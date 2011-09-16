@@ -1,0 +1,43 @@
+import org::csu::idl::idlmm;
+
+extension templates::Operations reexport;
+extension templates::FileName reexport;
+extension templates::auxiliares reexport;
+extension templates::corbasim::cpptypes reexport;
+
+// Properties
+Boolean generateClient() : GLOBALVAR genClient;
+Boolean generateInjector() : GLOBALVAR genInjector;
+Boolean generateServer() : GLOBALVAR genServer;
+
+String getHeaderExtension() : ".hpp";
+String getSourceExtension() : ".cpp";
+String getHeader(String this) : this.toUpperCase().replaceAll("\\.","_");
+
+String getFQN(Contained this) : getFQN(this, "::");
+String getFQN(Contained this, String separator ) : 
+	this.definedIn != null ? 
+		this.definedIn.getFQN(separator) + separator + identifier 
+	:
+		identifier;
+		
+String getPOAFQN(InterfaceDef this) :
+    "POA_" + getFQN();
+
+String getQImpl(InterfaceDef this) : getFQN("_") + "_qimpl"; 
+String getQImpl(TranslationUnit this) : getFileName() + "_qimpl"; 
+String getQImplHeaderFile(TranslationUnit this) : getQImpl() + getHeaderExtension();
+String getQImplSourceFile(TranslationUnit this) : getQImpl() + getSourceExtension();
+
+String getAdaptedFile(TranslationUnit this) : getFileName() + "_adapted" + getHeaderExtension();
+String getAdaptedServantFile(TranslationUnit this) : getFileName() + "_servant" + getHeaderExtension();
+
+TranslationUnit getTranslationUnit(Container this) : 
+	if definedIn == null then
+		((TranslationUnit)eContainer())
+	else
+		definedIn.getTranslationUnit();
+
+TranslationUnit getTranslationUnit(OperationDef this) :
+	definedIn.getTranslationUnit();
+	

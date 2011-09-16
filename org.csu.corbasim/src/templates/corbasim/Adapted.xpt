@@ -1,0 +1,344 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+«EXTENSION templates::StructDef»
+
+«DEFINE main FOR TranslationUnit»
+«FILE getAdaptedFile()-»
+«LET getAdaptedFile().getHeader() AS cppDefineName-»
+#ifndef «cppDefineName»
+#define «cppDefineName»
+
+#include "«getFileNameStubHpp()»"
+#include <corbasim/corba_adapted.hpp>
+#include <corbasim/core/copy.hpp>
+
+«FOREACH includes AS e»
+#include "«e.translationUnit.getAdaptedFile()»"
+«ENDFOREACH»
+
+«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+
+«EXPAND values FOREACH contains SEPARATOR "\n\n"»
+
+«EXPAND adaptvalues FOREACH contains SEPARATOR "\n\n"»
+
+#endif // «cppDefineName»
+
+«ENDLET»
+«ENDFILE»
+«ENDDEFINE»
+
+«REM» ADAPT «ENDREM»
+
+«DEFINE adapt FOR Contained-»«ENDDEFINE»
+
+«DEFINE adapt FOR ModuleDef-»
+	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adapt FOR InterfaceDef-»
+namespace boost
+{
+namespace serialization
+{
+
+template < class Archive >
+void serialize(Archive& ar, «getFQN()»_var& t, const unsigned int version)
+{	
+	// TODO
+}
+
+} // serialization
+} // boost
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template < >
+struct is_objrefvar< «getFQN()»_var > : public cs_mpl::true_
+{
+	typedef «getFQN()» interface;
+};
+
+} // adapted
+} // corbasim
+
+	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adapt FOR AliasDef-»
+«LET getType() AS type-»
+    «IF SequenceDef.isInstance(type)-»
+        «EXPAND adapt(getFQN(), true) FOR (SequenceDef)type-»
+    «ENDIF-»
+«ENDLET-»
+«ENDDEFINE»
+
+«DEFINE adapt(String fqn, Boolean var) FOR SequenceDef»
+namespace boost
+{
+namespace serialization
+{
+
+template < class Archive >
+void serialize(Archive& ar, «fqn»& t, const unsigned int version)
+{	
+	«IF !getType().isString()-»
+	::corbasim::serialization::sequence::serialize(ar, t, version);
+	«ELSE-»
+	// TODO
+	«ENDIF-»
+}
+	«IF var»
+template < class Archive >
+void serialize(Archive& ar, «fqn»_var& t, const unsigned int version)
+{	
+	// TODO
+}
+	«ENDIF»
+} // serialization
+} // boost
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template < >
+struct is_corbaseq< «fqn» > : public cs_mpl::true_
+{
+	typedef «getType().getMemberCPPType()» slice_type;
+};
+
+} // adapted
+} // corbasim
+«ENDDEFINE»
+
+«DEFINE adaptvalues FOR Contained-»«ENDDEFINE»
+
+«DEFINE adaptvalues FOR Container-»
+	«EXPAND adaptvalues FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adaptvalues FOR InterfaceDef-»
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template < >
+struct interface < «getFQN()» >
+{
+«LET contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS allOperations-»
+	typedef cs_mpl::vector< «FOREACH allOperations AS op SEPARATOR ", "»_corbasim_«op.getFQN()»«ENDFOREACH» > _op_list;
+	typedef cs_mpl::vector< «FOREACH allOperations.sortBy(e|e.identifier) AS op SEPARATOR ", "»_corbasim_«op.getFQN()»«ENDFOREACH» > _sorted_op_list;
+	typedef cs_mpl::vector< «FOREACH contains.typeSelect(OperationDef) AS op SEPARATOR ", "»_corbasim_«op.getFQN()»«ENDFOREACH» > _own_op_list;
+	typedef cs_mpl::vector< «FOREACH derivesFrom AS e SEPARATOR ", "»«e.getFQN()»«ENDFOREACH» > _parent_list;
+«ENDLET-»
+};
+
+} // adapted
+} // corbasim
+
+	«EXPAND adaptvalues FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adaptvalues FOR OperationDef-»
+// OperationDef: «getFQN()»
+BOOST_FUSION_ADAPT_STRUCT(
+	_corbasim_«getFQN()»,
+	«FOREACH parameters AS p-»
+	( «p.getCallType()», «p.identifier»)
+	«ENDFOREACH-»
+	«IF !returnVoid()-»
+	( «getType().getCallTypeOut()», _return)
+	«ENDIF-»
+     )
+
+namespace corbasim
+{
+namespace adapted
+{     
+	«IF isOneway-»
+template< >
+struct is_oneway< _corbasim_«getFQN()» > : public cs_mpl::true_
+{
+};
+	«ENDIF-»
+
+template< >
+struct call< _corbasim_«getFQN()» >
+{
+	typedef _corbasim_«getFQN()» Value;
+	
+    template < typename Interface >
+    static inline void invoke(Interface * ref, Value& value)
+    {
+        «IF !returnVoid()-»value._return =«ENDIF-» ref->«identifier»(«FOREACH parameters AS p SEPARATOR ", "-»value.«p.identifier»«ENDFOREACH»);
+    }
+};
+
+template< >
+struct name< _corbasim_«getFQN()» >
+{
+	static inline const char * call()
+	{
+		return "«identifier»";
+	}
+};
+
+} // adapted
+} // corbasim
+«ENDDEFINE»
+
+«DEFINE adapt FOR StructDef-»
+// StructDef: «getFQN()»
+BOOST_FUSION_ADAPT_STRUCT(
+	«getFQN_Type()-»,
+	«FOREACH members AS member-»
+	( «member.getMemberTypeIdFQN(this)», «member.identifier»)
+	«ENDFOREACH-»
+     )
+
+namespace boost
+{
+namespace serialization
+{
+
+template < class Archive >
+void serialize(Archive& ar, «getFQN()»& t, const unsigned int /* unused */)
+{	
+	«FOREACH members AS member-»
+	ar & boost::serialization::make_nvp("«member.identifier»", t.«member.identifier»);
+	«ENDFOREACH-»
+}
+
+«IF isVariableLen()»
+template < class Archive >
+void serialize(Archive& ar, «getFQN()»_var& t, const unsigned int /* unused */)
+{	
+	// TODO
+}
+«ENDIF»
+
+} // serialization
+} // boost
+
+	«FOREACH getAnonymousFields().select(e|SequenceDef.isInstance(e.getType())) AS member-»
+		«EXPAND adapt(member.getMemberTypeIdFQN(this), false) FOR (SequenceDef)member.getType()-»
+	«ENDFOREACH-»
+	
+	«EXPAND adapt FOREACH getNestedStructs()-»
+
+«ENDDEFINE»
+
+«DEFINE adapt FOR EnumDef-»
+// Enum: «getFQN()»
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct enumeration< «getFQN()» >
+{
+	static const unsigned int size = «members.size»;
+	
+	static inline const char** values()
+	{
+		static const char* _data[] = {«FOREACH members AS m SEPARATOR ", "-»"«m.identifier»"«ENDFOREACH-», 0};
+		return _data;
+	}
+};
+
+} // adapted
+} // corbasim
+
+«ENDDEFINE»
+
+«REM» NAMESPACE ALTERNATIVO «ENDREM»
+
+«DEFINE values FOR Contained-»«ENDDEFINE»
+
+«DEFINE values FOR Container-»
+namespace «IF definedIn == null-»_corbasim_«ENDIF-»«identifier» 
+{
+	«EXPAND values FOREACH contains SEPARATOR "\n\n"»
+} // «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
+«ENDDEFINE»
+
+«DEFINE values FOR StructDef-»
+struct «identifier»
+{
+	«FOREACH members AS mem ITERATOR it-»
+	typedef corbasim::adapted::member< ::«getFQN()», «it.counter0» > «mem.identifier»_corbasim_member;
+	«ENDFOREACH-»
+	
+	«EXPAND values FOREACH getNestedStructs()-»
+};
+«ENDDEFINE»
+
+«DEFINE values FOR OperationDef-»
+«LET parameters.select(e|!ArrayDef.isInstance(e.getOriginalType())) AS initializationList»
+struct __«identifier»
+{
+	typedef boost::mpl::vector< «FOREACH parameters AS p SEPARATOR ", "»corbasim::Arg_«p.getDirection()»< «p.getParamCPPType()» >«ENDFOREACH» > _arg_list;
+
+	«FOREACH parameters AS param ITERATOR it-»
+	typedef corbasim::adapted::member< __«identifier», «it.counter0» > «param.identifier»_corbasim_member;
+	«ENDFOREACH-»
+
+	«FOREACH parameters AS param ITERATOR it-»
+	«param.getCallType()» «param.identifier»;
+	«ENDFOREACH-»
+	
+	«IF !returnVoid()-»
+	«getType().getCallTypeOut()» _return;
+	«ENDIF-»
+	
+	__«identifier»()
+	{
+	}
+	
+	«IF !parameters.isEmpty-»
+	__«identifier»(«FOREACH parameters AS p SEPARATOR ", "»«p.getParamCPPType()» _«p.identifier»«ENDFOREACH»)«IF !initializationList.isEmpty»:
+		«FOREACH initializationList AS p SEPARATOR ", "»«p.identifier»(_«p.identifier»)«ENDFOREACH»«ENDIF»
+	{
+		«FOREACH parameters.select(e|ArrayDef.isInstance(e.getOriginalType())) AS p-»
+		«REM»// std::memcpy(«p.identifier», _«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
+		corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(_«p.identifier», «p.identifier»);
+		«ENDFOREACH-»
+	}
+	«ENDIF-»
+	
+	// Copy constructor
+	__«identifier»(const __«identifier»& o)«IF !initializationList.isEmpty || !returnVoid()» :
+		«FOREACH initializationList AS p SEPARATOR ", "»«p.identifier»(o.«p.identifier»)«ENDFOREACH»«ENDIF»
+		«IF !returnVoid()-»«IF !initializationList.isEmpty-», «ENDIF-»_return(o._return)«ENDIF-»
+	{
+		«FOREACH parameters.select(e|ArrayDef.isInstance(e.getOriginalType())) AS p-»
+		«REM»// std::memcpy(«p.identifier», o.«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
+		corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(o.«p.identifier», «p.identifier»);
+		«ENDFOREACH-»
+	}
+
+    template< typename Archive >
+    void serialize(Archive& ar, const unsigned int /* unused */)
+    {
+	«FOREACH parameters AS param-»
+		ar & boost::serialization::make_nvp("«param.identifier»", «param.identifier»);
+	«ENDFOREACH-»
+	«IF !returnVoid()-»
+		ar & boost::serialization::make_nvp("return", _return);
+	«ENDIF-»
+	}
+};
+
+typedef __«identifier» «identifier»;
+«ENDLET»
+«ENDDEFINE»
+

@@ -1,0 +1,31 @@
+import org::csu::idl::idlmm;
+
+/* Suffix properties */
+String getStubCppSuffix() : GLOBALVAR StubCppSuffix;
+String getStubHppSuffix() : GLOBALVAR StubHppSuffix;
+String getSkelCppSuffix() : GLOBALVAR SkelCppSuffix;
+String getSkelHppSuffix() : GLOBALVAR SkelHppSuffix;
+String getSkelImplCppSuffix() : GLOBALVAR SkelImplCppSuffix;
+String getSkelImplHppSuffix() : GLOBALVAR SkelImplHppSuffix;
+
+/* generate stub/skel/skelImpl?*/
+Boolean generateStub() : GLOBALVAR genStub;
+Boolean generateSkel() : GLOBALVAR genSkel;
+Boolean generateSkelImpl() : GLOBALVAR genSkelImpl;
+
+Boolean hasInterfaceDef(TranslationUnit this) :
+    !contains.select(e|InterfaceDef.isInstance(e)).isEmpty || contains.select(e|Container.isInstance(e)).hasInterfaceDef()
+;
+
+Boolean hasInterfaceDef(Container this) :
+    !contains.select(e|InterfaceDef.isInstance(e)).isEmpty || contains.select(e|Container.isInstance(e)).hasInterfaceDef()
+;
+
+private Boolean hasInterfaceDef(List[Container] this) :
+    if isEmpty then
+        false
+    else if first().hasInterfaceDef() then
+        true
+    else
+        withoutFirst().hasInterfaceDef()
+;

@@ -1,0 +1,77 @@
+module workflow.IDLFileGeneratorWithPreprocessor
+
+var idlFile = "examples/cosnaming/Cosnaming.idl"
+var fileEncoding = "UTF-8"
+
+// Parameters
+var targetDir = "examples/cosnaming"
+var genClient = true
+var genServer = true
+var genInjector = true
+var StubHppSuffix = "\'C.h\'"
+var StubCppSuffix = "\'C.cpp\'"
+var SkelHppSuffix = "\'S.h\'"
+var SkelCppSuffix = "\'S.cpp\'"
+var SkelImplHppSuffix = "\'I.h\'"
+var SkelImplCppSuffix = "\'I.cpp\'"
+
+Workflow {
+	component = org.csu.idl.mwe2.Reader {
+		idlFile = idlFile
+		modelSlot = "model"
+		
+		// For each include path 
+		// includePath = "/usr/include/idl"
+	}
+	
+	component = org.eclipse.xpand2.Generator {
+		expand = "templates::corbasim::Main::main FOREACH model"
+		metaModel = org.eclipse.xtend.type.impl.java.JavaBeansMetaModel {}
+		outlet = {
+			path = targetDir
+			postprocessor = org.csu.cpp.output.CppBeautifier {}
+		}
+		fileEncoding = fileEncoding
+
+		// Regiones protegidas
+		prSrcPaths = "${targetDir}"
+		
+		// Variables globales
+		globalVarDef = {
+			name = "genClient"
+			value = "${genClient}"
+		}
+		globalVarDef = {
+			name = "genServer"
+			value = "${genServer}"
+		}
+		globalVarDef = {
+			name = "genInjector"
+			value = "${genInjector}"
+		}
+		globalVarDef = {
+			name = "StubHppSuffix"
+			value = "${StubHppSuffix}"
+		}
+		globalVarDef = {
+			name = "StubCppSuffix"
+			value = "${StubCppSuffix}"
+		}
+		globalVarDef = {
+			name = "SkelHppSuffix"
+			value = "${SkelHppSuffix}"
+		}
+		globalVarDef = {
+			name = "SkelImplHppSuffix"
+			value = "${SkelImplHppSuffix}"
+		}
+		globalVarDef = {
+			name = "SkelCppSuffix"
+			value = "${SkelCppSuffix}"
+		}
+		globalVarDef = {
+			name = "SkelImplCppSuffix"
+			value = "${SkelImplCppSuffix}"
+		}
+	}
+}

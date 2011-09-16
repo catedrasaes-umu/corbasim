@@ -1,0 +1,111 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+
+«DEFINE server FOR TranslationUnit»
+	«EXPAND server FOREACH contains»
+«ENDDEFINE»
+
+«DEFINE server FOR Contained»«ENDDEFINE»
+
+«DEFINE server FOR ModuleDef»
+	«EXPAND server FOREACH contains»
+«ENDDEFINE»
+
+«REM»Servidor para interfaces«ENDREM»
+«DEFINE server FOR InterfaceDef»
+«LET getFQN("_") AS fqn»
+
+«FILE fqn+"_server.cpp"»
+#include <tao/ORB.h>
+#include "«getTranslationUnit().getFileNameSkelHpp()»"
+#include "«getTranslationUnit().getAdaptedFile()»"
+
+#include <corbasim/core/archives.hpp>
+
+#include <iostream>
+#include <sstream>
+
+
+«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl_server::___includes"»
+«ENDPROTECT»
+
+class «fqn»_impl : virtual public «this.getPOAFQN()»
+{
+public:
+
+	«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::___public"»
+	«ENDPROTECT»
+
+	«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op»
+	«op.getSignature()»
+	{
+		std::ostringstream __oss;
+		std::cout << ">«op.identifier»" << std::endl;
+		__oss << "«op.identifier» ";
+		
+		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::"+op.getFQN("_")+"___pre"»
+		«ENDPROTECT»
+		
+		__oss << ' ';
+		«IF !op.parameters.isEmpty || !op.returnVoid()-»
+		_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
+		try {
+			corbasim::core::text_oarchive toa(__oss);
+			toa << _val;
+		} catch(...) {
+			std::cerr << "Serialization exception!" << std::endl;
+		}
+		«ELSE-»
+		__oss << std::endl;
+		«ENDIF-»
+		
+		std::cout << ' ' << __oss.str();
+		
+		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::"+op.getFQN("_")+"___post"»
+		«ENDPROTECT»
+		
+		std::cout << "<«op.identifier»" << std::endl;
+		
+		«IF !op.returnVoid()-»
+		«IF op.returnString()-»
+		return CORBA::string_dup(_val._return);
+		«ELSEIF op.returnWString()-»
+		return CORBA::wstring_dup(_val._return);
+		«ELSE-»
+		return _val._return;
+		«ENDIF-»
+		«ENDIF-»
+	}
+	«ENDFOREACH»
+};
+
+int main(int argc, char **argv)
+{
+    CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
+
+    «fqn»_impl _impl;
+   
+	CORBA::Object_var rootPOAObj = 
+			orb->resolve_initial_references("RootPOA");
+			
+	PortableServer::POA_var rootPOA = 
+			PortableServer::POA::_narrow(rootPOAObj.in());
+			
+	PortableServer::POAManager_var manager = rootPOA->the_POAManager();
+
+	PortableServer::ObjectId_var myObjID = 
+				rootPOA->activate_object(&_impl);
+				
+	CORBA::Object_var obj = rootPOA->servant_to_reference(&_impl);
+
+    CORBA::String_var ref = orb->object_to_string(obj);
+    std::cout << ref << std::endl;
+
+	manager->activate();
+    orb->run();
+}
+«ENDFILE»
+
+«ENDLET»
+«ENDDEFINE»

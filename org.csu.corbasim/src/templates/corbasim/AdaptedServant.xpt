@@ -1,0 +1,74 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+«EXTENSION templates::StructDef»
+
+«DEFINE main FOR TranslationUnit»
+«FILE getAdaptedServantFile()-»
+«LET getAdaptedServantFile().getHeader() AS cppDefineName-»
+#ifndef «cppDefineName»
+#define «cppDefineName»
+
+#include "«getFileNameSkelHpp()»"
+#include "«getAdaptedFile()»"
+
+«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+
+#endif // «cppDefineName»
+
+«ENDLET»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE adapt FOR Contained-»«ENDDEFINE»
+
+«DEFINE adapt FOR Container-»
+	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adapt FOR InterfaceDef-»
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct sevant< «this.getFQN()» >
+{
+	template < typename F >
+	class _type : public virtual «this.getPOAFQN()»
+	{
+	public:
+	
+		_type(F f) : 
+			__f(f)
+		{
+		}
+	
+		«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op»
+		«op.getSignature()»
+		{
+			_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
+	
+			__f(_val);		
+			
+			«IF !op.returnVoid()-»
+			«IF op.returnString()-»
+			return CORBA::string_dup(_val._return);
+			«ELSEIF op.returnWString()-»
+			return CORBA::wstring_dup(_val._return);
+			«ELSE-»
+			return _val._return;
+			«ENDIF-»
+			«ENDIF-»
+		}
+		«ENDFOREACH»
+		
+	protected:
+		F __f;
+	};
+};
+
+} // adapted
+} // corbasim
+«ENDDEFINE»

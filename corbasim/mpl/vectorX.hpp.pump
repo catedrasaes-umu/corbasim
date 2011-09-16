@@ -1,0 +1,80 @@
+// -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
+/*
+ * vector.hpp
+ * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
+ *
+ * CORBASIM is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * CORBASIM is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */ 
+
+#ifndef CORBASIM_MPL_VECTOR_HPP
+#define CORBASIM_MPL_VECTOR_HPP
+
+$var maxparameters = 50
+$var maxparameters_less_one = maxparameters-1
+$range parameters 0..maxparameters-1
+$range parameters_less_one 0..maxparameters-2
+
+#include <boost/mpl/int.hpp>
+
+namespace corbasim 
+{
+namespace cs_mpl 
+{
+namespace detail 
+{
+struct none {};
+} // namespace detail
+
+template < $for parameters , [[ typename P$parameters = detail::none ]] >
+struct vector
+{
+$range tail 1..maxparameters_less_one
+
+    typedef boost::mpl::int_< $maxparameters > size_type;
+    typedef P0 head_type;
+    typedef vector< $for tail , [[ P$tail ]] 
+        > tail_type;
+};
+
+template < >
+struct vector< $for parameters , [[ detail::none ]] > 
+{
+    typedef boost::mpl::int_< 0 > size_type;
+};
+
+$for parameters_less_one [[
+
+$range current_parameters 0..parameters_less_one
+$range resto parameters_less_one+1..maxparameters_less_one
+
+template < $for current_parameters , [[ typename P$current_parameters ]] >
+struct vector < $for current_parameters [[ P$current_parameters, ]]
+    $for resto , [[ /* P$resto */ detail::none ]] >
+{
+$var current_size=parameters_less_one+1
+$range tail 1..parameters_less_one
+
+    typedef boost::mpl::int_< $current_size > size_type;
+    typedef P0 head_type;
+    typedef vector< $for tail , [[ P$tail ]] 
+        > tail_type;
+};
+
+]]
+
+} // namespace cs_mpl
+} // namespace corbasim
+
+#endif /* CORBASIM_MPL_VECTOR_HPP */
+

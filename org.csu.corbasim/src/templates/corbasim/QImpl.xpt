@@ -1,0 +1,103 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+
+«DEFINE hpp FOR Contained-»«ENDDEFINE»
+«DEFINE cpp FOR Contained-»«ENDDEFINE»
+
+«DEFINE impl FOR TranslationUnit»
+«FILE getQImplHeaderFile()-»
+«LET getQImplHeaderFile().getHeader() AS cppDefineName-»
+#ifndef «cppDefineName»
+#define «cppDefineName»
+
+#include <QtCore>
+#include "«getFileName()»S.h"
+
+«EXPAND hpp FOREACH contains»
+
+
+#endif // «cppDefineName»
+«ENDLET-»
+«ENDFILE»
+
+«FILE getQImplSourceFile()-»
+#include "«getQImplHeaderFile()»"
+
+«EXPAND cpp FOREACH contains SEPARATOR "\n\n"»
+
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE hpp FOR ModuleDef»
+	«EXPAND hpp FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE cpp FOR ModuleDef»
+	«EXPAND cpp FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE hpp FOR InterfaceDef»
+class «getQImpl()» : public QObject, virtual public «this.getPOAFQN()»
+{
+	Q_OBJECT
+public:
+    «getQImpl()»();
+    «getQImpl()»(«this.getFQN()» * impl);
+    virtual ~«getQImpl()»();
+    
+public slots:
+
+    «EXPAND hpp FOREACH contains SEPARATOR "\n\n"-»
+    
+signals:
+
+	«EXPAND signal FOREACH contains SEPARATOR "\n\n"-»
+
+protected:
+
+	«this.getFQN()» * m_impl;
+	
+}; // «getQImpl()»
+«ENDDEFINE»
+
+«DEFINE cpp FOR InterfaceDef»
+// Constructors and destructor
+«getQImpl()»::«getQImpl()»() : m_impl(0) {}
+«getQImpl()»::«getQImpl()»(«this.getFQN()» * impl) : m_impl(impl) {}
+«getQImpl()»::~«getQImpl()»() {}
+
+«FOREACH contains.typeSelect(OperationDef) AS op»
+«op.getSignature(getQImpl() + "::" + op.identifier)»
+{
+	if (m_impl)
+		m_impl->«op.identifier»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»);
+	
+	emit _«op.identifier»();
+}
+«ENDFOREACH»
+«ENDDEFINE»
+
+«REM»Header contents«ENDREM»
+
+«DEFINE hpp FOR OperationDef-»
+    «getSignature()»;
+«ENDDEFINE»
+
+«DEFINE hpp FOR AttributeDef-»
+	«getGetSignature()»;
+	«IF !isReadonly-»
+    «getSetSignature()»;
+    «ENDIF-»
+«ENDDEFINE»
+
+«REM»Signals«ENDREM»
+«DEFINE signal FOR Contained-»«ENDDEFINE»
+
+«DEFINE signal FOR OperationDef-»
+    void _«identifier»();
+«ENDDEFINE»
+
+«REM»Source file contents«ENDREM»
+
+

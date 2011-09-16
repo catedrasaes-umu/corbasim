@@ -1,0 +1,47 @@
+import org::csu::idl::idlmm;
+
+extension templates::auxiliares;
+
+//
+//
+// To string
+//
+//
+
+String exp2str(Expression this, Boolean useFQN) : "/***ERROR***/";
+String exp2str(BinaryExpression this, Boolean useFQN) :
+    if right != null then 
+        "(" + left.exp2str(useFQN) + operator + right.exp2str(useFQN) + ")"
+    else
+        "(" + left.exp2str(useFQN) + ")"
+;
+String exp2str(UnaryExpression this, Boolean useFQN) : "(" + operator + expression.exp2str(useFQN) + ")";
+String exp2str(ValueExpression this, Boolean useFQN) : 
+	if value == "FALSE" then
+		"false"
+	else if value == "TRUE" then
+		"true"
+	else
+		value
+;
+
+String exp2str_impl(Constant this, Boolean useFQN) : "/***ERROR***/";
+String exp2str_impl(EnumMember this, Boolean useFQN) :
+	if useFQN && enum.definedIn != null then
+		enum.definedIn.getFQN() + "::" + identifier
+	else
+		identifier
+;
+String exp2str_impl(ConstantDef this, Boolean useFQN) :
+	if useFQN then 
+		getFQN()
+	else
+		identifier
+;
+
+String exp2str(ConstantDefRef this, Boolean useFQN) :
+	constant.exp2str_impl(useFQN);
+
+String exp2strInteger(Expression this, Boolean useFQN) :
+	exp2str(useFQN).replaceAll("\\.0","")
+;

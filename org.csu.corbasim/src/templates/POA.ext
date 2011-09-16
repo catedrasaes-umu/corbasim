@@ -1,0 +1,23 @@
+import org::csu::idl::idlmm;
+
+extension templates::auxiliares;
+
+// "POA_" prefix just for the first module or interface, not for nested modules
+String getPOA(InterfaceDef this) :
+    if definedIn == null then
+        "POA_" + identifier
+    else
+        identifier
+;
+
+// "POA_" prefix just for the first module, not for nested modules
+String getPOA(ModuleDef this) :
+    if definedIn == null then
+        "POA_" + identifier
+    else
+        identifier
+;
+
+String getPOAFQN(InterfaceDef this) :
+    "POA_" + getFQN()
+;

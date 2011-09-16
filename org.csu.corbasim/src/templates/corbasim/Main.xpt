@@ -1,0 +1,25 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+
+«DEFINE main FOR TranslationUnit»
+	«REM»«EXPAND templates::corbasim::QImpl::impl FOR this»«ENDREM»
+	
+	«REM» Comunes «ENDREM»
+	«EXPAND templates::corbasim::CMake::main FOR this»
+	«EXPAND templates::corbasim::Adapted::main FOR this»
+	«EXPAND templates::corbasim::AdaptedServant::main FOR this»
+	
+	«REM» Específicos «ENDREM»
+	«IF generateClient()»
+		«EXPAND templates::corbasim::SimpleClient::client FOR this»
+	«ENDIF»
+	
+	«IF generateInjector()»
+		«EXPAND templates::corbasim::Injector::injector FOR this»
+	«ENDIF»
+		
+	«IF generateServer()»
+		«EXPAND templates::corbasim::Server::server FOR this»
+	«ENDIF»
+«ENDDEFINE»

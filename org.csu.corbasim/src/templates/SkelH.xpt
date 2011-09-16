@@ -1,0 +1,85 @@
+«IMPORT org::csu::idl::idlmm»
+«EXTENSION templates::auxiliares»
+«EXTENSION templates::cpptypes»
+«EXTENSION templates::FileName»
+«EXTENSION templates::Properties»
+«EXTENSION templates::POA»
+«EXTENSION templates::Operations»
+
+«DEFINE main FOR TranslationUnit-»
+«FILE getFileNameSkelHpp()-»
+«EXPAND templates::Header::header(getFileNameSkelHpp()) FOR this-»
+
+«LET getFileNameSkelHpp().getHeader() AS cppDefineName-»
+#ifndef «cppDefineName»
+#define «cppDefineName»
+
+#include "«getFileNameStubHpp()»"
+
+«FOREACH includes.select(e|e.translationUnit.hasInterfaceDef()) AS e»
+#include "«e.getFileNameSkelHpp()»"
+«ENDFOREACH»
+
+«EXPAND code FOREACH this.contains-»
+#endif // «cppDefineName»
+«ENDLET-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR Contained-»«ENDDEFINE»
+
+
+
+«DEFINE code FOR ModuleDef-»
+// BEGIN CODE MODULE «identifier»
+namespace «getPOA()»
+{
+    «EXPAND code FOREACH this.contains-»
+} // «getPOA()»
+// END CODE MODULE «identifier»
+
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR InterfaceDef-»
+// BEGIN CODE INTERFACE «identifier»
+class «getPOA()» : «IF derivesFrom.isEmpty-»public virtual PortableServer::ServantBase
+«ELSE-»
+«FOREACH derivesFrom AS parent SEPARATOR ", "»public virtual ::«parent.getPOAFQN()»«ENDFOREACH»
+«ENDIF-»
+{
+protected:
+    «getPOA()»();
+
+public:
+    virtual ~«getPOA()»();
+    
+    «getFQN()»_ptr _this();
+
+    «EXPAND code FOREACH this.contains SEPARATOR "\n\n"-»
+    
+}; // «getPOA()»
+// END CODE INTERFACE «identifier»
+
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR OperationDef-»
+    «IF !contexts.isEmpty-»
+// ERROR: CONTEXT IN OPERATIONDEF NOT SUPPORTED (YET)
+    «ENDIF-»
+    virtual «getSignature()» = 0;
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR AttributeDef-»
+    virtual «getGetSignature()» = 0;
+    «IF !isReadonly-»
+    virtual «getSetSignature()» = 0;
+    «ENDIF-»
+«ENDDEFINE»

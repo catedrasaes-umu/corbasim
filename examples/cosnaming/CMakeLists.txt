@@ -1,0 +1,2 @@
+include(Cosnaming.cmake)
+

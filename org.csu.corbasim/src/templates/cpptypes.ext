@@ -1,0 +1,366 @@
+import org::csu::idl::idlmm;
+extension templates::auxiliares reexport;
+extension templates::StructDef reexport;
+
+getIN_CPPType(IDLType this) : "/***ERROR IDLType IN: "+metaType.name+"***/";
+getOUT_CPPType(IDLType this) : "/***ERROR IDLType OUT: "+metaType.name+"***/";
+getINOUT_CPPType(IDLType this) : "/***ERROR IDLType INOUT: "+metaType.name+"***/";
+
+getIN_CPPType(PrimitiveDef this) : switch (kind) {
+/*		case PrimitiveKind::PK_NULL : ""
+		case PrimitiveKind::PK_TYPECODE : ""
+		case PrimitiveKind::PK_PRINCIPAL : ""*/
+		case PrimitiveKind::PK_OBJREF : "::CORBA::Object_ptr"
+		case PrimitiveKind::PK_ANY : "const ::CORBA::Any &"
+		//case PrimitiveKind::PK_VOID : "void"
+		case PrimitiveKind::PK_SHORT: "::CORBA::Short"
+		case PrimitiveKind::PK_LONG : "::CORBA::Long"
+		case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
+		case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
+		case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
+		case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
+		case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
+		case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
+		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
+		case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
+		case PrimitiveKind::PK_CHAR : "::CORBA::Char"
+		case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
+		case PrimitiveKind::PK_WSTRING : "const ::CORBA::WChar*"
+		case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"
+		case PrimitiveKind::PK_STRING : "const char*"
+		default : "/***UNUSED!***/"
+	};
+
+getOUT_CPPType(PrimitiveDef this) : switch(kind) {
+/*		case PrimitiveKind::PK_NULL : ""
+		case PrimitiveKind::PK_TYPECODE : ""
+		case PrimitiveKind::PK_PRINCIPAL : ""*/
+		case PrimitiveKind::PK_OBJREF : "::CORBA::Object_ptr&"
+		case PrimitiveKind::PK_ANY : "::CORBA::Any *&"
+		//case PrimitiveKind::PK_VOID : "void"
+		case PrimitiveKind::PK_SHORT : "::CORBA::Short&"
+		case PrimitiveKind::PK_LONG : "::CORBA::Long&"
+		case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong&"
+		case PrimitiveKind::PK_USHORT : "::CORBA::UShort&"
+		case PrimitiveKind::PK_ULONG : "::CORBA::ULong&"
+		case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong&"
+		case PrimitiveKind::PK_FLOAT : "::CORBA::Float&"
+		case PrimitiveKind::PK_DOUBLE : "::CORBA::Double&"
+		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble&"
+		case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean&"
+		case PrimitiveKind::PK_CHAR : "::CORBA::Char&"
+		case PrimitiveKind::PK_OCTET : "::CORBA::Octet&"
+		case PrimitiveKind::PK_WSTRING : "::CORBA::WChar*&"
+		case PrimitiveKind::PK_WCHAR : "::CORBA::WChar&"
+		case PrimitiveKind::PK_STRING : "char *&"
+		default : "/***UNUSED!***/"
+	};
+
+getINOUT_CPPType(PrimitiveDef this) : switch(kind) {
+/*		case PrimitiveKind::PK_NULL : ""
+		case PrimitiveKind::PK_TYPECODE : ""
+		case PrimitiveKind::PK_PRINCIPAL : ""*/
+		case PrimitiveKind::PK_OBJREF : "::CORBA::Object_ptr&"
+		case PrimitiveKind::PK_ANY : "::CORBA::Any&"
+		//case PrimitiveKind::PK_VOID : "void"
+		case PrimitiveKind::PK_SHORT : "::CORBA::Short &"
+		case PrimitiveKind::PK_LONG : "::CORBA::Long &"
+		case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong &"
+		case PrimitiveKind::PK_USHORT : "::CORBA::UShort &"
+		case PrimitiveKind::PK_ULONG : "::CORBA::ULong &"
+		case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong &"
+		case PrimitiveKind::PK_FLOAT : "::CORBA::Float &"
+		case PrimitiveKind::PK_DOUBLE : "::CORBA::Double &"
+		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble &"
+		case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean &"
+		case PrimitiveKind::PK_CHAR : "::CORBA::Char&"
+		case PrimitiveKind::PK_OCTET : "::CORBA::Octet &"
+		case PrimitiveKind::PK_WSTRING : "::CORBA::WChar *&"
+		case PrimitiveKind::PK_WCHAR : "::CORBA::WChar &"
+		case PrimitiveKind::PK_STRING : "char *&"
+		default : "/***UNUSED!***/"
+	};
+
+/*
+	these three won't exist, as they will allways be contained
+	within an aliasdef
+	
+	getIN_CPPType(StructDef this) : "STRUCTDEF"+identifier;
+	getIN_CPPType(StringDef this) :	"STRINGDEF"+bound;
+	getIN_CPPType(FixedDef this) :	"FIXED"+digits+","+scale;
+*/
+
+
+getIN_CPPType(TypedefDef this) : "const "+getFQN()+"&";
+getOUT_CPPType(TypedefDef this) : getFQN()+"_out";
+getINOUT_CPPType(TypedefDef this) : getFQN()+"&";
+
+getIN_CPPType(StructDef this) : "const "+getFQN()+"&";
+getOUT_CPPType(StructDef this) : isVariableLen()? getFQN()+"_out" : getFQN()+"&"; // segun mapping: isVariableLen()? getFQN()+"*&" : getFQN()+"&";
+getINOUT_CPPType(StructDef this) : getFQN()+"&";
+
+getIN_CPPType(AliasDef this) : 
+	if SequenceDef.isInstance(getType()) then
+		"const "+getFQN()+"&"
+	else if ArrayDef.isInstance(getType()) then
+		"const "+getFQN()
+	else if StringDef.isInstance(getType()) then
+		"const char *" // +getFQN()
+	else
+	 	getType().getIN_CPPType(getFQN())
+	 ;
+	 
+getOUT_CPPType(AliasDef this) :
+	if SequenceDef.isInstance(getType()) then
+		getFQN()+"_out" // segun mapping = "*&"
+	else if ArrayDef.isInstance(getType()) then
+		(getType().isVariableLen()? getFQN()+"_slice*&" : getFQN())
+	else if StringDef.isInstance(getType()) then
+		"char*&" // getFQN()+"&"
+	else
+	 	getType().getOUT_CPPType(getFQN())
+	 ;
+
+getINOUT_CPPType(AliasDef this) :
+	if SequenceDef.isInstance(getType()) then
+		getFQN()+"&"
+	else if ArrayDef.isInstance(getType()) then
+		getFQN()
+	else if StringDef.isInstance(getType()) then
+		"char*&"// getFQN()+"&"
+	else
+	 	getType().getINOUT_CPPType(getFQN())
+	 ;
+
+getIN_CPPType(UnionDef this) : "const "+getFQN()+"&";
+getOUT_CPPType(UnionDef this) : isVariableLen()? getFQN()+"*&" : getFQN()+"&";
+getINOUT_CPPType(UnionDef this) : getFQN()+"&";
+
+getIN_CPPType(EnumDef this) : getFQN();
+getOUT_CPPType(EnumDef this) : getFQN()+"&";
+getINOUT_CPPType(EnumDef this) : getFQN()+"&";
+
+getIN_CPPType(InterfaceDef this) : getFQN()+"_ptr";
+getOUT_CPPType(InterfaceDef this) : getFQN()+"_out"; // segun mapping = "_ptr&"
+getINOUT_CPPType(InterfaceDef this) : getFQN()+"_ptr&";
+
+getIN_CPPType(ConstantDef this) : getType().getIN_CPPType();
+getOUT_CPPType(ConstantDef this) : getType().getOUT_CPPType();
+getINOUT_CPPType(ConstantDef this) : getType().getINOUT_CPPType();
+
+getParamCPPType(ParameterDef this) : switch(direction) {
+		case ParameterMode::PARAM_IN : getType().getIN_CPPType()
+		case ParameterMode::PARAM_OUT : getType().getOUT_CPPType()
+		case ParameterMode::PARAM_INOUT : getType().getINOUT_CPPType()
+		default: "/***ERROR-ParameterDef (UNKNOWN parameter direction:"+direction+")***/"
+	};
+
+get_CPPType(IDLType this) : "/***ERROR IDLType CPP: "+metaType.name+"***/";
+
+get_CPPType(PrimitiveDef this) : switch (kind) {
+/*		case PrimitiveKind::PK_NULL : ""
+		case PrimitiveKind::PK_TYPECODE : ""
+		case PrimitiveKind::PK_PRINCIPAL : ""*/
+		//case PrimitiveKind::PK_OBJREF : "CORBA::Object_ptr"
+		case PrimitiveKind::PK_ANY : "::CORBA::Any"
+		case PrimitiveKind::PK_VOID : "void"
+		case PrimitiveKind::PK_SHORT: "::CORBA::Short"
+		case PrimitiveKind::PK_LONG : "::CORBA::Long"
+		case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
+		case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
+		case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
+		case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
+		case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
+		case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
+		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
+		case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
+		case PrimitiveKind::PK_CHAR : "::CORBA::Char"
+		case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
+		case PrimitiveKind::PK_WSTRING : "::CORBA::WChar*"
+		case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"
+		case PrimitiveKind::PK_STRING : "char*"
+		default : "/***UNUSED!***/"
+	};
+
+/*
+// these won't exist, as they will allways be contained
+// within an aliasdef
+get_CPPType(StringDef this) :	"STRINGDEF"+bound;
+get_CPPType(FixedDef this) :	"FIXED"+digits+","+scale;
+*/
+
+/* TypedefDef includes: StructDef, AliasDef, UnionDef, EnumDef and InterfaceDef */
+get_CPPType(TypedefDef this) : getFQN();
+get_CPPType(AliasDef this) : getFQN();
+get_CPPType(InterfaceDef this) : getFQN()+"_ptr";
+get_CPPType(ConstantDef this) : getFQN();
+get_CPPType(StructDef this, Field anonymous) : getFQN()+"::"+anonymous.getMemberTypeId(); // Special case for anonymous types
+get_CPPType(FixedDef this) : "fixed"; //TODO: change when fixed type is supported by mycorba lib.
+// Not used
+//get_CPPType(StringDef this) : getFQN();
+//get_CPPType(WStringDef this) : getFQN();
+
+
+/*** return types ***/
+getReturn_CPPType(IDLType this) : "/***ERROR IDLType Return: "+metaType.name+"***/";
+
+getReturn_CPPType(PrimitiveDef this) : switch (kind) {
+/*		case PrimitiveKind::PK_NULL : ""
+		case PrimitiveKind::PK_TYPECODE : ""
+		case PrimitiveKind::PK_PRINCIPAL : ""*/
+		case PrimitiveKind::PK_OBJREF : "::CORBA::Object_ptr"
+		case PrimitiveKind::PK_ANY : "::CORBA::Any *"
+		case PrimitiveKind::PK_VOID : "void"
+		case PrimitiveKind::PK_SHORT: "::CORBA::Short"
+		case PrimitiveKind::PK_LONG : "::CORBA::Long"
+		case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
+		case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
+		case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
+		case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
+		case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
+		case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
+		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
+		case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
+		case PrimitiveKind::PK_CHAR : "::CORBA::Char"
+		case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
+		case PrimitiveKind::PK_WSTRING : "::CORBA::WChar*"
+		case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"
+		case PrimitiveKind::PK_STRING : "char*"
+		default : "/***UNUSED!***/"
+	};
+
+getReturn_CPPType(ArrayDef this) : "/***"+this.containedType.metaType.name+" ["+this.bounds+"] (arrays still not supported)***/";
+
+// these won't exist, as they will allways be contained
+// within an aliasdef
+//getReturn_CPPType(StringDef this) :	"/*STRINGDEF*/"+bound;
+//getReturn_CPPType(FixedDef this) :	"/*FIXED*/"+digits+","+scale;
+
+getReturn_CPPType(TypedefDef this) : getFQN()+"*";
+getReturn_CPPType(StructDef this) : isVariableLen()? getFQN()+"*" : getFQN();
+getReturn_CPPType(AliasDef this) :
+	if SequenceDef.isInstance(getType()) then
+		getFQN()+"*"
+	else if ArrayDef.isInstance(getType()) then
+		getFQN()+"_slice*"
+	else if StringDef.isInstance(getType()) then
+		"char*" // getFQN()
+	else
+		getType().getReturn_CPPType(getFQN())
+	;
+getReturn_CPPType(UnionDef this) : isVariableLen()? getFQN()+"*" : getFQN();
+getReturn_CPPType(EnumDef this) : getFQN();
+getReturn_CPPType(InterfaceDef this) : getFQN()+"_ptr";
+getReturn_CPPType(ConstantDef this) : getType().getReturn_CPPType();
+
+
+
+/*** Special cases used by AliasDef ***/
+/* IN/OUT/INOUT */
+getIN_CPPType(IDLType this, String fqn) : "/***ERROR IDLType IN: "+metaType.name+"***/";
+getOUT_CPPType(IDLType this, String fqn) : "/***ERROR IDLType OUT: "+metaType.name+"***/";
+getINOUT_CPPType(IDLType this, String fqn) : "/***ERROR IDLType INOUT: "+metaType.name+"***/";
+
+getIN_CPPType(PrimitiveDef this, String fqn) : switch (kind) {
+		case PrimitiveKind::PK_ANY : "const "+fqn+" &"
+		case PrimitiveKind::PK_WSTRING : "const "+fqn // TODO
+		case PrimitiveKind::PK_STRING : "const char*"
+		default : fqn
+	};
+
+getOUT_CPPType(PrimitiveDef this, String fqn) :switch(kind) {
+		case PrimitiveKind::PK_ANY : "::CORBA::Any *&"
+		case PrimitiveKind::PK_WSTRING : fqn+"&" // TODO
+		case PrimitiveKind::PK_STRING : "char*&"
+		default : fqn+"&"
+	};
+
+getINOUT_CPPType(PrimitiveDef this, String fqn) : switch(kind) {
+		case PrimitiveKind::PK_WSTRING : fqn+"&" // TODO
+		case PrimitiveKind::PK_STRING : "char*&"
+		default : fqn+"&"
+	};
+
+/*
+// these won't exist, as they will allways be contained
+// within an aliasdef
+getIN_CPPType(StringDef this, String fqn) :	"STRINGDEF"+bound;
+getIN_CPPType(FixedDef this, String fqn) :	"FIXED"+digits+","+scale;
+*/
+getIN_CPPType(TypedefDef this, String fqn) : "const "+fqn+"&";
+getOUT_CPPType(TypedefDef this, String fqn) : fqn+"_out";
+getINOUT_CPPType(TypedefDef this, String fqn) : fqn+"&";
+
+getIN_CPPType(StructDef this, String fqn) : "const "+fqn+"&";
+getOUT_CPPType(StructDef this, String fqn) : isVariableLen()? fqn+"*&" : fqn+"&";
+getINOUT_CPPType(StructDef this, String fqn) : fqn+"&";
+
+getIN_CPPType(AliasDef this, String fqn) : 
+	if SequenceDef.isInstance(getType()) then
+		"const "+fqn+"&"
+	else if ArrayDef.isInstance(getType()) then
+		"const "+fqn
+	else
+	 	getType().getIN_CPPType(fqn)
+	 ;
+	 
+getOUT_CPPType(AliasDef this, String fqn) :
+	if SequenceDef.isInstance(getType()) then
+		fqn+"*&"
+	else if ArrayDef.isInstance(getType()) then
+		(getType().isVariableLen()? fqn+"_slice*&" : fqn)
+	else
+	 	getType().getOUT_CPPType(getFQN())
+	 ;
+
+getINOUT_CPPType(AliasDef this, String fqn) :
+	if SequenceDef.isInstance(getType()) then
+		fqn+"&"
+	else if ArrayDef.isInstance(getType()) then
+		fqn
+	else
+	 	getType().getINOUT_CPPType(fqn)
+	 ;
+
+getIN_CPPType(UnionDef this, String fqn) : "const "+fqn+"&";
+getOUT_CPPType(UnionDef this, String fqn) : isVariableLen()? fqn+"*&" : fqn+"&";
+getINOUT_CPPType(UnionDef this, String fqn) : fqn+"&";
+
+getIN_CPPType(EnumDef this, String fqn) : fqn;
+getOUT_CPPType(EnumDef this, String fqn) : fqn+"&";
+getINOUT_CPPType(EnumDef this, String fqn) : fqn+"&";
+
+getIN_CPPType(InterfaceDef this, String fqn) : fqn+"_ptr";
+getOUT_CPPType(InterfaceDef this, String fqn) : fqn+"_ptr&";
+getINOUT_CPPType(InterfaceDef this, String fqn) : fqn+"_ptr&";
+
+getIN_CPPType(ConstantDef this, String fqn) : getType().getIN_CPPType(fqn);
+getOUT_CPPType(ConstantDef this, String fqn) : getType().getOUT_CPPType(fqn);
+getINOUT_CPPType(ConstantDef this, String fqn) : getType().getINOUT_CPPType(fqn);
+
+/* return types */
+getReturn_CPPType(IDLType this, String fqn) : "/***ERROR IDLType IN ("+fqn+"): "+metaType.name+"***/";
+
+getReturn_CPPType(PrimitiveDef this, String fqn) : fqn;
+
+getReturn_CPPType(ArrayDef this, String fqn) : "/***"+this.containedType.metaType.name+" ["+this.bounds+"] ("+fqn+")(arrays still not supported)***/";
+
+// these won't exist, as they will allways be contained
+// within an aliasdef
+//getReturn_CPPType(StringDef this, String fqn) :	"/*STRINGDEF*/"+bound;
+//getReturn_CPPType(FixedDef this, String fqn) :	"/*FIXED*/"+digits+","+scale;
+
+getReturn_CPPType(TypedefDef this, String fqn) : fqn+"*"; /*separated into cases*/
+getReturn_CPPType(StructDef this, String fqn) : isVariableLen()? fqn+"*" : fqn;
+getReturn_CPPType(AliasDef this, String fqn) :
+	if SequenceDef.isInstance(getType()) then
+		fqn+"*"
+	else if ArrayDef.isInstance(getType()) then
+		fqn+"_slice*"
+	else
+		getType().getReturn_CPPType(fqn)
+	;
+getReturn_CPPType(UnionDef this, String fqn) : isVariableLen()? fqn+"*" : fqn;
+getReturn_CPPType(EnumDef this, String fqn) : fqn;
+getReturn_CPPType(InterfaceDef this, String fqn) : fqn+"_ptr";
+getReturn_CPPType(ConstantDef this, String fqn) : getType().getReturn_CPPType(fqn);

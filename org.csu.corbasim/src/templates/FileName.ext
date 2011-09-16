@@ -1,0 +1,21 @@
+import org::csu::idl::idlmm;
+extension templates::Properties;
+
+String getFileName(TranslationUnit tu) : JAVA templates.FileNameHelper.getFileName(org.csu.idl.idlmm.TranslationUnit);
+String getFileName(Include tu) : JAVA templates.FileNameHelper.getFileName(org.csu.idl.idlmm.Include);
+
+String getFileNameStubCpp(TranslationUnit tu) : tu.getFileName()+getStubCppSuffix();
+String getFileNameStubHpp(TranslationUnit tu) : tu.getFileName()+getStubHppSuffix();
+String getFileNameSkelCpp(TranslationUnit tu) : tu.getFileName()+getSkelCppSuffix();
+String getFileNameSkelHpp(TranslationUnit tu) : tu.getFileName()+getSkelHppSuffix();
+String getFileNameSkelImplCpp(TranslationUnit tu) : tu.getFileName()+getSkelImplCppSuffix();
+String getFileNameSkelImplHpp(TranslationUnit tu) : tu.getFileName()+getSkelImplHppSuffix();
+
+String getHeader(String this) :
+    "_" + this.toUpperCase().replaceAll("\\.","_")
+;
+
+// For includes
+String getFileNameStubHpp(Include tu) : tu.getFileName()+getStubHppSuffix();
+String getFileNameSkelHpp(Include tu) : tu.getFileName()+getSkelHppSuffix();
+// String getFileNameSkelImplCpp(Include tu) : tu.getFileName()+getSkelImplCppSuffix();

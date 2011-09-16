@@ -1,0 +1,97 @@
+«IMPORT org::csu::idl::idlmm»
+«EXTENSION templates::auxiliares»
+«EXTENSION templates::cpptypes»
+«EXTENSION templates::FileName»
+«EXTENSION templates::Properties»
+«EXTENSION templates::POA»
+«EXTENSION templates::Operations»
+
+«DEFINE main FOR TranslationUnit-»
+«FILE getFileNameSkelImplHpp()-»
+«EXPAND templates::Header::header(getFileNameSkelImplHpp()) FOR this-»
+
+«LET getFileNameSkelImplHpp().getHeader() AS cppDefineName-»
+#ifndef «cppDefineName»
+#define «cppDefineName»
+
+«PROTECT CSTART '/*' CEND '*/' ID getFileNameSkelImplHpp() DISABLE»
+// Please, enable the protected region if you add manually written code.
+// To do this, add the keyword ENABLED before START.
+
+// TODO: Additional includes here
+«ENDPROTECT»
+
+#include "«getFileNameSkelHpp()»"
+
+«EXPAND code FOREACH this.contains»
+
+#endif // «cppDefineName»
+
+«ENDLET-»
+«ENDFILE»
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR Contained-»«ENDDEFINE»
+
+
+
+«DEFINE code FOR ModuleDef-»
+// BEGIN CODE MODULE «identifier»
+namespace «identifier»
+{
+	«PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i" DISABLE»
+	// Please, enable the protected region if you add manually written code.
+	// To do this, add the keyword ENABLED before START.
+	«ENDPROTECT»
+
+    «EXPAND code FOREACH contains SEPARATOR "\n\n"-»
+} // «identifier»
+// END CODE MODULE «identifier»
+
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR InterfaceDef-»
+// BEGIN CODE INTERFACE «identifier»
+class «identifier»_i;
+
+class «identifier»_i : virtual public ::«this.getPOAFQN()»
+{
+public:
+    «identifier»_i();
+    virtual ~«identifier»_i();
+
+    «EXPAND code FOREACH contains SEPARATOR "\n\n"-»
+
+	«EXPAND code FOREACH getAllParentsSet().contains SEPARATOR "\n\n"-»
+
+	«PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i" DISABLE»
+	// Please, enable the protected region if you add manually written code.
+	// To do this, add the keyword ENABLED before START.
+	«ENDPROTECT»
+	
+}; // «identifier»_i
+// END CODE INTERFACE «identifier»
+
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR OperationDef-»
+    «IF !contexts.isEmpty-»
+    // ERROR: CONTEXT IN OPERATIONDEF NOT SUPPORTED (YET)
+    «ENDIF-»
+    «getSignature()»;
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR AttributeDef-»
+    «getGetSignature()»;«REM»GET function«ENDREM»
+    «IF !isReadonly-»
+    «getSetSignature()»;«REM»SET function«ENDREM»
+    «ENDIF-»
+«ENDDEFINE»

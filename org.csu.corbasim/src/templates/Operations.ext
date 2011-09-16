@@ -1,0 +1,88 @@
+import org::csu::idl::idlmm;
+
+extension templates::auxiliares;
+extension templates::cpptypes reexport;
+
+//
+// Operation signatures
+//
+
+String getSignature(OperationDef this) :
+    getSignature(identifier)
+;
+
+cached String getSignature(OperationDef this, String prefix) :
+    getType().getReturn_CPPType() + " "+ prefix + "(" + parameters._getParameterSignature() + ")"
+;
+
+
+//
+// Attribute signatures
+//
+
+String getGetSignature(AttributeDef this) :
+    getGetSignature(identifier)
+;
+
+cached String getGetSignature(AttributeDef this, String prefix) :
+    getType().getReturn_CPPType() + " " + prefix + "()"
+;
+
+// Requires !isReadonly
+String getSetSignature(AttributeDef this) :
+    getSetSignature(identifier)
+;
+
+// Requires !isReadonly
+cached String getSetSignature(AttributeDef this, String prefix) :
+    "void " + prefix + "(" + getType().getIN_CPPType() + " " + identifier + ")"
+;
+
+//
+// ParemeterDef operations
+//
+String directionToString(ParameterDef this) : switch(direction)
+{
+    case ParameterMode::PARAM_IN: "CORBA::ARG_IN"
+    case ParameterMode::PARAM_OUT: "CORBA::ARG_OUT"
+    case ParameterMode::PARAM_INOUT: "CORBA::ARG_INOUT"
+    default: ""
+};
+
+String getDirection(ParameterDef this) : switch(direction)
+{
+    case ParameterMode::PARAM_IN: "IN"
+    case ParameterMode::PARAM_OUT: "OUT"
+    case ParameterMode::PARAM_INOUT: "INOUT"
+    default: ""
+};
+
+
+//
+// Private methods
+//
+
+private String _getParameterSignature(ParameterDef this) :
+    getParamCPPType() + " " + identifier
+;
+
+private String _getParameterSignature(List[ParameterDef] this) :
+    if size == 0 then
+        ""
+    else
+        if size == 1 then
+            first()._getParameterSignature()
+        else
+            first()._getParameterSignature() + ", " + withoutFirst()._getParameterSignature()
+;
+
+
+// all operations
+
+List[OperationDef] getAllOperations(TranslationUnit this): 
+	contains.select(e|Container.isInstance(e)).getAllOperations();
+List[OperationDef] getAllOperations(Contained this): 
+	((Container) this).getAllOperations();
+List[OperationDef] getAllOperations(Container this): 
+	contains.select(e|OperationDef.isInstance(e)).
+		addAll(contains.select(e|Container.isInstance(e)).getAllOperations());

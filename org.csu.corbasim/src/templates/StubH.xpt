@@ -1,0 +1,446 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::auxiliares»
+«EXTENSION templates::cpptypes»
+«EXTENSION templates::cppcode»
+«EXTENSION templates::FileName»
+«EXTENSION templates::Properties»
+«EXTENSION templates::Operations»
+
+«EXTENSION templates::StructDef»
+
+«DEFINE main FOR TranslationUnit-»
+«FILE getFileNameStubHpp()-»
+«EXPAND templates::Header::header(getFileNameStubHpp()) FOR this-»
+
+«LET getFileNameStubHpp().getHeader() AS cppDefineName-»
+#ifndef «cppDefineName»
+#define «cppDefineName»
+
+#include <mycorba/CORBA.hpp>
+#include <mycorba/mapping/mapping.hpp>
+
+«FOREACH includes AS e»
+#include "«e.getFileNameStubHpp()»"
+«ENDFOREACH»
+
+«EXPAND code FOREACH this.contains SEPARATOR "\n\n"»
+
+// BEGIN ANY OPERATORS
+namespace CORBA
+{«REM»any operators for Structures and Sequences (+ anonymous sequences) «ENDREM»
+«EXPAND anyOperators FOREACH this.contains SEPARATOR "\n\n"-»
+} // CORBA
+// END ANY OPERATORS
+
+// BEGIN EXPAND STRUCTS
+namespace mycorba
+{«REM»generate code of "expand" method for Structures«ENDREM»
+«EXPAND structsExpand FOREACH this.contains SEPARATOR "\n\n"-»
+} // mycorba
+// END EXPAND STRUCTS
+
+#endif // «cppDefineName»
+
+«ENDLET-»
+«ENDFILE-»
+«ENDDEFINE»
+
+
+
+«REM»FIXME: don't show innecesary messages«ENDREM»
+«DEFINE code FOR Contained-»«ENDDEFINE»
+
+
+
+«DEFINE code FOR ModuleDef-»
+// BEGIN CODE MODULE «identifier»
+namespace «identifier»
+{
+    «EXPAND code FOREACH contains SEPARATOR "\n\n"-»
+} // «identifier»
+// END CODE MODULE «identifier»
+
+«ENDDEFINE»
+
+«DEFINE forward FOR String-»
+class «this»;
+
+typedef «this»* «this»_ptr;
+typedef csu::mycorba::_interface_var_t< «this» > «this»_var;
+typedef csu::mycorba::_interface_out_t< «this» > «this»_out;
+«ENDDEFINE»
+
+«DEFINE code FOR ForwardDef-»
+// BEGIN CODE FORWARD «identifier»
+	«EXPAND forward FOR identifier-»
+// END CODE FORWARD «identifier»
+«ENDDEFINE»
+
+«DEFINE code FOR InterfaceDef-»
+// BEGIN CODE INTERFACE «identifier»
+	«EXPAND forward FOR identifier-»
+	
+«getCode_TypeCodeDeclaration()»
+
+class «identifier» : «IF derivesFrom.isEmpty-»public virtual ::CORBA::Object
+«ELSE-»
+«FOREACH derivesFrom AS parent SEPARATOR ", "»public virtual «parent.getFQN()»«ENDFOREACH»
+«ENDIF-»
+{
+public:
+    «identifier»();
+    virtual ~«identifier»();
+
+    typedef «identifier»_var _var_type;
+    typedef «identifier»_out _out_type;
+
+    static «identifier»_ptr _duplicate(«identifier»_ptr obj);
+    static «identifier»_ptr _narrow(::CORBA::Object_ptr obj);
+    
+    static inline «identifier»_ptr _unchecked_narrow(::CORBA::Object_ptr obj)
+    {
+        return _narrow(obj);
+    }
+        
+    static «identifier»_ptr _nil(void)
+    {
+        return static_cast< «identifier»_ptr > (0);
+    }
+
+    «EXPAND code FOREACH this.contains-»
+
+protected:
+    «identifier»(const CORBA::Object& obj);
+
+private:
+    void operator=(const «identifier» &);
+}; // «identifier»
+// END CODE INTERFACE «identifier»
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR OperationDef-»
+    «IF !contexts.isEmpty-»
+    // ERROR: CONTEXT IN OPERATIONDEF NOT SUPPORTED (YET)
+    «ENDIF-»
+    virtual «getSignature()»;
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR AttributeDef-»
+    virtual «getGetSignature()»;«REM»GET function«ENDREM»
+    «IF !isReadonly-»
+    virtual «getSetSignature()»;«REM»SET function«ENDREM»
+    «ENDIF-»
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR ExceptionDef-»
+// BEGIN CODE EXCEPTION «identifier»
+«getCode_TypeCodeDeclaration()»
+    «FOREACH members AS mmb-»
+MYCORBA_EXCEPTION_ATTRIBUTE(«identifier», «mmb.identifier», «mmb.getType().get_CPPType()»);
+    «ENDFOREACH-»
+typedef csu::mycorba::mapping::exceptions::exception< ::CORBA::UserException, «getTypeCode()»«FOREACH members AS mmb-», _«identifier»_«mmb.identifier-»«ENDFOREACH-» > «identifier»;
+// END CODE EXCEPTION «identifier»
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR ConstantDef-»
+    «IF InterfaceDef.isInstance(definedIn)-»
+    static «getCode_ConstDeclaration()»
+    «ELSE-»
+static «getCode_ConstDefinition(false)»
+    «ENDIF-»
+«ENDDEFINE»
+
+
+
+«REM»
+            ********CODE GENERATION FOR TYPEDEFDEF SONS*******
+«ENDREM»
+
+«DEFINE code FOR TypedefDef-»
+/**** ERROR: CODE NOT DEFINED FOR TYPEDEF: "«metaType.name»" ****/
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR AliasDef-»
+// BEGIN CODE ALIAS «identifier»
+«getCode_TypeCodeDeclaration()»
+
+«LET getType() AS type-»
+    «IF SequenceDef.isInstance(type)-»
+        «EXPAND sequence((SequenceDef)type) FOR this-»
+    «ELSEIF ArrayDef.isInstance(type)-»
+        «EXPAND array((ArrayDef)type) FOR this-»
+    «ELSE-»
+        «EXPAND alias FOR this-»
+    «ENDIF-»
+«ENDLET-»
+// END CODE ALIAS «identifier»
+«ENDDEFINE»
+
+
+
+«DEFINE alias FOR AliasDef-»
+«LET getOriginalType() AS type-»
+«IF SequenceDef.isInstance(type)-»
+typedef «getType().getFQN_Type()» «identifier»;
+typedef «getType().getFQN_Type()»_var «identifier»_var;
+typedef «getType().getFQN_Type()»_out «identifier»_out;
+«ELSEIF ArrayDef.isInstance(type)-»
+typedef «getType().getFQN_Type()» «identifier»;
+typedef «getType().getFQN_Type()»_slice «identifier»_slice;
+typedef «getType().getFQN_Type()»_var «identifier»_var;
+typedef «getType().getFQN_Type()»_forany «identifier»_forany;
+«ELSE-»
+typedef «getType().getFQN_Type()» «identifier»;
+    «IF PrimitiveDef.isInstance(type)-»
+    «LET (PrimitiveDef)type AS primitive-»
+        «IF primitive.kind ==  PrimitiveKind::PK_OBJREF-»
+typedef «primitive.getFQN_Type()»_ptr «identifier»_ptr;
+typedef «primitive.getFQN_Type()»_var «identifier»_var;
+typedef «primitive.getFQN_Type()»_out «identifier»_out;
+        «ELSEIF primitive.kind ==  PrimitiveKind::PK_STRING-»
+typedef ::CORBA::String_out «identifier»_out;
+typedef ::CORBA::String_var «identifier»_var;
+        «ELSEIF primitive.kind ==  PrimitiveKind::PK_WSTRING-»
+typedef ::CORBA::WString_out «identifier»_out;
+typedef ::CORBA::WString_var «identifier»_var;
+        «ELSEIF primitive.kind ==  PrimitiveKind::PK_ANY-»
+typedef «primitive.getFQN_Type()»_var «identifier»_var;
+        «ELSEIF primitive.kind ==  PrimitiveKind::PK_NULL || primitive.kind ==  PrimitiveKind::PK_VOID
+              || primitive.kind ==  PrimitiveKind::PK_TYPECODE || primitive.kind ==  PrimitiveKind::PK_PRINCIPAL-»
+        «ELSE-»
+typedef «getType().getFQN_Type()»_out «identifier»_out;
+        «ENDIF-»
+    «ENDLET-»
+    «ELSEIF StructDef.isInstance(type)-»
+typedef «((StructDef)type).get_CPPType()»_out «identifier»_out;
+typedef «((StructDef)type).get_CPPType()»_var «identifier»_var;
+    «ELSEIF InterfaceDef.isInstance(type)-»
+typedef «type.getFQN_Type()»_ptr «identifier»_ptr;
+typedef «type.getFQN_Type()»_var «identifier»_var;
+typedef «type.getFQN_Type()»_out «identifier»_out;
+    «ENDIF-»
+«ENDIF-»
+
+«ENDLET-»
+«ENDDEFINE»
+
+
+
+«DEFINE sequence(SequenceDef seq) FOR AliasDef-»
+// BEGIN SEQUENCE «identifier»
+«seq.getCode_SequenceDeclaration(identifier, getTypeCode())»
+// END SEQUENCE «identifier»
+«ENDDEFINE»
+
+
+
+«DEFINE array(ArrayDef array) FOR AliasDef-»
+    «EXPAND templates::ArrayDef::stubH(identifier) FOR array-»
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR EnumDef-»
+// BEGIN CODE ENUM «identifier»
+enum «identifier» { «FOREACH members AS elem SEPARATOR ", "»«elem.identifier»«ENDFOREACH» };
+typedef «identifier»& «identifier»_out;
+
+«getCode_TypeCodeDeclaration()»
+// END CODE ENUM «identifier»
+«ENDDEFINE»
+
+
+
+«DEFINE code FOR StructDef-»
+// BEGIN CODE STRUCT «identifier»
+struct «identifier»;
+
+typedef ::csu::mycorba::_structured_var_t< «identifier» > «identifier»_var;
+    «IF isVariableLen()-»
+typedef ::csu::mycorba::_structured_out_t< «identifier» > «identifier»_out;
+    «ELSE-»
+typedef «identifier»& «identifier»_out;
+    «ENDIF-»
+
+struct «identifier»
+{
+    typedef «identifier»_var _var_type;
+    typedef «identifier»_out _out_type;
+
+    «FOREACH getAnonymousFields() AS field-»
+        «EXPAND anonymous(this, field) FOR field.getType()-»
+    «ENDFOREACH-»
+    
+    «EXPAND code FOREACH getNestedStructs()-»
+
+    // STRUCT MEMBERS
+    «FOREACH members AS mmb-»
+    «mmb.getMemberTypeId()» «mmb.identifier»;
+    «ENDFOREACH-»
+};
+
+«getCode_TypeCodeDeclaration()»
+// END CODE STRUCT «identifier»
+«ENDDEFINE»
+
+
+«REM»anonymous types used inside the Structure«ENDREM»
+«DEFINE anonymous(StructDef struct, Field field) FOR IDLType»«ENDDEFINE»
+
+
+
+«DEFINE anonymous(StructDef struct,Field field) FOR SequenceDef»
+// BEGIN ANONYMOUS SEQUENCE «field.identifier»
+«getCode_TypeCodeDeclaration(true, field.getMemberTypeId())»
+
+«getCode_SequenceDeclaration(field.getMemberTypeId(), struct.getTypeCode(field))»
+// END ANONYMOUS SEQUENCE «field.identifier»
+«ENDDEFINE»
+
+
+
+«DEFINE anonymous(StructDef struct, Field field) FOR ArrayDef»
+// BEGIN ANONYMOUS ARRAY «field.identifier»
+«getCode_TypeCodeDeclaration(true, field.getMemberTypeId())»
+
+«EXPAND templates::ArrayDef::stubH(field.getMemberTypeId(), true) FOR this-»
+// END ANONYMOUS ARRAY «field.identifier»
+«ENDDEFINE»
+
+
+
+
+«REM»
+            ********Generate Any Operators for Structures and Sequences (+ Anonymous Sequences) *******
+«ENDREM»
+
+«REM»just defined for structures and sequences«ENDREM»
+«DEFINE anyOperators FOR Contained-»«ENDDEFINE»
+
+
+
+«DEFINE anyOperators FOR ModuleDef-»
+// BEGIN ANY OPERATORS MODULE «getFQN()»
+    «EXPAND anyOperators FOREACH contains SEPARATOR "\n\n"-»
+// END ANY OPERATORS MODULE «getFQN()»
+«ENDDEFINE» 
+
+
+
+«DEFINE anyOperators FOR InterfaceDef-»
+// BEGIN ANY OPERATORS INTERFACE «getFQN()»
+«getCode_AnyOperatorsDeclaration()»
+    «EXPAND anyOperators FOREACH contains SEPARATOR "\n\n"-»    
+// END ANY OPERATORS INTERFACE «getFQN()»
+«ENDDEFINE»
+
+
+«DEFINE anyOperators FOR EnumDef-»
+// ENUM «getFQN()»
+«getCode_AnyOperatorsDeclaration()»
+«ENDDEFINE»
+
+
+«REM»
+            Any operatos for Structs and his anonymous types
+«ENDREM»
+
+
+«DEFINE anyOperators FOR StructDef-»
+// BEGIN ANY OPERATORS STRUCT «getFQN()»
+«getCode_AnyOperatorsDeclaration(get_CPPType())-»
+
+    «EXPAND anonymousAnyOperators(this) FOREACH getAnonymousFields() SEPARATOR "\n\n"-»
+    
+    «EXPAND anyOperators FOREACH getNestedStructs()-»
+// END ANY OPERATORS STRUCT «getFQN()»
+«ENDDEFINE»
+
+
+«DEFINE anonymousAnyOperators(StructDef struct) FOR Field-»
+	«IF SequenceDef.isInstance(getType())-»
+	    «LET (SequenceDef) getType() AS seq-»
+// ANONYMOUS SEQUENCE «struct.getFQN(this)»  («getMemberTypeId()», MEMBER OF STRUCT «struct.identifier»)
+«struct.getCode_AnyOperatorsDeclaration(struct.getFQN(this))-»
+	    «ENDLET-»
+«REM»
+    «ELSEIF ArrayDef.isInstance(getType())-»
+        «LET (SequenceDef) getType() AS seq-»
+// ANONYMOUS ARRAY «struct.getFQN(this)»  («getMemberTypeId()», MEMBER OF STRUCT «struct.identifier»)
+«((ArrayDef) getType()).getCode_AnyOperatorsDeclaration(struct.getFQN(this)+"_forany")-»
+        «ENDLET-»
+«ENDREM»
+    «ENDIF-»
+«ENDDEFINE»
+
+
+
+«REM»
+            Any operatos for Alias
+«ENDREM»
+
+
+
+«DEFINE anyOperators FOR AliasDef-»
+    «EXPAND anyOperators(this) FOR getType()-»
+«ENDDEFINE»
+
+«DEFINE anyOperators(AliasDef alias) FOR IDLType-»«ENDDEFINE»
+
+
+«DEFINE anyOperators(AliasDef alias) FOR SequenceDef-»
+// SEQUENCE «alias.getFQN()»
+«alias.getCode_AnyOperatorsDeclaration(alias.getFQN())-»
+«ENDDEFINE»
+
+«REM»
+«DEFINE anyOperators(AliasDef alias) FOR ArrayDef-»
+// ARRAY «alias.getFQN()»
+«getCode_AnyOperatorsDeclaration(alias.getFQN()+"_forany")-»
+«ENDDEFINE»
+«ENDREM»
+
+
+
+
+«REM»
+            ********Generate "Expand" functions for Structures*******
+«ENDREM»
+
+«REM»just defined for structures«ENDREM»
+«DEFINE structsExpand FOR Contained-»«ENDDEFINE»
+
+
+«DEFINE structsExpand FOR ModuleDef-»
+    «EXPAND structsExpand FOREACH contains-»
+«ENDDEFINE»
+
+«DEFINE structsExpand FOR InterfaceDef-»
+    «EXPAND structsExpand FOREACH contains-»
+«ENDDEFINE»
+
+«DEFINE structsExpand FOR StructDef-»
+// STRUCT: «getFQN()»
+template<>
+inline void expand< «getFQN()» >(«getFQN()»& s,
+        csu::mycorba::typecode_stack_t & stack)
+{
+    csu::mycorba::mapping::expand::Struct _s(«getTypeCode()», stack);
+«REM»push members in reverse order«ENDREM»
+    «FOREACH members.reverse() AS mmb-»
+    _s.push(s.«mmb.identifier»);
+    «ENDFOREACH-»
+}
+
+«ENDDEFINE»

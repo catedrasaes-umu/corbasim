@@ -1,0 +1,18 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::Properties»
+
+«DEFINE main FOR TranslationUnit»
+    «IF generateStub()»
+        «EXPAND templates::StubH::main FOR this»
+        «EXPAND templates::StubC::main FOR this»
+    «ENDIF»
+    «IF generateSkel()»«REM» && hasInterfaceDef()»«ENDREM»
+        «EXPAND templates::SkelH::main FOR this»
+        «EXPAND templates::SkelC::main FOR this»
+    «ENDIF»
+    «IF generateSkelImpl()»«REM»&& hasInterfaceDef()»«ENDREM»
+        «EXPAND templates::SkelImplH::main FOR this»
+        «EXPAND templates::SkelImplC::main FOR this»
+    «ENDIF»
+«ENDDEFINE»

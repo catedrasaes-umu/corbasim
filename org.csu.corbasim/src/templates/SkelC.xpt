@@ -1,0 +1,157 @@
+«IMPORT org::csu::idl::idlmm»
+«EXTENSION templates::auxiliares»
+«EXTENSION templates::cpptypes»
+«EXTENSION templates::cppcode»
+«EXTENSION templates::FileName»
+«EXTENSION templates::Properties»
+
+«EXTENSION templates::POA»
+«EXTENSION templates::Operations»
+
+«DEFINE main FOR TranslationUnit-»
+«FILE getFileNameSkelCpp()-»
+«EXPAND templates::Header::header(getFileNameSkelCpp()) FOR this-»
+
+#include "«getFileNameSkelHpp()»"
+#include <mycorba/mapping/mapping.hpp>
+
+«EXPAND body FOREACH this.contains.typeSelect(Container)»
+
+«ENDFILE-»
+«ENDDEFINE»
+
+
+
+«DEFINE body FOR ModuleDef-»
+    «EXPAND body FOREACH this.contains-»
+«ENDDEFINE»
+
+
+
+«DEFINE body FOR Container-»
+    «EXPAND body FOREACH this.contains-»
+«ENDDEFINE»
+
+
+
+«DEFINE body FOR Contained-»«ENDDEFINE»
+
+
+
+«DEFINE body FOR InterfaceDef»
+// BEGIN BODY INTERFACE «getFQN()»
+«EXPAND methods FOREACH this.contains.typeSelect(OperationDef) SEPARATOR "\n\n"»
+«EXPAND methods FOREACH this.contains.typeSelect(AttributeDef) SEPARATOR "\n\n"»
+«EXPAND params FOREACH this.contains.typeSelect(OperationDef).select(e|!e.parameters.isEmpty) SEPARATOR "\n\n"»
+«EXPAND params FOREACH this.contains.typeSelect(AttributeDef) SEPARATOR "\n\n"»
+
+static ::csu::mycorba::_operation
+__operations_«getFQN("_")»[] = {
+«EXPAND opDef FOREACH this.contains.typeSelect(OperationDef)-»
+«EXPAND setGetDef FOREACH this.contains.typeSelect(AttributeDef)-»
+    {"", NULL, NULL}
+};
+
+«getPOAFQN()»::«getPOA()»()
+{
+    _add_operations(__operations_«getFQN("_")»);
+}
+
+«getPOAFQN()»::~«getPOA()»()
+{
+}
+
+«getFQN()»_ptr «getPOAFQN()»::_this()
+{
+    return csu::mycorba::mapping::skel::SkelImpl< «getPOAFQN()», «getFQN()» >::_this(this);
+}
+
+// END BODY INTERFACE «getFQN()»
+
+«ENDDEFINE»
+
+
+«REM»just for operations with parameters«ENDREM»
+«DEFINE params FOR OperationDef-»
+// BEGIN PARAMETERS OPERATION «getFQN()»
+static ::csu::mycorba::_nv_param
+__parameters_«getFQN("_")»[] = {«FOREACH parameters AS prm SEPARATOR ","»
+    {"«prm.identifier»", «prm.getType().getTypeCode()», «prm.directionToString()»}«ENDFOREACH»,
+    {"", NULL}
+};
+// END PARAMETERS OPERATION «getFQN()»
+«ENDDEFINE»
+
+
+
+«DEFINE params FOR AttributeDef-»
+// BEGIN PARAMETERS ATTRIBUTE «getFQN()»
+static ::csu::mycorba::_nv_param
+__attr_parameters_«identifier»_get[] = {
+    {"", NULL, 0}
+};
+    «IF !isReadonly-»
+    
+static ::csu::mycorba::_nv_param
+__attr_parameters_«identifier»_set[] = {
+    {"«identifier»", «getType().getTypeCode()», ::CORBA::ARG_IN},
+    {"", NULL, 0}
+};
+    «ENDIF-»
+// END PARAMETERS ATTRIBUTE «getFQN()»
+«ENDDEFINE»
+
+
+
+«DEFINE opDef FOR OperationDef-»
+    {"«identifier»", «getType().getTypeCode()», «IF !parameters.isEmpty-»__parameters_«getFQN("_")»«ELSE»NULL«ENDIF», &_«getFQN("_")»},
+«ENDDEFINE»
+
+
+«REM»GET/SET operations for interface attributes«ENDREM»
+«DEFINE setGetDef FOR AttributeDef-»
+    {"«identifier»:get", «getType().getTypeCode()», __attr_parameters_«identifier»_get, &__get_«getFQN("_")»},
+    «IF !isReadonly-»
+    {"«identifier»:set", CORBA::_tc_void, __attr_parameters_«identifier»_set, &__set_«getFQN("_")»},
+    «ENDIF-»
+«ENDDEFINE»
+
+
+
+«DEFINE methodArgs FOR ParameterDef-»
+    «getCode_SkelArg()-»
+«ENDDEFINE»
+
+
+
+«DEFINE methods FOR OperationDef-»
+// BEGIN METHOD OPERATION «getFQN()»
+typedef ::csu::mycorba::mapping::skel::Method < POA_«definedIn.getFQN()», «getType().getReturn_CPPType()-»
+«IF !parameters.isEmpty-»,
+«EXPAND methodArgs FOREACH parameters SEPARATOR ",\n"-»«ENDIF-» > _«getFQN("_")»_t;
+
+static _«getFQN("_")»_t _«getFQN("_")»(&POA_«getFQN()»);
+// END METHOD OPERATION «getFQN()»
+«ENDDEFINE»
+
+
+
+«DEFINE methods FOR AttributeDef-»
+// BEGIN METHOD ATTRIBUTE «getFQN()»
+«REM»GET function«ENDREM»
+typedef ::csu::mycorba::mapping::skel::Method < POA_«definedIn.getFQN()», «getType().getReturn_CPPType()» > __get_«getFQN("_")»_t;
+
+typedef «getType().getReturn_CPPType()» (POA_«definedIn.getFQN()»::*___get_«getFQN("_")»_t)();
+
+static __get_«getFQN("_")»_t __get_«getFQN("_")»((___get_«getFQN("_")»_t) &POA_«getFQN()»);
+
+«IF !isReadonly-»
+«REM»SET function«ENDREM»
+typedef ::csu::mycorba::mapping::skel::Method < POA_«definedIn.getFQN()», void, «getType().getCode_SkelArgIN()» > __set_«getFQN("_")»_t;
+
+typedef void (POA_«definedIn.getFQN()»::*___set_«getFQN("_")»_t)(«getType().getIN_CPPType()»);
+
+static __set_«getFQN("_")»_t __set_«getFQN("_")»((___set_«getFQN("_")»_t)&POA_«getFQN()»);
+«ENDIF-»
+// END METHOD ATTRIBUTE «getFQN()»
+«ENDDEFINE»
