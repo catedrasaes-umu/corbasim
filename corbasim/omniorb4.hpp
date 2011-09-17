@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * impl.hpp
+ * omniorb4.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -15,27 +15,23 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
-#ifndef CORBASIM_IMPL_HPP
-#define CORBASIM_IMPL_HPP
+#ifndef CORBASIM_OMNIORB4_HPP
+#define CORBASIM_OMNIORB4_HPP
 
-#ifdef CORBASIM_OMNIORB4
-#include <corbasim/omniorb4.hpp>
-#else
-#include <corbasim/tao.hpp>
-#endif
+#include <omniORB4/CORBA.h>
 
 namespace corbasim 
 {
 
-#ifdef CORBASIM_OMNIORB4
-typedef omniorb4 orbimpl;
-#else
-typedef tao orbimpl;
-#endif
+struct omniorb4
+{
+    typedef ::_CORBA_String_element string_for_seq;
+    typedef ::_CORBA_String_member String_Manager;
+};
 
 } // namespace corbasim
 
-#endif /* CORBASIM_IMPL_HPP */
+#endif /* CORBASIM_OMNIORB4_HPP */
 

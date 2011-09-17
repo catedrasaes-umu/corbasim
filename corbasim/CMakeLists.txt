@@ -28,6 +28,7 @@ set(corbasim_EXPORTED_HEADERS
     mpl/vector200.hpp
     mpl/vector50.hpp
     mpl/vector.hpp
+    omniorb4.hpp
     serialization.hpp
     tao.hpp
     version.hpp
