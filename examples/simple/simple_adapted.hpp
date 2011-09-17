@@ -9,6 +9,7 @@
 BOOST_FUSION_ADAPT_STRUCT(
         SimpleExample::St,
         ( SimpleExample::St::_l_seq, l)
+        ( SimpleExample::St::_ss_seq, ss)
         ( ::CORBA::Long, b)
 )
 
@@ -21,6 +22,7 @@ namespace boost
         void serialize(Archive& ar, SimpleExample::St& t, const unsigned int /* unused */)
         {
             ar & boost::serialization::make_nvp("l", t.l);
+            ar & boost::serialization::make_nvp("ss", t.ss);
             ar & boost::serialization::make_nvp("b", t.b);
         }
 
@@ -58,6 +60,35 @@ namespace corbasim
         struct is_corbaseq< SimpleExample::St::_l_seq > : public cs_mpl::true_
         {
             typedef ::CORBA::Long slice_type;
+        };
+
+    } // adapted
+} // corbasim
+
+namespace boost
+{
+    namespace serialization
+    {
+
+        template< class Archive >
+        void serialize(Archive& ar, SimpleExample::St::_ss_seq& t,
+                const unsigned int version)
+        {
+            // TODO
+        }
+
+    } // serialization
+} // boost
+
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct is_corbaseq< SimpleExample::St::_ss_seq > : public cs_mpl::true_
+        {
+            typedef ::TAO::String_Manager slice_type;
         };
 
     } // adapted
@@ -186,6 +217,8 @@ namespace _corbasim_SimpleExample
         typedef corbasim::adapted::member< ::SimpleExample::St, 0 >
                 l_corbasim_member;
         typedef corbasim::adapted::member< ::SimpleExample::St, 1 >
+                ss_corbasim_member;
+        typedef corbasim::adapted::member< ::SimpleExample::St, 2 >
                 b_corbasim_member;
 
     };

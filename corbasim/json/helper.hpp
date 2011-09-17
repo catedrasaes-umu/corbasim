@@ -367,6 +367,52 @@ struct corbaseq_helper : public helper_base
 };
 
 template< typename T >
+struct corbaseq_string_helper : public helper_base
+{
+    T& _t;
+    unsigned int _index;
+    typedef typename adapted::is_corbaseq< T >::slice_type slice_type;
+    slice_type last_inserted;
+
+    corbaseq_string_helper(T& t) :
+        _t(t), _index(0)
+    {
+        _t.length(0);
+    }
+    
+    ~corbaseq_string_helper()
+    {
+        if (!(_index == 0))
+            _t[_index - 1] = last_inserted;
+    }
+
+    helper_base* new_child()
+    {
+        if (!(_index == 0))
+            _t[_index - 1] = last_inserted;
+
+        _t.length(++_index);
+        return create_helper(last_inserted);
+    }
+
+    template< typename Writer >
+    static inline void write(Writer& w, const T& t)
+    {
+        w.array_start();
+
+        size_t size = t.length();
+        for (size_t i = 0; i < size; i++) 
+        {
+            // TODO try to avoid this copy
+            slice_type sl = t[i].in();
+            helper_write(w, sl);
+        }
+
+        w.array_end();
+    }
+};
+
+template< typename T >
 struct string_helper : public helper_base
 {
     T& _t;
@@ -498,6 +544,9 @@ struct calculate_helper
         cs_mpl::eval_if_identity< cs_mpl::is_string< T >, 
             string_helper< T >,
         // else if
+        cs_mpl::eval_if_identity< adapted::is_corbaseq_string< T >, 
+            corbaseq_string_helper< T >,
+        // else if
         cs_mpl::eval_if_identity< adapted::is_corbaseq< T >, 
             corbaseq_helper< T >,
         // else if
@@ -508,7 +557,7 @@ struct calculate_helper
             unsupported_type_helper< T >,
         // else
             boost::mpl::identity< unsupported_type_helper< T > >
-        > > > > > > > >::type type;
+        > > > > > > > > >::type type;
 };
 
 template < typename T >

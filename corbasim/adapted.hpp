@@ -105,6 +105,34 @@ struct member_type
         typename M::index_type >::type type;
 };
 
+namespace detail 
+{
+template< typename T >
+struct is_string_slice_impl
+{
+    typedef typename 
+        cs_mpl::eval_if< cs_mpl::is_string< 
+                    typename is_corbaseq< T >::slice_type >,
+                boost::mpl::identity< cs_mpl::true_ >,
+                boost::mpl::identity< cs_mpl::false_ >
+            >::type type;
+};
+
+template< typename T >
+struct is_string_slice
+{
+    typedef typename cs_mpl::eval_if< is_corbaseq< T >,
+                is_string_slice_impl< T >,
+                boost::mpl::identity< cs_mpl::false_ >
+            >::type type;
+};
+} // namespace detail
+
+template< typename T >
+struct is_corbaseq_string : public detail::is_string_slice< T >::type
+{
+};
+
 } // namespace adapted
 } // namespace corbasim
 

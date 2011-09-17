@@ -116,5 +116,24 @@ int main(int argc, char **argv)
         corbasim::json::write(std::cout, maplist); 
         std::cout << std::endl << std::endl << std::endl;
     }
+
+    {
+        std::ostringstream oss;
+        SimpleExample::St mSt, mSt2;
+
+        mSt.ss.length(10);
+        for (int i = 0; i < 10; i++) 
+        {
+            mSt.ss[i] = "prueba";
+        }
+        
+        corbasim::json::write(std::cout, mSt); 
+        corbasim::json::write(oss, mSt); 
+        std::cout << std::endl << std::endl << std::endl;
+        
+        res = corbasim::json::parse(mSt2, oss.str());
+        corbasim::json::write(std::cout, mSt2); 
+        std::cout << std::endl << std::endl << std::endl;
+    }
 }
 

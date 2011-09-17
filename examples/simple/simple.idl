@@ -6,6 +6,7 @@ module SimpleExample
     {
         // sequence< string > a;
         sequence< long > l;
+        sequence< string > ss;
         long b;
     };
 
