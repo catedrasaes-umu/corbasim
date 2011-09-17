@@ -1,0 +1,11 @@
+module HelloApp
+{
+  typedef sequence< string > Names;
+  interface Hello
+  {
+    string sayHello();
+    string sayHelloTo(in Names people);
+    oneway void shutdown();
+  };
+};
+
