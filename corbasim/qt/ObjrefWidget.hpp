@@ -21,7 +21,7 @@
 #define CORBASIM_QT_OBJREFWIDGET_HPP
 
 #include <QtGui>
-#include <tao/ORB.h>
+#include <corbasim/impl.hpp>
 
 #include <corbasim/core/reference_validator.hpp>
 #include <corbasim/qt/Status.hpp>

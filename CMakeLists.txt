@@ -14,7 +14,16 @@ if(NOT DEFINED CMAKE_BUILD_TYPE OR "${CMAKE_BUILD_TYPE}" STREQUAL "")
 endif()
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-include(check_ace_tao)
+
+if(NOT DEFINED CORBASIM_ORBIMPL)
+    set(CORBASIM_ORBIMPL "TAO")
+endif()
+
+if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
+    include(check_ace_tao)
+elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
+    # TODO check omni
+endif()
 
 add_definitions(-Wall)
 

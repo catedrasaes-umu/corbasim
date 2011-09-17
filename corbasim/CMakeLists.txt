@@ -6,6 +6,10 @@
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.hpp.in" 
     "${CMAKE_CURRENT_SOURCE_DIR}/version.hpp" IMMEDIATE @ONLY)
 
+# Fichero config.hpp
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/core/config.hpp.in" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/core/config.hpp" IMMEDIATE @ONLY)
+
 set(corbasim_EXPORTED_HEADERS
     adapted.hpp
     corba_adapted.hpp

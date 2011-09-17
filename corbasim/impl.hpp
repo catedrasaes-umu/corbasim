@@ -20,6 +20,8 @@
 #ifndef CORBASIM_IMPL_HPP
 #define CORBASIM_IMPL_HPP
 
+#include <corbasim/core/config.hpp>
+
 #ifdef CORBASIM_OMNIORB4
 #include <corbasim/omniorb4.hpp>
 #else
