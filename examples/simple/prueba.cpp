@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <corbasim/xml/parse.hpp>
+
 int main(int argc, char **argv)
 {
     SimpleExample::St st1;
@@ -133,6 +135,27 @@ int main(int argc, char **argv)
         
         res = corbasim::json::parse(mSt2, oss.str());
         corbasim::json::write(std::cout, mSt2); 
+        std::cout << std::endl << std::endl << std::endl;
+    }
+
+    // XML
+    {
+        const char xml_[] =
+            "<?xml version=\"1.0\"?>\n"
+            "<st1>\n"
+            "  <ss>prueba1</ss>"
+            "  <ss>prueba2</ss>"
+            "  <ss>prueba3</ss>"
+            "  <ss>prueba4</ss>"
+            "  <ss>prueba5</ss>"
+            "</st1>";
+
+        SimpleExample::St st1;
+        bool res = corbasim::xml::parse(st1, xml_);
+        std::cout << res << std::endl;
+
+        corbasim::json::write(std::cout, st1); 
+
         std::cout << std::endl << std::endl << std::endl;
     }
 }
