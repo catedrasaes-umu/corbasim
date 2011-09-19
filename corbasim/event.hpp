@@ -29,7 +29,7 @@ namespace corbasim
 namespace event 
 {
 
-enum event_types { EXCEPTION, REQUEST, RESPONSE};
+enum event_types { EXCEPTION, REQUEST, RESPONSE, MESSAGE};
 
 struct event
 {
@@ -52,6 +52,19 @@ struct exception : public event
     tag_t get_tag() const
     {
         return tag< exception >::value();
+    }
+};
+
+struct message : public event
+{
+    event_types get_type() const 
+    {
+        return MESSAGE;
+    }
+
+    tag_t get_tag() const
+    {
+        return tag< message >::value();
     }
 };
 

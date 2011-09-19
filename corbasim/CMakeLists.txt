@@ -53,6 +53,8 @@ set(corbasim_LIBS
 set(corbasim_SRCS
     core/archives.cpp
     core/core.cpp
+    core/event_notifier.cpp
+    core/reference_repository.cpp
     core/reference_validator.cpp
     core/request_serializer.cpp
 
