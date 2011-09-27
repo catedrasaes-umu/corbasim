@@ -120,6 +120,7 @@ struct interface_caller : public interface_caller_base
     }
 
     interface_caller()
+        : m_ref(Interface::_nil())
     {
         cs_mpl::for_each< operations_t >(inserter_t(this));
     }
