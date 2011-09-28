@@ -45,7 +45,15 @@ public:
 
     CORBA::Object_ptr get_reference(const std::string& name);
 
+    CORBA::Object_ptr resolve(const CosNaming::Name& name);
+    CORBA::Object_ptr resolve_str(const std::string& name);
+    CORBA::Object_ptr string_to_object(const std::string& str);
+    char * object_to_string(CORBA::Object_ptr obj);
+
+
 protected:
+
+    CosNaming::NamingContextExt_ptr get_name_service();
 
     reference_repository();
 
@@ -55,7 +63,9 @@ protected:
     entries_t m_entries;
 
     CORBA::ORB_var m_orb;
-    CosNaming::NamingContext_var m_nc;
+    CosNaming::NamingContextExt_var m_nc;
+
+    bool m_ns_available;
 };
 
 } // namespace core

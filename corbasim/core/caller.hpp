@@ -25,6 +25,7 @@
 #include <corbasim/event.hpp>
 #include <corbasim/impl.hpp>
 #include <corbasim/core/inserter.hpp>
+#include <corbasim/core/reference_validator.hpp>
 
 namespace corbasim 
 {
@@ -99,11 +100,9 @@ struct operation_caller_impl : public operation_caller_base< Interface >
     }
 };
 
-struct interface_caller_base
+struct interface_caller_base : public reference_validator_base
 {
     virtual event::event * do_call(event::request * req) const = 0;
-    virtual void set_reference(CORBA::Object_ptr ref) = 0;
-    virtual bool is_nil() const = 0;
 
     virtual ~interface_caller_base();
 };
@@ -134,6 +133,11 @@ struct interface_caller : public interface_caller_base
     {
         CORBA::release(m_ref);
         m_ref = Interface::_narrow(ref);
+    }
+
+    CORBA::Object_ptr get_reference()
+    {
+        return CORBA::Object::_duplicate(m_ref);
     }
 
     template < typename Value >

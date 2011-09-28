@@ -108,6 +108,12 @@ struct is_string< orbimpl::String_Manager > :
 {
 };
 
+template< >
+struct is_string< CORBA::String_var > : 
+    public true_
+{
+};
+
 template< typename T >
 struct is_bool :
     public false_

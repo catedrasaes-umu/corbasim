@@ -22,7 +22,6 @@
 
 #include <boost/shared_ptr.hpp>
 #include <corbasim/impl.hpp>
-#include <corbasim/core/reference_validator.hpp>
 
 namespace corbasim 
 {
@@ -83,7 +82,7 @@ struct reference_validator_impl : public reference_validator_base
 
     CORBA::Object_ptr get_reference()
     {
-        return m_ref;
+        return CORBA::Object::_duplicate(m_ref);
     }
 
     bool is_nil() const

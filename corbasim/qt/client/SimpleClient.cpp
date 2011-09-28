@@ -32,7 +32,8 @@ SimpleClient::SimpleClient(QWidget * parent) :
     m_multi_sender(NULL), m_script_editor(NULL)
 {
     // TODO registrar en otro sitio una sola vez
-    qRegisterMetaType< event::request_ptr >("corbasim::event::request_ptr");
+    qRegisterMetaType< event::request_ptr >
+        ("corbasim::event::request_ptr");
 
     QWidget * central = new QWidget;
     QVBoxLayout * layout = new QVBoxLayout;
@@ -66,18 +67,11 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QObject::connect(act, SIGNAL(toggled(bool)), gb,
         SLOT(setVisible(bool)));
     QHBoxLayout * gbLayout = new QHBoxLayout;
-    m_ior = new QTextEdit;
-    gbLayout->addWidget(m_ior);
+    m_ref = new ObjrefWidget;
+    gbLayout->addWidget(m_ref);
     gb->setLayout(gbLayout);
-    gb->setMaximumHeight(90);
-    m_ior->setMaximumHeight(90);
 
-    m_status = new Status;
-    gbLayout->addWidget(m_status);
     m_mainSplitter->addWidget(gb);
-
-    QObject::connect(m_ior, SIGNAL(textChanged()), this, 
-            SLOT(referenceChanged()));
 
     // Operations
     gb = new QGroupBox("Operations");
@@ -165,8 +159,7 @@ SimpleClient::~SimpleClient()
 
 void SimpleClient::pasteIOR()
 {
-    m_ior->clear();
-    m_ior->paste(); 
+    m_ref->pasteIOR();
 }
 
 void SimpleClient::stopAllTimers()
@@ -179,38 +172,8 @@ void SimpleClient::stopAllTimers()
 void SimpleClient::clearAll()
 {
     m_tree->clear();
-    m_ior->clear();
-    m_status->setRedLight();
     m_caller->set_reference(CORBA::Object::_nil());
-}
-
-void SimpleClient::referenceChanged()
-{
-    int argc = 0;
-    std::string str = m_ior->toPlainText().toStdString();
-
-    std::cout << "New Reference: " << str << std::endl;
-
-    try {
-        // Default ORB
-        CORBA::ORB_var orb = CORBA::ORB_init(argc, NULL);
-
-        m_ref = orb->string_to_object(str.c_str());
-    
-        m_caller->set_reference(m_ref);
-
-        if (m_caller->is_nil())
-            m_status->setRedLight();
-        else
-            m_status->setGreenLight();
-
-    } catch (...)
-    {
-        std::cerr << "Error!" << std::endl;
-
-        // Aquí también luz roja
-        m_status->setRedLight();
-    }
+    m_ref->validatorHasChanged();
 }
 
 void SimpleClient::sendRequest(corbasim::event::request_ptr req)

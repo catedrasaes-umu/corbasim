@@ -78,22 +78,39 @@ reference_repository::get_reference(const std::string& name)
     return update_entry(name);
 }
 
-reference_repository::reference_repository()
+reference_repository::reference_repository() :
+    m_ns_available(true)
 {
     int argc = 0;
     // get the default ORB
     m_orb = CORBA::ORB_init(argc, NULL);
+}
 
-    // get the name service reference
-    CORBA::Object_var obj = 
-        m_orb->resolve_initial_references("NameService");
+CosNaming::NamingContextExt_ptr reference_repository::get_name_service()
+{
+    if (CORBA::is_nil(m_nc) && m_ns_available)
+    {
+        try {
+            // get the name service reference
+            CORBA::Object_var obj = 
+                m_orb->resolve_initial_references("NameService");
 
-    m_nc = CosNaming::NamingContext::_narrow(obj);
+            m_nc = CosNaming::NamingContextExt::_narrow(obj);
+        } catch (...)
+        {
+            m_ns_available = false;
+        }
+    }
+
+    return m_nc;
 }
 
 CORBA::Object_ptr 
 reference_repository::update_entry(const std::string& name)
 {
+    if (CORBA::is_nil(get_name_service()))
+        return CORBA::Object::_nil();
+
     loaded_entries_t::const_iterator it = 
         m_loaded_entries.find(name);
 
@@ -111,5 +128,34 @@ reference_repository::update_entry(const std::string& name)
     }
 
     return CORBA::Object::_nil();
+}
+
+CORBA::Object_ptr 
+reference_repository::resolve(const CosNaming::Name& name)
+{
+    if (!CORBA::is_nil(get_name_service()))
+        return m_nc->resolve(name);
+
+    return CORBA::Object::_nil();
+}
+
+CORBA::Object_ptr 
+reference_repository::resolve_str(const std::string& name)
+{
+    if (!CORBA::is_nil(get_name_service()))
+        return m_nc->resolve_str(name.c_str());
+
+    return CORBA::Object::_nil();
+}
+
+CORBA::Object_ptr 
+reference_repository::string_to_object(const std::string& str)
+{
+    return m_orb->string_to_object(str.c_str());
+}
+
+char * reference_repository::object_to_string(CORBA::Object_ptr obj)
+{
+    return m_orb->object_to_string(obj);
 }
 

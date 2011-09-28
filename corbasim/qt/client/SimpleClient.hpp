@@ -25,7 +25,8 @@
 
 #include <corbasim/core/caller.hpp>
 #include <corbasim/gui/gui_factory.hpp> // TODO fwd
-#include <corbasim/qt/Status.hpp>
+
+#include <corbasim/qt/ObjrefWidget.hpp>
 
 namespace corbasim 
 {
@@ -50,6 +51,7 @@ public:
     void initialize(Interface * ref)
     {
         m_caller.reset(new core::interface_caller< Interface >(ref));
+        m_ref->setValidator(m_caller.get());
 
         do_initialize(gui::gui_factory< Interface >::get_instance());
     }
@@ -58,7 +60,6 @@ public:
 
 public slots:
     void sendRequest(corbasim::event::request_ptr);
-    void referenceChanged();
     void clearAll();
     void stopAllTimers();
     void pasteIOR();
@@ -73,8 +74,7 @@ protected:
     gui::gui_factory_base * m_factory;
     QTabWidget * m_tab;
     QTreeWidget * m_tree;
-    QTextEdit * m_ior;
-    Status * m_status;
+    ObjrefWidget * m_ref;
 
     QButtonGroup m_buttons;
     QActionGroup m_actions;
@@ -90,8 +90,6 @@ protected:
 
     typedef std::vector< RequestDialog * > dialogs_t;
     dialogs_t m_dialogs;
-
-    CORBA::Object_var m_ref;
 
     static const int _max_btns_per_row = 4;
     static const int _max_btns_per_page = 16;
