@@ -1,5 +1,6 @@
 #include "ObjrefWidget.hpp"
 #include <string>
+#include <iostream>
 
 #include <corbasim/cosnaming/Cosnaming_adapted.hpp>
 #include <corbasim/gui/widgets.hpp>
@@ -100,7 +101,7 @@ void ObjrefWidget::valueChanged()
             {
                 CosNaming::Name name;
                 static_cast< resolve_wt* >(m_resolve)->get_value(name);
-                rr->resolve(name);
+                ref = rr->resolve(name);
             }
             break;
         // NS query from str
@@ -108,7 +109,7 @@ void ObjrefWidget::valueChanged()
             {
                 std::string str = 
                     m_resolve_str->toPlainText().toStdString();
-                rr->resolve_str(str);
+                ref = rr->resolve_str(str);
             }
             break;
          // IOR
