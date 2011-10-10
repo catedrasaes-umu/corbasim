@@ -26,6 +26,16 @@ set(corbasim_EXPORTED_HEADERS
     core/servant.hpp
     event.hpp
     impl.hpp
+    json/parser.hpp
+    json/writer.hpp
+    json/helper.hpp
+    json/detail/modp_b64.h
+    json/detail/json_writer.hpp
+    json/detail/json.hpp
+    json/detail/json_parse.hpp
+    json/detail/modp_b64_data.h
+    json/detail/base64_blob.hpp
+    json/converter.hpp
     mpl/for_each.hpp
     mpl.hpp
     mpl/vector100.hpp
