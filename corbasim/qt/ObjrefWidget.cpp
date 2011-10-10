@@ -88,16 +88,17 @@ void ObjrefWidget::setValidator(
     if (CORBA::is_nil(ref))
         return;
 
-    int argc = 0;
-    CORBA::ORB_var orb = CORBA::ORB_init(argc, NULL);
-    std::string ior = orb->object_to_string(ref);
+    core::reference_repository * rr = 
+        core::reference_repository::get_instance();
 
-    m_ior->setPlainText(ior.c_str());
+    CORBA::String_var ior = rr->object_to_string(ref);
+    m_ior->setPlainText(ior.in());
     m_stack->setCurrentIndex(0);
 }
 
 void ObjrefWidget::valueChanged()
 {
+    std::cout << ">valueChanged" << std::endl;
     if (!m_validator)
     {
         m_status->setRedLight();
