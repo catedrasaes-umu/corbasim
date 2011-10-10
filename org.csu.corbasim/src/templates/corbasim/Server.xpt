@@ -18,6 +18,7 @@
 
 «FILE fqn+"_server.cpp"»
 #include <tao/ORB.h>
+#include <orbsvcs/CosNamingC.h>
 #include "«getTranslationUnit().getFileNameSkelHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
 
@@ -102,11 +103,33 @@ int main(int argc, char **argv)
     CORBA::String_var ref = orb->object_to_string(obj);
     std::cout << ref << std::endl;
     
+    CosNaming::NamingContextExt_var nc;
+    CosNaming::Name_var name;
+    
+    if (argc > 1)
+    {
+		CORBA::Object_var ncObj = orb->resolve_initial_references("NameService");
+		
+		nc = CosNaming::NamingContextExt::_narrow(ncObj);
+		
+		if (!CORBA::is_nil(nc))
+		{
+			name = nc->to_name(argv[1]);
+			
+			nc->rebind(name, obj);
+		}    	
+    }
+    
     «PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl_server::___main"»
 	«ENDPROTECT»
 
 	manager->activate();
     orb->run();
+    
+    if (!CORBA::is_nil(nc))
+    {
+    	nc->unbind(name);
+    }
     
     return 0;
 }
