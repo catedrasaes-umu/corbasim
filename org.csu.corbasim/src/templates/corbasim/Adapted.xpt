@@ -283,7 +283,7 @@ struct «identifier»
 «ENDDEFINE»
 
 «DEFINE values FOR OperationDef-»
-«LET parameters.select(e|!ArrayDef.isInstance(e.getOriginalType())) AS initializationList»
+«LET parameters.select(e|!ArrayDef.isInstance(e.getOriginalType()) && !e.getType().isObjectRef()) AS initializationList»
 struct __«identifier»
 {
 	typedef boost::mpl::vector< «FOREACH parameters AS p SEPARATOR ", "»corbasim::Arg_«p.getDirection()»< «p.getParamCPPType()» >«ENDFOREACH» > _arg_list;
@@ -312,6 +312,10 @@ struct __«identifier»
 		«REM»// std::memcpy(«p.identifier», _«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
 		corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(_«p.identifier», «p.identifier»);
 		«ENDFOREACH-»
+		
+		«FOREACH parameters.select(e|e.getType().isObjectRef()) AS p-»
+		«p.identifier» = «p.getType().getFQN_Type()»::_duplicate(_«p.identifier»);
+		«ENDFOREACH-»
 	}
 	«ENDIF-»
 	
@@ -323,6 +327,10 @@ struct __«identifier»
 		«FOREACH parameters.select(e|ArrayDef.isInstance(e.getOriginalType())) AS p-»
 		«REM»// std::memcpy(«p.identifier», o.«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
 		corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(o.«p.identifier», «p.identifier»);
+		«ENDFOREACH-»
+		
+		«FOREACH parameters.select(e|e.getType().isObjectRef()) AS p-»
+		«p.identifier» = o.«p.identifier»;
 		«ENDFOREACH-»
 	}
 
