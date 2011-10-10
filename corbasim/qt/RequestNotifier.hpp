@@ -30,6 +30,7 @@ namespace qt
 
 class RequestNotifier : public QObject 
 {
+    Q_OBJECT
 public:
     RequestNotifier (QObject * parent = 0) {}
     virtual ~RequestNotifier () {}

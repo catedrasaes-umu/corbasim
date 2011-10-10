@@ -88,7 +88,7 @@ struct name;
 */
 
 template< typename Inteface >
-struct sevant;
+struct servant;
 
 template< typename T, unsigned int N >
 struct member
@@ -132,6 +132,12 @@ template< typename T >
 struct is_corbaseq_string : public detail::is_string_slice< T >::type
 {
 };
+
+template< class Interface, typename F >
+inline typename servant< Interface >::template _type< F& >* create_servant(F& f)
+{
+    return new typename servant< Interface >::template _type< F& >(f);
+}
 
 } // namespace adapted
 } // namespace corbasim

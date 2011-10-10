@@ -119,6 +119,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/MultiFileSelectionWidget.hpp
         qt/TemplatedSpinBox.hpp
         qt/RequestDialog.hpp
+        qt/RequestNotifier.hpp
         qt/SimpleScriptEditor.hpp
         qt/client/SimpleClient.hpp
         qt/ObjrefWidget.hpp
@@ -138,6 +139,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/MultiInputWidget.hpp
         qt/SequenceWidget.hpp
         qt/RequestDialog.hpp
+        qt/RequestNotifier.hpp
         qt/RangedWidget.hpp
         qt/Status.hpp)
 

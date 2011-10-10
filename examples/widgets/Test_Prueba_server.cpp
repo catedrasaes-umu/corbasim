@@ -118,6 +118,11 @@ int main(int argc, char **argv)
     CORBA::String_var ref = orb->object_to_string( obj);
     std::cout << ref << std::endl;
 
+    /*PROTECTED REGION ID(Test_Prueba_impl_server::___main) ENABLED START*/
+    /*PROTECTED REGION END*/
+
     manager->activate();
     orb->run();
+
+    return 0;
 }

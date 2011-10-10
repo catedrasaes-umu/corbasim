@@ -142,12 +142,14 @@ namespace _corbasim_Test
             __operacion1(const Test::St2& _a, const Test::St& _b):
             a(_a), b(_b)
             {
+
             }
 
             // Copy constructor
             __operacion1(const __operacion1& o) :
             a(o.a), b(o.b)
             {
+
             }
 
             template< typename Archive >
@@ -172,15 +174,17 @@ namespace _corbasim_Test
             {
             }
 
-            __operacion2(Test::Prueba_ptr _myref):
-            myref(_myref)
+            __operacion2(Test::Prueba_ptr _myref)
             {
+
+                myref = Test::Prueba::_duplicate(_myref);
             }
 
             // Copy constructor
-            __operacion2(const __operacion2& o) :
-            myref(o.myref)
+            __operacion2(const __operacion2& o)
             {
+
+                myref = o.myref;
             }
 
             template< typename Archive >
@@ -203,6 +207,7 @@ namespace _corbasim_Test
             // Copy constructor
             __operacion3(const __operacion3& o)
             {
+
             }
 
             template< typename Archive >
