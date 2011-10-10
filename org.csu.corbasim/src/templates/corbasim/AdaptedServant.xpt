@@ -33,7 +33,7 @@ namespace adapted
 {
 
 template< >
-struct sevant< «this.getFQN()» >
+struct servant< «this.getFQN()» >
 {
 	template < typename F >
 	class _type : public virtual «this.getPOAFQN()»
