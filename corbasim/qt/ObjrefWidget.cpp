@@ -79,6 +79,21 @@ void ObjrefWidget::setValidator(
         core::reference_validator_base * validator)
 {
     m_validator = validator;
+
+    if (!validator)
+        return;
+
+    CORBA::Object_var ref = validator->get_reference();
+
+    if (CORBA::is_nil(ref))
+        return;
+
+    int argc = 0;
+    CORBA::ORB_var orb = CORBA::ORB_init(argc, NULL);
+    std::string ior = orb->object_to_string(ref);
+
+    m_ior->setPlainText(ior.c_str());
+    m_stack->setCurrentIndex(0);
 }
 
 void ObjrefWidget::valueChanged()
