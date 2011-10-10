@@ -126,6 +126,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/Status.hpp
         qt/MultiInputWidget.hpp
         qt/RangedWidget.hpp
+        qt/LogTreeWidget.hpp
         qt/MultiFileSelectionWidget.hpp
         qt/TemplatedSpinBox.hpp
         qt/RequestDialog.hpp
@@ -151,6 +152,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/RequestDialog.hpp
         qt/RequestNotifier.hpp
         qt/RangedWidget.hpp
+        qt/LogTreeWidget.hpp
         qt/Status.hpp)
 
     set(corbasim_qt_SRCS
@@ -160,6 +162,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/client/SimpleClient.cpp
         qt/SimpleScriptEditor.cpp
         qt/ObjrefWidget.cpp
+        qt/LogTreeWidget.cpp
         qt/MultiFileSelectionWidget.cpp
         qt/MultiInputWidget.cpp
         qt/SequenceWidget.cpp

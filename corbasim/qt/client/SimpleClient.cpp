@@ -24,6 +24,7 @@
 #include <corbasim/qt/RequestDialog.hpp>
 #include <corbasim/qt/MultiInputWidget.hpp>
 #include <corbasim/qt/SimpleScriptEditor.hpp>
+#include <corbasim/qt/LogTreeWidget.hpp>
 
 using namespace corbasim::qt::client;
 
@@ -95,8 +96,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
         SLOT(setVisible(bool)));
 
     gbLayout = new QHBoxLayout;
-    m_tree = new QTreeWidget;
-    m_tree->setHeaderLabel("Timeline");
+    m_tree = new LogTreeWidget(100);
     gbLayout->addWidget(m_tree);
     gb->setLayout(gbLayout);
     m_mainSplitter->addWidget(gb);
@@ -183,29 +183,15 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
         QTreeWidgetItem * req_item = m_factory->create_tree(req.get());
 
         if (req_item)
-        {
-            if (m_tree->topLevelItemCount() >= 100)
-                delete m_tree->takeTopLevelItem(0);
+            m_tree->appendItem(req_item);
 
-            m_tree->addTopLevelItem(req_item);
-            m_tree->scrollToItem(req_item);
-        }
-
-        event::event * ev = m_caller->do_call(req.get());
+        event::event_ptr ev(m_caller->do_call(req.get()));
         if (ev)
         {
-            QTreeWidgetItem * item = m_factory->create_tree(ev);
+            QTreeWidgetItem * item = m_factory->create_tree(ev.get());
 
             if (item)
-            {
-                if (m_tree->topLevelItemCount() >= 100)
-                    delete m_tree->takeTopLevelItem(0);
-
-                m_tree->addTopLevelItem(item);
-                m_tree->scrollToItem(item);
-            }
-
-            delete ev;
+                m_tree->appendItem(item);
         }
     }
 }

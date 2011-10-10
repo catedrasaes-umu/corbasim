@@ -7,6 +7,6 @@ OK  * Hacer visible la herencia de alguna forma en el fichero adapted
     * Capturar la excepción de serializado en los servidores
 OK  * Introducir el multisender
 OK  * Soportar serializado de estructuras dentro de estructuras. Adaptarlas
-    * Soportar serializado de secuencias de strings
+OK  * Soportar serializado de secuencias de strings
     * Utilizar el mismo widget en SequenceWidget, para evitar crear cientos de widgets.
-    * No crear el RequestDialog hasta que se instancie por primera vez.
+OK  * No crear el RequestDialog hasta que se instancie por primera vez.

@@ -36,6 +36,7 @@ namespace qt
 class RequestDialog;
 class MultiSenderDialog;
 class SimpleScriptEditor;
+class LogTreeWidget;
 
 namespace client 
 {
@@ -73,7 +74,7 @@ protected:
     core::interface_caller_ptr m_caller;
     gui::gui_factory_base * m_factory;
     QTabWidget * m_tab;
-    QTreeWidget * m_tree;
+    LogTreeWidget * m_tree;
     ObjrefWidget * m_ref;
 
     QButtonGroup m_buttons;
