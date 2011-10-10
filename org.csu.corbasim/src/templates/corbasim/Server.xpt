@@ -101,9 +101,14 @@ int main(int argc, char **argv)
 
     CORBA::String_var ref = orb->object_to_string(obj);
     std::cout << ref << std::endl;
+    
+    «PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl_server::___main"»
+	«ENDPROTECT»
 
 	manager->activate();
     orb->run();
+    
+    return 0;
 }
 «ENDFILE»
 
