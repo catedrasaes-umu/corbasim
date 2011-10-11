@@ -42,6 +42,9 @@ auto_response::auto_response(core::factory_base * input_factory,
     m_input_factory(input_factory), m_output_factory(output_factory),
     m_work(m_io_service), m_data(new auto_response_data)
 {
+    // TODO inicializar solo una vez
+    Py_Initialize();
+
     // TODO configuration write mutex
     // threads -> m_io_service.run()
     for (int i = 0; i < 1; i++) 

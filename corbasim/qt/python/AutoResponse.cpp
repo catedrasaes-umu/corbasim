@@ -88,9 +88,22 @@ void AutoResponseWidget::initialize(
             output_factory->get_factory_by_index(i);
 
         QGroupBox * gb = new QGroupBox(iop->get_name(), this);
+        gb->setCheckable(true);
+        gb->setChecked(false);
+
+        QGridLayout * gbLayout = new QGridLayout;
+        gb->setLayout(gbLayout);
+
+        gbLayout->addWidget(new QLabel("Guard"), 0, 0);
+        gbLayout->addWidget(new QLabel("Response if true"), 0, 1);
+        gbLayout->addWidget(new QLabel("Response if false"), 0, 2);
 
         QComboBox * cb_true = new QComboBox;
         QComboBox * cb_false = new QComboBox;
+
+        // No response
+        cb_true->addItem("(No response)");
+        cb_false->addItem("(No response)");
 
         for (unsigned int j = 0; j < ocount; j++) 
         {
@@ -101,6 +114,13 @@ void AutoResponseWidget::initialize(
             cb_true->addItem(name);
             cb_false->addItem(name);
         }
+
+        gbLayout->addWidget(cb_true, 1, 1);
+        gbLayout->addWidget(cb_false, 1, 2);
+
+        gbLayout->addWidget(new QTextEdit, 2, 0);
+        gbLayout->addWidget(new QTextEdit, 2, 1);
+        gbLayout->addWidget(new QTextEdit, 2, 2);
 
         QPushButton * btn = new QPushButton("Save");
         m_data->g->addButton(btn);

@@ -47,11 +47,11 @@ public:
 
 public slots:
 
-    void requestReceived(event::request_ptr);
+    void requestReceived(corbasim::event::request_ptr);
 
 signals:
 
-    void sendRequest(event::request_ptr);
+    void sendRequest(corbasim::event::request_ptr);
 
 protected:
 

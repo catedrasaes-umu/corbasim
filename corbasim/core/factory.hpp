@@ -47,7 +47,7 @@ struct operation_factory : public operation_factory_base
         return adapted::name< Value >::call();
     }
     
-    void to_json(event::request* req, std::string& str)
+    void to_json(event::request* req, std::string& str) const
     {
         std::ostringstream oss;
         request_t* reqi = static_cast< request_t* >(req);
@@ -56,7 +56,7 @@ struct operation_factory : public operation_factory_base
         str = oss.str();
     }
 
-    event::request* from_json(const std::string& str)
+    event::request* from_json(const std::string& str) const
     {
         std::auto_ptr< request_t > reqi (new request_t);
         json::parse(reqi->m_values, str);

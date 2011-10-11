@@ -1,4 +1,5 @@
 #include <tao/ORB.h>
+#include <orbsvcs/CosNamingC.h>
 #include "widgetsS.h"
 #include "widgets_adapted.hpp"
 
@@ -118,11 +119,34 @@ int main(int argc, char **argv)
     CORBA::String_var ref = orb->object_to_string( obj);
     std::cout << ref << std::endl;
 
+    CosNaming::NamingContextExt_var nc;
+    CosNaming::Name_var name;
+
+    if (argc > 1)
+    {
+        CORBA::Object_var ncObj = orb->resolve_initial_references(
+                "NameService");
+
+        nc = CosNaming::NamingContextExt::_narrow( ncObj);
+
+        if (!CORBA::is_nil( nc))
+        {
+            name = nc->to_name( argv[1]);
+
+            nc->rebind( name, obj);
+        }
+    }
+
     /*PROTECTED REGION ID(Test_Prueba_impl_server::___main) ENABLED START*/
     /*PROTECTED REGION END*/
 
     manager->activate();
     orb->run();
+
+    if (!CORBA::is_nil( nc))
+    {
+        nc->unbind( name);
+    }
 
     return 0;
 }
