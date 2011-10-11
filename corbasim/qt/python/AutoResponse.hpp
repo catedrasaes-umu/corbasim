@@ -49,6 +49,8 @@ public slots:
 
     void requestReceived(corbasim::event::request_ptr);
 
+    void saveConfig(int);
+
 signals:
 
     void sendRequest(corbasim::event::request_ptr);

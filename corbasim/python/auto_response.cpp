@@ -20,6 +20,7 @@
 #include "auto_response.hpp"
 #include <boost/bind.hpp>
 #include <boost/python.hpp>
+#include <iostream>
 
 using namespace corbasim::python;
 
@@ -74,6 +75,8 @@ void auto_response::new_input_message(event::request_ptr req)
 
 void auto_response::process_input_message(event::request_ptr req)
 {
+    std::cout << "Processing input message" << std::endl;
+    
     // TODO
     tag_t tag = req->get_tag();
     config_t::const_iterator it = m_config.find(tag);
@@ -82,7 +85,10 @@ void auto_response::process_input_message(event::request_ptr req)
         if (it != m_config.end() && it->second->active)
         {
             std::string json_request;
-            m_input_factory->get_factory_by_tag(tag)->to_json(req.get(), json_request);
+            m_input_factory->get_factory_by_tag(
+                    tag)->to_json(req.get(), json_request);
+
+            std::cout << "JSON request: " << json_request << std::endl;
 
             bool evaluated_guard = it->second->guard.empty();
 
@@ -90,6 +96,7 @@ void auto_response::process_input_message(event::request_ptr req)
             
             if(!evaluated_guard)
             {
+                std::cout << "Evaluating guard" << std::endl;
                 // evalua guarda
                 boost::python::object res = boost::python::exec(
                         it->second->guard.c_str(),
@@ -110,9 +117,12 @@ void auto_response::process_input_message(event::request_ptr req)
             core::operation_factory_base * factory = 
                 m_output_factory->get_factory_by_tag(response_tag);
 
+            std::cout << "Response tag: " << response_tag  << std::endl;
+
             // Asume que la configuración se ha validado
             if (factory)
             {
+#if 0
                 // evalua transformación
                 boost::python::object res = boost::python::exec(
                         transformation.c_str(),
@@ -120,20 +130,31 @@ void auto_response::process_input_message(event::request_ptr req)
                         m_data->global);
 
                 // TODO pasar res a json
-
+#endif
+                const std::string json_response;
+#if 0
                 const std::string json_response = 
                     boost::python::extract< std::string >(res);
-                event::request_ptr response(factory->from_json(json_response));
+#endif
+                event::request_ptr response(
+                        factory->from_json(json_response));
 
+                std::cout << "JSON response: " << json_response 
+                    << std::endl;
+
+                std::cout << "Sending response" << std::endl;
                 m_output_signal(response);
             }
         }
     } catch(...) {
+        std::cout << "Processing exception" << std::endl;
     }
 }
 
 void auto_response::configure(auto_response_config_ptr config)
 {
+    std::cout << "Configure" << std::endl;
+
     // TODO validar configuración
     m_io_service.post(boost::bind(
                 &auto_response::apply_configuration, this, config));
@@ -141,6 +162,8 @@ void auto_response::configure(auto_response_config_ptr config)
 
 void auto_response::apply_configuration(auto_response_config_ptr config)
 {
+    std::cout << "Applying configuration" << std::endl;
+
     // Copy the configuration
     auto_response_config_ptr new_config(
             new auto_response_config(*config.get()));

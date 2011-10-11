@@ -47,6 +47,11 @@ struct operation_factory : public operation_factory_base
     {
         return adapted::name< Value >::call();
     }
+    
+    tag_t get_tag() const
+    {
+        return tag< Value >::value(); 
+    }
 
     static inline operation_factory * get_instance()
     {

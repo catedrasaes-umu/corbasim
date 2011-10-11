@@ -43,6 +43,7 @@ struct operation_factory_base
     virtual dialogs::input_base * create_input() const = 0;
     virtual const char * get_name() const = 0;
     virtual QTreeWidgetItem * create_tree(event::event* ev) const = 0;
+    virtual tag_t get_tag() const = 0;
     virtual ~operation_factory_base();
 };
 
