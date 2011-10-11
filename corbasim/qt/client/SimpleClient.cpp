@@ -25,6 +25,7 @@
 #include <corbasim/qt/MultiInputWidget.hpp>
 #include <corbasim/qt/SimpleScriptEditor.hpp>
 #include <corbasim/qt/LogTreeWidget.hpp>
+#include <corbasim/qt/initialize.hpp>
 
 using namespace corbasim::qt::client;
 
@@ -32,9 +33,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QMainWindow(parent), m_factory(NULL), m_actions(this),
     m_multi_sender(NULL), m_script_editor(NULL)
 {
-    // TODO registrar en otro sitio una sola vez
-    qRegisterMetaType< event::request_ptr >
-        ("corbasim::event::request_ptr");
+    corbasim::qt::initialize();
 
     QWidget * central = new QWidget;
     QVBoxLayout * layout = new QVBoxLayout;

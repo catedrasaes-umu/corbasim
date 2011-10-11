@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * AutoResponse.hpp
+ * initialize.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -15,57 +15,38 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
-
-#ifndef CORBASIM_QT_PYTHONAUTORESPONSE_HPP
-#define CORBASIM_QT_PYTHONAUTORESPONSE_HPP
+ */
 
 #include <QtGui>
-#include <corbasim/gui/gui_factory_fwd.hpp>
-#include <corbasim/python/auto_response.hpp>
+#include <boost/shared_ptr.hpp>
 #include <corbasim/event.hpp>
+
+namespace  
+{
+
+class Initializer
+{
+public:
+    Initializer()
+    {
+        qRegisterMetaType< corbasim::event::request_ptr >
+            ("corbasim::event::request_ptr");
+    }
+};
+
+} // namespace
 
 namespace corbasim 
 {
 namespace qt 
 {
-namespace python 
+
+void initialize()
 {
+    static boost::shared_ptr< Initializer > instance(new Initializer);
+}
 
-struct auto_response_data;
-
-class AutoResponseWidget : public QWidget
-{
-    Q_OBJECT
-public:
-
-    AutoResponseWidget(QWidget * parent = 0);
-    virtual ~AutoResponseWidget();
-
-    void initialize(gui::gui_factory_base * input_factory,
-            gui::gui_factory_base* output_factory);
-
-public slots:
-
-    void requestReceived(event::request_ptr);
-
-signals:
-
-    void sendRequest(event::request_ptr);
-
-protected:
-
-    boost::shared_ptr< ::corbasim::python::auto_response > 
-        m_auto_response;
-
-    auto_response_data * m_data;
-    
-    void notifyRequest(event::request_ptr);
-};
-
-} // namespace python
 } // namespace qt
 } // namespace corbasim
 
-#endif /* CORBASIM_QT_PYTHONAUTORESPONSE_HPP */
 

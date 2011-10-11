@@ -19,16 +19,52 @@
 
 #include "AutoResponse.hpp"
 #include <boost/bind.hpp>
+#include <vector>
 
 using namespace corbasim::qt::python;
 
-AutoResponseWidget::AutoResponseWidget(QWidget * parent) :
-    QWidget(parent)
+namespace  
 {
+
+struct item_data
+{
+    QGroupBox * gb;
+    QPushButton * btn_save;
+    QTextEdit * te_guard;
+    QComboBox * cb_true;
+    QComboBox * cb_false;
+    QTextEdit * te_true;
+    QTextEdit * te_false;
+};
+
+} // namespace
+
+namespace corbasim 
+{
+namespace qt 
+{
+namespace python 
+{
+
+struct auto_response_data
+{
+    QButtonGroup * g;
+    std::vector< item_data > v;
+};
+
+} // namespace python
+} // namespace qt
+} // namespace corbasim
+
+AutoResponseWidget::AutoResponseWidget(QWidget * parent) :
+    QWidget(parent), m_data(new auto_response_data)
+{
+    m_data->g = new QButtonGroup(this);
 }
 
 AutoResponseWidget::~AutoResponseWidget()
 {
+    delete m_data;
 }
 
 void AutoResponseWidget::initialize(
@@ -39,8 +75,48 @@ void AutoResponseWidget::initialize(
                 input_factory->get_core_factory(),
                 output_factory->get_core_factory()));
 
+    QVBoxLayout * layout = new QVBoxLayout;
+
+    unsigned int icount = input_factory->operation_count();
+    unsigned int ocount = output_factory->operation_count();
+
+    m_data->v.reserve(icount);
+
+    for (unsigned int i = 0; i < icount; i++) 
+    {
+        gui::operation_factory_base * iop = 
+            output_factory->get_factory_by_index(i);
+
+        QGroupBox * gb = new QGroupBox(iop->get_name(), this);
+
+        QComboBox * cb_true = new QComboBox;
+        QComboBox * cb_false = new QComboBox;
+
+        for (unsigned int j = 0; j < ocount; j++) 
+        {
+            gui::operation_factory_base * op = 
+                output_factory->get_factory_by_index(j);
+            const char * name = op->get_name();
+
+            cb_true->addItem(name);
+            cb_false->addItem(name);
+        }
+
+        QPushButton * btn = new QPushButton("Save");
+        m_data->g->addButton(btn);
+
+        m_data->v[i].gb = gb;
+        m_data->v[i].cb_true = cb_true;
+        m_data->v[i].cb_false = cb_false;
+        m_data->v[i].btn_save = btn;
+
+        layout->addWidget(gb);
+    }
+
     m_auto_response->connect_output(boost::bind(
                 &AutoResponseWidget::notifyRequest, this, _1));
+
+    setLayout(layout);
 }
 
 void AutoResponseWidget::requestReceived(event::request_ptr req)

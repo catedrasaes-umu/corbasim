@@ -160,6 +160,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         gui/tree_factory.cpp
         gui/gui_factory.cpp
 
+        qt/initialize.cpp
         qt/client/SimpleClient.cpp
         qt/SimpleScriptEditor.cpp
         qt/ObjrefWidget.cpp
