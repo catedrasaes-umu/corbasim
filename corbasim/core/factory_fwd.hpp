@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include <corbasim/event.hpp>
 
 namespace corbasim 

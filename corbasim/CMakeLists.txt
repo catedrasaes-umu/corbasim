@@ -18,7 +18,7 @@ set(corbasim_EXPORTED_HEADERS
     core/caller.hpp
     core/config.hpp
     core/copy.hpp
-    core/factory.cpp
+    core/factory.hpp
     core/injector.hpp
     core/inserter.hpp
     core/range.hpp
@@ -65,6 +65,7 @@ set(corbasim_SRCS
     core/archives.cpp
     core/core.cpp
     core/event_notifier.cpp
+    core/factory.cpp
     core/reference_repository.cpp
     core/reference_validator.cpp
     core/request_serializer.cpp
@@ -215,6 +216,7 @@ endforeach(_header ${corbasim_python_EXPORTED_HEADERS})
 
 set(corbasim_python_LIBS
     corbasim
+    ${PYTHON_LIBRARIES}
     boost_python)
 
 set(corbasim_python_SRCS
