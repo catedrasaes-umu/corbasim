@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * gui_factory_fwd.hpp
+ * factory_fwd.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,36 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_GUI_GUI_FACTORY_FWD_HPP
-#define CORBASIM_GUI_GUI_FACTORY_FWD_HPP
+#ifndef CORBASIM_CORE_FACTORY_FWD_HPP
+#define CORBASIM_CORE_FACTORY_FWD_HPP
 
 #include <vector>
 #include <string>
 #include <corbasim/event.hpp>
-#include <corbasim/gui/dialogs.hpp>
-
-class QTreeWidgetItem;
 
 namespace corbasim 
 {
 namespace core 
 {
 class request_serializer_base;
-class factory_base;
 } // namespace core
 
-namespace gui 
+namespace core 
 {
 
 struct operation_factory_base
 {
-    virtual dialogs::input_base * create_input() const = 0;
     virtual const char * get_name() const = 0;
-    virtual QTreeWidgetItem * create_tree(event::event* ev) const = 0;
+    virtual void to_json(event::request* req, std::string& str) const = 0;
+    virtual event::request* from_json(const std::string& str) const = 0;
     virtual ~operation_factory_base();
 };
 
-struct gui_factory_base
+struct factory_base
 {
     unsigned int operation_count() const;
     operation_factory_base * get_factory_by_index(unsigned int idx) const;
@@ -54,15 +50,11 @@ struct gui_factory_base
             const std::string& name) const;
     operation_factory_base * get_factory_by_tag(tag_t tag) const;
 
-    QTreeWidgetItem * create_tree(event::event* ev) const;
-
-    virtual ~gui_factory_base();
+    virtual ~factory_base();
     virtual core::request_serializer_base * get_serializer() const = 0;
 
     void insert_factory(const std::string& name,
             tag_t tag, operation_factory_base * factory);
-
-    virtual core::factory_base * get_core_factory() const = 0;
 
     // Data
     typedef std::vector< operation_factory_base * > factories_t;
@@ -77,8 +69,8 @@ struct gui_factory_base
     factories_by_tag_t m_factories_by_tag;
 };
 
-} // namespace gui
+} // namespace core
 } // namespace corbasim
 
-#endif /* CORBASIM_GUI_GUI_FACTORY_FWD_HPP */
+#endif /* CORBASIM_CORE_FACTORY_FWD_HPP */
 

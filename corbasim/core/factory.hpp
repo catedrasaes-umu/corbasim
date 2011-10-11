@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * gui_factory.hpp
+ * factory.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,35 +17,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_GUI_GUI_FACTORY_HPP
-#define CORBASIM_GUI_GUI_FACTORY_HPP
+#ifndef CORBASIM_CORE_FACTORY_HPP
+#define CORBASIM_CORE_FACTORY_HPP
 
 #include <boost/shared_ptr.hpp>
 #include <corbasim/mpl.hpp>
 #include <corbasim/core/inserter.hpp>
 #include <corbasim/core/request_serializer.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
-#include <corbasim/gui/tree_factory.hpp>
-#include <corbasim/core/factory.hpp>
+#include <corbasim/core/factory_fwd.hpp>
+
+#include <sstream>
+#include <memory>
+#include <corbasim/json/writer.hpp>
+#include <corbasim/json/parser.hpp>
 
 namespace corbasim 
 {
-namespace gui 
+namespace core 
 {
 
 template< typename Value >
 struct operation_factory : public operation_factory_base
 {
     typedef dialogs::input< Value > input_t;
-
-    dialogs::input_base * create_input() const
-    {
-        return new input_t;
-    }
+    typedef event::request_impl< Value > request_t;
 
     const char * get_name() const
     {
         return adapted::name< Value >::call();
+    }
+    
+    void to_json(event::request* req, std::string& str)
+    {
+        std::ostringstream oss;
+        request_t* reqi = static_cast< request_t* >(req);
+
+        json::write(oss, reqi->m_values);
+        str = oss.str();
+    }
+
+    event::request* from_json(const std::string& str)
+    {
+        std::auto_ptr< request_t > reqi (new request_t);
+        json::parse(reqi->m_values, str);
+        return reqi.release();
     }
 
     static inline operation_factory * get_instance()
@@ -54,35 +69,23 @@ struct operation_factory : public operation_factory_base
                 new operation_factory);
         return _instance.get();
     }
-
-    typedef operation_tree_factory< Value > tree_factory_t;
-
-    QTreeWidgetItem * create_tree(event::event* ev) const
-    {
-        return tree_factory_t::create_tree_impl(ev);
-    }
 };
 
 template< typename Interface >
-struct gui_factory : public gui_factory_base
+struct factory : public factory_base
 {
     typedef typename  adapted::interface< Interface >::_op_list 
         operations_t;
 
-    gui_factory()
+    factory()
     {
-        typedef core::impl::inserter< gui_factory > inserter_t;
+        typedef core::impl::inserter< factory > inserter_t;
         cs_mpl::for_each< operations_t >(inserter_t(this));
     }
 
     core::request_serializer_base * get_serializer() const
     {
         return core::request_serializer< Interface >::get_instance();
-    }
-
-    core::factory_base * get_core_factory() const
-    {
-        return core::factory< Interface >::get_instance();
     }
 
     template< typename Value >
@@ -96,15 +99,15 @@ struct gui_factory : public gui_factory_base
                 factory_t::get_instance());
     }
 
-    static inline gui_factory * get_instance()
+    static inline factory * get_instance()
     {
-        static boost::shared_ptr< gui_factory > _instance(new gui_factory);
+        static boost::shared_ptr< factory > _instance(new factory);
         return _instance.get();
     }
 };
 
-} // namespace gui
+} // namespace core
 } // namespace corbasim
 
-#endif /* CORBASIM_GUI_GUI_FACTORY_HPP */
+#endif /* CORBASIM_CORE_FACTORY_HPP */
 
