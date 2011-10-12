@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * initialize.cpp
+ * LogWidget.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,42 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef CORBASIM_QT_LOGWIDGET_HPP
+#define CORBASIM_QT_LOGWIDGET_HPP
+
 #include <QtGui>
-#include <boost/shared_ptr.hpp>
+#include <corbasim/qt/LogTreeWidget.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/event.hpp>
-
-namespace  
-{
-
-class Initializer
-{
-public:
-    Initializer()
-    {
-        qRegisterMetaType< corbasim::event::request_ptr >
-            ("corbasim::event::request_ptr");
-        qRegisterMetaType< corbasim::event::response_ptr >
-            ("corbasim::event::response_ptr");
-        qRegisterMetaType< corbasim::event::event_ptr >
-            ("corbasim::event::event_ptr");
-        qRegisterMetaType< corbasim::event::exception_ptr >
-            ("corbasim::event::exception_ptr");
-    }
-};
-
-} // namespace
 
 namespace corbasim 
 {
 namespace qt 
 {
 
-void initialize()
+class LogWidget : public QWidget
 {
-    static boost::shared_ptr< Initializer > instance(new Initializer);
-}
+    Q_OBJECT
+public:
+    LogWidget(QWidget * parent = 0);
+    virtual ~LogWidget();
+
+    void initialize(gui::gui_factory_base * factory);
+
+public slots:
+
+    void notifyEvent(corbasim::event::event_ptr);
+    void notifyRequest(corbasim::event::request_ptr);
+    void notifyResponse(corbasim::event::response_ptr);
+    void notifyException(corbasim::event::exception_ptr);
+
+protected:
+
+    LogTreeWidget * m_tree;
+    gui::gui_factory_base * m_factory;
+};
 
 } // namespace qt
 } // namespace corbasim
 
+#endif /* CORBASIM_QT_LOGWIDGET_HPP */
 

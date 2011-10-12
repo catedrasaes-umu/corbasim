@@ -55,6 +55,8 @@ struct exception : public event
     }
 };
 
+typedef boost::shared_ptr< exception > exception_ptr;
+
 struct message : public event
 {
     event_types get_type() const 

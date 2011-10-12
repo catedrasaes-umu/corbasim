@@ -129,6 +129,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/MultiInputWidget.hpp
         qt/RangedWidget.hpp
         qt/LogTreeWidget.hpp
+        qt/LogWidget.hpp
         qt/MultiFileSelectionWidget.hpp
         qt/TemplatedSpinBox.hpp
         qt/RequestDialog.hpp
@@ -154,6 +155,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/RequestDialog.hpp
         qt/RequestNotifier.hpp
         qt/RangedWidget.hpp
+        qt/LogWidget.hpp
         qt/LogTreeWidget.hpp
         qt/Status.hpp)
 
@@ -165,6 +167,7 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
         qt/client/SimpleClient.cpp
         qt/SimpleScriptEditor.cpp
         qt/ObjrefWidget.cpp
+        qt/LogWidget.cpp
         qt/LogTreeWidget.cpp
         qt/MultiFileSelectionWidget.cpp
         qt/MultiInputWidget.cpp
@@ -242,7 +245,8 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
     include(${QT_USE_FILE})
 
     set(corbasim_qt_python_EXPORTED_HEADERS
-        qt/AutoResponse.hpp)
+        qt/python/AutoResponse.hpp
+        qt/python/AutoResponseMainWindow.hpp)
 
     foreach(_header ${corbasim_qt_python_EXPORTED_HEADERS})
         get_filename_component(_header_path ${_header} PATH)
@@ -251,10 +255,12 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
     endforeach(_header ${corbasim_qt_python_EXPORTED_HEADERS})
 
     set(corbasim_qt_python_MOC_HDRS
-        qt/python/AutoResponse.hpp)
+        qt/python/AutoResponse.hpp
+        qt/python/AutoResponseMainWindow.hpp)
 
     set(corbasim_qt_python_SRCS
-        qt/python/AutoResponse.cpp)
+        qt/python/AutoResponse.cpp
+        qt/python/AutoResponseMainWindow.cpp)
 
     set(corbasim_qt_python_LIBS
         ${QT_LIBRARIES}
