@@ -53,6 +53,8 @@ struct auto_response_data
 {
     QButtonGroup * g;
     std::vector< item_data > v;
+    gui::gui_factory_base * in;
+    gui::gui_factory_base * out;
 };
 
 } // namespace python
@@ -74,8 +76,11 @@ AutoResponseWidget::~AutoResponseWidget()
 
 void AutoResponseWidget::initialize(
         gui::gui_factory_base * input_factory,
-        gui::gui_factory_base* output_factory)
+        gui::gui_factory_base * output_factory)
 {
+    m_data->in = input_factory;
+    m_data->out = output_factory;
+
     m_auto_response.reset(new ::corbasim::python::auto_response(
                 input_factory->get_core_factory(),
                 output_factory->get_core_factory()));
@@ -110,8 +115,8 @@ void AutoResponseWidget::initialize(
         QComboBox * cb_false = new QComboBox;
 
         // No response
-        cb_true->addItem("(No response)", 0);
-        cb_false->addItem("(No response)", 0);
+        cb_true->addItem("(No response)", -1);
+        cb_false->addItem("(No response)", -1);
 
         for (unsigned int j = 0; j < ocount; j++) 
         {
@@ -119,9 +124,8 @@ void AutoResponseWidget::initialize(
                 output_factory->get_factory_by_index(j);
             const char * name = op->get_name();
 
-            tag_t otag = op->get_tag();
-            cb_true->addItem(name, otag);
-            cb_false->addItem(name, otag);
+            cb_true->addItem(name, j);
+            cb_false->addItem(name, j);
         }
 
         gbLayout->addWidget(cb_true, 1, 1);
@@ -185,12 +189,14 @@ void AutoResponseWidget::saveConfig(int idx)
     cfg->input_message = data.tag;
 
     int cur = data.cb_true->currentIndex();
-    cfg->true_output_message = (tag_t)
-        data.cb_true->itemData(cur).toUInt();
+    if (cur)
+        cfg->true_output_message = m_data->out->get_factory_by_index( 
+            data.cb_true->itemData(cur).toInt())->get_tag();
 
     cur = data.cb_false->currentIndex();
-    cfg->false_output_message = (tag_t) 
-        data.cb_false->itemData(cur).toUInt();
+    if (cur)
+        cfg->false_output_message = m_data->out->get_factory_by_index( 
+            data.cb_false->itemData(cur).toInt())->get_tag();
 
     // Code
     cfg->guard = data.te_guard->toPlainText().toStdString();

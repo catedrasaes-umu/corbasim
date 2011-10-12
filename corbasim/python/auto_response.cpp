@@ -54,6 +54,7 @@ auto_response::auto_response(core::factory_base * input_factory,
 
     m_data->main = boost::python::import("__main__");
     m_data->global = m_data->main.attr("__dict__");
+    boost::python::exec("import json", m_data->global, m_data->global);
 }
 
 auto_response::~auto_response()
@@ -92,18 +93,31 @@ void auto_response::process_input_message(event::request_ptr req)
 
             bool evaluated_guard = it->second->guard.empty();
 
-            // TODO añadir json_request como input a global
+            // añade json_request como input a global
+            boost::python::dict local;
+            local["input"] = boost::python::str(json_request.c_str());
+
+            boost::python::exec("input = json.loads(input)", m_data->global, local);
             
             if(!evaluated_guard)
             {
-                std::cout << "Evaluating guard" << std::endl;
+                std::cout << "Evaluating guard: " << it->second->guard << std::endl;
                 // evalua guarda
                 boost::python::object res = boost::python::exec(
                         it->second->guard.c_str(),
                         m_data->global,
-                        m_data->global);
+                        local);
 
-                evaluated_guard = boost::python::extract< bool >(res);
+                if (local.has_key("result"))
+                {
+                    std::cout << "result key found" << std::endl;
+                    res = local["result"];
+                    evaluated_guard = boost::python::extract< bool >(res);
+                }
+                else
+                    evaluated_guard = true;
+                
+                std::cout << "Evaluated guard: " << evaluated_guard << std::endl;
             }
 
             tag_t response_tag = (evaluated_guard)? 
@@ -122,25 +136,32 @@ void auto_response::process_input_message(event::request_ptr req)
             // Asume que la configuración se ha validado
             if (factory)
             {
-#if 0
                 // evalua transformación
                 boost::python::object res = boost::python::exec(
                         transformation.c_str(),
                         m_data->global,
-                        m_data->global);
+                        local);
 
-                // TODO pasar res a json
-#endif
-                const std::string json_response;
-#if 0
-                const std::string json_response = 
-                    boost::python::extract< std::string >(res);
-#endif
-                event::request_ptr response(
-                        factory->from_json(json_response));
+                event::request_ptr response;
 
-                std::cout << "JSON response: " << json_response 
-                    << std::endl;
+                if (local.has_key("output"))
+                {
+                    res = boost::python::exec(
+                            "output = json.dumps(output)",
+                            m_data->global,
+                            local);
+                    res = local["output"];
+
+                    const std::string json_response = 
+                        boost::python::extract< std::string >(res);
+
+                    std::cout << "JSON response: " << json_response 
+                        << std::endl;
+
+                    response.reset(factory->from_json(json_response));
+                }
+                else
+                    response.reset(factory->from_json("{}"));
 
                 std::cout << "Sending response" << std::endl;
                 m_output_signal(response);
@@ -148,6 +169,9 @@ void auto_response::process_input_message(event::request_ptr req)
         }
     } catch(...) {
         std::cout << "Processing exception" << std::endl;
+
+        if (PyErr_Occurred())
+            PyErr_Print();
     }
 }
 
@@ -168,7 +192,6 @@ void auto_response::apply_configuration(auto_response_config_ptr config)
     auto_response_config_ptr new_config(
             new auto_response_config(*config.get()));
 
-    m_config.insert(std::make_pair(new_config->input_message,
-                new_config));
+    m_config[new_config->input_message] = new_config;
 }
 
