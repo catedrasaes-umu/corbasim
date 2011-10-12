@@ -63,6 +63,13 @@ AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
             SLOT(showOutputReference()));
     menuFile->addSeparator();
     menuFile->addAction("&Close", this, SLOT(close()));
+
+    // Signals
+    QObject::connect(m_auto_response, 
+            SIGNAL(sendRequest(corbasim::event::request_ptr)),
+            this,
+            SLOT(setOutputRequest(corbasim::event::request_ptr)));
+
 }
 
 void AutoResponseMainWindow::showOutputReference()
@@ -76,6 +83,11 @@ void AutoResponseMainWindow::showInputEstimulator()
         m_input_stim = new SimpleScriptEditor(this);
         m_input_stim->initialize(m_input_factory);
         m_input_stim->setWindowTitle("Input stimulator");
+
+        QObject::connect(m_input_stim, 
+                SIGNAL(sendRequest(corbasim::event::request_ptr)),
+                this,
+                SLOT(setInputRequest(corbasim::event::request_ptr)));
     }
     m_input_stim->show();
 }
@@ -87,6 +99,11 @@ void AutoResponseMainWindow::showOutputEstimulator()
         m_output_stim = new SimpleScriptEditor(this);
         m_output_stim->initialize(m_output_factory);
         m_output_stim->setWindowTitle("Output stimulator");
+
+        QObject::connect(m_output_stim, 
+                SIGNAL(sendRequest(corbasim::event::request_ptr)),
+                this,
+                SLOT(setOutputRequest(corbasim::event::request_ptr)));
     }
     m_output_stim->show();
 }
@@ -107,5 +124,18 @@ void AutoResponseMainWindow::initialize(
     m_output_log->initialize(output_factory);
 }
 
+
+void AutoResponseMainWindow::setInputRequest(corbasim::event::request_ptr req)
+{
+    m_input_log->notifyRequest(req);
+    m_auto_response->requestReceived(req);
+}
+
+void AutoResponseMainWindow::setOutputRequest(corbasim::event::request_ptr req)
+{
+    m_output_log->notifyRequest(req);
+
+    // TODO send through the caller
+}
 
 

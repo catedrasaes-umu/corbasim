@@ -9,6 +9,7 @@ extension templates::corbasim::cpptypes reexport;
 Boolean generateClient() : GLOBALVAR genClient;
 Boolean generateInjector() : GLOBALVAR genInjector;
 Boolean generateServer() : GLOBALVAR genServer;
+Boolean generatePyStim() : GLOBALVAR genPyStim;
 
 String getHeaderExtension() : ".hpp";
 String getSourceExtension() : ".cpp";

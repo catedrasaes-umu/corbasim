@@ -51,6 +51,9 @@ public slots:
     void showOutputEstimulator();
     void showOutputReference();
 
+    void setInputRequest(corbasim::event::request_ptr);
+    void setOutputRequest(corbasim::event::request_ptr);
+
 protected:
 
     AutoResponseWidget * m_auto_response;

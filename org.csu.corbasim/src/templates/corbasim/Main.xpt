@@ -22,4 +22,8 @@
 	«IF generateServer()»
 		«EXPAND templates::corbasim::Server::server FOR this»
 	«ENDIF»
+	
+	«IF generatePyStim()»
+		«EXPAND templates::corbasim::PyStim::stim FOR this»
+	«ENDIF»
 «ENDDEFINE»

@@ -178,10 +178,12 @@ public class Generator {
 		genClient = cmd.hasOption("Gclient");
 		genInjector = cmd.hasOption("Ginjector");
 		genServer = cmd.hasOption("Gserver");
+		genPyStim = cmd.hasOption("Gpystim");
 		
 		globalVarsMap.put("genClient", new Variable("genClient", genClient));
 		globalVarsMap.put("genInjector", new Variable("genInjector", genInjector));
 		globalVarsMap.put("genServer", new Variable("genServer", genServer));
+		globalVarsMap.put("genPyStim", new Variable("genPyStim", genPyStim));
 	}
 
 	private static Options options = null; // Command line options
@@ -197,6 +199,7 @@ public class Generator {
 	private boolean genClient = false;
 	private boolean genServer = false;
 	private boolean genInjector = false;
+	private boolean genPyStim = false;
 
 	// TAO defaults
 	private static String stubHppSuffix = "C.h";
@@ -229,6 +232,7 @@ public class Generator {
 		options.addOption("Gclient", false, "Generate GUI client.");
 		options.addOption("Ginjector", false, "Generate script injector.");
 		options.addOption("Gserver", false, "Generate dummy server.");
+		options.addOption("Gpystim", false, "Generate a PyStim.");
 
 		options.addOption("p", true, "Protected regions source paths. Default is output directory.");
 
