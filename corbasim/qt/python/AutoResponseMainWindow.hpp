@@ -60,8 +60,8 @@ protected:
     gui::gui_factory_base * m_input_factory;
     gui::gui_factory_base * m_output_factory;
 
-    SimpleScriptEditor * m_input_estim;
-    SimpleScriptEditor * m_output_estim;
+    SimpleScriptEditor * m_input_stim;
+    SimpleScriptEditor * m_output_stim;
     
     // Callers
     core::interface_caller_ptr m_output_caller;

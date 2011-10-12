@@ -24,7 +24,7 @@ using namespace corbasim::qt::python;
 AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
     QMainWindow(parent), 
     m_input_factory(NULL), m_output_factory(NULL),
-    m_input_estim(NULL), m_output_estim(NULL)
+    m_input_stim(NULL), m_output_stim(NULL)
 {
     QSplitter * w = new QSplitter(Qt::Vertical, this);
 
@@ -54,9 +54,9 @@ AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
     setMenuBar(menu);
 
     QMenu * menuFile = menu->addMenu("&File");
-    menuFile->addAction("&Input estimulator", this, 
+    menuFile->addAction("&Input stimulator", this, 
             SLOT(showInputEstimulator()));
-    menuFile->addAction("&Output estimulator", this, 
+    menuFile->addAction("&Output stimulator", this, 
             SLOT(showOutputEstimulator()));
     menuFile->addSeparator();
     menuFile->addAction("Output &reference", this, 
@@ -71,24 +71,24 @@ void AutoResponseMainWindow::showOutputReference()
 
 void AutoResponseMainWindow::showInputEstimulator()
 {
-    if (!m_input_estim)
+    if (!m_input_stim)
     {
-        m_input_estim = new SimpleScriptEditor(this);
-        m_input_estim->initialize(m_input_factory);
-        m_input_estim->setWindowTitle("Input estimulator");
+        m_input_stim = new SimpleScriptEditor(this);
+        m_input_stim->initialize(m_input_factory);
+        m_input_stim->setWindowTitle("Input stimulator");
     }
-    m_input_estim->show();
+    m_input_stim->show();
 }
 
 void AutoResponseMainWindow::showOutputEstimulator()
 {
-    if (!m_output_estim)
+    if (!m_output_stim)
     {
-        m_output_estim = new SimpleScriptEditor(this);
-        m_output_estim->initialize(m_output_factory);
-        m_output_estim->setWindowTitle("Output estimulator");
+        m_output_stim = new SimpleScriptEditor(this);
+        m_output_stim->initialize(m_output_factory);
+        m_output_stim->setWindowTitle("Output stimulator");
     }
-    m_output_estim->show();
+    m_output_stim->show();
 }
 
 AutoResponseMainWindow::~AutoResponseMainWindow()
