@@ -68,6 +68,8 @@ protected:
     
     // Callers
     core::interface_caller_ptr m_output_caller;
+
+    QDialog * m_output_ref_dlg;
 };
 
 } // namespace python

@@ -19,13 +19,15 @@
 
 #include "AutoResponseMainWindow.hpp"
 #include <corbasim/qt/initialize.hpp>
+#include <corbasim/qt/ObjrefWidget.hpp>
 
 using namespace corbasim::qt::python;
 
 AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
     QMainWindow(parent), 
     m_input_factory(NULL), m_output_factory(NULL),
-    m_input_stim(NULL), m_output_stim(NULL)
+    m_input_stim(NULL), m_output_stim(NULL),
+    m_output_ref_dlg(NULL)
 {
     corbasim::qt::initialize();
 
@@ -77,6 +79,16 @@ AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
 
 void AutoResponseMainWindow::showOutputReference()
 {
+    if (!m_output_ref_dlg)
+    {
+        m_output_ref_dlg = new QDialog(this);
+        QVBoxLayout * l = new QVBoxLayout;
+        ObjrefWidget * ref = new ObjrefWidget(m_output_caller.get());
+        l->addWidget(ref);
+        m_output_ref_dlg->setLayout(l);
+        m_output_ref_dlg->setWindowTitle("Output reference");
+    }
+    m_output_ref_dlg->show();
 }
 
 void AutoResponseMainWindow::showInputEstimulator()
@@ -125,6 +137,9 @@ void AutoResponseMainWindow::initialize(
     m_auto_response->initialize(input_factory, output_factory);
     m_input_log->initialize(input_factory);
     m_output_log->initialize(output_factory);
+
+    m_output_caller.reset(
+            output_factory->get_core_factory()->create_caller());
 }
 
 
@@ -134,11 +149,24 @@ void AutoResponseMainWindow::setInputRequest(corbasim::event::request_ptr req)
     m_auto_response->requestReceived(req);
 }
 
-void AutoResponseMainWindow::setOutputRequest(corbasim::event::request_ptr req)
+void AutoResponseMainWindow::setOutputRequest(
+        corbasim::event::request_ptr req)
 {
-    m_output_log->notifyRequest(req);
+    if (!m_output_caller || m_output_caller->is_nil())
+    {
+        m_output_log->notifyEvent(event::event_ptr(
+                    new event::message("Reference not set yet!")));
+    }
+    else
+    {
+        m_output_log->notifyRequest(req);
 
-    // TODO send through the caller
+        // Send the request through the output caller
+        event::event_ptr ev(m_output_caller->do_call(req.get()));
+
+        if (ev)
+            m_output_log->notifyEvent(ev);
+    }
 }
 
 

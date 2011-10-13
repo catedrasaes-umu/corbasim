@@ -93,6 +93,11 @@ QTreeWidgetItem * gui_factory_base::create_tree(event::event* ev) const
     }
     case event::EXCEPTION:
         item = new QTreeWidgetItem(QStringList("Exception"));
+        break;
+    case event::MESSAGE:
+        item = new QTreeWidgetItem(QStringList(
+                    static_cast< event::message* >(ev)->get_message()));
+        break;
     default:
         break;
     }

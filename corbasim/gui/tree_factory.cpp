@@ -44,6 +44,11 @@ QTreeWidgetItem * tree_factory_interface::create_tree(
     }
     case event::EXCEPTION:
         item = new QTreeWidgetItem(QStringList("Exception"));
+        break;
+    case event::MESSAGE:
+        item = new QTreeWidgetItem(QStringList(
+                    static_cast< event::message* >(ev)->get_message()));
+        break;
     default:
         break;
     }

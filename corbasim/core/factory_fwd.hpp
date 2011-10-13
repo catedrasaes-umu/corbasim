@@ -30,6 +30,7 @@ namespace corbasim
 namespace core 
 {
 class request_serializer_base;
+class interface_caller_base;
 } // namespace core
 
 namespace core 
@@ -50,6 +51,8 @@ struct factory_base
     operation_factory_base * get_factory_by_name(
             const std::string& name) const;
     operation_factory_base * get_factory_by_tag(tag_t tag) const;
+
+    virtual core::interface_caller_base* create_caller() const = 0;
 
     virtual ~factory_base();
     virtual core::request_serializer_base * get_serializer() const = 0;

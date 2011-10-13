@@ -23,6 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/mpl.hpp>
 #include <corbasim/adapted.hpp>
+#include <string>
 
 namespace corbasim 
 {
@@ -59,6 +60,11 @@ typedef boost::shared_ptr< exception > exception_ptr;
 
 struct message : public event
 {
+    message(const char * msg) :
+        m_msg(msg)
+    {
+    }
+
     event_types get_type() const 
     {
         return MESSAGE;
@@ -68,6 +74,13 @@ struct message : public event
     {
         return tag< message >::value();
     }
+
+    const char * get_message() const
+    {
+        return m_msg.c_str();
+    }
+
+    const std::string m_msg;
 };
 
 struct request : public event
