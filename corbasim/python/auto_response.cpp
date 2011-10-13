@@ -97,11 +97,14 @@ void auto_response::process_input_message(event::request_ptr req)
             boost::python::dict local;
             local["input"] = boost::python::str(json_request.c_str());
 
-            boost::python::exec("input = json.loads(input)", m_data->global, local);
+            boost::python::exec("input = json.loads(input)", 
+                    m_data->global, local);
             
             if(!evaluated_guard)
             {
-                std::cout << "Evaluating guard: " << it->second->guard << std::endl;
+                std::cout << "Evaluating guard: " << it->second->guard 
+                    << std::endl;
+
                 // evalua guarda
                 boost::python::object res = boost::python::exec(
                         it->second->guard.c_str(),
@@ -117,7 +120,8 @@ void auto_response::process_input_message(event::request_ptr req)
                 else
                     evaluated_guard = true;
                 
-                std::cout << "Evaluated guard: " << evaluated_guard << std::endl;
+                std::cout << "Evaluated guard: " << evaluated_guard 
+                    << std::endl;
             }
 
             tag_t response_tag = (evaluated_guard)? 

@@ -22,6 +22,7 @@
 
 #include <corbasim/json/helper.hpp>
 #include <corbasim/json/detail/json_writer.hpp>
+#include <ostream>
 
 namespace corbasim 
 {
@@ -38,6 +39,8 @@ inline void write(Ostream& os, const T& t)
     writer_t w(os);
     helper::helper_write(w, t);
 }
+
+typedef csu::corbasim::json::writer::json_writer< std::ostream > ostreamwriter_t;
 
 } // namespace json
 } // namespace corbasim
