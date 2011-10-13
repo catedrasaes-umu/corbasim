@@ -59,9 +59,9 @@ int main(int argc, char **argv)
 	PortableServer::POAManager_var manager = rootPOA->the_POAManager();
 
 	PortableServer::ObjectId_var myObjID = 
-		rootPOA->activate_object(_impl);
+		rootPOA->activate_object(_impl.in());
 				
-	CORBA::Object_var obj = rootPOA->servant_to_reference(_impl);
+	CORBA::Object_var obj = rootPOA->servant_to_reference(_impl.in());
 
     CORBA::String_var ref = orb->object_to_string(obj);
     std::cout << ref << std::endl;
