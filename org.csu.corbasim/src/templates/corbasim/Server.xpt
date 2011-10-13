@@ -17,8 +17,8 @@
 «LET getFQN("_") AS fqn»
 
 «FILE fqn+"_server.cpp"»
-#include <tao/ORB.h>
-#include <orbsvcs/CosNamingC.h>
+#include <corbasim/impl.hpp>
+#include <corbasim/cosnaming/CosNamingC.h>
 #include "«getTranslationUnit().getFileNameSkelHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
 
@@ -26,7 +26,6 @@
 
 #include <iostream>
 #include <sstream>
-
 
 «PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl_server::___includes"»
 «ENDPROTECT»
