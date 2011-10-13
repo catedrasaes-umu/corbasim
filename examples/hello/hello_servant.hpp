@@ -10,7 +10,7 @@ namespace corbasim
     {
 
         template< >
-        struct sevant< HelloApp::Hello >
+        struct servant< HelloApp::Hello >
         {
             template< typename F >
             class _type: public virtual POA_HelloApp::Hello

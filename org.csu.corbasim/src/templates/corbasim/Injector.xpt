@@ -17,7 +17,7 @@
 «DEFINE injector FOR InterfaceDef»
 «LET getFQN("_") AS fqn»
 «FILE fqn+"_injector.cpp"»
-#include <tao/ORB.h>
+#include <corbasim/impl.hpp>
 #include "«getTranslationUnit().getFileNameStubHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
 #include <corbasim/core/injector.hpp>

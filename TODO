@@ -1,4 +1,4 @@
-    * Utilizar el ObjrefWidget en SimpleClient. Caller ha de heredar de reference_validator
+OK  * Utilizar el ObjrefWidget en SimpleClient. Caller ha de heredar de reference_validator
     * Serializar referencias
 OK  * Utilizar copy< T > en Adapted.xpt
     * Añadir timestamp a los eventos

@@ -18,7 +18,7 @@
 
 «FILE fqn+"_server.cpp"»
 #include <corbasim/impl.hpp>
-#include <corbasim/cosnaming/CosNamingC.h>
+#include <corbasim/cosnaming/CosnamingC.h>
 #include "«getTranslationUnit().getFileNameSkelHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
 

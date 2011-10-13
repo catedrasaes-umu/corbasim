@@ -44,12 +44,21 @@ AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
     w->addWidget(gb);
 
     // Logs
+    QGroupBox * igb = new QGroupBox("Input events");
+    QGroupBox * ogb = new QGroupBox("Output events");
+    QHBoxLayout * il = new QHBoxLayout;
+    QHBoxLayout * ol = new QHBoxLayout;
     m_input_log = new LogWidget;
     m_output_log = new LogWidget;
     QHBoxLayout * hLayout = new QHBoxLayout;
-    hLayout->addWidget(m_input_log);
-    hLayout->addWidget(m_output_log);
+    il->addWidget(m_input_log);
+    ol->addWidget(m_output_log);
+    igb->setLayout(il);
+    ogb->setLayout(ol);
+    
     QWidget * logWidget = new QWidget;
+    hLayout->addWidget(igb);
+    hLayout->addWidget(ogb);
     logWidget->setLayout(hLayout);
     w->addWidget(logWidget);
 

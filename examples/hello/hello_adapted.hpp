@@ -93,6 +93,7 @@ namespace _corbasim_HelloApp
 
             _return(o._return)
             {
+
             }
 
             template< typename Archive >
@@ -121,12 +122,14 @@ namespace _corbasim_HelloApp
 	__sayHelloTo(const HelloApp::Names& _people):
 		people(_people)
 	{
+		
 	}
 	
 	// Copy constructor
 	__sayHelloTo(const __sayHelloTo& o) :
 		people(o.people)
 , _return(o._return)	{
+		
 	}
 
     template< typename Archive >
@@ -157,6 +160,7 @@ struct __shutdown
 	// Copy constructor
 	__shutdown(const __shutdown& o)
 	{
+		
 	}
 
     template< typename Archive >

@@ -1,4 +1,5 @@
-#include <tao/ORB.h>
+#include <corbasim/impl.hpp>
+#include <corbasim/cosnaming/CosnamingC.h>
 #include "helloS.h"
 #include "hello_adapted.hpp"
 
@@ -72,17 +73,17 @@ public:
 
         /*PROTECTED REGION ID(HelloApp_Hello_impl::HelloApp_Hello_sayHelloTo___post) ENABLED START*/
         std::ostringstream hoss;
-        for (int i = 0; i < people.length(); i++) 
+        for (int i = 0; i < people.length(); i++)
         {
             hoss << "hello " << people[i];
             if (i + 1 == people.length())
             {
-            } 
+            }
             else if (i + 2 == people.length())
             {
                 hoss << " and ";
             }
-            else 
+            else
                 hoss << ", ";
         }
         _val._return = hoss.str().c_str();
@@ -137,6 +138,34 @@ int main(int argc, char **argv)
     CORBA::String_var ref = orb->object_to_string( obj);
     std::cout << ref << std::endl;
 
+    CosNaming::NamingContextExt_var nc;
+    CosNaming::Name_var name;
+
+    if (argc > 1)
+    {
+        CORBA::Object_var ncObj = orb->resolve_initial_references(
+                "NameService");
+
+        nc = CosNaming::NamingContextExt::_narrow( ncObj);
+
+        if (!CORBA::is_nil( nc))
+        {
+            name = nc->to_name( argv[1]);
+
+            nc->rebind( name, obj);
+        }
+    }
+
+    /*PROTECTED REGION ID(HelloApp_Hello_impl_server::___main) ENABLED START*/
+    /*PROTECTED REGION END*/
+
     manager->activate();
     orb->run();
+
+    if (!CORBA::is_nil( nc))
+    {
+        nc->unbind( name);
+    }
+
+    return 0;
 }
