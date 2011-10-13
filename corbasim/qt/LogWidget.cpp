@@ -25,7 +25,8 @@ LogWidget::LogWidget(QWidget * parent) :
     QWidget(parent), m_factory(NULL)
 {
     QHBoxLayout * layout = new QHBoxLayout;
-    m_tree = new LogTreeWidget(100, this);
+    m_tree = new LogTreeWidget(100);
+    layout->addWidget(m_tree);
     setLayout(layout);
 }
 

@@ -19,6 +19,7 @@
 
 #include "RequestDialog.hpp"
 #include <corbasim/gui/dialogs.hpp>
+#include <corbasim/qt/initialize.hpp>
 
 using namespace corbasim::qt;
 
@@ -26,6 +27,8 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
         QWidget * parent) :
     QDialog(parent), m_dlg(dlg)
 {
+    corbasim::qt::initialize();
+
     QVBoxLayout * layout = new QVBoxLayout;
 
     QScrollArea * scroll = new QScrollArea;
@@ -89,9 +92,6 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
             this, SLOT(sendStored()));
 
     setLayout(layout);
-
-    // TODO registrar en otro sitio una sola vez
-    int id = qRegisterMetaType< event::request_ptr >("corbasim::event::request_ptr");
 }
 
 RequestDialog::~RequestDialog()

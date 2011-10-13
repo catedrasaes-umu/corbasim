@@ -18,6 +18,7 @@
  */
 
 #include "AutoResponseMainWindow.hpp"
+#include <corbasim/qt/initialize.hpp>
 
 using namespace corbasim::qt::python;
 
@@ -26,6 +27,8 @@ AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
     m_input_factory(NULL), m_output_factory(NULL),
     m_input_stim(NULL), m_output_stim(NULL)
 {
+    corbasim::qt::initialize();
+
     QSplitter * w = new QSplitter(Qt::Vertical, this);
 
     QGroupBox * gb = new QGroupBox("Automatic response");
@@ -33,6 +36,7 @@ AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
     QScrollArea * sc = new QScrollArea;
     m_auto_response = new AutoResponseWidget;
     sc->setWidget(m_auto_response);
+    sc->setWidgetResizable(true);
     vLayout->addWidget(sc);
     gb->setLayout(vLayout);
     w->addWidget(gb);
@@ -69,7 +73,6 @@ AutoResponseMainWindow::AutoResponseMainWindow(QWidget * parent) :
             SIGNAL(sendRequest(corbasim::event::request_ptr)),
             this,
             SLOT(setOutputRequest(corbasim::event::request_ptr)));
-
 }
 
 void AutoResponseMainWindow::showOutputReference()
