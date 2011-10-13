@@ -52,6 +52,7 @@ foreach(_header ${corbasim_EXPORTED_HEADERS})
 endforeach(_header ${corbasim_EXPORTED_HEADERS})
 
 set(corbasim_LIBS
+    ${CORBASIM_ORB_LIBS}
     boost_serialization
     boost_thread
     boost_system

@@ -21,6 +21,12 @@ endif()
 
 if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
     include(check_ace_tao)
+    set(CORBASIM_ORB_LIBS
+        TAO 
+        TAO_PortableServer 
+        TAO_AnyTypeCode 
+        TAO_CosNaming 
+        TAO_ObjRefTemplate)
 elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni
 endif()
