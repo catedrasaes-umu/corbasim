@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * sequence_fwd.hpp
+ * python_out_redirect.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,27 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_WIDGETS_SEQUENCE_FWD_HPP
-#define CORBASIM_WIDGETS_SEQUENCE_FWD_HPP
+#include "python_out_redirect.hpp"
 
-class QWidget;
+using namespace corbasim::qt;
 
-namespace corbasim 
-{
-namespace widgets 
-{
 
-struct abstract_sequence_widget
-{
-    virtual QWidget * get_child_widget() const = 0;
-    virtual void set_length(unsigned int length) = 0;
-    virtual void change_to(unsigned int index) = 0;
-
-    virtual ~abstract_sequence_widget() {}
-};
-
-} // namespace widgets
-} // namespace corbasim
-
-#endif /* CORBASIM_WIDGETS_SEQUENCE_FWD_HPP */
 
