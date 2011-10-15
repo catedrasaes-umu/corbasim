@@ -14,8 +14,7 @@ set(corbasim_python_LIBS
     boost_python)
 
 set(corbasim_python_SRCS
-    python/interpreter.cpp
-    python/python_out_redirect.cpp
+    python/auto_response.cpp
     )
 add_library(corbasim_python SHARED ${corbasim_python_SRCS})
 target_link_libraries(corbasim_python

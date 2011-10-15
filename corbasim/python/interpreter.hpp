@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * python_out_redirect.hpp
+ * interpreter.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,25 +17,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_PYTHON_PYTHON_OUT_REDIRECT_HPP
-#define CORBASIM_PYTHON_PYTHON_OUT_REDIRECT_HPP
+#ifndef CORBASIM_PYTHON_INTERPRETER_HPP
+#define CORBASIM_PYTHON_INTERPRETER_HPP
+
+#include <corbasim/scripting/interpreter.hpp>
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
 
 namespace corbasim 
 {
 namespace python 
 {
 
-class python_out_redirect 
+class context;
+
+class interpreter : public scripting::interpreter
 {
 public:
-    python_out_redirect ();
-    virtual ~python_out_redirect ();
+
+    interpreter();
+
+    ~interpreter();
+    
+    scripting::context_ptr main_context();
+    
+    scripting::context_ptr new_context();
+
+    void register_factory(core::factory_base * factory);
+
+    void request_to_context(scripting::context_ptr ctx, 
+            core::factory_base * factory,
+            const char * name,
+            event::request_ptr req);
+
+    void exec_code(scripting::context_ptr ctx, 
+            const std::string& code);
 
 protected:
+
+    scripting::context_ptr m_main_context;
+
 };
 
 } // namespace python
 } // namespace corbasim
 
-#endif /* CORBASIM_PYTHON_PYTHON_OUT_REDIRECT_HPP */
+#endif /* CORBASIM_PYTHON_INTERPRETER_HPP */
 

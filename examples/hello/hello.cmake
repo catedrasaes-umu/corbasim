@@ -59,7 +59,7 @@ add_executable(${CORBASIM_PREFIX}HelloApp_Hello_pystim HelloApp_Hello_pystim.cpp
 target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_pystim 
 	${CORBASIM_PREFIX}hello_idl
 	# CORBASIM Libraries
-	corbasim corbasim_python corbasim_qt corbasim_qt_python
+	corbasim corbasim_python corbasim_qt
 	# TAO
 	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
 	# QT 

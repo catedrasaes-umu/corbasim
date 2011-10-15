@@ -13,8 +13,8 @@ if(NOT DEFINED CORBASIM_DISABLE_UI)
 
     include(corbasim_qt.cmake)
 
-    if (PYTHONLIBS_FOUND)
-        include(corbasim_qt_python.cmake)
-    endif()
+#    if (PYTHONLIBS_FOUND)
+#        include(corbasim_qt_python.cmake)
+#    endif()
 endif()
 

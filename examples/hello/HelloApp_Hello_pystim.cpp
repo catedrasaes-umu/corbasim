@@ -3,7 +3,7 @@
 
 #include <corbasim/impl.hpp>
 #include <corbasim/gui/widgets.hpp>
-#include <corbasim/qt/python/AutoResponseMainWindow.hpp>
+#include <corbasim/qt/RequestProcessor.hpp>
 #include <corbasim/qt/RequestNotifier.hpp>
 
 #include "helloS.h"
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     manager->activate();
 
     // Window
-    corbasim::qt::python::AutoResponseMainWindow window;
+    corbasim::qt::RequestProcessorMain window;
     window.initialize( input_factory, output_factory);
 
     QObject::connect( &notifier, SIGNAL( notifyRequest(

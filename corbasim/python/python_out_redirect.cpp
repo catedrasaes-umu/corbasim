@@ -19,7 +19,7 @@
 
 #include "python_out_redirect.hpp"
 
-using namespace corbasim::qt;
+using namespace corbasim::python;
 
 
 

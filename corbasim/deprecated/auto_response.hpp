@@ -42,7 +42,7 @@ struct auto_response_config
     std::string guard;
 
     std::string true_transformation;
-    tag_t true_output_message;
+    tag_t true_output_message;  
 
     std::string false_transformation;
     tag_t false_output_message;

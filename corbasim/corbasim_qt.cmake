@@ -40,6 +40,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/TemplatedSpinBox.hpp
     qt/RequestDialog.hpp
     qt/RequestNotifier.hpp
+    qt/RequestProcessor.hpp
     qt/SimpleScriptEditor.hpp
     qt/client/SimpleClient.hpp
     qt/ObjrefWidget.hpp
@@ -60,6 +61,7 @@ set(corbasim_qt_MOC_HDRS
     qt/SequenceWidget.hpp
     qt/RequestDialog.hpp
     qt/RequestNotifier.hpp
+    qt/RequestProcessor.hpp
     qt/RangedWidget.hpp
     qt/LogWidget.hpp
     qt/LogTreeWidget.hpp
@@ -78,6 +80,7 @@ set(corbasim_qt_SRCS
     qt/MultiFileSelectionWidget.cpp
     qt/MultiInputWidget.cpp
     qt/PythonHighlighter.cpp
+    qt/RequestProcessor.cpp
     qt/SequenceWidget.cpp
     qt/RequestDialog.cpp
     qt/Status.cpp)
