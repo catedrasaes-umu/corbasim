@@ -2,6 +2,7 @@
 #include <boost/bind.hpp>
 
 #include <corbasim/impl.hpp>
+#include <corbasim/python/interpreter.hpp>
 #include <corbasim/gui/widgets.hpp>
 #include <corbasim/qt/RequestProcessor.hpp>
 #include <corbasim/qt/RequestNotifier.hpp>
@@ -16,6 +17,9 @@ typedef HelloApp::Hello Opposite;
 
 int main(int argc, char **argv)
 {
+    corbasim::scripting::set_default_interpreter(
+            new corbasim::python::interpreter);
+
     // Initialization
     QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale());
     QApplication app( argc, argv);

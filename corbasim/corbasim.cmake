@@ -68,6 +68,7 @@ set(corbasim_SRCS
     core/request_serializer.cpp
 
     scripting/request_processor.cpp
+    scripting/interpreter.cpp
 
     # JSON
     json/detail/modp_b64.c

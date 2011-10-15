@@ -101,6 +101,10 @@ public:
 
 typedef boost::shared_ptr< interpreter > interpreter_ptr;
 
+void set_default_interpreter(interpreter * interpreter_);
+void set_default_interpreter(interpreter_ptr interpreter_);
+interpreter_ptr get_default_interpreter();
+
 } // namespace scripting
 } // namespace corbasim
 

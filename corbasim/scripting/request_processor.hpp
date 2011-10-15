@@ -20,6 +20,7 @@
 #ifndef CORBASIM_SCRIPTING_REQUEST_PROCESSOR_HPP
 #define CORBASIM_SCRIPTING_REQUEST_PROCESSOR_HPP
 
+#include <boost/shared_ptr.hpp>
 #include <corbasim/scripting/interpreter.hpp>
 #include <corbasim/core/factory_fwd.hpp>
 
@@ -27,6 +28,9 @@ namespace corbasim
 {
 namespace scripting 
 {
+
+class request_processor;
+typedef boost::shared_ptr< request_processor > request_processor_ptr;
 
 /**
  * @brief Executes some trigger code into an interpreter.

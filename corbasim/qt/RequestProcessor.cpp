@@ -67,10 +67,24 @@ void RequestProcessor::initialize(
     }
 
     setLayout(layout);
+
+    scripting::interpreter_ptr interpreter_ =
+        scripting::get_default_interpreter();
+
+    m_processor.reset(
+            new scripting::request_processor(
+                interpreter_,
+                output_factory->get_core_factory()));
+
+    interpreter_->request_signal.connect(
+            boost::bind(&RequestProcessor::notifyRequest,
+                this, _1));
 }
 
 void RequestProcessor::requestReceived(event::request_ptr req)
 {
+    if (m_processor)
+        m_processor->process_message(req);
 }
 
 void RequestProcessor::notifyRequest(event::request_ptr req)
@@ -80,6 +94,16 @@ void RequestProcessor::notifyRequest(event::request_ptr req)
 
 void RequestProcessor::saveConfig(int idx)
 {
+    TriggerConfigurator * trigger = m_triggers[idx];
+
+    scripting::request_processor::configuration_ptr config(
+            new scripting::request_processor::configuration);
+
+    config->active = trigger->isEnabled();
+    // TODO config->request_type = trigger->getTag();
+    config->code = trigger->getCode().toStdString();
+
+    m_processor->configure(config);
 }
 
 // Trigger Configurator
@@ -128,6 +152,16 @@ TriggerConfigurator::~TriggerConfigurator()
 
 void TriggerConfigurator::initialize(gui::operation_factory_base * factory)
 {
+}
+
+bool TriggerConfigurator::isEnabled()
+{
+    return m_enabled->isChecked();
+}
+
+QString TriggerConfigurator::getCode()
+{
+    return m_code->toPlainText();
 }
 
 void TriggerConfigurator::enableSave()

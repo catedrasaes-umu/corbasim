@@ -65,6 +65,8 @@ protected:
     // Data
     QButtonGroup * m_buttons;
     std::vector< TriggerConfigurator* > m_triggers;
+
+    scripting::request_processor_ptr m_processor;
 };
 
 class TriggerConfigurator : public QWidget
@@ -77,6 +79,9 @@ public:
     QPushButton * getSaveButton();
 
     void initialize(gui::operation_factory_base * factory);
+
+    QString getCode();
+    bool isEnabled();
 
 protected slots:
 
