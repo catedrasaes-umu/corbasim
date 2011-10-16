@@ -1,5 +1,6 @@
 set(corbasim_python_EXPORTED_HEADERS
-    python/auto_response.hpp
+    python/interpreter.hpp
+    python/python_out_redirect.hpp
     )
 
 foreach(_header ${corbasim_python_EXPORTED_HEADERS})

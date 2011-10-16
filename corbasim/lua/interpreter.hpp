@@ -17,15 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_PYTHON_INTERPRETER_HPP
-#define CORBASIM_PYTHON_INTERPRETER_HPP
+#ifndef CORBASIM_LUA_INTERPRETER_HPP
+#define CORBASIM_LUA_INTERPRETER_HPP
 
 #include <corbasim/scripting/interpreter.hpp>
-#include <corbasim/python/python_out_redirect.hpp>
 
 namespace corbasim 
 {
-namespace python 
+namespace lua 
 {
 
 class context;
@@ -54,14 +53,12 @@ public:
 
 protected:
 
-    python_out_redirect m_output;
-
     scripting::context_ptr m_main_context;
 
 };
 
-} // namespace python
+} // namespace lua
 } // namespace corbasim
 
-#endif /* CORBASIM_PYTHON_INTERPRETER_HPP */
+#endif /* CORBASIM_LUA_INTERPRETER_HPP */
 
