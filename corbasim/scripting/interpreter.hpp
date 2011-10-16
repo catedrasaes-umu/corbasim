@@ -138,6 +138,9 @@ protected:
             const char * name,
             event::request_ptr req);
 
+    void forward_request(event::request_ptr req);
+    void forward_output(const std::string& out);
+
     // Data
     interpreter_ptr m_interpreter;
 

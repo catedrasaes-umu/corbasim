@@ -75,7 +75,7 @@ void RequestProcessor::initialize(
     m_processor.reset(
             new scripting::request_processor(
                 interpreter_,
-                output_factory->get_core_factory()));
+                input_factory->get_core_factory()));
 
     interpreter_->request_signal.connect(
             boost::bind(&RequestProcessor::notifyRequest,

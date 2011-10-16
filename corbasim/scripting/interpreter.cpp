@@ -104,6 +104,11 @@ void interpreter_worker::request_to_context(context_ptr ctx,
 {
     m_io_service.post(boost::bind(&interpreter_worker::do_request_to_context,
                 this, ctx, factory, name, req));
+
+    m_interpreter->request_signal.connect(boost::bind(
+                &interpreter_worker::forward_request, this, _1));
+    m_interpreter->output_signal.connect(boost::bind(
+                &interpreter_worker::forward_output, this, _1));
 }
 
 void interpreter_worker::do_register_factory(core::factory_base * factory)
@@ -123,5 +128,15 @@ void interpreter_worker::do_request_to_context(context_ptr ctx,
         event::request_ptr req)
 {
     m_interpreter->request_to_context(ctx, factory, name, req);
+}
+
+void interpreter_worker::forward_request(event::request_ptr req)
+{
+    request_signal(req);
+}
+
+void interpreter_worker::forward_output(const std::string& out)
+{
+    output_signal(out);
 }
 
