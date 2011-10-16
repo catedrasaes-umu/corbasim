@@ -20,18 +20,28 @@
 #ifndef CORBASIM_PYTHON_PYTHON_OUT_REDIRECT_HPP
 #define CORBASIM_PYTHON_PYTHON_OUT_REDIRECT_HPP
 
+#include <string>
+
 namespace corbasim 
 {
 namespace python 
 {
 
+class interpreter;
+
 class python_out_redirect 
 {
 public:
+
     python_out_redirect ();
+    python_out_redirect (interpreter* interpreter_);
     virtual ~python_out_redirect ();
+ 
+    void write(std::string const& str);
 
 protected:
+
+    interpreter* m_interpreter;
 };
 
 } // namespace python

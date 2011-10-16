@@ -212,7 +212,8 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
     m_output_stim(NULL),
     m_output_ref(NULL),
     m_input_triggers(NULL),
-    m_interpreter(NULL)
+    m_interpreter(NULL),
+    m_console_output(NULL)
 {
     corbasim::qt::initialize();
 
@@ -248,6 +249,14 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
     m_sub_in_log->hide();
     m_sub_out_log->hide();
     
+    // Console output
+    m_sub_console_output = new QMdiSubWindow;
+    m_sub_console_output->setWindowTitle("Console output");
+    m_console_output = new ConsoleOutput;
+    m_sub_console_output->setWidget(m_console_output);
+    m_mdi_area->addSubWindow(m_sub_console_output);
+    m_sub_console_output->hide();
+
     setCentralWidget(m_mdi_area);
 
     // Menu
@@ -315,6 +324,8 @@ void RequestProcessorMain::showInputTriggers()
 
 void RequestProcessorMain::showConsoleOutput()
 {
+    m_sub_console_output->showNormal();
+    m_console_output->show();
 }
 
 void RequestProcessorMain::showInterpreter()
@@ -330,6 +341,8 @@ void RequestProcessorMain::showInterpreter()
 
         m_sub_interpreter->setWidget(m_interpreter);
         m_mdi_area->addSubWindow(m_sub_interpreter);
+        
+        m_sub_interpreter->setWindowTitle("Interpreter");
     }
     m_sub_interpreter->showNormal();
     m_interpreter->show();
@@ -343,6 +356,8 @@ void RequestProcessorMain::showOutputReference()
         m_output_ref = new ObjrefWidget(m_output_caller.get());
         m_sub_out_ref->setWidget(m_output_ref);
         m_mdi_area->addSubWindow(m_sub_out_ref);
+    
+        m_sub_out_ref->setWindowTitle("Output reference");
     }
     m_sub_out_ref->showNormal();
     m_output_ref->show();
@@ -441,5 +456,31 @@ void RequestProcessorMain::setOutputRequest(
         if (ev)
             m_output_log->notifyEvent(ev);
     }
+}
+
+// Console output
+ConsoleOutput::ConsoleOutput(QWidget * parent) :
+    QWidget(parent)
+{
+    QVBoxLayout * l = new QVBoxLayout;
+    m_output = new QTextEdit;
+    l->addWidget(m_output);
+    setLayout(l);
+
+    QObject::connect(this, SIGNAL(append(QString)),
+            m_output, SLOT(append(const QString&)));
+                
+    scripting::get_default_interpreter()->output_signal.connect(
+            boost::bind(&ConsoleOutput::write, this, _1));
+}
+
+ConsoleOutput::~ConsoleOutput()
+{
+}
+
+void ConsoleOutput::write(const std::string& str)
+{
+    QString str_(str.c_str());
+    emit append(str_);
 }
 

@@ -40,7 +40,8 @@ struct context : public corbasim::scripting::context
 } // namespace python
 } // namespace corbasim
 
-interpreter::interpreter()
+interpreter::interpreter() :
+    m_output(this)
 {
     // TODO inicializar solo una vez
     Py_Initialize();
@@ -48,13 +49,22 @@ interpreter::interpreter()
     context * main_ctx = new context;
     m_main_context = scripting::context_ptr(main_ctx);
 
-    boost::python::object main = boost::python::import("__main__");
+    bp::object main = bp::import("__main__");
 
     main_ctx->global = 
-        boost::python::extract< boost::python::dict >(main.attr("__dict__"));
+        bp::extract< bp::dict >(
+                main.attr("__dict__"));
     main_ctx->local = main_ctx->global;
 
-    boost::python::exec("import json", main_ctx->global, main_ctx->local);
+    bp::exec("import json", main_ctx->global, main_ctx->local);
+
+    main_ctx->global["PythonOutRedirect"] = 
+        bp::class_< python_out_redirect >("PythonOutRedirect", 
+                bp::init<>())
+            .def("write", &python_out_redirect::write);
+
+    bp::import("sys").attr("stderr") = m_output;
+    bp::import("sys").attr("stdout") = m_output;
 }
 
 interpreter::~interpreter()
@@ -123,13 +133,13 @@ void interpreter::request_to_context(scripting::context_ptr ctx,
 
         factory->get_factory_by_tag(tag)->to_json(req.get(), json_request);
 
-        ctx_->local[name] = boost::python::str(json_request.c_str());
+        ctx_->local[name] = bp::str(json_request.c_str());
 
         oss << name << " = json.loads(" << name << ")" << std::endl;
 
         std::string code = oss.str();
 
-        boost::python::exec(code.c_str(), ctx_->global, ctx_->local);
+        bp::exec(code.c_str(), ctx_->global, ctx_->local);
 
     } catch(...) {
         std::cerr << "Exception catched!" << std::endl;
@@ -160,7 +170,7 @@ void interpreter::exec_code(scripting::context_ptr ctx,
 {
     try {
         context * ctx_ = static_cast< context* >(ctx.get());
-        boost::python::exec(code.c_str(), ctx_->global, ctx_->local);
+        bp::exec(code.c_str(), ctx_->global, ctx_->local);
     } catch (...) {
         std::cerr << "Exception catched!" << std::endl;
 

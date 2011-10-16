@@ -20,9 +20,11 @@
 #ifndef CORBASIM_PYTHON_INTERPRETER_HPP
 #define CORBASIM_PYTHON_INTERPRETER_HPP
 
-#include <corbasim/scripting/interpreter.hpp>
 #include <boost/asio.hpp>
 #include <boost/thread.hpp>
+
+#include <corbasim/scripting/interpreter.hpp>
+#include <corbasim/python/python_out_redirect.hpp>
 
 namespace corbasim 
 {
@@ -54,6 +56,8 @@ public:
             const std::string& code);
 
 protected:
+
+    python_out_redirect m_output;
 
     scripting::context_ptr m_main_context;
 

@@ -150,10 +150,28 @@ protected:
     QWidget * m_output_ref;
     QScrollArea * m_input_triggers;
     Interpreter * m_interpreter;
+    QWidget * m_console_output;
 
     // Callers
     core::interface_caller_ptr m_output_caller;
 
+};
+
+class ConsoleOutput : public QWidget
+{
+    Q_OBJECT
+public:
+    ConsoleOutput(QWidget * parent = 0);
+    virtual ~ConsoleOutput();
+
+    void write(const std::string& str);
+
+signals:
+
+    void append(QString);
+
+protected:
+    QTextEdit * m_output;
 };
 
 } // namespace qt

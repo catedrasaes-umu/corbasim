@@ -18,8 +18,27 @@
  */
 
 #include "python_out_redirect.hpp"
+#include <corbasim/python/interpreter.hpp>
 
 using namespace corbasim::python;
 
+python_out_redirect::python_out_redirect() :
+    m_interpreter(NULL)
+{
+}
 
+python_out_redirect::python_out_redirect(interpreter* interpreter_) :
+    m_interpreter(interpreter_)
+{
+}
+
+python_out_redirect::~python_out_redirect()
+{
+}
+
+void python_out_redirect::write(std::string const& str)
+{
+    if (m_interpreter)
+        m_interpreter->output_signal(str);
+}
 

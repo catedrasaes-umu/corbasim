@@ -64,6 +64,11 @@ interpreter_worker::interpreter_worker(interpreter_ptr interpreter_) :
 {
     m_threads.create_thread(boost::bind(&boost::asio::io_service::run,
                 &m_io_service));
+
+    m_interpreter->request_signal.connect(boost::bind(
+                &interpreter_worker::forward_request, this, _1));
+    m_interpreter->output_signal.connect(boost::bind(
+                &interpreter_worker::forward_output, this, _1));
 }
 
 interpreter_worker::~interpreter_worker()
@@ -102,13 +107,9 @@ void interpreter_worker::request_to_context(context_ptr ctx,
         const char * name,
         event::request_ptr req)
 {
-    m_io_service.post(boost::bind(&interpreter_worker::do_request_to_context,
+    m_io_service.post(boost::bind(
+                &interpreter_worker::do_request_to_context,
                 this, ctx, factory, name, req));
-
-    m_interpreter->request_signal.connect(boost::bind(
-                &interpreter_worker::forward_request, this, _1));
-    m_interpreter->output_signal.connect(boost::bind(
-                &interpreter_worker::forward_output, this, _1));
 }
 
 void interpreter_worker::do_register_factory(core::factory_base * factory)
