@@ -18,6 +18,7 @@
  */
 
 #include "interpreter.hpp"
+#include <boost/bind.hpp>
 
 namespace  
 {
@@ -37,12 +38,15 @@ namespace scripting
 
 void set_default_interpreter(interpreter * interpreter_)
 {
-    corbasim_impl_default_interpreter().reset(interpreter_);
+
+    interpreter_ptr i_(interpreter_);
+    set_default_interpreter(i_);
 }
 
 void set_default_interpreter(interpreter_ptr interpreter_)
 {
-    corbasim_impl_default_interpreter() = interpreter_;
+    interpreter_ptr worker_(new interpreter_worker(interpreter_));
+    corbasim_impl_default_interpreter() = worker_;
 }
 
 interpreter_ptr get_default_interpreter()
@@ -52,3 +56,72 @@ interpreter_ptr get_default_interpreter()
 
 } // namespace scripting
 } // namespace corbasim
+
+using namespace corbasim::scripting;
+
+interpreter_worker::interpreter_worker(interpreter_ptr interpreter_) :
+    m_interpreter(interpreter_), m_work(m_io_service)
+{
+    m_threads.create_thread(boost::bind(&boost::asio::io_service::run,
+                &m_io_service));
+}
+
+interpreter_worker::~interpreter_worker()
+{
+    m_io_service.stop();
+    m_threads.join_all();
+}
+
+context_ptr interpreter_worker::main_context()
+{
+    return m_interpreter->main_context();
+}
+
+context_ptr interpreter_worker::new_context()
+{
+    return m_interpreter->new_context();
+}
+
+void interpreter_worker::register_factory(core::factory_base * factory)
+{
+    m_io_service.post(boost::bind(&interpreter_worker::do_register_factory,
+                this, factory));
+}
+
+void interpreter_worker::exec_code(context_ptr ctx, 
+        const std::string& code)
+{
+    string_ptr code_(new std::string(code));
+
+    m_io_service.post(boost::bind(&interpreter_worker::do_exec_code,
+                this, ctx, code_));
+}
+
+void interpreter_worker::request_to_context(context_ptr ctx, 
+        core::factory_base * factory,
+        const char * name,
+        event::request_ptr req)
+{
+    m_io_service.post(boost::bind(&interpreter_worker::do_request_to_context,
+                this, ctx, factory, name, req));
+}
+
+void interpreter_worker::do_register_factory(core::factory_base * factory)
+{
+    m_interpreter->register_factory(factory);
+}
+
+void interpreter_worker::do_exec_code(context_ptr ctx, 
+        string_ptr code)
+{
+    m_interpreter->exec_code(ctx, *code.get());
+}
+
+void interpreter_worker::do_request_to_context(context_ptr ctx, 
+        core::factory_base * factory,
+        const char * name,
+        event::request_ptr req)
+{
+    m_interpreter->request_to_context(ctx, factory, name, req);
+}
+

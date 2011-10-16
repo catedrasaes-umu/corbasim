@@ -30,6 +30,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/widgets/struct.hpp
 
     # QObjects
+    qt/Interpreter.hpp
     qt/Status.hpp
     qt/MultiInputWidget.hpp
     qt/RangedWidget.hpp
@@ -53,6 +54,7 @@ foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
 endforeach(_header ${corbasim_qt_EXPORTED_HEADERS})
 
 set(corbasim_qt_MOC_HDRS
+    qt/Interpreter.hpp
     qt/client/SimpleClient.hpp
     qt/SimpleScriptEditor.hpp
     qt/ObjrefWidget.hpp
@@ -71,6 +73,7 @@ set(corbasim_qt_SRCS
     gui/tree_factory.cpp
     gui/gui_factory.cpp
 
+    qt/Interpreter.cpp
     qt/initialize.cpp
     qt/client/SimpleClient.cpp
     qt/SimpleScriptEditor.cpp

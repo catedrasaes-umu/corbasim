@@ -201,6 +201,8 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
     m_sub_in_log(NULL),
     m_sub_out_log(NULL),
     m_sub_req_proc(NULL),
+    m_sub_console_output(NULL),
+    m_sub_interpreter(NULL),
 
     // Widgets
     m_request_processor(NULL),
@@ -209,7 +211,8 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
     m_input_stim(NULL), 
     m_output_stim(NULL),
     m_output_ref(NULL),
-    m_input_triggers(NULL)
+    m_input_triggers(NULL),
+    m_interpreter(NULL)
 {
     corbasim::qt::initialize();
 
@@ -316,6 +319,20 @@ void RequestProcessorMain::showConsoleOutput()
 
 void RequestProcessorMain::showInterpreter()
 {
+    if (!m_sub_interpreter)
+    {
+        m_sub_interpreter = new QMdiSubWindow;
+        m_interpreter = new Interpreter;
+
+        // Assign the default interpreter
+        m_interpreter->initialize(
+                scripting::get_default_interpreter());
+
+        m_sub_interpreter->setWidget(m_interpreter);
+        m_mdi_area->addSubWindow(m_sub_interpreter);
+    }
+    m_sub_interpreter->showNormal();
+    m_interpreter->show();
 }
 
 void RequestProcessorMain::showOutputReference()

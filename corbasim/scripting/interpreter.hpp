@@ -126,10 +126,12 @@ public:
 
 protected:
 
+    typedef boost::shared_ptr< std::string > string_ptr;
+
     void do_register_factory(core::factory_base * factory);
 
     void do_exec_code(context_ptr ctx, 
-            const std::string& code);
+            string_ptr code);
 
     void do_request_to_context(context_ptr ctx, 
             core::factory_base * factory,

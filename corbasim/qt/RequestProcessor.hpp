@@ -27,6 +27,7 @@
 #include <corbasim/core/caller.hpp>
 #include <corbasim/qt/LogWidget.hpp>
 #include <corbasim/qt/SimpleScriptEditor.hpp>
+#include <corbasim/qt/Interpreter.hpp>
 
 #include <corbasim/scripting/request_processor.hpp>
 
@@ -133,6 +134,8 @@ protected:
     QMdiSubWindow * m_sub_in_log;
     QMdiSubWindow * m_sub_out_log;
     QMdiSubWindow * m_sub_req_proc;
+    QMdiSubWindow * m_sub_console_output;
+    QMdiSubWindow * m_sub_interpreter;
 
     RequestProcessor * m_request_processor;
     LogWidget * m_input_log;
@@ -146,6 +149,7 @@ protected:
     
     QWidget * m_output_ref;
     QScrollArea * m_input_triggers;
+    Interpreter * m_interpreter;
 
     // Callers
     core::interface_caller_ptr m_output_caller;
