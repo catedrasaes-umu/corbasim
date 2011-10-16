@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+    <file>resources/images/pystim.png</file>
+    <file>resources/images/csu.png</file>
+</qresource>
+</RCC>

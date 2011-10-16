@@ -97,9 +97,11 @@ set(corbasim_qt_LIBS
     boost_regex
 )
 
+qt4_add_resources(corbasim_qt_RCC qt/corbasim_qt.qrc)
 qt4_wrap_cpp(corbasim_qt_MOC_SRCS ${corbasim_qt_MOC_HDRS})
 add_library(corbasim_qt SHARED ${corbasim_qt_SRCS} 
-    ${corbasim_qt_MOC_SRCS})
+    ${corbasim_qt_MOC_SRCS}
+    ${corbasim_qt_RCC})
 target_link_libraries(corbasim_qt
     ${corbasim_qt_LIB})
 
