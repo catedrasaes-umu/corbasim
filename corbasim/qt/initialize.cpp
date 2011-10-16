@@ -29,7 +29,7 @@ class Initializer
 public:
     Initializer()
     {
-        Q_INIT_RESOURCE(corbasim_qt);
+        // Q_INIT_RESOURCE(corbasim_qt);
 
         qRegisterMetaType< corbasim::event::request_ptr >
             ("corbasim::event::request_ptr");

@@ -302,6 +302,7 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
             SLOT(setOutputRequest(corbasim::event::request_ptr)));
 
     setWindowTitle("corbasim");
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
 
 void RequestProcessorMain::showInputEvents()
