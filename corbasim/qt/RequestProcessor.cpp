@@ -308,24 +308,28 @@ void RequestProcessorMain::showInputEvents()
 {
     m_sub_in_log->showNormal();
     m_input_log->show();
+    m_mdi_area->setActiveSubWindow(m_sub_in_log);
 }
 
 void RequestProcessorMain::showOutputEvents()
 {
     m_sub_out_log->showNormal();
     m_output_log->show();
+    m_mdi_area->setActiveSubWindow(m_sub_out_log);
 }
 
 void RequestProcessorMain::showInputTriggers()
 {
     m_sub_req_proc->showNormal();
     m_input_triggers->show();
+    m_mdi_area->setActiveSubWindow(m_sub_req_proc);
 }
 
 void RequestProcessorMain::showConsoleOutput()
 {
     m_sub_console_output->showNormal();
     m_console_output->show();
+    m_mdi_area->setActiveSubWindow(m_sub_console_output);
 }
 
 void RequestProcessorMain::showInterpreter()
@@ -346,6 +350,7 @@ void RequestProcessorMain::showInterpreter()
     }
     m_sub_interpreter->showNormal();
     m_interpreter->show();
+    m_mdi_area->setActiveSubWindow(m_sub_interpreter);
 }
 
 void RequestProcessorMain::showOutputReference()
@@ -361,6 +366,7 @@ void RequestProcessorMain::showOutputReference()
     }
     m_sub_out_ref->showNormal();
     m_output_ref->show();
+    m_mdi_area->setActiveSubWindow(m_sub_out_ref);
 }
 
 void RequestProcessorMain::showInputEstimulator()
@@ -383,6 +389,7 @@ void RequestProcessorMain::showInputEstimulator()
     }
     m_sub_in_stim->showNormal();
     m_input_stim->show();
+    m_mdi_area->setActiveSubWindow(m_sub_in_stim);
 }
 
 void RequestProcessorMain::showOutputEstimulator()
@@ -405,6 +412,7 @@ void RequestProcessorMain::showOutputEstimulator()
     }
     m_sub_out_stim->showNormal();
     m_output_stim->show();
+    m_mdi_area->setActiveSubWindow(m_sub_out_stim);
 }
 
 RequestProcessorMain::~RequestProcessorMain()
