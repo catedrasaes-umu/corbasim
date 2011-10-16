@@ -21,6 +21,7 @@
 #include <boost/python.hpp>
 #include <boost/bind.hpp>
 #include <sstream>
+#include <iostream>
 
 using namespace corbasim::python;
 namespace bp = boost::python;
@@ -131,6 +132,10 @@ void interpreter::request_to_context(scripting::context_ptr ctx,
         boost::python::exec(code.c_str(), ctx_->global, ctx_->local);
 
     } catch(...) {
+        std::cerr << "Exception catched!" << std::endl;
+
+        if (PyErr_Occurred())
+            PyErr_Print();
     }
 }
 
@@ -157,7 +162,10 @@ void interpreter::exec_code(scripting::context_ptr ctx,
         context * ctx_ = static_cast< context* >(ctx.get());
         boost::python::exec(code.c_str(), ctx_->global, ctx_->local);
     } catch (...) {
+        std::cerr << "Exception catched!" << std::endl;
+
+        if (PyErr_Occurred())
+            PyErr_Print();
     }
 }
-
 

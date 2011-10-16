@@ -68,6 +68,7 @@ void RequestProcessor::initialize(
 
     setLayout(layout);
 
+    // Prepare the interpreter
     scripting::interpreter_ptr interpreter_ =
         scripting::get_default_interpreter();
 
@@ -79,6 +80,8 @@ void RequestProcessor::initialize(
     interpreter_->request_signal.connect(
             boost::bind(&RequestProcessor::notifyRequest,
                 this, _1));
+
+    interpreter_->register_factory(output_factory->get_core_factory());
 }
 
 void RequestProcessor::requestReceived(event::request_ptr req)
@@ -100,7 +103,7 @@ void RequestProcessor::saveConfig(int idx)
             new scripting::request_processor::configuration);
 
     config->active = trigger->isEnabled();
-    // TODO config->request_type = trigger->getTag();
+    config->request_type = trigger->getTag();
     config->code = trigger->getCode().toStdString();
 
     m_processor->configure(config);
@@ -136,6 +139,7 @@ TriggerConfigurator::TriggerConfigurator(QWidget * parent) :
 
     setLayout(layout);
 
+    // Signals
     QObject::connect(m_save_button, SIGNAL(clicked()),
             this, SLOT(doSave()));
 
@@ -152,6 +156,12 @@ TriggerConfigurator::~TriggerConfigurator()
 
 void TriggerConfigurator::initialize(gui::operation_factory_base * factory)
 {
+    m_factory = factory;
+}
+
+corbasim::tag_t TriggerConfigurator::getTag()
+{
+    return m_factory->get_tag();
 }
 
 bool TriggerConfigurator::isEnabled()
@@ -183,86 +193,149 @@ QPushButton * TriggerConfigurator::getSaveButton()
 
 RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
     QMainWindow(parent), 
-    m_input_factory(NULL), m_output_factory(NULL),
-    m_input_stim(NULL), m_output_stim(NULL),
-    m_output_ref_dlg(NULL)
+
+    // Subwindows
+    m_sub_out_ref(NULL),
+    m_sub_in_stim(NULL),
+    m_sub_out_stim(NULL),
+    m_sub_in_log(NULL),
+    m_sub_out_log(NULL),
+    m_sub_req_proc(NULL),
+
+    // Widgets
+    m_request_processor(NULL),
+    m_input_factory(NULL),
+    m_output_factory(NULL),
+    m_input_stim(NULL), 
+    m_output_stim(NULL),
+    m_output_ref(NULL),
+    m_input_triggers(NULL)
 {
     corbasim::qt::initialize();
 
-    QSplitter * w = new QSplitter(Qt::Vertical, this);
+    m_mdi_area = new QMdiArea();
 
-    QGroupBox * gb = new QGroupBox("Triggers");
-    QVBoxLayout * vLayout = new QVBoxLayout;
-    QScrollArea * sc = new QScrollArea;
+    m_sub_req_proc = new QMdiSubWindow;
+    m_sub_req_proc->setWindowTitle("Input triggers");
+
+    m_input_triggers = new QScrollArea;
     m_request_processor = new RequestProcessor;
-    sc->setWidget(m_request_processor);
-    sc->setWidgetResizable(true);
-    vLayout->addWidget(sc);
-    gb->setLayout(vLayout);
-    w->addWidget(gb);
+    m_input_triggers->setWidget(m_request_processor);
+    m_input_triggers->setWidgetResizable(true);
+
+    m_sub_req_proc->setWidget(m_input_triggers);
+    m_mdi_area->addSubWindow(m_sub_req_proc);
+    m_sub_req_proc->hide();
 
     // Logs
-    QGroupBox * igb = new QGroupBox("Input events");
-    QGroupBox * ogb = new QGroupBox("Output events");
-    QHBoxLayout * il = new QHBoxLayout;
-    QHBoxLayout * ol = new QHBoxLayout;
+    m_sub_in_log = new QMdiSubWindow;
+    m_sub_out_log = new QMdiSubWindow;
+    m_sub_in_log->setWindowTitle("Input events");
+    m_sub_out_log->setWindowTitle("Output events");
+
     m_input_log = new LogWidget;
     m_output_log = new LogWidget;
-    QHBoxLayout * hLayout = new QHBoxLayout;
-    il->addWidget(m_input_log);
-    ol->addWidget(m_output_log);
-    igb->setLayout(il);
-    ogb->setLayout(ol);
-    
-    QWidget * logWidget = new QWidget;
-    hLayout->addWidget(igb);
-    hLayout->addWidget(ogb);
-    logWidget->setLayout(hLayout);
-    w->addWidget(logWidget);
 
-    setCentralWidget(w);
+    m_sub_in_log->setWidget(m_input_log);
+    m_sub_out_log->setWidget(m_output_log);
+
+    m_mdi_area->addSubWindow(m_sub_in_log);
+    m_mdi_area->addSubWindow(m_sub_out_log);
+
+    m_sub_in_log->hide();
+    m_sub_out_log->hide();
+    
+    setCentralWidget(m_mdi_area);
 
     // Menu
     QMenuBar * menu = new QMenuBar;
     setMenuBar(menu);
 
     QMenu * menuFile = menu->addMenu("&File");
-    menuFile->addAction("&Input stimulator", this, 
-            SLOT(showInputEstimulator()));
-    menuFile->addAction("&Output stimulator", this, 
-            SLOT(showOutputEstimulator()));
-    menuFile->addSeparator();
-    menuFile->addAction("Output &reference", this, 
-            SLOT(showOutputReference()));
-    menuFile->addSeparator();
     menuFile->addAction("&Close", this, SLOT(close()));
+
+    QMenu * menuWin = menu->addMenu("&Window");
+    menuWin->addAction("&Input stimulator", this, 
+            SLOT(showInputEstimulator()));
+    menuWin->addAction("&Output stimulator", this, 
+            SLOT(showOutputEstimulator()));
+    menuWin->addSeparator();
+    menuWin->addAction("Output &reference", this, 
+            SLOT(showOutputReference()));
+    menuWin->addSeparator();
+    menuWin->addAction("Input &triggers", this, 
+            SLOT(showInputTriggers()));
+    menuWin->addSeparator();
+    menuWin->addAction("Input events", this, 
+            SLOT(showInputEvents()));
+    menuWin->addAction("Output events", this, 
+            SLOT(showOutputEvents()));
+    menuWin->addSeparator();
+    menuWin->addAction("Console output", this, 
+            SLOT(showConsoleOutput()));
+    menuWin->addAction("Interpreter", this, 
+            SLOT(showInterpreter()));
+    menuWin->addSeparator();
+    menuWin->addAction("Cascade", m_mdi_area, 
+            SLOT(cascadeSubWindows()));
+    menuWin->addAction("Tile", m_mdi_area, 
+            SLOT(tileSubWindows()));
+    
+    QMenu * menuAbout = menu->addMenu("&About");
 
     // Signals
     QObject::connect(m_request_processor, 
             SIGNAL(sendRequest(corbasim::event::request_ptr)),
             this,
             SLOT(setOutputRequest(corbasim::event::request_ptr)));
+
+    setWindowTitle("corbasim");
+}
+
+void RequestProcessorMain::showInputEvents()
+{
+    m_sub_in_log->showNormal();
+    m_input_log->show();
+}
+
+void RequestProcessorMain::showOutputEvents()
+{
+    m_sub_out_log->showNormal();
+    m_output_log->show();
+}
+
+void RequestProcessorMain::showInputTriggers()
+{
+    m_sub_req_proc->showNormal();
+    m_input_triggers->show();
+}
+
+void RequestProcessorMain::showConsoleOutput()
+{
+}
+
+void RequestProcessorMain::showInterpreter()
+{
 }
 
 void RequestProcessorMain::showOutputReference()
 {
-    if (!m_output_ref_dlg)
+    if (!m_sub_out_ref)
     {
-        m_output_ref_dlg = new QDialog(this);
-        QVBoxLayout * l = new QVBoxLayout;
-        ObjrefWidget * ref = new ObjrefWidget(m_output_caller.get());
-        l->addWidget(ref);
-        m_output_ref_dlg->setLayout(l);
-        m_output_ref_dlg->setWindowTitle("Output reference");
+        m_sub_out_ref = new QMdiSubWindow;
+        m_output_ref = new ObjrefWidget(m_output_caller.get());
+        m_sub_out_ref->setWidget(m_output_ref);
+        m_mdi_area->addSubWindow(m_sub_out_ref);
     }
-    m_output_ref_dlg->show();
+    m_sub_out_ref->showNormal();
+    m_output_ref->show();
 }
 
 void RequestProcessorMain::showInputEstimulator()
 {
     if (!m_input_stim)
     {
-        m_input_stim = new SimpleScriptEditor(this);
+        m_input_stim = new SimpleScriptEditor;
         m_input_stim->initialize(m_input_factory);
         m_input_stim->setWindowTitle("Input stimulator");
 
@@ -270,7 +343,13 @@ void RequestProcessorMain::showInputEstimulator()
                 SIGNAL(sendRequest(corbasim::event::request_ptr)),
                 this,
                 SLOT(setInputRequest(corbasim::event::request_ptr)));
+
+        m_sub_in_stim = new QMdiSubWindow;
+        m_sub_in_stim->setWidget(m_input_stim);
+
+        m_mdi_area->addSubWindow(m_sub_in_stim);
     }
+    m_sub_in_stim->showNormal();
     m_input_stim->show();
 }
 
@@ -278,7 +357,7 @@ void RequestProcessorMain::showOutputEstimulator()
 {
     if (!m_output_stim)
     {
-        m_output_stim = new SimpleScriptEditor(this);
+        m_output_stim = new SimpleScriptEditor;
         m_output_stim->initialize(m_output_factory);
         m_output_stim->setWindowTitle("Output stimulator");
 
@@ -286,12 +365,24 @@ void RequestProcessorMain::showOutputEstimulator()
                 SIGNAL(sendRequest(corbasim::event::request_ptr)),
                 this,
                 SLOT(setOutputRequest(corbasim::event::request_ptr)));
+        
+        m_sub_out_stim = new QMdiSubWindow;
+        m_sub_out_stim->setWidget(m_output_stim);
+
+        m_mdi_area->addSubWindow(m_sub_out_stim);
     }
+    m_sub_out_stim->showNormal();
     m_output_stim->show();
 }
 
 RequestProcessorMain::~RequestProcessorMain()
 {
+    delete m_sub_out_ref;
+    delete m_sub_in_stim;
+    delete m_sub_out_stim;
+    delete m_sub_in_log;
+    delete m_sub_out_log;
+    delete m_sub_req_proc;
 }
 
 void RequestProcessorMain::initialize(

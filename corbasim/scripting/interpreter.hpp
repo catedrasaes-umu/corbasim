@@ -22,6 +22,8 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/signals2.hpp>
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
 #include <string>
 
 #include <corbasim/event.hpp>
@@ -100,6 +102,48 @@ public:
 };
 
 typedef boost::shared_ptr< interpreter > interpreter_ptr;
+
+class interpreter_worker : public interpreter
+{
+public:
+
+    interpreter_worker(interpreter_ptr interpreter_);
+    virtual ~interpreter_worker();
+
+    void register_factory(core::factory_base * factory);
+
+    context_ptr main_context();
+    
+    context_ptr new_context();
+
+    void exec_code(context_ptr ctx, 
+            const std::string& code);
+
+    void request_to_context(context_ptr ctx, 
+            core::factory_base * factory,
+            const char * name,
+            event::request_ptr req);
+
+protected:
+
+    void do_register_factory(core::factory_base * factory);
+
+    void do_exec_code(context_ptr ctx, 
+            const std::string& code);
+
+    void do_request_to_context(context_ptr ctx, 
+            core::factory_base * factory,
+            const char * name,
+            event::request_ptr req);
+
+    // Data
+    interpreter_ptr m_interpreter;
+
+    boost::asio::io_service m_io_service;
+    boost::asio::io_service::work m_work;
+    boost::thread_group m_threads;
+    
+};
 
 void set_default_interpreter(interpreter * interpreter_);
 void set_default_interpreter(interpreter_ptr interpreter_);

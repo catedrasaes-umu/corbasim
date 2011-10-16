@@ -82,6 +82,7 @@ public:
 
     QString getCode();
     bool isEnabled();
+    tag_t getTag();
 
 protected slots:
 
@@ -93,6 +94,8 @@ protected:
     QPushButton * m_save_button;
     QCheckBox * m_enabled;
     QTextEdit * m_code;
+
+    gui::operation_factory_base * m_factory;
 };
 
 class RequestProcessorMain : public QMainWindow
@@ -107,14 +110,29 @@ public:
 
 public slots:
 
+    void showInputTriggers();
     void showInputEstimulator();
     void showOutputEstimulator();
     void showOutputReference();
+
+    void showInputEvents();
+    void showOutputEvents();
+
+    void showConsoleOutput();
+    void showInterpreter();
 
     void setInputRequest(corbasim::event::request_ptr);
     void setOutputRequest(corbasim::event::request_ptr);
 
 protected:
+
+    QMdiArea * m_mdi_area;
+    QMdiSubWindow * m_sub_out_ref;
+    QMdiSubWindow * m_sub_in_stim;
+    QMdiSubWindow * m_sub_out_stim;
+    QMdiSubWindow * m_sub_in_log;
+    QMdiSubWindow * m_sub_out_log;
+    QMdiSubWindow * m_sub_req_proc;
 
     RequestProcessor * m_request_processor;
     LogWidget * m_input_log;
@@ -126,10 +144,12 @@ protected:
     SimpleScriptEditor * m_input_stim;
     SimpleScriptEditor * m_output_stim;
     
+    QWidget * m_output_ref;
+    QScrollArea * m_input_triggers;
+
     // Callers
     core::interface_caller_ptr m_output_caller;
 
-    QDialog * m_output_ref_dlg;
 };
 
 } // namespace qt
