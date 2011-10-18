@@ -88,7 +88,9 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_server
 	# CORBASIM Libraries
 	corbasim
 	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate)
+	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
+	# Boost
+	boost_program_options)
 	«ENDIF-»
 	
 	«IF generatePyStim()-»

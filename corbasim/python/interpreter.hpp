@@ -52,6 +52,11 @@ public:
     void exec_code(scripting::context_ptr ctx, 
             const std::string& code);
 
+    void exec_file(scripting::context_ptr ctx, 
+            const std::string& code);
+
+    void run_interactive();
+
 protected:
 
     python_out_redirect m_output;

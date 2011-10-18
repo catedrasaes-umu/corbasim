@@ -26,6 +26,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
+#include <boost/program_options.hpp>
 
 «PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl_server::___includes"»
 «ENDPROTECT»
@@ -35,13 +37,17 @@ class «fqn»_impl : virtual public «this.getPOAFQN()»
 public:
 
 	«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::___public"»
+	«fqn»_impl(const std::string& log_file, «getFQN()»_ptr _reference) :
+		__m_ofstream(log_file.c_str()), __m_reference(«getFQN()»::_duplicate(_reference))
+	{
+	}
 	«ENDPROTECT»
 
 	«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op»
 	«op.getSignature()»
 	{
 		std::ostringstream __oss;
-		std::cout << ">«op.identifier»" << std::endl;
+		std::cout << ">";
 		__oss << "«op.identifier» ";
 		
 		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::"+op.getFQN("_")+"___pre"»
@@ -62,6 +68,17 @@ public:
 		
 		std::cout << ' ' << __oss.str();
 		
+		if (__m_ofstream.is_open())
+			__m_ofstream << __oss.str();
+			
+		try {
+			if (!CORBA::is_nil(__m_reference))
+				«IF !op.returnVoid()-»_val._return = «ENDIF-»__m_reference->«op.identifier»(«FOREACH op.parameters AS p SEPARATOR ", "»_val.«p.identifier»«ENDFOREACH»);
+		} catch(...) {
+			std::cerr << "CORBA exception!" << std::endl;
+			__m_reference = «getFQN()»::_nil();
+		}
+		
 		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::"+op.getFQN("_")+"___post"»
 		«ENDPROTECT»
 		
@@ -78,13 +95,78 @@ public:
 		«ENDIF-»
 	}
 	«ENDFOREACH»
+
+protected:
+
+	std::ofstream __m_ofstream;
+	
+	«getFQN()»_var __m_reference;
 };
+
+namespace _po = namespace boost::program_options;
 
 int main(int argc, char **argv)
 {
+	// Program options
+	std::string register_servant;
+	std::string log_file;
+	std::string proxy_reference;
+	
+	_po::options_description _desc("Proxy Server options");
+	_desc.add_options()
+	    ("help,h", "produce help message")
+	    ("register-servant,r", _po::value< std::string >(&register_servant), "")
+	    ("proxy-reference,p", _po::value< std::string >(&proxy_reference), "")
+	    ("log-file,l", _po::value< std::string >(&log_file), "");
+	
+	_po::variables_map _vm;
+	_po::store(po::parse_command_line(argc, argv, _desc), _vm);
+	_po::notify(_vm);
+	  
+	if (_vm.count("help"))
+	{
+		std::cout << _desc << std::endl;
+		return 0;
+	}
+	
+	bool reference_is_ns_entry = false;
+	// TODO
+	
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
+    
+    // Name Service
+    CosNaming::NamingContextExt_var nc;
+    
+    if (reference_is_ns_entry || !register_servant.empty())
+    {
+    	try {
+			CORBA::Object_var ncObj = orb->resolve_initial_references("NameService");
+		
+			nc = CosNaming::NamingContextExt::_narrow(ncObj);
+		} catch(...) {
+		}
+		
+		if (CORBA::is_nil(nc))
+			std::cerr << "Name service unavailable!" << std::endl;
+    }
+    
+    // Proxy reference
+    «getFQN()»_var reference;
+    
+    if (!proxy_reference.empty())
+    {
+    	CORBA::Object_var refObj;
+    	
+		if (reference_is_ns_entry && !CORBA::is_nil(nc))
+			refObj = nc->resolve_str(proxy_reference.c_str());
+		else
+			refObj = orb->string_to_object(proxy_reference.c_str());
+		
+		reference = «getFQN()»::_narrow(refObj);
+    }
 
-    «fqn»_impl _impl;
+	// Servant
+    «fqn»_impl _impl(log_file, reference.in());
    
 	CORBA::Object_var rootPOAObj = 
 			orb->resolve_initial_references("RootPOA");
@@ -99,36 +181,30 @@ int main(int argc, char **argv)
 				
 	CORBA::Object_var obj = rootPOA->servant_to_reference(&_impl);
 
+	// Displaying reference
     CORBA::String_var ref = orb->object_to_string(obj);
     std::cout << ref << std::endl;
     
-    CosNaming::NamingContextExt_var nc;
+    // Registring servant
     CosNaming::Name_var name;
     
-    if (argc > 1)
+    if (!register_servant.empty() && !CORBA::is_nil(nc)))
     {
-		CORBA::Object_var ncObj = orb->resolve_initial_references("NameService");
+		name = nc->to_name(register_servant.c_str());
 		
-		nc = CosNaming::NamingContextExt::_narrow(ncObj);
-		
-		if (!CORBA::is_nil(nc))
-		{
-			name = nc->to_name(argv[1]);
-			
-			nc->rebind(name, obj);
-		}    	
+		nc->rebind(name, obj);    	
     }
     
     «PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl_server::___main"»
 	«ENDPROTECT»
 
+	// Running
 	manager->activate();
     orb->run();
-    
-    if (!CORBA::is_nil(nc))
-    {
+
+	// Unbinding servant    
+    if (!CORBA::is_nil(nc)) && name.in())
     	nc->unbind(name);
-    }
     
     return 0;
 }

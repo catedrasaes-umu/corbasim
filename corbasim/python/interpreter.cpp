@@ -179,3 +179,15 @@ void interpreter::exec_code(scripting::context_ptr ctx,
     }
 }
 
+void interpreter::exec_file(scripting::context_ptr ctx, 
+        const std::string& code)
+{
+    // TODO
+}
+
+void interpreter::run_interactive()
+{
+    // TODO
+}
+
+

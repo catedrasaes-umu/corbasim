@@ -26,4 +26,8 @@
 	«IF generatePyStim()»
 		«EXPAND templates::corbasim::PyStim::stim FOR this»
 	«ENDIF»
+	
+	«IF generateInterpreter()»
+		«EXPAND templates::corbasim::Interpreter::interpreter FOR this»
+	«ENDIF»
 «ENDDEFINE»
