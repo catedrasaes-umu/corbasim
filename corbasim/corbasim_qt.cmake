@@ -88,6 +88,8 @@ set(corbasim_qt_SRCS
     qt/RequestDialog.cpp
     qt/Status.cpp)
 
+message(STATUS "Qt libraries: ${QT_LIBRARIES}")
+
 set(corbasim_qt_LIBS
     ${QT_LIBRARIES}
     corbasim
@@ -103,7 +105,7 @@ add_library(corbasim_qt SHARED ${corbasim_qt_SRCS}
     ${corbasim_qt_MOC_SRCS}
     ${corbasim_qt_RCC})
 target_link_libraries(corbasim_qt
-    ${corbasim_qt_LIB})
+    ${corbasim_qt_LIBS})
 
 set_target_properties(corbasim_qt PROPERTIES 
     VERSION ${${PROJECT_NAME}_VERSION} 

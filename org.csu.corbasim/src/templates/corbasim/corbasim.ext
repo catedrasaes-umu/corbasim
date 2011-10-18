@@ -10,7 +10,8 @@ Boolean generateClient() : GLOBALVAR genClient;
 Boolean generateInjector() : GLOBALVAR genInjector;
 Boolean generateServer() : GLOBALVAR genServer;
 Boolean generatePyStim() : GLOBALVAR genPyStim;
-Boolean generateInterpreter() : false;
+Boolean generateInterpreter() : GLOBALVAR genInterpreter;
+Boolean generateCMake() : GLOBALVAR genCMake;
 
 String getHeaderExtension() : ".hpp";
 String getSourceExtension() : ".cpp";
@@ -25,11 +26,6 @@ String getFQN(Contained this, String separator ) :
 		
 String getPOAFQN(InterfaceDef this) :
     "POA_" + getFQN();
-
-String getQImpl(InterfaceDef this) : getFQN("_") + "_qimpl"; 
-String getQImpl(TranslationUnit this) : getFileName() + "_qimpl"; 
-String getQImplHeaderFile(TranslationUnit this) : getQImpl() + getHeaderExtension();
-String getQImplSourceFile(TranslationUnit this) : getQImpl() + getSourceExtension();
 
 String getAdaptedFile(TranslationUnit this) : getFileName() + "_adapted" + getHeaderExtension();
 String getAdaptedServantFile(TranslationUnit this) : getFileName() + "_servant" + getHeaderExtension();

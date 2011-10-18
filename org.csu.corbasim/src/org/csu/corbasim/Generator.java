@@ -181,11 +181,16 @@ public class Generator {
 		genInjector = cmd.hasOption("Ginjector");
 		genServer = cmd.hasOption("Gserver");
 		genPyStim = cmd.hasOption("Gpystim");
+		genInterpreter = cmd.hasOption("Ginterpreter");
+		
+		genCMake = !cmd.hasOption("Ncmake");
 		
 		globalVarsMap.put("genClient", new Variable("genClient", genClient));
 		globalVarsMap.put("genInjector", new Variable("genInjector", genInjector));
 		globalVarsMap.put("genServer", new Variable("genServer", genServer));
 		globalVarsMap.put("genPyStim", new Variable("genPyStim", genPyStim));
+		globalVarsMap.put("genInterpreter", new Variable("genInterpreter", genInterpreter));
+		globalVarsMap.put("genCMake", new Variable("genCMake", genCMake));
 	}
 
 	private static Options options = null; // Command line options
@@ -202,6 +207,8 @@ public class Generator {
 	private boolean genServer = false;
 	private boolean genInjector = false;
 	private boolean genPyStim = false;
+	private boolean genInterpreter = false;
+	private boolean genCMake = true;
 
 	// TAO defaults
 	private static String stubHppSuffix = "C.h";
@@ -235,6 +242,9 @@ public class Generator {
 		options.addOption("Ginjector", false, "Generate script injector.");
 		options.addOption("Gserver", false, "Generate dummy server.");
 		options.addOption("Gpystim", false, "Generate a PyStim.");
+		options.addOption("Ginterpreter", false, "Generate a script interpreter.");
+		
+		options.addOption("Ncmake", false, "Do not generate CMake files.");
 
 		options.addOption("p", true, "Protected regions source paths. Default is output directory.");
 

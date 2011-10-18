@@ -21,7 +21,6 @@ add_library(${CORBASIM_PREFIX}hello_idl SHARED ${hello_GENERATED})
 
 	
 	
-	
 
 
 
@@ -30,20 +29,14 @@ add_executable(${CORBASIM_PREFIX}HelloApp_Hello_client HelloApp_Hello_client_mai
 target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_client 
 	${CORBASIM_PREFIX}hello_idl
 	# CORBASIM Libraries
-	corbasim corbasim_qt
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
-	# QT 
-	${QT_LIBRARIES})
+	corbasim corbasim_qt)
 	
 # Injector	
 add_executable(${CORBASIM_PREFIX}HelloApp_Hello_injector HelloApp_Hello_injector.cpp)
 target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_injector
 	${CORBASIM_PREFIX}hello_idl
 	# CORBASIM Libraries
-	corbasim
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate)
+	corbasim)
 	
 # Server
 add_executable(${CORBASIM_PREFIX}HelloApp_Hello_server HelloApp_Hello_server.cpp)
@@ -51,8 +44,6 @@ target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_server
 	${CORBASIM_PREFIX}hello_idl
 	# CORBASIM Libraries
 	corbasim
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
 	# Boost
 	boost_program_options)
 	
@@ -61,11 +52,8 @@ add_executable(${CORBASIM_PREFIX}HelloApp_Hello_pystim HelloApp_Hello_pystim.cpp
 target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_pystim 
 	${CORBASIM_PREFIX}hello_idl
 	# CORBASIM Libraries
-	corbasim corbasim_python corbasim_qt
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
-	# QT 
-	${QT_LIBRARIES})
+	corbasim corbasim_python corbasim_qt)
+	
 
 
 

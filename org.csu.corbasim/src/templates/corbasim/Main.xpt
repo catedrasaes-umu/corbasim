@@ -6,7 +6,10 @@
 	«REM»«EXPAND templates::corbasim::QImpl::impl FOR this»«ENDREM»
 	
 	«REM» Comunes «ENDREM»
-	«EXPAND templates::corbasim::CMake::main FOR this»
+	«IF generateCMake()»
+		«EXPAND templates::corbasim::CMake::main FOR this»
+	«ENDIF»
+	
 	«EXPAND templates::corbasim::Adapted::main FOR this»
 	«EXPAND templates::corbasim::AdaptedServant::main FOR this»
 	

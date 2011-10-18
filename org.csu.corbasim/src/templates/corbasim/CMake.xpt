@@ -31,18 +31,6 @@ target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
 		«ENDFOREACH-»)
 	«ENDIF-»
 
-«REM»
-set(«filename»_QIMPL
-	«filename»_qimpl.cpp)
-qt4_wrap_cpp(«filename»_MOC_QIMPL «filename»_qimpl.hpp)
-add_library(${CORBASIM_PREFIX}«filename»_qimpl SHARED ${«filename»_QIMPL} ${«filename»_MOC_QIMPL})
-	«IF !includes.isEmpty-»
-target_link_libraries(${CORBASIM_PREFIX}«filename»_qimpl
-		«FOREACH includes AS e-»
-	${CORBASIM_PREFIX}«e.getFileName()»_qimpl
-		«ENDFOREACH-»)
-	«ENDIF-»
-«ENDREM»	
 	«EXPAND cmake FOREACH contains SEPARATOR "\n\n"»
 	
 «ENDFILE»
@@ -62,11 +50,7 @@ add_executable(${CORBASIM_PREFIX}«fqn»_client «fqn»_client_main.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_client 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	# CORBASIM Libraries
-	corbasim corbasim_qt
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
-	# QT 
-	${QT_LIBRARIES})
+	corbasim corbasim_qt)
 	«ENDIF-»
 	
 	«IF generateInjector()-»
@@ -75,9 +59,7 @@ add_executable(${CORBASIM_PREFIX}«fqn»_injector «fqn»_injector.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_injector
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	# CORBASIM Libraries
-	corbasim
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate)
+	corbasim)
 	«ENDIF-»
 	
 	«IF generateServer()-»
@@ -87,8 +69,6 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_server
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	# CORBASIM Libraries
 	corbasim
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
 	# Boost
 	boost_program_options)
 	«ENDIF-»
@@ -99,11 +79,16 @@ add_executable(${CORBASIM_PREFIX}«fqn»_pystim «fqn»_pystim.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_pystim 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	# CORBASIM Libraries
-	corbasim corbasim_python corbasim_qt
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
-	# QT 
-	${QT_LIBRARIES})
+	corbasim corbasim_python corbasim_qt)
+	«ENDIF-»
+	
+	«IF generateInterpreter()-»
+# Interpreter
+add_executable(${CORBASIM_PREFIX}«fqn»_interpreter «fqn»_interpreter.cpp)
+target_link_libraries(${CORBASIM_PREFIX}«fqn»_interpreter 
+	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
+	# CORBASIM Libraries
+	corbasim corbasim_python)
 	«ENDIF-»
 «ENDLET»
 «ENDDEFINE»
