@@ -103,7 +103,7 @@ protected:
 	«getFQN()»_var __m_reference;
 };
 
-namespace _po = namespace boost::program_options;
+namespace _po = boost::program_options;
 
 int main(int argc, char **argv)
 {
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 	    ("log-file,l", _po::value< std::string >(&log_file), "");
 	
 	_po::variables_map _vm;
-	_po::store(po::parse_command_line(argc, argv, _desc), _vm);
+	_po::store(_po::parse_command_line(argc, argv, _desc), _vm);
 	_po::notify(_vm);
 	  
 	if (_vm.count("help"))
@@ -188,7 +188,7 @@ int main(int argc, char **argv)
     // Registring servant
     CosNaming::Name_var name;
     
-    if (!register_servant.empty() && !CORBA::is_nil(nc)))
+    if (!register_servant.empty() && !CORBA::is_nil(nc))
     {
 		name = nc->to_name(register_servant.c_str());
 		
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     orb->run();
 
 	// Unbinding servant    
-    if (!CORBA::is_nil(nc)) && name.in())
+    if (!CORBA::is_nil(nc) && name)
     	nc->unbind(name);
     
     return 0;

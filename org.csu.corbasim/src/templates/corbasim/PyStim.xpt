@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 	manager->activate();
 	
 	// Window
-	corbasim::qt::python::RequestProcessorMain window;
+	corbasim::qt::RequestProcessorMain window;
 	window.initialize(input_factory, output_factory);
 	
 	QObject::connect(

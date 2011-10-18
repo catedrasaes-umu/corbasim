@@ -99,7 +99,7 @@ add_executable(${CORBASIM_PREFIX}«fqn»_pystim «fqn»_pystim.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_pystim 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	# CORBASIM Libraries
-	corbasim corbasim_python corbasim_qt corbasim_qt_python
+	corbasim corbasim_python corbasim_qt
 	# TAO
 	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
 	# QT 

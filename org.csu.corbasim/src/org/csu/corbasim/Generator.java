@@ -74,6 +74,8 @@ public class Generator {
 		// Protected regions
 		ProtectedRegionResolverImpl pr = new ProtectedRegionResolverImpl();
 		pr.setSrcPathes(prSrcPaths);
+		pr.setDefaultExcludes(true);
+		pr.setIgnoreList("*.swp");
 
 		// Execution context
 		XpandExecutionContextImpl execCtx = new XpandExecutionContextImpl(output, pr, globalVarsMap, null, null);
