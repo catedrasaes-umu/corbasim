@@ -109,6 +109,9 @@ namespace _po = boost::program_options;
 
 int main(int argc, char **argv)
 {
+	// Removes ORB related arguments
+	CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
+	
 	// Program options
 	std::string register_servant;
 	std::string log_file;
@@ -117,9 +120,9 @@ int main(int argc, char **argv)
 	_po::options_description _desc("Proxy Server options");
 	_desc.add_options()
 	    ("help,h", "produce help message")
-	    ("register-servant,r", _po::value< std::string >(&register_servant), "")
-	    ("proxy-reference,p", _po::value< std::string >(&proxy_reference), "")
-	    ("log-file,l", _po::value< std::string >(&log_file), "");
+	    ("register-servant,r", _po::value< std::string >(&register_servant), "register the servant into the name service")
+	    ("proxy-reference,p", _po::value< std::string >(&proxy_reference), "forward received calls to another servant")
+	    ("log-file,l", _po::value< std::string >(&log_file), "store received calls in CORBASIM script format");
 	
 	_po::variables_map _vm;
 	_po::store(_po::parse_command_line(argc, argv, _desc), _vm);
@@ -133,8 +136,6 @@ int main(int argc, char **argv)
 	
 	bool reference_is_ns_entry = false;
 	// TODO
-	
-    CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
     
     // Name Service
     CosNaming::NamingContextExt_var nc;
