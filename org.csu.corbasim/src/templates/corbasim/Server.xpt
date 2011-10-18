@@ -38,7 +38,8 @@ public:
 
 	«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::___public"»
 	«fqn»_impl(const std::string& log_file, «getFQN()»_ptr _reference) :
-		__m_ofstream(log_file.c_str()), __m_reference(«getFQN()»::_duplicate(_reference))
+		__m_ofstream(log_file.c_str()), 
+		__m_reference(«getFQN()»::_duplicate(_reference))
 	{
 	}
 	«ENDPROTECT»
@@ -53,7 +54,6 @@ public:
 		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::"+op.getFQN("_")+"___pre"»
 		«ENDPROTECT»
 		
-		__oss << ' ';
 		«IF !op.parameters.isEmpty || !op.returnVoid()-»
 		_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
 		try {
@@ -66,17 +66,19 @@ public:
 		__oss << std::endl;
 		«ENDIF-»
 		
-		std::cout << ' ' << __oss.str();
+		std::cout << __oss.str();
 		
 		if (__m_ofstream.is_open())
+		{
 			__m_ofstream << __oss.str();
+			__m_ofstream.flush();
+		}
 			
 		try {
 			if (!CORBA::is_nil(__m_reference))
 				«IF !op.returnVoid()-»_val._return = «ENDIF-»__m_reference->«op.identifier»(«FOREACH op.parameters AS p SEPARATOR ", "»_val.«p.identifier»«ENDFOREACH»);
 		} catch(...) {
 			std::cerr << "CORBA exception!" << std::endl;
-			__m_reference = «getFQN()»::_nil();
 		}
 		
 		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::"+op.getFQN("_")+"___post"»
