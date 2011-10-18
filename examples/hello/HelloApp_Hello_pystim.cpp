@@ -33,8 +33,8 @@ int main(int argc, char **argv)
 
     // Registring the servant
     corbasim::qt::RequestNotifier notifier;
-    PortableServer::ServantBase_var _impl( corbasim::adapted::create_servant<
-            HelloApp::Hello >( notifier));
+    PortableServer::ServantBase_var _impl(
+            corbasim::adapted::create_servant< HelloApp::Hello >( notifier));
 
     CORBA::Object_var rootPOAObj = orb->resolve_initial_references( "RootPOA");
 
@@ -57,9 +57,9 @@ int main(int argc, char **argv)
     corbasim::qt::RequestProcessorMain window;
     window.initialize( input_factory, output_factory);
 
-    QObject::connect( &notifier, SIGNAL( notifyRequest(
-            corbasim::event::request_ptr)), &window, SLOT( setInputRequest(
-            corbasim::event::request_ptr)));
+    QObject::connect( &notifier,
+            SIGNAL( notifyRequest( corbasim::event::request_ptr)), &window,
+            SLOT( setInputRequest( corbasim::event::request_ptr)));
 
     window.show();
 
