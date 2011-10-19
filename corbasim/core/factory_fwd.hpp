@@ -39,8 +39,22 @@ namespace core
 struct operation_factory_base
 {
     virtual const char * get_name() const = 0;
-    virtual void to_json(event::request* req, std::string& str) const = 0;
+
+    // To json
+    virtual void to_json(event::request* req, 
+            std::string& str) const = 0;
+    virtual void to_json(event::response* req, 
+            std::string& str) const = 0;
+
+    // Will be deprecated
     virtual event::request* from_json(const std::string& str) const = 0;
+    
+    // From json
+    virtual event::request* request_from_json(
+            const std::string& str) const = 0;
+    virtual event::response* response_from_json(
+            const std::string& str) const = 0;
+
     virtual ~operation_factory_base();
 };
 

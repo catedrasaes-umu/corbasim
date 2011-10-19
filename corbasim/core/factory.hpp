@@ -42,12 +42,14 @@ struct operation_factory : public operation_factory_base
 {
     typedef dialogs::input< Value > input_t;
     typedef event::request_impl< Value > request_t;
+    typedef event::response_impl< Value > response_t;
 
     const char * get_name() const
     {
         return adapted::name< Value >::call();
     }
     
+    // To JSON
     void to_json(event::request* req, std::string& str) const
     {
         std::ostringstream oss;
@@ -57,9 +59,34 @@ struct operation_factory : public operation_factory_base
         str = oss.str();
     }
 
+    void to_json(event::response* req, std::string& str) const
+    {
+        std::ostringstream oss;
+        response_t* reqi = static_cast< response_t* >(req);
+
+        json::write(oss, reqi->m_values);
+        str = oss.str();
+    }
+
+    // Will be deprecated
     event::request* from_json(const std::string& str) const
     {
         std::auto_ptr< request_t > reqi (new request_t);
+        json::parse(reqi->m_values, str);
+        return reqi.release();
+    }
+
+    // From JSON
+    event::request* request_from_json(const std::string& str) const
+    {
+        std::auto_ptr< request_t > reqi (new request_t);
+        json::parse(reqi->m_values, str);
+        return reqi.release();
+    }
+
+    event::response* response_from_json(const std::string& str) const
+    {
+        std::auto_ptr< response_t > reqi (new response_t);
         json::parse(reqi->m_values, str);
         return reqi.release();
     }
