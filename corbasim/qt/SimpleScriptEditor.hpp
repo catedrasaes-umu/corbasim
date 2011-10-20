@@ -53,6 +53,7 @@ public slots:
     void deleteSelected();
     
     void copySelected();
+    void replaceSelected();
     void doSave();
     void doLoad();
     

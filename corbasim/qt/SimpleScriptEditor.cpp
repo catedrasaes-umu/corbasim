@@ -113,6 +113,14 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     QObject::connect(copyAction, SIGNAL(triggered()), 
             this, SLOT(copySelected()));
 
+    // Replace selected item
+    QAction * replaceAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileDialogDetailedView),
+            "&Replace selected item", this);
+    replaceAction->setShortcut(QKeySequence::Paste);
+    QObject::connect(replaceAction, SIGNAL(triggered()), 
+            this, SLOT(replaceSelected()));
+
     // Delete selected item
     QAction * deleteAction = new QAction(
             style()->standardIcon(QStyle::SP_TrashIcon),
@@ -190,6 +198,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     scriptMenu->addAction(appendAction);
     scriptMenu->addAction(appendOneAction);
     scriptMenu->addAction(copyAction);
+    scriptMenu->addAction(replaceAction);
     scriptMenu->addAction(deleteAction);
     scriptMenu->addAction(clearAction);
     scriptMenu->addSeparator();
@@ -214,6 +223,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     toolBar->addAction(appendAction);
     toolBar->addAction(appendOneAction);
     toolBar->addAction(copyAction);
+    toolBar->addAction(replaceAction);
     toolBar->addAction(deleteAction);
     toolBar->addAction(clearAction);
     toolBar->addSeparator();
@@ -226,6 +236,8 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     toolBar->addAction(stopAction);
     toolBar->addSeparator();
     toolBar->addAction(sendCurrentAction);
+    
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
 
 SimpleScriptEditor::~SimpleScriptEditor()
@@ -321,6 +333,23 @@ void SimpleScriptEditor::deleteSelected()
         m_requests.erase(it);
         delete m_tree->takeTopLevelItem(pos);
     }
+}
+
+void SimpleScriptEditor::replaceSelected()
+{
+    int pos = getSelected();
+
+    // Añade la nueva
+    dialogs::input_ptr dlg = m_multi->getCurrentDialog();
+    event::request_ptr req(dlg->create_request());
+    doAppendRequest(req, true);
+
+    // Elimina el actual
+    deleteSelected();
+    
+    // Selecciona la nueva entrada
+    QTreeWidgetItem * item = m_tree->topLevelItem(pos);
+    m_tree->setCurrentItem(item);
 }
 
 void SimpleScriptEditor::sendNextRequest()
