@@ -141,6 +141,62 @@ struct sequence
     }
 
 }; // class sequence
+
+/**
+ * @brief Serializador para secuencias de strings.
+ *
+ * Requiere método length y operador [].
+ */
+struct string_sequence 
+{
+
+    struct saver
+    {
+        template < class Archive, typename Sequence >
+        static void invoke(Archive & ar, const Sequence& seq, 
+                const unsigned int version)
+        {
+            unsigned int length = seq.length();
+            ar << length;
+
+            for (unsigned int i = 0; i < length; i++) 
+            {
+                std::string tmp = seq[i].in();
+                ar << tmp;
+            }
+        }
+    };
+
+    struct loader
+    {
+        template < class Archive, typename Sequence >
+        static void invoke(Archive & ar, Sequence& seq, 
+                const unsigned int version)
+        {
+            unsigned int length;
+            ar >> length;
+
+            seq.length(length);
+
+            for (unsigned int i = 0; i < length; i++) 
+            {
+                std::string tmp;
+                ar >> tmp;
+                seq[i] = tmp.c_str();
+            }
+        }
+    };
+
+    template < class Archive, typename Sequence >
+    static void serialize(Archive & ar, Sequence& seq, 
+            const unsigned int version)
+    {
+        detail::split< Archive, string_sequence, Sequence >(
+                ar, seq, version);
+    }
+
+}; // class string_sequence
+
 } // namespace serialization
 } // namespace corbasim
 

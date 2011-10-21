@@ -89,7 +89,7 @@ void serialize(Archive& ar, «fqn»& t, const unsigned int version)
 	«IF !getType().isString()-»
 	::corbasim::serialization::sequence::serialize(ar, t, version);
 	«ELSE-»
-	// TODO
+	::corbasim::serialization::string_sequence::serialize(ar, t, version);
 	«ENDIF-»
 }
 	«IF var»

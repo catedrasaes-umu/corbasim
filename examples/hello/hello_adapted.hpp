@@ -14,7 +14,8 @@ namespace boost
         void serialize(Archive& ar, HelloApp::Names& t,
                 const unsigned int version)
         {
-            // TODO
+            ::corbasim::serialization::string_sequence::serialize( ar, t,
+                    version);
         }
 
         template< class Archive >
