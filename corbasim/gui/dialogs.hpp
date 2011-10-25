@@ -21,9 +21,12 @@
 #define CORBASIM_DIALOGS_HPP
 
 #include <boost/shared_ptr.hpp>
+#include <sstream>
 
 #include <corbasim/event.hpp>
 #include <corbasim/gui/widgets/struct.hpp>
+#include <corbasim/json/parser.hpp>
+#include <corbasim/json/writer.hpp>
 
 namespace corbasim 
 {
@@ -53,6 +56,8 @@ struct input_base
     virtual event::request* create_request() = 0;
     virtual void copy_from_request(event::request*) = 0;
     virtual QWidget* get_qwidget() = 0;
+    virtual void from_json(const std::string& str) = 0;
+    virtual void to_json(std::string& str) = 0;
     
     virtual ~input_base() {}
 };
@@ -94,6 +99,25 @@ struct input :
     {
         return widget_t::get_QWidget();
     }
+    
+     void from_json(const std::string& str)
+     {
+         Value value;
+         json::parse(value, str);
+         set_value(value);
+     }
+     
+     void to_json(std::string& str)
+     {
+         std::ostringstream ss;
+         // Get value
+         Value value;
+         get_value(value);
+
+         // Serializing
+         json::write(ss, value);
+         str = ss.str();
+     }
 };
 
 } // namespace dialogs
