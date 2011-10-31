@@ -6,7 +6,7 @@ set(corbasim_python_EXPORTED_HEADERS
 foreach(_header ${corbasim_python_EXPORTED_HEADERS})
     get_filename_component(_header_path ${_header} PATH)
     install(FILES ${_header} 
-        DESTINATION include/corbasim_python/${_header_path}) 
+        DESTINATION include/corbasim/${_header_path}) 
 endforeach(_header ${corbasim_python_EXPORTED_HEADERS})
 
 set(corbasim_python_LIBS
