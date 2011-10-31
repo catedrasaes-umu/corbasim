@@ -57,6 +57,7 @@ interpreter_ptr get_default_interpreter()
 } // namespace scripting
 } // namespace corbasim
 
+using namespace corbasim;
 using namespace corbasim::scripting;
 
 interpreter_worker::interpreter_worker(interpreter_ptr interpreter_) :

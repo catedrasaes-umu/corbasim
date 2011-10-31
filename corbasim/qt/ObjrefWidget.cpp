@@ -6,6 +6,7 @@
 #include <corbasim/gui/widgets.hpp>
 #include <corbasim/core/reference_repository.hpp>
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 typedef corbasim::widgets::widget< 

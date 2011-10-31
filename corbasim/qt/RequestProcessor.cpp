@@ -21,6 +21,7 @@
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/qt/ObjrefWidget.hpp>
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 RequestProcessor::RequestProcessor(QWidget * parent) :

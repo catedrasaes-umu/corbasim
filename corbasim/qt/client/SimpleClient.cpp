@@ -27,6 +27,7 @@
 #include <corbasim/qt/LogTreeWidget.hpp>
 #include <corbasim/qt/initialize.hpp>
 
+using namespace corbasim;
 using namespace corbasim::qt::client;
 
 SimpleClient::SimpleClient(QWidget * parent) :

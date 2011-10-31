@@ -19,6 +19,7 @@
 
 #include "LogWidget.hpp"
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 LogWidget::LogWidget(QWidget * parent) :

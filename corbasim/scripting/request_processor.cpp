@@ -20,6 +20,7 @@
 #include "request_processor.hpp"
 #include <boost/bind.hpp>
 
+using namespace corbasim;
 using namespace corbasim::scripting;
 
 request_processor::request_processor(interpreter_ptr interpreter_,

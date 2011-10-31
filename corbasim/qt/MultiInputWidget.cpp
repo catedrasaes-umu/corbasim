@@ -19,6 +19,7 @@
 
 #include "MultiInputWidget.hpp"
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 MultiInputWidget::MultiInputWidget(QWidget * parent) :

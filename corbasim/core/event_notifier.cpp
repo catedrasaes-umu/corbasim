@@ -20,6 +20,7 @@
 #include "event_notifier.hpp"
 #include <boost/shared_ptr.hpp>
 
+using namespace corbasim;
 using namespace corbasim::core;
 
 event_notifier::event_notifier()

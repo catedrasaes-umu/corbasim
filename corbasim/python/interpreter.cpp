@@ -23,6 +23,7 @@
 #include <sstream>
 #include <iostream>
 
+using namespace corbasim;
 using namespace corbasim::python;
 namespace bp = boost::python;
 
@@ -49,11 +50,11 @@ interpreter::interpreter() :
     context * main_ctx = new context;
     m_main_context = scripting::context_ptr(main_ctx);
 
-    bp::object main = bp::import("__main__");
+    bp::object main_ = bp::import("__main__");
 
     main_ctx->global = 
         bp::extract< bp::dict >(
-                main.attr("__dict__"));
+                main_.attr("__dict__"));
     main_ctx->local = main_ctx->global;
 
     bp::exec("import json", main_ctx->global, main_ctx->local);

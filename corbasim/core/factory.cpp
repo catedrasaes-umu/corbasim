@@ -19,6 +19,7 @@
 
 #include "factory_fwd.hpp"
 
+using namespace corbasim;
 using namespace corbasim::core;
 
 operation_factory_base::~operation_factory_base()

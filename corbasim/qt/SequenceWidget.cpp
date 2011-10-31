@@ -19,6 +19,7 @@
 
 #include "SequenceWidget.hpp"
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 SequenceWidget::SequenceWidget(gui::widget_factory_base * factory, QWidget * parent) :

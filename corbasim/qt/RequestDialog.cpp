@@ -21,6 +21,7 @@
 #include <corbasim/gui/dialogs.hpp>
 #include <corbasim/qt/initialize.hpp>
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 RequestDialog::RequestDialog(dialogs::input_base* dlg, 

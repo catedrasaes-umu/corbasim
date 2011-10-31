@@ -19,6 +19,7 @@
 
 #include "Interpreter.hpp"
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 Interpreter::Interpreter(QWidget * parent) :

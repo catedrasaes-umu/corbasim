@@ -206,7 +206,7 @@ int modp_b64_decode(char* dest, const char* src, int len)
         }
     }
 #endif
-
+#ifdef TODO_0
     int i;
     int leftover = len % 4;
     int chunks = (leftover == 0) ? len / 4 - 1 : len /4;
@@ -264,6 +264,7 @@ int modp_b64_decode(char* dest, const char* src, int len)
     if (x >= BADCHAR) return -1;
 
     return 3*chunks + (6*leftover)/8;
+#endif
 }
 
 #endif  /* if bigendian / else / endif */

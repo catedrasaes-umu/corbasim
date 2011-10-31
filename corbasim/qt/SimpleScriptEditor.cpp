@@ -24,6 +24,7 @@
 #include <corbasim/gui/gui_factory.hpp>
 #include <boost/next_prior.hpp>
 
+using namespace corbasim;
 using namespace corbasim::qt;
 
 SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
