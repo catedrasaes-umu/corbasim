@@ -33,7 +33,13 @@ endif()
 
 add_definitions(-Wall)
 
-set(Boost_USE_MULTITHREADED OFF)
+#
+# Dependencies
+#
+
+if(UNIX)
+    set(Boost_USE_MULTITHREADED OFF)
+endif()
 find_package(Boost 1.45.0)
 
 if(NOT Boost_FOUND)
@@ -41,7 +47,18 @@ if(NOT Boost_FOUND)
 else(NOT Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     link_directories(${Boost_LIBRARY_DIRS})
+
+    message(STATUS "Boost include directory: ${Boost_INCLUDE_DIRS}")
+    message(STATUS "Boost libraries directory: ${Boost_LIBRARY_DIRS}")
 endif(NOT Boost_FOUND)
+
+find_package(PythonLibs)
+find_package(Lua51)
+find_package(Qt4)
+find_package(Boost 1.45.0 
+    COMPONENTS serialization regex python system thread)
+
+message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 

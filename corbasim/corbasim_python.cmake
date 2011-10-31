@@ -12,7 +12,7 @@ endforeach(_header ${corbasim_python_EXPORTED_HEADERS})
 set(corbasim_python_LIBS
     corbasim
     ${PYTHON_LIBRARIES}
-    boost_python)
+    ${Boost_PYTHON_LIBRARY})
 
 set(corbasim_python_SRCS
     python/interpreter.cpp

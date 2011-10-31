@@ -53,10 +53,10 @@ endforeach(_header ${corbasim_EXPORTED_HEADERS})
 
 set(corbasim_LIBS
     ${CORBASIM_ORB_LIBS}
-    boost_serialization
-    boost_thread
-    boost_system
-    boost_regex)
+    ${Boost_SERIALIZATION_LIBRARY}
+    ${Boost_THREAD_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
+    ${Boost_REGEX_LIBRARY})
 
 set(corbasim_SRCS
     core/archives.cpp

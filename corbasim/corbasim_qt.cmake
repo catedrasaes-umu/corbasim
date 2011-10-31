@@ -92,12 +92,7 @@ message(STATUS "Qt libraries: ${QT_LIBRARIES}")
 
 set(corbasim_qt_LIBS
     ${QT_LIBRARIES}
-    corbasim
-    boost_serialization
-    boost_thread
-    boost_system
-    boost_regex
-)
+    corbasim)
 
 qt4_add_resources(corbasim_qt_RCC qt/corbasim_qt.qrc)
 qt4_wrap_cpp(corbasim_qt_MOC_SRCS ${corbasim_qt_MOC_HDRS})
