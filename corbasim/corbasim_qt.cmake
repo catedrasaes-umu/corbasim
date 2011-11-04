@@ -43,6 +43,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/RequestNotifier.hpp
     qt/RequestProcessor.hpp
     qt/SimpleScriptEditor.hpp
+    qt/ScriptEditor.hpp
     qt/client/SimpleClient.hpp
     qt/ObjrefWidget.hpp
     qt/SequenceWidget.hpp)
@@ -57,6 +58,7 @@ set(corbasim_qt_MOC_HDRS
     qt/Interpreter.hpp
     qt/client/SimpleClient.hpp
     qt/SimpleScriptEditor.hpp
+    qt/ScriptEditor.hpp
     qt/ObjrefWidget.hpp
     qt/MultiFileSelectionWidget.hpp
     qt/MultiInputWidget.hpp
@@ -77,6 +79,7 @@ set(corbasim_qt_SRCS
     qt/initialize.cpp
     qt/client/SimpleClient.cpp
     qt/SimpleScriptEditor.cpp
+    qt/ScriptEditor.cpp
     qt/ObjrefWidget.cpp
     qt/LogWidget.cpp
     qt/LogTreeWidget.cpp
