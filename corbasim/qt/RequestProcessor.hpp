@@ -36,6 +36,8 @@ namespace corbasim
 namespace qt 
 {
 
+class ScriptEditor;
+
 class TriggerConfigurator;
 
 class RequestProcessor : public QWidget
@@ -115,6 +117,8 @@ public slots:
     void showInputEstimulator();
     void showOutputEstimulator();
     void showOutputReference();
+    
+    void showScriptEditor();
 
     void showInputEvents();
     void showOutputEvents();
@@ -136,6 +140,7 @@ protected:
     QMdiSubWindow * m_sub_req_proc;
     QMdiSubWindow * m_sub_console_output;
     QMdiSubWindow * m_sub_interpreter;
+    QMdiSubWindow * m_sub_script_editor;
 
     RequestProcessor * m_request_processor;
     LogWidget * m_input_log;
@@ -146,6 +151,7 @@ protected:
 
     SimpleScriptEditor * m_input_stim;
     SimpleScriptEditor * m_output_stim;
+    ScriptEditor * m_script_editor;
     
     QWidget * m_output_ref;
     QScrollArea * m_input_triggers;

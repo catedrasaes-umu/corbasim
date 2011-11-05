@@ -21,6 +21,7 @@
 #include <fstream>
 #include <iostream>
 #include <corbasim/qt/MultiInputWidget.hpp>
+#include <corbasim/qt/Interpreter.hpp>
 #include <corbasim/gui/gui_factory.hpp>
 #include <boost/next_prior.hpp>
 
@@ -28,18 +29,13 @@ using namespace corbasim;
 using namespace corbasim::qt;
 
 ScriptEditor::ScriptEditor(QWidget * parent) :
-    QMainWindow(parent), m_timer(this), m_current_request(0), m_factory(NULL)
+    QMainWindow(parent), m_factory(NULL)
 {
     QWidget * central = new QWidget();
     setCentralWidget(central);
 
-    m_tree = new QTreeWidget;
-    m_tree->setHeaderLabel("Script");
+    m_interpreter = new Interpreter;
     m_selector = new QComboBox;
-    m_diff = new QSpinBox;
-    m_diff->setRange(0, 9999);
-    m_diff->setValue(200);
-    m_diff->setSuffix(" ms");
 
     m_how_many = new QSpinBox;
     m_how_many->setRange(1, 9999);
@@ -54,23 +50,18 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
     QHBoxLayout * selLayout = new QHBoxLayout;
     selLayout->addWidget(new QLabel("Operation"));
     selLayout->addWidget(m_selector);
-    selLayout->addWidget(new QLabel("Diff"));
-    selLayout->addWidget(m_diff);
     selLayout->addWidget(new QLabel("Times"));
     selLayout->addWidget(m_how_many);
     inputLayout->addLayout(selLayout);
 
     inputLayout->addWidget(m_multi);
     mainLayout->addLayout(inputLayout);
-    mainLayout->addWidget(m_tree);
+    mainLayout->addWidget(m_interpreter);
 
     central->setLayout(mainLayout);
 
     QObject::connect(m_selector, SIGNAL(currentIndexChanged(int)), 
             m_multi, SLOT(changeInputForm(int)));
-
-    QObject::connect(&m_timer, SIGNAL(timeout()), 
-            this, SLOT(sendNextRequest()));
 
     setWindowTitle("Script editor");
 
@@ -106,30 +97,6 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
     QObject::connect(appendOneAction, SIGNAL(triggered()), 
             this, SLOT(appendOneRequest()));
 
-    // Copy selected item
-    QAction * copyAction = new QAction(
-            style()->standardIcon(QStyle::SP_DialogApplyButton),
-            "&Copy selected item", this);
-    copyAction->setShortcut(QKeySequence::Copy);
-    QObject::connect(copyAction, SIGNAL(triggered()), 
-            this, SLOT(copySelected()));
-
-    // Replace selected item
-    QAction * replaceAction = new QAction(
-            style()->standardIcon(QStyle::SP_FileDialogDetailedView),
-            "&Replace selected item", this);
-    replaceAction->setShortcut(QKeySequence::Paste);
-    QObject::connect(replaceAction, SIGNAL(triggered()), 
-            this, SLOT(replaceSelected()));
-
-    // Delete selected item
-    QAction * deleteAction = new QAction(
-            style()->standardIcon(QStyle::SP_TrashIcon),
-            "&Delete selected item", this);
-    deleteAction->setShortcut(QKeySequence::Delete);
-    QObject::connect(deleteAction, SIGNAL(triggered()), 
-            this, SLOT(deleteSelected()));
-
     // Clear script
     QAction * clearAction = new QAction(
             style()->standardIcon(QStyle::SP_TrashIcon),
@@ -137,22 +104,6 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
     clearAction->setShortcut(QKeySequence::Cut);
     QObject::connect(clearAction, SIGNAL(triggered()), 
             this, SLOT(clearClicked()));
-
-    // Move up
-    QAction * moveUpAction = new QAction(
-            style()->standardIcon(QStyle::SP_ArrowUp),
-            "Move &up", this);
-    moveUpAction->setShortcut(QKeySequence::MoveToPreviousPage);
-    QObject::connect(moveUpAction, SIGNAL(triggered()), 
-            this, SLOT(moveUp()));
-
-    // Move down
-    QAction * moveDownAction = new QAction(
-            style()->standardIcon(QStyle::SP_ArrowDown),
-            "Move &down", this);
-    moveDownAction->setShortcut(QKeySequence::MoveToNextPage);
-    QObject::connect(moveDownAction, SIGNAL(triggered()), 
-            this, SLOT(moveDown()));
 
     // Play
     QAction * playAction = new QAction(
@@ -198,13 +149,7 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
     QMenu * scriptMenu = menuBar()->addMenu("&Script");
     scriptMenu->addAction(appendAction);
     scriptMenu->addAction(appendOneAction);
-    scriptMenu->addAction(copyAction);
-    scriptMenu->addAction(replaceAction);
-    scriptMenu->addAction(deleteAction);
     scriptMenu->addAction(clearAction);
-    scriptMenu->addSeparator();
-    scriptMenu->addAction(moveUpAction);
-    scriptMenu->addAction(moveDownAction);
     
     QMenu * playerMenu = menuBar()->addMenu("&Player");
     playerMenu->addAction(playAction);
@@ -223,13 +168,7 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
     toolBar->addWidget(m_cbInsertAtEnd);
     toolBar->addAction(appendAction);
     toolBar->addAction(appendOneAction);
-    toolBar->addAction(copyAction);
-    toolBar->addAction(replaceAction);
-    toolBar->addAction(deleteAction);
     toolBar->addAction(clearAction);
-    toolBar->addSeparator();
-    toolBar->addAction(moveUpAction);
-    toolBar->addAction(moveDownAction);
 
     toolBar = addToolBar("Player");
     toolBar->addAction(playAction);
@@ -253,126 +192,22 @@ void ScriptEditor::initialize(gui::gui_factory_base * factory)
         m_selector->addItem(factory->get_factory_by_index(i)->get_name());
 
     m_multi->initialize(factory);
-    m_request_serializer = factory->get_serializer();
     m_factory = factory;
-}
-
-void ScriptEditor::moveUp()
-{
-    int pos = getSelected();
-
-    if (pos > 0)
-    {
-        // La elimina de la posición actual
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        event::request_ptr selected = *it;
-        m_requests.erase(it);
-
-        // La añade en la nueva
-        it = boost::next(m_requests.begin(), pos - 1);
-        m_requests.insert(it, selected);
-
-        // Tree
-        QTreeWidgetItem * item = m_tree->takeTopLevelItem(pos);
-        m_tree->insertTopLevelItem(pos - 1, item);
-
-        // Selecciona el elemento
-        m_tree->setCurrentItem(item);
-    }
-}
-
-void ScriptEditor::moveDown()
-{
-    int pos = getSelected();
-
-    if (pos >= 0 && pos < m_requests.size() - 1)
-    {
-        // La elimina de la posición actual
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        event::request_ptr selected = *it;
-        m_requests.erase(it);
-
-        // La añade en la nueva
-        it = boost::next(m_requests.begin(), pos + 1);
-        m_requests.insert(it, selected);
-
-        // Tree
-        QTreeWidgetItem * item = m_tree->takeTopLevelItem(pos);
-        m_tree->insertTopLevelItem(pos + 1, item);
-       
-        // Selecciona el elemento
-        m_tree->setCurrentItem(item);
-    }
 }
 
 void ScriptEditor::playFromSelected()
 {
-    int pos = getSelected();
-
-    if (pos >= 0)
-    {
-        m_current_request = pos;
-
-        if (m_timer.isActive())
-            m_timer.stop();
-
-        m_current_iterator = boost::next(m_requests.begin(), pos);
-
-        m_timer.start(m_diff->value());
-    }
-}
-
-void ScriptEditor::deleteSelected()
-{
-    int pos = getSelected();
-
-    assert(m_tree->topLevelItemCount() == m_requests.size());
-
-    if (pos >= 0 && pos < m_tree->topLevelItemCount())
-    {
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        m_requests.erase(it);
-        delete m_tree->takeTopLevelItem(pos);
-    }
-}
-
-void ScriptEditor::replaceSelected()
-{
-    int pos = getSelected();
-
-    // Añade la nueva
-    dialogs::input_ptr dlg = m_multi->getCurrentDialog();
-    event::request_ptr req(dlg->create_request());
-    doAppendRequest(req, true);
-
-    // Elimina el actual
-    deleteSelected();
-    
-    // Selecciona la nueva entrada
-    QTreeWidgetItem * item = m_tree->topLevelItem(pos);
-    m_tree->setCurrentItem(item);
+    // TODO
 }
 
 void ScriptEditor::sendNextRequest()
 {
-    if (m_current_request < m_requests.size())
-    {
-        // Selecciona la siguiente request en el arbol
-        m_tree->setCurrentItem(m_tree->topLevelItem(m_current_request++));
-        emit sendRequest(*(m_current_iterator++));
-    }
-    else
-        m_timer.stop();
+    // TODO
 }
 
 void ScriptEditor::sendCurrent()
 {
-    // Obtiene el dialogo seleccionado
-    dialogs::input_ptr dlg = m_multi->getCurrentDialog();
-
-    event::request_ptr req(dlg->create_request());
-
-    emit sendRequest(req);
+    // TODO
 }
 
 void ScriptEditor::appendRequest()
@@ -404,32 +239,21 @@ void ScriptEditor::appendOneRequest()
 
 void ScriptEditor::playClicked()
 {   
-    m_current_request = 0;
-
-    if (m_timer.isActive())
-        m_timer.stop();
-
-    m_current_iterator = m_requests.begin();
-
-    m_timer.start(m_diff->value());
+    // TODO
 }
 
 void ScriptEditor::clearClicked()
 {
-    m_tree->clear();
-    m_requests.clear();
+    // TODO
 }
 
 void ScriptEditor::stopClicked()
 {
-    m_timer.stop();
+    // TODO
 }
 
 void ScriptEditor::doSave()
 {
-    if (!m_request_serializer)
-        return;
-
     // Seleccionar fichero
     QString log_file = QFileDialog::getSaveFileName( 0, tr(
                 "Select a script file"), ".");
@@ -440,16 +264,11 @@ void ScriptEditor::doSave()
 
     std::ofstream ofs(log_file.toStdString().c_str());
 
-    for (requests_t::const_iterator it = m_requests.begin(); 
-            it != m_requests.end(); it++) 
-        m_request_serializer->save(ofs, (*it).get());
+    // TODO save
 }
 
 void ScriptEditor::doLoad()
 {
-    if (!m_request_serializer)
-        return;
-
     QStringList log_file = QFileDialog::getOpenFileNames( 0, tr(
                 "Select some script files"), ".");
 
@@ -457,85 +276,11 @@ void ScriptEditor::doLoad()
     if (log_file.isEmpty())
         return;
 
-    for (int i = 0; i < log_file.length(); i++) 
-    {
-        std::ifstream ifs(log_file.at(i).toStdString().c_str());
-
-        try {
-            while(ifs.good())
-            {
-                event::request_ptr _request(
-                        m_request_serializer->load(ifs));
-
-                if (!_request)
-                    continue;
-
-                doAppendRequest(_request);
-            }
-        } catch (...) 
-        {
-            std::cerr << "Error loading file!" << std::endl;
-        }
-    }
-}
-
-int ScriptEditor::getSelected()
-{
-    QTreeWidgetItem* current = m_tree->currentItem();
- 
-    // Obtiene el elemento de nivel superior 
-    while(current && current->parent())
-        current = current->parent();
-
-    if (current)
-        return m_tree->indexOfTopLevelItem(current);
-
-    return -1;
-}
-
-void ScriptEditor::copySelected()
-{
-    int pos = getSelected();
-
-    if (pos >= 0)
-    {
-        event::request_ptr selected = *boost::next(m_requests.begin(), pos);
-
-        gui::operation_factory_base * op =
-            m_factory->get_factory_by_tag(selected->get_tag());
-
-        int cb_pos = m_selector->findText(
-                QString(op->get_name()),
-                Qt::MatchFixedString| Qt::MatchCaseSensitive);
-
-        // copiar 'it' al editor correspondiente
-        m_multi->getDialog(cb_pos)->copy_from_request(selected.get());
-
-        // mostrar el editor correspondiente
-        m_selector->setCurrentIndex(cb_pos);
-    }
+    // TODO load
 }
 
 void ScriptEditor::doAppendRequest(event::request_ptr _request, bool beforeSelected)
 {
-    int pos = getSelected();
-
-    // La inserta en el árbol
-    QTreeWidgetItem * req_item = 
-        m_factory->create_tree(_request.get());
-
-    if (pos >= 0 && beforeSelected)
-    {
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        m_requests.insert(it, _request);
-        m_tree->insertTopLevelItem(pos, req_item);
-    }
-    else
-    {
-        m_requests.push_back(_request);
-        m_tree->addTopLevelItem(req_item);
-    }
-
-    m_tree->scrollToItem(req_item);
+    // TODO append
 }
 

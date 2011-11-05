@@ -20,6 +20,7 @@
 #include "RequestProcessor.hpp"
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/qt/ObjrefWidget.hpp>
+#include <corbasim/qt/ScriptEditor.hpp>
 
 using namespace corbasim;
 using namespace corbasim::qt;
@@ -204,6 +205,7 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
     m_sub_req_proc(NULL),
     m_sub_console_output(NULL),
     m_sub_interpreter(NULL),
+    m_sub_script_editor(NULL),
 
     // Widgets
     m_request_processor(NULL),
@@ -211,6 +213,7 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
     m_output_factory(NULL),
     m_input_stim(NULL), 
     m_output_stim(NULL),
+    m_script_editor(NULL),
     m_output_ref(NULL),
     m_input_triggers(NULL),
     m_interpreter(NULL),
@@ -272,6 +275,9 @@ RequestProcessorMain::RequestProcessorMain(QWidget * parent) :
             SLOT(showInputEstimulator()));
     menuWin->addAction("&Output stimulator", this, 
             SLOT(showOutputEstimulator()));
+    menuWin->addSeparator();
+    menuWin->addAction("&Script editor", this, 
+            SLOT(showScriptEditor()));
     menuWin->addSeparator();
     menuWin->addAction("Output &reference", this, 
             SLOT(showOutputReference()));
@@ -416,6 +422,30 @@ void RequestProcessorMain::showOutputEstimulator()
     m_output_stim->show();
     m_mdi_area->setActiveSubWindow(m_sub_out_stim);
 }
+
+void RequestProcessorMain::showScriptEditor()
+{
+    if (!m_script_editor)
+    {
+        m_script_editor = new ScriptEditor;
+        m_script_editor->initialize(m_output_factory);
+        m_script_editor->setWindowTitle("Script editor");
+
+        QObject::connect(m_script_editor, 
+                SIGNAL(sendRequest(corbasim::event::request_ptr)),
+                this,
+                SLOT(setOutputRequest(corbasim::event::request_ptr)));
+        
+        m_sub_script_editor = new QMdiSubWindow;
+        m_sub_script_editor->setWidget(m_script_editor);
+
+        m_mdi_area->addSubWindow(m_sub_script_editor);
+    }
+    m_sub_script_editor->showNormal();
+    m_script_editor->show();
+    m_mdi_area->setActiveSubWindow(m_sub_script_editor);
+}
+
 
 RequestProcessorMain::~RequestProcessorMain()
 {

@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QT_SIMPLESCRIPTEDITOR_HPP
-#define CORBASIM_QT_SIMPLESCRIPTEDITOR_HPP
+#ifndef CORBASIM_QT_SCRIPTEDITOR_HPP
+#define CORBASIM_QT_SCRIPTEDITOR_HPP
 
 #include <QtGui>
 #include <list>
@@ -31,6 +31,7 @@ namespace qt
 {
 
 class MultiInputWidget;
+class Interpreter;
 
 class ScriptEditor : public QMainWindow
 {
@@ -50,47 +51,29 @@ public slots:
     void sendCurrent();
     void clearClicked();
     void stopClicked();
-    void deleteSelected();
     
-    void copySelected();
-    void replaceSelected();
     void doSave();
     void doLoad();
     
-    void moveUp();
-    void moveDown();
-
 signals:
     void sendRequest(corbasim::event::request_ptr);
 
 protected:
 
-    typedef std::list< corbasim::event::request_ptr > requests_t;
-
     void doAppendRequest(corbasim::event::request_ptr, 
             bool beforeSelected = false);
-    int getSelected();
-
-    QTimer m_timer;
-    unsigned int m_current_request;
-    requests_t::iterator m_current_iterator;
 
     QComboBox * m_selector;
     MultiInputWidget * m_multi;
-    QSpinBox * m_diff; 
     QSpinBox * m_how_many; 
-    QTreeWidget * m_tree;
+    Interpreter * m_interpreter;
     QCheckBox * m_cbInsertAtEnd;
     
-    requests_t m_requests;
-
     gui::gui_factory_base * m_factory;
-
-    core::request_serializer_base * m_request_serializer;
 };
 
 } // namespace qt
 } // namespace corbasim
 
-#endif /* CORBASIM_QT_SIMPLESCRIPTEDITOR_HPP */
+#endif /* CORBASIM_QT_SCRIPTEDITOR_HPP */
 
