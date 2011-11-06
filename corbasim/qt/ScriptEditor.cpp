@@ -243,7 +243,7 @@ void ScriptEditor::playClicked()
 
 void ScriptEditor::clearClicked()
 {
-    // TODO
+    m_code->clear();
 }
 
 void ScriptEditor::stopClicked()

@@ -508,7 +508,7 @@ ConsoleOutput::ConsoleOutput(QWidget * parent) :
     setLayout(l);
 
     QObject::connect(this, SIGNAL(append(QString)),
-            m_output, SLOT(append(const QString&)));
+            m_output, SLOT(insertPlainText(const QString&)));
                 
     scripting::get_default_interpreter()->output_signal.connect(
             boost::bind(&ConsoleOutput::write, this, _1));
