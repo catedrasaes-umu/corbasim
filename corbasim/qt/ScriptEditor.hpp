@@ -31,7 +31,6 @@ namespace qt
 {
 
 class MultiInputWidget;
-class Interpreter;
 
 class ScriptEditor : public QMainWindow
 {
@@ -66,7 +65,7 @@ protected:
     QComboBox * m_selector;
     MultiInputWidget * m_multi;
     QSpinBox * m_how_many; 
-    Interpreter * m_interpreter;
+    QTextEdit * m_code;
     QCheckBox * m_cbInsertAtEnd;
     
     gui::gui_factory_base * m_factory;

@@ -21,7 +21,6 @@
 #include <fstream>
 #include <iostream>
 #include <corbasim/qt/MultiInputWidget.hpp>
-#include <corbasim/qt/Interpreter.hpp>
 #include <corbasim/gui/gui_factory.hpp>
 #include <boost/next_prior.hpp>
 
@@ -34,7 +33,7 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
     QWidget * central = new QWidget();
     setCentralWidget(central);
 
-    m_interpreter = new Interpreter;
+    m_code = new QTextEdit;
     m_selector = new QComboBox;
 
     m_how_many = new QSpinBox;
@@ -56,7 +55,7 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
 
     inputLayout->addWidget(m_multi);
     mainLayout->addLayout(inputLayout);
-    mainLayout->addWidget(m_interpreter);
+    mainLayout->addWidget(m_code);
 
     central->setLayout(mainLayout);
 
@@ -281,6 +280,17 @@ void ScriptEditor::doLoad()
 
 void ScriptEditor::doAppendRequest(event::request_ptr _request, bool beforeSelected)
 {
-    // TODO append
+    QString line = _request->get_name();
+    line += '(';
+    
+    // Parameters
+    std::string params;
+    m_factory->get_core_factory()->get_factory_by_tag(
+            _request->get_tag())->to_json(_request.get(), params);
+    line += params.c_str();
+
+    line += ')';
+
+    m_code->append(line);
 }
 
