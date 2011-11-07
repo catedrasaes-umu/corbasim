@@ -21,6 +21,9 @@
 #include <corbasim/gui/dialogs.hpp>
 #include <corbasim/qt/initialize.hpp>
 
+#include <QtScript>
+#include <iostream>
+
 using namespace corbasim;
 using namespace corbasim::qt;
 
@@ -33,7 +36,9 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
     QVBoxLayout * layout = new QVBoxLayout;
 
     QScrollArea * scroll = new QScrollArea;
+    scroll->setObjectName("scroll");
     scroll->setWidgetResizable(true);
+    m_dlg->get_qwidget()->setObjectName("form");
     scroll->setWidget(m_dlg->get_qwidget());
     layout->addWidget(scroll); 
 
@@ -70,18 +75,21 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
 
     // Update
     m_pbUpdate = new QPushButton("&Update");
+    m_pbUpdate->setObjectName("updateButton");
     QObject::connect(m_pbUpdate, SIGNAL(clicked()), 
             this, SLOT(storeRequest()));
     btnsLayout->addWidget(m_pbUpdate);
 
     // Send button
     QPushButton * btn = new QPushButton("&Send");
+    btn->setObjectName("sendButton");
     QObject::connect(btn, SIGNAL(clicked()), 
             this, SLOT(sendClicked())); 
     btnsLayout->addWidget(btn);
 
     // Close button
     btn = new QPushButton("&Close");
+    btn->setObjectName("closeButton");
     QObject::connect(btn, SIGNAL(clicked()), 
             this, SLOT(hide())); 
     btnsLayout->addWidget(btn);
@@ -93,6 +101,78 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
             this, SLOT(sendStored()));
 
     setLayout(layout);
+
+#if 0
+    // Prueba QtScript
+    QFile file(QString(m_dlg->get_name())+ ".js");
+
+    if (!file.exists())
+    {
+        std::cout << "Could not find program file!" << std::endl;
+        return;
+    }
+ 
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        std::cout << "Could not open program file!";
+        return;
+    }
+
+    QScriptEngine * engine = new QScriptEngine;
+    QScriptValue m_thisObject = engine->newQObject(this);
+
+    QString strProgram = file.readAll();
+ 
+    // do static check so far of code:
+    if (! engine->canEvaluate(strProgram) )
+    {
+        QMessageBox::critical(0, "Error", "canEvaluate returned false!");
+        return;
+    }
+ 
+    // actually do the eval:
+    engine->evaluate(strProgram);
+
+    // uncaught exception?
+    if (engine->hasUncaughtException())
+    {
+        QScriptValue exception = engine->uncaughtException();
+        QMessageBox::critical(0, "Script error", 
+                QString("Script threw an uncaught exception: ") 
+                + exception.toString());
+        return;
+    }
+
+    QScriptValue createFunc = engine->evaluate("create");
+
+    if (engine->hasUncaughtException())
+    {
+        QScriptValue exception = engine->uncaughtException();
+        QMessageBox::critical(0, "Script error", 
+                QString("Script threw an uncaught exception while"
+                    " looking for create func: ") 
+                + exception.toString());
+        return;
+    }
+
+    if (!createFunc.isFunction())
+    {
+        QMessageBox::critical(0, "Script Error", 
+                "createFunc is not a function!");
+    }
+
+    createFunc.call(m_thisObject);
+
+    if (engine->hasUncaughtException())
+    {
+        QScriptValue exception = engine->uncaughtException();
+        QMessageBox::critical(0, "Script error", 
+                QString("Script threw an uncaught exception while"
+                    " looking for create func: ") 
+                + exception.toString());
+        return;
+    }
+#endif
 }
 
 RequestDialog::~RequestDialog()

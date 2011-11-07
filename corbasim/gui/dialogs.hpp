@@ -58,6 +58,8 @@ struct input_base
     virtual QWidget* get_qwidget() = 0;
     virtual void from_json(const std::string& str) = 0;
     virtual void to_json(std::string& str) = 0;
+
+    virtual const char * get_name() const = 0;
     
     virtual ~input_base() {}
 };
@@ -100,24 +102,29 @@ struct input :
         return widget_t::get_QWidget();
     }
     
-     void from_json(const std::string& str)
-     {
-         Value value;
-         json::parse(value, str);
-         set_value(value);
-     }
+    void from_json(const std::string& str)
+    {
+        Value value;
+        json::parse(value, str);
+        set_value(value);
+    }
      
-     void to_json(std::string& str)
-     {
-         std::ostringstream ss;
-         // Get value
-         Value value;
-         get_value(value);
+    void to_json(std::string& str)
+    {
+        std::ostringstream ss;
+        // Get value
+        Value value;
+        get_value(value);
 
-         // Serializing
-         json::write(ss, value);
-         str = ss.str();
-     }
+        // Serializing
+        json::write(ss, value);
+        str = ss.str();
+    }
+    
+    const char * get_name() const
+    {
+        return adapted::name< Value >::call(); 
+    }
 };
 
 } // namespace dialogs

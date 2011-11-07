@@ -52,6 +52,7 @@ struct grid_inserter_impl< T, cs_mpl::false_ >
         int row = grid->rowCount();
 
         QGroupBox * g = new QGroupBox(name);
+        // g->setObjectName(name);
         QVBoxLayout * l = new QVBoxLayout;
         l->addWidget(widget);
         g->setLayout(l);

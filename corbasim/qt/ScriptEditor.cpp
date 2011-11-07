@@ -263,7 +263,7 @@ void ScriptEditor::doSave()
 
     std::ofstream ofs(log_file.toStdString().c_str());
 
-    // TODO save
+    ofs << m_code->toPlainText().toStdString();
 }
 
 void ScriptEditor::doLoad()
