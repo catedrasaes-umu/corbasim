@@ -38,7 +38,11 @@ struct grid_inserter_impl
     {
         int row = grid->rowCount();
 
-        grid->addWidget(new QLabel(name), row, 0);
+        QString _name(name);
+        QLabel * label = new QLabel(_name);
+        label->setObjectName(_name + "_label");
+
+        grid->addWidget(label, row, 0);
         grid->addWidget(widget, row, 1);
     }
 };
@@ -51,8 +55,10 @@ struct grid_inserter_impl< T, cs_mpl::false_ >
     {
         int row = grid->rowCount();
 
-        QGroupBox * g = new QGroupBox(name);
-        // g->setObjectName(name);
+        QString _name(name);
+        QGroupBox * g = new QGroupBox(_name);
+        g->setObjectName(_name + "_group");
+
         QVBoxLayout * l = new QVBoxLayout;
         l->addWidget(widget);
         g->setLayout(l);

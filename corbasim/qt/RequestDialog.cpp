@@ -21,7 +21,6 @@
 #include <corbasim/gui/dialogs.hpp>
 #include <corbasim/qt/initialize.hpp>
 
-#include <QtScript>
 #include <iostream>
 
 using namespace corbasim;
@@ -87,6 +86,15 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
             this, SLOT(sendClicked())); 
     btnsLayout->addWidget(btn);
 
+#ifdef CORBASIM_USE_QTSCRIPT
+    // Reload script button
+    btn = new QPushButton("&Reload script");
+    btn->setObjectName("reloadButton");
+    QObject::connect(btn, SIGNAL(clicked()), 
+            this, SLOT(reloadScript())); 
+    btnsLayout->addWidget(btn);
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
     // Close button
     btn = new QPushButton("&Close");
     btn->setObjectName("closeButton");
@@ -102,77 +110,15 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
 
     setLayout(layout);
 
-#if 0
-    // Prueba QtScript
-    QFile file(QString(m_dlg->get_name())+ ".js");
 
-    if (!file.exists())
-    {
-        std::cout << "Could not find program file!" << std::endl;
-        return;
-    }
- 
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        std::cout << "Could not open program file!";
-        return;
-    }
+#ifdef CORBASIM_USE_QTSCRIPT
 
-    QScriptEngine * engine = new QScriptEngine;
-    QScriptValue m_thisObject = engine->newQObject(this);
+    m_thisObject = m_engine.newQObject(this);
 
-    QString strProgram = file.readAll();
- 
-    // do static check so far of code:
-    if (! engine->canEvaluate(strProgram) )
-    {
-        QMessageBox::critical(0, "Error", "canEvaluate returned false!");
-        return;
-    }
- 
-    // actually do the eval:
-    engine->evaluate(strProgram);
+    reloadScript();
 
-    // uncaught exception?
-    if (engine->hasUncaughtException())
-    {
-        QScriptValue exception = engine->uncaughtException();
-        QMessageBox::critical(0, "Script error", 
-                QString("Script threw an uncaught exception: ") 
-                + exception.toString());
-        return;
-    }
+#endif /* CORBASIM_USE_QTSCRIPT*/
 
-    QScriptValue createFunc = engine->evaluate("create");
-
-    if (engine->hasUncaughtException())
-    {
-        QScriptValue exception = engine->uncaughtException();
-        QMessageBox::critical(0, "Script error", 
-                QString("Script threw an uncaught exception while"
-                    " looking for create func: ") 
-                + exception.toString());
-        return;
-    }
-
-    if (!createFunc.isFunction())
-    {
-        QMessageBox::critical(0, "Script Error", 
-                "createFunc is not a function!");
-    }
-
-    createFunc.call(m_thisObject);
-
-    if (engine->hasUncaughtException())
-    {
-        QScriptValue exception = engine->uncaughtException();
-        QMessageBox::critical(0, "Script error", 
-                QString("Script threw an uncaught exception while"
-                    " looking for create func: ") 
-                + exception.toString());
-        return;
-    }
-#endif
 }
 
 RequestDialog::~RequestDialog()
@@ -185,9 +131,87 @@ void RequestDialog::stopTimer()
     m_pbStartStop->setChecked(false);
 }
 
+#ifdef CORBASIM_USE_QTSCRIPT
+void RequestDialog::reloadScript()
+{
+    QFile file(QString(m_dlg->get_name())+ ".js");
+
+    if (!file.exists() || 
+            !file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        std::cerr << "Could not open program file!" << std::endl;
+        return;
+    }
+
+    QString strProgram = file.readAll();
+    if (!m_engine.canEvaluate(strProgram))
+    {
+        std::cerr << "Could not evaluate program!" << std::endl;
+        return;
+    }
+
+    m_engine.evaluate(strProgram);
+
+    m_initFunc = m_engine.evaluate("init");
+    m_preFunc = m_engine.evaluate("pre");
+    m_postFunc = m_engine.evaluate("post");
+    
+    m_engine.evaluate(
+            "function to_json() { return JSON.stringify(this); }");
+    m_jsonFunc = m_engine.evaluate("to_json");
+
+    if (m_initFunc.isFunction())
+        m_initFunc.call(m_thisObject);
+
+}
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
 void RequestDialog::sendClicked()
 {
+
+#ifdef CORBASIM_USE_QTSCRIPT
+    if (m_preFunc.isFunction())
+    {
+        // Convierte el contenido del diálogo a JSON
+        std::string str;
+        m_dlg->to_json(str);
+
+        // Evalua la cadena y la asigna como propiedad
+        QScriptValue json_value = m_engine.evaluate(
+                QString('(') + str.c_str() + ')');
+        m_thisObject.setProperty("request", json_value);
+
+        m_preFunc.call(m_thisObject);
+
+        // property -> JSON
+        QScriptValue val = m_jsonFunc.call(json_value);
+
+        // JSON -> dialog
+        str = val.toString().toStdString();
+        m_dlg->from_json(str);
+    }
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
     emit sendRequest(event::request_ptr(m_dlg->create_request()));
+
+#ifdef CORBASIM_USE_QTSCRIPT
+    if (m_postFunc.isFunction())
+    {
+        m_postFunc.call(m_thisObject);
+
+        // property -> JSON
+        QScriptValue json_value = m_thisObject.property("request");
+
+        if (json_value.isObject())
+        {
+            QScriptValue val = m_jsonFunc.call(json_value);
+
+            // JSON -> dialog
+            const std::string str = val.toString().toStdString();
+            m_dlg->from_json(str);
+        }
+    }
+#endif /* CORBASIM_USE_QTSCRIPT*/
 }
 
 void RequestDialog::startStopChecked(bool chk)
@@ -214,7 +238,8 @@ void RequestDialog::sendStored()
     if (m_cbUseStored->isChecked())
         emit sendRequest(m_storedRequest);
     else
-        emit sendRequest(event::request_ptr(m_dlg->create_request()));
+        sendClicked();
+        // emit sendRequest(event::request_ptr(m_dlg->create_request()));
 
     ++m_currentPeriodicRequest;
     if (m_sbTimes->value() >= 0 && 

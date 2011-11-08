@@ -23,6 +23,10 @@
 #include <QtGui>
 #include <corbasim/event.hpp>
 
+#ifdef CORBASIM_USE_QTSCRIPT
+#include <QtScript>
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
 Q_DECLARE_METATYPE(corbasim::event::request_ptr)
 
 // fwd
@@ -60,6 +64,10 @@ public slots:
     void storeRequest();
     void stopTimer();
 
+#ifdef CORBASIM_USE_QTSCRIPT
+    void reloadScript();
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
 signals:
     void sendRequest(corbasim::event::request_ptr);
 
@@ -77,6 +85,18 @@ protected:
     int m_currentPeriodicRequest;
 
     event::request_ptr m_storedRequest;
+
+#ifdef CORBASIM_USE_QTSCRIPT
+
+    QScriptEngine m_engine;
+    QScriptValue m_thisObject;
+    QScriptValue m_initFunc;
+    QScriptValue m_preFunc;
+    QScriptValue m_postFunc;
+    QScriptValue m_jsonFunc;
+
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
 };
 
 } // namespace qt

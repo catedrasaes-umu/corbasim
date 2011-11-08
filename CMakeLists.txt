@@ -32,6 +32,7 @@ elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
 endif()
 
 add_definitions(-Wall)
+add_definitions(-DCORBASIM_USE_QTSCRIPT)
 
 #
 # Dependencies
