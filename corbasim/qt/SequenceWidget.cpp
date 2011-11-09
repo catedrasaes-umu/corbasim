@@ -88,6 +88,7 @@ void SequenceWidget::lengthChanged(int len)
     }
 
     m_sbCurrentIndex->setRange(0, len-1);
+    m_sbLength->setValue(len);
 }
 
 void SequenceWidget::indexChanged(int idx)
