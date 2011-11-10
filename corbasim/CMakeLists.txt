@@ -19,6 +19,8 @@ if(QT_FOUND)
     include(${QT_USE_FILE})
 
     include(corbasim_qt.cmake)
+
+    add_subdirectory(app)
 endif()
 
 # CORBASIM HTTP library
