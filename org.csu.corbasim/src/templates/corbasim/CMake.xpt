@@ -46,7 +46,7 @@ target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
 «LET getFQN("_") AS fqn»
 	«IF generateLibrary()-»
 # Corbasim library	
-add_library(corbasim_lib_«fqn» «fqn»_lib.cpp)
+add_library(corbasim_lib_«fqn» SHARED «fqn»_lib.cpp)
 target_link_libraries(corbasim_lib_«fqn»
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	# CORBASIM Libraries
