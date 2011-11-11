@@ -33,4 +33,8 @@
 	«IF generateInterpreter()»
 		«EXPAND templates::corbasim::Interpreter::interpreter FOR this»
 	«ENDIF»
+	
+	«IF generateLibrary()»
+		«EXPAND templates::corbasim::LibCorbasim::main FOR this»
+	«ENDIF»
 «ENDDEFINE»

@@ -1,0 +1,34 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+
+
+«DEFINE main FOR TranslationUnit»
+	«EXPAND main FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE main FOR Contained-»«ENDDEFINE»
+
+«DEFINE main FOR ModuleDef-»
+	«EXPAND main FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE main FOR InterfaceDef-»
+«LET getFQN("_") AS fqn»
+«FILE fqn+"_lib.cpp"»
+#include "«getTranslationUnit().getFileNameStubHpp()»"
+#include "«getTranslationUnit().getAdaptedFile()»"
+#include "«getTranslationUnit().getAdaptedServantFile()»"
+#include <corbasim/gui/widgets.hpp>
+#include <corbasim/gui/trees.hpp>
+#include <corbasim/gui/gui_factory.hpp>
+
+extern "C" corbasim::gui::gui_factory_base * corbasim_lib_«fqn»()
+{
+	return corbasim::gui::gui_factory< «getFQN()» >::get_instance();
+}
+
+«ENDFILE»
+«ENDLET»
+«ENDDEFINE»
+
