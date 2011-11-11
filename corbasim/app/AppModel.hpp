@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * main.cpp
+ * AppModel.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,27 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "AppMainWindow.hpp"
-#include "AppController.hpp"
-#include "AppModel.hpp"
+#ifndef CORBASIM_APP_APPMODEL_HPP
+#define CORBASIM_APP_APPMODEL_HPP
 
-int main(int argc, char **argv)
+#include "appC.h"
+
+namespace corbasim 
 {
-    QApplication app(argc, argv); 
+namespace app 
+{
 
-    QThread thread;
+class AppController;
 
-    corbasim::app::AppModel model;
-    corbasim::app::AppController controller(&thread);
+class AppModel
+{
+public:
+    AppModel();
+    virtual ~AppModel();
 
-    controller.setModel(&model);
-    model.setController(&controller);
+    void setController(AppController * controller);
 
-    corbasim::app::AppMainWindow window;
-    window.setController(&controller);
-    window.show();
+    void createObjref(const corbasim::app::ObjrefConfig& cfg);
 
-    return app.exec();
-}
+protected:
+    AppController * m_controller;
+};
+
+} // namespace app
+} // namespace corbasim
+
+#endif /* CORBASIM_APP_APPMODEL_HPP */
 

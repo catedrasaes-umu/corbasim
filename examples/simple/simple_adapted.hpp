@@ -74,7 +74,8 @@ namespace boost
         void serialize(Archive& ar, SimpleExample::St::_ss_seq& t,
                 const unsigned int version)
         {
-            // TODO
+            ::corbasim::serialization::string_sequence::serialize( ar, t,
+                    version);
         }
 
     } // serialization
@@ -247,12 +248,14 @@ namespace _corbasim_SimpleExample
             __operation1(::CORBA::Long _a, ::CORBA::Long _b, const SimpleExample::St& _c):
             a(_a), b(_b), c(_c)
             {
+
             }
 
             // Copy constructor
             __operation1(const __operation1& o) :
             a(o.a), b(o.b), c(o.c)
             {
+
             }
 
             template< typename Archive >
@@ -278,15 +281,17 @@ namespace _corbasim_SimpleExample
             {
             }
 
-            __operation4(SimpleExample::Test_ptr _a):
-            a(_a)
+            __operation4(SimpleExample::Test_ptr _a)
             {
+
+                a = SimpleExample::Test::_duplicate(_a);
             }
 
             // Copy constructor
-            __operation4(const __operation4& o) :
-            a(o.a)
+            __operation4(const __operation4& o)
             {
+
+                a = o.a;
             }
 
             template< typename Archive >

@@ -21,6 +21,10 @@
 #define CORBASIM_APP_APPCONTROLLER_HPP
 
 #include <corbasim/event.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <QObject>
+
+#include "appC.h"
 
 namespace corbasim 
 {
@@ -33,14 +37,25 @@ class AppController : public QObject
 {
     Q_OBJECT
 public:
-    AppController(AppModel * model, QObject * parent = 0);
+    AppController(QObject * parent = 0);
     virtual ~AppController();
+
+    void setModel(AppModel * model);
 
 public slots:
 
-    void sendRequest(corbasim::event::request_ptr req);
+    // Usados por la vista
+    //
+    void loadFile(const QString& file);
+    void saveFile(const QString& file);
 
-    void createObjref(); 
+    void createObjref(const corbasim::app::ObjrefConfig& cfg);
+
+    void sendRequest(const QString& id,
+            corbasim::event::request_ptr req);
+
+/*
+    // TODO
     void createServant();
 
     void removeObjref(); 
@@ -51,19 +66,33 @@ public slots:
 
     void resetBehaviour();
     void resetAllBehaviours();
+*/
+
+    // Usados por el modelo
+
+    void notifyObjrefCreated(const QString& id, 
+            corbasim::gui::gui_factory_base * factory);
+
+    void notifyError(const QString& msg);
 
 signals:
 
-    void notifyObjrefCreated();
-    void notifyServantCreated();
+    // Usadas por la vista
 
-    void notifyRequestSent(QString id, corbasim::event::request_ptr req);
-    void notifyResponseReceived();
+    void objrefCreated(QString id, 
+            corbasim::gui::gui_factory_base * factory);
+    void servantCreated(QString id, 
+            corbasim::gui::gui_factory_base * factory);
 
-    void notifyRequestReceived(QString id, corbasim::event::request_ptr req);
-    void notifyResponseSent();
+    void requestSent(QString id, 
+            corbasim::event::request_ptr req);
+    void responseReceived();
+
+    void requestReceived(QString id, 
+            corbasim::event::request_ptr req);
+    void responseSent();
     
-    void notifyError(QString msg);
+    void error(QString msg);
 
 protected:
     AppModel * m_model;

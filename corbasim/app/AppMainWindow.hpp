@@ -21,11 +21,14 @@
 #define CORBASIM_APP_APPMAINWINDOW_HPP
 
 #include <QtGui>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 
 namespace corbasim 
 {
 namespace app 
 {
+
+class AppController;
 
 class AppMainWindow : public QMainWindow
 {
@@ -33,6 +36,34 @@ class AppMainWindow : public QMainWindow
 public:
     AppMainWindow(QWidget * parent = 0);
     virtual ~AppMainWindow();
+
+    void setController(AppController * controller);
+
+public slots:
+
+    void showCreateObjref();
+
+    // Notificaciones del controlador
+
+    void objrefCreated(const QString& id,
+        corbasim::gui::gui_factory_base * factory);
+
+    void displayError(const QString& err);
+
+protected:
+    AppController * m_controller;
+    QMdiArea * m_mdi_area;
+
+    QMenu * m_menuObjects;
+    QMenu * m_menuServants;
+
+    QStatusBar * m_statusBar;
+
+    // Subwindows
+    QMdiSubWindow * m_sub_create_objref;
+    
+    // Subwindows widgets
+    QDialog * m_create_objref;
 };
 
 } // namespace app

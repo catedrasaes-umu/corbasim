@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * main.cpp
+ * CreateDialog.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,27 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "AppMainWindow.hpp"
-#include "AppController.hpp"
-#include "AppModel.hpp"
+#ifndef CORBASIM_APP_VIEW_CREATEDIALOG_HPP
+#define CORBASIM_APP_VIEW_CREATEDIALOG_HPP
 
-int main(int argc, char **argv)
+#include <QtGui>
+#include "../appC.h"
+#include "../app_adapted.hpp"
+#include <corbasim/gui/widgets.hpp>
+
+namespace corbasim 
 {
-    QApplication app(argc, argv); 
+namespace app 
+{
+namespace view 
+{
 
-    QThread thread;
+class ObjrefCreateDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    ObjrefCreateDialog(QWidget * parent = 0);
+    virtual ~ObjrefCreateDialog();
 
-    corbasim::app::AppModel model;
-    corbasim::app::AppController controller(&thread);
+public slots:
 
-    controller.setModel(&model);
-    model.setController(&controller);
+    void createClicked();
 
-    corbasim::app::AppMainWindow window;
-    window.setController(&controller);
-    window.show();
+signals:
 
-    return app.exec();
-}
+    void createObjref(corbasim::app::ObjrefConfig);
+
+protected:
+    widgets::widget< ObjrefConfig > m_widget;
+};
+
+} // namespace view
+} // namespace app
+} // namespace corbasim
+
+#endif /* CORBASIM_APP_VIEW_CREATEDIALOG_HPP */
 

@@ -21,29 +21,29 @@ add_library(${CORBASIM_PREFIX}simple_idl SHARED ${simple_GENERATED})
 
 	
 	
-	
 
 
+
+# Corbasim library	
+add_library(corbasim_lib_SimpleExample_Test SHARED SimpleExample_Test_lib.cpp)
+target_link_libraries(corbasim_lib_SimpleExample_Test
+	${CORBASIM_PREFIX}simple_idl
+	# CORBASIM Libraries
+	corbasim corbasim_qt)
 
 # Client
 add_executable(${CORBASIM_PREFIX}SimpleExample_Test_client SimpleExample_Test_client_main.cpp)
 target_link_libraries(${CORBASIM_PREFIX}SimpleExample_Test_client 
 	${CORBASIM_PREFIX}simple_idl
 	# CORBASIM Libraries
-	corbasim corbasim_qt
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate
-	# QT 
-	${QT_LIBRARIES})
+	corbasim corbasim_qt)
 	
 # Injector	
 add_executable(${CORBASIM_PREFIX}SimpleExample_Test_injector SimpleExample_Test_injector.cpp)
 target_link_libraries(${CORBASIM_PREFIX}SimpleExample_Test_injector
 	${CORBASIM_PREFIX}simple_idl
 	# CORBASIM Libraries
-	corbasim
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate)
+	corbasim)
 	
 # Server
 add_executable(${CORBASIM_PREFIX}SimpleExample_Test_server SimpleExample_Test_server.cpp)
@@ -51,8 +51,10 @@ target_link_libraries(${CORBASIM_PREFIX}SimpleExample_Test_server
 	${CORBASIM_PREFIX}simple_idl
 	# CORBASIM Libraries
 	corbasim
-	# TAO
-	TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming TAO_ObjRefTemplate)
+	# Boost
+	boost_program_options)
+	
+	
 
 
 

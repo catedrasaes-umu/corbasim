@@ -10,7 +10,7 @@ namespace corbasim
     {
 
         template< >
-        struct sevant< SimpleExample::Test >
+        struct servant< SimpleExample::Test >
         {
             template< typename F >
             class _type: public virtual POA_SimpleExample::Test

@@ -18,15 +18,107 @@
  */
 
 #include "AppMainWindow.hpp"
+#include "AppController.hpp"
+#include "view/CreateDialog.hpp"
 
 using namespace corbasim::app;
 
 AppMainWindow::AppMainWindow(QWidget * parent) :
-    QMainWindow(parent)
+    QMainWindow(parent), m_controller(NULL),
+
+    // Subwindows
+    m_sub_create_objref(NULL),
+
+    // Widgets
+    m_create_objref(NULL)
 {
+    m_mdi_area = new QMdiArea;
+
+    setCentralWidget(m_mdi_area);
+
+    // Menu
+    QMenuBar * menu = new QMenuBar;
+    setMenuBar(menu);
+
+    QMenu * menuFile = menu->addMenu("&File");
+    menuFile->addAction("New &object", this, SLOT(showCreateObjref()));
+    menuFile->addAction("&New servant");
+    menuFile->addSeparator();
+    menuFile->addAction("&Load configuration");
+    menuFile->addAction("&Save configuration");
+    menuFile->addSeparator();
+    menuFile->addAction("&Close", this, SLOT(close()));
+
+    m_menuObjects = menu->addMenu("&Objects");
+    m_menuServants = menu->addMenu("&Servants");
+
+    // Status bar
+    m_statusBar = new QStatusBar;
+    setStatusBar(m_statusBar);
+    
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
+    setWindowTitle("corbasim generic application");
+
+    // Regiter types
+    qRegisterMetaType< corbasim::app::ObjrefConfig >
+        ("corbasim::app::ObjrefConfig");
+    qRegisterMetaType< corbasim::app::ServantConfig >
+        ("corbasim::app::ServantConfig");
 }
 
 AppMainWindow::~AppMainWindow()
 {
+}
+
+void AppMainWindow::setController(AppController * controller)
+{
+    m_controller = controller;
+
+    // Signals
+    QObject::connect(
+            m_controller,
+            SIGNAL(objrefCreated(
+                    QString, corbasim::gui::gui_factory_base *)),
+            this,
+            SLOT(objrefCreated(
+                    const QString&, corbasim::gui::gui_factory_base *)));
+
+    QObject::connect(m_controller, SIGNAL(error(QString)),
+            this, SLOT(displayError(const QString&)));
+}
+
+// Subwindow slot
+void AppMainWindow::showCreateObjref()
+{
+    if (!m_sub_create_objref)
+    {
+        m_sub_create_objref = new QMdiSubWindow;
+        m_create_objref = new view::ObjrefCreateDialog;
+
+        m_create_objref->setWindowTitle("Create object reference");
+
+        m_sub_create_objref->setWidget(m_create_objref);
+        m_mdi_area->addSubWindow(m_sub_create_objref);
+
+        QObject::connect(m_create_objref,
+                SIGNAL(createObjref(corbasim::app::ObjrefConfig)),
+                m_controller, 
+                SLOT(createObjref(const corbasim::app::ObjrefConfig&)));
+    }
+    m_sub_create_objref->showNormal();
+    m_create_objref->show();
+    m_mdi_area->setActiveSubWindow(m_sub_create_objref);
+}
+
+// Notificaciones del controlador
+void AppMainWindow::objrefCreated(const QString& id,
+    corbasim::gui::gui_factory_base * factory)
+{
+    m_menuObjects->addMenu(id);
+}
+
+void AppMainWindow::displayError(const QString& err)
+{
+    QMessageBox::critical(this, "Error", err);
 }
 

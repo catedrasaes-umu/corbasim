@@ -24,7 +24,7 @@ module app
     struct ObjrefConfig
     {
         string id;
-        string interface;       // FQN
+        string fqn;       // FQN
         string entry;           // Naming service entry (for resolving)
         Object ref;
     };
@@ -34,7 +34,7 @@ module app
     struct ServantConfig
     {
         string id;
-        string interface;       // FQN
+        string fqn;       // FQN
         string entry;           // Naming service entry (for binding)
         string behaviour;
     };
