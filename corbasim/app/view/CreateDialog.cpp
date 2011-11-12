@@ -35,6 +35,10 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     QObject::connect(createButton, SIGNAL(clicked()),
             this, SLOT(createClicked()));
+/* 
+    QObject::connect(cancelButton, SIGNAL(clicked()),
+            window(), SLOT(hide()));
+ */
 
     hLayout->addWidget(createButton);
     hLayout->addWidget(cancelButton);
@@ -55,5 +59,7 @@ void ObjrefCreateDialog::createClicked()
     // TODO validate
 
     emit createObjref(config);
+
+    // window()->hide();
 }
 

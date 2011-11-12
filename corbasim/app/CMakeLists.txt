@@ -9,6 +9,7 @@ set(corbasim_app_SRCS
     main.cpp
 
     view/CreateDialog.cpp
+    view/Objref.cpp
     )
 
 set(corbasim_app_MOC_HDRS
@@ -16,6 +17,7 @@ set(corbasim_app_MOC_HDRS
     AppMainWindow.hpp
     
     view/CreateDialog.hpp
+    view/Objref.hpp
     )
 
 qt4_wrap_cpp(corbasim_app_MOC_SRCS 

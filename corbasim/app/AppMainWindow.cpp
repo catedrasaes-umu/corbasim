@@ -20,6 +20,7 @@
 #include "AppMainWindow.hpp"
 #include "AppController.hpp"
 #include "view/CreateDialog.hpp"
+#include "view/Objref.hpp"
 
 using namespace corbasim::app;
 
@@ -114,7 +115,10 @@ void AppMainWindow::showCreateObjref()
 void AppMainWindow::objrefCreated(const QString& id,
     corbasim::gui::gui_factory_base * factory)
 {
-    m_menuObjects->addMenu(id);
+    view::Objref * objref = new view::Objref(id, factory, this);
+    m_menuObjects->addMenu(objref->getMenu());
+
+    // TODO
 }
 
 void AppMainWindow::displayError(const QString& err)
