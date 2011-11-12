@@ -21,14 +21,19 @@
 
 using namespace corbasim::app::view;
 
-Objref::Objref(const QString& id, gui::gui_factory_base* factory,
+Objref::Objref(QMdiArea * area,
+        const QString& id, gui::gui_factory_base* factory,
         QObject * parent) :
-    QObject(parent), m_id(id), m_factory(factory)
+    QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory)
 {
     m_menu = new QMenu(m_id);
     QMenu * operation = m_menu->addMenu("Operations");
-    
+
     unsigned int count = factory->operation_count();
+
+    // Inicializa los dialogos a nulo
+    m_dialogs.resize(count, NULL);
+    m_subwindows.resize(count, NULL);
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -37,9 +42,15 @@ Objref::Objref(const QString& id, gui::gui_factory_base* factory,
 
         const char * name = op->get_name();
 
-        operation->addAction(name);
+        operation->addAction(name)->setData(i);
     }
 
+    QObject::connect(operation,
+            SIGNAL(triggered(QAction*)),
+            this,
+            SLOT(showRequestDialog(QAction*)));
+
+    m_menu->addSeparator();
     m_menu->addAction("Delete");
 }
 
@@ -55,5 +66,61 @@ QMenu * Objref::getMenu() const
 void Objref::sendRequest(corbasim::event::request_ptr req)
 {
     emit sendRequest(m_id, req);
+}
+
+void Objref::showRequestDialog(int idx)
+{
+    QMdiSubWindow * w = getWindow(idx);
+    w->showNormal();
+    getRequestDialog(idx)->show();
+    m_mdi_area->setActiveSubWindow(w);
+}
+
+void Objref::showRequestDialog(QAction * act)
+{
+    showRequestDialog(act->data().toInt());
+}
+
+QMdiSubWindow * Objref::getWindow(int idx)
+{
+    QMdiSubWindow * win = m_subwindows[idx];
+
+    if (!win)
+    {
+        m_subwindows[idx] = new QMdiSubWindow;
+
+        m_subwindows[idx]->setWidget(getRequestDialog(idx));
+        m_mdi_area->addSubWindow(m_subwindows[idx]);
+        
+        m_subwindows[idx]->setWindowTitle("Title");
+        win = m_subwindows[idx];
+    }
+
+    return win;
+}
+
+corbasim::qt::RequestDialog * Objref::getRequestDialog(int idx)
+{
+    qt::RequestDialog * dlg = m_dialogs[idx];
+
+    if (!dlg)
+    {
+        gui::operation_factory_base * op = 
+            m_factory->get_factory_by_index(idx);
+        const char * name = op->get_name();
+
+        dialogs::input_base * input = op->create_input();
+        dlg = new qt::RequestDialog(input);
+        dlg->setWindowTitle(name);
+
+        QObject::connect(dlg,
+            SIGNAL(sendRequest(corbasim::event::request_ptr)),
+            this, 
+            SLOT(sendRequest(corbasim::event::request_ptr)));
+
+        m_dialogs[idx] = dlg;
+    }
+
+    return dlg;
 }
 

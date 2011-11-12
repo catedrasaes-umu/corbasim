@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/qt/RequestDialog.hpp>
 
 namespace corbasim 
 {
@@ -34,16 +35,22 @@ class Objref : public QObject
 {
     Q_OBJECT
 public:
-    Objref(const QString& id,
+    Objref(QMdiArea * area,
+            const QString& id,
             gui::gui_factory_base * factory,
             QObject * parent = 0);
     virtual ~Objref();
 
     QMenu * getMenu() const;
 
+    qt::RequestDialog * getRequestDialog(int idx);
+    QMdiSubWindow * getWindow(int idx);
+
 public slots:
 
     void sendRequest(corbasim::event::request_ptr req);
+    void showRequestDialog(int idx);
+    void showRequestDialog(QAction * act);
 
 signals:
 
@@ -51,8 +58,18 @@ signals:
         corbasim::event::request_ptr req);
 
 protected:
+
+    QMdiArea * m_mdi_area;
+
     QString m_id;
     gui::gui_factory_base * m_factory;
+
+    // Operation dialogs
+    typedef std::vector< qt::RequestDialog * > dialogs_t;
+    dialogs_t m_dialogs;
+    
+    typedef std::vector< QMdiSubWindow * > subwindows_t;
+    subwindows_t m_subwindows;
 
     QMenu * m_menu;
 };

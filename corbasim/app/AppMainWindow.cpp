@@ -115,8 +115,13 @@ void AppMainWindow::showCreateObjref()
 void AppMainWindow::objrefCreated(const QString& id,
     corbasim::gui::gui_factory_base * factory)
 {
-    view::Objref * objref = new view::Objref(id, factory, this);
+    view::Objref * objref = new view::Objref(m_mdi_area, id, factory, this);
     m_menuObjects->addMenu(objref->getMenu());
+
+    QObject::connect(objref,
+                SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+                m_controller, 
+                SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
 
     // TODO
 }
