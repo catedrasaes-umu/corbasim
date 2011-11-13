@@ -51,7 +51,7 @@ Objref::Objref(QMdiArea * area,
             SLOT(showRequestDialog(QAction*)));
 
     m_menu->addSeparator();
-    m_menu->addAction("Delete");
+    m_menu->addAction("&Delete", this, SLOT(deleteObjref()));
 }
 
 Objref::~Objref()
@@ -66,6 +66,11 @@ QMenu * Objref::getMenu() const
 void Objref::sendRequest(corbasim::event::request_ptr req)
 {
     emit sendRequest(m_id, req);
+}
+
+void Objref::deleteObjref()
+{
+    emit deleteObjref(m_id);
 }
 
 void Objref::showRequestDialog(int idx)

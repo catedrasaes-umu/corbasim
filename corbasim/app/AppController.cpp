@@ -43,19 +43,26 @@ void AppController::loadFile(const QString& file)
 
 void AppController::saveFile(const QString& file)
 {
+    // TODO
 }
 
 void AppController::createObjref(const ObjrefConfig& cfg)
 {
-    std::cout << cfg.id << std::endl;
+    std::cout << "Create " << cfg.id << std::endl;
 
     if (m_model)
         m_model->createObjref(cfg);
 }
 
+void AppController::deleteObjref(const QString& id)
+{
+    // TODO
+}
+
 void AppController::sendRequest(const QString& id,
         corbasim::event::request_ptr req)
 {
+    // TODO
 }
 
 // Usados por el modelo
@@ -64,6 +71,11 @@ void AppController::notifyObjrefCreated(const QString& id,
         corbasim::gui::gui_factory_base * factory)
 {
     emit objrefCreated(id, factory);
+}
+
+void AppController::notifyObjrefDeleted(const QString& id)
+{
+    emit objrefDeleted(id);
 }
 
 void AppController::notifyError(const QString& msg)

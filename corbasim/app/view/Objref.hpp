@@ -49,13 +49,18 @@ public:
 public slots:
 
     void sendRequest(corbasim::event::request_ptr req);
+    
+    void deleteObjref();
+
     void showRequestDialog(int idx);
     void showRequestDialog(QAction * act);
 
 signals:
 
-    void sendRequest(QString id,
-        corbasim::event::request_ptr req);
+    void sendRequest(QString,
+        corbasim::event::request_ptr);
+
+    void deleteObjref(QString);
 
 protected:
 

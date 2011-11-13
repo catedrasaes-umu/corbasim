@@ -123,6 +123,11 @@ void AppMainWindow::objrefCreated(const QString& id,
                 m_controller, 
                 SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
 
+    QObject::connect(objref,
+                SIGNAL(deleteObjref(QString)),
+                m_controller, 
+                SLOT(deleteObjref(const QString&)));
+
     // TODO
 }
 
