@@ -74,6 +74,9 @@ struct factory_base
     void insert_factory(const std::string& name,
             tag_t tag, operation_factory_base * factory);
 
+    // virtual const char * get_name() const = 0;
+    // virtual const char * get_fqn() const = 0;
+
     // Data
     typedef std::vector< operation_factory_base * > factories_t;
     factories_t m_factories;

@@ -120,6 +120,13 @@ struct factory : public factory_base
     {
         return new core::interface_caller< Interface >();
     }
+   
+    /*
+    const char * get_name() const
+    {
+        return adapted::name< Interface >::call();
+    }
+    */
 
     template< typename Value >
     void append()

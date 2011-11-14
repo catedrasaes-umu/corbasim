@@ -17,74 +17,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_VIEW_OBJREF_HPP
-#define CORBASIM_APP_VIEW_OBJREF_HPP
+#ifndef CORBASIM_APP_MODEL_OBJREF_HPP
+#define CORBASIM_APP_MODEL_OBJREF_HPP
 
-#include <QtGui>
 #include <boost/shared_ptr.hpp>
+#include <string>
+#include <corbasim/core/caller.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
-#include <corbasim/qt/RequestDialog.hpp>
+
+#include "../appC.h"
 
 namespace corbasim 
 {
 namespace app 
 {
-namespace view 
+namespace model 
 {
 
-class Objref : public QObject
+class Objref
 {
-    Q_OBJECT
 public:
-    Objref(QMdiArea * area,
-            const QString& id,
-            gui::gui_factory_base * factory,
-            QObject * parent = 0);
+    Objref(const ObjrefConfig& cfg, gui::gui_factory_base * factory);
     virtual ~Objref();
 
-    QMenu * getMenu() const;
-
-    qt::RequestDialog * getRequestDialog(int idx);
-    QMdiSubWindow * getWindow(int idx);
-
-public slots:
-
-    void sendRequest(corbasim::event::request_ptr req);
-    
-    void deleteObjref();
-
-    void showRequestDialog(int idx);
-    void showRequestDialog(QAction * act);
-
-signals:
-
-    void sendRequest(QString,
-        corbasim::event::request_ptr);
-
-    void deleteObjref(QString);
+    corbasim::event::event* sendRequest(corbasim::event::request_ptr req);
 
 protected:
-
-    QMdiArea * m_mdi_area;
-
-    QString m_id;
+    ObjrefConfig m_cfg;
     gui::gui_factory_base * m_factory;
-
-    // Operation dialogs
-    typedef std::vector< qt::RequestDialog * > dialogs_t;
-    dialogs_t m_dialogs;
-    
-    typedef std::vector< QMdiSubWindow * > subwindows_t;
-    subwindows_t m_subwindows;
-
-    QMenu * m_menu;
+    core::interface_caller_ptr m_caller;
 };
 
 typedef boost::shared_ptr< Objref > Objref_ptr;
 
-} // namespace view
+} // namespace model
 } // namespace app
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_VIEW_OBJREF_HPP */
+#endif /* CORBASIM_APP_MODEL_OBJREF_HPP */
 

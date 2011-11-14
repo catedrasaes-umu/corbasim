@@ -56,13 +56,15 @@ void AppController::createObjref(const ObjrefConfig& cfg)
 
 void AppController::deleteObjref(const QString& id)
 {
-    // TODO
+    if (m_model)
+        m_model->deleteObjref(id);
 }
 
 void AppController::sendRequest(const QString& id,
         corbasim::event::request_ptr req)
 {
-    // TODO
+    if (m_model)
+        m_model->sendRequest(id, req);
 }
 
 // Usados por el modelo

@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * AppModel.hpp
+ * Objref.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,46 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_APPMODEL_HPP
-#define CORBASIM_APP_APPMODEL_HPP
+#include "Objref.hpp"
+#include <corbasim/core/factory.hpp>
 
-#include "appC.h"
-#include "model/Objref.hpp"
+using namespace corbasim::app::model;
 
-#include <map>
-#include <corbasim/event.hpp>
-
-namespace corbasim 
+Objref::Objref(const ObjrefConfig& cfg, 
+        gui::gui_factory_base * factory) :
+    m_cfg(cfg), m_factory(factory)
 {
-namespace app 
+    // Create a caller
+    m_caller.reset(m_factory->get_core_factory()->create_caller());
+    m_caller->set_reference(cfg.ref);
+}
+
+Objref::~Objref()
 {
+}
 
-class AppController;
-
-class AppModel
+corbasim::event::event* 
+Objref::sendRequest(corbasim::event::request_ptr req)
 {
-public:
-    AppModel();
-    virtual ~AppModel();
+    // TODO throw exceptions
 
-    void setController(AppController * controller);
+    if (!m_caller)
+        return NULL;
 
-    void createObjref(const corbasim::app::ObjrefConfig& cfg);
-
-    void sendRequest(const QString& id,
-            corbasim::event::request_ptr req);
-
-    void deleteObjref(const QString& id);
-
-protected:
-    AppController * m_controller;
-
-    typedef std::map< QString, model::Objref_ptr > objrefs_t;
-    objrefs_t m_objrefs;
-};
-
-} // namespace app
-} // namespace corbasim
-
-#endif /* CORBASIM_APP_APPMODEL_HPP */
+    return m_caller->do_call(req.get());
+}
 

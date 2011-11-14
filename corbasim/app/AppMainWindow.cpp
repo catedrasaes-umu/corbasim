@@ -20,7 +20,6 @@
 #include "AppMainWindow.hpp"
 #include "AppController.hpp"
 #include "view/CreateDialog.hpp"
-#include "view/Objref.hpp"
 
 using namespace corbasim::app;
 
@@ -84,6 +83,12 @@ void AppMainWindow::setController(AppController * controller)
             SLOT(objrefCreated(
                     const QString&, corbasim::gui::gui_factory_base *)));
 
+    QObject::connect(
+            m_controller,
+            SIGNAL(objrefDeleted(QString)),
+            this,
+            SLOT(objrefDeleted(const QString&)));
+
     QObject::connect(m_controller, SIGNAL(error(QString)),
             this, SLOT(displayError(const QString&)));
 }
@@ -115,20 +120,33 @@ void AppMainWindow::showCreateObjref()
 void AppMainWindow::objrefCreated(const QString& id,
     corbasim::gui::gui_factory_base * factory)
 {
-    view::Objref * objref = new view::Objref(m_mdi_area, id, factory, this);
+    view::Objref_ptr objref(
+            new view::Objref(m_mdi_area, id, factory, this));
     m_menuObjects->addMenu(objref->getMenu());
 
-    QObject::connect(objref,
-                SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
-                m_controller, 
-                SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
+    QObject::connect(objref.get(),
+        SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+        m_controller, 
+        SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
 
-    QObject::connect(objref,
+    QObject::connect(objref.get(),
                 SIGNAL(deleteObjref(QString)),
                 m_controller, 
                 SLOT(deleteObjref(const QString&)));
 
-    // TODO
+    m_objrefs.insert(std::make_pair(id, objref));
+}
+
+void AppMainWindow::objrefDeleted(const QString& id)
+{
+    objrefs_t::iterator it = m_objrefs.find(id);
+
+    if (it != m_objrefs.end())
+    {
+        // Removes the submenu and deletes the objref instance
+        m_menuObjects->removeAction(it->second->getMenu()->menuAction());
+        m_objrefs.erase(it);
+    }
 }
 
 void AppMainWindow::displayError(const QString& err)

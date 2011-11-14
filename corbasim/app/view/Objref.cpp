@@ -18,6 +18,8 @@
  */
 
 #include "Objref.hpp"
+#include <iostream>
+#include <corbasim/core/factory.hpp>
 
 using namespace corbasim::app::view;
 
@@ -26,7 +28,11 @@ Objref::Objref(QMdiArea * area,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory)
 {
-    m_menu = new QMenu(m_id);
+    QString menu_entry = QString("%1 (%2)").arg(m_id);
+    // TODO menu_entry.arg(factory->get_core_factory()->get_name());
+
+    m_menu = new QMenu(menu_entry);
+    // Takes the ownership
     QMenu * operation = m_menu->addMenu("Operations");
 
     unsigned int count = factory->operation_count();
@@ -56,6 +62,15 @@ Objref::Objref(QMdiArea * area,
 
 Objref::~Objref()
 {
+    std::cout << "Deleting: " << m_id.toStdString() << std::endl;
+
+    m_menu->deleteLater();
+
+    for (unsigned int i = 0; i < m_dialogs.size(); i++) 
+    {
+        m_dialogs[i]->deleteLater();
+        m_subwindows[i]->deleteLater();
+    }
 }
 
 QMenu * Objref::getMenu() const

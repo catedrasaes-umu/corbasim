@@ -39,6 +39,16 @@ void AppModel::setController(AppController * controller)
 
 void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
 {
+    QString id(cfg.id.in());
+
+    if (m_objrefs.find(id) != m_objrefs.end())
+    {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Object %1 already exists!").arg(id));
+        return;
+    }
+
     corbasim::gui::gui_factory_base * factory = NULL;
 
     QString lib(cfg.fqn.in());
@@ -77,7 +87,36 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
 
     factory = get_factory();
 
+    model::Objref_ptr obj(new model::Objref(cfg, factory));
+    m_objrefs.insert(std::make_pair(id, obj));
+
     if (m_controller)
-        m_controller->notifyObjrefCreated(cfg.id.in(), factory);
+        m_controller->notifyObjrefCreated(id, factory);
 }
+
+void AppModel::sendRequest(const QString& id,
+        corbasim::event::request_ptr req)
+{
+    objrefs_t::iterator it = m_objrefs.find(id);
+    if (it == m_objrefs.end())
+        m_controller->notifyError(
+                QString("Object %1 not found!").arg(id));
+    else
+    {
+        corbasim::event::event_ptr ev (it->second->sendRequest(req));
+    }
+}
+
+void AppModel::deleteObjref(const QString& id)
+{
+    if (m_objrefs.erase(id) > 0)
+    {
+        if (m_controller)
+            m_controller->notifyObjrefDeleted(id);
+    }
+    else if (m_controller)
+        m_controller->notifyError(
+                QString("Object %1 not found!").arg(id));
+}
+
 

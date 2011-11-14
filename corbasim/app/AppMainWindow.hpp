@@ -20,8 +20,10 @@
 #ifndef CORBASIM_APP_APPMAINWINDOW_HPP
 #define CORBASIM_APP_APPMAINWINDOW_HPP
 
+#include <map>
 #include <QtGui>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+#include "view/Objref.hpp"
 
 namespace corbasim 
 {
@@ -47,12 +49,16 @@ public slots:
 
     void objrefCreated(const QString& id,
         corbasim::gui::gui_factory_base * factory);
+    void objrefDeleted(const QString& id);
 
     void displayError(const QString& err);
 
 protected:
     AppController * m_controller;
     QMdiArea * m_mdi_area;
+
+    typedef std::map< QString, view::Objref_ptr > objrefs_t;
+    objrefs_t m_objrefs;
 
     QMenu * m_menuObjects;
     QMenu * m_menuServants;

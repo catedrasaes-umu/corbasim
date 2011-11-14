@@ -10,6 +10,8 @@ set(corbasim_app_SRCS
 
     view/CreateDialog.cpp
     view/Objref.cpp
+
+    model/Objref.cpp
     )
 
 set(corbasim_app_MOC_HDRS
