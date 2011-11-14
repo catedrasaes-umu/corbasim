@@ -45,6 +45,9 @@ public slots:
 
     void showCreateObjref();
 
+    void showLoad();
+    void showSave();
+
     // Notificaciones del controlador
 
     void objrefCreated(const QString& id,
@@ -52,6 +55,11 @@ public slots:
     void objrefDeleted(const QString& id);
 
     void displayError(const QString& err);
+
+signals:
+
+    void saveFile(QString);
+    void loadFile(QString);
 
 protected:
     AppController * m_controller;

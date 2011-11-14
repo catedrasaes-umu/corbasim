@@ -44,8 +44,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuFile->addAction("New &object", this, SLOT(showCreateObjref()));
     menuFile->addAction("&New servant");
     menuFile->addSeparator();
-    menuFile->addAction("&Load configuration");
-    menuFile->addAction("&Save configuration");
+    menuFile->addAction("&Load configuration", this, SLOT(showLoad()));
+    menuFile->addAction("&Save configuration", this, SLOT(showSave()));
     menuFile->addSeparator();
     menuFile->addAction("&Close", this, SLOT(close()));
 
@@ -91,6 +91,11 @@ void AppMainWindow::setController(AppController * controller)
 
     QObject::connect(m_controller, SIGNAL(error(QString)),
             this, SLOT(displayError(const QString&)));
+
+    QObject::connect(this, SIGNAL(saveFile(QString)),
+            m_controller, SLOT(saveFile(const QString&)));
+    QObject::connect(this, SIGNAL(loadFile(QString)),
+            m_controller, SLOT(loadFile(const QString&)));
 }
 
 // Subwindow slot
@@ -152,5 +157,29 @@ void AppMainWindow::objrefDeleted(const QString& id)
 void AppMainWindow::displayError(const QString& err)
 {
     QMessageBox::critical(this, "Error", err);
+}
+
+void AppMainWindow::showLoad()
+{
+    QString file = QFileDialog::getOpenFileName( 0, tr(
+                "Select a file"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    emit loadFile(file);
+}
+
+void AppMainWindow::showSave()
+{
+    QString file = QFileDialog::getSaveFileName( 0, tr(
+                "Select a file"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    emit saveFile(file);
 }
 
