@@ -24,6 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/qt/RequestDialog.hpp>
+#include <corbasim/qt/SimpleScriptEditor.hpp>
 
 namespace corbasim 
 {
@@ -55,6 +56,7 @@ public slots:
 
     void showRequestDialog(int idx);
     void showRequestDialog(QAction * act);
+    void showScriptEditor();
 
 signals:
 
@@ -76,6 +78,9 @@ protected:
     
     typedef std::vector< QMdiSubWindow * > subwindows_t;
     subwindows_t m_subwindows;
+
+    QMdiSubWindow * m_sub_script;
+    qt::SimpleScriptEditor * m_script;
 
     QMenu * m_menu;
 };
