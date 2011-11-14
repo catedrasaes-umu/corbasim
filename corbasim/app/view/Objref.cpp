@@ -58,6 +58,7 @@ Objref::Objref(QMdiArea * area,
             SLOT(showRequestDialog(QAction*)));
 
     m_menu->addAction("&Script editor", this, SLOT(showScriptEditor()));
+    m_menu->addAction("Set &reference", this, SLOT(showSetReference()));
     m_menu->addSeparator();
     m_menu->addAction("&Delete", this, SLOT(deleteObjref()));
 }
@@ -168,5 +169,9 @@ void Objref::showScriptEditor()
     m_sub_script->showNormal();
     m_script->show();
     m_mdi_area->setActiveSubWindow(m_sub_script);
+}
+
+void Objref::showSetReference()
+{
 }
 

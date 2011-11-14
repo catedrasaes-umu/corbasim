@@ -51,6 +51,10 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     m_menuObjects = menu->addMenu("&Objects");
     m_menuServants = menu->addMenu("&Servants");
+    
+    menu->addMenu("&Tools");
+    menu->addMenu("&Window");
+    menu->addMenu("&About");
 
     // Status bar
     m_statusBar = new QStatusBar;

@@ -58,6 +58,8 @@ public slots:
     void showRequestDialog(QAction * act);
     void showScriptEditor();
 
+    void showSetReference();
+
 signals:
 
     void sendRequest(QString,
