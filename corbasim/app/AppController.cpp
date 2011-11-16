@@ -60,6 +60,20 @@ void AppController::deleteObjref(const QString& id)
         m_model->deleteObjref(id);
 }
 
+void AppController::createServant(const ServantConfig& cfg)
+{
+    std::cout << "Create " << cfg.id << std::endl;
+
+    if (m_model)
+        m_model->createServant(cfg);
+}
+
+void AppController::deleteServant(const QString& id)
+{
+    if (m_model)
+        m_model->deleteServant(id);
+}
+
 void AppController::sendRequest(const QString& id,
         corbasim::event::request_ptr req)
 {
@@ -78,6 +92,17 @@ void AppController::notifyObjrefCreated(const QString& id,
 void AppController::notifyObjrefDeleted(const QString& id)
 {
     emit objrefDeleted(id);
+}
+
+void AppController::notifyServantCreated(const QString& id, 
+        corbasim::gui::gui_factory_base * factory)
+{
+    emit servantCreated(id, factory);
+}
+
+void AppController::notifyServantDeleted(const QString& id)
+{
+    emit servantDeleted(id);
 }
 
 void AppController::notifyError(const QString& msg)

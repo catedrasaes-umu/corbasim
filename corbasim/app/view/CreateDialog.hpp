@@ -51,6 +51,27 @@ protected:
     widgets::widget< ObjrefConfig > m_widget;
 };
 
+class ServantCreateDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    ServantCreateDialog(QWidget * parent = 0);
+    virtual ~ServantCreateDialog();
+
+public slots:
+
+    void createClicked();
+
+signals:
+
+    void createServant(corbasim::app::ServantConfig);
+
+protected:
+    widgets::widget< ServantConfig > m_widget;
+};
+
+
+
 } // namespace view
 } // namespace app
 } // namespace corbasim

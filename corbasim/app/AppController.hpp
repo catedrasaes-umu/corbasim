@@ -52,24 +52,21 @@ public slots:
     void createObjref(const corbasim::app::ObjrefConfig& cfg);
     void deleteObjref(const QString& id);
 
+    void createServant(const corbasim::app::ServantConfig& cfg);
+    void deleteServant(const QString& id);
+
     void sendRequest(const QString& id,
             corbasim::event::request_ptr req);
-
-/*
-    // TODO
-    void createServant();
-
-    void deleteServant(); 
-
-    void resetBehaviour();
-    void resetAllBehaviours();
-*/
 
     // Usados por el modelo
 
     void notifyObjrefCreated(const QString& id, 
             corbasim::gui::gui_factory_base * factory);
     void notifyObjrefDeleted(const QString& id);
+
+    void notifyServantCreated(const QString& id, 
+            corbasim::gui::gui_factory_base * factory);
+    void notifyServantDeleted(const QString& id);
 
     void notifyError(const QString& msg);
 
@@ -95,6 +92,7 @@ signals:
     void servantCreated(QString id, 
             corbasim::gui::gui_factory_base * factory);
     void objrefDeleted(QString id);
+    void servantDeleted(QString id);
 
     void requestSent(QString id, 
             corbasim::event::request_ptr req);

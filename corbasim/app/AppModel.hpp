@@ -42,11 +42,13 @@ public:
     void setController(AppController * controller);
 
     void createObjref(const corbasim::app::ObjrefConfig& cfg);
+    void deleteObjref(const QString& id);
+
+    void createServant(const corbasim::app::ServantConfig& cfg);
+    void deleteServant(const QString& id);
 
     void sendRequest(const QString& id,
             corbasim::event::request_ptr req);
-
-    void deleteObjref(const QString& id);
 
 protected:
     AppController * m_controller;

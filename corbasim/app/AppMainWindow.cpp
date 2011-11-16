@@ -28,10 +28,12 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Subwindows
     m_sub_create_objref(NULL),
+    m_sub_create_servant(NULL),
     m_sub_log(NULL),
 
     // Widgets
     m_create_objref(NULL),
+    m_create_servant(NULL),
     m_log(NULL)
 {
     m_mdi_area = new QMdiArea;
@@ -51,7 +53,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     QMenu * menuFile = menu->addMenu("&File");
     menuFile->addAction("New &object", this, SLOT(showCreateObjref()));
-    menuFile->addAction("&New servant");
+    menuFile->addAction("&New servant", this, SLOT(showCreateServant()));
     menuFile->addSeparator();
     menuFile->addAction("&Load configuration", this, SLOT(showLoad()));
     menuFile->addAction("&Save configuration", this, SLOT(showSave()));
@@ -152,13 +154,34 @@ void AppMainWindow::showCreateObjref()
     m_mdi_area->setActiveSubWindow(m_sub_create_objref);
 }
 
+void AppMainWindow::showCreateServant()
+{
+    if (!m_sub_create_servant)
+    {
+        m_sub_create_servant = new QMdiSubWindow;
+        m_create_servant = new view::ServantCreateDialog;
+
+        m_create_servant->setWindowTitle("Create servant");
+
+        m_sub_create_servant->setWidget(m_create_servant);
+        m_mdi_area->addSubWindow(m_sub_create_servant);
+
+        QObject::connect(m_create_servant,
+                SIGNAL(createServant(corbasim::app::ServantConfig)),
+                m_controller, 
+                SLOT(createServant(const corbasim::app::ServantConfig&)));
+    }
+    m_sub_create_servant->showNormal();
+    m_create_servant->show();
+    m_mdi_area->setActiveSubWindow(m_sub_create_servant);
+}
+
 void AppMainWindow::showLog()
 {
     m_sub_log->showNormal();
     m_log->show();
     m_mdi_area->setActiveSubWindow(m_sub_log);
 }
-
 
 // Notificaciones del controlador
 

@@ -94,6 +94,65 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         m_controller->notifyObjrefCreated(id, factory);
 }
 
+void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
+{
+    /*
+    QString id(cfg.id.in());
+
+    if (m_objrefs.find(id) != m_objrefs.end())
+    {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Object %1 already exists!").arg(id));
+        return;
+    }
+
+    corbasim::gui::gui_factory_base * factory = NULL;
+
+    QString lib(cfg.fqn.in());
+    lib.replace("::","_");
+    lib.prepend("libcorbasim_lib_");
+    lib.append(".so");
+
+    std::string str(lib.toStdString());
+
+    typedef corbasim::gui::gui_factory_base *(*get_factory_t)();
+
+    void * handle = dlopen(str.c_str(), RTLD_NOW);
+
+    if (!handle)
+    {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Library %1 not found!").arg(lib));
+        return;
+    }
+
+    lib.remove(0, 3); // lib
+    lib.truncate(lib.length() - 3); // .so
+    str = lib.toStdString();
+   
+    get_factory_t get_factory = (get_factory_t) dlsym(handle,
+            str.c_str());
+
+    if (!get_factory)
+    {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Symbol %1 not found!").arg(lib));
+        return;
+    }
+
+    factory = get_factory();
+
+    model::Servant_ptr obj(new model::Servant(cfg, factory));
+    m_objrefs.insert(std::make_pair(id, obj));
+
+    if (m_controller)
+        m_controller->notifyServantCreated(id, factory);
+    */
+}
+
 void AppModel::sendRequest(const QString& id,
         corbasim::event::request_ptr req)
 {
@@ -136,4 +195,17 @@ void AppModel::deleteObjref(const QString& id)
                 QString("Object %1 not found!").arg(id));
 }
 
+void AppModel::deleteServant(const QString& id)
+{
+    /*
+    if (m_objrefs.erase(id) > 0)
+    {
+        if (m_controller)
+            m_controller->notifyServantDeleted(id);
+    }
+    else if (m_controller)
+        m_controller->notifyError(
+                QString("Object %1 not found!").arg(id));
+    */
+}
 

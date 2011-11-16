@@ -63,3 +63,46 @@ void ObjrefCreateDialog::createClicked()
     // window()->hide();
 }
 
+// Servant
+
+ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
+    QDialog(parent)
+{
+    QVBoxLayout * layout = new QVBoxLayout;
+
+    layout->addWidget(m_widget.getWidget());
+
+    QHBoxLayout * hLayout = new QHBoxLayout;
+
+    QPushButton * createButton = new QPushButton("&Create");
+    QPushButton * cancelButton = new QPushButton("C&ancel");
+
+    QObject::connect(createButton, SIGNAL(clicked()),
+            this, SLOT(createClicked()));
+/* 
+    QObject::connect(cancelButton, SIGNAL(clicked()),
+            window(), SLOT(hide()));
+ */
+
+    hLayout->addWidget(createButton);
+    hLayout->addWidget(cancelButton);
+
+    layout->addLayout(hLayout);
+    setLayout(layout);
+}
+
+ServantCreateDialog::~ServantCreateDialog()
+{
+}
+
+void ServantCreateDialog::createClicked()
+{
+    ServantConfig config;
+    m_widget.get_value(config);
+
+    // TODO validate
+
+    emit createServant(config);
+}
+
+

@@ -44,6 +44,7 @@ public:
 public slots:
 
     void showCreateObjref();
+    void showCreateServant();
 
     void showLoad();
     void showSave();
@@ -90,10 +91,12 @@ protected:
 
     // Subwindows
     QMdiSubWindow * m_sub_create_objref;
+    QMdiSubWindow * m_sub_create_servant;
     QMdiSubWindow * m_sub_log;
     
     // Subwindows widgets
     QDialog * m_create_objref;
+    QDialog * m_create_servant;
     QTreeWidget * m_log;
 
     void appendToLog(QTreeWidgetItem * item);
