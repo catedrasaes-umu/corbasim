@@ -165,21 +165,7 @@ void AppModel::sendRequest(const QString& id,
         corbasim::event::event_ptr ev (it->second->sendRequest(req));
 
         if (m_controller)
-            m_controller->notifyRequestSent(id, req);
-        
-        if (ev && m_controller)
-        {
-            if (ev->get_type() == event::RESPONSE)
-            {
-                m_controller->notifyResponseReceived(id, 
-                        boost::dynamic_pointer_cast< event::response >(ev));
-            }
-            else if (ev->get_type() == event::EXCEPTION)
-            {
-                m_controller->notifyExceptionCatched(id, 
-                        boost::dynamic_pointer_cast< event::exception >(ev));
-            }
-        }
+            m_controller->notifyRequestSent(id, req, ev);
     }
 }
 

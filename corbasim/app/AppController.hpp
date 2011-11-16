@@ -71,17 +71,12 @@ public slots:
     void notifyError(const QString& msg);
 
     void notifyRequestSent(const QString& id, 
-            corbasim::event::request_ptr req);
-    void notifyResponseReceived(const QString& id, 
-            corbasim::event::response_ptr req);
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr resp);
 
     void notifyRequestReceived(const QString& id, 
-            corbasim::event::request_ptr req);
-    void notifyResponseSent(const QString& id, 
-            corbasim::event::response_ptr req);
-
-    void notifyExceptionCatched(const QString& id,
-            corbasim::event::exception_ptr exc);
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr resp);
 
 signals:
 
@@ -95,17 +90,12 @@ signals:
     void servantDeleted(QString id);
 
     void requestSent(QString id, 
-            corbasim::event::request_ptr req);
-    void responseReceived(QString id, 
-            corbasim::event::response_ptr req);
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr res);
 
     void requestReceived(QString id, 
-            corbasim::event::request_ptr req);
-    void responseSent(QString id, 
-            corbasim::event::response_ptr req);
-
-    void exceptionCatched(QString id,
-            corbasim::event::exception_ptr exc);
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr res);
     
     void error(QString msg);
 

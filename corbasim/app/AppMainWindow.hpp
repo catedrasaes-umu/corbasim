@@ -58,17 +58,11 @@ public slots:
     void objrefDeleted(const QString& id);
 
     void requestSent(const QString& id, 
-            corbasim::event::request_ptr req);
-    void responseReceived(const QString& id, 
-            corbasim::event::response_ptr req);
-
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr resp);
     void requestReceived(const QString& id, 
-            corbasim::event::request_ptr req);
-    void responseSent(const QString& id, 
-            corbasim::event::response_ptr req);
-
-    void exceptionCatched(const QString& id,
-            corbasim::event::exception_ptr exc);
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr resp);
 
     void displayError(const QString& err);
 

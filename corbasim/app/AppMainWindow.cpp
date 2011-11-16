@@ -114,18 +114,17 @@ void AppMainWindow::setController(AppController * controller)
     QObject::connect(this, SIGNAL(loadFile(QString)),
             m_controller, SLOT(loadFile(const QString&)));
 
-#define CORBASIM_APP_CON(ev, type)                                   \
+#define CORBASIM_APP_CON(ev)                                         \
     QObject::connect(m_controller,                                   \
-            SIGNAL(ev(QString, corbasim::event::type ## _ptr)),      \
-            this,                                                    \
-            SLOT(ev(const QString&, corbasim::event::type ## _ptr))) \
+    SIGNAL(ev(QString, corbasim::event::request_ptr,                 \
+            corbasim::event::event_ptr)),                            \
+    this,                                                            \
+    SLOT(ev(const QString&, corbasim::event::request_ptr,            \
+            corbasim::event::event_ptr)));                           \
     /***/
 
-    CORBASIM_APP_CON(requestSent, request);
-    CORBASIM_APP_CON(requestReceived, request);
-    CORBASIM_APP_CON(responseSent, response);
-    CORBASIM_APP_CON(responseReceived, response);
-    CORBASIM_APP_CON(exceptionCatched, exception);
+    CORBASIM_APP_CON(requestSent);
+    CORBASIM_APP_CON(requestReceived);
 
 #undef CORBASIM_APP_CON
 }
@@ -218,7 +217,8 @@ void AppMainWindow::objrefDeleted(const QString& id)
 }
 
 void AppMainWindow::requestSent(const QString& id, 
-        corbasim::event::request_ptr req)
+        corbasim::event::request_ptr req,
+        corbasim::event::event_ptr resp)
 {
     objrefs_t::iterator it = m_objrefs.find(id);
     
@@ -235,31 +235,12 @@ void AppMainWindow::requestSent(const QString& id,
     }
 }
 
-void AppMainWindow::responseReceived(const QString& id, 
-        corbasim::event::response_ptr req)
-{
-    objrefs_t::iterator it = m_objrefs.find(id);
-    
-    if (it != m_objrefs.end())
-    {
-        gui::gui_factory_base * factory = it->second->getFactory();
-        QTreeWidgetItem * item = factory->create_tree(req.get());
-
-        QString text (item->text(0));
-        text.prepend(QString("Received from %1: ").arg(id));
-        item->setText(0, text);
-
-        appendToLog(item);
-    }
-}
-
 void AppMainWindow::requestReceived(const QString& id, 
-        corbasim::event::request_ptr req) {}
-void AppMainWindow::responseSent(const QString& id, 
-        corbasim::event::response_ptr req) {}
-
-void AppMainWindow::exceptionCatched(const QString& id,
-        corbasim::event::exception_ptr exc) {}
+        corbasim::event::request_ptr req,
+        corbasim::event::event_ptr resp)
+{
+    // TODO
+}
 
 void AppMainWindow::displayError(const QString& err)
 {
