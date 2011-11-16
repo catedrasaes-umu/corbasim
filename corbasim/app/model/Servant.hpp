@@ -20,12 +20,32 @@
 #ifndef CORBASIM_APP_SERVANT_HPP
 #define CORBASIM_APP_SERVANT_HPP
 
+#include <boost/shared_ptr.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
+
+#include "../appC.h"
+
 namespace corbasim 
 {
 namespace app 
 {
 namespace model 
 {
+
+class Servant
+{
+public:
+    Servant(const ServantConfig& cfg, gui::gui_factory_base * factory);
+    virtual ~Servant();
+
+    const ServantConfig& getConfig() const;
+
+protected:
+    ServantConfig m_cfg;
+    gui::gui_factory_base * m_factory;
+};
+
+typedef boost::shared_ptr< Servant > Servant_ptr;
 
 } // namespace model
 } // namespace app

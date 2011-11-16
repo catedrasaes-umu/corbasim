@@ -21,3 +21,18 @@
 
 using namespace corbasim::app::model;
 
+Servant::Servant(const ServantConfig& cfg, 
+        gui::gui_factory_base * factory) :
+    m_cfg(cfg), m_factory(factory)
+{
+}
+
+Servant::~Servant()
+{
+}
+
+const corbasim::app::ServantConfig& Servant::getConfig() const
+{
+    return m_cfg;
+}
+

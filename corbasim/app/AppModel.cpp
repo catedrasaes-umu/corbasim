@@ -20,6 +20,10 @@
 #include "AppModel.hpp"
 #include "AppController.hpp"
 
+#include <corbasim/json/writer.hpp>
+#include <corbasim/json/parser.hpp>
+
+#include <fstream>
 #include <dlfcn.h>
 
 using namespace corbasim::app;
@@ -106,7 +110,8 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
 {
     QString id(cfg.id.in());
 
-    if (m_objrefs.find(id) != m_objrefs.end())
+    if (m_servants.find(id) != m_servants.end() ||
+            m_objrefs.find(id) != m_objrefs.end())
     {
         if (m_controller)
             m_controller->notifyError(
@@ -129,10 +134,10 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
 
 void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 {
-    /*
     QString id(cfg.id.in());
 
-    if (m_objrefs.find(id) != m_objrefs.end())
+    if (m_servants.find(id) != m_servants.end() ||
+            m_objrefs.find(id) != m_objrefs.end())
     {
         if (m_controller)
             m_controller->notifyError(
@@ -140,14 +145,17 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
         return;
     }
 
-    factory = get_factory();
+    corbasim::gui::gui_factory_base * factory = 
+        getFactory(cfg.fqn.in());
 
-    model::Servant_ptr obj(new model::Servant(cfg, factory));
-    m_objrefs.insert(std::make_pair(id, obj));
+    if (factory)
+    {
+        model::Servant_ptr obj(new model::Servant(cfg, factory));
+        m_servants.insert(std::make_pair(id, obj));
 
-    if (m_controller)
-        m_controller->notifyServantCreated(id, factory);
-    */
+        if (m_controller)
+            m_controller->notifyServantCreated(id, factory);
+    }
 }
 
 void AppModel::sendRequest(const QString& id,
@@ -190,5 +198,72 @@ void AppModel::deleteServant(const QString& id)
         m_controller->notifyError(
                 QString("Object %1 not found!").arg(id));
     */
+}
+
+void AppModel::saveFile(const QString& file)
+{
+    Configuration cfg;
+
+    // Objrefs
+    {
+        cfg.objects.length(m_objrefs.size());
+        objrefs_t::const_iterator it = m_objrefs.begin();
+        objrefs_t::const_iterator end = m_objrefs.end();
+
+        for (int i = 0; it != m_objrefs.end(); ++it, i++)
+            cfg.objects[i] = it->second->getConfig();
+    }
+
+    // Servants
+    {
+        cfg.servants.length(m_servants.size());
+        servants_t::const_iterator it = m_servants.begin();
+        servants_t::const_iterator end = m_servants.end();
+
+        for (int i = 0; it != m_servants.end(); ++it, i++)
+            cfg.servants[i] = it->second->getConfig();
+    }
+
+    std::string file_ (file.toStdString());
+    std::ofstream ofs (file_.c_str());
+
+    // convert to JSON and save
+    try {
+        json::write(ofs, cfg);
+    } catch (...) {
+        if (m_controller)
+            m_controller->notifyError("Error saving file!");
+    }
+}
+
+void AppModel::loadFile(const QString& file)
+{
+    // clear current config
+    clearConfig();
+
+    Configuration cfg;
+    std::string file_ (file.toStdString());
+    std::ifstream ifs (file_.c_str());
+
+    // TODO from ifs to json_str
+    std::string json_str;
+
+    // parse JSON
+    json::parse(cfg, json_str);
+
+    // process cfg
+
+    // Objects
+    for (unsigned int i = 0; i < cfg.objects.length(); i++) 
+        createObjref(cfg.objects[i]);
+
+    // Servants
+    for (unsigned int i = 0; i < cfg.servants.length(); i++) 
+        createServant(cfg.servants[i]);
+}
+
+void AppModel::clearConfig()
+{
+    // TODO
 }
 

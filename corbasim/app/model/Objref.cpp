@@ -35,6 +35,11 @@ Objref::~Objref()
 {
 }
 
+const corbasim::app::ObjrefConfig& Objref::getConfig() const
+{
+    return m_cfg;
+}
+
 corbasim::event::event* 
 Objref::sendRequest(corbasim::event::request_ptr req)
 {

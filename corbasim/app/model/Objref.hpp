@@ -21,7 +21,6 @@
 #define CORBASIM_APP_MODEL_OBJREF_HPP
 
 #include <boost/shared_ptr.hpp>
-#include <string>
 #include <corbasim/core/caller.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 
@@ -39,6 +38,8 @@ class Objref
 public:
     Objref(const ObjrefConfig& cfg, gui::gui_factory_base * factory);
     virtual ~Objref();
+
+    const ObjrefConfig& getConfig() const;
 
     corbasim::event::event* sendRequest(corbasim::event::request_ptr req);
 

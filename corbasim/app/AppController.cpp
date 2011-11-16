@@ -39,11 +39,14 @@ void AppController::setModel(AppModel * model)
 
 void AppController::loadFile(const QString& file)
 {
+    if (m_model)
+        m_model->loadFile(file);
 }
 
 void AppController::saveFile(const QString& file)
 {
-    // TODO
+    if (m_model)
+        m_model->saveFile(file);
 }
 
 void AppController::createObjref(const ObjrefConfig& cfg)

@@ -51,11 +51,19 @@ public:
     void sendRequest(const QString& id,
             corbasim::event::request_ptr req);
 
+    void saveFile(const QString& file);
+    void loadFile(const QString& file);
+    
+    void clearConfig();
+
 protected:
     AppController * m_controller;
 
     typedef std::map< QString, model::Objref_ptr > objrefs_t;
     objrefs_t m_objrefs;
+
+    typedef std::map< QString, model::Servant_ptr > servants_t;
+    servants_t m_servants;
 
     typedef std::map< QString, void * > libraries_t;
     libraries_t m_libraries;

@@ -57,8 +57,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuFile->addSeparator();
     menuFile->addAction("&Load configuration", this, SLOT(showLoad()));
     menuFile->addAction("&Save configuration", this, SLOT(showSave()));
+    menuFile->addAction("&Clear configuration", this, SLOT(clearConfig()));
     menuFile->addSeparator();
-    menuFile->addAction("&Close", this, SLOT(close()));
+    menuFile->addAction("&Exit", this, SLOT(close()));
 
     m_menuObjects = menu->addMenu("&Objects");
     m_menuServants = menu->addMenu("&Servants");
@@ -99,12 +100,24 @@ void AppMainWindow::setController(AppController * controller)
             this,
             SLOT(objrefCreated(
                     const QString&, corbasim::gui::gui_factory_base *)));
-
     QObject::connect(
             m_controller,
             SIGNAL(objrefDeleted(QString)),
             this,
             SLOT(objrefDeleted(const QString&)));
+
+    QObject::connect(
+            m_controller,
+            SIGNAL(servantCreated(
+                    QString, corbasim::gui::gui_factory_base *)),
+            this,
+            SLOT(servantCreated(
+                    const QString&, corbasim::gui::gui_factory_base *)));
+    QObject::connect(
+            m_controller,
+            SIGNAL(servantDeleted(QString)),
+            this,
+            SLOT(servantDeleted(const QString&)));
 
     QObject::connect(m_controller, SIGNAL(error(QString)),
             this, SLOT(displayError(const QString&)));
@@ -182,6 +195,11 @@ void AppMainWindow::showLog()
     m_mdi_area->setActiveSubWindow(m_sub_log);
 }
 
+void AppMainWindow::clearConfig()
+{
+    // TODO
+}
+
 // Notificaciones del controlador
 
 void AppMainWindow::objrefCreated(const QString& id,
@@ -215,6 +233,43 @@ void AppMainWindow::objrefDeleted(const QString& id)
         m_objrefs.erase(it);
     }
 }
+
+void AppMainWindow::servantCreated(const QString& id,
+    corbasim::gui::gui_factory_base * factory)
+{
+    /*
+    view::Servant_ptr servant(
+            new view::Servant(m_mdi_area, id, factory, this));
+    m_menuObjects->addMenu(servant->getMenu());
+
+    QObject::connect(servant.get(),
+        SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+        m_controller, 
+        SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
+
+    QObject::connect(servant.get(),
+                SIGNAL(deleteServant(QString)),
+                m_controller, 
+                SLOT(deleteServant(const QString&)));
+
+    m_servants.insert(std::make_pair(id, servant));
+    */
+}
+
+void AppMainWindow::servantDeleted(const QString& id)
+{
+    /*
+    servants_t::iterator it = m_servants.find(id);
+
+    if (it != m_servants.end())
+    {
+        // Removes the submenu and deletes the servant instance
+        m_menuServants->removeAction(it->second->getMenu()->menuAction());
+        m_servants.erase(it);
+    }
+    */
+}
+
 
 void AppMainWindow::requestSent(const QString& id, 
         corbasim::event::request_ptr req,
