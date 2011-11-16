@@ -85,3 +85,33 @@ void AppController::notifyError(const QString& msg)
     emit error(msg);
 }
 
+void AppController::notifyRequestSent(const QString& id, 
+        corbasim::event::request_ptr req)
+{
+    emit requestSent(id, req);
+}
+
+void AppController::notifyResponseReceived(const QString& id, 
+        corbasim::event::response_ptr req)
+{
+    emit responseReceived(id, req);
+}
+
+void AppController::notifyRequestReceived(const QString& id, 
+        corbasim::event::request_ptr req)
+{
+    emit requestReceived(id, req);
+}
+
+void AppController::notifyResponseSent(const QString& id, 
+        corbasim::event::response_ptr req)
+{
+    emit responseSent(id, req);
+}
+
+void AppController::notifyExceptionCatched(const QString& id,
+        corbasim::event::exception_ptr exc)
+{
+    emit exceptionCatched(id, exc);
+}
+

@@ -48,11 +48,26 @@ public slots:
     void showLoad();
     void showSave();
 
+    void showLog();
+
     // Notificaciones del controlador
 
     void objrefCreated(const QString& id,
         corbasim::gui::gui_factory_base * factory);
     void objrefDeleted(const QString& id);
+
+    void requestSent(const QString& id, 
+            corbasim::event::request_ptr req);
+    void responseReceived(const QString& id, 
+            corbasim::event::response_ptr req);
+
+    void requestReceived(const QString& id, 
+            corbasim::event::request_ptr req);
+    void responseSent(const QString& id, 
+            corbasim::event::response_ptr req);
+
+    void exceptionCatched(const QString& id,
+            corbasim::event::exception_ptr exc);
 
     void displayError(const QString& err);
 
@@ -75,9 +90,13 @@ protected:
 
     // Subwindows
     QMdiSubWindow * m_sub_create_objref;
+    QMdiSubWindow * m_sub_log;
     
     // Subwindows widgets
     QDialog * m_create_objref;
+    QTreeWidget * m_log;
+
+    void appendToLog(QTreeWidgetItem * item);
 };
 
 } // namespace app

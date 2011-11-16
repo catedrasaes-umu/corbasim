@@ -28,11 +28,20 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Subwindows
     m_sub_create_objref(NULL),
+    m_sub_log(NULL),
 
     // Widgets
-    m_create_objref(NULL)
+    m_create_objref(NULL),
+    m_log(NULL)
 {
     m_mdi_area = new QMdiArea;
+    m_sub_log = new QMdiSubWindow;
+    m_log = new QTreeWidget;
+
+    m_log->setWindowTitle("Log");
+
+    m_sub_log->setWidget(m_log);
+    m_mdi_area->addSubWindow(m_sub_log);
 
     setCentralWidget(m_mdi_area);
 
@@ -53,7 +62,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_menuServants = menu->addMenu("&Servants");
     
     menu->addMenu("&Tools");
-    menu->addMenu("&Window");
+    QMenu * winMenu = menu->addMenu("&Window");
+    winMenu->addAction("Show &log", this, SLOT(showLog()));
+    winMenu->addAction("&Clear log", m_log, SLOT(clear()));
     menu->addMenu("&About");
 
     // Status bar
@@ -100,9 +111,25 @@ void AppMainWindow::setController(AppController * controller)
             m_controller, SLOT(saveFile(const QString&)));
     QObject::connect(this, SIGNAL(loadFile(QString)),
             m_controller, SLOT(loadFile(const QString&)));
+
+#define CORBASIM_APP_CON(ev, type)                                   \
+    QObject::connect(m_controller,                                   \
+            SIGNAL(ev(QString, corbasim::event::type ## _ptr)),      \
+            this,                                                    \
+            SLOT(ev(const QString&, corbasim::event::type ## _ptr))) \
+    /***/
+
+    CORBASIM_APP_CON(requestSent, request);
+    CORBASIM_APP_CON(requestReceived, request);
+    CORBASIM_APP_CON(responseSent, response);
+    CORBASIM_APP_CON(responseReceived, response);
+    CORBASIM_APP_CON(exceptionCatched, exception);
+
+#undef CORBASIM_APP_CON
 }
 
 // Subwindow slot
+
 void AppMainWindow::showCreateObjref()
 {
     if (!m_sub_create_objref)
@@ -125,7 +152,16 @@ void AppMainWindow::showCreateObjref()
     m_mdi_area->setActiveSubWindow(m_sub_create_objref);
 }
 
+void AppMainWindow::showLog()
+{
+    m_sub_log->showNormal();
+    m_log->show();
+    m_mdi_area->setActiveSubWindow(m_sub_log);
+}
+
+
 // Notificaciones del controlador
+
 void AppMainWindow::objrefCreated(const QString& id,
     corbasim::gui::gui_factory_base * factory)
 {
@@ -158,10 +194,56 @@ void AppMainWindow::objrefDeleted(const QString& id)
     }
 }
 
+void AppMainWindow::requestSent(const QString& id, 
+        corbasim::event::request_ptr req)
+{
+    objrefs_t::iterator it = m_objrefs.find(id);
+    
+    if (it != m_objrefs.end())
+    {
+        gui::gui_factory_base * factory = it->second->getFactory();
+        QTreeWidgetItem * item = factory->create_tree(req.get());
+
+        QString text (item->text(0));
+        text.prepend(QString("Sent to %1: ").arg(id));
+        item->setText(0, text);
+
+        appendToLog(item);
+    }
+}
+
+void AppMainWindow::responseReceived(const QString& id, 
+        corbasim::event::response_ptr req)
+{
+    objrefs_t::iterator it = m_objrefs.find(id);
+    
+    if (it != m_objrefs.end())
+    {
+        gui::gui_factory_base * factory = it->second->getFactory();
+        QTreeWidgetItem * item = factory->create_tree(req.get());
+
+        QString text (item->text(0));
+        text.prepend(QString("Received from %1: ").arg(id));
+        item->setText(0, text);
+
+        appendToLog(item);
+    }
+}
+
+void AppMainWindow::requestReceived(const QString& id, 
+        corbasim::event::request_ptr req) {}
+void AppMainWindow::responseSent(const QString& id, 
+        corbasim::event::response_ptr req) {}
+
+void AppMainWindow::exceptionCatched(const QString& id,
+        corbasim::event::exception_ptr exc) {}
+
 void AppMainWindow::displayError(const QString& err)
 {
     QMessageBox::critical(this, "Error", err);
 }
+
+// Dialogs
 
 void AppMainWindow::showLoad()
 {
@@ -185,5 +267,11 @@ void AppMainWindow::showSave()
         return;
 
     emit saveFile(file);
+}
+
+void AppMainWindow::appendToLog(QTreeWidgetItem * item)
+{
+    // TODO check log size
+    m_log->addTopLevelItem(item);
 }
 

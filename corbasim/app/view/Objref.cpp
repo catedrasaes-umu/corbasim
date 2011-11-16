@@ -84,6 +84,11 @@ QMenu * Objref::getMenu() const
     return m_menu;
 }
 
+corbasim::gui::gui_factory_base * Objref::getFactory() const
+{
+    return m_factory;
+}
+
 void Objref::sendRequest(corbasim::event::request_ptr req)
 {
     emit sendRequest(m_id, req);

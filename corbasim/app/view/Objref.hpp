@@ -48,6 +48,8 @@ public:
     qt::RequestDialog * getRequestDialog(int idx);
     QMdiSubWindow * getWindow(int idx);
 
+    gui::gui_factory_base * getFactory() const;
+
 public slots:
 
     void sendRequest(corbasim::event::request_ptr req);

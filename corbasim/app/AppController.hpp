@@ -73,6 +73,19 @@ public slots:
 
     void notifyError(const QString& msg);
 
+    void notifyRequestSent(const QString& id, 
+            corbasim::event::request_ptr req);
+    void notifyResponseReceived(const QString& id, 
+            corbasim::event::response_ptr req);
+
+    void notifyRequestReceived(const QString& id, 
+            corbasim::event::request_ptr req);
+    void notifyResponseSent(const QString& id, 
+            corbasim::event::response_ptr req);
+
+    void notifyExceptionCatched(const QString& id,
+            corbasim::event::exception_ptr exc);
+
 signals:
 
     // Usadas por la vista
@@ -85,11 +98,16 @@ signals:
 
     void requestSent(QString id, 
             corbasim::event::request_ptr req);
-    void responseReceived();
+    void responseReceived(QString id, 
+            corbasim::event::response_ptr req);
 
     void requestReceived(QString id, 
             corbasim::event::request_ptr req);
-    void responseSent();
+    void responseSent(QString id, 
+            corbasim::event::response_ptr req);
+
+    void exceptionCatched(QString id,
+            corbasim::event::exception_ptr exc);
     
     void error(QString msg);
 
