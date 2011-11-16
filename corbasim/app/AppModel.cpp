@@ -30,6 +30,71 @@ AppModel::AppModel() : m_controller(NULL)
 
 AppModel::~AppModel()
 {
+    // TODO close libraries
+}
+
+corbasim::gui::gui_factory_base * 
+AppModel::getFactory(const QString& fqn)
+{
+    factories_t::iterator it = m_factories.find(fqn);
+
+    if (it != m_factories.end())
+        return it->second;
+
+    QString lib (fqn);
+    lib.replace("::","_");
+    lib.prepend("libcorbasim_lib_");
+    lib.append(".so");
+
+    std::string str(lib.toStdString());
+
+    typedef corbasim::gui::gui_factory_base *(*get_factory_t)();
+
+    void * handle = dlopen(str.c_str(), RTLD_NOW);
+
+    if (!handle)
+    {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Library %1 not found!").arg(lib));
+        return NULL;
+    }
+
+    lib.remove(0, 3); // lib
+    lib.truncate(lib.length() - 3); // .so
+    str = lib.toStdString();
+   
+    get_factory_t get_factory = (get_factory_t) dlsym(handle,
+            str.c_str());
+
+    if (!get_factory)
+    {
+        dlclose (handle);
+
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Symbol %1 not found!").arg(lib));
+        return NULL;
+    }
+
+    corbasim::gui::gui_factory_base * factory = get_factory();
+
+    if (factory)
+    {
+        m_libraries.insert(std::make_pair(fqn, handle));
+        m_factories.insert(std::make_pair(fqn, factory));
+    }
+    else
+    {
+        // Impossible is nothing!
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Erroneus library %1!").arg(lib));
+
+        dlclose(handle);
+    }
+
+    return factory;
 }
 
 void AppModel::setController(AppController * controller)
@@ -49,49 +114,17 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         return;
     }
 
-    corbasim::gui::gui_factory_base * factory = NULL;
+    corbasim::gui::gui_factory_base * factory = 
+        getFactory(cfg.fqn.in());
 
-    QString lib(cfg.fqn.in());
-    lib.replace("::","_");
-    lib.prepend("libcorbasim_lib_");
-    lib.append(".so");
-
-    std::string str(lib.toStdString());
-
-    typedef corbasim::gui::gui_factory_base *(*get_factory_t)();
-
-    void * handle = dlopen(str.c_str(), RTLD_NOW);
-
-    if (!handle)
+    if (factory)
     {
+        model::Objref_ptr obj(new model::Objref(cfg, factory));
+        m_objrefs.insert(std::make_pair(id, obj));
+
         if (m_controller)
-            m_controller->notifyError(
-                    QString("Library %1 not found!").arg(lib));
-        return;
+            m_controller->notifyObjrefCreated(id, factory);
     }
-
-    lib.remove(0, 3); // lib
-    lib.truncate(lib.length() - 3); // .so
-    str = lib.toStdString();
-   
-    get_factory_t get_factory = (get_factory_t) dlsym(handle,
-            str.c_str());
-
-    if (!get_factory)
-    {
-        if (m_controller)
-            m_controller->notifyError(
-                    QString("Symbol %1 not found!").arg(lib));
-        return;
-    }
-
-    factory = get_factory();
-
-    model::Objref_ptr obj(new model::Objref(cfg, factory));
-    m_objrefs.insert(std::make_pair(id, obj));
-
-    if (m_controller)
-        m_controller->notifyObjrefCreated(id, factory);
 }
 
 void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
@@ -104,42 +137,6 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
         if (m_controller)
             m_controller->notifyError(
                     QString("Object %1 already exists!").arg(id));
-        return;
-    }
-
-    corbasim::gui::gui_factory_base * factory = NULL;
-
-    QString lib(cfg.fqn.in());
-    lib.replace("::","_");
-    lib.prepend("libcorbasim_lib_");
-    lib.append(".so");
-
-    std::string str(lib.toStdString());
-
-    typedef corbasim::gui::gui_factory_base *(*get_factory_t)();
-
-    void * handle = dlopen(str.c_str(), RTLD_NOW);
-
-    if (!handle)
-    {
-        if (m_controller)
-            m_controller->notifyError(
-                    QString("Library %1 not found!").arg(lib));
-        return;
-    }
-
-    lib.remove(0, 3); // lib
-    lib.truncate(lib.length() - 3); // .so
-    str = lib.toStdString();
-   
-    get_factory_t get_factory = (get_factory_t) dlsym(handle,
-            str.c_str());
-
-    if (!get_factory)
-    {
-        if (m_controller)
-            m_controller->notifyError(
-                    QString("Symbol %1 not found!").arg(lib));
         return;
     }
 

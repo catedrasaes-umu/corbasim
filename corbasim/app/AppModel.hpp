@@ -22,6 +22,7 @@
 
 #include "appC.h"
 #include "model/Objref.hpp"
+#include "model/Servant.hpp"
 
 #include <map>
 #include <corbasim/event.hpp>
@@ -55,6 +56,14 @@ protected:
 
     typedef std::map< QString, model::Objref_ptr > objrefs_t;
     objrefs_t m_objrefs;
+
+    typedef std::map< QString, void * > libraries_t;
+    libraries_t m_libraries;
+
+    typedef std::map< QString, gui::gui_factory_base * > factories_t;
+    factories_t m_factories;
+
+    gui::gui_factory_base * getFactory(const QString& fqn);
 };
 
 } // namespace app
