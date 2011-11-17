@@ -31,6 +31,7 @@ namespace core
 {
 class request_serializer_base;
 class interface_caller_base;
+class request_processor;
 } // namespace core
 
 namespace core 
