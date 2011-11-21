@@ -151,7 +151,31 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
     if (factory)
     {
         model::Servant_ptr obj(new model::Servant(cfg, factory));
+        obj->setController(m_controller);
         m_servants.insert(std::make_pair(id, obj));
+
+        // Temporal - Proof of concept
+        
+        int argc = 0;
+        CORBA::ORB_var orb = CORBA::ORB_init (argc, NULL);
+
+        CORBA::Object_var rootPOAObj = 
+            orb->resolve_initial_references ("RootPOA");
+
+        PortableServer::POA_var rootPOA = PortableServer::POA::_narrow(
+            rootPOAObj.in());
+
+        PortableServer::ObjectId_var myObjID = 
+            rootPOA->activate_object (obj->getServant());
+    
+        CORBA::Object_var objSrv = 
+            rootPOA->servant_to_reference(obj->getServant());
+
+        // Displaying reference
+        CORBA::String_var ref = orb->object_to_string (objSrv);
+        std::cout << cfg.id << ": " << ref << std::endl;
+
+        // End temporal
 
         if (m_controller)
             m_controller->notifyServantCreated(id, factory);
@@ -176,6 +200,27 @@ void AppModel::sendRequest(const QString& id,
 
 void AppModel::deleteObjref(const QString& id)
 {
+    servants_t::iterator it = m_servants.find(id);
+
+    if (it != m_servants.end())
+    {
+        // Temporal - Proof of concept
+        int argc = 0;
+        CORBA::ORB_var orb = CORBA::ORB_init (argc, NULL);
+
+        CORBA::Object_var rootPOAObj = 
+            orb->resolve_initial_references ("RootPOA");
+
+        PortableServer::POA_var rootPOA = PortableServer::POA::_narrow(
+            rootPOAObj.in());
+
+        PortableServer::ObjectId_var myObjID = 
+            rootPOA->servant_to_id(it->second->getServant()); 
+
+        rootPOA->deactivate_object (myObjID);
+        // End temporal
+    }
+
     if (m_objrefs.erase(id) > 0)
     {
         if (m_controller)
@@ -188,8 +233,7 @@ void AppModel::deleteObjref(const QString& id)
 
 void AppModel::deleteServant(const QString& id)
 {
-    /*
-    if (m_objrefs.erase(id) > 0)
+    if (m_servants.erase(id) > 0)
     {
         if (m_controller)
             m_controller->notifyServantDeleted(id);
@@ -197,7 +241,6 @@ void AppModel::deleteServant(const QString& id)
     else if (m_controller)
         m_controller->notifyError(
                 QString("Object %1 not found!").arg(id));
-    */
 }
 
 void AppModel::saveFile(const QString& file)

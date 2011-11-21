@@ -29,6 +29,8 @@
 #include <tao/Seq_Out_T.h>
 #include <tao/VarOut_T.h>
 #include <tao/Array_VarOut_T.h>
+#include <tao/PortableServer/Servant_Base.h>
+#include <tao/PortableServer/PortableServer.h>
 
 namespace corbasim 
 {

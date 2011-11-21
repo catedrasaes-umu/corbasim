@@ -1,6 +1,7 @@
 #include <corbasim/impl.hpp>
 #include "helloC.h"
 #include "hello_adapted.hpp"
+#include "hello_servant.hpp"
 #include <corbasim/gui/widgets.hpp>
 #include <corbasim/gui/dialogs.hpp>
 #include <corbasim/gui/trees.hpp>

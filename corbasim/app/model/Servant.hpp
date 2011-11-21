@@ -22,6 +22,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/callable.hpp>
 
 #include "../appC.h"
 
@@ -29,20 +30,35 @@ namespace corbasim
 {
 namespace app 
 {
+
+class AppController;
+
 namespace model 
 {
 
-class Servant
+class Servant : public core::request_processor
 {
 public:
     Servant(const ServantConfig& cfg, gui::gui_factory_base * factory);
     virtual ~Servant();
 
+    void setController(AppController * controller);
+
     const ServantConfig& getConfig() const;
 
+    // Request processor interface
+    event::event_ptr operator()(event::request_ptr,
+            event::response_ptr);
+
+    PortableServer::ServantBase * getServant() const;
+
 protected:
+    AppController * m_controller;
+
     ServantConfig m_cfg;
     gui::gui_factory_base * m_factory;
+    PortableServer::ServantBase * m_servant;
+
 };
 
 typedef boost::shared_ptr< Servant > Servant_ptr;

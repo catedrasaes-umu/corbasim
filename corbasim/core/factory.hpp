@@ -26,6 +26,7 @@
 #include <corbasim/core/request_serializer.hpp>
 #include <corbasim/core/factory_fwd.hpp>
 #include <corbasim/core/caller.hpp>
+#include <corbasim/core/callable.hpp>
 
 #include <sstream>
 #include <memory>
@@ -119,6 +120,14 @@ struct factory : public factory_base
     core::interface_caller_base* create_caller() const
     {
         return new core::interface_caller< Interface >();
+    }
+
+    // Servant
+    PortableServer::ServantBase * create_servant(
+            request_processor * proc) const
+    {
+        callable _cal(proc);
+        return adapted::create_servant< Interface >(_cal);
     }
    
     /*

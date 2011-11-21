@@ -24,6 +24,7 @@
 #include <string>
 #include <map>
 #include <corbasim/event.hpp>
+#include <corbasim/impl.hpp> // For PortableServer::ServantBase
 
 namespace corbasim 
 {
@@ -32,10 +33,6 @@ namespace core
 class request_serializer_base;
 class interface_caller_base;
 class request_processor;
-} // namespace core
-
-namespace core 
-{
 
 struct operation_factory_base
 {
@@ -77,6 +74,10 @@ struct factory_base
 
     // virtual const char * get_name() const = 0;
     // virtual const char * get_fqn() const = 0;
+
+    // Servant
+    virtual PortableServer::ServantBase * create_servant(
+            request_processor * proc) const = 0;
 
     // Data
     typedef std::vector< operation_factory_base * > factories_t;

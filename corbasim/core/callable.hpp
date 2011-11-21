@@ -30,13 +30,12 @@ namespace core
 
 struct request_processor
 {
-    virtual event::event_ptr operator()(event::request_ptr) = 0;
+    virtual event::event_ptr operator()(event::request_ptr,
+            event::response_ptr) = 0;
 };
 
 struct callable
 {
-    typedef response_impl< Value > response_t;
-
     callable(request_processor * proc) :
         m_proc (proc)
     {
@@ -45,9 +44,16 @@ struct callable
     template< typename Value >
     void operator()(Value& val)
     {
-        event::request_ptr _req (new request_impl< Value >(val));
+        typedef event::request_impl< Value > request_t;
+        typedef event::response_impl< Value > response_t;
 
-        event::event_ptr _ev ((_req));
+        event::request_ptr _req (new request_t(val));
+
+        // Proposed response
+        event::response_ptr _resp (new response_t(val));
+
+        // Call to the request processor
+        event::event_ptr _ev ((*m_proc)(_req, _resp));
 
         if (_ev && _ev->get_type () == event::RESPONSE)
         {
