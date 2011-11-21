@@ -24,6 +24,7 @@
 #include <QtGui>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include "view/Objref.hpp"
+#include "view/Servant.hpp"
 
 namespace corbasim 
 {
@@ -83,6 +84,9 @@ protected:
 
     typedef std::map< QString, view::Objref_ptr > objrefs_t;
     objrefs_t m_objrefs;
+
+    typedef std::map< QString, view::Servant_ptr > servants_t;
+    servants_t m_servants;
 
     QMenu * m_menuObjects;
     QMenu * m_menuServants;

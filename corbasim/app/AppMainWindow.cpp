@@ -237,28 +237,25 @@ void AppMainWindow::objrefDeleted(const QString& id)
 void AppMainWindow::servantCreated(const QString& id,
     corbasim::gui::gui_factory_base * factory)
 {
-    /*
     view::Servant_ptr servant(
             new view::Servant(m_mdi_area, id, factory, this));
-    m_menuObjects->addMenu(servant->getMenu());
-
+    m_menuServants->addMenu(servant->getMenu());
+/*
     QObject::connect(servant.get(),
         SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
         m_controller, 
         SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-
+*/
     QObject::connect(servant.get(),
                 SIGNAL(deleteServant(QString)),
                 m_controller, 
                 SLOT(deleteServant(const QString&)));
 
     m_servants.insert(std::make_pair(id, servant));
-    */
 }
 
 void AppMainWindow::servantDeleted(const QString& id)
 {
-    /*
     servants_t::iterator it = m_servants.find(id);
 
     if (it != m_servants.end())
@@ -267,9 +264,7 @@ void AppMainWindow::servantDeleted(const QString& id)
         m_menuServants->removeAction(it->second->getMenu()->menuAction());
         m_servants.erase(it);
     }
-    */
 }
-
 
 void AppMainWindow::requestSent(const QString& id, 
         corbasim::event::request_ptr req,

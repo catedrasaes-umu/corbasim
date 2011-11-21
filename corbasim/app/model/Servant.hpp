@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_SERVANT_HPP
-#define CORBASIM_APP_SERVANT_HPP
+#ifndef CORBASIM_APP_MODEL_SERVANT_HPP
+#define CORBASIM_APP_MODEL_SERVANT_HPP
 
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
@@ -67,5 +67,5 @@ typedef boost::shared_ptr< Servant > Servant_ptr;
 } // namespace app
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_SERVANT_HPP */
+#endif /* CORBASIM_APP_MODEL_SERVANT_HPP */
 

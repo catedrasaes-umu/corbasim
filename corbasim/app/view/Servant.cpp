@@ -21,3 +21,36 @@
 
 using namespace corbasim::app::view;
 
+Servant::Servant(QMdiArea * area,
+        const QString& id, gui::gui_factory_base* factory,
+        QObject * parent) :
+    QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory)
+{
+    QString menu_entry = QString("%1 (%2)").arg(m_id);
+    // TODO menu_entry.arg(factory->get_core_factory()->get_name());
+
+    m_menu = new QMenu(menu_entry);
+    // TODO
+    m_menu->addSeparator();
+    m_menu->addAction("&Delete", this, SLOT(deleteServant()));
+}
+
+Servant::~Servant()
+{
+    std::cout << "Deleting: " << m_id.toStdString() << std::endl;
+
+    m_menu->deleteLater();
+}
+
+QMenu * Servant::getMenu() const
+{
+    return m_menu;
+}
+
+void Servant::deleteServant()
+{
+    emit deleteServant(m_id);
+}
+
+
+

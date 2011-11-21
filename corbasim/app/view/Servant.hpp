@@ -17,8 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_SERVANT_HPP
-#define CORBASIM_APP_SERVANT_HPP
+#ifndef CORBASIM_APP_VIEW_SERVANT_HPP
+#define CORBASIM_APP_VIEW_SERVANT_HPP
+
+#include <QtGui>
+#include <boost/shared_ptr.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 
 namespace corbasim 
 {
@@ -27,9 +31,40 @@ namespace app
 namespace view 
 {
 
+class Servant : public QObject
+{
+    Q_OBJECT
+public:
+    Servant(QMdiArea * area,
+            const QString& id,
+            gui::gui_factory_base * factory,
+            QObject * parent = 0);
+    virtual ~Servant();
+
+    QMenu * getMenu() const;
+
+public slots:
+
+    void deleteServant();
+
+signals:
+
+    void deleteServant(QString);
+
+protected:
+    QMdiArea * m_mdi_area;
+
+    QString m_id;
+    gui::gui_factory_base * m_factory;
+
+    QMenu * m_menu;
+};
+
+typedef boost::shared_ptr< Servant > Servant_ptr;
+
 } // namespace view
 } // namespace app
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_SERVANT_HPP */
+#endif /* CORBASIM_APP_VIEW_SERVANT_HPP */
 
