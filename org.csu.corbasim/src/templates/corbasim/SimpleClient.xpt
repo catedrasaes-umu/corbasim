@@ -20,6 +20,7 @@
 #include <corbasim/impl.hpp>
 #include "«getTranslationUnit().getFileNameStubHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
+#include "«getTranslationUnit().getAdaptedServantFile()»"
 #include <corbasim/gui/widgets.hpp>
 #include <corbasim/gui/dialogs.hpp>
 #include <corbasim/gui/trees.hpp>
