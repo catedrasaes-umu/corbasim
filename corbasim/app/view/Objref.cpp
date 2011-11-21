@@ -123,7 +123,11 @@ QMdiSubWindow * Objref::getWindow(int idx)
         m_subwindows[idx]->setWidget(getRequestDialog(idx));
         m_mdi_area->addSubWindow(m_subwindows[idx]);
         
-        m_subwindows[idx]->setWindowTitle("Title");
+        // Window title
+        QString title = QString("%1: %2").arg(m_id).arg(
+            m_factory->get_factory_by_index(idx)->get_name());
+
+        m_subwindows[idx]->setWindowTitle(title);
         win = m_subwindows[idx];
     }
 
@@ -164,6 +168,7 @@ void Objref::showScriptEditor()
 
         m_sub_script = new QMdiSubWindow;
         m_sub_script->setWidget(m_script);
+        m_sub_script->setWindowTitle(QString("%1: Script editor").arg(m_id));
         m_mdi_area->addSubWindow(m_sub_script);
 
         QObject::connect(m_script,
