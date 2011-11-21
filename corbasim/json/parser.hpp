@@ -61,7 +61,11 @@ struct semantic_state
     inline void new_null()
     {
         _check_pre();
-        //std::cout << "new null" << std::endl;
+        std::cout << "new null" << std::endl;
+        
+        m_helpers_stack.back()->new_null();
+        _consume();
+
         _check_post();
     }
 

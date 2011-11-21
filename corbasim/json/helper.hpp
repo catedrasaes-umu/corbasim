@@ -60,6 +60,11 @@ struct helper_base
         throw "Error!";
     }
 
+    virtual void new_null()
+    {
+        throw "Error!";
+    }
+
     // For structs
     virtual helper_base* new_child(const std::string& name)
     {
@@ -433,6 +438,41 @@ struct string_helper : public helper_base
     }
 };
 
+template< typename T >
+struct corba_objrefvar_helper : public helper_base
+{
+    T& _t;
+
+    corba_objrefvar_helper(T& t) :
+        _t(t)
+    {
+    }
+    
+    // TODO new_string and new_null
+    void new_string(const std::string& d)
+    {
+        // TODO
+    }
+
+    void new_null()
+    {
+        // TODO
+    }
+
+    template< typename Writer >
+    static inline void write(Writer& w, const T& t)
+    {
+        if (t.in())
+        {
+            // TODO
+            w.new_string("TODO");
+        }
+        else
+            w.new_null();
+    }
+};
+
+
 //
 //
 // STL containers
@@ -554,7 +594,7 @@ struct calculate_helper
             struct_helper< T >,
         // else if
         cs_mpl::eval_if_identity< adapted::is_objrefvar< T >, 
-            unsupported_type_helper< T >,
+            corba_objrefvar_helper< T >,
         // else
             boost::mpl::identity< unsupported_type_helper< T > >
         > > > > > > > > >::type type;
