@@ -97,6 +97,7 @@ protected:
 
 #endif /* CORBASIM_USE_QTSCRIPT*/
 
+    void hideEvent(QHideEvent * event);
 };
 
 } // namespace qt

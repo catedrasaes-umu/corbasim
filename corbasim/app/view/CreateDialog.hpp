@@ -49,6 +49,8 @@ signals:
 
 protected:
     widgets::widget< ObjrefConfig > m_widget;
+    
+    void hideEvent(QHideEvent* event);
 };
 
 class ServantCreateDialog : public QDialog
@@ -68,6 +70,8 @@ signals:
 
 protected:
     widgets::widget< ServantConfig > m_widget;
+
+    void hideEvent(QHideEvent* event);
 };
 
 

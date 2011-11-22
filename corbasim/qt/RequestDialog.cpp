@@ -247,3 +247,13 @@ void RequestDialog::sendStored()
         m_pbStartStop->setChecked(false);
 }
 
+void RequestDialog::hideEvent(QHideEvent * event)
+{
+    QWidget * parent = parentWidget();
+
+    if (parent && dynamic_cast< QMdiSubWindow* >(parent))
+        parent->hide();
+
+    event->accept();
+}
+

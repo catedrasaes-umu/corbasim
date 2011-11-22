@@ -35,10 +35,9 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     QObject::connect(createButton, SIGNAL(clicked()),
             this, SLOT(createClicked()));
-/* 
+
     QObject::connect(cancelButton, SIGNAL(clicked()),
             window(), SLOT(hide()));
- */
 
     hLayout->addWidget(createButton);
     hLayout->addWidget(cancelButton);
@@ -60,7 +59,17 @@ void ObjrefCreateDialog::createClicked()
 
     emit createObjref(config);
 
-    // window()->hide();
+    hide();
+}
+
+void ObjrefCreateDialog::hideEvent(QHideEvent* event)
+{
+    QWidget * parent = parentWidget();
+
+    if (parent && dynamic_cast< QMdiSubWindow* >(parent))
+        parent->hide();
+
+    event->accept();
 }
 
 // Servant
@@ -79,10 +88,9 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
 
     QObject::connect(createButton, SIGNAL(clicked()),
             this, SLOT(createClicked()));
-/* 
+
     QObject::connect(cancelButton, SIGNAL(clicked()),
             window(), SLOT(hide()));
- */
 
     hLayout->addWidget(createButton);
     hLayout->addWidget(cancelButton);
@@ -103,6 +111,17 @@ void ServantCreateDialog::createClicked()
     // TODO validate
 
     emit createServant(config);
+
+    hide();
 }
 
+void ServantCreateDialog::hideEvent(QHideEvent* event)
+{
+    QWidget * parent = parentWidget();
+
+    if (parent && dynamic_cast< QMdiSubWindow* >(parent))
+        parent->hide();
+
+    event->accept();
+}
 

@@ -539,3 +539,14 @@ void SimpleScriptEditor::doAppendRequest(event::request_ptr _request, bool befor
     m_tree->scrollToItem(req_item);
 }
 
+
+void SimpleScriptEditor::hideEvent(QHideEvent * event)
+{
+    QWidget * parent = parentWidget();
+
+    if (parent && dynamic_cast< QMdiSubWindow* >(parent))
+        parent->hide();
+
+    event->accept();
+}
+

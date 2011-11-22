@@ -87,6 +87,8 @@ protected:
     gui::gui_factory_base * m_factory;
 
     core::request_serializer_base * m_request_serializer;
+
+    void hideEvent(QHideEvent * event);
 };
 
 } // namespace qt
