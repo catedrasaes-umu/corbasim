@@ -43,5 +43,6 @@ module SimpleExample
     struct Abuelo
     {
         Padres p;
+        Test tt;
     };
 };

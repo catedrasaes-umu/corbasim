@@ -188,6 +188,7 @@ namespace boost
 BOOST_FUSION_ADAPT_STRUCT(
         SimpleExample::Abuelo,
         ( SimpleExample::Padres, p)
+        ( SimpleExample::Test_var, tt)
 )
 
 namespace boost
@@ -199,6 +200,7 @@ namespace boost
         void serialize(Archive& ar, SimpleExample::Abuelo& t, const unsigned int /* unused */)
         {
             ar & boost::serialization::make_nvp("p", t.p);
+            ar & boost::serialization::make_nvp("tt", t.tt);
         }
 
         template < class Archive >
@@ -323,6 +325,7 @@ namespace _corbasim_SimpleExample
     struct Abuelo
     {
         typedef corbasim::adapted::member< ::SimpleExample::Abuelo, 0 > p_corbasim_member;
+        typedef corbasim::adapted::member< ::SimpleExample::Abuelo, 1 > tt_corbasim_member;
 
     };
 
