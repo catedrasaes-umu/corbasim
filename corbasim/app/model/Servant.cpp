@@ -22,6 +22,8 @@
 #include <corbasim/impl.hpp>
 #include "../AppController.hpp"
 
+#include <iostream>
+
 using namespace corbasim::app::model;
 
 Servant::Servant(const ServantConfig& cfg, 
@@ -51,6 +53,8 @@ corbasim::event::event_ptr Servant::operator()(event::request_ptr req,
         event::response_ptr resp)
 {
     // TODO
+
+    std::cout << "Received!" << std::endl;
 
     if (m_controller)
         m_controller->notifyRequestReceived(m_cfg.id.in(), req, resp);

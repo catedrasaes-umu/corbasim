@@ -83,6 +83,8 @@ struct message : public event
     const std::string m_msg;
 };
 
+typedef boost::shared_ptr< message > message_ptr;
+
 struct request : public event
 {
     event_types get_type() const 

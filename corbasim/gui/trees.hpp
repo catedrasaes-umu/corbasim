@@ -29,6 +29,7 @@
 #include <corbasim/gui/trees/enum.hpp>
 #include <corbasim/gui/trees/string.hpp>
 #include <corbasim/gui/trees/sequence.hpp>
+#include <corbasim/gui/trees/objref.hpp>
 
 namespace corbasim 
 {
@@ -91,7 +92,7 @@ struct default_struct_tree : public struct_as_tree< T >
 };
 
 template< typename T >
-struct default_objrefvar_tree : public unsupported_type< T >
+struct default_objrefvar_tree : public detail::objref_tree< T >
 {
 };
 

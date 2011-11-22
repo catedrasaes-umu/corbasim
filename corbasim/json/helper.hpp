@@ -27,6 +27,7 @@
 #include <boost/shared_ptr.hpp>
 //#include <boost/variant.hpp> // TODO
 #include <corbasim/adapted.hpp>
+#include <corbasim/core/reference_repository.hpp>
 
 namespace corbasim 
 {
@@ -443,20 +444,25 @@ struct corba_objrefvar_helper : public helper_base
 {
     T& _t;
 
+    typedef typename 
+        corbasim::adapted::is_objrefvar< T >::interface interface;
+
     corba_objrefvar_helper(T& t) :
         _t(t)
     {
     }
     
-    // TODO new_string and new_null
     void new_string(const std::string& d)
     {
-        // TODO
+        corbasim::core::reference_repository * rr = 
+            corbasim::core::reference_repository::get_instance();
+
+        _t = interface::_narrow(rr->string_to_object(d));
     }
 
     void new_null()
     {
-        // TODO
+        _t = interface::_nil();
     }
 
     template< typename Writer >
@@ -464,8 +470,11 @@ struct corba_objrefvar_helper : public helper_base
     {
         if (t.in())
         {
-            // TODO
-            w.new_string("TODO");
+            corbasim::core::reference_repository * rr = 
+                corbasim::core::reference_repository::get_instance();
+
+            CORBA::String_var str = rr->object_to_string(t.in());
+            w.new_string(str.in());
         }
         else
             w.new_null();

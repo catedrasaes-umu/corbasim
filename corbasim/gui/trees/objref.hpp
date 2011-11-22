@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * Servant.hpp
+ * objref.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,56 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_VIEW_SERVANT_HPP
-#define CORBASIM_APP_VIEW_SERVANT_HPP
+#ifndef CORBASIM_GUI_TREES_OBJREF_HPP
+#define CORBASIM_GUI_TREES_OBJREF_HPP
 
-#include <QtGui>
-#include <boost/shared_ptr.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/gui/trees_fwd.hpp>
+#include <corbasim/core/reference_repository.hpp>
 
 namespace corbasim 
 {
-namespace app 
+namespace trees 
 {
-namespace view 
+namespace detail 
 {
 
-class Servant : public QObject
+template< typename T >
+struct objref_tree
 {
-    Q_OBJECT
-public:
-    Servant(QMdiArea * area,
-            const QString& id,
-            gui::gui_factory_base * factory,
-            QObject * parent = 0);
-    virtual ~Servant();
+    static inline QTreeWidgetItem* create_tree(const T& t,
+            const char * name)
+    {
+        core::reference_repository * rr =
+            core::reference_repository::get_instance();
 
-    QMenu * getMenu() const;
+        CORBA::String_var str;
+        
+        if (t.in())
+            str = rr->object_to_string(t.in());
+        else
+            str = "NIL";
 
-    gui::gui_factory_base * getFactory() const;
-
-public slots:
-
-    void deleteServant();
-
-signals:
-
-    void deleteServant(QString);
-
-protected:
-    QMdiArea * m_mdi_area;
-
-    QString m_id;
-    gui::gui_factory_base * m_factory;
-
-    QMenu * m_menu;
+        return new QTreeWidgetItem(QStringList(
+                    QString("%1: %2").arg(name).arg(str.in())));
+    }
 };
 
-typedef boost::shared_ptr< Servant > Servant_ptr;
-
-} // namespace view
-} // namespace app
+} // namespace detail
+} // namespace trees
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_VIEW_SERVANT_HPP */
+#endif /* CORBASIM_GUI_TREES_OBJREF_HPP */
 

@@ -45,8 +45,8 @@ Objref::sendRequest(corbasim::event::request_ptr req)
 {
     // TODO throw exceptions
 
-    if (!m_caller)
-        return NULL;
+    if (!m_caller || m_caller->is_nil())
+        return new corbasim::event::message("Invalid reference!");
 
     return m_caller->do_call(req.get());
 }

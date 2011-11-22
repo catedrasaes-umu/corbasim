@@ -10,6 +10,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/trees/enum.hpp
     gui/trees_fwd.hpp
     gui/trees.hpp
+    gui/trees/objref.hpp
     gui/trees/primitive.hpp
     gui/trees/sequence.hpp
     gui/trees/string.hpp

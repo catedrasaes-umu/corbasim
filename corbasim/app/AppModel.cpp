@@ -28,13 +28,64 @@
 
 using namespace corbasim::app;
 
-AppModel::AppModel() : m_controller(NULL)
+namespace corbasim 
+{
+namespace app 
+{
+
+class AppModelData 
+{
+public:
+    AppModelData ()
+    {
+        int argc = 0;
+        orb = CORBA::ORB_init (argc, NULL);
+
+        CORBA::Object_var rootPOAObj = 
+            orb->resolve_initial_references ("RootPOA");
+
+        rootPOA = PortableServer::POA::_narrow(rootPOAObj.in());
+
+        manager = rootPOA->the_POAManager();
+
+        manager->activate();
+    }
+    
+    ~AppModelData ()
+    {
+    }
+
+    CORBA::ORB_var orb;
+    PortableServer::POA_var rootPOA;
+    PortableServer::POAManager_var manager; 
+};
+
+} // namespace app
+} // namespace corbasim
+
+AppModel::AppModel() : 
+    m_data(new AppModelData), m_controller(NULL)
 {
 }
 
 AppModel::~AppModel()
 {
     // TODO close libraries
+    
+    servants_t::iterator it = m_servants.begin();
+    servants_t::iterator end = m_servants.end();
+
+    for (; it != end; it++) 
+    {
+        // Temporal - Proof of concept
+        PortableServer::ObjectId_var myObjID = 
+            m_data->rootPOA->servant_to_id(it->second->getServant()); 
+
+        m_data->rootPOA->deactivate_object (myObjID);
+        // End temporal
+    }
+
+    delete m_data;
 }
 
 corbasim::gui::gui_factory_base * 
@@ -155,24 +206,15 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
         m_servants.insert(std::make_pair(id, obj));
 
         // Temporal - Proof of concept
-        
-        int argc = 0;
-        CORBA::ORB_var orb = CORBA::ORB_init (argc, NULL);
-
-        CORBA::Object_var rootPOAObj = 
-            orb->resolve_initial_references ("RootPOA");
-
-        PortableServer::POA_var rootPOA = PortableServer::POA::_narrow(
-            rootPOAObj.in());
 
         PortableServer::ObjectId_var myObjID = 
-            rootPOA->activate_object (obj->getServant());
+            m_data->rootPOA->activate_object (obj->getServant());
     
         CORBA::Object_var objSrv = 
-            rootPOA->servant_to_reference(obj->getServant());
+            m_data->rootPOA->servant_to_reference(obj->getServant());
 
         // Displaying reference
-        CORBA::String_var ref = orb->object_to_string (objSrv);
+        CORBA::String_var ref = m_data->orb->object_to_string (objSrv);
         std::cout << cfg.id << ": " << ref << std::endl;
 
         // End temporal
@@ -200,27 +242,6 @@ void AppModel::sendRequest(const QString& id,
 
 void AppModel::deleteObjref(const QString& id)
 {
-    servants_t::iterator it = m_servants.find(id);
-
-    if (it != m_servants.end())
-    {
-        // Temporal - Proof of concept
-        int argc = 0;
-        CORBA::ORB_var orb = CORBA::ORB_init (argc, NULL);
-
-        CORBA::Object_var rootPOAObj = 
-            orb->resolve_initial_references ("RootPOA");
-
-        PortableServer::POA_var rootPOA = PortableServer::POA::_narrow(
-            rootPOAObj.in());
-
-        PortableServer::ObjectId_var myObjID = 
-            rootPOA->servant_to_id(it->second->getServant()); 
-
-        rootPOA->deactivate_object (myObjID);
-        // End temporal
-    }
-
     if (m_objrefs.erase(id) > 0)
     {
         if (m_controller)
@@ -233,6 +254,18 @@ void AppModel::deleteObjref(const QString& id)
 
 void AppModel::deleteServant(const QString& id)
 {
+    servants_t::iterator it = m_servants.find(id);
+
+    if (it != m_servants.end())
+    {
+        // Temporal - Proof of concept
+        PortableServer::ObjectId_var myObjID = 
+            m_data->rootPOA->servant_to_id(it->second->getServant()); 
+
+        m_data->rootPOA->deactivate_object (myObjID);
+        // End temporal
+    }
+
     if (m_servants.erase(id) > 0)
     {
         if (m_controller)

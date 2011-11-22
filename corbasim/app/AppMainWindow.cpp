@@ -279,8 +279,35 @@ void AppMainWindow::requestSent(const QString& id,
 
         QString text (item->text(0));
         text.prepend(QString("Sent to %1: ").arg(id));
-        item->setText(0, text);
 
+        if (resp)
+        {
+            using namespace corbasim::event;
+
+            if (resp->get_type() == RESPONSE)
+            {
+                response_ptr ptr_ = 
+                    boost::dynamic_pointer_cast< response >(resp);
+
+                QTreeWidgetItem * resp_item = 
+                    factory->create_tree(ptr_.get());
+
+                resp_item->setText(0, "Response");
+                item->addChild(resp_item);
+            }
+            else if (resp->get_type() == EXCEPTION)
+                text.append(" (Exception!)");
+            else if (resp->get_type() == MESSAGE)
+            {
+                message_ptr ptr_ = 
+                    boost::dynamic_pointer_cast< message >(resp);
+
+                text.append(QString(" (%1)").arg(ptr_->get_message()));
+            }
+        }
+
+        // Add to log
+        item->setText(0, text);
         appendToLog(item);
     }
 }
@@ -289,7 +316,20 @@ void AppMainWindow::requestReceived(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-    // TODO
+    servants_t::iterator it = m_servants.find(id);
+    
+    if (it != m_servants.end())
+    {
+        gui::gui_factory_base * factory = it->second->getFactory();
+        QTreeWidgetItem * item = factory->create_tree(req.get());
+
+        QString text (item->text(0));
+        text.prepend(QString("Received to %1: ").arg(id));
+
+        // Add to log
+        item->setText(0, text);
+        appendToLog(item);
+    }
 }
 
 void AppMainWindow::displayError(const QString& err)

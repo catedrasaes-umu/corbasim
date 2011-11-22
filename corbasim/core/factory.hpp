@@ -126,8 +126,8 @@ struct factory : public factory_base
     PortableServer::ServantBase * create_servant(
             request_processor * proc) const
     {
-        callable _cal(proc);
-        return adapted::create_servant< Interface >(_cal);
+        return new typename adapted::servant< Interface >::template 
+            _type< callable >(callable(proc));
     }
    
     /*

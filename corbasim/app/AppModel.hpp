@@ -34,6 +34,8 @@ namespace app
 
 class AppController;
 
+struct AppModelData;
+
 class AppModel
 {
 public:
@@ -57,6 +59,9 @@ public:
     void clearConfig();
 
 protected:
+
+    AppModelData * m_data;
+
     AppController * m_controller;
 
     typedef std::map< QString, model::Objref_ptr > objrefs_t;

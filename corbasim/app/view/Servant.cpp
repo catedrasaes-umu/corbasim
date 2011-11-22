@@ -47,6 +47,11 @@ QMenu * Servant::getMenu() const
     return m_menu;
 }
 
+corbasim::gui::gui_factory_base * Servant::getFactory() const
+{
+    return m_factory;
+}
+
 void Servant::deleteServant()
 {
     emit deleteServant(m_id);
