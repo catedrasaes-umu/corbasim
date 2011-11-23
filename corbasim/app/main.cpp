@@ -21,6 +21,8 @@
 #include "AppMainWindow.hpp"
 #include "AppController.hpp"
 #include "AppModel.hpp"
+#include <boost/thread.hpp>
+#include <boost/bind.hpp>
 
 int main(int argc, char **argv)
 {
@@ -41,6 +43,13 @@ int main(int argc, char **argv)
     window.setController(&controller);
     window.show();
 
-    return app.exec();
+    boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));
+
+    int res = app.exec();
+    
+    orb->shutdown();
+    orbThread.join();
+
+    return res;
 }
 
