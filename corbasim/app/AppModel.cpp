@@ -20,6 +20,8 @@
 #include "AppModel.hpp"
 #include "AppController.hpp"
 
+#include "app_adapted.hpp" // for json serializer
+
 #include <corbasim/json/writer.hpp>
 #include <corbasim/json/parser.hpp>
 
@@ -317,15 +319,33 @@ void AppModel::loadFile(const QString& file)
     // clear current config
     clearConfig();
 
+    char * buffer = NULL;
+    size_t length = 0;
+
     Configuration cfg;
-    std::string file_ (file.toStdString());
-    std::ifstream ifs (file_.c_str());
 
-    // TODO from ifs to json_str
-    std::string json_str;
+    try {
+        std::string file_ (file.toStdString());
+        std::ifstream ifs (file_.c_str());
 
-    // parse JSON
-    json::parse(cfg, json_str);
+        // get length of file:
+        ifs.seekg (0, std::ios::end);
+        length = ifs.tellg();
+        ifs.seekg (0, std::ios::beg);
+
+        // allocate memory:
+        buffer = new char [length];
+
+        // read data as a block:
+        ifs.read (buffer, length);
+        ifs.close();
+
+        // parse JSON
+        json::parse(cfg, buffer, length);
+    } catch (...) {
+    }
+
+    delete [] buffer;
 
     // process cfg
 
@@ -340,6 +360,5 @@ void AppModel::loadFile(const QString& file)
 
 void AppModel::clearConfig()
 {
-    // TODO
 }
 

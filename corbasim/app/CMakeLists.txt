@@ -37,3 +37,13 @@ target_link_libraries(corbasim_app
     corbasim_qt 
     corbasim_app_idl)
 
+install(TARGETS corbasim_app DESTINATION bin)
+
+add_executable(corbasim_app_test test.cpp)
+target_link_libraries(corbasim_app_test 
+    dl # for dlopen, dlsym
+    corbasim 
+    corbasim_qt 
+    corbasim_app_idl)
+
+

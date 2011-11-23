@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * main.cpp
+ * test.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -18,29 +18,12 @@
  */
 
 #include <iostream>
-#include "AppMainWindow.hpp"
-#include "AppController.hpp"
-#include "AppModel.hpp"
+#include "appC.h"
+#include "app_adapted.hpp"
+#include <corbasim/impl.hpp>
 
 int main(int argc, char **argv)
 {
-    // Default ORB
-    CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
-
-    QApplication app(argc, argv); 
-
-    QThread thread;
-
-    corbasim::app::AppModel model;
-    corbasim::app::AppController controller(&thread);
-
-    controller.setModel(&model);
-    model.setController(&controller);
-
-    corbasim::app::AppMainWindow window;
-    window.setController(&controller);
-    window.show();
-
-    return app.exec();
+    
+    return 0;
 }
-
