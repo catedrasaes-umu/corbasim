@@ -41,6 +41,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_log = new QTreeWidget;
 
     m_log->setWindowTitle("Log");
+    m_log->setHeaderLabel("Timeline");
+    m_log->setColumnWidth(0, 800);
+    m_sub_log->resize(400, 500);
 
     m_sub_log->setWidget(m_log);
     m_mdi_area->addSubWindow(m_sub_log);
@@ -365,7 +368,11 @@ void AppMainWindow::showSave()
 
 void AppMainWindow::appendToLog(QTreeWidgetItem * item)
 {
-    // TODO check log size
+    // check log size
+    if (m_log->topLevelItemCount() >= 200)
+        delete m_log->takeTopLevelItem(0);
+
     m_log->addTopLevelItem(item);
+    m_log->scrollToItem(item);
 }
 
