@@ -146,5 +146,10 @@ int main(int argc, char **argv)
 
     }
 
+    {
+        CORBA::Object_var myVar;
+        corbasim::json::write(std::cout, myVar); 
+    }
+
 }
 
