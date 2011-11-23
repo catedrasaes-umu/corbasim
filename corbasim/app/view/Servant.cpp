@@ -31,6 +31,8 @@ Servant::Servant(QMdiArea * area,
 
     m_menu = new QMenu(menu_entry);
     // TODO
+    m_menu->addAction("Self-stimulator");
+    m_menu->addAction("Asynchronous triggers");
     m_menu->addSeparator();
     m_menu->addAction("&Delete", this, SLOT(deleteServant()));
 }
