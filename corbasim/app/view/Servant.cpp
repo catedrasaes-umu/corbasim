@@ -42,6 +42,9 @@ Servant::~Servant()
     std::cout << "Deleting: " << m_id.toStdString() << std::endl;
 
     m_menu->deleteLater();
+
+    m_script->deleteLater();
+    m_sub_script->deleteLater();
 }
 
 QMenu * Servant::getMenu() const
