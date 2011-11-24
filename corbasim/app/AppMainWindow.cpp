@@ -67,7 +67,10 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_menuObjects = menu->addMenu("&Objects");
     m_menuServants = menu->addMenu("&Servants");
     
-    menu->addMenu("&Tools");
+    QMenu * tools = menu->addMenu("&Tools");
+    tools->addAction("&Load script");
+    tools->addAction("&Run script");
+
     QMenu * winMenu = menu->addMenu("&Window");
     winMenu->addAction("Show &log", this, SLOT(showLog()));
     winMenu->addAction("&Clear log", m_log, SLOT(clear()));

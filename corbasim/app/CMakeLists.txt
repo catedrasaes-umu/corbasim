@@ -8,6 +8,8 @@ set(corbasim_app_SRCS
     AppMainWindow.cpp
     main.cpp
 
+    TriggerEngine.cpp
+
     view/CreateDialog.cpp
     view/Objref.cpp
     view/Servant.cpp
@@ -20,6 +22,8 @@ set(corbasim_app_MOC_HDRS
     AppController.hpp
     AppMainWindow.hpp
     
+    TriggerEngine.hpp
+
     view/CreateDialog.hpp
     view/Objref.hpp
     view/Servant.hpp

@@ -21,6 +21,7 @@
 #include "AppMainWindow.hpp"
 #include "AppController.hpp"
 #include "AppModel.hpp"
+#include "TriggerEngine.hpp"
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 
@@ -31,13 +32,16 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv); 
 
-    QThread thread;
+    QThread threadController;
+    QThread threadEngine;
 
     corbasim::app::AppModel model;
-    corbasim::app::AppController controller(&thread);
+    corbasim::app::AppController controller(&threadController);
+    corbasim::app::TriggerEngine engine(&threadEngine);
 
     controller.setModel(&model);
     model.setController(&controller);
+    engine.setController(&controller);
 
     corbasim::app::AppMainWindow window;
     window.setController(&controller);
