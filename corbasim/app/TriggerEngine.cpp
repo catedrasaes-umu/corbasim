@@ -103,10 +103,10 @@ void TriggerEngine::servantCreated(const QString& id,
 
     // TODO add 'on' method like in node.js
 
-    // m_engine.globalObject().setProperty(id, obj);
+    m_engine.globalObject().setProperty(id, obj);
 
     m_engine.evaluate(QString(
-            "var %1 = new Object;"
+    //      "var %1 = new Object;"
             "%1.on = function (op, func)"
             "{"
             "   print('Registred method ' + op + ' in %1!');"
