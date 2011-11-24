@@ -237,7 +237,7 @@ void AppModel::sendRequest(const QString& id,
             m_controller->notifyError(
                     QString("Object %1 not found!").arg(id));
         else
-            ; // TODO
+            corbasim::event::event_ptr ev (it->second->sendRequest(req));
     }
     else
     {

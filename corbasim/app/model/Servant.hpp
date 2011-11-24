@@ -23,6 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/core/callable.hpp>
+#include <corbasim/core/caller.hpp>
 
 #include "../appC.h"
 
@@ -51,6 +52,8 @@ public:
             event::response_ptr);
 
     PortableServer::ServantBase * getServant() const;
+    
+    corbasim::event::event* sendRequest(corbasim::event::request_ptr req);
 
 protected:
     AppController * m_controller;
@@ -58,6 +61,8 @@ protected:
     ServantConfig m_cfg;
     gui::gui_factory_base * m_factory;
     PortableServer::ServantBase * m_servant;
+    
+    core::interface_caller_ptr m_caller;
 
 };
 

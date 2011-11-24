@@ -67,3 +67,21 @@ PortableServer::ServantBase * Servant::getServant() const
     return m_servant;
 }
 
+corbasim::event::event* 
+Servant::sendRequest(corbasim::event::request_ptr req)
+{
+    if (!m_caller)
+        m_caller.reset(m_factory->get_core_factory()->create_caller());
+
+    if(m_caller->is_nil())
+    {
+        PortableServer::POA_var poa = m_servant->_default_POA();
+
+        CORBA::Object_var obj = poa->servant_to_reference(m_servant);
+
+        m_caller->set_reference(obj);
+    }
+
+    return m_caller->do_call(req.get());
+}
+
