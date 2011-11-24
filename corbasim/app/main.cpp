@@ -45,6 +45,7 @@ int main(int argc, char **argv)
 
     corbasim::app::AppMainWindow window;
     window.setController(&controller);
+    window.setEngine(&engine);
     window.show();
 
     boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));

@@ -19,12 +19,13 @@
 
 #include "AppMainWindow.hpp"
 #include "AppController.hpp"
+#include "TriggerEngine.hpp"
 #include "view/CreateDialog.hpp"
 
 using namespace corbasim::app;
 
 AppMainWindow::AppMainWindow(QWidget * parent) :
-    QMainWindow(parent), m_controller(NULL),
+    QMainWindow(parent), m_controller(NULL), m_engine(NULL),
 
     // Subwindows
     m_sub_create_objref(NULL),
@@ -68,7 +69,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_menuServants = menu->addMenu("&Servants");
     
     QMenu * tools = menu->addMenu("&Tools");
-    tools->addAction("&Load script");
+    tools->addAction("&Load script", this, SLOT(showLoadScript()));
     tools->addAction("&Run script");
 
     QMenu * winMenu = menu->addMenu("&Window");
@@ -146,6 +147,14 @@ void AppMainWindow::setController(AppController * controller)
     CORBASIM_APP_CON(requestReceived);
 
 #undef CORBASIM_APP_CON
+}
+
+void AppMainWindow::setEngine(TriggerEngine * engine)
+{
+    m_engine = engine;
+
+    QObject::connect(this, SIGNAL(loadScriptFile(QString)),
+            m_engine, SLOT(runFile(const QString&)));
 }
 
 // Subwindow slot
@@ -246,12 +255,12 @@ void AppMainWindow::servantCreated(const QString& id,
     view::Servant_ptr servant(
             new view::Servant(m_mdi_area, id, factory, this));
     m_menuServants->addMenu(servant->getMenu());
-/*
+
     QObject::connect(servant.get(),
         SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
         m_controller, 
         SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-*/
+
     QObject::connect(servant.get(),
                 SIGNAL(deleteServant(QString)),
                 m_controller, 
@@ -355,6 +364,18 @@ void AppMainWindow::showLoad()
         return;
 
     emit loadFile(file);
+}
+
+void AppMainWindow::showLoadScript()
+{
+    QString file = QFileDialog::getOpenFileName( 0, tr(
+                "Select a script file"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    emit loadScriptFile(file);
 }
 
 void AppMainWindow::showSave()

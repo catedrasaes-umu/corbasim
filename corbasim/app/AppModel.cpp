@@ -231,8 +231,14 @@ void AppModel::sendRequest(const QString& id,
 {
     objrefs_t::iterator it = m_objrefs.find(id);
     if (it == m_objrefs.end())
-        m_controller->notifyError(
-                QString("Object %1 not found!").arg(id));
+    {
+        servants_t::iterator it = m_servants.find(id);
+        if (it == m_servants.end())
+            m_controller->notifyError(
+                    QString("Object %1 not found!").arg(id));
+        else
+            ; // TODO
+    }
     else
     {
         corbasim::event::event_ptr ev (it->second->sendRequest(req));

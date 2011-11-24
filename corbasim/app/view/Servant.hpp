@@ -23,6 +23,7 @@
 #include <QtGui>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/qt/SimpleScriptEditor.hpp>
 
 namespace corbasim 
 {
@@ -47,9 +48,16 @@ public:
 
 public slots:
 
+    void sendRequest(corbasim::event::request_ptr req);
+
     void deleteServant();
 
+    void showSelfStimulator();
+
 signals:
+
+    void sendRequest(QString,
+        corbasim::event::request_ptr);
 
     void deleteServant(QString);
 
@@ -58,6 +66,9 @@ protected:
 
     QString m_id;
     gui::gui_factory_base * m_factory;
+
+    QMdiSubWindow * m_sub_script;
+    qt::SimpleScriptEditor * m_script;
 
     QMenu * m_menu;
 };

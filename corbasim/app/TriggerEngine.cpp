@@ -66,21 +66,25 @@ void TriggerEngine::setController(AppController * controller)
             this,
             SLOT(servantDeleted(const QString&)));
 
+#define CORBASIM_APP_CON(ev)                                         \
+    QObject::connect(m_controller,                                   \
+    SIGNAL(ev(QString, corbasim::event::request_ptr,                 \
+            corbasim::event::event_ptr)),                            \
+    this,                                                            \
+    SLOT(ev(const QString&, corbasim::event::request_ptr,            \
+            corbasim::event::event_ptr)));                           \
+    /***/
+
+    CORBASIM_APP_CON(requestReceived);
+
+#undef CORBASIM_APP_CON
+
 }
 
 void TriggerEngine::objrefCreated(const QString& id, 
         corbasim::gui::gui_factory_base * factory)
 {
     QScriptValue obj = m_engine.newObject();
-
-    // TODO add 'on' method like in node.js
-
-    QScriptValue on = m_engine.evaluate(
-            "function (id, func)"
-            "{"
-            "   this[id] = func;"
-            "}");
-    obj.setProperty("on", on);
 
     // TODO expose methods
 
@@ -97,9 +101,19 @@ void TriggerEngine::servantCreated(const QString& id,
 {
     QScriptValue obj = m_engine.newObject();
 
-    // TODO expose methods
+    // TODO add 'on' method like in node.js
 
-    m_engine.globalObject().setProperty(id, obj);
+    // m_engine.globalObject().setProperty(id, obj);
+
+    m_engine.evaluate(QString(
+            "var %1 = new Object;"
+            "%1.on = function (op, func)"
+            "{"
+            "   print('Registred method ' + op + ' in %1!');"
+            "   this[op] = func;"
+            "}").arg(id));
+
+    // TODO expose methods
 }
 
 void TriggerEngine::servantDeleted(const QString& id)
@@ -121,14 +135,35 @@ void TriggerEngine::requestReceived(const QString& id,
         if (meth.isValid() && meth.isFunction())
         {
             // TODO request to script
-            meth.call();
+            meth.call(obj);
         }
     }
 }
 
 void TriggerEngine::runFile(const QString& file)
-{}
+{
+    QFile scriptFile(file);
+
+    if (!scriptFile.open(QIODevice::ReadOnly))
+    {
+        m_controller->notifyError(QString("Can not read file %1!").arg(file));
+        return;
+    }
+
+    QTextStream stream(&scriptFile);
+    QString contents = stream.readAll();
+    scriptFile.close();
+
+    m_engine.evaluate(contents, file);
+
+    // notify evaluation error
+    if (m_engine.hasUncaughtException())
+    {
+        m_controller->notifyError(m_engine.uncaughtException().toString());
+    }
+}
 
 void TriggerEngine::runCode(const QString& code)
-{}
+{
+}
 

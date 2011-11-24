@@ -33,6 +33,8 @@ namespace app
 
 class AppController;
 
+class TriggerEngine;
+
 class AppMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -41,6 +43,7 @@ public:
     virtual ~AppMainWindow();
 
     void setController(AppController * controller);
+    void setEngine(TriggerEngine * engine);
 
 public slots:
 
@@ -49,6 +52,8 @@ public slots:
 
     void showLoad();
     void showSave();
+    
+    void showLoadScript();
 
     void showLog();
 
@@ -77,9 +82,12 @@ signals:
 
     void saveFile(QString);
     void loadFile(QString);
+    
+    void loadScriptFile(QString);
 
 protected:
     AppController * m_controller;
+    TriggerEngine * m_engine;
     QMdiArea * m_mdi_area;
 
     typedef std::map< QString, view::Objref_ptr > objrefs_t;

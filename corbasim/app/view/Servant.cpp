@@ -24,14 +24,15 @@ using namespace corbasim::app::view;
 Servant::Servant(QMdiArea * area,
         const QString& id, gui::gui_factory_base* factory,
         QObject * parent) :
-    QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory)
+    QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
+    m_sub_script(NULL), m_script(NULL)
 {
     QString menu_entry = QString("%1 (%2)").arg(m_id);
     // TODO menu_entry.arg(factory->get_core_factory()->get_name());
 
     m_menu = new QMenu(menu_entry);
     // TODO
-    m_menu->addAction("Self-stimulator");
+    m_menu->addAction("Self-stimulator", this, SLOT(showSelfStimulator()));
     m_menu->addSeparator();
     m_menu->addAction("&Delete", this, SLOT(deleteServant()));
 }
@@ -58,5 +59,30 @@ void Servant::deleteServant()
     emit deleteServant(m_id);
 }
 
+void Servant::showSelfStimulator()
+{
+    if (!m_sub_script)
+    {
+        m_script = new qt::SimpleScriptEditor;
+        m_script->initialize(m_factory);
 
+        m_sub_script = new QMdiSubWindow;
+        m_sub_script->setWidget(m_script);
+        m_sub_script->setWindowTitle(QString("%1: Self-stimulator").arg(m_id));
+        m_mdi_area->addSubWindow(m_sub_script);
+
+        QObject::connect(m_script,
+            SIGNAL(sendRequest(corbasim::event::request_ptr)),
+            this, 
+            SLOT(sendRequest(corbasim::event::request_ptr)));
+    }
+    m_sub_script->showNormal();
+    m_script->show();
+    m_mdi_area->setActiveSubWindow(m_sub_script);
+}
+
+void Servant::sendRequest(corbasim::event::request_ptr req)
+{
+    emit sendRequest(m_id, req);
+}
 
