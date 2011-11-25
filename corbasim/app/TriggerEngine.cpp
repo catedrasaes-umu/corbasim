@@ -19,8 +19,39 @@
 
 #include "TriggerEngine.hpp"
 #include "AppController.hpp"
+#include <iostream>
 
 using namespace corbasim::app;
+
+ScriptEngine::ScriptEngine(QObject * parent) :
+    QScriptEngine(parent)
+{
+}
+
+ScriptEngine::~ScriptEngine()
+{
+}
+
+QScriptValue ScriptEngine::_call(QScriptContext * ctx, QScriptEngine * eng)
+{
+    // TODO do the call
+    QScriptContextInfo info(ctx);
+    const std::string function_name = info.functionName().toStdString();
+
+    std::cout << "Function name: " << function_name << std::endl;
+
+    return QScriptValue();
+}
+
+void ScriptEngine::addFactory(const QString& id, gui::gui_factory_base * f) 
+{
+    m_factories.insert(std::make_pair(id, f));
+}
+
+void ScriptEngine::removeFactory(const QString& id)
+{
+    m_factories.erase(id);
+}
 
 TriggerEngine::TriggerEngine(QObject * parent) :
     QObject(parent), m_controller(NULL), m_engine(this)
@@ -84,24 +115,41 @@ void TriggerEngine::setController(AppController * controller)
 void TriggerEngine::objrefCreated(const QString& id, 
         corbasim::gui::gui_factory_base * factory)
 {
+    m_engine.addFactory(id, factory);
+
     QScriptValue obj = m_engine.newObject();
 
-    // TODO expose methods
+    // expose methods
 
     m_engine.globalObject().setProperty(id, obj);
+
+    unsigned int count = factory->operation_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        gui::operation_factory_base * op =
+            factory->get_factory_by_index(i);
+
+        obj.setProperty(op->get_name(), 
+                m_engine.newFunction(ScriptEngine::_call));
+    }
 }
 
 void TriggerEngine::objrefDeleted(const QString& id)
 {
+    m_engine.removeFactory(id);
+
     m_engine.globalObject().setProperty(id, QScriptValue());
 }
 
 void TriggerEngine::servantCreated(const QString& id, 
         corbasim::gui::gui_factory_base * factory)
 {
+    m_engine.addFactory(id, factory);
+
     QScriptValue obj = m_engine.newObject();
 
-    // TODO add 'on' method like in node.js
+    // add 'on' method like in node.js
 
     m_engine.globalObject().setProperty(id, obj);
 
@@ -113,11 +161,23 @@ void TriggerEngine::servantCreated(const QString& id,
             "   this[op] = func;"
             "}").arg(id));
 
-    // TODO expose methods
+    // expose methods
+    unsigned int count = factory->operation_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        gui::operation_factory_base * op =
+            factory->get_factory_by_index(i);
+
+        obj.setProperty(op->get_name(), 
+                m_engine.newFunction(ScriptEngine::_call));
+    }
 }
 
 void TriggerEngine::servantDeleted(const QString& id)
 {
+    m_engine.removeFactory(id);
+
     m_engine.globalObject().setProperty(id, QScriptValue());
 }
 
@@ -159,7 +219,11 @@ void TriggerEngine::runFile(const QString& file)
     // notify evaluation error
     if (m_engine.hasUncaughtException())
     {
-        m_controller->notifyError(m_engine.uncaughtException().toString());
+        QString error = QString("%1\n\n%2")
+            .arg(m_engine.uncaughtException().toString())
+            .arg(m_engine.uncaughtExceptionBacktrace().join("\n"));
+
+        m_controller->notifyError(error);
     }
 }
 

@@ -24,6 +24,7 @@
 #include <QtScript>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/event.hpp>
+#include <boost/function.hpp>
 
 namespace corbasim 
 {
@@ -31,6 +32,27 @@ namespace app
 {
 
 class AppController;
+
+class ScriptEngine : public QScriptEngine
+{
+    Q_OBJECT
+public:
+    ScriptEngine(QObject * parent = 0);
+    virtual ~ScriptEngine();
+
+    typedef boost::function< void() > method_type;
+    typedef std::map< QString, gui::gui_factory_base * > factories_t;
+
+    static QScriptValue _call(QScriptContext *, QScriptEngine *);
+
+    void addFactory(const QString& id, gui::gui_factory_base *);
+    void removeFactory(const QString& id);
+
+protected:
+
+    factories_t m_factories;
+
+};
 
 class TriggerEngine : public QObject
 {
@@ -66,7 +88,7 @@ signals:
 protected:
 
     AppController * m_controller;
-    QScriptEngine m_engine;
+    ScriptEngine m_engine;
 
 };
 
