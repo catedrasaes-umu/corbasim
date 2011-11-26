@@ -44,9 +44,13 @@ public:
     typedef std::map< QString, gui::gui_factory_base * > factories_t;
 
     static QScriptValue _call(QScriptContext *, QScriptEngine *);
+    static QScriptValue _createObject(QScriptContext *, QScriptEngine *);
+    static QScriptValue _createServant(QScriptContext *, QScriptEngine *);
 
     void addFactory(const QString& id, gui::gui_factory_base *);
     void removeFactory(const QString& id);
+
+    gui::gui_factory_base * getFactory(const QString& id);
 
 protected:
 
