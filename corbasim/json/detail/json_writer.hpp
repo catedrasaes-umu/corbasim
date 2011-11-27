@@ -35,6 +35,31 @@ namespace json
 namespace writer
 {
 
+void encode(std::string& data) 
+{
+    // Fast check for the most common case
+    size_t pos;
+    if (std::string::npos == (pos = data.find_first_of("\\\"")))
+	return;
+
+    std::string buffer;
+    buffer.reserve(data.size());
+    // Copy the first part, if it exists
+    if (pos)
+	buffer.append(pos, &data[0]);
+    for(; pos != data.size(); ++pos) 
+    {
+        switch(data[pos) 
+        {
+            case '"':  buffer.append("\\\"");       break; // Only " here
+            case '\\': buffer.append("\\\\");      break;
+            default:   buffer.append(1, &data[pos]); break;
+        }
+    }
+    data.swap(buffer);
+}
+
+
 struct binary_blob_emitter
 {
     template<typename Ostream>

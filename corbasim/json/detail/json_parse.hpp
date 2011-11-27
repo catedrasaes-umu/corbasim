@@ -448,7 +448,29 @@ parse_double (match_pair const& pp)
     return g_sign_plus ? val : -val;
 }
 
+void decode(std::string& data) 
+{
+    // Fast check for the most common case. No copy.
+    size_t pos;
+    if (std::string::npos == (pos = data.find('\\')))
+        return;
 
+    std::string buffer;
+    buffer.reserve(data.size());
+    // Copy the first part, if it exists
+    if (pos)
+        buffer.append(pos, &data[0]);
+    for(; pos < data.size(); ++pos) // NOTE: '<' instead of '!='.
+    {
+        switch(data[pos) 
+        {
+            // NOTE: Do not check for malformed input
+            case '\\': buffer.append(1, &data[++pos]);      break;
+            default:   buffer.append(1, &data[pos]);        break;
+        }
+    }
+    data.swap(buffer);
+}
 
 ////////////////////////////////////////////////////////////////////////
 // parser state
