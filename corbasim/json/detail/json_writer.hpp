@@ -35,7 +35,7 @@ namespace json
 namespace writer
 {
 
-void encode(std::string& data)
+inline void encode(std::string& data)
 {
     // Fast check for the most common case
     size_t pos;
@@ -46,14 +46,14 @@ void encode(std::string& data)
     buffer.reserve(data.size());
     // Copy the first part, if it exists
     if (pos)
-	buffer.append(pos, &data[0]);
+    	buffer.append(&data[0], pos);
     for(; pos != data.size(); ++pos)
     {
-        switch(data[pos)
+        switch(data[pos])
         {
             case '"':  buffer.append("\\\"");       break; // Only " here
             case '\\': buffer.append("\\\\");      break;
-            default:   buffer.append(1, &data[pos]); break;
+            default:   buffer.append(&data[pos], 1); break;
         }
     }
     data.swap(buffer);
@@ -127,7 +127,7 @@ public:
 
         std::string s (p.first, p.second);
         encode (s);
-        o_ << '"' s << '"';
+        o_ << '"' << s << '"';
 
         _check_post();
     }
