@@ -63,12 +63,18 @@ public slots:
 
     void showSetReference();
 
+protected slots:
+
+    void slotUpdateReference(const CORBA::Object_var& ref);
+
 signals:
 
     void sendRequest(QString,
         corbasim::event::request_ptr);
 
     void deleteObjref(QString);
+    
+    void updatedReference(QString, CORBA::Object_var);
 
 protected:
 

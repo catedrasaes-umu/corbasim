@@ -79,7 +79,6 @@ class ReferenceValidatedWidget : public QWidget
     Q_OBJECT
 public:
     ReferenceValidatedWidget(
-            const QString& id,
             core::reference_validator_base * validator,
             QWidget * parent = 0);
     virtual ~ReferenceValidatedWidget();
@@ -92,11 +91,10 @@ public slots:
 
 signals:
 
-    void updatedReference(QString, CORBA::Object_var);
+    void updatedReference(CORBA::Object_var);
 
 protected:
 
-    const QString m_id;
     core::reference_validator_base * m_validator;
     qt::ObjrefWidget * m_widget;
 };

@@ -126,10 +126,9 @@ void ServantCreateDialog::hideEvent(QHideEvent* event)
 }
 
 ReferenceValidatedWidget::ReferenceValidatedWidget(
-        const QString& id,
         core::reference_validator_base * validator,
         QWidget * parent) :
-    QWidget(parent), m_id(id), m_validator(validator)
+    QWidget(parent), m_validator(validator)
 {
     QVBoxLayout * l = new QVBoxLayout;
 
@@ -162,7 +161,7 @@ void ReferenceValidatedWidget::applyClicked()
 {
     CORBA::Object_var ref = m_validator->get_reference();
 
-    emit updatedReference(m_id, ref);
+    emit updatedReference(ref);
 }
 
 

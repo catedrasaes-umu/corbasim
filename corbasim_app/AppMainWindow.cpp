@@ -240,6 +240,12 @@ void AppMainWindow::objrefCreated(const QString& id,
                 m_controller, 
                 SLOT(deleteObjref(const QString&)));
 
+    QObject::connect(objref.get(),
+                SIGNAL(updatedReference(QString, CORBA::Object_var)),
+                m_controller, 
+                SLOT(updateReference(const QString&,
+                        const CORBA::Object_var&)));
+
     m_objrefs.insert(std::make_pair(id, objref));
 }
 

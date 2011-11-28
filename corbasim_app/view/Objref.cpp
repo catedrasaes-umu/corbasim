@@ -67,12 +67,17 @@ Objref::Objref(QMdiArea * area,
 
     // Set reference
     m_sub_reference = new QMdiSubWindow;
-    m_reference = new ReferenceValidatedWidget(id,
-            factory->get_core_factory()->create_validator());
+    ReferenceValidatedWidget * w = 
+        new ReferenceValidatedWidget(
+                factory->get_core_factory()->create_validator());
+    m_reference = w;
     m_sub_reference->setWidget(m_reference);
     m_mdi_area->addSubWindow(m_sub_reference);
     m_sub_reference->hide();
     m_sub_reference->setWindowTitle(QString("%1: reference").arg(id));
+
+    QObject::connect(w, SIGNAL(updatedReference(CORBA::Object_var)),
+            this, SLOT(slotUpdateReference(const CORBA::Object_var&)));
 }
 
 Objref::~Objref()
@@ -202,5 +207,10 @@ void Objref::showSetReference()
     m_sub_reference->showNormal();
     m_reference->show();
     m_mdi_area->setActiveSubWindow(m_sub_reference);
+}
+
+void Objref::slotUpdateReference(const CORBA::Object_var& ref)
+{
+    emit updatedReference(m_id, ref);
 }
 

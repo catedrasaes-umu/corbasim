@@ -55,6 +55,10 @@ CORBA::Object_ptr Objref::updateReference(CORBA::Object_ptr ref)
 {
     m_caller->set_reference(ref);
 
+    // A duplicate
+    m_cfg.ref = m_caller->get_reference();
+
+    // Another duplicate
     return m_caller->get_reference();
 }
 
