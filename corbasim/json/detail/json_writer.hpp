@@ -35,7 +35,7 @@ namespace json
 namespace writer
 {
 
-void encode(std::string& data) 
+void encode(std::string& data)
 {
     // Fast check for the most common case
     size_t pos;
@@ -47,9 +47,9 @@ void encode(std::string& data)
     // Copy the first part, if it exists
     if (pos)
 	buffer.append(pos, &data[0]);
-    for(; pos != data.size(); ++pos) 
+    for(; pos != data.size(); ++pos)
     {
-        switch(data[pos) 
+        switch(data[pos)
         {
             case '"':  buffer.append("\\\"");       break; // Only " here
             case '\\': buffer.append("\\\\");      break;
@@ -121,26 +121,26 @@ public:
         _check_post();
     }
 
-    // TODO: escape chars
     inline void new_string(match_pair  const& p)
     {
         _check_pre();
 
-        o_ << '"';
-        o_.write(p.first, p.second);
-        o_ << '"';
+        std::string s (p.first, p.second);
+        encode (s);
+        o_ << '"' s << '"';
 
         _check_post();
     }
 
     // Overload for ASCIIZ. This allows not having to pre-calculate
     // the string size for C strings.
-    // TODO: escape chars
     inline void new_string (const char* s)
     {
         _check_pre();
 
-        o_ << '"' << s << '"';
+        std::string ss (s);
+        encode (ss);
+        o_ << '"' << ss << '"';
 
         _check_post();
     }
@@ -226,7 +226,7 @@ private:
     {
 #if 0
         o_ << '\n';
-        for (int i = 0; i < level; i++) 
+        for (int i = 0; i < level; i++)
             o_<< "    ";
 #endif
     }
