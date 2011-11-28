@@ -56,8 +56,21 @@ QScriptValue ScriptEngine::_call(QScriptContext * ctx,
         const core::operation_factory_base * op =
             f->get_factory_by_name(fn.toStdString());
 
-        // TODO arguments to JSON
-        std::string json_request;
+        // arguments in JSON
+        std::string json_request("{}"); // empty request
+
+        if (ctx->argumentCount() > 0)
+        {
+            QScriptValue val = ctx->argument(0);
+
+            // JSON string
+            if (val.isString())
+                json_request = 
+                    val.toString().toStdString();
+        }
+
+        std::cout << "Request: " << json_request << std::endl;
+
         corbasim::event::request_ptr request(
                 op->request_from_json(json_request));
 
@@ -103,7 +116,8 @@ void ScriptEngine::removeFactory(const QString& id)
     m_factories.erase(id);
 }
 
-corbasim::gui::gui_factory_base * ScriptEngine::getFactory(const QString& id)
+corbasim::gui::gui_factory_base * ScriptEngine::getFactory(
+        const QString& id)
 {
     factories_t::const_iterator it = m_factories.find(id);
 
@@ -214,7 +228,13 @@ void TriggerEngine::objrefCreated(const QString& id,
         QScriptValue fn = m_engine.newFunction(ScriptEngine::_call,
                 fnProto);
 
-        obj.setProperty(op->get_name(), fn);
+        obj.setProperty(QString("_%1").arg(op->get_name()), fn);
+
+        // Convert into JSON
+        m_engine.evaluate(
+                QString("%1.%2 = function(request) "
+                    "{ this._%2(JSON.stringify(request)); }")
+                .arg(id).arg(op->get_name()));
     }
 }
 
@@ -260,7 +280,13 @@ void TriggerEngine::servantCreated(const QString& id,
         QScriptValue fn = m_engine.newFunction(ScriptEngine::_call,
                 fnProto);
 
-        obj.setProperty(op->get_name(), fn);
+        obj.setProperty(QString("_%1").arg(op->get_name()), fn);
+
+        // Convert into JSON
+        m_engine.evaluate(
+                QString("%1.%2 = function(request) "
+                    "{ this._%2(JSON.stringify(request)); }")
+                .arg(id).arg(op->get_name()));
     }
 }
 
@@ -285,7 +311,8 @@ void TriggerEngine::requestReceived(const QString& id,
         if (meth.isValid() && meth.isFunction())
         {
             // request to script using JSON
-            const gui::gui_factory_base * factory = m_engine.getFactory(id);
+            const gui::gui_factory_base * factory = 
+                m_engine.getFactory(id);
             
             if (!factory)
             {
