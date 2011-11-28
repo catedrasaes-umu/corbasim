@@ -54,6 +54,7 @@ public slots:
     void showSave();
     
     void showLoadScript();
+    void showScript();
 
     void showLog();
 
@@ -105,11 +106,13 @@ protected:
     QMdiSubWindow * m_sub_create_objref;
     QMdiSubWindow * m_sub_create_servant;
     QMdiSubWindow * m_sub_log;
+    QMdiSubWindow * m_sub_script;
     
     // Subwindows widgets
     QDialog * m_create_objref;
     QDialog * m_create_servant;
     QTreeWidget * m_log;
+    QWidget * m_script;
 
     void appendToLog(QTreeWidgetItem * item);
 };

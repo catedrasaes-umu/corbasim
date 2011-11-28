@@ -21,6 +21,7 @@
 #include "AppController.hpp"
 #include "TriggerEngine.hpp"
 #include "view/CreateDialog.hpp"
+#include <corbasim/qt/ScriptWindow.hpp>
 
 using namespace corbasim::app;
 
@@ -31,11 +32,13 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_sub_create_objref(NULL),
     m_sub_create_servant(NULL),
     m_sub_log(NULL),
+    m_sub_script(NULL),
 
     // Widgets
     m_create_objref(NULL),
     m_create_servant(NULL),
-    m_log(NULL)
+    m_log(NULL),
+    m_script(NULL)
 {
     m_mdi_area = new QMdiArea;
     m_sub_log = new QMdiSubWindow;
@@ -70,7 +73,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     
     QMenu * tools = menu->addMenu("&Tools");
     tools->addAction("&Load script", this, SLOT(showLoadScript()));
-    tools->addAction("&Run script");
+    tools->addAction("&Run script", this, SLOT(showScript()));
 
     QMenu * winMenu = menu->addMenu("&Window");
     winMenu->addAction("Show &log", this, SLOT(showLog()));
@@ -401,5 +404,28 @@ void AppMainWindow::appendToLog(QTreeWidgetItem * item)
 
     m_log->addTopLevelItem(item);
     m_log->scrollToItem(item);
+}
+
+void AppMainWindow::showScript()
+{
+    if (!m_sub_script)
+    {
+        m_sub_script = new QMdiSubWindow;
+        m_script = new qt::ScriptWindow;
+
+        m_sub_script->setWindowTitle("Run script");
+
+        m_sub_script->setWidget(m_script);
+        m_mdi_area->addSubWindow(m_sub_script);
+/*  
+        QObject::connect(m_script,
+                SIGNAL(createServant(corbasim::app::ServantConfig)),
+                m_controller, 
+                SLOT(createServant(const corbasim::app::ServantConfig&)));
+ */
+    }
+    m_sub_script->showNormal();
+    m_script->show();
+    m_mdi_area->setActiveSubWindow(m_sub_script);
 }
 
