@@ -24,6 +24,7 @@
 #include "TriggerEngine.hpp"
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
+#include <corbasim/qt/initialize.hpp>
 
 int main(int argc, char **argv)
 {
@@ -32,12 +33,22 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv); 
 
+    // Force initialization
+    corbasim::qt::initialize();
+
     QThread threadController;
     QThread threadEngine;
 
     corbasim::app::AppModel model;
-    corbasim::app::AppController controller(&threadController);
-    corbasim::app::TriggerEngine engine(&threadEngine);
+    corbasim::app::AppController controller;
+    corbasim::app::TriggerEngine engine;
+
+    // Executed in dedicated threads
+    controller.moveToThread(&threadController);
+    engine.moveToThread(&threadEngine);
+
+    threadController.start();
+    threadEngine.start();
 
     controller.setModel(&model);
     model.setController(&controller);
@@ -52,6 +63,10 @@ int main(int argc, char **argv)
 
     int res = app.exec();
     
+    // Wait for child threads
+    threadController.quit();
+    threadEngine.quit();
+
     orb->shutdown(1);
     orbThread.join();
 

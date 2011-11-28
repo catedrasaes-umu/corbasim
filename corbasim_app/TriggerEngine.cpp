@@ -33,15 +33,50 @@ ScriptEngine::~ScriptEngine()
 {
 }
 
-QScriptValue ScriptEngine::_call(QScriptContext * ctx, QScriptEngine * eng)
+QScriptValue ScriptEngine::_call(QScriptContext * ctx, 
+        QScriptEngine * eng)
 {
-    // TODO do the call
-    QScriptContextInfo info(ctx);
-    const std::string function_name = info.functionName().toStdString();
+    ScriptEngine * _this = static_cast< ScriptEngine * >(eng);
 
-    std::cout << "Function name: " << function_name << std::endl;
+    // QScriptContextInfo info(ctx);
+
+    QScriptValue fun = ctx->callee();
+
+    QString id = ctx->thisObject().prototype().property("id").toString();
+    QString fn = fun.property("prototype").property("name").toString();
+
+    std::cout << "ID: " << id.toStdString() << std::endl;
+    std::cout << "Function name: " << fn.toStdString() << std::endl;
+
+    factories_t::const_iterator it = _this->m_factories.find(id);
+
+    if (it != _this->m_factories.end())
+    {
+        const core::factory_base * f = it->second->get_core_factory();
+        const core::operation_factory_base * op =
+            f->get_factory_by_name(fn.toStdString());
+
+        // TODO arguments to JSON
+        std::string json_request;
+        corbasim::event::request_ptr request(
+                op->request_from_json(json_request));
+
+        // send request
+        _this->doSendRequest(id, request);
+    }
 
     return QScriptValue();
+}
+void ScriptEngine::doSendRequest(const QString& id,
+        corbasim::event::request_ptr req)
+{
+    emit sendRequest(id, req);
+}
+
+void TriggerEngine::doSendRequest(const QString& id,
+        corbasim::event::request_ptr req)
+{
+    emit sendRequest(id, req);
 }
 
 QScriptValue ScriptEngine::_createObject(QScriptContext * ctx, 
@@ -87,6 +122,12 @@ TriggerEngine::TriggerEngine(QObject * parent) :
             m_engine.newFunction(ScriptEngine::_createObject));
     m_engine.globalObject().setProperty("createServant", 
             m_engine.newFunction(ScriptEngine::_createServant));
+
+    // Envio desde el engine
+    QObject::connect(&m_engine, SIGNAL(sendRequest(QString, 
+                    corbasim::event::request_ptr)),
+            this, SLOT(doSendRequest(const QString&,
+                    corbasim::event::request_ptr)));
 }
 
 TriggerEngine::~TriggerEngine()
@@ -140,6 +181,11 @@ void TriggerEngine::setController(AppController * controller)
 
 #undef CORBASIM_APP_CON
 
+    // Envio asincrono
+    QObject::connect(this, SIGNAL(sendRequest(QString, 
+                    corbasim::event::request_ptr)),
+            m_controller, SLOT(sendRequest(const QString&,
+                    corbasim::event::request_ptr)));
 }
 
 void TriggerEngine::objrefCreated(const QString& id, 
@@ -148,6 +194,7 @@ void TriggerEngine::objrefCreated(const QString& id,
     m_engine.addFactory(id, factory);
 
     QScriptValue obj = m_engine.newObject();
+    obj.prototype().setProperty("id", id);
 
     // expose methods
 
@@ -160,8 +207,14 @@ void TriggerEngine::objrefCreated(const QString& id,
         gui::operation_factory_base * op =
             factory->get_factory_by_index(i);
 
-        obj.setProperty(op->get_name(), 
-                m_engine.newFunction(ScriptEngine::_call));
+        // Prototype
+        QScriptValue fnProto = m_engine.newObject();
+        fnProto.setProperty("name", op->get_name());
+
+        QScriptValue fn = m_engine.newFunction(ScriptEngine::_call,
+                fnProto);
+
+        obj.setProperty(op->get_name(), fn);
     }
 }
 
@@ -178,6 +231,7 @@ void TriggerEngine::servantCreated(const QString& id,
     m_engine.addFactory(id, factory);
 
     QScriptValue obj = m_engine.newObject();
+    obj.prototype().setProperty("id", id);
 
     // add 'on' method like in node.js
 
@@ -199,8 +253,14 @@ void TriggerEngine::servantCreated(const QString& id,
         gui::operation_factory_base * op =
             factory->get_factory_by_index(i);
 
-        obj.setProperty(op->get_name(), 
-                m_engine.newFunction(ScriptEngine::_call));
+        // Prototype
+        QScriptValue fnProto = m_engine.newObject();
+        fnProto.setProperty("name", op->get_name());
+
+        QScriptValue fn = m_engine.newFunction(ScriptEngine::_call,
+                fnProto);
+
+        obj.setProperty(op->get_name(), fn);
     }
 }
 

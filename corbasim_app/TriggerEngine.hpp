@@ -43,16 +43,27 @@ public:
     typedef boost::function< void() > method_type;
     typedef std::map< QString, gui::gui_factory_base * > factories_t;
 
-    static QScriptValue _call(QScriptContext *, QScriptEngine *);
-    static QScriptValue _createObject(QScriptContext *, QScriptEngine *);
-    static QScriptValue _createServant(QScriptContext *, QScriptEngine *);
+    static QScriptValue _call(QScriptContext *, 
+            QScriptEngine *);
+    static QScriptValue _createObject(QScriptContext *, 
+            QScriptEngine *);
+    static QScriptValue _createServant(QScriptContext *, 
+            QScriptEngine *);
 
     void addFactory(const QString& id, gui::gui_factory_base *);
     void removeFactory(const QString& id);
 
     gui::gui_factory_base * getFactory(const QString& id);
 
+signals:
+
+    void sendRequest(QString id,
+            corbasim::event::request_ptr req);
+
 protected:
+
+    void doSendRequest(const QString& id,
+            corbasim::event::request_ptr req);
 
     factories_t m_factories;
 
@@ -83,6 +94,11 @@ public slots:
     void requestReceived(const QString& id, 
             corbasim::event::request_ptr req,
             corbasim::event::event_ptr resp);
+
+protected slots:
+
+    void doSendRequest(const QString& id,
+            corbasim::event::request_ptr req);
 
 signals:
 
