@@ -63,8 +63,18 @@ message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+if(QT_FOUND)
+    set(QT_USE_QTSCRIPT 1)
+    include(${QT_USE_FILE})
+endif()
+
 add_subdirectory(corbasim)
 add_subdirectory(corbasim_idl)
+
+if(QT_FOUND)
+    add_subdirectory(corbasim_app)
+endif()
+
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 add_subdirectory(test EXCLUDE_FROM_ALL)
 

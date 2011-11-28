@@ -15,12 +15,7 @@ endif()
 
 # CORBASIM QT library
 if(QT_FOUND)
-    set(QT_USE_QTSCRIPT 1)
-    include(${QT_USE_FILE})
-
     include(corbasim_qt.cmake)
-
-    add_subdirectory(app)
 endif()
 
 # CORBASIM HTTP library
