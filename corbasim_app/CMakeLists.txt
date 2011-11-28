@@ -2,6 +2,10 @@
 set(CORBASIM_PREFIX corbasim_)
 include(app.cmake)
 
+set_target_properties(corbasim_app_idl PROPERTIES 
+    VERSION ${${PROJECT_NAME}_VERSION} 
+    SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
+
 set(corbasim_app_SRCS
     AppModel.cpp
     AppController.cpp
@@ -42,6 +46,7 @@ target_link_libraries(corbasim_app
     corbasim_app_idl)
 
 install(TARGETS corbasim_app DESTINATION bin)
+install(TARGETS corbasim_app_idl DESTINATION lib)
 
 add_executable(corbasim_app_test test.cpp)
 target_link_libraries(corbasim_app_test 
