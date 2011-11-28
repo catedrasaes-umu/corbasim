@@ -27,7 +27,10 @@ Objref::Objref(QMdiArea * area,
         const QString& id, gui::gui_factory_base* factory,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
-    m_sub_script(NULL), m_script(NULL)
+    m_sub_script(NULL), 
+    m_sub_reference(NULL),
+    m_script(NULL),
+    m_reference(NULL)
 {
     QString menu_entry = QString("%1 (%2)").arg(m_id);
     // TODO menu_entry.arg(factory->get_core_factory()->get_name());
@@ -61,6 +64,15 @@ Objref::Objref(QMdiArea * area,
     m_menu->addAction("Set &reference", this, SLOT(showSetReference()));
     m_menu->addSeparator();
     m_menu->addAction("&Delete", this, SLOT(deleteObjref()));
+
+    // Set reference
+    m_sub_reference = new QMdiSubWindow;
+    m_reference = new ReferenceValidatedWidget(id,
+            factory->get_core_factory()->create_validator());
+    m_sub_reference->setWidget(m_reference);
+    m_mdi_area->addSubWindow(m_sub_reference);
+    m_sub_reference->hide();
+    m_sub_reference->setWindowTitle(QString("%1: reference").arg(id));
 }
 
 Objref::~Objref()
@@ -77,6 +89,10 @@ Objref::~Objref()
 
     m_script->deleteLater();
     m_sub_script->deleteLater();
+
+    m_reference->deleteLater();
+    m_sub_reference->deleteLater();
+
 }
 
 QMenu * Objref::getMenu() const
@@ -183,5 +199,8 @@ void Objref::showScriptEditor()
 
 void Objref::showSetReference()
 {
+    m_sub_reference->showNormal();
+    m_reference->show();
+    m_mdi_area->setActiveSubWindow(m_sub_reference);
 }
 

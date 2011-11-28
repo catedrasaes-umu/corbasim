@@ -126,14 +126,23 @@ void ServantCreateDialog::hideEvent(QHideEvent* event)
 }
 
 ReferenceValidatedWidget::ReferenceValidatedWidget(
+        const QString& id,
         core::reference_validator_base * validator,
         QWidget * parent) :
-    QWidget(parent), m_validator(validator)
+    QWidget(parent), m_id(id), m_validator(validator)
 {
     QVBoxLayout * l = new QVBoxLayout;
 
     m_widget = new qt::ObjrefWidget(validator, this);
     l->addWidget(m_widget);
+
+    QPushButton * applyBtn = new QPushButton("&Apply", this);
+
+    QObject::connect(applyBtn, SIGNAL(clicked()),
+            this, SLOT(applyClicked()));
+
+    // TODO spacer
+    l->addWidget(applyBtn);
 
     setLayout(l);
 }
@@ -145,12 +154,15 @@ ReferenceValidatedWidget::~ReferenceValidatedWidget()
 
 void ReferenceValidatedWidget::updateReference(const CORBA::Object_var& ref)
 {
-    // TODO
+    m_validator->set_reference(ref);
+    m_widget->validatorHasChanged();
 }
 
 void ReferenceValidatedWidget::applyClicked()
 {
-    // TODO
+    CORBA::Object_var ref = m_validator->get_reference();
+
+    emit updatedReference(m_id, ref);
 }
 
 
