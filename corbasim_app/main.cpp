@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 
     int res = app.exec();
     
-    orb->shutdown();
+    orb->shutdown(1);
     orbThread.join();
 
     return res;
