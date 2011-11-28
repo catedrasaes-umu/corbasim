@@ -43,6 +43,8 @@ public:
 
     corbasim::event::event* sendRequest(corbasim::event::request_ptr req);
 
+    CORBA::Object_ptr updateReference(CORBA::Object_ptr ref); 
+
 protected:
     ObjrefConfig m_cfg;
     gui::gui_factory_base * m_factory;

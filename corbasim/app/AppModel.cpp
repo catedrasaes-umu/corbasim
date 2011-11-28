@@ -368,3 +368,28 @@ void AppModel::clearConfig()
 {
 }
 
+void AppModel::updateReference(const QString& id,
+        const CORBA::Object_var& ref)
+{
+    objrefs_t::iterator it = m_objrefs.find(id);
+
+    if (it == m_objrefs.end())
+    {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Object %1 not found!").arg(id));
+    }
+    else
+    {
+        CORBA::Object_var new_ref = it->second->updateReference(ref.in());
+
+        if (CORBA::is_nil(new_ref) && m_controller)
+            m_controller->notifyError(
+                    QString("Invalid reference for %1!").arg(id));
+
+        if (m_controller)
+            m_controller->notifyUpdatedReference(id, new_ref);
+    }
+}
+
+

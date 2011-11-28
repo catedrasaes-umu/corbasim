@@ -58,6 +58,9 @@ public:
     
     void clearConfig();
 
+    void updateReference(const QString& id,
+            const CORBA::Object_var& ref);
+
 protected:
 
     AppModelData * m_data;

@@ -74,7 +74,30 @@ protected:
     void hideEvent(QHideEvent* event);
 };
 
+class ReferenceValidatedWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    ReferenceValidatedWidget(
+            core::reference_validator_base * validator,
+            QWidget * parent = 0);
+    virtual ~ReferenceValidatedWidget();
 
+public slots:    
+
+    void updateReference(const CORBA::Object_var& ref);
+
+    void applyClicked();
+
+signals:
+
+    void updatedReference(CORBA::Object_var);
+
+protected:
+
+    core::reference_validator_base * m_validator;
+    qt::ObjrefWidget * m_widget;
+};
 
 } // namespace view
 } // namespace app

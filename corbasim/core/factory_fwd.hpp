@@ -33,6 +33,7 @@ namespace core
 class request_serializer_base;
 class interface_caller_base;
 class request_processor;
+class reference_validator_base;
 
 struct operation_factory_base
 {
@@ -74,6 +75,8 @@ struct factory_base
 
     // virtual const char * get_name() const = 0;
     // virtual const char * get_fqn() const = 0;
+
+    virtual reference_validator_base * create_validator() const = 0;
 
     // Servant
     virtual PortableServer::ServantBase * create_servant(

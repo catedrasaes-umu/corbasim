@@ -58,6 +58,9 @@ public slots:
     void sendRequest(const QString& id,
             corbasim::event::request_ptr req);
 
+    void updateReference(const QString& id,
+            const CORBA::Object_var& ref);
+
     // Usados por el modelo
 
     void notifyObjrefCreated(const QString& id, 
@@ -77,6 +80,9 @@ public slots:
     void notifyRequestReceived(const QString& id, 
             corbasim::event::request_ptr req,
             corbasim::event::event_ptr resp);
+
+    void notifyUpdatedReference(const QString& id,
+            const CORBA::Object_var& ref);
 
 signals:
 
@@ -98,6 +104,9 @@ signals:
             corbasim::event::event_ptr res);
     
     void error(QString msg);
+
+    void updatedReference(QString id,
+            CORBA::Object_var ref);
 
 protected:
     AppModel * m_model;

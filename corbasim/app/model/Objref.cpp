@@ -51,3 +51,10 @@ Objref::sendRequest(corbasim::event::request_ptr req)
     return m_caller->do_call(req.get());
 }
 
+CORBA::Object_ptr Objref::updateReference(CORBA::Object_ptr ref)
+{
+    m_caller->set_reference(ref);
+
+    return m_caller->get_reference();
+}
+

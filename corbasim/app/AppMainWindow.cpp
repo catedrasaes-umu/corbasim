@@ -89,6 +89,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
         ("corbasim::app::ObjrefConfig");
     qRegisterMetaType< corbasim::app::ServantConfig >
         ("corbasim::app::ServantConfig");
+
+    qRegisterMetaType< CORBA::Object_var >
+        ("CORBA::Object_var");
 }
 
 AppMainWindow::~AppMainWindow()

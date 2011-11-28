@@ -84,6 +84,13 @@ void AppController::sendRequest(const QString& id,
         m_model->sendRequest(id, req);
 }
 
+void AppController::updateReference(const QString& id,
+        const CORBA::Object_var& ref)
+{
+    if (m_model)
+        m_model->updateReference(id, ref);
+}
+
 // Usados por el modelo
 
 void AppController::notifyObjrefCreated(const QString& id, 
@@ -125,5 +132,11 @@ void AppController::notifyRequestReceived(const QString& id,
         corbasim::event::event_ptr resp)
 {
     emit requestReceived(id, req, resp);
+}
+
+void AppController::notifyUpdatedReference(const QString& id,
+        const CORBA::Object_var& ref)
+{
+    emit updatedReference(id, ref);
 }
 

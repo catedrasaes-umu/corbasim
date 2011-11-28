@@ -24,6 +24,7 @@
 #include <corbasim/mpl.hpp>
 #include <corbasim/core/inserter.hpp>
 #include <corbasim/core/request_serializer.hpp>
+#include <corbasim/core/reference_validator.hpp>
 #include <corbasim/core/factory_fwd.hpp>
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/callable.hpp>
@@ -120,6 +121,11 @@ struct factory : public factory_base
     core::interface_caller_base* create_caller() const
     {
         return new core::interface_caller< Interface >();
+    }
+
+    reference_validator_base * create_validator() const
+    {
+        return new reference_validator_impl< Interface >();
     }
 
     // Servant

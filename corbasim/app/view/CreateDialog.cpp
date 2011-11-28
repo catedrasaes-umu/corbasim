@@ -125,3 +125,32 @@ void ServantCreateDialog::hideEvent(QHideEvent* event)
     event->accept();
 }
 
+ReferenceValidatedWidget::ReferenceValidatedWidget(
+        core::reference_validator_base * validator,
+        QWidget * parent) :
+    QWidget(parent), m_validator(validator)
+{
+    QVBoxLayout * l = new QVBoxLayout;
+
+    m_widget = new qt::ObjrefWidget(validator, this);
+    l->addWidget(m_widget);
+
+    setLayout(l);
+}
+
+ReferenceValidatedWidget::~ReferenceValidatedWidget()
+{
+    delete m_validator;
+}
+
+void ReferenceValidatedWidget::updateReference(const CORBA::Object_var& ref)
+{
+    // TODO
+}
+
+void ReferenceValidatedWidget::applyClicked()
+{
+    // TODO
+}
+
+
