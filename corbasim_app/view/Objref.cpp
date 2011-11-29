@@ -32,8 +32,8 @@ Objref::Objref(QMdiArea * area,
     m_script(NULL),
     m_reference(NULL)
 {
-    QString menu_entry = QString("%1 (%2)").arg(m_id);
-    // TODO menu_entry.arg(factory->get_core_factory()->get_name());
+    QString menu_entry = QString("%1 (%2)")
+        .arg(m_id).arg(factory->get_core_factory()->get_fqn());
 
     m_menu = new QMenu(menu_entry);
     // Takes the ownership

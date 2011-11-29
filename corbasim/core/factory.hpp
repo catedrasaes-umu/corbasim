@@ -136,12 +136,15 @@ struct factory : public factory_base
             _type< callable >(callable(proc));
     }
    
-    /*
     const char * get_name() const
     {
         return adapted::name< Interface >::call();
     }
-    */
+
+    const char * get_fqn() const
+    {
+        return adapted::full_qualified_name< Interface >::call();
+    }
 
     template< typename Value >
     void append()

@@ -27,8 +27,8 @@ Servant::Servant(QMdiArea * area,
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
     m_sub_script(NULL), m_script(NULL)
 {
-    QString menu_entry = QString("%1 (%2)").arg(m_id);
-    // TODO menu_entry.arg(factory->get_core_factory()->get_name());
+    QString menu_entry = QString("%1 (%2)")
+        .arg(m_id).arg(factory->get_core_factory()->get_fqn());
 
     m_menu = new QMenu(menu_entry);
     // TODO
