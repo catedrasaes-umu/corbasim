@@ -35,6 +35,32 @@ namespace boost
     } // serialization
 } // boost
 
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct full_qualified_name< SimpleExample::St >
+        {
+            static inline const char * call()
+            {
+                return "SimpleExample::St";
+            }
+        };
+
+        template< >
+        struct name< SimpleExample::St >
+        {
+            static inline const char * call()
+            {
+                return "St";
+            }
+        };
+
+    } // adapted
+} // corbasim
+
 
 namespace boost
 {
@@ -122,6 +148,33 @@ namespace corbasim
             typedef SimpleExample::Test interface;
         };
 
+        template< >
+        struct full_qualified_name< SimpleExample::Test >
+        {
+            static inline const char * call()
+            {
+                return "SimpleExample::Test";
+            }
+        };
+
+        template< >
+        struct name< SimpleExample::Test >
+        {
+            static inline const char * call()
+            {
+                return "Test";
+            }
+        };
+
+        template< >
+        struct typecode< SimpleExample::Test >
+        {
+            static inline CORBA::TypeCode const * call()
+            {
+                return SimpleExample::_tc_Test;
+            }
+        };
+
     } // adapted
 } // corbasim
 
@@ -156,6 +209,32 @@ namespace boost
     } // serialization
 } // boost
 
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct full_qualified_name< SimpleExample::Hijo >
+        {
+            static inline const char * call()
+            {
+                return "SimpleExample::Hijo";
+            }
+        };
+
+        template< >
+        struct name< SimpleExample::Hijo >
+        {
+            static inline const char * call()
+            {
+                return "Hijo";
+            }
+        };
+
+    } // adapted
+} // corbasim
+
 
 // StructDef: SimpleExample::Padre
 BOOST_FUSION_ADAPT_STRUCT(
@@ -182,6 +261,32 @@ namespace boost
 
     } // serialization
 } // boost
+
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct full_qualified_name< SimpleExample::Padre >
+        {
+            static inline const char * call()
+            {
+                return "SimpleExample::Padre";
+            }
+        };
+
+        template< >
+        struct name< SimpleExample::Padre >
+        {
+            static inline const char * call()
+            {
+                return "Padre";
+            }
+        };
+
+    } // adapted
+} // corbasim
 
 
 // StructDef: SimpleExample::Abuelo
@@ -211,6 +316,32 @@ namespace boost
 
     } // serialization
 } // boost
+
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct full_qualified_name< SimpleExample::Abuelo >
+        {
+            static inline const char * call()
+            {
+                return "SimpleExample::Abuelo";
+            }
+        };
+
+        template< >
+        struct name< SimpleExample::Abuelo >
+        {
+            static inline const char * call()
+            {
+                return "Abuelo";
+            }
+        };
+
+    } // adapted
+} // corbasim
 
 
 namespace _corbasim_SimpleExample

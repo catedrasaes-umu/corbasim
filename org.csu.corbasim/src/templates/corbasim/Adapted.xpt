@@ -63,6 +63,33 @@ struct is_objrefvar< «getFQN()»_var > : public cs_mpl::true_
 	typedef «getFQN()» interface;
 };
 
+template< >
+struct full_qualified_name< «getFQN()» >
+{
+	static inline const char * call()
+	{
+		return "«getFQN()»";
+	}
+};
+
+template< >
+struct name< «getFQN()» >
+{
+	static inline const char * call()
+	{
+		return "«identifier»";
+	}
+};
+
+template< >
+struct typecode< «getFQN()» >
+{
+	static inline CORBA::TypeCode const * call()
+	{
+		return «getTypeCode()»;
+	}
+};
+
 } // adapted
 } // corbasim
 
@@ -227,6 +254,32 @@ void serialize(Archive& ar, «getFQN()»_var& t, const unsigned int /* unused */
 
 } // serialization
 } // boost
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct full_qualified_name< «getFQN()» >
+{
+	static inline const char * call()
+	{
+		return "«getFQN()»";
+	}
+};
+
+template< >
+struct name< «getFQN()» >
+{
+	static inline const char * call()
+	{
+		return "«identifier»";
+	}
+};
+
+} // adapted
+} // corbasim
 
 	«FOREACH getAnonymousFields().select(e|SequenceDef.isInstance(e.getType())) AS member-»
 		«EXPAND adapt(member.getMemberTypeIdFQN(this), false) FOR (SequenceDef)member.getType()-»

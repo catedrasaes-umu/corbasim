@@ -23,6 +23,11 @@
 #include <corbasim/mpl.hpp>
 #include <corbasim/serialization.hpp>
 
+namespace CORBA 
+{
+class TypeCode;
+} // namespace CORBA
+
 namespace corbasim 
 {
 
@@ -86,6 +91,20 @@ struct name;
     }
 };
 */
+
+template< typename TypeDef >
+struct full_qualified_name;
+/*
+{
+    static inline const char * call()
+    {
+        return "ERROR!";
+    }
+};
+*/
+
+template< typename TypeDef >
+struct typecode;
 
 template< typename Inteface >
 struct servant;
