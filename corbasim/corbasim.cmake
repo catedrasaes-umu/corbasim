@@ -12,13 +12,16 @@ set(corbasim_EXPORTED_HEADERS
     corbasim.hpp
     core/archives.hpp
     core/caller.hpp
+    core/callable.hpp
     core/config.hpp
     core/copy.hpp
+    core/factory_fwd.hpp
     core/factory.hpp
     core/injector.hpp
     core/inserter.hpp
     core/range.hpp
     core/reference_validator.hpp
+    core/reference_repository.hpp
     core/request_serializer.hpp
     core/servant.hpp
     event.hpp
@@ -33,6 +36,8 @@ set(corbasim_EXPORTED_HEADERS
     json/detail/modp_b64_data.h
     json/detail/base64_blob.hpp
     json/converter.hpp
+    cosnaming/Cosnaming_adapted.hpp
+    cosnaming/CosnamingC.h
     mpl/for_each.hpp
     mpl.hpp
     mpl/vector100.hpp
