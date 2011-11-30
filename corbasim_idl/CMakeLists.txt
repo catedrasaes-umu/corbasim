@@ -1,3 +1,3 @@
 install(FILES bin/corbasim_idl DESTINATION bin PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 install(FILES share/corbasim/corbasim_idl.jar DESTINATION share/corbasim)
-
+install(DIRECTORY share/corbasim/corbasim_idl_lib DESTINATION share/corbasim PATTERN ".svn" EXCLUDE)
