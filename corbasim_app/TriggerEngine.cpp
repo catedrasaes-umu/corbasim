@@ -262,7 +262,7 @@ void TriggerEngine::servantCreated(const QString& id,
             "%1.on = function (op, func)"
             "{"
             "   print('Registred method ' + op + ' in %1!');"
-            "   this[op] = func;"
+            "   this['_dispatch_' + op] = func;"
             "}").arg(id));
 
     // expose methods
@@ -306,7 +306,8 @@ void TriggerEngine::requestReceived(const QString& id,
     if (obj.isValid() && obj.isObject())
     {
         // evaluates the trigger
-        QScriptValue meth = obj.property(req->get_name());
+        QScriptValue meth = obj.property(
+                QString("_dispatch_").arg(req->get_name()));
 
         if (meth.isValid() && meth.isFunction())
         {
