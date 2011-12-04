@@ -24,7 +24,7 @@
 using namespace corbasim::app::view;
 
 Objref::Objref(QMdiArea * area,
-        const QString& id, gui::gui_factory_base* factory,
+        const QString& id, const gui::gui_factory_base* factory,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
     m_sub_script(NULL), 
@@ -47,7 +47,7 @@ Objref::Objref(QMdiArea * area,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        gui::operation_factory_base * op = 
+        const gui::operation_factory_base * op = 
             factory->get_factory_by_index(i);
 
         const char * name = op->get_name();
@@ -105,7 +105,7 @@ QMenu * Objref::getMenu() const
     return m_menu;
 }
 
-corbasim::gui::gui_factory_base * Objref::getFactory() const
+const corbasim::gui::gui_factory_base * Objref::getFactory() const
 {
     return m_factory;
 }

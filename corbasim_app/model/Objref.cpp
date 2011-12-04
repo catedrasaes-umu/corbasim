@@ -23,7 +23,7 @@
 using namespace corbasim::app::model;
 
 Objref::Objref(const ObjrefConfig& cfg, 
-        gui::gui_factory_base * factory) :
+        const gui::gui_factory_base * factory) :
     m_cfg(cfg), m_factory(factory)
 {
     // Create a caller

@@ -22,7 +22,7 @@
 using namespace corbasim::app::view;
 
 Servant::Servant(QMdiArea * area,
-        const QString& id, gui::gui_factory_base* factory,
+        const QString& id, const gui::gui_factory_base* factory,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
     m_sub_script(NULL), m_script(NULL)
@@ -52,7 +52,7 @@ QMenu * Servant::getMenu() const
     return m_menu;
 }
 
-corbasim::gui::gui_factory_base * Servant::getFactory() const
+const corbasim::gui::gui_factory_base * Servant::getFactory() const
 {
     return m_factory;
 }

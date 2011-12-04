@@ -94,7 +94,7 @@ void AppController::updateReference(const QString& id,
 // Usados por el modelo
 
 void AppController::notifyObjrefCreated(const QString& id, 
-        corbasim::gui::gui_factory_base * factory)
+        const corbasim::gui::gui_factory_base * factory)
 {
     emit objrefCreated(id, factory);
 }
@@ -105,7 +105,7 @@ void AppController::notifyObjrefDeleted(const QString& id)
 }
 
 void AppController::notifyServantCreated(const QString& id, 
-        corbasim::gui::gui_factory_base * factory)
+        const corbasim::gui::gui_factory_base * factory)
 {
     emit servantCreated(id, factory);
 }

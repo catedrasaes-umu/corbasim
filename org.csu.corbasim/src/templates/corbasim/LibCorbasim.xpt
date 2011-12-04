@@ -26,7 +26,7 @@
 «PROTECT CSTART '/*' CEND '*/' ID "corbasim_lib_"+fqn+"::custom_widgets_region"»
 «ENDPROTECT»
 
-extern "C" corbasim::gui::gui_factory_base * corbasim_lib_«fqn»()
+extern "C" const corbasim::gui::gui_factory_base * corbasim_lib_«fqn»()
 {
 	return corbasim::gui::gui_factory< «getFQN()» >::get_instance();
 }

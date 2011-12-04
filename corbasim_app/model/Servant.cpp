@@ -27,7 +27,7 @@
 using namespace corbasim::app::model;
 
 Servant::Servant(const ServantConfig& cfg, 
-        gui::gui_factory_base * factory) :
+        const gui::gui_factory_base * factory) :
     m_controller(NULL),
     m_cfg(cfg), m_factory(factory), m_servant(NULL)
 {

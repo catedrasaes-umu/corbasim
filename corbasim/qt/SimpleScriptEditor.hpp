@@ -39,7 +39,7 @@ public:
     SimpleScriptEditor(QWidget * parent = 0);
     virtual ~SimpleScriptEditor();
 
-    void initialize(gui::gui_factory_base * factory);
+    void initialize(const gui::gui_factory_base * factory);
 
 public slots:
     void appendRequest();
@@ -84,7 +84,7 @@ protected:
     
     requests_t m_requests;
 
-    gui::gui_factory_base * m_factory;
+    const gui::gui_factory_base * m_factory;
 
     core::request_serializer_base * m_request_serializer;
 

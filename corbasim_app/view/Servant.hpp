@@ -38,13 +38,13 @@ class Servant : public QObject
 public:
     Servant(QMdiArea * area,
             const QString& id,
-            gui::gui_factory_base * factory,
+            const gui::gui_factory_base * factory,
             QObject * parent = 0);
     virtual ~Servant();
 
     QMenu * getMenu() const;
 
-    gui::gui_factory_base * getFactory() const;
+    const gui::gui_factory_base * getFactory() const;
 
 public slots:
 
@@ -65,7 +65,7 @@ protected:
     QMdiArea * m_mdi_area;
 
     QString m_id;
-    gui::gui_factory_base * m_factory;
+    const gui::gui_factory_base * m_factory;
 
     QMdiSubWindow * m_sub_script;
     qt::SimpleScriptEditor * m_script;

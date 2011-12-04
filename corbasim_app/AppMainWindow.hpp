@@ -63,11 +63,11 @@ public slots:
     // Notificaciones del controlador
 
     void objrefCreated(const QString& id,
-        corbasim::gui::gui_factory_base * factory);
+        const corbasim::gui::gui_factory_base * factory);
     void objrefDeleted(const QString& id);
 
     void servantCreated(const QString& id,
-        corbasim::gui::gui_factory_base * factory);
+        const corbasim::gui::gui_factory_base * factory);
     void servantDeleted(const QString& id);
 
     void requestSent(const QString& id, 

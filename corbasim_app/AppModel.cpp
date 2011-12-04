@@ -90,7 +90,7 @@ AppModel::~AppModel()
     delete m_data;
 }
 
-corbasim::gui::gui_factory_base * 
+const corbasim::gui::gui_factory_base * 
 AppModel::getFactory(const QString& fqn)
 {
     factories_t::iterator it = m_factories.find(fqn);
@@ -105,7 +105,7 @@ AppModel::getFactory(const QString& fqn)
 
     std::string str(lib.toStdString());
 
-    typedef corbasim::gui::gui_factory_base *(*get_factory_t)();
+    typedef const corbasim::gui::gui_factory_base *(*get_factory_t)();
 
     void * handle = dlopen(str.c_str(), RTLD_NOW);
 
@@ -134,7 +134,7 @@ AppModel::getFactory(const QString& fqn)
         return NULL;
     }
 
-    corbasim::gui::gui_factory_base * factory = get_factory();
+    const corbasim::gui::gui_factory_base * factory = get_factory();
 
     if (factory)
     {
@@ -172,7 +172,7 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         return;
     }
 
-    corbasim::gui::gui_factory_base * factory = 
+    const corbasim::gui::gui_factory_base * factory = 
         getFactory(cfg.fqn.in());
 
     if (factory)
@@ -181,7 +181,12 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         m_objrefs.insert(std::make_pair(id, obj));
 
         if (m_controller)
+        {
             m_controller->notifyObjrefCreated(id, factory);
+
+            // Also notifies its reference
+            m_controller->notifyUpdatedReference(id, cfg.ref);
+        }
     }
 }
 
@@ -198,7 +203,7 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
         return;
     }
 
-    corbasim::gui::gui_factory_base * factory = 
+    const corbasim::gui::gui_factory_base * factory = 
         getFactory(cfg.fqn.in());
 
     if (factory)
@@ -366,6 +371,7 @@ void AppModel::loadFile(const QString& file)
 
 void AppModel::clearConfig()
 {
+    // TODO
 }
 
 void AppModel::updateReference(const QString& id,

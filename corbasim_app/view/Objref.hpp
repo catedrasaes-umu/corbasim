@@ -40,7 +40,7 @@ class Objref : public QObject
 public:
     Objref(QMdiArea * area,
             const QString& id,
-            gui::gui_factory_base * factory,
+            const gui::gui_factory_base * factory,
             QObject * parent = 0);
     virtual ~Objref();
 
@@ -49,7 +49,7 @@ public:
     qt::RequestDialog * getRequestDialog(int idx);
     QMdiSubWindow * getWindow(int idx);
 
-    gui::gui_factory_base * getFactory() const;
+    const gui::gui_factory_base * getFactory() const;
 
 public slots:
 
@@ -81,7 +81,7 @@ protected:
     QMdiArea * m_mdi_area;
 
     QString m_id;
-    gui::gui_factory_base * m_factory;
+    const gui::gui_factory_base * m_factory;
 
     // Operation dialogs
     typedef std::vector< qt::RequestDialog * > dialogs_t;

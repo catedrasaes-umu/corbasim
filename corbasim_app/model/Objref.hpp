@@ -36,7 +36,8 @@ namespace model
 class Objref
 {
 public:
-    Objref(const ObjrefConfig& cfg, gui::gui_factory_base * factory);
+    Objref(const ObjrefConfig& cfg, 
+            const gui::gui_factory_base * factory);
     virtual ~Objref();
 
     const ObjrefConfig& getConfig() const;
@@ -47,7 +48,7 @@ public:
 
 protected:
     ObjrefConfig m_cfg;
-    gui::gui_factory_base * m_factory;
+    const gui::gui_factory_base * m_factory;
     core::interface_caller_ptr m_caller;
 };
 

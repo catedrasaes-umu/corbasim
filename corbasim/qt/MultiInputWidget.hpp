@@ -42,7 +42,7 @@ public:
 
     typedef std::vector< dialogs::input_ptr > inputs_t;
 
-    void initialize(gui::gui_factory_base * factory);
+    void initialize(const gui::gui_factory_base * factory);
 
     dialogs::input_ptr getCurrentDialog();
     
@@ -56,7 +56,7 @@ protected:
     QStackedWidget * m_stack;
     inputs_t m_inputs;
 
-    gui::gui_factory_base * m_factory;
+    const gui::gui_factory_base * m_factory;
 };
 
 class MultiInputForm : public QWidget
@@ -66,7 +66,7 @@ public:
     MultiInputForm (QWidget * parent = 0);
     virtual ~MultiInputForm ();
 
-    void initialize(gui::gui_factory_base * factory);
+    void initialize(const gui::gui_factory_base * factory);
 
 protected:
     QComboBox * m_selector;
@@ -80,7 +80,7 @@ public:
     MultiSenderDialog (QWidget * parent = 0);
     virtual ~MultiSenderDialog ();
 
-    void initialize(gui::gui_factory_base * factory);
+    void initialize(const gui::gui_factory_base * factory);
 
 public slots:
 	void sendClicked(); 

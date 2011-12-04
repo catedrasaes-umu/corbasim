@@ -40,7 +40,8 @@ namespace model
 class Servant : public core::request_processor
 {
 public:
-    Servant(const ServantConfig& cfg, gui::gui_factory_base * factory);
+    Servant(const ServantConfig& cfg, 
+            const gui::gui_factory_base * factory);
     virtual ~Servant();
 
     void setController(AppController * controller);
@@ -59,7 +60,7 @@ protected:
     AppController * m_controller;
 
     ServantConfig m_cfg;
-    gui::gui_factory_base * m_factory;
+    const gui::gui_factory_base * m_factory;
     PortableServer::ServantBase * m_servant;
     
     core::interface_caller_ptr m_caller;

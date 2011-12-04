@@ -109,10 +109,11 @@ void AppMainWindow::setController(AppController * controller)
     QObject::connect(
             m_controller,
             SIGNAL(objrefCreated(
-                    QString, corbasim::gui::gui_factory_base *)),
+                    QString, const corbasim::gui::gui_factory_base *)),
             this,
             SLOT(objrefCreated(
-                    const QString&, corbasim::gui::gui_factory_base *)));
+                    const QString&, const 
+                    corbasim::gui::gui_factory_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(objrefDeleted(QString)),
@@ -122,10 +123,12 @@ void AppMainWindow::setController(AppController * controller)
     QObject::connect(
             m_controller,
             SIGNAL(servantCreated(
-                    QString, corbasim::gui::gui_factory_base *)),
+                    QString, 
+                    const corbasim::gui::gui_factory_base *)),
             this,
             SLOT(servantCreated(
-                    const QString&, corbasim::gui::gui_factory_base *)));
+                    const QString&, 
+                    const corbasim::gui::gui_factory_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(servantDeleted(QString)),
@@ -224,7 +227,7 @@ void AppMainWindow::clearConfig()
 // Notificaciones del controlador
 
 void AppMainWindow::objrefCreated(const QString& id,
-    corbasim::gui::gui_factory_base * factory)
+    const corbasim::gui::gui_factory_base * factory)
 {
     view::Objref_ptr objref(
             new view::Objref(m_mdi_area, id, factory, this));
@@ -262,7 +265,7 @@ void AppMainWindow::objrefDeleted(const QString& id)
 }
 
 void AppMainWindow::servantCreated(const QString& id,
-    corbasim::gui::gui_factory_base * factory)
+    const corbasim::gui::gui_factory_base * factory)
 {
     view::Servant_ptr servant(
             new view::Servant(m_mdi_area, id, factory, this));
@@ -301,7 +304,7 @@ void AppMainWindow::requestSent(const QString& id,
     
     if (it != m_objrefs.end())
     {
-        gui::gui_factory_base * factory = it->second->getFactory();
+        const gui::gui_factory_base * factory = it->second->getFactory();
         QTreeWidgetItem * item = factory->create_tree(req.get());
 
         QString text (item->text(0));
@@ -347,7 +350,7 @@ void AppMainWindow::requestReceived(const QString& id,
     
     if (it != m_servants.end())
     {
-        gui::gui_factory_base * factory = it->second->getFactory();
+        const gui::gui_factory_base * factory = it->second->getFactory();
         QTreeWidgetItem * item = factory->create_tree(req.get());
 
         QString text (item->text(0));

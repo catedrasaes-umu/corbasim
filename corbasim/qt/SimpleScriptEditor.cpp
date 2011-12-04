@@ -28,7 +28,8 @@ using namespace corbasim;
 using namespace corbasim::qt;
 
 SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
-    QMainWindow(parent), m_timer(this), m_current_request(0), m_factory(NULL)
+    QMainWindow(parent), m_timer(this), m_current_request(0), 
+    m_factory(NULL)
 {
     QWidget * central = new QWidget();
     setCentralWidget(central);
@@ -245,7 +246,7 @@ SimpleScriptEditor::~SimpleScriptEditor()
 {
 }
 
-void SimpleScriptEditor::initialize(gui::gui_factory_base * factory)
+void SimpleScriptEditor::initialize(const gui::gui_factory_base * factory)
 {
     unsigned int count = factory->operation_count();
 
@@ -499,9 +500,10 @@ void SimpleScriptEditor::copySelected()
 
     if (pos >= 0)
     {
-        event::request_ptr selected = *boost::next(m_requests.begin(), pos);
+        event::request_ptr selected = 
+            *boost::next(m_requests.begin(), pos);
 
-        gui::operation_factory_base * op =
+        const gui::operation_factory_base * op =
             m_factory->get_factory_by_tag(selected->get_tag());
 
         int cb_pos = m_selector->findText(
