@@ -156,6 +156,11 @@ void AppMainWindow::setController(AppController * controller)
     CORBASIM_APP_CON(requestReceived);
 
 #undef CORBASIM_APP_CON
+
+    QObject::connect(m_controller, 
+            SIGNAL(updatedReference(QString, CORBA::Object_var)),
+            this, SLOT(updatedReference(const QString&,
+                    const CORBA::Object_var&)));
 }
 
 void AppMainWindow::setEngine(TriggerEngine * engine)
@@ -365,6 +370,11 @@ void AppMainWindow::requestReceived(const QString& id,
 void AppMainWindow::displayError(const QString& err)
 {
     QMessageBox::critical(this, "Error", err);
+}
+
+void AppMainWindow::updatedReference(const QString& id,
+        const CORBA::Object_var& ref)
+{
 }
 
 // Dialogs

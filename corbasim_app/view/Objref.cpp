@@ -189,7 +189,8 @@ void Objref::showScriptEditor()
 
         m_sub_script = new QMdiSubWindow;
         m_sub_script->setWidget(m_script);
-        m_sub_script->setWindowTitle(QString("%1: Script editor").arg(m_id));
+        m_sub_script->setWindowTitle(
+                QString("%1: Script editor").arg(m_id));
         m_mdi_area->addSubWindow(m_sub_script);
 
         QObject::connect(m_script,
@@ -212,5 +213,10 @@ void Objref::showSetReference()
 void Objref::slotUpdateReference(const CORBA::Object_var& ref)
 {
     emit updatedReference(m_id, ref);
+}
+
+void Objref::updateReference(const CORBA::Object_var& ref)
+{
+    // TODO
 }
 

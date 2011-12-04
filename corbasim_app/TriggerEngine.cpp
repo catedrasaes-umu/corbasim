@@ -106,7 +106,8 @@ QScriptValue ScriptEngine::_createServant(QScriptContext * ctx,
     return QScriptValue();
 }
 
-void ScriptEngine::addFactory(const QString& id, gui::gui_factory_base * f) 
+void ScriptEngine::addFactory(const QString& id, 
+        const gui::gui_factory_base * f) 
 {
     m_factories.insert(std::make_pair(id, f));
 }
@@ -116,7 +117,7 @@ void ScriptEngine::removeFactory(const QString& id)
     m_factories.erase(id);
 }
 
-corbasim::gui::gui_factory_base * ScriptEngine::getFactory(
+const corbasim::gui::gui_factory_base * ScriptEngine::getFactory(
         const QString& id)
 {
     factories_t::const_iterator it = m_factories.find(id);
@@ -159,10 +160,12 @@ void TriggerEngine::setController(AppController * controller)
     QObject::connect(
             m_controller,
             SIGNAL(objrefCreated(
-                    QString, corbasim::gui::gui_factory_base *)),
+                    QString, 
+                    const corbasim::gui::gui_factory_base *)),
             this,
             SLOT(objrefCreated(
-                    const QString&, corbasim::gui::gui_factory_base *)));
+                    const QString&, 
+                    const corbasim::gui::gui_factory_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(objrefDeleted(QString)),
@@ -172,10 +175,12 @@ void TriggerEngine::setController(AppController * controller)
     QObject::connect(
             m_controller,
             SIGNAL(servantCreated(
-                    QString, corbasim::gui::gui_factory_base *)),
+                    QString, 
+                    const corbasim::gui::gui_factory_base *)),
             this,
             SLOT(servantCreated(
-                    const QString&, corbasim::gui::gui_factory_base *)));
+                    const QString&, 
+                    const corbasim::gui::gui_factory_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(servantDeleted(QString)),
@@ -203,7 +208,7 @@ void TriggerEngine::setController(AppController * controller)
 }
 
 void TriggerEngine::objrefCreated(const QString& id, 
-        corbasim::gui::gui_factory_base * factory)
+        const corbasim::gui::gui_factory_base * factory)
 {
     m_engine.addFactory(id, factory);
 
@@ -218,7 +223,7 @@ void TriggerEngine::objrefCreated(const QString& id,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        gui::operation_factory_base * op =
+        const gui::operation_factory_base * op =
             factory->get_factory_by_index(i);
 
         // Prototype
@@ -246,7 +251,7 @@ void TriggerEngine::objrefDeleted(const QString& id)
 }
 
 void TriggerEngine::servantCreated(const QString& id, 
-        corbasim::gui::gui_factory_base * factory)
+        const corbasim::gui::gui_factory_base * factory)
 {
     m_engine.addFactory(id, factory);
 
@@ -270,7 +275,7 @@ void TriggerEngine::servantCreated(const QString& id,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        gui::operation_factory_base * op =
+        const gui::operation_factory_base * op =
             factory->get_factory_by_index(i);
 
         // Prototype

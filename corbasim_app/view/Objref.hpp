@@ -63,6 +63,8 @@ public slots:
 
     void showSetReference();
 
+    void updateReference(const CORBA::Object_var& ref);
+
 protected slots:
 
     void slotUpdateReference(const CORBA::Object_var& ref);

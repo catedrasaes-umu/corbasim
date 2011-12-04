@@ -41,7 +41,8 @@ public:
     virtual ~ScriptEngine();
 
     typedef boost::function< void() > method_type;
-    typedef std::map< QString, gui::gui_factory_base * > factories_t;
+    typedef std::map< QString, const gui::gui_factory_base * > 
+        factories_t;
 
     static QScriptValue _call(QScriptContext *, 
             QScriptEngine *);
@@ -50,10 +51,10 @@ public:
     static QScriptValue _createServant(QScriptContext *, 
             QScriptEngine *);
 
-    void addFactory(const QString& id, gui::gui_factory_base *);
+    void addFactory(const QString& id, const gui::gui_factory_base *);
     void removeFactory(const QString& id);
 
-    gui::gui_factory_base * getFactory(const QString& id);
+    const gui::gui_factory_base * getFactory(const QString& id);
 
 signals:
 
@@ -84,11 +85,11 @@ public slots:
     void runCode(const QString& code);
 
     void objrefCreated(const QString& id, 
-            corbasim::gui::gui_factory_base * factory);
+            const corbasim::gui::gui_factory_base * factory);
     void objrefDeleted(const QString& id);
 
     void servantCreated(const QString& id, 
-            corbasim::gui::gui_factory_base * factory);
+            const corbasim::gui::gui_factory_base * factory);
     void servantDeleted(const QString& id);
 
     void requestReceived(const QString& id, 

@@ -79,6 +79,9 @@ public slots:
 
     void displayError(const QString& err);
 
+    void updatedReference(const QString& id,
+            const CORBA::Object_var& ref);
+
 signals:
 
     void saveFile(QString);
