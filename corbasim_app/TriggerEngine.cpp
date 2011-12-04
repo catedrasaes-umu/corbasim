@@ -307,7 +307,7 @@ void TriggerEngine::requestReceived(const QString& id,
     {
         // evaluates the trigger
         QScriptValue meth = obj.property(
-                QString("_dispatch_").arg(req->get_name()));
+                QString("_dispatch_%1").arg(req->get_name()));
 
         if (meth.isValid() && meth.isFunction())
         {
