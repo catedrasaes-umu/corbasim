@@ -80,6 +80,7 @@ QScriptValue ScriptEngine::_call(QScriptContext * ctx,
 
     return QScriptValue();
 }
+
 void ScriptEngine::doSendRequest(const QString& id,
         corbasim::event::request_ptr req)
 {
@@ -373,7 +374,8 @@ void TriggerEngine::runFile(const QString& file)
 
     if (!scriptFile.open(QIODevice::ReadOnly))
     {
-        m_controller->notifyError(QString("Can not read file %1!").arg(file));
+        m_controller->notifyError(
+                QString("Can not read file %1!").arg(file));
         return;
     }
 
