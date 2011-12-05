@@ -85,7 +85,7 @@ struct semantic_state
         namespace w = csu::corbasim::json::writer;
 
         std::string val;
-        decode (val);
+        csu::corbasim::json::parser::decode (val);
 
         _check_pre();
         std::cout << "new string: " << val <<  std::endl;
