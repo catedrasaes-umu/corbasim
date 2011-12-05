@@ -8,11 +8,6 @@ if(PYTHONLIBS_FOUND AND Boost_PYTHON_LIBRARY)
     include(corbasim_python.cmake)
 endif()
 
-# CORBASIM Lua library
-if(LUA51_FOUND)
-    include(corbasim_lua.cmake)
-endif()
-
 # CORBASIM QT library
 if(QT_FOUND)
     include(corbasim_qt.cmake)

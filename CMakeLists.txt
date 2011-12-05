@@ -54,7 +54,6 @@ else(NOT Boost_FOUND)
 endif(NOT Boost_FOUND)
 
 find_package(PythonLibs)
-find_package(Lua51)
 find_package(Qt4)
 find_package(Boost 1.45.0 
     COMPONENTS serialization regex python system thread)
