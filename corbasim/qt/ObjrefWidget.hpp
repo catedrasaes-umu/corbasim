@@ -46,6 +46,10 @@ public slots:
     void validatorHasChanged();
     void pasteIOR();
 
+signals:
+
+    void valueHasChanged(CORBA::Object_var);
+
 protected:
     QComboBox * m_selector;
     QStackedWidget * m_stack;

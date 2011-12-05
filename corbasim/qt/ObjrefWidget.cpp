@@ -99,7 +99,6 @@ void ObjrefWidget::setValidator(
 
 void ObjrefWidget::valueChanged()
 {
-    std::cout << ">valueChanged" << std::endl;
     if (!m_validator)
     {
         m_status->setRedLight();
@@ -142,6 +141,9 @@ void ObjrefWidget::valueChanged()
     }
 
     m_validator->set_reference(ref);
+
+    // Notify its modification
+    emit valueHasChanged(ref);
 
     if (m_validator->is_nil())
         m_status->setRedLight();

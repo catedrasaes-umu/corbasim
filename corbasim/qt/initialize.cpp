@@ -20,6 +20,7 @@
 #include <QtGui>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/event.hpp>
+#include <corbasim/impl.hpp>
 
 namespace  
 {
@@ -39,6 +40,9 @@ public:
             ("corbasim::event::event_ptr");
         qRegisterMetaType< corbasim::event::exception_ptr >
             ("corbasim::event::exception_ptr");
+
+        qRegisterMetaType< CORBA::Object_var >
+            ("CORBA::Object_var");
     }
 };
 
