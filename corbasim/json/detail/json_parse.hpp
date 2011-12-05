@@ -448,7 +448,7 @@ parse_double (match_pair const& pp)
     return g_sign_plus ? val : -val;
 }
 
-inline void decode(std::string& data) 
+inline void decode(std::string& data)
 {
     // Fast check for the most common case. No copy.
     size_t pos;
@@ -462,7 +462,7 @@ inline void decode(std::string& data)
         buffer.append(&data[0], pos);
     for(; pos < data.size(); ++pos) // NOTE: '<' instead of '!='.
     {
-        switch(data[pos]) 
+        switch(data[pos])
         {
             // NOTE: Do not check for malformed input
             case '\\': buffer.append(&data[++pos], 1);      break;
@@ -886,8 +886,8 @@ struct string_ :
     template <typename S>
     static inline void process_match (S& state, match_pair const& mp)
     {
-        match_pair new_pair (mp.first + 1, mp.second - 2);
-        state.semantic_state().new_string (new_pair);
+        std::string s (mp.fist + 1, mp.second - 2);
+        state.semantic_state().new_string (s);
     }
 };
 
@@ -1076,7 +1076,7 @@ struct SemanticState
         //std::cout << "new double: " << d << std::endl;
     }
 
-    inline void new_string(match_pair  const& p)
+    inline void new_string(std::string const& p)
     {
         //std::cout << "new string: " << std::string(p.first,p.second)
         //          <<  std::endl;

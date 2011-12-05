@@ -30,9 +30,9 @@
 #include <iostream>
 #include <string>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace json 
+namespace json
 {
 
 struct semantic_state
@@ -62,7 +62,7 @@ struct semantic_state
     {
         _check_pre();
         std::cout << "new null" << std::endl;
-        
+
         m_helpers_stack.back()->new_null();
         _consume();
 
@@ -80,11 +80,12 @@ struct semantic_state
         _check_post();
     }
 
-    inline void new_string(match_pair  const& p)
+    inline void new_string(std::string  const& p)
     {
         namespace w = csu::corbasim::json::writer;
 
-        std::string val(p.first, p.second);
+        std::string val;
+        decode (val);
 
         _check_pre();
         std::cout << "new string: " << val <<  std::endl;
@@ -94,7 +95,7 @@ struct semantic_state
             m_helpers_stack.back()->new_string(val);
             _consume();
         }
-        else 
+        else
         {
             helper_ptr parent = m_helpers_stack.back();
             m_helpers_stack.push_back(helper_ptr(parent->new_child(val)));
@@ -107,7 +108,7 @@ struct semantic_state
     {
         _check_pre();
         std::cout << "new bool: " << b << std::endl;
-        
+
         m_helpers_stack.back()->new_bool(b);
         _consume();
 
@@ -126,7 +127,7 @@ struct semantic_state
         namespace w = csu::corbasim::json::writer;
 
         //std::cout << "object start" << std::endl;
-        
+
         _check_pre();
 
         state_struct ss;
@@ -138,7 +139,7 @@ struct semantic_state
     inline void object_end()
     {
         //std::cout << "object end" << std::endl;
-        
+
         state_stack.pop_back();
         _consume();
         _check_post();
@@ -149,7 +150,7 @@ struct semantic_state
         namespace w = csu::corbasim::json::writer;
 
         //std::cout << "array start" << std::endl;
-        
+
         _check_pre();
 
         state_struct ss;
@@ -161,7 +162,7 @@ struct semantic_state
     inline void array_end()
     {
         //std::cout << "array end" << std::endl;
-        
+
         state_stack.pop_back();
         _consume();
         _check_post();
