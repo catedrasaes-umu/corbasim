@@ -886,7 +886,7 @@ struct string_ :
     template <typename S>
     static inline void process_match (S& state, match_pair const& mp)
     {
-        std::string s (mp.fist + 1, mp.second - 2);
+        std::string s (mp.first + 1, mp.second - 2);
         state.semantic_state().new_string (s);
     }
 };
