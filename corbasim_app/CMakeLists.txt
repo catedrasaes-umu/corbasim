@@ -2,8 +2,8 @@
 set(CORBASIM_PREFIX corbasim_)
 include(app.cmake)
 
-set_target_properties(corbasim_app_idl PROPERTIES 
-    VERSION ${${PROJECT_NAME}_VERSION} 
+set_target_properties(corbasim_app_idl PROPERTIES
+    VERSION ${${PROJECT_NAME}_VERSION}
     SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
 set(corbasim_app_SRCS
@@ -25,7 +25,7 @@ set(corbasim_app_SRCS
 set(corbasim_app_MOC_HDRS
     AppController.hpp
     AppMainWindow.hpp
-    
+
     TriggerEngine.hpp
 
     view/CreateDialog.hpp
@@ -33,28 +33,29 @@ set(corbasim_app_MOC_HDRS
     view/Servant.hpp
     )
 
-qt4_wrap_cpp(corbasim_app_MOC_SRCS 
-    ${corbasim_app_MOC_HDRS})
+# NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
+qt4_wrap_cpp(corbasim_app_MOC_SRCS
+    ${corbasim_app_MOC_HDRS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
 
-add_executable(corbasim_app 
+add_executable(corbasim_app
     ${corbasim_app_MOC_SRCS}
     ${corbasim_app_SRCS})
-target_link_libraries(corbasim_app 
+target_link_libraries(corbasim_app
     dl # for dlopen, dlsym
     boost_filesystem
     boost_program_options
-    corbasim 
-    corbasim_qt 
+    corbasim
+    corbasim_qt
     corbasim_app_idl)
 
 install(TARGETS corbasim_app DESTINATION bin)
 install(TARGETS corbasim_app_idl DESTINATION lib)
 
 add_executable(corbasim_app_test test.cpp)
-target_link_libraries(corbasim_app_test 
+target_link_libraries(corbasim_app_test
     dl # for dlopen, dlsym
-    corbasim 
-    corbasim_qt 
+    corbasim
+    corbasim_qt
     corbasim_app_idl)
 
 

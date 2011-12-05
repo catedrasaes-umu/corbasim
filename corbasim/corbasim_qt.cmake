@@ -52,8 +52,8 @@ set(corbasim_qt_EXPORTED_HEADERS
 
 foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
     get_filename_component(_header_path ${_header} PATH)
-    install(FILES ${_header} 
-        DESTINATION include/corbasim/${_header_path}) 
+    install(FILES ${_header}
+        DESTINATION include/corbasim/${_header_path})
 endforeach(_header ${corbasim_qt_EXPORTED_HEADERS})
 
 set(corbasim_qt_MOC_HDRS
@@ -102,15 +102,18 @@ set(corbasim_qt_LIBS
     corbasim)
 
 qt4_add_resources(corbasim_qt_RCC qt/corbasim_qt.qrc)
-qt4_wrap_cpp(corbasim_qt_MOC_SRCS ${corbasim_qt_MOC_HDRS})
-add_library(corbasim_qt SHARED ${corbasim_qt_SRCS} 
+
+# NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
+qt4_wrap_cpp(corbasim_qt_MOC_SRCS ${corbasim_qt_MOC_HDRS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+
+add_library(corbasim_qt SHARED ${corbasim_qt_SRCS}
     ${corbasim_qt_MOC_SRCS}
     ${corbasim_qt_RCC})
 target_link_libraries(corbasim_qt
     ${corbasim_qt_LIBS})
 
-set_target_properties(corbasim_qt PROPERTIES 
-    VERSION ${${PROJECT_NAME}_VERSION} 
+set_target_properties(corbasim_qt PROPERTIES
+    VERSION ${${PROJECT_NAME}_VERSION}
     SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
 install(TARGETS corbasim_qt DESTINATION lib)
