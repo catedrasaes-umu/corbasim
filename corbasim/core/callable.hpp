@@ -32,6 +32,7 @@ struct request_processor
 {
     virtual event::event_ptr operator()(event::request_ptr,
             event::response_ptr) = 0;
+    virtual ~request_processor() {}
 };
 
 struct callable
