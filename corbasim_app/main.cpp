@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include "AppConfiguration.hpp"
 #include "AppMainWindow.hpp"
 #include "AppController.hpp"
 #include "AppModel.hpp"
@@ -25,6 +26,23 @@
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
+#include <sstream>
+#include <cstdlib>
+#include <iterator>
+#include <algorithm>
+
+typedef std::vector< std::string > strings_t;
+
+void append_directories(const strings_t& dirs)
+{
+    std::ostringstream oss;
+
+    std::copy(dirs.begin(), dirs.end(), 
+            std::ostream_iterator< std::string >(oss, ":"));
+        
+    oss << getenv("LD_LIBRARY_PATH");
+    setenv("LD_LIBRARY_PATH", oss.str().c_str(),1);
+}
 
 int main(int argc, char **argv)
 {
@@ -32,6 +50,17 @@ int main(int argc, char **argv)
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
 
     QApplication app(argc, argv); 
+
+    corbasim::app::AppConfiguration * config =
+        corbasim::app::AppConfiguration::getInstance();
+
+    // options
+    config->processCmdLine(argc, argv);
+
+    if (config->exit)
+        return 0;
+
+    append_directories(config->plugin_directories);
 
     // Force initialization
     corbasim::qt::initialize();
@@ -42,22 +71,35 @@ int main(int argc, char **argv)
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
     corbasim::app::TriggerEngine engine;
+    corbasim::app::AppMainWindow window;
 
     // Executed in dedicated threads
     controller.moveToThread(&threadController);
-    engine.moveToThread(&threadEngine);
+
+    if (config->enable_scripting)
+    {
+        engine.moveToThread(&threadEngine);
+        threadEngine.start();
+        engine.setController(&controller);
+        window.setEngine(&engine);
+    }
 
     threadController.start();
-    threadEngine.start();
 
     controller.setModel(&model);
     model.setController(&controller);
-    engine.setController(&controller);
 
-    corbasim::app::AppMainWindow window;
     window.setController(&controller);
-    window.setEngine(&engine);
     window.show();
+
+    // load configuration files
+    strings_t::const_iterator end = config->load_files.end();
+    for (strings_t::const_iterator it = 
+            config->load_files.begin(); it != end; ++it) 
+    {
+        std::cout << "loading: " << (*it) << std::endl;
+        controller.loadFile(it->c_str());
+    }
 
     boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));
 

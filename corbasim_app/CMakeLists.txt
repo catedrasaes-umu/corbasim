@@ -11,6 +11,8 @@ set(corbasim_app_SRCS
     AppController.cpp
     AppMainWindow.cpp
     main.cpp
+    
+    AppConfiguration.cpp
 
     TriggerEngine.cpp
 
