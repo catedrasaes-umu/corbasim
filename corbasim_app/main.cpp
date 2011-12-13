@@ -33,17 +33,6 @@
 
 typedef std::vector< std::string > strings_t;
 
-void append_directories(const strings_t& dirs)
-{
-    std::ostringstream oss;
-
-    std::copy(dirs.begin(), dirs.end(), 
-            std::ostream_iterator< std::string >(oss, ":"));
-        
-    oss << getenv("LD_LIBRARY_PATH");
-    setenv("LD_LIBRARY_PATH", oss.str().c_str(),1);
-}
-
 int main(int argc, char **argv)
 {
     // Default ORB
@@ -60,7 +49,7 @@ int main(int argc, char **argv)
     if (config->exit)
         return 0;
 
-    append_directories(config->plugin_directories);
+    // append_directories(config->plugin_directories);
 
     // Force initialization
     corbasim::qt::initialize();
