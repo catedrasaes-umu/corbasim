@@ -6853,7 +6853,7 @@ namespace corbasim
                     _corbasim_Test::Huge::operation4,
                     _corbasim_Test::Huge::operation5,
                     _corbasim_Test::Huge::operation6,
-                    _corbasim_Test::Huge::operation7,
+                    /* _corbasim_Test::Huge::operation7,
                     _corbasim_Test::Huge::operation8,
                     _corbasim_Test::Huge::operation9,
                     _corbasim_Test::Huge::operation10,
@@ -6945,7 +6945,7 @@ namespace corbasim
                     _corbasim_Test::Huge::operation96,
                     _corbasim_Test::Huge::operation97,
                     _corbasim_Test::Huge::operation98,
-                    _corbasim_Test::Huge::operation99,
+                    _corbasim_Test::Huge::operation99,*/
                     _corbasim_Test::Huge::operation100,
                     _corbasim_Test::Huge::operation101,
                     _corbasim_Test::Huge::operation102,

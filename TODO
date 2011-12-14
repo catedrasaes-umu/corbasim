@@ -1,10 +1,10 @@
 OK  * Utilizar el ObjrefWidget en SimpleClient. Caller ha de heredar de reference_validator
-    * Serializar referencias
+OK  * Serializar referencias
 OK  * Utilizar copy< T > en Adapted.xpt
     * Añadir timestamp a los eventos
 OK  * Menubar en SimpleClient, que permita ocultar operations, reference y events
 OK  * Hacer visible la herencia de alguna forma en el fichero adapted
-    * Capturar la excepción de serializado en los servidores
+OK  * Capturar la excepción de serializado en los servidores
 OK  * Introducir el multisender
 OK  * Soportar serializado de estructuras dentro de estructuras. Adaptarlas
 OK  * Soportar serializado de secuencias de strings

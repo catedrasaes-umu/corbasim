@@ -29,6 +29,12 @@ target_link_libraries(corbasim_lib_Test_Huge
 	# CORBASIM Libraries
 	corbasim corbasim_qt)
 
+# Client
+add_executable(${CORBASIM_PREFIX}Test_Huge_client Test_Huge_client_main.cpp)
+target_link_libraries(${CORBASIM_PREFIX}Test_Huge_client 
+	${CORBASIM_PREFIX}huge_idl
+	# CORBASIM Libraries
+	corbasim corbasim_qt)
 	
 	
 	

@@ -32,6 +32,7 @@
 #include <corbasim/gui/widgets/string.hpp>
 #include <corbasim/gui/widgets/struct.hpp>
 #include <corbasim/gui/widgets/objrefvar.hpp>
+#include <corbasim/gui/widgets/union.hpp>
 
 namespace corbasim 
 {
@@ -119,6 +120,11 @@ struct default_struct_widget : public struct_as_grid< T >
 };
 
 template< typename T >
+struct default_union_widget : public unsupported_type< T >
+{
+};
+
+template< typename T >
 struct default_objrefvar_widget : public objrefvar_widget< T >
 {
 };
@@ -143,6 +149,9 @@ struct calculate_default_widget
         cs_mpl::eval_if< adapted::is_corbaseq< T >, 
             default_sequence_widget< T >,
         // else if
+        cs_mpl::eval_if< adapted::is_union< T >, 
+            default_union_widget< T >,
+        // else if
         cs_mpl::eval_if< cs_mpl::is_struct< T >, 
             default_struct_widget< T >,
         // else if
@@ -150,7 +159,7 @@ struct calculate_default_widget
             default_objrefvar_widget< T >,
         // else
         unsupported_type< T >
-        > > > > > > > >::type type;
+        > > > > > > > > >::type type;
 };
 
 } // namespace detail

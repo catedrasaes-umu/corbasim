@@ -92,6 +92,11 @@ struct default_struct_tree : public struct_as_tree< T >
 };
 
 template< typename T >
+struct default_union_tree : public unsupported_type< T >
+{
+};
+
+template< typename T >
 struct default_objrefvar_tree : public detail::objref_tree< T >
 {
 };
@@ -121,6 +126,9 @@ struct calculate_default_tree
         cs_mpl::eval_if_identity< adapted::is_corbaseq< T >, 
             default_sequence_tree< T >,
         // else if
+        cs_mpl::eval_if_identity< adapted::is_union< T >, 
+            default_union_tree< T >,
+        // else if
         cs_mpl::eval_if_identity< cs_mpl::is_struct< T >, 
             default_struct_tree< T >,
         // else if
@@ -128,7 +136,7 @@ struct calculate_default_tree
             default_objrefvar_tree< T >,
         // else
             boost::mpl::identity< unsupported_type< T > >
-        > > > > > > >::type type;
+        > > > > > > > >::type type;
 };
 
 } // namespace detail

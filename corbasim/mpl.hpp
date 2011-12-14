@@ -20,9 +20,6 @@
 #ifndef CORBASIM_MPL_HPP
 #define CORBASIM_MPL_HPP
 
-#define BOOST_MPL_CFG_NO_PREPROCESSED_HEADERS
-#define BOOST_MPL_LIMIT_VECTOR_SIZE 50
-
 #include <boost/type_traits.hpp> // is_array, is_class, remove_bounds
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/is_sequence.hpp>

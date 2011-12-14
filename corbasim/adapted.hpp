@@ -49,6 +49,11 @@ struct is_corbaseq : public cs_mpl::false_
 };
 
 template< typename T >
+struct is_union : public cs_mpl::false_
+{
+};
+
+template< typename T >
 struct is_oneway : public cs_mpl::false_
 {
 };
