@@ -2,12 +2,19 @@
 module SimpleExample
 {
 
+    union MyUnion switch(long)
+    {
+        case 100: long aa;
+        case 101: long bb;
+    };
+
     struct St
     {
         // sequence< string > a;
         sequence< long > l;
         sequence< string > ss;
         long b;
+        MyUnion uniii;
     };
 
     interface Test

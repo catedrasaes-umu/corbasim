@@ -120,7 +120,7 @@ struct default_struct_widget : public struct_as_grid< T >
 };
 
 template< typename T >
-struct default_union_widget : public unsupported_type< T >
+struct default_union_widget : public union_as_stack< T >
 {
 };
 

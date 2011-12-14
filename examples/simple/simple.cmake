@@ -24,6 +24,8 @@ add_library(${CORBASIM_PREFIX}simple_idl SHARED ${simple_GENERATED})
 
 
 
+
+
 # Corbasim library	
 add_library(corbasim_lib_SimpleExample_Test SHARED SimpleExample_Test_lib.cpp)
 target_link_libraries(corbasim_lib_SimpleExample_Test

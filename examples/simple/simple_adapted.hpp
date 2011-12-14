@@ -5,12 +5,111 @@
 #include <corbasim/corba_adapted.hpp>
 #include <corbasim/core/copy.hpp>
 
+// UnionDef: SimpleExample::MyUnion
+BOOST_FUSION_ADAPT_ADT(
+        SimpleExample::MyUnion,
+        ( ::CORBA::Long, ::CORBA::Long, obj._d(), obj._d(val)) // Discriminator
+        ( ::CORBA::Long, ::CORBA::Long, obj.aa(), obj.aa(val))
+        ( ::CORBA::Long, ::CORBA::Long, obj.bb(), obj.bb(val))
+)
+
+namespace boost
+{
+    namespace serialization
+    {
+
+        template < class Archive >
+        void serialize(Archive& ar, SimpleExample::MyUnion& t, const unsigned int /* unused */)
+        {
+            // TODO case ar & boost::serialization::make_nvp("aa", t.aa);
+            // TODO case ar & boost::serialization::make_nvp("bb", t.bb);
+        }
+
+    } // serialization
+} // boost
+
+namespace boost
+{
+    namespace fusion
+    {
+        namespace extension
+        {
+
+            template< >
+            struct struct_member_name< SimpleExample::MyUnion, 0 >
+            {
+                static inline const char * call()
+                {
+                    return "_d";
+                }
+            };
+
+            template< >
+            struct struct_member_name< SimpleExample::MyUnion, 1 >
+            {
+                static inline const char * call()
+                {
+                    return "aa";
+                }
+            };
+            template< >
+            struct struct_member_name< SimpleExample::MyUnion, 2 >
+            {
+                static inline const char * call()
+                {
+                    return "bb";
+                }
+            };
+
+        } // extension
+    } // fusion
+} // boost
+
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct is_union< SimpleExample::MyUnion > : public cs_mpl::true_
+        {
+            static inline ::CORBA::Long* discriminators()
+            {
+                static ::CORBA::Long _disc[] =
+                { 100, 101 };
+                return _disc;
+            }
+        };
+
+        template< >
+        struct full_qualified_name< SimpleExample::MyUnion >
+        {
+            static inline const char * call()
+            {
+                return "SimpleExample::MyUnion";
+            }
+        };
+
+        template< >
+        struct name< SimpleExample::MyUnion >
+        {
+            static inline const char * call()
+            {
+                return "MyUnion";
+            }
+        };
+
+    } // adapted
+} // corbasim
+
+
 // StructDef: SimpleExample::St
 BOOST_FUSION_ADAPT_STRUCT(
         SimpleExample::St,
         ( SimpleExample::St::_l_seq, l)
         ( SimpleExample::St::_ss_seq, ss)
         ( ::CORBA::Long, b)
+        ( SimpleExample::MyUnion, uniii)
 )
 
 namespace boost
@@ -24,6 +123,7 @@ namespace boost
             ar & boost::serialization::make_nvp("l", t.l);
             ar & boost::serialization::make_nvp("ss", t.ss);
             ar & boost::serialization::make_nvp("b", t.b);
+            ar & boost::serialization::make_nvp("uniii", t.uniii);
         }
 
         template < class Archive >
@@ -346,6 +446,7 @@ namespace corbasim
 
 namespace _corbasim_SimpleExample
 {
+
     struct St
     {
         typedef corbasim::adapted::member< ::SimpleExample::St, 0 >
@@ -354,6 +455,8 @@ namespace _corbasim_SimpleExample
                 ss_corbasim_member;
         typedef corbasim::adapted::member< ::SimpleExample::St, 2 >
                 b_corbasim_member;
+        typedef corbasim::adapted::member< ::SimpleExample::St, 3 >
+                uniii_corbasim_member;
 
     };
 

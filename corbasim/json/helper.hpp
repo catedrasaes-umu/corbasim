@@ -599,6 +599,9 @@ struct calculate_helper
         cs_mpl::eval_if_identity< adapted::is_corbaseq< T >, 
             corbaseq_helper< T >,
         // else if
+        cs_mpl::eval_if_identity< adapted::is_union< T >, 
+            unsupported_type_helper< T >,
+        // else if
         cs_mpl::eval_if_identity< cs_mpl::is_struct< T >, 
             struct_helper< T >,
         // else if
@@ -606,7 +609,7 @@ struct calculate_helper
             corba_objrefvar_helper< T >,
         // else
             boost::mpl::identity< unsupported_type_helper< T > >
-        > > > > > > > > >::type type;
+        > > > > > > > > > >::type type;
 };
 
 template < typename T >

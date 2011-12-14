@@ -324,6 +324,37 @@ void serialize(Archive& ar, «getFQN()»_var& t, const unsigned int /* unused */
 } // serialization
 } // boost
 
+namespace boost
+{
+namespace fusion
+{
+namespace extension
+{
+
+template< >
+struct struct_member_name< «getFQN()», 0>
+{
+	static inline const char * call()
+	{
+		return "_d";
+	}
+};
+
+«FOREACH unionMembers AS e ITERATOR it-»
+template< >
+struct struct_member_name< «getFQN()», «it.counter1»>
+{
+	static inline const char * call()
+	{
+		return "«e.identifier»";
+	}
+};
+«ENDFOREACH-»
+
+} // extension
+} // fusion
+} // boost
+
 namespace corbasim
 {
 namespace adapted
