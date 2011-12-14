@@ -105,7 +105,7 @@ struct UnionImpl
     static inline void set_value(const S& s, UnionChildren& vector, 
             int pos = 0)
     {
-        if (pos == N::value)
+        if (pos == N::value - 1)
             set_value_impl::invoke(s, vector, pos);
         else
             UnionImpl < S, next_t >::set_value(s, vector, pos);
@@ -127,7 +127,7 @@ struct UnionImpl
     static inline void get_value(S& s, UnionChildren& vector, 
             int pos = 0)
     {
-        if (pos == N::value)
+        if (pos == N::value - 1)
             get_value_impl::invoke(s, vector, pos);
         else
             UnionImpl < S, next_t >::get_value(s, vector, pos);
