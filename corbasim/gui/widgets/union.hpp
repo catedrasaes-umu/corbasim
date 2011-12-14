@@ -79,7 +79,13 @@ struct UnionImpl
     static inline void create(Layout* layout, UnionChildren& vector, 
             int pos = 0)
     {
-        create_impl::invoke(layout, vector, pos);
+        QWidget * w = new QWidget;
+        QGridLayout * gridLayout = new QGridLayout;
+
+        create_impl::invoke(gridLayout, vector, pos);
+
+        w->setLayout(gridLayout);
+        layout->addWidget(w);
     
         // Siguiente iteracion
         UnionImpl < S, next_t >::create(layout, vector, pos);
@@ -99,9 +105,10 @@ struct UnionImpl
     static inline void set_value(const S& s, UnionChildren& vector, 
             int pos = 0)
     {
-        set_value_impl::invoke(s, vector, pos);
-
-        UnionImpl < S, next_t >::set_value(s, vector, pos);
+        if (pos == N::value)
+            set_value_impl::invoke(s, vector, pos);
+        else
+            UnionImpl < S, next_t >::set_value(s, vector, pos);
     }
 
     struct get_value_impl
@@ -109,17 +116,21 @@ struct UnionImpl
         static inline void invoke(S& s,
                 UnionChildren& vector, int& pos)
         {
+            current_t t;
             reinterpret_cast< current_widget_t* >(vector[pos].get())->
-                get_value(boost::fusion::at < N >(s));
+                get_value(t);
+            boost::fusion::at < N >(s) = t;
             pos++;
         }
     };
 
-    static inline void get_value(S& s, UnionChildren& vector, int pos = 0)
+    static inline void get_value(S& s, UnionChildren& vector, 
+            int pos = 0)
     {
-        get_value_impl::invoke(s, vector, pos);
-
-        UnionImpl < S, next_t >::get_value(s, vector, pos);
+        if (pos == N::value)
+            get_value_impl::invoke(s, vector, pos);
+        else
+            UnionImpl < S, next_t >::get_value(s, vector, pos);
     }
 };
 
@@ -140,7 +151,8 @@ struct UnionImpl < S, typename cs_mpl::number_of_members< S >::type >
         // Nada por hacer
     }
 
-    static inline void get_value(S& s, UnionChildren& vector, int pos = 0)
+    static inline void get_value(S& s, UnionChildren& vector, 
+            int pos = 0)
     {
         // Nada por hacer
     }
@@ -158,42 +170,94 @@ struct Union: public UnionImpl < S, boost::mpl::int_ < 1 > >
 template< typename T >
 struct union_base_widget : public widget_base
 {
-    inline void get_value(T& t)
-    {
-        iterator::Union< T >::get_value(t, m_children);
-    }
-
-    inline void set_value(const T& t)
-    {
-        iterator::Union< T >::set_value(t, m_children);
-    }
-
     std::vector< widget_ptr > m_children;
 };
 
 template< typename T >
-struct union_as_grid : public union_base_widget< T >
+struct union_as_stack : public union_base_widget< T >
 {
-    typedef union_as_grid< T > type;
+    typedef union_as_stack< T > type;
     typedef QWidget qwidget_t;
 
     typedef cs_mpl::false_ is_simple_widget;
 
     typedef union_base_widget< T > base_t;
 
+    typedef adapted::is_union< T > adapted_t;
+
+    typedef typename cs_mpl::number_of_members< T >::type size_type; 
+
+    typedef typename 
+        cs_mpl::type_of_member< T, boost::mpl::int_< 0 > >::type 
+        discriminator_t;
+
     CORBASIM_DEFAULTCREATEWIDGET()
 
-    union_as_grid()
+    union_as_stack()
     {
         m_qwidget = new qwidget_t;
-        QGridLayout * layout = new QGridLayout;
+        QVBoxLayout * layout = new QVBoxLayout;
 
-        iterator::Union< T >::create(layout, base_t::m_children);
+        m_combo = new QComboBox;
+
+        // add members
+        const unsigned int count = size_type::value; 
+
+        for (unsigned int i = 1; i < count; i++) 
+        {
+            std::ostringstream oss;
+            oss << adapted_t::discriminators()[i - 1];
+
+            // TODO more efficient but generic convertion to string
+            m_combo->addItem(oss.str().c_str());
+        }
+        
+        m_stack = new QStackedWidget;
+
+        QObject::connect(m_combo, SIGNAL(currentIndexChanged(int)), 
+                m_stack, SLOT(setCurrentIndex(int)));
+
+        iterator::Union< T >::create(m_stack, base_t::m_children);
+
+        layout->addWidget(m_combo);
+        layout->addWidget(m_stack);
 
         m_qwidget->setLayout(layout);
     }
 
     CORBASIM_QWIDGET()
+
+    QComboBox * m_combo;
+    QStackedWidget * m_stack;
+
+    static inline int disc_to_pos(discriminator_t d)
+    {
+        for (int i = 0; i < size_type::value; i++) 
+        {
+            if (adapted_t::discriminators()[i] == d)
+                return i;
+        }
+
+        // Invalid value
+        return size_type::value;
+    }
+
+    inline void get_value(T& t)
+    {
+        int pos = m_combo->currentIndex();
+
+        if (pos > 0 && pos < size_type::value)
+            iterator::Union< T >::get_value(t, base_t::m_children, pos);
+    }
+
+    inline void set_value(const T& t)
+    {
+        int pos = disc_to_pos(t._d());
+
+        if (pos < size_type::value)
+            iterator::Union< T >::set_value(t, base_t::m_children, pos);
+    }
+
 };
 
 } // namespace detail
