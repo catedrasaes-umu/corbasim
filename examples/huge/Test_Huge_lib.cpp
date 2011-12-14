@@ -8,7 +8,7 @@
 /*PROTECTED REGION ID(corbasim_lib_Test_Huge::custom_widgets_region) ENABLED START*/
 /*PROTECTED REGION END*/
 
-extern "C" corbasim::gui::gui_factory_base * corbasim_lib_Test_Huge()
+extern "C" const corbasim::gui::gui_factory_base * corbasim_lib_Test_Huge()
 {
     return corbasim::gui::gui_factory< Test::Huge >::get_instance();
 }
