@@ -25,6 +25,8 @@
 #include <corbasim/json/writer.hpp>
 #include <corbasim/json/parser.hpp>
 
+#include <corbasim/core/factory_fwd.hpp>
+
 #include <fstream>
 #include <dlfcn.h>
 
@@ -103,55 +105,7 @@ AppModel::getFactory(const QString& fqn)
     lib.prepend("libcorbasim_lib_");
     lib.append(".so");
 
-    std::string str(lib.toStdString());
-
-    typedef const corbasim::gui::gui_factory_base *(*get_factory_t)();
-
-    void * handle = dlopen(str.c_str(), RTLD_NOW);
-
-    if (!handle)
-    {
-        if (m_controller)
-            m_controller->notifyError(
-                    QString("Library %1 not found!").arg(lib));
-        return NULL;
-    }
-
-    lib.remove(0, 3); // lib
-    lib.truncate(lib.length() - 3); // .so
-    str = lib.toStdString();
-   
-    get_factory_t get_factory = (get_factory_t) dlsym(handle,
-            str.c_str());
-
-    if (!get_factory)
-    {
-        dlclose (handle);
-
-        if (m_controller)
-            m_controller->notifyError(
-                    QString("Symbol %1 not found!").arg(lib));
-        return NULL;
-    }
-
-    const corbasim::gui::gui_factory_base * factory = get_factory();
-
-    if (factory)
-    {
-        m_libraries.insert(std::make_pair(fqn, handle));
-        m_factories.insert(std::make_pair(fqn, factory));
-    }
-    else
-    {
-        // Impossible is nothing!
-        if (m_controller)
-            m_controller->notifyError(
-                    QString("Erroneus library %1!").arg(lib));
-
-        dlclose(handle);
-    }
-
-    return factory;
+    return loadLibrary(lib);
 }
 
 void AppModel::setController(AppController * controller)
@@ -367,6 +321,83 @@ void AppModel::loadFile(const QString& file)
     // Servants
     for (unsigned int i = 0; i < cfg.servants.length(); i++) 
         createServant(cfg.servants[i]);
+}
+
+void AppModel::loadDirectory(const QString& path)
+{
+    QDir d(path);
+    QStringList filters;
+    filters << "libcorbasim_lib_*.so";
+    d.setNameFilters(filters);
+
+    const QFileInfoList files = d.entryInfoList(QDir::Files);
+    int count = files.count();
+
+    for (int i = 0; i < count; i++) 
+    {
+        loadLibrary(files[i].absoluteFilePath());
+    }
+}
+
+const corbasim::gui::gui_factory_base * 
+AppModel::loadLibrary(const QString& file)
+{
+    std::string str(file.toStdString());
+
+    std::cout << "Loading: " << str << std::endl;
+
+    typedef const corbasim::gui::gui_factory_base *(*get_factory_t)();
+
+    void * handle = dlopen(str.c_str(), RTLD_NOW);
+
+    if (!handle)
+    {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Library %1 not found!").arg(file));
+        return NULL;
+    }
+
+    QFileInfo info(file);
+    QString lib(info.baseName());
+    lib.remove(0, 3); // lib
+    // basename has no extension
+    // lib.truncate(lib.length() - 3); // .so
+    str = lib.toStdString();
+   
+    get_factory_t get_factory = (get_factory_t) dlsym(handle,
+            str.c_str());
+
+    if (!get_factory)
+    {
+        dlclose (handle);
+
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Symbol %1 not found!").arg(lib));
+        return NULL;
+    }
+
+    const corbasim::gui::gui_factory_base * factory = get_factory();
+    
+    if (factory)
+    {
+        const QString fqn(factory->get_core_factory()->get_fqn());
+
+        m_libraries.insert(std::make_pair(fqn, handle));
+        m_factories.insert(std::make_pair(fqn, factory));
+    }
+    else
+    {
+        // Impossible is nothing!
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Erroneus library %1!").arg(lib));
+
+        dlclose(handle);
+    }
+
+    return factory;
 }
 
 void AppModel::clearConfig()

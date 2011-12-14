@@ -56,6 +56,9 @@ public:
     void saveFile(const QString& file);
     void loadFile(const QString& file);
     
+    void loadDirectory(const QString& path);
+    const gui::gui_factory_base * loadLibrary(const QString& file);
+    
     void clearConfig();
 
     void updateReference(const QString& id,

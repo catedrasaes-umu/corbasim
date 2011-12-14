@@ -38,8 +38,6 @@ int main(int argc, char **argv)
     // Default ORB
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
 
-    QApplication app(argc, argv); 
-
     corbasim::app::AppConfiguration * config =
         corbasim::app::AppConfiguration::getInstance();
 
@@ -49,7 +47,7 @@ int main(int argc, char **argv)
     if (config->exit)
         return 0;
 
-    // append_directories(config->plugin_directories);
+    QApplication app(argc, argv); 
 
     // Force initialization
     corbasim::qt::initialize();
@@ -81,7 +79,16 @@ int main(int argc, char **argv)
     window.setController(&controller);
     window.show();
 
-    // load configuration files
+    // Directories with corbasim_app plugins
+    strings_t::const_iterator end2 = config->plugin_directories.end();
+    for (strings_t::const_iterator it = 
+            config->plugin_directories.begin(); it != end2; ++it) 
+    {
+        std::cout << "loading: " << (*it) << std::endl;
+        model.loadDirectory(it->c_str());
+    }
+
+    // Load configuration files
     strings_t::const_iterator end = config->load_files.end();
     for (strings_t::const_iterator it = 
             config->load_files.begin(); it != end; ++it) 
