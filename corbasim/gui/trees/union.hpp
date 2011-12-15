@@ -50,15 +50,21 @@ struct UnionImpl
     // Tree widget asociado al tipo del campo actual
     typedef tree_member < member_t > current_tree_t;
 
-	static inline void create_tree(QTreeWidgetItem* parent, const S& s)
+	static inline void create_tree(QTreeWidgetItem* parent, const S& s,
+            int pos = 0)
 	{
-		QTreeWidgetItem* current = current_tree_t::create_tree(
-                boost::fusion::at < N >(s), name_t::call());
+        if (pos == N::value - 1)
+        {
+            QTreeWidgetItem* current = current_tree_t::create_tree(
+                    boost::fusion::at < N >(s), name_t::call());
 
-		parent->addChild(current);
-
-        // Siguiente iteración
-		UnionImpl< S, next_t >::create_tree(parent, s);
+            parent->addChild(current);
+        }
+        else
+        {
+            // Siguiente iteración
+    		UnionImpl< S, next_t >::create_tree(parent, s, pos++);
+        }
 	}
 };
 
@@ -66,7 +72,8 @@ struct UnionImpl
 template < typename S >
 struct UnionImpl < S, typename cs_mpl::number_of_members < S >::type >
 {
-	static inline void create_tree(QTreeWidgetItem* parent, const S& s)
+	static inline void create_tree(QTreeWidgetItem* parent, const S& s,
+            int pos = 0)
 	{
 		// Nada que hacer
 	}
@@ -74,7 +81,7 @@ struct UnionImpl < S, typename cs_mpl::number_of_members < S >::type >
 
 // Iterador sobre una estructura. Template fachada.
 template < typename S >
-struct Union: UnionImpl < S, boost::mpl::int_ < 0 > >
+struct Union: UnionImpl < S, boost::mpl::int_ < 1 > >
 {
 };
 
@@ -86,12 +93,44 @@ struct union_as_tree
 {
     typedef union_as_tree < T > type;
 
+    typedef adapted::is_union< T > adapted_t;
+
+    typedef typename cs_mpl::number_of_members< T >::type size_type; 
+
+    typedef typename 
+        cs_mpl::type_of_member< T, boost::mpl::int_< 0 > >::type 
+        discriminator_t;
+
+    static inline int disc_to_pos(discriminator_t d)
+    {
+        for (int i = 0; i < size_type::value; i++) 
+        {
+            if (adapted_t::discriminators()[i] == d)
+                return i;
+        }
+
+        // Invalid value
+        return size_type::value;
+    }
+
+    typedef tree < discriminator_t > discriminator_tree_t;
+
     static inline QTreeWidgetItem* create_tree(const T& t, 
             const char* name)
     {
-         QTreeWidgetItem* parent = new QTreeWidgetItem(QStringList(name));
-         // iterator::Union< T >::create_tree(parent, t);
-         return parent;
+        QTreeWidgetItem* parent = new QTreeWidgetItem(QStringList(name));
+
+        int pos = disc_to_pos(t._d());
+
+        QTreeWidgetItem* current = discriminator_tree_t::create_tree(
+                    t._d(), "discriminator");
+
+        parent->addChild(current);
+        
+        if (pos < size_type::value)
+            iterator::Union< T >::create_tree(parent, t, pos);
+
+        return parent;
     }
 };
 
