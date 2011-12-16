@@ -22,7 +22,7 @@
 using namespace corbasim::app::view;
 
 ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
-    QDialog(parent)
+    QWidget(parent)
 {
     QVBoxLayout * layout = new QVBoxLayout;
 
@@ -75,7 +75,7 @@ void ObjrefCreateDialog::hideEvent(QHideEvent* event)
 // Servant
 
 ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
-    QDialog(parent)
+    QWidget(parent)
 {
     QVBoxLayout * layout = new QVBoxLayout;
 

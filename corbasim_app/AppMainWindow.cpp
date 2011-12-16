@@ -52,6 +52,12 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_sub_log->setWidget(m_log);
     m_mdi_area->addSubWindow(m_sub_log);
 
+    // Dock widgets
+    m_dock_app_log = new QDockWidget("Application log", this);
+    m_app_log = new QTreeWidget;
+    m_dock_app_log->setWidget(m_app_log);
+    addDockWidget(Qt::BottomDockWidgetArea, m_dock_app_log);
+
     setCentralWidget(m_mdi_area);
 
     // Menu
@@ -59,12 +65,14 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     setMenuBar(menu);
 
     QMenu * menuFile = menu->addMenu("&File");
-    menuFile->addAction("New &object", this, SLOT(showCreateObjref()));
-    menuFile->addAction("&New servant", this, SLOT(showCreateServant()));
+    menuFile->addAction("&New object", this, SLOT(showCreateObjref()));
+    menuFile->addAction("N&ew servant", this, SLOT(showCreateServant()));
     menuFile->addSeparator();
     menuFile->addAction("&Load configuration", this, SLOT(showLoad()));
     menuFile->addAction("&Save configuration", this, SLOT(showSave()));
     menuFile->addAction("&Clear configuration", this, SLOT(clearConfig()));
+    menuFile->addSeparator();
+    menuFile->addAction("&Append plug-in directory", this, SLOT(showLoadDirectory()));
     menuFile->addSeparator();
     menuFile->addAction("&Exit", this, SLOT(close()));
 
@@ -142,6 +150,9 @@ void AppMainWindow::setController(AppController * controller)
             m_controller, SLOT(saveFile(const QString&)));
     QObject::connect(this, SIGNAL(loadFile(QString)),
             m_controller, SLOT(loadFile(const QString&)));
+
+    QObject::connect(this, SIGNAL(loadDirectory(QString)),
+            m_controller, SLOT(loadDirectory(const QString&)));
 
 #define CORBASIM_APP_CON(ev)                                         \
     QObject::connect(m_controller,                                   \
@@ -389,6 +400,18 @@ void AppMainWindow::showLoad()
         return;
 
     emit loadFile(file);
+}
+
+void AppMainWindow::showLoadDirectory()
+{
+    QString file = QFileDialog::getExistingDirectory( 0, tr(
+                "Select a file"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    emit loadDirectory(file);
 }
 
 void AppMainWindow::showLoadScript()

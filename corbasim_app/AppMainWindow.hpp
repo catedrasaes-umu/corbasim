@@ -53,6 +53,8 @@ public slots:
     void showLoad();
     void showSave();
     
+    void showLoadDirectory();
+    
     void showLoadScript();
     void showScript();
 
@@ -87,6 +89,8 @@ signals:
     void saveFile(QString);
     void loadFile(QString);
     
+    void loadDirectory(QString);
+    
     void loadScriptFile(QString);
 
 protected:
@@ -112,10 +116,14 @@ protected:
     QMdiSubWindow * m_sub_script;
     
     // Subwindows widgets
-    QDialog * m_create_objref;
-    QDialog * m_create_servant;
+    QWidget * m_create_objref;
+    QWidget * m_create_servant;
     QTreeWidget * m_log;
     QWidget * m_script;
+
+    // Dock widgets
+    QDockWidget * m_dock_app_log;
+    QTreeWidget * m_app_log;
 
     void appendToLog(QTreeWidgetItem * item);
 };

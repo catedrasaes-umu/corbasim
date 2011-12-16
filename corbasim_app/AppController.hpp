@@ -48,6 +48,8 @@ public slots:
     //
     void loadFile(const QString& file);
     void saveFile(const QString& file);
+    
+    void loadDirectory(const QString& directory);
 
     void createObjref(const corbasim::app::ObjrefConfig& cfg);
     void deleteObjref(const QString& id);

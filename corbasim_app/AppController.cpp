@@ -49,6 +49,12 @@ void AppController::saveFile(const QString& file)
         m_model->saveFile(file);
 }
 
+void AppController::loadDirectory(const QString& directory)
+{
+    if (m_model)
+        m_model->loadDirectory(directory);
+}
+
 void AppController::createObjref(const ObjrefConfig& cfg)
 {
     std::cout << "Create " << cfg.id << std::endl;
