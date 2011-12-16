@@ -15,6 +15,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/trees/sequence.hpp
     gui/trees/string.hpp
     gui/trees/struct.hpp
+    gui/trees/union.hpp
     gui/widget_factory_fwd.hpp
     gui/widget_factory.hpp
     gui/widgets/array.hpp
@@ -29,6 +30,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/widgets/sequence.hpp
     gui/widgets/string.hpp
     gui/widgets/struct.hpp
+    gui/widgets/union.hpp
 
     # QObjects
     qt/Interpreter.hpp

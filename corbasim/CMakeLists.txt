@@ -3,6 +3,7 @@
 include(corbasim.cmake)
 
 # CORBASIM Python library
+message(STATUS "${Boost_PYTHON_LIBRARY}")
 if(PYTHONLIBS_FOUND AND Boost_PYTHON_LIBRARY)
     include_directories(${PYTHON_INCLUDE_PATH})
     include(corbasim_python.cmake)
