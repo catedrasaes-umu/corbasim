@@ -18,7 +18,6 @@
  */
 
 #include "Objref.hpp"
-#include <iostream>
 #include <corbasim/core/factory.hpp>
 
 using namespace corbasim::app::view;
@@ -82,8 +81,6 @@ Objref::Objref(QMdiArea * area,
 
 Objref::~Objref()
 {
-    std::cout << "Deleting: " << m_id.toStdString() << std::endl;
-
     m_menu->deleteLater();
 
     for (unsigned int i = 0; i < m_dialogs.size(); i++) 

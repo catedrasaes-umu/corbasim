@@ -31,32 +31,32 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     // Subwindows
     m_sub_create_objref(NULL),
     m_sub_create_servant(NULL),
-    m_sub_log(NULL),
     m_sub_script(NULL),
 
     // Widgets
     m_create_objref(NULL),
     m_create_servant(NULL),
-    m_log(NULL),
     m_script(NULL)
 {
     m_mdi_area = new QMdiArea;
-    m_sub_log = new QMdiSubWindow;
+
+    // Log dock widget
+    m_dock_log = new QDockWidget("Log", this);
     m_log = new QTreeWidget;
 
-    m_log->setWindowTitle("Log");
-    m_log->setHeaderLabel("Timeline");
     m_log->setColumnWidth(0, 800);
-    m_sub_log->resize(400, 500);
-
-    m_sub_log->setWidget(m_log);
-    m_mdi_area->addSubWindow(m_sub_log);
+    m_dock_log->setWidget(m_log);
+    addDockWidget(Qt::RightDockWidgetArea, m_dock_log);
 
     // Dock widgets
     m_dock_app_log = new QDockWidget("Application log", this);
     m_app_log = new QTreeWidget;
     m_dock_app_log->setWidget(m_app_log);
-    addDockWidget(Qt::BottomDockWidgetArea, m_dock_app_log);
+    addDockWidget(Qt::RightDockWidgetArea, m_dock_app_log);
+
+    // Disables the header
+    m_log->header()->hide();
+    m_app_log->header()->hide();
 
     setCentralWidget(m_mdi_area);
 
@@ -145,6 +145,8 @@ void AppMainWindow::setController(AppController * controller)
 
     QObject::connect(m_controller, SIGNAL(error(QString)),
             this, SLOT(displayError(const QString&)));
+    QObject::connect(m_controller, SIGNAL(message(QString)),
+            this, SLOT(displayMessage(const QString&)));
 
     QObject::connect(this, SIGNAL(saveFile(QString)),
             m_controller, SLOT(saveFile(const QString&)));
@@ -230,9 +232,7 @@ void AppMainWindow::showCreateServant()
 
 void AppMainWindow::showLog()
 {
-    m_sub_log->showNormal();
-    m_log->show();
-    m_mdi_area->setActiveSubWindow(m_sub_log);
+    m_dock_log->show();
 }
 
 void AppMainWindow::clearConfig()
@@ -266,6 +266,8 @@ void AppMainWindow::objrefCreated(const QString& id,
                         const CORBA::Object_var&)));
 
     m_objrefs.insert(std::make_pair(id, objref));
+
+    displayMessage(QString("Object %1 created").arg(id));
 }
 
 void AppMainWindow::objrefDeleted(const QString& id)
@@ -277,6 +279,8 @@ void AppMainWindow::objrefDeleted(const QString& id)
         // Removes the submenu and deletes the objref instance
         m_menuObjects->removeAction(it->second->getMenu()->menuAction());
         m_objrefs.erase(it);
+
+        displayMessage(QString("Object %1 deleted").arg(id));
     }
 }
 
@@ -298,6 +302,8 @@ void AppMainWindow::servantCreated(const QString& id,
                 SLOT(deleteServant(const QString&)));
 
     m_servants.insert(std::make_pair(id, servant));
+    
+    displayMessage(QString("Servant %1 created").arg(id));
 }
 
 void AppMainWindow::servantDeleted(const QString& id)
@@ -309,6 +315,8 @@ void AppMainWindow::servantDeleted(const QString& id)
         // Removes the submenu and deletes the servant instance
         m_menuServants->removeAction(it->second->getMenu()->menuAction());
         m_servants.erase(it);
+
+        displayMessage(QString("Servant %1 deleted").arg(id));
     }
 }
 
@@ -383,9 +391,16 @@ void AppMainWindow::displayError(const QString& err)
     QMessageBox::critical(this, "Error", err);
 }
 
+void AppMainWindow::displayMessage(const QString& msg)
+{
+    QTreeWidgetItem * item = new QTreeWidgetItem(QStringList(msg));
+    appendToAppLog(item);
+}
+
 void AppMainWindow::updatedReference(const QString& id,
         const CORBA::Object_var& ref)
 {
+    displayMessage(QString("Updated reference for '%1'").arg(id));
 }
 
 // Dialogs
@@ -446,6 +461,16 @@ void AppMainWindow::appendToLog(QTreeWidgetItem * item)
 
     m_log->addTopLevelItem(item);
     m_log->scrollToItem(item);
+}
+
+void AppMainWindow::appendToAppLog(QTreeWidgetItem * item)
+{
+    // check log size
+    if (m_app_log->topLevelItemCount() >= 200)
+        delete m_app_log->takeTopLevelItem(0);
+
+    m_app_log->addTopLevelItem(item);
+    m_app_log->scrollToItem(item);
 }
 
 void AppMainWindow::showScript()

@@ -80,6 +80,7 @@ public slots:
             corbasim::event::event_ptr resp);
 
     void displayError(const QString& err);
+    void displayMessage(const QString& msg);
 
     void updatedReference(const QString& id,
             const CORBA::Object_var& ref);
@@ -112,20 +113,22 @@ protected:
     // Subwindows
     QMdiSubWindow * m_sub_create_objref;
     QMdiSubWindow * m_sub_create_servant;
-    QMdiSubWindow * m_sub_log;
     QMdiSubWindow * m_sub_script;
     
     // Subwindows widgets
     QWidget * m_create_objref;
     QWidget * m_create_servant;
-    QTreeWidget * m_log;
     QWidget * m_script;
 
     // Dock widgets
     QDockWidget * m_dock_app_log;
     QTreeWidget * m_app_log;
 
+    QDockWidget * m_dock_log;
+    QTreeWidget * m_log;
+
     void appendToLog(QTreeWidgetItem * item);
+    void appendToAppLog(QTreeWidgetItem * item);
 };
 
 } // namespace app

@@ -39,8 +39,6 @@ Servant::Servant(QMdiArea * area,
 
 Servant::~Servant()
 {
-    std::cout << "Deleting: " << m_id.toStdString() << std::endl;
-
     m_menu->deleteLater();
 
     m_script->deleteLater();

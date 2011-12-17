@@ -19,7 +19,6 @@
 
 #include "AppController.hpp"
 #include "AppModel.hpp"
-#include <iostream>
 
 using namespace corbasim::app;
 
@@ -57,8 +56,6 @@ void AppController::loadDirectory(const QString& directory)
 
 void AppController::createObjref(const ObjrefConfig& cfg)
 {
-    std::cout << "Create " << cfg.id << std::endl;
-
     if (m_model)
         m_model->createObjref(cfg);
 }
@@ -71,8 +68,6 @@ void AppController::deleteObjref(const QString& id)
 
 void AppController::createServant(const ServantConfig& cfg)
 {
-    std::cout << "Create " << cfg.id << std::endl;
-
     if (m_model)
         m_model->createServant(cfg);
 }
@@ -124,6 +119,11 @@ void AppController::notifyServantDeleted(const QString& id)
 void AppController::notifyError(const QString& msg)
 {
     emit error(msg);
+}
+
+void AppController::notifyMessage(const QString& msg)
+{
+    emit message(msg);
 }
 
 void AppController::notifyRequestSent(const QString& id, 

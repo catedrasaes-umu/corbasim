@@ -232,7 +232,7 @@ struct union_as_stack : public union_base_widget< T >
 
     static inline int disc_to_pos(discriminator_t d)
     {
-        for (int i = 0; i < size_type::value; i++) 
+        for (int i = 0; i < size_type::value - 1; i++) 
         {
             if (adapted_t::discriminators()[i] == d)
                 return i;
@@ -246,7 +246,7 @@ struct union_as_stack : public union_base_widget< T >
     {
         int pos = m_combo->currentIndex();
 
-        if (pos > 0 && pos < size_type::value)
+        if (pos > 0 && pos < size_type::value - 1)
             iterator::Union< T >::get_value(t, base_t::m_children, pos);
     }
 
@@ -254,7 +254,7 @@ struct union_as_stack : public union_base_widget< T >
     {
         int pos = disc_to_pos(t._d());
 
-        if (pos < size_type::value)
+        if (pos < size_type::value - 1)
             iterator::Union< T >::set_value(t, base_t::m_children, pos);
     }
 

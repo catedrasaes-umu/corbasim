@@ -74,6 +74,7 @@ public slots:
     void notifyServantDeleted(const QString& id);
 
     void notifyError(const QString& msg);
+    void notifyMessage(const QString& msg);
 
     void notifyRequestSent(const QString& id, 
             corbasim::event::request_ptr req,
@@ -106,6 +107,7 @@ signals:
             corbasim::event::event_ptr res);
     
     void error(QString msg);
+    void message(QString msg);
 
     void updatedReference(QString id,
             CORBA::Object_var ref);

@@ -103,7 +103,7 @@ struct union_as_tree
 
     static inline int disc_to_pos(discriminator_t d)
     {
-        for (int i = 0; i < size_type::value; i++) 
+        for (int i = 0; i < size_type::value - 1; i++) 
         {
             if (adapted_t::discriminators()[i] == d)
                 return i;
@@ -127,7 +127,7 @@ struct union_as_tree
 
         parent->addChild(current);
         
-        if (pos < size_type::value)
+        if (pos < size_type::value - 1)
             iterator::Union< T >::create_tree(parent, t, pos);
 
         return parent;

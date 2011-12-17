@@ -27,7 +27,7 @@
 #include <corbasim/json/detail/json_parse.hpp>
 #include <corbasim/json/detail/json_writer.hpp>
 
-#include <iostream>
+//#include <iostream>
 #include <string>
 
 namespace corbasim
@@ -61,7 +61,7 @@ struct semantic_state
     inline void new_null()
     {
         _check_pre();
-        std::cout << "new null" << std::endl;
+        // std::cout << "new null" << std::endl;
 
         m_helpers_stack.back()->new_null();
         _consume();
@@ -72,7 +72,7 @@ struct semantic_state
     inline void new_double(double d)
     {
         _check_pre();
-        std::cout << "new double: " << d << std::endl;
+        // std::cout << "new double: " << d << std::endl;
 
         m_helpers_stack.back()->new_double(d);
         _consume();
@@ -88,7 +88,7 @@ struct semantic_state
         csu::corbasim::json::parser::decode (val);
 
         _check_pre();
-        std::cout << "new string: " << val <<  std::endl;
+        // std::cout << "new string: " << val <<  std::endl;
 
         if (state_stack.back().s != w::IN_OBJECT_AWAIT_ID)
         {
@@ -107,7 +107,7 @@ struct semantic_state
     inline void new_bool(bool b)
     {
         _check_pre();
-        std::cout << "new bool: " << b << std::endl;
+        // std::cout << "new bool: " << b << std::endl;
 
         m_helpers_stack.back()->new_bool(b);
         _consume();
@@ -118,7 +118,7 @@ struct semantic_state
     inline void new_blob(match_pair const& p)
     {
         _check_pre();
-        //std::cout << "new blob, size: " << p.second << std::endl;
+        //// std::cout << "new blob, size: " << p.second << std::endl;
         _check_post();
     }
 
@@ -126,7 +126,7 @@ struct semantic_state
     {
         namespace w = csu::corbasim::json::writer;
 
-        //std::cout << "object start" << std::endl;
+        //// std::cout << "object start" << std::endl;
 
         _check_pre();
 
@@ -138,7 +138,7 @@ struct semantic_state
 
     inline void object_end()
     {
-        //std::cout << "object end" << std::endl;
+        //// std::cout << "object end" << std::endl;
 
         state_stack.pop_back();
         _consume();
@@ -149,7 +149,7 @@ struct semantic_state
     {
         namespace w = csu::corbasim::json::writer;
 
-        //std::cout << "array start" << std::endl;
+        //// std::cout << "array start" << std::endl;
 
         _check_pre();
 
@@ -161,7 +161,7 @@ struct semantic_state
 
     inline void array_end()
     {
-        //std::cout << "array end" << std::endl;
+        //// std::cout << "array end" << std::endl;
 
         state_stack.pop_back();
         _consume();

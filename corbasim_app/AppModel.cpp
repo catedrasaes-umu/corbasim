@@ -30,6 +30,8 @@
 #include <fstream>
 #include <dlfcn.h>
 
+#include <iostream>
+
 using namespace corbasim::app;
 
 namespace corbasim 
@@ -273,9 +275,15 @@ void AppModel::saveFile(const QString& file)
     // convert to JSON and save
     try {
         json::write(ofs, cfg);
+
+        if (m_controller)
+            m_controller->notifyMessage(
+                    QString("Configuration saved into file %1").arg(file));
+
     } catch (...) {
         if (m_controller)
-            m_controller->notifyError("Error saving file!");
+            m_controller->notifyError(
+                    QString("Error saving file %1").arg(file));
     }
 }
 
@@ -307,20 +315,25 @@ void AppModel::loadFile(const QString& file)
 
         // parse JSON
         json::parse(cfg, buffer, length);
+
+        if (m_controller)
+            m_controller->notifyMessage(
+                    QString("Configuration loaded from file %1").arg(file));
+
+        // process cfg
+
+        // Objects
+        for (unsigned int i = 0; i < cfg.objects.length(); i++) 
+            createObjref(cfg.objects[i]);
+
+        // Servants
+        for (unsigned int i = 0; i < cfg.servants.length(); i++) 
+            createServant(cfg.servants[i]);
+
     } catch (...) {
     }
 
     delete [] buffer;
-
-    // process cfg
-
-    // Objects
-    for (unsigned int i = 0; i < cfg.objects.length(); i++) 
-        createObjref(cfg.objects[i]);
-
-    // Servants
-    for (unsigned int i = 0; i < cfg.servants.length(); i++) 
-        createServant(cfg.servants[i]);
 }
 
 void AppModel::loadDirectory(const QString& path)
@@ -343,8 +356,6 @@ const corbasim::gui::gui_factory_base *
 AppModel::loadLibrary(const QString& file)
 {
     std::string str(file.toStdString());
-
-    std::cout << "Loading: " << str << std::endl;
 
     typedef const corbasim::gui::gui_factory_base *(*get_factory_t)();
 
@@ -386,6 +397,10 @@ AppModel::loadLibrary(const QString& file)
 
         m_libraries.insert(std::make_pair(fqn, handle));
         m_factories.insert(std::make_pair(fqn, factory));
+
+        if (m_controller)
+            m_controller->notifyMessage(
+                    QString("New library loaded %1 for %2").arg(file).arg(fqn));
     }
     else
     {
@@ -402,7 +417,7 @@ AppModel::loadLibrary(const QString& file)
 
 void AppModel::clearConfig()
 {
-    // TODO
+   // TODO
 }
 
 void AppModel::updateReference(const QString& id,
