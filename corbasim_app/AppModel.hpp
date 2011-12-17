@@ -64,7 +64,12 @@ public:
     void updateReference(const QString& id,
             const CORBA::Object_var& ref);
 
+    QAbstractItemModel * getFQNModel();
+
 protected:
+
+    QStringList m_fqns;
+    QStringListModel m_fqns_model;
 
     AppModelData * m_data;
 

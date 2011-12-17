@@ -42,6 +42,8 @@ public:
 
     void setModel(AppModel * model);
 
+    QAbstractItemModel * getFQNModel();
+
 public slots:
 
     // Usados por la vista

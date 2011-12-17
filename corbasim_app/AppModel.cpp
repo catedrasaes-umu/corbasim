@@ -124,7 +124,7 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
     {
         if (m_controller)
             m_controller->notifyError(
-                    QString("Object %1 already exists!").arg(id));
+                    QString("Object '%1' already exists!").arg(id));
         return;
     }
 
@@ -155,7 +155,7 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
     {
         if (m_controller)
             m_controller->notifyError(
-                    QString("Object %1 already exists!").arg(id));
+                    QString("Object '%1' already exists!").arg(id));
         return;
     }
 
@@ -196,7 +196,7 @@ void AppModel::sendRequest(const QString& id,
         servants_t::iterator it = m_servants.find(id);
         if (it == m_servants.end())
             m_controller->notifyError(
-                    QString("Object %1 not found!").arg(id));
+                    QString("Object '%1' not found!").arg(id));
         else
             corbasim::event::event_ptr ev (it->second->sendRequest(req));
     }
@@ -218,7 +218,7 @@ void AppModel::deleteObjref(const QString& id)
     }
     else if (m_controller)
         m_controller->notifyError(
-                QString("Object %1 not found!").arg(id));
+                QString("Object '%1' not found!").arg(id));
 }
 
 void AppModel::deleteServant(const QString& id)
@@ -242,7 +242,7 @@ void AppModel::deleteServant(const QString& id)
     }
     else if (m_controller)
         m_controller->notifyError(
-                QString("Object %1 not found!").arg(id));
+                QString("Object '%1' not found!").arg(id));
 }
 
 void AppModel::saveFile(const QString& file)
@@ -278,12 +278,12 @@ void AppModel::saveFile(const QString& file)
 
         if (m_controller)
             m_controller->notifyMessage(
-                    QString("Configuration saved into file %1").arg(file));
+                    QString("Configuration saved into file '%1'").arg(file));
 
     } catch (...) {
         if (m_controller)
             m_controller->notifyError(
-                    QString("Error saving file %1").arg(file));
+                    QString("Error saving file '%1'").arg(file));
     }
 }
 
@@ -318,7 +318,7 @@ void AppModel::loadFile(const QString& file)
 
         if (m_controller)
             m_controller->notifyMessage(
-                    QString("Configuration loaded from file %1").arg(file));
+                    QString("Configuration loaded from file '%1'").arg(file));
 
         // process cfg
 
@@ -365,7 +365,7 @@ AppModel::loadLibrary(const QString& file)
     {
         if (m_controller)
             m_controller->notifyError(
-                    QString("Library %1 not found!").arg(file));
+                    QString("Library '%1' not found!").arg(file));
         return NULL;
     }
 
@@ -385,7 +385,7 @@ AppModel::loadLibrary(const QString& file)
 
         if (m_controller)
             m_controller->notifyError(
-                    QString("Symbol %1 not found!").arg(lib));
+                    QString("Symbol '%1' not found!").arg(lib));
         return NULL;
     }
 
@@ -398,16 +398,23 @@ AppModel::loadLibrary(const QString& file)
         m_libraries.insert(std::make_pair(fqn, handle));
         m_factories.insert(std::make_pair(fqn, factory));
 
+        // I don't like this solution because I need to set the list
+        // for each new fqn, but...
+        m_fqns << fqn;
+        m_fqns.removeDuplicates();
+        m_fqns_model.setStringList(m_fqns);
+
         if (m_controller)
             m_controller->notifyMessage(
-                    QString("New library loaded %1 for %2").arg(file).arg(fqn));
+                    QString("New library loaded '%1' for '%2'")
+                    .arg(file).arg(fqn));
     }
     else
     {
         // Impossible is nothing!
         if (m_controller)
             m_controller->notifyError(
-                    QString("Erroneus library %1!").arg(lib));
+                    QString("Erroneus library '%1'!").arg(lib));
 
         dlclose(handle);
     }
@@ -429,7 +436,7 @@ void AppModel::updateReference(const QString& id,
     {
         if (m_controller)
             m_controller->notifyError(
-                    QString("Object %1 not found!").arg(id));
+                    QString("Object '%1' not found!").arg(id));
     }
     else
     {
@@ -437,11 +444,15 @@ void AppModel::updateReference(const QString& id,
 
         if (CORBA::is_nil(new_ref) && m_controller)
             m_controller->notifyError(
-                    QString("Invalid reference for %1!").arg(id));
+                    QString("Invalid reference for '%1'!").arg(id));
 
         if (m_controller)
             m_controller->notifyUpdatedReference(id, new_ref);
     }
 }
 
+QAbstractItemModel * AppModel::getFQNModel()
+{
+    return &m_fqns_model;
+}
 

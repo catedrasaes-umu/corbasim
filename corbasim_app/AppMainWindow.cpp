@@ -72,7 +72,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuFile->addAction("&Save configuration", this, SLOT(showSave()));
     menuFile->addAction("&Clear configuration", this, SLOT(clearConfig()));
     menuFile->addSeparator();
-    menuFile->addAction("&Append plug-in directory", this, SLOT(showLoadDirectory()));
+    menuFile->addAction("&Append plug-in directory", this, 
+            SLOT(showLoadDirectory()));
     menuFile->addSeparator();
     menuFile->addAction("&Exit", this, SLOT(close()));
 
@@ -198,6 +199,16 @@ void AppMainWindow::showCreateObjref()
         m_sub_create_objref->setWidget(m_create_objref);
         m_mdi_area->addSubWindow(m_sub_create_objref);
 
+        // completer
+        QLineEdit *fqn = m_create_objref->findChild< QLineEdit *>("fqn");
+        if (fqn)
+        {
+            QCompleter * completer = 
+                new QCompleter(m_controller->getFQNModel());
+            completer->setCaseSensitivity(Qt::CaseInsensitive);
+            fqn->setCompleter(completer);
+        }
+
         QObject::connect(m_create_objref,
                 SIGNAL(createObjref(corbasim::app::ObjrefConfig)),
                 m_controller, 
@@ -219,6 +230,16 @@ void AppMainWindow::showCreateServant()
 
         m_sub_create_servant->setWidget(m_create_servant);
         m_mdi_area->addSubWindow(m_sub_create_servant);
+
+        // completer
+        QLineEdit *fqn = m_create_servant->findChild< QLineEdit *>("fqn");
+        if (fqn)
+        {
+            QCompleter * completer = 
+                new QCompleter(m_controller->getFQNModel());
+            completer->setCaseSensitivity(Qt::CaseInsensitive);
+            fqn->setCompleter(completer);
+        }
 
         QObject::connect(m_create_servant,
                 SIGNAL(createServant(corbasim::app::ServantConfig)),
@@ -267,7 +288,7 @@ void AppMainWindow::objrefCreated(const QString& id,
 
     m_objrefs.insert(std::make_pair(id, objref));
 
-    displayMessage(QString("Object %1 created").arg(id));
+    displayMessage(QString("Object '%1' created").arg(id));
 }
 
 void AppMainWindow::objrefDeleted(const QString& id)
@@ -280,7 +301,7 @@ void AppMainWindow::objrefDeleted(const QString& id)
         m_menuObjects->removeAction(it->second->getMenu()->menuAction());
         m_objrefs.erase(it);
 
-        displayMessage(QString("Object %1 deleted").arg(id));
+        displayMessage(QString("Object '%1' deleted").arg(id));
     }
 }
 
@@ -303,7 +324,7 @@ void AppMainWindow::servantCreated(const QString& id,
 
     m_servants.insert(std::make_pair(id, servant));
     
-    displayMessage(QString("Servant %1 created").arg(id));
+    displayMessage(QString("Servant '%1' created").arg(id));
 }
 
 void AppMainWindow::servantDeleted(const QString& id)
@@ -316,7 +337,7 @@ void AppMainWindow::servantDeleted(const QString& id)
         m_menuServants->removeAction(it->second->getMenu()->menuAction());
         m_servants.erase(it);
 
-        displayMessage(QString("Servant %1 deleted").arg(id));
+        displayMessage(QString("Servant '%1' deleted").arg(id));
     }
 }
 

@@ -146,3 +146,9 @@ void AppController::notifyUpdatedReference(const QString& id,
     emit updatedReference(id, ref);
 }
 
+QAbstractItemModel * AppController::getFQNModel()
+{
+    if (m_model) return m_model->getFQNModel();
+    return NULL;
+}
+
