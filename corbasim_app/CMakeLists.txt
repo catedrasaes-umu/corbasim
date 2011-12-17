@@ -22,6 +22,7 @@ set(corbasim_app_SRCS
 
     model/Objref.cpp
     model/Servant.cpp
+    model/ReferenceModel.cpp
     )
 
 set(corbasim_app_MOC_HDRS
@@ -33,6 +34,8 @@ set(corbasim_app_MOC_HDRS
     view/CreateDialog.hpp
     view/Objref.hpp
     view/Servant.hpp
+    
+    model/ReferenceModel.hpp
     )
 
 # NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
