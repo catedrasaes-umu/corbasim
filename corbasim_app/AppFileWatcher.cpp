@@ -43,6 +43,7 @@ void AppFileWatcher::setDirectory(const QString& directory)
 
     if (!m_directory.exists())
     {
+        // TODO try to create
     }
 }
 
@@ -79,19 +80,39 @@ void AppFileWatcher::setController(AppController * controller)
             SIGNAL(servantDeleted(QString)),
             this,
             SLOT(servantDeleted(const QString&)));
+
+    // Watcher to Controller
+    QObject::connect(
+            this,
+            SIGNAL(updateReference(QString, CORBA::Object_var)),
+            m_controller,
+            SLOT(updateReference(const QString&, 
+                    const CORBA::Object_var&)));
 }
 
 void AppFileWatcher::objrefCreated(const QString& id,
     const corbasim::gui::gui_factory_base * factory)
 {
     QString path = m_directory.absoluteFilePath(id);
+
+    if (!m_directory.exists(id))
+    {
+        QFile file(path);
+
+        if (!file.open(QIODevice::WriteOnly))
+            return;
+
+        // File exits
+        file.close();
+    }
+
     m_watcher.addPath(path);
 }
 
 void AppFileWatcher::objrefDeleted(const QString& id)
 {
     QString path = m_directory.absoluteFilePath(id);
-    m_watcher.addPath(path);
+    m_watcher.removePath(path);
 }
 
 void AppFileWatcher::servantCreated(const QString& id,
@@ -105,7 +126,7 @@ void AppFileWatcher::servantDeleted(const QString& id)
 
 void AppFileWatcher::fileChanged(const QString& path)
 {
-    // QFileInfo info(path);
+    QFileInfo info(path);
     QFile file(path);
 
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -114,28 +135,30 @@ void AppFileWatcher::fileChanged(const QString& path)
     QString content(file.readAll());
 
     int offset = 0;
-    QRegExp rx("IOR:*");
-    rx.setPatternSyntax(QRegExp::Wildcard);
+    QRegExp rx("IOR:(\\w+)");
 
     int pos;
+    QString ior;
+
     while((pos = rx.indexIn(content, offset)) != -1)
     {
-        // TODO
         int length = rx.matchedLength();
-        QString ior (content.mid(pos, length));
-        const std::string iorStr(ior.toStdString());
-
-        try {
-            CORBA::Object_var ref = 
-                corbasim::core::reference_repository::get_instance()->string_to_object(iorStr);
-
-            // TODO notify
-        } catch(...) {
-        }
-
+        ior = rx.cap();
         offset = pos + length;
     }
 
-}
+    if (!ior.isEmpty())
+    {
+        try {
+            const std::string iorStr(ior.toStdString());
 
+            CORBA::Object_var ref = 
+                corbasim::core::reference_repository::get_instance()->string_to_object(iorStr);
+
+            // notify the detected reference
+            emit updateReference(info.baseName(), ref);
+        } catch(...) {
+        }
+    }
+}
 

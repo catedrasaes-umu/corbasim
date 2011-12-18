@@ -52,6 +52,10 @@ public slots:
 
     void fileChanged(const QString& path);
 
+signals:
+
+    void updateReference(QString, CORBA::Object_var);
+
 protected:
     QDir m_directory;
     QFileSystemWatcher m_watcher;
