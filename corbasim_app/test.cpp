@@ -21,7 +21,7 @@
 #include "appC.h"
 #include "app_adapted.hpp"
 #include <corbasim/impl.hpp>
-#include "model/ReferenceModel.hpp"
+#include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/qt/types.hpp>
 
 int main(int argc, char **argv)
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     
     QComboBox cb;
 
-    corbasim::app::model::ReferenceModel refm;
+    corbasim::qt::ReferenceModel refm;
 
     cb.setModel(&refm);
 

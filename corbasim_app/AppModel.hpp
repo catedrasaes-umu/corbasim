@@ -26,6 +26,7 @@
 
 #include <map>
 #include <corbasim/event.hpp>
+#include <corbasim/qt/ReferenceModel.hpp>
 
 namespace corbasim 
 {
@@ -65,11 +66,14 @@ public:
             const CORBA::Object_var& ref);
 
     QAbstractItemModel * getFQNModel();
+    QAbstractItemModel * getReferenceModel();
 
 protected:
 
     QStringList m_fqns;
     QStringListModel m_fqns_model;
+
+    qt::ReferenceModel& m_ref_model;
 
     AppModelData * m_data;
 

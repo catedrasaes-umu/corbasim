@@ -27,6 +27,8 @@
 
 #include <corbasim/core/factory_fwd.hpp>
 
+#include <corbasim/qt/ReferenceModel.hpp>
+
 #include <fstream>
 #include <dlfcn.h>
 
@@ -70,6 +72,7 @@ public:
 } // namespace corbasim
 
 AppModel::AppModel() : 
+    m_ref_model(*qt::ReferenceModel::getDefaultModel()),
     m_data(new AppModelData), m_controller(NULL)
 {
 }
@@ -136,6 +139,8 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         model::Objref_ptr obj(new model::Objref(cfg, factory));
         m_objrefs.insert(std::make_pair(id, obj));
 
+        m_ref_model.appendItem(id, cfg.ref);
+
         if (m_controller)
         {
             m_controller->notifyObjrefCreated(id, factory);
@@ -182,6 +187,8 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 
         // End temporal
 
+        m_ref_model.appendItem(id, objSrv);
+
         if (m_controller)
             m_controller->notifyServantCreated(id, factory);
     }
@@ -213,6 +220,8 @@ void AppModel::deleteObjref(const QString& id)
 {
     if (m_objrefs.erase(id) > 0)
     {
+        m_ref_model.removeItem(id);
+
         if (m_controller)
             m_controller->notifyObjrefDeleted(id);
     }
@@ -237,6 +246,8 @@ void AppModel::deleteServant(const QString& id)
 
     if (m_servants.erase(id) > 0)
     {
+        m_ref_model.removeItem(id);
+
         if (m_controller)
             m_controller->notifyServantDeleted(id);
     }
@@ -446,6 +457,8 @@ void AppModel::updateReference(const QString& id,
             m_controller->notifyError(
                     QString("Invalid reference for '%1'!").arg(id));
 
+        m_ref_model.appendItem(id, new_ref);
+
         if (m_controller)
             m_controller->notifyUpdatedReference(id, new_ref);
     }
@@ -454,5 +467,10 @@ void AppModel::updateReference(const QString& id,
 QAbstractItemModel * AppModel::getFQNModel()
 {
     return &m_fqns_model;
+}
+
+QAbstractItemModel * AppModel::getReferenceModel()
+{
+    return &m_ref_model;
 }
 

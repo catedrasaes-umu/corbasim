@@ -152,3 +152,9 @@ QAbstractItemModel * AppController::getFQNModel()
     return NULL;
 }
 
+QAbstractItemModel * AppController::getReferenceModel()
+{
+    if (m_model) return m_model->getReferenceModel();
+    return NULL;
+}
+

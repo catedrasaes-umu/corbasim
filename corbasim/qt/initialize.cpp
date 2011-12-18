@@ -21,6 +21,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/event.hpp>
 #include <corbasim/impl.hpp>
+#include <corbasim/qt/ReferenceModel.hpp>
 
 namespace  
 {
@@ -43,6 +44,8 @@ public:
 
         qRegisterMetaType< CORBA::Object_var >
             ("CORBA::Object_var");
+
+        corbasim::qt::ReferenceModel::getDefaultModel();
     }
 };
 

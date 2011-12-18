@@ -5,6 +5,8 @@
 #include <corbasim/cosnaming/Cosnaming_adapted.hpp>
 #include <corbasim/gui/widgets.hpp>
 #include <corbasim/core/reference_repository.hpp>
+#include <corbasim/qt/ReferenceModel.hpp>
+#include <corbasim/qt/types.hpp>
 
 using namespace corbasim;
 using namespace corbasim::qt;
@@ -14,7 +16,7 @@ typedef corbasim::widgets::widget<
 
 ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
         QWidget * parent) :
-    QWidget(parent), m_validator(validator)
+    QWidget(parent), m_validator(validator), m_model(NULL)
 {
     QGridLayout * mainLayout = new QGridLayout;
     QHBoxLayout * layout = new QHBoxLayout;
@@ -49,6 +51,15 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
         m_selector->addItem("Name service query from string");
         m_resolve_str = new QTextEdit;
         m_stack->addWidget(m_resolve_str);
+
+        // Well-known objects
+        m_selector->addItem("Well-known object");
+        QWidget * w = new QWidget;
+        QVBoxLayout * l = new QVBoxLayout;
+        m_object_selector = new QComboBox;
+        l->addWidget(m_object_selector);
+        w->setLayout(l);
+        m_stack->addWidget(w);
     }
     mainLayout->addLayout(layout, 1, 0, 1, 4);
 
@@ -60,6 +71,9 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
     QObject::connect(m_selector, SIGNAL(currentIndexChanged(int)),
             this, SLOT(valueChanged()));
 
+    QObject::connect(m_object_selector, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(valueChanged()));
+
     QObject::connect(m_ior, SIGNAL(textChanged()), this, 
             SLOT(valueChanged()));
 
@@ -68,6 +82,9 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
     QObject::connect(updateBtn, SIGNAL(clicked()), this, 
             SLOT(valueChanged()));
+
+    // Default model
+    setModel(ReferenceModel::getDefaultModel());
 }
 
 ObjrefWidget::~ObjrefWidget()
@@ -95,6 +112,33 @@ void ObjrefWidget::setValidator(
     CORBA::String_var ior = rr->object_to_string(ref);
     m_ior->setPlainText(ior.in());
     m_stack->setCurrentIndex(0);
+}
+
+void ObjrefWidget::setModel(QAbstractItemModel * model)
+{
+    // Disconnect
+    if (m_model)
+    {
+        QObject::disconnect(m_model, SIGNAL(modelReset()),
+                this, SLOT(modelChanged()));
+    }
+
+    m_model = model;
+
+    // Connect
+    if (m_model)
+    {
+        m_object_selector->setModel(model);
+
+        QObject::connect(m_model, SIGNAL(modelReset()),
+                this, SLOT(modelChanged()));
+    }
+}
+
+void ObjrefWidget::modelChanged()
+{
+    if (m_stack->currentIndex() == 3)
+        valueChanged();
 }
 
 void ObjrefWidget::valueChanged()
@@ -126,6 +170,21 @@ void ObjrefWidget::valueChanged()
                 std::string str = 
                     m_resolve_str->toPlainText().toStdString();
                 ref = rr->resolve_str(str);
+            }
+            break;
+        // Well-known objects
+        case 3:
+            {
+                int idx = m_object_selector->currentIndex();
+
+                if (m_model && idx != -1)
+                {
+                    QVariant v = m_object_selector->itemData(idx);
+                    if (v.canConvert< CORBA::Object_var >())
+                    {
+                        ref = v.value< CORBA::Object_var >();
+                    }
+                }
             }
             break;
          // IOR

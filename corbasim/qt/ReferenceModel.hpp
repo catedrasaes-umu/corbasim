@@ -17,17 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_MODEL_REFERENCEMODEL_HPP
-#define CORBASIM_APP_MODEL_REFERENCEMODEL_HPP
+#ifndef CORBASIM_QT_REFERENCEMODEL_HPP
+#define CORBASIM_QT_REFERENCEMODEL_HPP
 
 #include <QtGui>
 #include <corbasim/impl.hpp>
 
 namespace corbasim
 {
-namespace app
-{
-namespace model
+namespace qt
 {
 
 class ReferenceModel : public QAbstractItemModel
@@ -49,6 +47,9 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     void appendItem(const QString& id, const CORBA::Object_var& ref);
+    void removeItem(const QString& id);
+
+    static ReferenceModel * getDefaultModel();
 
 protected:
 
@@ -56,9 +57,8 @@ protected:
     QList< CORBA::Object_var > m_refs;
 };
 
-} // model
-} // app
+} // qt
 } // corbasim
 
-#endif // CORBASIM_APP_MODEL_REFERENCEMODEL_HPP
+#endif // CORBASIM_QT_REFERENCEMODEL_HPP
 

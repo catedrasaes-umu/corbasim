@@ -46,6 +46,10 @@ public slots:
     void validatorHasChanged();
     void pasteIOR();
 
+    void setModel(QAbstractItemModel * model);
+
+    void modelChanged();
+
 signals:
 
     void valueHasChanged(CORBA::Object_var);
@@ -59,6 +63,9 @@ protected:
     core::reference_validator_base * m_validator;
     widgets::widget_base * m_resolve;
     QTextEdit * m_resolve_str;
+
+    QComboBox * m_object_selector;
+    QAbstractItemModel * m_model;
 };
 
 } // namespace qt

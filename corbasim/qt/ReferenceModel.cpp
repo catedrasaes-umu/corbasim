@@ -19,8 +19,9 @@
 
 #include "ReferenceModel.hpp"
 #include <corbasim/qt/types.hpp>
+#include <memory>
 
-using namespace corbasim::app::model;
+using namespace corbasim::qt;
 
 ReferenceModel::ReferenceModel(QObject *parent)
     : QAbstractItemModel(parent)
@@ -123,3 +124,22 @@ void ReferenceModel::appendItem(const QString& id,
     // TODO Notfiy model changed
     reset();
 }
+
+void ReferenceModel::removeItem(const QString& id)
+{
+    int idx;
+    if ((idx = m_ids.indexOf(id)) != -1)
+    {
+        m_ids.removeAt(idx);
+        m_refs.removeAt(idx);
+
+        reset();
+    }
+}
+
+ReferenceModel * ReferenceModel::getDefaultModel()
+{
+    static std::auto_ptr< ReferenceModel > _instance(new ReferenceModel);
+    return _instance.get();
+}
+

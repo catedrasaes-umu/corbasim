@@ -43,6 +43,7 @@ public:
     void setModel(AppModel * model);
 
     QAbstractItemModel * getFQNModel();
+    QAbstractItemModel * getReferenceModel();
 
 public slots:
 
