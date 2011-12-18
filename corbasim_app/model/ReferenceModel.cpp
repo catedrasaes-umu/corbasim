@@ -18,6 +18,7 @@
  */
 
 #include "ReferenceModel.hpp"
+#include <corbasim/qt/types.hpp>
 
 using namespace corbasim::app::model;
 
@@ -48,11 +49,8 @@ QVariant ReferenceModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
         return m_ids[row];
 
-    /*
-    Q_DECLARE_METATYPE
     if (role == Qt::UserRole)
         return QVariant::fromValue(m_refs[row]);
-    */
 
     return QVariant();
 }

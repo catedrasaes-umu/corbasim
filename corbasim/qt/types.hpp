@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * test.cpp
+ * types.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,29 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "appC.h"
-#include "app_adapted.hpp"
+#ifndef CORBASIM_QT_TYPES_HPP
+#define CORBASIM_QT_TYPES_HPP
+
+#include <QtGui>
 #include <corbasim/impl.hpp>
-#include "model/ReferenceModel.hpp"
-#include <corbasim/qt/types.hpp>
 
-int main(int argc, char **argv)
-{
-    QApplication app(argc, argv);
-    
-    QComboBox cb;
+Q_DECLARE_METATYPE(CORBA::Object_var);
 
-    corbasim::app::model::ReferenceModel refm;
+#endif /* CORBASIM_QT_TYPES_HPP */
 
-    cb.setModel(&refm);
-
-    refm.appendItem("my-id", CORBA::Object_var());
-
-    QVariant v = cb.itemData(0);
-
-    std::cout << v.canConvert< CORBA::Object_var >() << std::endl;
-    cb.show();
-
-    return app.exec();
-}

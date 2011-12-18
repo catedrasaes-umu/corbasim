@@ -33,6 +33,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/widgets/union.hpp
 
     # QObjects
+    qt/types.hpp
     qt/Interpreter.hpp
     qt/Status.hpp
     qt/MultiInputWidget.hpp

@@ -10,7 +10,6 @@ set(corbasim_app_SRCS
     AppModel.cpp
     AppController.cpp
     AppMainWindow.cpp
-    main.cpp
     
     AppConfiguration.cpp
 
@@ -43,11 +42,11 @@ qt4_wrap_cpp(corbasim_app_MOC_SRCS
     ${corbasim_app_MOC_HDRS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
 
 add_executable(corbasim_app
+    main.cpp
     ${corbasim_app_MOC_SRCS}
     ${corbasim_app_SRCS})
 target_link_libraries(corbasim_app
     dl # for dlopen, dlsym
-    boost_filesystem
     boost_program_options
     corbasim
     corbasim_qt
@@ -56,9 +55,13 @@ target_link_libraries(corbasim_app
 install(TARGETS corbasim_app DESTINATION bin)
 install(TARGETS corbasim_app_idl DESTINATION lib)
 
-add_executable(corbasim_app_test test.cpp)
+add_executable(corbasim_app_test EXCLUDE_FROM_ALL
+    test.cpp
+    ${corbasim_app_MOC_SRCS}
+    ${corbasim_app_SRCS})
 target_link_libraries(corbasim_app_test
     dl # for dlopen, dlsym
+    boost_program_options
     corbasim
     corbasim_qt
     corbasim_app_idl)
