@@ -94,7 +94,6 @@ Objref::~Objref()
 
     m_reference->deleteLater();
     m_sub_reference->deleteLater();
-
 }
 
 QMenu * Objref::getMenu() const

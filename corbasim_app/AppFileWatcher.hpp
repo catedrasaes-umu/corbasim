@@ -50,6 +50,7 @@ public slots:
         const corbasim::gui::gui_factory_base * factory);
     void servantDeleted(const QString& id);
 
+    void readFile(const QString& path);
     void fileChanged(const QString& path);
 
 signals:

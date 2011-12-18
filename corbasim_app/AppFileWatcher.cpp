@@ -93,7 +93,7 @@ void AppFileWatcher::setController(AppController * controller)
 void AppFileWatcher::objrefCreated(const QString& id,
     const corbasim::gui::gui_factory_base * factory)
 {
-    QString path = m_directory.absoluteFilePath(id);
+    QString path (m_directory.absoluteFilePath(id));
 
     if (!m_directory.exists(id))
     {
@@ -104,6 +104,11 @@ void AppFileWatcher::objrefCreated(const QString& id,
 
         // File exits
         file.close();
+    }
+    else
+    {
+        // Read file at init
+        readFile(path);
     }
 
     m_watcher.addPath(path);
@@ -126,6 +131,11 @@ void AppFileWatcher::servantDeleted(const QString& id)
 
 void AppFileWatcher::fileChanged(const QString& path)
 {
+    readFile(path);
+}
+
+void AppFileWatcher::readFile(const QString& path)
+{
     QFileInfo info(path);
     QFile file(path);
 
@@ -142,9 +152,8 @@ void AppFileWatcher::fileChanged(const QString& path)
 
     while((pos = rx.indexIn(content, offset)) != -1)
     {
-        int length = rx.matchedLength();
         ior = rx.cap();
-        offset = pos + length;
+        offset = pos + rx.matchedLength();
     }
 
     if (!ior.isEmpty())
