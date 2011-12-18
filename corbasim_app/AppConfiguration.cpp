@@ -26,7 +26,8 @@ using namespace corbasim::app;
 namespace po = boost::program_options;
 
 AppConfiguration::AppConfiguration() : 
-    exit(false)
+    exit(false), enable_scripting(false), 
+    enable_watch_directory(false), watch_directory("/tmp/corbasim_app")
 {
 }
 
@@ -52,10 +53,18 @@ void AppConfiguration::processCmdLine(int argc, char** argv)
     
     po::options_description scripting_("Scripting options");
     scripting_.add_options()
-        ("enable-scripting", "enable scripting support");
+        ("enable-scripting,s", "enable scripting support");
+
+    po::options_description watch_("Watch directory");
+    watch_.add_options()
+        ("enable-watch,w", "enable watch directory")
+        ("watch-directory", 
+            po::value< std::string >(&watch_directory),
+            "directory to watch");
 
     desc_.add(generic_);
     desc_.add(scripting_);
+    desc_.add(watch_);
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc_), vm);
@@ -69,5 +78,6 @@ void AppConfiguration::processCmdLine(int argc, char** argv)
     }
 
     enable_scripting = vm.count("enable-scripting");
+    enable_watch_directory = vm.count("enable-watch");
 }
 

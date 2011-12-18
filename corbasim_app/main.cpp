@@ -23,6 +23,7 @@
 #include "AppController.hpp"
 #include "AppModel.hpp"
 #include "TriggerEngine.hpp"
+#include "AppFileWatcher.hpp"
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
@@ -54,10 +55,12 @@ int main(int argc, char **argv)
 
     QThread threadController;
     QThread threadEngine;
+    QThread threadWatcher;
 
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
     corbasim::app::TriggerEngine engine;
+    corbasim::app::AppFileWatcher watcher;
     corbasim::app::AppMainWindow window;
 
     // Executed in dedicated threads
@@ -69,6 +72,15 @@ int main(int argc, char **argv)
         threadEngine.start();
         engine.setController(&controller);
         window.setEngine(&engine);
+    }
+
+    if (config->enable_watch_directory)
+    {
+        watcher.setDirectory(config->watch_directory.c_str());
+        watcher.setController(&controller);
+
+        watcher.moveToThread(&threadWatcher);
+        threadWatcher.start();
     }
 
     threadController.start();
@@ -104,6 +116,7 @@ int main(int argc, char **argv)
     // Wait for child threads
     threadController.quit();
     threadEngine.quit();
+    threadWatcher.quit();
 
     orb->shutdown(1);
     orbThread.join();

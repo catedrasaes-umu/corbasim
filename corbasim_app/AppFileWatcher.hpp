@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * AppConfiguration.hpp
+ * AppFileWatcher.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,46 +17,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_APPCONFIGURATION_HPP
-#define CORBASIM_APP_APPCONFIGURATION_HPP
+#ifndef CORBASIM_APP_APPFILEWATCHER_HPP
+#define CORBASIM_APP_APPFILEWATCHER_HPP
 
-#include <memory>
-#include <string>
-#include <vector>
+#include <QtCore>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 
 namespace corbasim 
 {
 namespace app 
 {
 
-class AppConfiguration
+class AppController;
+
+class AppFileWatcher : public QObject
 {
+    Q_OBJECT
 public:
+    AppFileWatcher(QObject * parent = 0);
+    virtual ~AppFileWatcher();
 
-    void processCmdLine(int argc, char** argv);
+    void setDirectory(const QString& directory);
+    void setController(AppController * controller);
 
-    static AppConfiguration * getInstance();
+public slots:
 
-    // Data
-    bool exit;
-    bool enable_scripting;
-    bool enable_watch_directory;
+    void objrefCreated(const QString& id,
+        const corbasim::gui::gui_factory_base * factory);
+    void objrefDeleted(const QString& id);
 
-    typedef std::vector< std::string > strings_t;
+    void servantCreated(const QString& id,
+        const corbasim::gui::gui_factory_base * factory);
+    void servantDeleted(const QString& id);
 
-    strings_t plugin_directories;
-    strings_t load_files;
-
-    std::string watch_directory;
+    void fileChanged(const QString& path);
 
 protected:
+    QDir m_directory;
+    QFileSystemWatcher m_watcher;
 
-    AppConfiguration();
-
+    AppController * m_controller;
 };
 
 } // namespace app
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_APPCONFIGURATION_HPP */
+#endif /* CORBASIM_APP_APPFILEWATCHER_HPP */
 

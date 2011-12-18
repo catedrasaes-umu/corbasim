@@ -12,6 +12,7 @@ set(corbasim_app_SRCS
     AppMainWindow.cpp
     
     AppConfiguration.cpp
+    AppFileWatcher.cpp
 
     TriggerEngine.cpp
 
@@ -26,6 +27,7 @@ set(corbasim_app_SRCS
 set(corbasim_app_MOC_HDRS
     AppController.hpp
     AppMainWindow.hpp
+    AppFileWatcher.hpp
 
     TriggerEngine.hpp
 
