@@ -121,6 +121,14 @@ int main(int argc, char **argv)
         controller.loadFile(it->c_str());
     }
 
+    // borrar
+    /*
+    QListView view;
+    view.setModel(corbasim::qt::ReferenceModel::getDefaultModel());
+    view.show();
+    */
+    // fin borrar
+
     boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));
 
     int res = app.exec();

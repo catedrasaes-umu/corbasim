@@ -64,8 +64,8 @@ Qt::ItemFlags ReferenceModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QVariant ReferenceModel::headerData(int section, Qt::Orientation orientation,
-                           int role) const
+QVariant ReferenceModel::headerData(int section, 
+        Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
@@ -82,7 +82,7 @@ QModelIndex ReferenceModel::index(int row, int column,
         return QModelIndex();
 
     if (row >= 0 && row < m_ids.count())
-        return createIndex(row, column);
+        return createIndex(row, column, (void *) m_factories[row]);
 
     return QModelIndex();
 }
@@ -107,13 +107,15 @@ int ReferenceModel::rowCount(const QModelIndex &parent) const
 }
 
 void ReferenceModel::appendItem(const QString& id, 
-        const CORBA::Object_var& ref)
+        const CORBA::Object_var& ref,
+        corbasim::gui::gui_factory_base const * factory)
 {
     int idx;
     if ((idx = m_ids.indexOf(id)) == -1)
     {
         m_ids.append(id);
         m_refs.append(ref);
+        m_factories.append(factory);
     }
     else
     {
@@ -132,6 +134,7 @@ void ReferenceModel::removeItem(const QString& id)
     {
         m_ids.removeAt(idx);
         m_refs.removeAt(idx);
+        m_factories.removeAt(idx);
 
         reset();
     }

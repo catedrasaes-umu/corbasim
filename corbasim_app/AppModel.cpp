@@ -139,7 +139,7 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         model::Objref_ptr obj(new model::Objref(cfg, factory));
         m_objrefs.insert(std::make_pair(id, obj));
 
-        m_ref_model.appendItem(id, cfg.ref);
+        m_ref_model.appendItem(id, cfg.ref, factory);
 
         if (m_controller)
         {
@@ -187,7 +187,7 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 
         // End temporal
 
-        m_ref_model.appendItem(id, objSrv);
+        m_ref_model.appendItem(id, objSrv, factory);
 
         if (m_controller)
             m_controller->notifyServantCreated(id, factory);
@@ -457,7 +457,7 @@ void AppModel::updateReference(const QString& id,
             m_controller->notifyError(
                     QString("Invalid reference for '%1'!").arg(id));
 
-        m_ref_model.appendItem(id, new_ref);
+        m_ref_model.appendItem(id, new_ref, NULL);
 
         if (m_controller)
             m_controller->notifyUpdatedReference(id, new_ref);

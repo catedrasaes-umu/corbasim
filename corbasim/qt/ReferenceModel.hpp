@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include <corbasim/impl.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 
 namespace corbasim
 {
@@ -46,7 +47,9 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    void appendItem(const QString& id, const CORBA::Object_var& ref);
+    void appendItem(const QString& id, 
+            const CORBA::Object_var& ref,
+            gui::gui_factory_base const * factory);
     void removeItem(const QString& id);
 
     static ReferenceModel * getDefaultModel();
@@ -55,6 +58,7 @@ protected:
 
     QList< QString > m_ids;
     QList< CORBA::Object_var > m_refs;
+    QList< gui::gui_factory_base const * > m_factories;
 };
 
 } // qt
