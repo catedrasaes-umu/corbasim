@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * test.cpp
+ * MultiScriptEditor.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,23 +17,37 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "appC.h"
-#include "app_adapted.hpp"
-#include <corbasim/impl.hpp>
-#include <corbasim/qt/ReferenceModel.hpp>
-#include <corbasim/qt/types.hpp>
-#include <QtScript>
-//#include <QScriptEngineDebugger>
-#include <corbasim/qt/private/MultiScriptEditor.hpp>
+#ifndef CORBASIM_QT_PRIVATE_MULTISCRIPTEDITOR_HPP
+#define CORBASIM_QT_PRIVATE_MULTISCRIPTEDITOR_HPP
 
-int main(int argc, char **argv)
+#include <QtGui>
+
+namespace corbasim 
 {
-    QApplication app(argc, argv);
-    
-    corbasim::qt::priv::MultiScriptEditor editor;
+namespace qt 
+{
+namespace priv 
+{
 
-    editor.show();
+class MultiScriptEditor : public QMainWindow
+{
+    Q_OBJECT
+public:
+    MultiScriptEditor(QWidget * parent = 0);
+    virtual ~MultiScriptEditor();
 
-    return app.exec();
-}
+public slots:
+
+    void new_();
+
+protected:
+
+    QTabWidget * m_tabs;
+};
+
+} // namespace priv
+} // namespace qt
+} // namespace corbasim
+
+#endif /* CORBASIM_QT_PRIVATE_MULTISCRIPTEDITOR_HPP */
+

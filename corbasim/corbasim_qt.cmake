@@ -64,6 +64,7 @@ set(corbasim_qt_MOC_HDRS
     # private
     qt/private/codeeditor.h
     qt/private/ScriptEditor.hpp
+    qt/private/MultiScriptEditor.hpp
 
     qt/ReferenceModel.hpp
     qt/Interpreter.hpp
@@ -91,6 +92,7 @@ set(corbasim_qt_SRCS
     qt/private/codeeditor.cpp
     qt/private/qscriptsyntaxhighlighter.cpp
     qt/private/ScriptEditor.cpp
+    qt/private/MultiScriptEditor.cpp
 
     qt/ReferenceModel.cpp
     qt/Interpreter.cpp
