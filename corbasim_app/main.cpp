@@ -23,6 +23,7 @@
 #include "AppController.hpp"
 #include "AppModel.hpp"
 #include "TriggerEngine.hpp"
+#include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
@@ -56,11 +57,13 @@ int main(int argc, char **argv)
     QThread threadController;
     QThread threadEngine;
     QThread threadWatcher;
+    QThread threadDumper;
 
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
     corbasim::app::TriggerEngine engine;
     corbasim::app::AppFileWatcher watcher;
+    corbasim::app::DataDumper dumper;
     corbasim::app::AppMainWindow window;
 
     // Executed in dedicated threads
@@ -81,6 +84,15 @@ int main(int argc, char **argv)
 
         watcher.moveToThread(&threadWatcher);
         threadWatcher.start();
+    }
+
+    if (config->enable_dump_data)
+    {
+        dumper.setDirectory(config->dump_directory.c_str());
+        dumper.setController(&controller);
+
+        dumper.moveToThread(&threadDumper);
+        threadDumper.start();
     }
 
     threadController.start();
@@ -117,6 +129,7 @@ int main(int argc, char **argv)
     threadController.quit();
     threadEngine.quit();
     threadWatcher.quit();
+    threadDumper.quit();
 
     orb->shutdown(1);
     orbThread.join();

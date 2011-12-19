@@ -41,6 +41,7 @@ public:
     bool exit;
     bool enable_scripting;
     bool enable_watch_directory;
+    bool enable_dump_data;
 
     typedef std::vector< std::string > strings_t;
 
@@ -48,6 +49,7 @@ public:
     strings_t load_files;
 
     std::string watch_directory;
+    std::string dump_directory;
 
 protected:
 

@@ -15,6 +15,7 @@ set(corbasim_app_SRCS
     AppFileWatcher.cpp
 
     TriggerEngine.cpp
+    DataDumper.cpp
 
     view/CreateDialog.cpp
     view/Objref.cpp
@@ -30,6 +31,7 @@ set(corbasim_app_MOC_HDRS
     AppFileWatcher.hpp
 
     TriggerEngine.hpp
+    DataDumper.hpp
 
     view/CreateDialog.hpp
     view/Objref.hpp
