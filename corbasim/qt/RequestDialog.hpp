@@ -87,6 +87,9 @@ protected:
     event::request_ptr m_storedRequest;
 
 #ifdef CORBASIM_USE_QTSCRIPT
+    // widgets
+    QTabWidget * m_tabs;
+    QPlainTextEdit * m_code;
 
     QScriptEngine m_engine;
     QScriptValue m_thisObject;

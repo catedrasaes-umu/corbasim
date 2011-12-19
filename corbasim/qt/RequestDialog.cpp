@@ -23,6 +23,10 @@
 
 #include <iostream>
 
+#ifdef CORBASIM_USE_QTSCRIPT
+#include <corbasim/qt/private/ScriptEditor.hpp>
+#endif
+
 using namespace corbasim;
 using namespace corbasim::qt;
 
@@ -108,7 +112,21 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
     QObject::connect(&m_timer, SIGNAL(timeout()), 
             this, SLOT(sendStored()));
 
+#ifdef CORBASIM_USE_QTSCRIPT
+    QVBoxLayout * mainLayout = new QVBoxLayout;
+    m_tabs = new QTabWidget;
+    QWidget * w = new QWidget;
+    w->setLayout(layout);
+    m_tabs->addTab(w, "Form");
+
+    m_code = new qt::priv::ScriptEditor;
+    m_tabs->addTab(m_code, "Script");
+
+    mainLayout->addWidget(m_tabs);
+    setLayout(mainLayout);
+#else
     setLayout(layout);
+#endif
 
 
 #ifdef CORBASIM_USE_QTSCRIPT
@@ -134,6 +152,7 @@ void RequestDialog::stopTimer()
 #ifdef CORBASIM_USE_QTSCRIPT
 void RequestDialog::reloadScript()
 {
+    /*
     QFile file(QString(m_dlg->get_name())+ ".js");
 
     if (!file.exists() || 
@@ -144,13 +163,25 @@ void RequestDialog::reloadScript()
     }
 
     QString strProgram = file.readAll();
+    */
+    const QString strProgram (m_code->toPlainText());
     if (!m_engine.canEvaluate(strProgram))
     {
         std::cerr << "Could not evaluate program!" << std::endl;
         return;
     }
 
-    m_engine.evaluate(strProgram);
+    m_engine.evaluate(strProgram, QString(m_dlg->get_name())+ ".js");
+
+    if (m_engine.hasUncaughtException())
+    {
+        QString error = QString("%1\n\n%2")
+            .arg(m_engine.uncaughtException().toString())
+            .arg(m_engine.uncaughtExceptionBacktrace().join("\n"));
+
+        QMessageBox::critical(this, "Error", error);
+        return;
+    }
 
     m_initFunc = m_engine.evaluate("init");
     m_preFunc = m_engine.evaluate("pre");

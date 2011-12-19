@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * test.cpp
+ * ScriptEditor.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,40 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "appC.h"
-#include "app_adapted.hpp"
-#include <corbasim/impl.hpp>
-#include <corbasim/qt/ReferenceModel.hpp>
-#include <corbasim/qt/types.hpp>
-#include <QtScript>
-//#include <QScriptEngineDebugger>
-#include <corbasim/qt/qscriptsyntaxhighlighter_p.h>
+#ifndef CORBASIM_QT_PRIVATE_SCRIPTEDITOR_HPP
+#define CORBASIM_QT_PRIVATE_SCRIPTEDITOR_HPP
 
-int main(int argc, char **argv)
+#include "codeeditor.h"
+#include "qscriptsyntaxhighlighter_p.h"
+
+namespace corbasim 
 {
-    QApplication app(argc, argv);
-    
-    QComboBox cb;
+namespace qt 
+{
+namespace priv
+{
 
-    corbasim::qt::ReferenceModel refm;
+class ScriptEditor : public CodeEditor
+{
+    Q_OBJECT
+public:
+    ScriptEditor(QWidget * parent = 0);
+    virtual ~ScriptEditor();
 
-    cb.setModel(&refm);
+protected:
+    tp::qt::QScriptSyntaxHighlighter m_ssh;
+};
 
-    refm.appendItem("my-id", CORBA::Object_var());
+} // namespace priv
+} // namespace qt
+} // namespace corbasim
 
-    QVariant v = cb.itemData(0);
+#endif /* CORBASIM_QT_PRIVATE_SCRIPTEDITOR_HPP */
 
-    std::cout << v.canConvert< CORBA::Object_var >() << std::endl;
-    cb.show();
-
-    QTextEdit edit;
-
-    tp::qt::QScriptSyntaxHighlighter ss(edit.document());
-
-
-    edit.show();
-
-
-    return app.exec();
-}

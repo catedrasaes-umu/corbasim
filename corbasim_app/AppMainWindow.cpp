@@ -383,6 +383,7 @@ void AppMainWindow::requestSent(const QString& id,
 
         // Add to log
         item->setText(0, text);
+        item->setIcon(0, style()->standardIcon(QStyle::SP_ArrowLeft));
         appendToLog(item);
     }
 }
@@ -403,6 +404,7 @@ void AppMainWindow::requestReceived(const QString& id,
 
         // Add to log
         item->setText(0, text);
+        item->setIcon(0, style()->standardIcon(QStyle::SP_ArrowRight));
         appendToLog(item);
     }
 }

@@ -64,6 +64,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 if(QT_FOUND)
     set(QT_USE_QTSCRIPT 1)
+    set(QT_USE_QTSCRIPTTOOLS 1)
     include(${QT_USE_FILE})
 endif()
 

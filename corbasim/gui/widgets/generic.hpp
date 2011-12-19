@@ -21,6 +21,8 @@
 #define CORBASIM_WIDGETS_GENERIC_HPP
 
 #include <corbasim/gui/widgets_fwd.hpp>
+#include <corbasim/core/archives.hpp>
+#include <sstream>
 
 namespace corbasim 
 {
@@ -44,12 +46,23 @@ struct type_as_serialized : public widget_base
 
     inline void set_value(const T& val)
     {
-        // TODO
+        // TODO JSON format
+        std::ostringstream os;
+        core::text_oarchive toa(os);
+
+        toa << val;
+
+        m_qwidget->setPlainText(os.str().c_str());
     }
 
     inline void get_value(T& val)
     {
-        // TODO
+        // TODO JSON format
+        const std::string str(m_qwidget->toPlainText().toStdString());
+        std::istringstream is(str);
+        core::text_iarchive tia(is);
+
+        tia >> val;
     }
 
     CORBASIM_QWIDGET()
@@ -60,4 +73,3 @@ struct type_as_serialized : public widget_base
 } // namespace corbasim
 
 #endif /* CORBASIM_WIDGETS_GENERIC_HPP */
-

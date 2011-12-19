@@ -61,6 +61,10 @@ foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
 endforeach(_header ${corbasim_qt_EXPORTED_HEADERS})
 
 set(corbasim_qt_MOC_HDRS
+    # private
+    qt/private/codeeditor.h
+    qt/private/ScriptEditor.hpp
+
     qt/ReferenceModel.hpp
     qt/Interpreter.hpp
     qt/client/SimpleClient.hpp
@@ -82,6 +86,11 @@ set(corbasim_qt_MOC_HDRS
 set(corbasim_qt_SRCS
     gui/tree_factory.cpp
     gui/gui_factory.cpp
+
+    # private
+    qt/private/codeeditor.cpp
+    qt/private/qscriptsyntaxhighlighter.cpp
+    qt/private/ScriptEditor.cpp
 
     qt/ReferenceModel.cpp
     qt/Interpreter.cpp
