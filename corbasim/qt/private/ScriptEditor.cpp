@@ -24,7 +24,13 @@ using namespace corbasim::qt::priv;
 ScriptEditor::ScriptEditor(QWidget * parent) :
     CodeEditor(parent), m_ssh(document())
 {
+    QFont font;
+    font.setFamily("Courier");
+    font.setFixedPitch(true);
+    font.setPointSize(10);
     
+    setFont(font);
+    setTabStopWidth(4 * fontMetrics().width(' '));
 }
 
 ScriptEditor::~ScriptEditor()

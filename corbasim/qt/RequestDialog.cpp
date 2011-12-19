@@ -106,12 +106,6 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
             this, SLOT(hide())); 
     btnsLayout->addWidget(btn);
 
-    layout->addLayout(btnsLayout);
-   
-    // Timer
-    QObject::connect(&m_timer, SIGNAL(timeout()), 
-            this, SLOT(sendStored()));
-
 #ifdef CORBASIM_USE_QTSCRIPT
     QVBoxLayout * mainLayout = new QVBoxLayout;
     m_tabs = new QTabWidget;
@@ -123,11 +117,16 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
     m_tabs->addTab(m_code, "Script");
 
     mainLayout->addWidget(m_tabs);
-    setLayout(mainLayout);
-#else
-    setLayout(layout);
+    layout = mainLayout;
 #endif
 
+    layout->addLayout(btnsLayout);
+   
+    // Timer
+    QObject::connect(&m_timer, SIGNAL(timeout()), 
+            this, SLOT(sendStored()));
+
+    setLayout(layout);
 
 #ifdef CORBASIM_USE_QTSCRIPT
 
