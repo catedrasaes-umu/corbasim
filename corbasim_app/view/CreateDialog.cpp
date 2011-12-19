@@ -136,12 +136,19 @@ ReferenceValidatedWidget::ReferenceValidatedWidget(
     l->addWidget(m_widget);
 
     QPushButton * applyBtn = new QPushButton("&Apply", this);
+    QPushButton * pasteBtn = new QPushButton("&Paste IOR from clipboard", this);
 
     QObject::connect(applyBtn, SIGNAL(clicked()),
             this, SLOT(applyClicked()));
+    QObject::connect(pasteBtn, SIGNAL(clicked()),
+            m_widget, SLOT(pasteIOR()));
 
     // TODO spacer
-    l->addWidget(applyBtn);
+    QHBoxLayout * hl = new QHBoxLayout;
+    hl->addWidget(applyBtn);
+    hl->addWidget(pasteBtn);
+
+    l->addLayout(hl);
 
     setLayout(l);
 }
