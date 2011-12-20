@@ -88,7 +88,7 @@ struct array_as_resume
             const char* name)
     {
         std::ostringstream oss;
-        oss << name << " (length " << size << "):";
+        oss << name << " (length: " << size << "):";
 
         size_t i = 0;
         for(; i < size && i < MAX; i++)

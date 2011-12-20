@@ -60,9 +60,6 @@ struct calculate_default_array_tree
 {
     typedef typename boost::remove_bounds< T >::type slice_t;
 
-    static const size_t size = sizeof(T) / sizeof(slice_t);
-    typedef boost::mpl::bool_< (size > CORBASIM_ARRAY_RESUME_CONDITION) > size_condition;
-
     typedef typename 
         // if
         cs_mpl::eval_if_identity< boost::is_arithmetic< slice_t >, 
@@ -103,7 +100,22 @@ struct default_objrefvar_tree : public detail::objref_tree< T >
 };
 
 template< typename T >
-struct default_sequence_tree : public sequence_as_tree< T >
+struct calculate_default_sequence_tree
+{
+    typedef typename adapted::is_corbaseq < T >::slice_type slice_t;
+
+    typedef typename 
+        // if
+        cs_mpl::eval_if_identity< boost::is_arithmetic< slice_t >, 
+            sequence_as_resume< T >,
+        // else
+            boost::mpl::identity< sequence_as_tree< T > >
+        >::type type;
+};
+
+template< typename T >
+struct default_sequence_tree : 
+    public calculate_default_sequence_tree< T >::type
 {
 };
 

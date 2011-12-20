@@ -43,7 +43,8 @@ struct sequence_as_tree
         size_t size = t.length();
         QString qname(name);
         qname += " (length: " + QString::number(size) +")";
-        QTreeWidgetItem* parent = new QTreeWidgetItem(QStringList(qname));
+        QTreeWidgetItem* parent = 
+            new QTreeWidgetItem(QStringList(qname));
 
         for(size_t i=0; i<size; i++)
         {
@@ -55,6 +56,32 @@ struct sequence_as_tree
         }
 
         return parent;
+    }
+};
+
+template< typename T, 
+    unsigned int MAX = CORBASIM_ARRAY_RESUME_CONDITION >
+struct sequence_as_resume
+{
+    typedef sequence_as_resume < T > type;
+    typedef typename adapted::is_corbaseq < T >::slice_type slice_t;
+
+    static inline QTreeWidgetItem* create_tree(const T& t, 
+            const char* name)
+    {
+        size_t size = t.length();
+
+        std::ostringstream oss;
+        oss << name << " (length: " << size << "):";
+
+        size_t i = 0;
+        for(; i < size && i < MAX; i++)
+            oss << ' ' << t[i];
+
+        if(MAX < size)
+            oss << "...";
+
+        return new QTreeWidgetItem(QStringList(oss.str().c_str()));
     }
 };
 
