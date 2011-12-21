@@ -128,6 +128,9 @@ protected:
     QDockWidget * m_dock_fqn;
     QTreeView * m_fqn;
 
+    QCompleter * m_completer;
+    QStringList m_op_list;
+
     void appendToLog(QTreeWidgetItem * item);
     void appendToAppLog(QTreeWidgetItem * item);
 };

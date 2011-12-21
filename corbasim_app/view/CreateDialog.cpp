@@ -30,6 +30,11 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     QHBoxLayout * hLayout = new QHBoxLayout;
 
+    // Horizontal spacer
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+    hLayout->addItem(spacer);
+
     QPushButton * createButton = new QPushButton("&Create");
     QPushButton * cancelButton = new QPushButton("C&ancel");
 
@@ -82,6 +87,11 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     layout->addWidget(m_widget.getWidget());
 
     QHBoxLayout * hLayout = new QHBoxLayout;
+
+    // Horizontal spacer
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+    hLayout->addItem(spacer);
 
     QPushButton * createButton = new QPushButton("&Create");
     QPushButton * cancelButton = new QPushButton("C&ancel");
@@ -143,8 +153,13 @@ ReferenceValidatedWidget::ReferenceValidatedWidget(
     QObject::connect(pasteBtn, SIGNAL(clicked()),
             m_widget, SLOT(pasteIOR()));
 
-    // TODO spacer
     QHBoxLayout * hl = new QHBoxLayout;
+
+    // Horizontal spacer
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+    hl->addItem(spacer);
+
     hl->addWidget(applyBtn);
     hl->addWidget(pasteBtn);
 

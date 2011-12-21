@@ -386,7 +386,7 @@ AppModel::loadLibrary(const QString& file)
         return NULL;
     }
 
-    QFileInfo info(file);
+    const QFileInfo info(file);
     QString lib(info.baseName());
     lib.remove(0, 3); // lib
     // basename has no extension
@@ -424,7 +424,7 @@ AppModel::loadLibrary(const QString& file)
         if (m_controller)
             m_controller->notifyMessage(
                     QString("New library loaded '%1' for '%2'")
-                    .arg(file).arg(fqn));
+                    .arg(info.baseName()).arg(fqn));
     }
     else
     {

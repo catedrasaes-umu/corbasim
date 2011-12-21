@@ -67,23 +67,82 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     setCentralWidget(m_mdi_area);
 
+    // Actions
+    // New object
+    QAction * newObjAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "&New object reference", this);
+    newObjAction->setShortcut(QKeySequence::New);
+    QObject::connect(newObjAction, SIGNAL(triggered()), 
+            this, SLOT(showCreateObjref()));
+
+    // New servant
+    QAction * newSrvAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "N&ew servant", this);
+    newSrvAction->setShortcut(QKeySequence::Save);
+    QObject::connect(newSrvAction, SIGNAL(triggered()), 
+            this, SLOT(showCreateServant()));
+
+    // Load
+    QAction * loadAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogOpenButton),
+            "&Load configuration", this);
+    loadAction->setShortcut(QKeySequence::Open);
+    QObject::connect(loadAction, SIGNAL(triggered()), 
+            this, SLOT(showLoad()));
+
+    // Save
+    QAction * saveAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogSaveButton),
+            "&Save configuration", this);
+    saveAction->setShortcut(QKeySequence::SaveAs);
+    QObject::connect(saveAction, SIGNAL(triggered()), 
+            this, SLOT(showSave()));
+
+    // Append
+    QAction * appendAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileDialogNewFolder),
+            "&Append plug-in directory", this);
+    appendAction->setShortcut(QKeySequence::SelectAll);
+    QObject::connect(appendAction, SIGNAL(triggered()), 
+            this, SLOT(showLoadDirectory()));
+
+    // Tool bar
+    QToolBar * toolBar = addToolBar("File");
+    toolBar->addAction(loadAction);
+    toolBar->addAction(saveAction);
+    toolBar->addAction(newObjAction);
+    toolBar->addAction(newSrvAction);
+   
+    /*
+    toolBar->addWidget(new QLabel("Operation dialog:"));
+    m_completer = new QCompleter(this);
+    QComboBox * opSelector = new QComboBox;
+    opSelector->setEditable(true);
+    opSelector->setInsertPolicy(QComboBox::NoInsert);
+    opSelector->setCompleter(m_completer);
+    toolBar->addWidget(opSelector);
+    */
+
     // Menu
     QMenuBar * menu = new QMenuBar;
     setMenuBar(menu);
 
     QMenu * menuFile = menu->addMenu("&File");
-    menuFile->addAction("&New object", this, SLOT(showCreateObjref()));
-    menuFile->addAction("N&ew servant", this, SLOT(showCreateServant()));
+    menuFile->addAction(newObjAction);
+    menuFile->addAction(newSrvAction);
     menuFile->addSeparator();
-    menuFile->addAction("&Load configuration", this, SLOT(showLoad()));
-    menuFile->addAction("&Save configuration", this, SLOT(showSave()));
+    menuFile->addAction(loadAction);
+    menuFile->addAction(saveAction);
     menuFile->addAction("&Clear configuration", this, 
             SLOT(clearConfig()));
     menuFile->addSeparator();
-    menuFile->addAction("&Append plug-in directory", this, 
-            SLOT(showLoadDirectory()));
+    menuFile->addAction(appendAction);
     menuFile->addSeparator();
-    menuFile->addAction("&Exit", this, SLOT(close()));
+    QAction * closeAction = 
+        menuFile->addAction("&Exit", this, SLOT(close()));
+    closeAction->setShortcut(QKeySequence::Close);
 
     m_menuObjects = menu->addMenu("&Objects");
     m_menuServants = menu->addMenu("&Servants");
