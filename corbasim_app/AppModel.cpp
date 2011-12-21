@@ -157,7 +157,7 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
 
 void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 {
-    QString id(cfg.id.in());
+    const QString id(cfg.id.in());
 
     if (m_servants.find(id) != m_servants.end() ||
             m_objrefs.find(id) != m_objrefs.end())
@@ -284,7 +284,7 @@ void AppModel::saveFile(const QString& file)
             cfg.servants[i] = it->second->getConfig();
     }
 
-    std::string file_ (file.toStdString());
+    const std::string file_ (file.toStdString());
     std::ofstream ofs (file_.c_str());
 
     // convert to JSON and save
@@ -346,6 +346,9 @@ void AppModel::loadFile(const QString& file)
             createServant(cfg.servants[i]);
 
     } catch (...) {
+        if (m_controller)
+            m_controller->notifyError(
+                    QString("Error parsing file '%1'").arg(file));
     }
 
     delete [] buffer;
@@ -353,13 +356,12 @@ void AppModel::loadFile(const QString& file)
 
 void AppModel::loadDirectory(const QString& path)
 {
-    QDir d(path);
+    const QDir d(path);
     QStringList filters;
     filters << "libcorbasim_lib_*.so";
-    d.setNameFilters(filters);
 
-    const QFileInfoList files = d.entryInfoList(QDir::Files);
-    int count = files.count();
+    const QFileInfoList files = d.entryInfoList(filters, QDir::Files);
+    const int count = files.count();
 
     for (int i = 0; i < count; i++) 
     {
@@ -455,12 +457,18 @@ void AppModel::updateReference(const QString& id,
     }
     else
     {
-        CORBA::Object_var new_ref = it->second->updateReference(ref.in());
+        // Returns the validated reference
+        // Narrows the input reference to the specific interface
+        CORBA::Object_var new_ref = 
+            it->second->updateReference(ref.in());
 
         if (CORBA::is_nil(new_ref) && m_controller)
             m_controller->notifyError(
                     QString("Invalid reference for '%1'!").arg(id));
 
+        // In this case, 'append' means 'update'
+        // You can't update the factory for this object
+        // Ignores 3er parameter
         m_ref_model.appendItem(id, new_ref, NULL);
 
         if (m_controller)

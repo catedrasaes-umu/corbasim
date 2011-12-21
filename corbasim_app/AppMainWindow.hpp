@@ -58,8 +58,6 @@ public slots:
     void showLoadScript();
     void showScript();
 
-    void showLog();
-
     void clearConfig();
 
     // Notificaciones del controlador
@@ -126,6 +124,9 @@ protected:
 
     QDockWidget * m_dock_log;
     QTreeWidget * m_log;
+    
+    QDockWidget * m_dock_fqn;
+    QTreeView * m_fqn;
 
     void appendToLog(QTreeWidgetItem * item);
     void appendToAppLog(QTreeWidgetItem * item);

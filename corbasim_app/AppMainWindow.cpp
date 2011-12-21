@@ -54,9 +54,16 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_dock_app_log->setWidget(m_app_log);
     addDockWidget(Qt::RightDockWidgetArea, m_dock_app_log);
 
+    // FQNs
+    m_dock_fqn = new QDockWidget("Available interfaces", this);
+    m_fqn = new QTreeView;
+    m_dock_fqn->setWidget(m_fqn);
+    addDockWidget(Qt::RightDockWidgetArea, m_dock_fqn);
+
     // Disables the header
     m_log->header()->hide();
     m_app_log->header()->hide();
+    m_fqn->header()->hide();
 
     setCentralWidget(m_mdi_area);
 
@@ -70,7 +77,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuFile->addSeparator();
     menuFile->addAction("&Load configuration", this, SLOT(showLoad()));
     menuFile->addAction("&Save configuration", this, SLOT(showSave()));
-    menuFile->addAction("&Clear configuration", this, SLOT(clearConfig()));
+    menuFile->addAction("&Clear configuration", this, 
+            SLOT(clearConfig()));
     menuFile->addSeparator();
     menuFile->addAction("&Append plug-in directory", this, 
             SLOT(showLoadDirectory()));
@@ -85,8 +93,16 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     tools->addAction("&Run script", this, SLOT(showScript()));
 
     QMenu * winMenu = menu->addMenu("&Window");
-    winMenu->addAction("Show &log", this, SLOT(showLog()));
+    winMenu->addAction("&Show log", m_dock_log, SLOT(show()));
     winMenu->addAction("&Clear log", m_log, SLOT(clear()));
+    winMenu->addSeparator();
+    winMenu->addAction("Show &application log", 
+            m_dock_app_log, SLOT(show()));
+    winMenu->addAction("Clear application &log", 
+            m_app_log, SLOT(clear()));
+    winMenu->addSeparator();
+    winMenu->addAction("Show available &interfaces", 
+            m_dock_fqn, SLOT(show()));
     menu->addMenu("&About");
 
     // Status bar
@@ -108,11 +124,16 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
 AppMainWindow::~AppMainWindow()
 {
+    delete m_sub_create_objref;
+    delete m_sub_create_servant;
+    delete m_sub_script;
 }
 
 void AppMainWindow::setController(AppController * controller)
 {
     m_controller = controller;
+
+    m_fqn->setModel(controller->getFQNModel());
 
     // Signals
     QObject::connect(
@@ -249,11 +270,6 @@ void AppMainWindow::showCreateServant()
     m_sub_create_servant->showNormal();
     m_create_servant->show();
     m_mdi_area->setActiveSubWindow(m_sub_create_servant);
-}
-
-void AppMainWindow::showLog()
-{
-    m_dock_log->show();
 }
 
 void AppMainWindow::clearConfig()
