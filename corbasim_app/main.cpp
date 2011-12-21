@@ -39,6 +39,7 @@ int main(int argc, char **argv)
 {
     // Default ORB
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
+    QApplication app(argc, argv); 
 
     corbasim::app::AppConfiguration * config =
         corbasim::app::AppConfiguration::getInstance();
@@ -48,8 +49,6 @@ int main(int argc, char **argv)
 
     if (config->exit)
         return 0;
-
-    QApplication app(argc, argv); 
 
     // Force initialization
     corbasim::qt::initialize();
