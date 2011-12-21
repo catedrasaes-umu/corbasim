@@ -85,15 +85,15 @@ Objref::~Objref()
 
     for (unsigned int i = 0; i < m_dialogs.size(); i++) 
     {
-        m_dialogs[i]->deleteLater();
-        m_subwindows[i]->deleteLater();
+        delete m_dialogs[i];
+        delete m_subwindows[i];
     }
 
-    m_script->deleteLater();
-    m_sub_script->deleteLater();
+    delete m_script;
+    delete m_sub_script;
 
-    m_reference->deleteLater();
-    m_sub_reference->deleteLater();
+    delete m_reference;
+    delete m_sub_reference;
 }
 
 QMenu * Objref::getMenu() const

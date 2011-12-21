@@ -39,10 +39,9 @@ Servant::Servant(QMdiArea * area,
 
 Servant::~Servant()
 {
-    m_menu->deleteLater();
-
-    m_script->deleteLater();
-    m_sub_script->deleteLater();
+    delete m_menu;
+    delete m_script;
+    delete m_sub_script;
 }
 
 QMenu * Servant::getMenu() const

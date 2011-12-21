@@ -139,6 +139,11 @@ int main(int argc, char **argv)
     threadWatcher.quit();
     threadDumper.quit();
 
+    threadController.wait();
+    threadEngine.wait();
+    threadWatcher.wait();
+    threadDumper.wait();
+
     orb->shutdown(1);
     orbThread.join();
 

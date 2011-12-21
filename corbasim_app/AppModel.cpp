@@ -80,10 +80,13 @@ AppModel::AppModel() :
 AppModel::~AppModel()
 {
     // TODO close libraries
-    
+   
+    // ORB already destroyed
+    /*
     servants_t::iterator it = m_servants.begin();
     servants_t::iterator end = m_servants.end();
 
+   
     for (; it != end; it++) 
     {
         // Temporal - Proof of concept
@@ -93,6 +96,7 @@ AppModel::~AppModel()
         m_data->rootPOA->deactivate_object (myObjID);
         // End temporal
     }
+    */
 
     delete m_data;
 }
