@@ -28,27 +28,14 @@
 #include <corbasim/json/parser.hpp>
 #include <corbasim/json/writer.hpp>
 
+#include <boost/mpl/filter_view.hpp>
+
 namespace corbasim 
 {
 namespace dialogs 
 {
 namespace detail 
 {
-
-template< typename Value >
-struct only_inargs
-{
-    /**
-     * @brief Lista de argumentos.
-     */
-    typedef typename Value::_arg_list arg_list;
-
-    template< typename N >
-    struct apply : 
-        public cs_mpl::is_inarg< typename boost::mpl::at< arg_list, N >::type >
-    {};
-};
-
 } // namespace detail
 
 struct input_base
@@ -66,6 +53,30 @@ struct input_base
 
 typedef boost::shared_ptr< input_base > input_ptr;
 
+using boost::mpl::_;
+
+template< typename Value >
+struct input_filter
+{
+    static const std::size_t members_count = 
+        boost::fusion::result_of::size< Value >::value;
+    typedef boost::mpl::range_c< size_t, 0, members_count > 
+        members_range_t;
+
+    typedef typename Value::_arg_list arg_list;
+
+    template< typename N >
+    struct is_inarg : public
+        cs_mpl::is_inarg< typename boost::mpl::at< arg_list, N >::type >
+    {
+    };
+
+    // Only in args
+    typedef boost::mpl::filter_view< 
+        members_range_t, is_inarg<_>
+            > type;
+};
+
 /**
  * @brief El díalogo input de una operación es un formulario con los 
  *        parámetros de tipo IN e INOUT.
@@ -75,9 +86,10 @@ typedef boost::shared_ptr< input_base > input_ptr;
 template< typename Value >
 struct input : 
     public input_base, 
-    public widgets::detail::struct_as_grid< Value, 
-        detail::only_inargs < Value > > 
+    public widgets::detail::struct_as_filtred_grid< Value,
+        typename input_filter< Value >::type > 
 {
+
     typedef event::request_impl< Value > request_t;
 
     event::request* create_request()
@@ -94,8 +106,8 @@ struct input :
         set_value(impl->m_values);
     }
     
-    typedef widgets::detail::struct_as_grid< Value, 
-        detail::only_inargs < Value > > widget_t;
+    typedef widgets::detail::struct_as_filtred_grid< Value,
+            typename input_filter< Value >::type > widget_t;
 
     QWidget* get_qwidget()
     {

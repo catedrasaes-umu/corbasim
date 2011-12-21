@@ -24,6 +24,13 @@ add_library(${CORBASIM_PREFIX}hello_idl SHARED ${hello_GENERATED})
 
 
 
+# Corbasim library	
+add_library(corbasim_lib_HelloApp_Hello SHARED HelloApp_Hello_lib.cpp)
+target_link_libraries(corbasim_lib_HelloApp_Hello
+	${CORBASIM_PREFIX}hello_idl
+	# CORBASIM Libraries
+	corbasim corbasim_qt)
+
 # Client
 add_executable(${CORBASIM_PREFIX}HelloApp_Hello_client HelloApp_Hello_client_main.cpp)
 target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_client 

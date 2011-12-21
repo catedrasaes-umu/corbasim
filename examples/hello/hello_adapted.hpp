@@ -69,6 +69,33 @@ namespace corbasim
             typedef HelloApp::Hello interface;
         };
 
+        template< >
+        struct full_qualified_name< HelloApp::Hello >
+        {
+            static inline const char * call()
+            {
+                return "HelloApp::Hello";
+            }
+        };
+
+        template< >
+        struct name< HelloApp::Hello >
+        {
+            static inline const char * call()
+            {
+                return "Hello";
+            }
+        };
+
+        template< >
+        struct typecode< HelloApp::Hello >
+        {
+            static inline CORBA::TypeCode const * call()
+            {
+                return HelloApp::_tc_Hello;
+            }
+        };
+
     } // adapted
 } // corbasim
 

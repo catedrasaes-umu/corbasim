@@ -30,187 +30,144 @@ namespace widgets
 {
 namespace detail 
 {
-namespace iterator 
-{
-
-struct always_insert
-{
-    template< typename N >
-    struct apply : public cs_mpl::true_ {};
-};
 
 typedef std::vector< widget_ptr > StructChildren;
 
 // Iteracion sobre una estructura
-template < typename S, typename N, typename Func >
-struct StructImpl
+template < typename S >
+struct create_iterator
 {
-    // Tipo del campo actual
-    typedef typename cs_mpl::type_of_member< S, N >::type current_t;
+    QGridLayout * layout_;
+    std::vector< widget_ptr >& children_;
 
-    // Valor de N en la siguiente iteracion
-    typedef typename boost::mpl::next < N >::type next_t;
+    create_iterator(QGridLayout * l,
+            std::vector< widget_ptr >& c) : 
+        layout_(l), children_(c)
+    {}
 
-    // Tipo que contiene el nombre del campo actual
-    typedef cs_mpl::name_of_member< S, N > name_t;
-
-    // Member
-    typedef adapted::member< S, N::value > member_t;
-
-    // Widget asociado al tipo del campo actual
-    typedef typename widget_member< member_t >::type current_widget_t;
-        
-    typedef typename Func::template apply< N > condition_t;
-
-    struct null_impl
+    template < typename N >
+    void operator()(N const& nn)
     {
-        template< typename X, typename Y, typename Z>
-        static inline void invoke(X x, Y y, Z z) { /* does nothing */}
-    };
+        // Tipo del campo actual
+        typedef typename cs_mpl::type_of_member< S, N >::type current_t;
 
-    struct create_impl
-    {
-        static inline void invoke(QGridLayout* layout, 
-                StructChildren& vector, int& pos)
-        {
-            current_widget_t * current_widget = 
-                current_widget_t::create_widget();
-            vector.push_back(widget_ptr(current_widget));
+        // Tipo que contiene el nombre del campo actual
+        typedef cs_mpl::name_of_member< S, N > name_t;
 
-            current_widget->get_QWidget()->setObjectName(name_t::call());
+        // Member
+        typedef adapted::member< S, N::value > member_t;
 
-            // Inserta el widget en la grid
-            grid_inserter< current_widget_t > inserter;
-            inserter.add_widget(layout, 
-                    current_widget->get_QWidget(),
-                    name_t::call());
+        // Widget asociado al tipo del campo actual
+        typedef typename widget_member< member_t >::type 
+            current_widget_t;
 
-            pos++;
-        }
-    };
+        current_widget_t * current_widget = 
+            current_widget_t::create_widget();
+        children_[N::value] = widget_ptr(current_widget);
 
-    template < typename Layout >
-    static inline void create(Layout* layout, StructChildren& vector, 
-            int pos = 0)
-    {
-        typedef typename cs_mpl::eval_if< 
-                    condition_t,
-                        boost::mpl::identity< create_impl >,
-                    // else
-                        boost::mpl::identity< null_impl >
-                >::type typex;
-        typex::invoke(layout, vector, pos);
-    
-        // Siguiente iteracion
-        StructImpl < S, next_t, Func >::create(layout, vector, pos);
-    }
+        current_widget->get_QWidget()->setObjectName(name_t::call());
 
-    struct set_value_impl
-    {
-        static inline void invoke(const S& s,
-                StructChildren& vector, int& pos)
-        {
-            reinterpret_cast< current_widget_t* >(vector[pos].get())->
-                set_value(boost::fusion::at < N >(s));
-            pos++;
-        }
-    };
-
-    static inline void set_value(const S& s, StructChildren& vector, 
-            int pos = 0)
-    {
-        typedef typename cs_mpl::eval_if< 
-                    condition_t,
-                        boost::mpl::identity< set_value_impl >,
-                    // else
-                        boost::mpl::identity< null_impl >
-                >::type typex;
-        typex::invoke(s, vector, pos);
-
-        StructImpl < S, next_t, Func >::set_value(s, vector, pos);
-    }
-
-    struct get_value_impl
-    {
-        static inline void invoke(S& s,
-                StructChildren& vector, int& pos)
-        {
-            reinterpret_cast< current_widget_t* >(vector[pos].get())->
-                get_value(boost::fusion::at < N >(s));
-            pos++;
-        }
-    };
-
-    static inline void get_value(S& s, StructChildren& vector, int pos = 0)
-    {
-        typedef typename cs_mpl::eval_if< 
-                    condition_t,
-                        boost::mpl::identity< get_value_impl >,
-                    // else
-                        boost::mpl::identity< null_impl >
-                >::type typex;
-        typex::invoke(s, vector, pos);
-
-        StructImpl < S, next_t, Func >::get_value(s, vector, pos);
+        // Inserta el widget en la grid
+        grid_inserter< current_widget_t > inserter;
+        inserter.add_widget(layout_, 
+                current_widget->get_QWidget(),
+                name_t::call());
     }
 };
 
-// Fin de la iteracion sobre estructuras.
-template < typename S, typename Func >
-struct StructImpl < S, typename cs_mpl::number_of_members< S >::type, Func >
+template < typename S >
+struct set_value_iterator
 {
-    template < typename Layout >
-    static inline void create(Layout* layout, StructChildren& vector, 
-            int pos = 0)
-    {
-        // Nada por hacer
-    }
+    const S& struct_;
+    std::vector< widget_ptr >& children_;
 
-    static inline void set_value(const S& s, StructChildren& vector, 
-            int pos = 0)
-    {
-        // Nada por hacer
-    }
+    set_value_iterator(const S& s,
+            std::vector< widget_ptr >& c) : 
+        struct_(s), children_(c)
+    {}
 
-    static inline void get_value(S& s, StructChildren& vector, int pos = 0)
+    template < typename N >
+    void operator()(N const& nn)
     {
-        // Nada por hacer
+        // Member
+        typedef adapted::member< S, N::value > member_t;
+
+        // Widget asociado al tipo del campo actual
+        typedef typename widget_member< member_t >::type 
+            current_widget_t;
+
+        if (!children_[N::value]) return;
+
+        reinterpret_cast< current_widget_t* >(
+                children_[N::value].get())->set_value(
+                    boost::fusion::at < N >(struct_));
     }
 };
 
-// Iterador sobre una estructura. Template fachada.
-template < typename S, typename Func >
-struct Struct: public StructImpl < S, boost::mpl::int_ < 0 >, Func >
+template < typename S >
+struct get_value_iterator
 {
+    S& struct_;
+    std::vector< widget_ptr >& children_;
+
+    get_value_iterator(S& s,
+            std::vector< widget_ptr >& c) : 
+        struct_(s), children_(c)
+    {}
+
+    template < typename N >
+    void operator()(N const& nn)
+    {
+        // Member
+        typedef adapted::member< S, N::value > member_t;
+
+        // Widget asociado al tipo del campo actual
+        typedef typename widget_member< member_t >::type 
+            current_widget_t;
+
+        if (!children_[N::value]) return;
+
+        reinterpret_cast< current_widget_t* >(
+                children_[N::value].get())->get_value(
+                    boost::fusion::at < N >(struct_));
+    }
 };
 
-} // namespace iterator
 
-template< typename T, typename Func = iterator::always_insert >
+template< typename T >
 struct struct_base_widget : public widget_base
 {
+    static const std::size_t members_count = 
+        boost::fusion::result_of::size< T >::value;
+    typedef boost::mpl::range_c< size_t, 0, members_count > 
+        members_range_t;
+
+    struct_base_widget() : m_children(members_count) {}
+
     inline void get_value(T& t)
     {
-        iterator::Struct< T, Func >::get_value(t, m_children);
+        get_value_iterator< T > it(t, m_children);
+        boost::mpl::for_each< members_range_t >(it);
     }
 
     inline void set_value(const T& t)
     {
-        iterator::Struct< T, Func >::set_value(t, m_children);
+        set_value_iterator< T > it(t, m_children);
+        boost::mpl::for_each< members_range_t >(it);
     }
 
     std::vector< widget_ptr > m_children;
 };
 
-template< typename T, typename Func = iterator::always_insert >
-struct struct_as_grid : public struct_base_widget< T, Func >
+template< typename T >
+struct struct_as_grid : public struct_base_widget< T >
 {
     typedef struct_as_grid< T > type;
     typedef QWidget qwidget_t;
 
     typedef cs_mpl::false_ is_simple_widget;
 
-    typedef struct_base_widget< T, Func > base_t;
+    typedef struct_base_widget< T > base_t;
 
     CORBASIM_DEFAULTCREATEWIDGET()
 
@@ -219,13 +176,41 @@ struct struct_as_grid : public struct_base_widget< T, Func >
         m_qwidget = new qwidget_t;
         QGridLayout * layout = new QGridLayout;
 
-        iterator::Struct< T, Func >::create(layout, base_t::m_children);
+        create_iterator< T > it(layout, base_t::m_children);
+        boost::mpl::for_each< typename base_t::members_range_t >(it);
 
         m_qwidget->setLayout(layout);
     }
 
     CORBASIM_QWIDGET()
 };
+
+template< typename T, typename View >
+struct struct_as_filtred_grid : public struct_base_widget< T >
+{
+    typedef struct_as_grid< T > type;
+    typedef QWidget qwidget_t;
+
+    typedef cs_mpl::false_ is_simple_widget;
+
+    typedef struct_base_widget< T > base_t;
+
+    CORBASIM_DEFAULTCREATEWIDGET()
+
+    struct_as_filtred_grid()
+    {
+        m_qwidget = new qwidget_t;
+        QGridLayout * layout = new QGridLayout;
+
+        create_iterator< T > it(layout, base_t::m_children);
+        boost::mpl::for_each< View >(it);
+
+        m_qwidget->setLayout(layout);
+    }
+
+    CORBASIM_QWIDGET()
+};
+
 
 } // namespace detail
 } // namespace widgets
