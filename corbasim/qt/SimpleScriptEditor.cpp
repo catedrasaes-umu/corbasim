@@ -37,6 +37,8 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     m_tree = new QTreeWidget;
     m_tree->setHeaderLabel("Script");
     m_selector = new QComboBox;
+    m_selector->setEditable(true);
+    m_selector->setInsertPolicy(QComboBox::NoInsert);
     m_diff = new QSpinBox;
     m_diff->setRange(0, 9999);
     m_diff->setValue(200);

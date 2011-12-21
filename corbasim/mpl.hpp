@@ -31,17 +31,9 @@
 #include <boost/fusion/mpl.hpp>
 #include <boost/fusion/adapted.hpp> // BOOST_FUSION_ADAPT_STRUCT
 
-// boost::fusion::result_of::value_at
-#include <boost/fusion/sequence/intrinsic/value_at.hpp>
-#include <boost/fusion/include/value_at.hpp>
-
-// boost::fusion::result_of::size
-#include <boost/fusion/sequence/intrinsic/size.hpp>
-#include <boost/fusion/include/size.hpp>
-
-// boost::fusion::at
-#include <boost/fusion/sequence/intrinsic/at.hpp>
-#include <boost/fusion/include/at.hpp>
+#include <boost/mpl/integral_c.hpp>
+#include <boost/mpl/range_c.hpp>
+#include <boost/fusion/sequence/intrinsic.hpp>
 
 #include <corbasim/mpl/vector.hpp>
 #include <corbasim/mpl/for_each.hpp>

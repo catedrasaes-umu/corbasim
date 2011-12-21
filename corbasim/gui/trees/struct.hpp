@@ -28,58 +28,39 @@ namespace trees
 {
 namespace detail 
 {
-namespace iterator
+
+template< class Struct >
+struct create_iterator
 {
+    const Struct& struct_;
+    QTreeWidgetItem * parent_;
 
-// Iteracion sobre una estructura
-template < typename S, typename N >
-struct StructImpl
-{
-    // Tipo del campo actual
-    typedef typename cs_mpl::type_of_member< S, N >::type current_t;
+    create_iterator(const Struct& s, QTreeWidgetItem * parent) : 
+        struct_(s), parent_(parent)
+    {}
 
-    // Valor de N en la siguiente iteracion
-    typedef typename boost::mpl::next < N >::type next_t;
+    template < typename N >
+    void operator()(N const& nn)
+    {
+        // Tipo del campo actual
+        typedef typename cs_mpl::type_of_member< Struct, N >::type 
+            current_t;
 
-    // Tipo que contiene el nombre del campo actual
-    typedef cs_mpl::name_of_member< S, N > name_t;
+        // Tipo que contiene el nombre del campo actual
+        typedef cs_mpl::name_of_member< Struct, N > name_t;
 
-    // Member
-    typedef adapted::member< S, N::value > member_t;
+        // Member
+        typedef adapted::member< Struct, N::value > member_t;
 
-    // Tree widget asociado al tipo del campo actual
-    typedef tree_member < member_t > current_tree_t;
+        // Tree widget asociado al tipo del campo actual
+        typedef tree_member < member_t > current_tree_t;
 
-	static inline void create_tree(QTreeWidgetItem* parent, const S& s)
-	{
 		QTreeWidgetItem* current = current_tree_t::create_tree(
-                boost::fusion::at < N >(s), name_t::call());
+                boost::fusion::at < N >(struct_), name_t::call());
 
-		parent->addChild(current);
-
-        // Siguiente iteración
-		StructImpl< S, next_t >::create_tree(parent, s);
-	}
+		parent_->addChild(current);
+    }
 };
-
-// Fin de la iteracion sobre estructuras.
-template < typename S >
-struct StructImpl < S, typename cs_mpl::number_of_members < S >::type >
-{
-	static inline void create_tree(QTreeWidgetItem* parent, const S& s)
-	{
-		// Nada que hacer
-	}
-};
-
-// Iterador sobre una estructura. Template fachada.
-template < typename S >
-struct Struct: StructImpl < S, boost::mpl::int_ < 0 > >
-{
-};
-
-} // iterator
-
 
 template < typename T >
 struct struct_as_tree
@@ -89,9 +70,18 @@ struct struct_as_tree
     static inline QTreeWidgetItem* create_tree(const T& t, 
             const char* name)
     {
-         QTreeWidgetItem* parent = new QTreeWidgetItem(QStringList(name));
-         iterator::Struct< T >::create_tree(parent, t);
-         return parent;
+        static const std::size_t members_count = 
+            boost::fusion::result_of::size< T >::value;
+        typedef boost::mpl::range_c< size_t, 0, members_count > 
+            members_range_t;
+
+        QTreeWidgetItem* parent = 
+            new QTreeWidgetItem(QStringList(name));
+
+        create_iterator< T > it(t, parent);
+        boost::mpl::for_each< members_range_t >(it);
+
+        return parent;
     }
 };
 
