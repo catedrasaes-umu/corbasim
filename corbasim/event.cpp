@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * PythonHighlighter.hpp
+ * event.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,29 +17,61 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QT_PYTHONHIGHLIGHTER_HPP
-#define CORBASIM_QT_PYTHONHIGHLIGHTER_HPP
+#include "event.hpp"
 
-#include <QSyntaxHighlighter>
+using namespace corbasim::event;
 
-namespace corbasim 
+event::~event() {}
+
+// Exception
+
+event_types exception::get_type() const 
 {
-namespace qt 
+    return EXCEPTION;
+}
+
+corbasim::tag_t exception::get_tag() const
 {
+    return tag< exception >::value();
+}
 
-// TODO translate 
-// http://diotavelli.net/PyQtWiki/Python%20syntax%20highlighting
+// Message
 
-class PythonHighlighter : public QSyntaxHighlighter
+message::message(const char * msg) :
+    m_msg(msg)
 {
-public:
-    PythonHighlighter(QObject * parent = 0);
-    virtual ~PythonHighlighter();
+}
 
-};
+event_types message::get_type() const 
+{
+    return MESSAGE;
+}
 
-} // namespace qt
-} // namespace corbasim
+corbasim::tag_t message::get_tag() const
+{
+    return tag< message >::value();
+}
 
-#endif /* CORBASIM_QT_PYTHONHIGHLIGHTER_HPP */
+const char * message::get_message() const
+{
+    return m_msg.c_str();
+}
+
+// Request
+
+event_types request::get_type() const 
+{
+    return REQUEST;
+}
+
+request::~request() {}
+
+// Response
+
+event_types response::get_type() const 
+{
+    return RESPONSE;
+}
+
+response::~response() {}
 

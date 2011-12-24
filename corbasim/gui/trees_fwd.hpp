@@ -20,7 +20,7 @@
 #ifndef CORBASIM_TREES_FWD_HPP
 #define CORBASIM_TREES_FWD_HPP
 
-#include <QtGui>
+#include <QTreeWidgetItem>
 #include <corbasim/mpl.hpp>
 
 namespace corbasim 

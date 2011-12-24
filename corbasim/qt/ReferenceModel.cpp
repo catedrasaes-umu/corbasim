@@ -19,6 +19,7 @@
 
 #include "ReferenceModel.hpp"
 #include <corbasim/qt/types.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 #include <memory>
 
 using namespace corbasim::qt;

@@ -21,7 +21,7 @@
 #include <fstream>
 #include <iostream>
 #include <corbasim/qt/MultiInputWidget.hpp>
-#include <corbasim/gui/gui_factory.hpp>
+#include <corbasim/core/factory_fwd.hpp>
 #include <boost/next_prior.hpp>
 
 using namespace corbasim;
@@ -256,7 +256,6 @@ void SimpleScriptEditor::initialize(const gui::gui_factory_base * factory)
         m_selector->addItem(factory->get_factory_by_index(i)->get_name());
 
     m_multi->initialize(factory);
-    m_request_serializer = factory->get_serializer();
     m_factory = factory;
 }
 
@@ -288,7 +287,7 @@ void SimpleScriptEditor::moveDown()
 {
     int pos = getSelected();
 
-    if (pos >= 0 && pos < m_requests.size() - 1)
+    if (pos >= 0 && pos < (int) m_requests.size() - 1)
     {
         // La elimina de la posición actual
         requests_t::iterator it = boost::next(m_requests.begin(), pos);
@@ -329,7 +328,7 @@ void SimpleScriptEditor::deleteSelected()
 {
     int pos = getSelected();
 
-    assert(m_tree->topLevelItemCount() == m_requests.size());
+    assert(m_tree->topLevelItemCount() == (int) m_requests.size());
 
     if (pos >= 0 && pos < m_tree->topLevelItemCount())
     {
@@ -430,7 +429,7 @@ void SimpleScriptEditor::stopClicked()
 
 void SimpleScriptEditor::doSave()
 {
-    if (!m_request_serializer)
+    if (!m_factory)
         return;
 
     // Seleccionar fichero
@@ -445,15 +444,15 @@ void SimpleScriptEditor::doSave()
 
     for (requests_t::const_iterator it = m_requests.begin(); 
             it != m_requests.end(); it++) 
-        m_request_serializer->save(ofs, (*it).get());
+        m_factory->get_core_factory()->save(ofs, (*it).get());
 }
 
 void SimpleScriptEditor::doLoad()
 {
-    if (!m_request_serializer)
+    if (!m_factory)
         return;
 
-    QStringList log_file = QFileDialog::getOpenFileNames( 0, tr(
+    const QStringList log_file = QFileDialog::getOpenFileNames( 0, tr(
                 "Select some script files"), ".");
 
     // User cancels
@@ -468,7 +467,7 @@ void SimpleScriptEditor::doLoad()
             while(ifs.good())
             {
                 event::request_ptr _request(
-                        m_request_serializer->load(ifs));
+                        m_factory->get_core_factory()->load(ifs));
 
                 if (!_request)
                     continue;
@@ -542,7 +541,6 @@ void SimpleScriptEditor::doAppendRequest(event::request_ptr _request, bool befor
 
     m_tree->scrollToItem(req_item);
 }
-
 
 void SimpleScriptEditor::hideEvent(QHideEvent * event)
 {

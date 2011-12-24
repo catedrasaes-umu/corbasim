@@ -96,7 +96,8 @@ class json_writer
     std::deque<state_struct> state_stack;
 
 public:
-    json_writer (Ostream& o) : o_ (o), level(0)
+    json_writer (Ostream& o, bool indent = false) : 
+        o_ (o), indent_(indent), level_(0)
     {
         state_struct ss = { BEGIN, false };
         state_stack.push_back (ss);
@@ -173,7 +174,7 @@ public:
         state_stack.push_back (ss);
 
         o_ << "{";
-        ++level;
+        ++level_;
         _indent();
     }
 
@@ -181,7 +182,7 @@ public:
     {
         state_stack.pop_back();
 
-        --level;
+        --level_;
 
         _indent();
         o_ << "}";
@@ -197,7 +198,7 @@ public:
         state_stack.push_back (ss);
 
         o_ << "[";
-        ++level;
+        ++level_;
         _indent();
     }
 
@@ -205,7 +206,7 @@ public:
     {
         state_stack.pop_back();
 
-        --level;
+        --level_;
 
         _indent();
         o_ << "]";
@@ -224,11 +225,12 @@ private:
 
     inline void _indent()
     {
-#if 0
-        o_ << '\n';
-        for (int i = 0; i < level; i++)
-            o_<< "    ";
-#endif
+        if (indent_)
+        {
+            o_ << '\n';
+            for (int i = 0; i < level_; i++)
+                o_<< "    ";
+        }
     }
 
     inline void _check_pre()
@@ -250,9 +252,9 @@ private:
         {
             // Output the ":"
             o_ << ":";
-#if 0
-            o_ << ' ';
-#endif
+
+            if (indent_)
+                o_ << ' ';
         }
     }
 
@@ -266,7 +268,8 @@ private:
     }
 
     Ostream& o_;
-    int level;
+    bool indent_;
+    int level_;
 };
 
 

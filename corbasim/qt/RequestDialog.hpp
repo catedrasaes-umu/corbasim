@@ -20,16 +20,21 @@
 #ifndef CORBASIM_QT_REQUESTDIALOG_HPP
 #define CORBASIM_QT_REQUESTDIALOG_HPP
 
-#include <QtGui>
-#include <corbasim/event.hpp>
+#include <QDialog>
+#include <QTimer>
+#include <corbasim/qt/types.hpp>
 
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <QtScript>
 #endif /* CORBASIM_USE_QTSCRIPT*/
 
-Q_DECLARE_METATYPE(corbasim::event::request_ptr)
-
 // fwd
+class QSpinBox;
+class QCheckBox;
+class QPushButton;
+class QTabWidget;
+class QPlainTextEdit;
+
 namespace corbasim 
 {
 namespace dialogs 

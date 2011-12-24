@@ -18,6 +18,7 @@
  */
 
 #include "Servant.hpp"
+#include <corbasim/core/factory_fwd.hpp>
 
 using namespace corbasim::app::view;
 

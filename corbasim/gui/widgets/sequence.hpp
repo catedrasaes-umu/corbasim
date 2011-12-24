@@ -114,6 +114,7 @@ struct sequence_as_stacked : public widget_base
     CORBASIM_QWIDGET()
 };
 
+#if 0
 template < typename T >
 struct sequence_as_stacked2 : public widget_base, 
     public abstract_sequence_widget
@@ -178,7 +179,7 @@ struct sequence_as_stacked2 : public widget_base,
 
     CORBASIM_QWIDGET()
 };
-
+#endif
 
 template < typename T, typename SourceType, typename DestType >
 struct sequence_from_files : public widget_base

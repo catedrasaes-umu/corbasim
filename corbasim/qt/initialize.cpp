@@ -17,9 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtGui>
+#include <QMetaType>
 #include <boost/shared_ptr.hpp>
-#include <corbasim/event.hpp>
+#include <corbasim/event_fwd.hpp>
 #include <corbasim/impl.hpp>
 #include <corbasim/qt/ReferenceModel.hpp>
 

@@ -30,7 +30,6 @@ namespace corbasim
 {
 namespace core 
 {
-class request_serializer_base;
 class interface_caller_base;
 class request_processor;
 class reference_validator_base;
@@ -54,6 +53,10 @@ struct operation_factory_base
     virtual event::response* response_from_json(
             const std::string& str) const = 0;
 
+    // From/to text
+    virtual void save(std::ostream& os, event::request* req) const = 0;
+    virtual event::request* load(std::istream& is) const = 0;
+
     virtual ~operation_factory_base();
 };
 
@@ -65,10 +68,13 @@ struct factory_base
             const std::string& name) const;
     operation_factory_base * get_factory_by_tag(tag_t tag) const;
 
+    // From/to text
+    void save(std::ostream& os, event::request * req) const;
+    event::request * load(std::istream& is) const;
+
     virtual core::interface_caller_base* create_caller() const = 0;
 
     virtual ~factory_base();
-    virtual core::request_serializer_base * get_serializer() const = 0;
 
     void insert_factory(const std::string& name,
             tag_t tag, operation_factory_base * factory);

@@ -20,10 +20,12 @@
 #ifndef CORBASIM_QT_TYPES_HPP
 #define CORBASIM_QT_TYPES_HPP
 
-#include <QtGui>
+#include <QMetaType>
 #include <corbasim/impl.hpp>
+#include <corbasim/event_fwd.hpp>
 
 Q_DECLARE_METATYPE(CORBA::Object_var);
+Q_DECLARE_METATYPE(corbasim::event::request_ptr)
 
 #endif /* CORBASIM_QT_TYPES_HPP */
 

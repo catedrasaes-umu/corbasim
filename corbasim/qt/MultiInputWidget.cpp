@@ -19,6 +19,8 @@
 
 #include "MultiInputWidget.hpp"
 
+#include <QtGui>
+
 using namespace corbasim;
 using namespace corbasim::qt;
 

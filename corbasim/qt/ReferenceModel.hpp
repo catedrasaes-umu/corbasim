@@ -20,19 +20,25 @@
 #ifndef CORBASIM_QT_REFERENCEMODEL_HPP
 #define CORBASIM_QT_REFERENCEMODEL_HPP
 
-#include <QtGui>
+#include <QAbstractItemModel>
+#include <QList>
 #include <corbasim/impl.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
 
 namespace corbasim
 {
+
+// fwd
+namespace gui 
+{
+struct gui_factory_base;
+} // namespace gui
+
 namespace qt
 {
 
 class ReferenceModel : public QAbstractItemModel
 {
     Q_OBJECT
-
 public:
     ReferenceModel(QObject *parent = 0);
     ~ReferenceModel();

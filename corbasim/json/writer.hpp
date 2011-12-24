@@ -30,17 +30,17 @@ namespace json
 {
 
 template< typename Ostream, typename T >
-inline void write(Ostream& os, const T& t);
+inline void write(Ostream& os, const T& t, bool indent = false);
 
 template< typename Ostream, typename T >
-inline void write(Ostream& os, const T& t)
+inline void write(Ostream& os, const T& t, bool indent = false)
 {
     typedef csu::corbasim::json::writer::json_writer< Ostream > writer_t;
     writer_t w(os);
     helper::helper_write(w, t);
 }
 
-typedef csu::corbasim::json::writer::json_writer< std::ostream > ostreamwriter_t;
+typedef csu::corbasim::json::writer::json_writer< std::ostream > ostream_writer_t;
 
 } // namespace json
 } // namespace corbasim

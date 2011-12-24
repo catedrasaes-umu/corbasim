@@ -24,6 +24,7 @@ set(corbasim_EXPORTED_HEADERS
     core/reference_repository.hpp
     core/request_serializer.hpp
     core/servant.hpp
+    event_fwd.hpp
     event.hpp
     impl.hpp
     json/parser.hpp
@@ -74,6 +75,8 @@ set(corbasim_SRCS
 
     scripting/request_processor.cpp
     scripting/interpreter.cpp
+
+    event.cpp
 
     # JSON
     json/detail/modp_b64.c

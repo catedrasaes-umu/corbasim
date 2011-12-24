@@ -20,12 +20,17 @@
 #ifndef CORBASIM_QT_MULTIINPUTWIDGET_HPP
 #define CORBASIM_QT_MULTIINPUTWIDGET_HPP
 
-#include <QtGui>
+#include <QWidget>
 #include <vector>
 
 #include <corbasim/impl.hpp>
 #include <corbasim/adapted.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+
+#include <corbasim/qt/types.hpp>
+
+class QStackedWidget;
+class QComboBox;
 
 namespace corbasim 
 {

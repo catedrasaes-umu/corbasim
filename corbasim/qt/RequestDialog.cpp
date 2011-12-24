@@ -21,11 +21,18 @@
 #include <corbasim/gui/dialogs.hpp>
 #include <corbasim/qt/initialize.hpp>
 
-#include <iostream>
+// Qt widgets
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QPlainTextEdit>
 
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <corbasim/qt/private/ScriptEditor.hpp>
 #endif
+
+#include <iostream>
 
 using namespace corbasim;
 using namespace corbasim::qt;

@@ -1,7 +1,8 @@
 #ifndef CORBA_QT_STATUS_HPP
 #define CORBA_QT_STATUS_HPP
 
-#include <QtGui>
+#include <QWidget>
+#include <QColor>
 
 namespace corbasim
 {

@@ -42,7 +42,6 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/LogTreeWidget.hpp
     qt/LogWidget.hpp
     qt/MultiFileSelectionWidget.hpp
-    qt/PythonHighlighter.hpp
     qt/TemplatedSpinBox.hpp
     qt/RequestDialog.hpp
     qt/RequestNotifier.hpp
@@ -106,7 +105,6 @@ set(corbasim_qt_SRCS
     qt/LogTreeWidget.cpp
     qt/MultiFileSelectionWidget.cpp
     qt/MultiInputWidget.cpp
-    qt/PythonHighlighter.cpp
     qt/RequestProcessor.cpp
     qt/SequenceWidget.cpp
     qt/RequestDialog.cpp

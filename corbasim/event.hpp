@@ -20,84 +20,13 @@
 #ifndef CORBASIM_EVENT_HPP
 #define CORBASIM_EVENT_HPP
 
-#include <boost/shared_ptr.hpp>
-#include <corbasim/mpl.hpp>
+#include <corbasim/event_fwd.hpp>
 #include <corbasim/adapted.hpp>
-#include <string>
 
 namespace corbasim 
 {
 namespace event 
 {
-
-enum event_types { EXCEPTION, REQUEST, RESPONSE, MESSAGE};
-
-struct event
-{
-    // virtual void serialize(std::ostream& out) const = 0;
-    virtual event_types get_type() const = 0;
-    virtual tag_t get_tag() const = 0;
-
-    virtual ~event() {}
-};
-
-typedef boost::shared_ptr< event > event_ptr;
-
-struct exception : public event
-{
-    event_types get_type() const 
-    {
-        return EXCEPTION;
-    }
-
-    tag_t get_tag() const
-    {
-        return tag< exception >::value();
-    }
-};
-
-typedef boost::shared_ptr< exception > exception_ptr;
-
-struct message : public event
-{
-    message(const char * msg) :
-        m_msg(msg)
-    {
-    }
-
-    event_types get_type() const 
-    {
-        return MESSAGE;
-    }
-
-    tag_t get_tag() const
-    {
-        return tag< message >::value();
-    }
-
-    const char * get_message() const
-    {
-        return m_msg.c_str();
-    }
-
-    const std::string m_msg;
-};
-
-typedef boost::shared_ptr< message > message_ptr;
-
-struct request : public event
-{
-    event_types get_type() const 
-    {
-        return REQUEST;
-    }
-    
-    virtual ~request() {}
-
-    virtual const char * get_name() const = 0; 
-};
-
-typedef boost::shared_ptr< request > request_ptr;
 
 template< typename Value >
 struct request_impl : public request
@@ -123,18 +52,6 @@ struct request_impl : public request
         return adapted::name< Value >::call();
     }
 };
-
-struct response : public event
-{
-    event_types get_type() const 
-    {
-        return RESPONSE;
-    }
-
-    virtual ~response() {}
-};
-
-typedef boost::shared_ptr< response > response_ptr;
 
 template< typename Value >
 struct response_impl : public response

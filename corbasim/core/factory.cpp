@@ -75,4 +75,36 @@ operation_factory_base * factory_base::get_factory_by_tag(
     return NULL;
 }
 
+void factory_base::save(std::ostream& os, 
+        corbasim::event::request * req) const
+{
+    factories_by_tag_t::const_iterator it;
+    it = m_factories_by_tag.find(req->get_tag());
+
+    if (it != m_factories_by_tag.end())
+    {
+        os << req->get_name() << ' ';
+        it->second->save(os, req);
+    }
+}
+
+corbasim::event::request * factory_base::load(
+        std::istream& is) const
+{
+    std::string name;
+    std::string line;
+    std::getline(is, line);
+    std::istringstream iss(line);
+
+    iss >> name;
+
+    factories_by_name_t::const_iterator it;
+    it = m_factories_by_name.find(name);
+
+    if (it != m_factories_by_name.end())
+        return it->second->load(iss);
+
+    return NULL;
+}
+
 

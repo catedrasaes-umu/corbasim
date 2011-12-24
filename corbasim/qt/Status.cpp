@@ -1,5 +1,7 @@
 #include "Status.hpp"
 
+#include <QPainter>
+
 using namespace corbasim::qt;
 
 Status::Status(QWidget *parent) 
@@ -22,9 +24,9 @@ void Status::setColorLight(const QColor& color)
 
 void Status::paintEvent(QPaintEvent *)
 {
-     QPainter painter(this);
-     painter.setRenderHint(QPainter::Antialiasing);
-     painter.setBrush(m_color);
-     painter.drawEllipse(0, 0, width(), height());
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(m_color);
+    painter.drawEllipse(0, 0, width(), height());
 }
 

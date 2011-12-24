@@ -28,6 +28,7 @@
 #include <corbasim/core/factory_fwd.hpp>
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/callable.hpp>
+#include <corbasim/core/archives.hpp>
 
 #include <sstream>
 #include <memory>
@@ -93,6 +94,25 @@ struct operation_factory : public operation_factory_base
         return reqi.release();
     }
 
+    // From Text
+    void save(std::ostream& os, event::request* req) const
+    {
+        request_t * impl = static_cast< request_t * >(req);
+
+        text_oarchive toa(os);
+        toa << impl->m_values;
+    }
+
+    event::request* load(std::istream& is) const
+    {
+        request_t * impl = new request_t;
+
+        text_iarchive tia(is);
+        tia >> impl->m_values;
+
+        return impl;
+    }
+
     static inline operation_factory * get_instance()
     {
         static boost::shared_ptr< operation_factory > _instance(
@@ -111,11 +131,6 @@ struct factory : public factory_base
     {
         typedef core::impl::inserter< factory > inserter_t;
         cs_mpl::for_each< operations_t >(inserter_t(this));
-    }
-
-    core::request_serializer_base * get_serializer() const
-    {
-        return core::request_serializer< Interface >::get_instance();
     }
 
     core::interface_caller_base* create_caller() const
