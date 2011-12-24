@@ -199,7 +199,7 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
 void SimpleClient::do_initialize(gui::gui_factory_base * factory)
 {
     QGridLayout * grid = NULL;
-    unsigned int count = factory->operation_count();
+    const unsigned int count = factory->operation_count();
 
     // Inicializa los dialogos a nulo
     m_dialogs.resize(count, NULL);
@@ -208,7 +208,7 @@ void SimpleClient::do_initialize(gui::gui_factory_base * factory)
     {
         const unsigned int idx = i % _max_btns_per_page;
 
-        gui::operation_factory_base * op = 
+        const gui::operation_factory_base * op = 
             factory->get_factory_by_index(i);
 
         const char * name = op->get_name();
@@ -257,7 +257,7 @@ corbasim::qt::RequestDialog * SimpleClient::getRequestDialog(int idx)
 
     if (!dlg)
     {
-        gui::operation_factory_base * op = 
+        const gui::operation_factory_base * op = 
             m_factory->get_factory_by_index(idx);
         const char * name = op->get_name();
 

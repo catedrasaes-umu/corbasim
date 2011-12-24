@@ -20,17 +20,25 @@
 #ifndef CORBASIM_QT_OBJREFWIDGET_HPP
 #define CORBASIM_QT_OBJREFWIDGET_HPP
 
-#include <QtGui>
-
-#include <corbasim/core/reference_validator.hpp>
-#include <corbasim/qt/Status.hpp>
-
+#include <QWidget>
 #include <corbasim/gui/widgets_fwd.hpp>
+
+class QComboBox;
+class QStackedWidget;
+class QTextEdit;
+class QAbstractItemModel;
 
 namespace corbasim 
 {
+namespace core 
+{
+class reference_validator_base;
+} // namespace core
+
 namespace qt 
 {
+
+class Status;
 
 class ObjrefWidget : public QWidget
 {

@@ -25,7 +25,7 @@
 #include "model/Servant.hpp"
 
 #include <map>
-#include <corbasim/event.hpp>
+#include <corbasim/qt/types.hpp>
 #include <corbasim/qt/ReferenceModel.hpp>
 
 namespace corbasim 

@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <corbasim/gui/gui_factory_fwd.hpp>
-#include <corbasim/event.hpp>
+#include <corbasim/qt/types.hpp>
 #include <QMap>
 
 namespace corbasim 

@@ -5,8 +5,14 @@
 #include <corbasim/cosnaming/Cosnaming_adapted.hpp>
 #include <corbasim/gui/widgets.hpp>
 #include <corbasim/core/reference_repository.hpp>
+#include <corbasim/core/reference_validator.hpp>
+#include <corbasim/qt/Status.hpp>
 #include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/qt/types.hpp>
+
+#include <QComboBox>
+#include <QStackedWidget>
+#include <QTextEdit>
 
 using namespace corbasim;
 using namespace corbasim::qt;

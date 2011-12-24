@@ -20,7 +20,7 @@
 #ifndef CORBASIM_APP_APPCONTROLLER_HPP
 #define CORBASIM_APP_APPCONTROLLER_HPP
 
-#include <corbasim/event.hpp>
+#include <corbasim/qt/types.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <QObject>
 
