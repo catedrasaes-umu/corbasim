@@ -2,7 +2,6 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/dialogs.hpp
     gui/gui_factory_fwd.hpp
     gui/gui_factory.hpp
-    gui/initialize.hpp
     gui/macros.hpp
     gui/macros_impl.hpp
     gui/tree_factory.hpp
