@@ -23,7 +23,7 @@
 #include <QtGui>
 #include <list>
 #include <corbasim/event.hpp>
-#include <corbasim/gui/gui_factory.hpp> // TODO fwd
+#include <corbasim/gui/gui_factory_fwd.hpp>
 
 namespace corbasim 
 {

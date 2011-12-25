@@ -20,7 +20,8 @@
 #include "SimpleClient.hpp"
 #include <iostream>
 #include <string>
-#include <corbasim/gui/gui_factory.hpp>
+#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/qt/RequestDialog.hpp>
 #include <corbasim/qt/MultiInputWidget.hpp>
 #include <corbasim/qt/SimpleScriptEditor.hpp>
