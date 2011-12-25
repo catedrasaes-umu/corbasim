@@ -37,7 +37,7 @@ struct inserter
     {}
 
     template < typename Value >
-    void operator()(const Value& /* unused */)
+    inline void operator()(const Value& /* unused */)
     {
         _this->template append< Value >();
     }

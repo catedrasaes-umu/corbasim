@@ -44,11 +44,6 @@ typedef boost::shared_ptr< tree_factory_base > tree_factory_ptr;
 template < typename Value >
 struct operation_tree_factory : public tree_factory_base
 {
-    typedef event::request_impl< Value > request_t;
-    typedef event::response_impl< Value > response_t;
-    typedef trees::tree< Value > tree_t; 
-    typedef adapted::name< Value > name_t;
-
     QTreeWidgetItem * create_tree(event::event* ev)
     {
         return create_tree_impl(ev);
@@ -56,6 +51,11 @@ struct operation_tree_factory : public tree_factory_base
 
     static inline QTreeWidgetItem * create_tree_impl(event::event* ev)
     {
+        typedef event::request_impl< Value > request_t;
+        typedef event::response_impl< Value > response_t;
+        typedef trees::tree< Value > tree_t; 
+        typedef adapted::name< Value > name_t;
+
         QTreeWidgetItem * item = NULL;
 
         switch (ev->get_type())
@@ -97,15 +97,15 @@ struct tree_factory_impl : public tree_factory_interface
 {
     tree_factory_impl()
     {
+        typedef typename adapted::interface< Interface >::_op_list 
+            operations_t;
+
         typedef core::impl::inserter< tree_factory_impl > inserter_t;
-        cs_mpl::for_each< operations_t >(inserter_t(this));
+        cs_mpl::for_each_list< operations_t >(inserter_t(this));
     }
 
-    typedef typename adapted::interface< Interface >::_op_list 
-        operations_t;
-
     template < typename Value >
-    void append()
+    inline void append()
     {
         m_factories.insert(std::make_pair(
                     tag< Value >::value(),

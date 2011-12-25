@@ -37,6 +37,7 @@ class reference_validator_base;
 struct operation_factory_base
 {
     virtual const char * get_name() const = 0;
+    virtual tag_t get_tag() const = 0;
 
     // To json
     virtual void to_json(event::request* req, 

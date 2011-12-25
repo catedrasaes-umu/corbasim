@@ -23,7 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/mpl.hpp>
 #include <corbasim/core/inserter.hpp>
-#include <corbasim/core/request_serializer.hpp>
+//#include <corbasim/core/request_serializer.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/gui/tree_factory.hpp>
 #include <corbasim/core/factory.hpp>
@@ -71,39 +71,38 @@ struct operation_factory : public operation_factory_base
 template< typename Interface >
 struct gui_factory : public gui_factory_base
 {
-    typedef typename  adapted::interface< Interface >::_op_list 
-        operations_t;
-
     gui_factory()
     {
-        typedef core::impl::inserter< gui_factory > inserter_t;
-        cs_mpl::for_each< operations_t >(inserter_t(this));
-    }
+        typedef typename  adapted::interface< Interface >::_op_list 
+            operations_t;
 
+        typedef core::impl::inserter< gui_factory > inserter_t;
+        cs_mpl::for_each_list< operations_t >(inserter_t(this));
+    }
+/*
     core::request_serializer_base * get_serializer() const
     {
         return core::request_serializer< Interface >::get_instance();
     }
-
+*/
     core::factory_base * get_core_factory() const
     {
         return core::factory< Interface >::get_instance();
     }
 
     template< typename Value >
-    void append()
+    inline void append()
     {
         typedef operation_factory< Value > factory_t;
+        operation_factory_base * f = factory_t::get_instance();
 
-        insert_factory(
-                adapted::name< Value >::call(),
-                tag< Value >::value(),
-                factory_t::get_instance());
+        insert_factory(f->get_name(), f->get_tag(), f);
     }
 
     static inline gui_factory * get_instance()
     {
-        static boost::shared_ptr< gui_factory > _instance(new gui_factory);
+        static boost::shared_ptr< gui_factory > 
+            _instance(new gui_factory);
         return _instance.get();
     }
 };

@@ -196,7 +196,7 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
     }
 }
 
-void SimpleClient::do_initialize(gui::gui_factory_base * factory)
+void SimpleClient::initialize(gui::gui_factory_base * factory)
 {
     QGridLayout * grid = NULL;
     const unsigned int count = factory->operation_count();
@@ -239,6 +239,15 @@ void SimpleClient::do_initialize(gui::gui_factory_base * factory)
     }
 
     m_factory = factory;
+
+    // Establece el llamador
+    m_caller.reset(factory->get_core_factory()->create_caller());
+    m_ref->setValidator(m_caller.get());
+}
+
+void SimpleClient::setReference(CORBA::Object_ptr ref)
+{
+    m_caller->set_reference(ref);
 }
 
 void SimpleClient::showDialog(int idx)

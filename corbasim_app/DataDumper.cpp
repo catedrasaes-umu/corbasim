@@ -22,7 +22,6 @@
 #include <iostream>
 #include <fstream>
 #include <corbasim/core/factory_fwd.hpp>
-#include <corbasim/core/request_serializer.hpp>
 
 using namespace corbasim::app;
 
@@ -99,7 +98,7 @@ void DataDumper::objrefDeleted(const QString& id)
 void DataDumper::servantCreated(const QString& id, 
         const corbasim::gui::gui_factory_base * factory)
 {
-    m_serializers[id] = factory->get_serializer();
+    m_serializers[id] = factory->get_core_factory();
 }
 
 void DataDumper::servantDeleted(const QString& id)

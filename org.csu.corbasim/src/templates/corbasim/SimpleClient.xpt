@@ -19,15 +19,9 @@
 «FILE fqn+"_client_main.cpp"»
 #include <corbasim/impl.hpp>
 #include "«getTranslationUnit().getFileNameStubHpp()»"
-#include "«getTranslationUnit().getAdaptedFile()»"
-#include "«getTranslationUnit().getAdaptedServantFile()»"
-#include <corbasim/gui/widgets.hpp>
-#include <corbasim/gui/dialogs.hpp>
-#include <corbasim/gui/trees.hpp>
 #include <corbasim/qt/client/SimpleClient.hpp>
 
-«PROTECT CSTART '/*' CEND '*/' ID fqn+"::custom_widgets_region"»
-«ENDPROTECT»
+extern "C" const corbasim::gui::gui_factory_base * corbasim_lib_«fqn»();
 
 int main(int argc, char **argv)
 {
@@ -37,13 +31,16 @@ int main(int argc, char **argv)
 	CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
 	CORBA::Object_var obj;
 	
-	if(argc > 1)
-		obj = orb->string_to_object(argv[1]);
-	
-	«getFQN()»_var _«identifier» = «getFQN()»::_narrow(obj.in());
-	
 	corbasim::qt::client::SimpleClient window;
-	window.initialize(_«identifier».in());
+	window.initialize(corbasim_lib_«fqn»());
+	
+	if(argc > 1)
+	{
+		obj = orb->string_to_object(argv[1]);
+		
+		window.setReference(obj);
+	}
+	
 	window.show();
 	return app.exec();
 }

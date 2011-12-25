@@ -64,33 +64,6 @@ struct is_objrefvar< «getFQN()»_var > : public cs_mpl::true_
 	typedef «getFQN()» interface;
 };
 
-template< >
-struct full_qualified_name< «getFQN()» >
-{
-	static inline const char * call()
-	{
-		return "«getFQN()»";
-	}
-};
-
-template< >
-struct name< «getFQN()» >
-{
-	static inline const char * call()
-	{
-		return "«identifier»";
-	}
-};
-
-template< >
-struct typecode< «getFQN()» >
-{
-	static inline CORBA::TypeCode const * call()
-	{
-		return «getTypeCode()»;
-	}
-};
-
 } // adapted
 } // corbasim
 
@@ -162,10 +135,12 @@ template < >
 struct interface < «getFQN()» >
 {
 «LET contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS allOperations-»
-	typedef cs_mpl::vector< «FOREACH allOperations AS op SEPARATOR ", "»_corbasim_«op.getFQN()»«ENDFOREACH» > _op_list;
+	typedef cs_mpl::list< «FOREACH allOperations AS op SEPARATOR ", cs_mpl::list< "»_corbasim_«op.getFQN()»«ENDFOREACH» «FOREACH allOperations AS op» > «ENDFOREACH» «IF allOperations.isEmpty» > «ENDIF» _op_list;
+	«REM»
 	typedef cs_mpl::vector< «FOREACH allOperations.sortBy(e|e.identifier) AS op SEPARATOR ", "»_corbasim_«op.getFQN()»«ENDFOREACH» > _sorted_op_list;
 	typedef cs_mpl::vector< «FOREACH contains.typeSelect(OperationDef) AS op SEPARATOR ", "»_corbasim_«op.getFQN()»«ENDFOREACH» > _own_op_list;
 	typedef cs_mpl::vector< «FOREACH derivesFrom AS e SEPARATOR ", "»«e.getFQN()»«ENDFOREACH» > _parent_list;
+	«ENDREM»
 «ENDLET-»
 };
 
@@ -210,15 +185,6 @@ struct call< _corbasim_«getFQN()» >
     }
 };
 
-template< >
-struct name< _corbasim_«getFQN()» >
-{
-	static inline const char * call()
-	{
-		return "«identifier»";
-	}
-};
-
 } // adapted
 } // corbasim
 «ENDDEFINE»
@@ -255,32 +221,6 @@ void serialize(Archive& ar, «getFQN()»_var& t, const unsigned int /* unused */
 
 } // serialization
 } // boost
-
-namespace corbasim
-{
-namespace adapted
-{
-
-template< >
-struct full_qualified_name< «getFQN()» >
-{
-	static inline const char * call()
-	{
-		return "«getFQN()»";
-	}
-};
-
-template< >
-struct name< «getFQN()» >
-{
-	static inline const char * call()
-	{
-		return "«identifier»";
-	}
-};
-
-} // adapted
-} // corbasim
 
 	«FOREACH getAnonymousFields().select(e|SequenceDef.isInstance(e.getType())) AS member-»
 		«EXPAND adapt(member.getMemberTypeIdFQN(this), false) FOR (SequenceDef)member.getType()-»
@@ -371,24 +311,6 @@ struct is_union< «getFQN()» > : public cs_mpl::true_
 	}
 };
 
-template< >
-struct full_qualified_name< «getFQN()» >
-{
-	static inline const char * call()
-	{
-		return "«getFQN()»";
-	}
-};
-
-template< >
-struct name< «getFQN()» >
-{
-	static inline const char * call()
-	{
-		return "«identifier»";
-	}
-};
-
 } // adapted
 } // corbasim
 
@@ -441,7 +363,6 @@ struct «identifier»
 «ENDDEFINE»
 
 «DEFINE values FOR OperationDef-»
-«LET parameters.select(e|!ArrayDef.isInstance(e.getOriginalType()) && !e.getType().isObjectRef()) AS initializationList»
 struct __«identifier»
 {
 	typedef boost::mpl::vector< «FOREACH parameters AS p SEPARATOR ", "»corbasim::Arg_«p.getDirection()»< «p.getParamCPPType()» >«ENDFOREACH» > _arg_list;
@@ -458,39 +379,14 @@ struct __«identifier»
 	«getType().getCallTypeOut()» _return;
 	«ENDIF-»
 	
-	__«identifier»()
-	{
-	}
+	__«identifier»();
 	
 	«IF !parameters.isEmpty-»
-	__«identifier»(«FOREACH parameters AS p SEPARATOR ", "»«p.getParamCPPType()» _«p.identifier»«ENDFOREACH»)«IF !initializationList.isEmpty»:
-		«FOREACH initializationList AS p SEPARATOR ", "»«p.identifier»(_«p.identifier»)«ENDFOREACH»«ENDIF»
-	{
-		«FOREACH parameters.select(e|ArrayDef.isInstance(e.getOriginalType())) AS p-»
-		«REM»// std::memcpy(«p.identifier», _«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
-		corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(_«p.identifier», «p.identifier»);
-		«ENDFOREACH-»
-		
-		«FOREACH parameters.select(e|e.getType().isObjectRef()) AS p-»
-		«p.identifier» = «p.getType().getFQN_Type()»::_duplicate(_«p.identifier»);
-		«ENDFOREACH-»
-	}
-	«ENDIF-»
+	__«identifier»(«FOREACH parameters AS p SEPARATOR ", "»«p.getParamCPPType()» _«p.identifier»«ENDFOREACH»);
+	«ENDIF-»	
 	
 	// Copy constructor
-	__«identifier»(const __«identifier»& o)«IF !initializationList.isEmpty || !returnVoid()» :
-		«FOREACH initializationList AS p SEPARATOR ", "»«p.identifier»(o.«p.identifier»)«ENDFOREACH»«ENDIF»
-		«IF !returnVoid()-»«IF !initializationList.isEmpty-», «ENDIF-»_return(o._return)«ENDIF-»
-	{
-		«FOREACH parameters.select(e|ArrayDef.isInstance(e.getOriginalType())) AS p-»
-		«REM»// std::memcpy(«p.identifier», o.«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
-		corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(o.«p.identifier», «p.identifier»);
-		«ENDFOREACH-»
-		
-		«FOREACH parameters.select(e|e.getType().isObjectRef()) AS p-»
-		«p.identifier» = o.«p.identifier»;
-		«ENDFOREACH-»
-	}
+	__«identifier»(const __«identifier»& o);
 
     template< typename Archive >
     void serialize(Archive& ar, const unsigned int /* unused */)
@@ -505,6 +401,5 @@ struct __«identifier»
 };
 
 typedef __«identifier» «identifier»;
-«ENDLET»
 «ENDDEFINE»
 

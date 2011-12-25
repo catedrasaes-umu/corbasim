@@ -1,13 +1,16 @@
 module workflow.IDLFileGeneratorWithPreprocessor
 
-var idlFile = "examples/cosnaming/Cosnaming.idl"
+var idlFile = "/home/asenac/svn-corbasim/corbasim/examples/huge/huge.idl"
 var fileEncoding = "UTF-8"
 
 // Parameters
-var targetDir = "examples/cosnaming"
-var genClient = true
-var genServer = true
-var genInjector = true
+var targetDir = "/home/asenac/svn-corbasim/corbasim/examples/huge"
+var genClient = false
+var genServer = false
+var genInjector = false
+var genCMake = true
+var genPyStim = false
+var genInterpreter = false
 var StubHppSuffix = "\'C.h\'"
 var StubCppSuffix = "\'C.cpp\'"
 var SkelHppSuffix = "\'S.h\'"
@@ -48,6 +51,18 @@ Workflow {
 		globalVarDef = {
 			name = "genInjector"
 			value = "${genInjector}"
+		}
+		globalVarDef = {
+			name = "genCMake"
+			value = "${genCMake}"
+		}
+		globalVarDef = {
+			name = "genPyStim"
+			value = "${genPyStim}"
+		}
+		globalVarDef = {
+			name = "genInterpreter"
+			value = "${genInterpreter}"
 		}
 		globalVarDef = {
 			name = "StubHppSuffix"

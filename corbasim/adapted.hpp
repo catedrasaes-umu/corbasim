@@ -87,29 +87,22 @@ struct call;
 */
 
 template< typename Value >
-struct name;
-/*
+struct name
 {
-    static inline const char * call()
-    {
-        return "ERROR!";
-    }
+    static const char * call();
 };
-*/
 
 template< typename TypeDef >
-struct full_qualified_name;
-/*
+struct full_qualified_name
 {
-    static inline const char * call()
-    {
-        return "ERROR!";
-    }
+    static const char * call();
 };
-*/
 
 template< typename TypeDef >
-struct typecode;
+struct typecode
+{
+    static CORBA::TypeCode const * call();
+};
 
 template< typename Inteface >
 struct servant;

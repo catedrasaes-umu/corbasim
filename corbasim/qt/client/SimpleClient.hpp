@@ -24,7 +24,7 @@
 #include <QtGui>
 
 #include <corbasim/core/caller.hpp>
-#include <corbasim/gui/gui_factory.hpp> // TODO fwd
+#include <corbasim/gui/gui_factory_fwd.hpp>
 
 #include <corbasim/qt/ObjrefWidget.hpp>
 
@@ -48,16 +48,8 @@ public:
     SimpleClient(QWidget * parent = 0);
     virtual ~SimpleClient();
 
-    template< typename Interface >
-    void initialize(Interface * ref)
-    {
-        m_caller.reset(new core::interface_caller< Interface >(ref));
-        m_ref->setValidator(m_caller.get());
-
-        do_initialize(gui::gui_factory< Interface >::get_instance());
-    }
-
-    void do_initialize(gui::gui_factory_base *);
+    void initialize(gui::gui_factory_base *);
+    void setReference(CORBA::Object_ptr ref);
 
 public slots:
     void sendRequest(corbasim::event::request_ptr);

@@ -33,6 +33,32 @@ namespace boost
     } // serialization
 } // boost
 
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct full_qualified_name< CosNaming::NameComponent >
+        {
+            static inline const char * call()
+            {
+                return "CosNaming::NameComponent";
+            }
+        };
+
+        template< >
+        struct name< CosNaming::NameComponent >
+        {
+            static inline const char * call()
+            {
+                return "NameComponent";
+            }
+        };
+
+    } // adapted
+} // corbasim
+
 
 namespace boost
 {
@@ -122,6 +148,32 @@ namespace boost
     } // serialization
 } // boost
 
+namespace corbasim
+{
+    namespace adapted
+    {
+
+        template< >
+        struct full_qualified_name< CosNaming::Binding >
+        {
+            static inline const char * call()
+            {
+                return "CosNaming::Binding";
+            }
+        };
+
+        template< >
+        struct name< CosNaming::Binding >
+        {
+            static inline const char * call()
+            {
+                return "Binding";
+            }
+        };
+
+    } // adapted
+} // corbasim
+
 
 namespace boost
 {
@@ -186,6 +238,33 @@ namespace corbasim
             typedef CosNaming::NamingContext interface;
         };
 
+        template< >
+        struct full_qualified_name< CosNaming::NamingContext >
+        {
+            static inline const char * call()
+            {
+                return "CosNaming::NamingContext";
+            }
+        };
+
+        template< >
+        struct name< CosNaming::NamingContext >
+        {
+            static inline const char * call()
+            {
+                return "NamingContext";
+            }
+        };
+
+        template< >
+        struct typecode< CosNaming::NamingContext >
+        {
+            static inline CORBA::TypeCode const * call()
+            {
+                return CosNaming::_tc_NamingContext;
+            }
+        };
+
     } // adapted
 } // corbasim
 
@@ -238,6 +317,33 @@ namespace corbasim
             typedef CosNaming::BindingIterator interface;
         };
 
+        template< >
+        struct full_qualified_name< CosNaming::BindingIterator >
+        {
+            static inline const char * call()
+            {
+                return "CosNaming::BindingIterator";
+            }
+        };
+
+        template< >
+        struct name< CosNaming::BindingIterator >
+        {
+            static inline const char * call()
+            {
+                return "BindingIterator";
+            }
+        };
+
+        template< >
+        struct typecode< CosNaming::BindingIterator >
+        {
+            static inline CORBA::TypeCode const * call()
+            {
+                return CosNaming::_tc_BindingIterator;
+            }
+        };
+
     } // adapted
 } // corbasim
 
@@ -266,6 +372,33 @@ namespace corbasim
         struct is_objrefvar< CosNaming::NamingContextExt_var > : public cs_mpl::true_
         {
             typedef CosNaming::NamingContextExt interface;
+        };
+
+        template< >
+        struct full_qualified_name< CosNaming::NamingContextExt >
+        {
+            static inline const char * call()
+            {
+                return "CosNaming::NamingContextExt";
+            }
+        };
+
+        template< >
+        struct name< CosNaming::NamingContextExt >
+        {
+            static inline const char * call()
+            {
+                return "NamingContextExt";
+            }
+        };
+
+        template< >
+        struct typecode< CosNaming::NamingContextExt >
+        {
+            static inline CORBA::TypeCode const * call()
+            {
+                return CosNaming::_tc_NamingContextExt;
+            }
         };
 
     } // adapted
@@ -313,14 +446,18 @@ namespace _corbasim_CosNaming
             }
 
             __bind(const CosNaming::Name& _n, ::CORBA::Object_ptr _obj):
-            n(_n), obj(_obj)
+            n(_n)
             {
+
+                obj = ::CORBA::Object::_duplicate(_obj);
             }
 
             // Copy constructor
                     __bind(const __bind& o) :
-                    n(o.n), obj(o.obj)
+                    n(o.n)
                     {
+
+                        obj = o.obj;
                     }
 
                     template< typename Archive >
@@ -348,14 +485,18 @@ namespace _corbasim_CosNaming
                     }
 
                     __rebind(const CosNaming::Name& _n, ::CORBA::Object_ptr _obj):
-                    n(_n), obj(_obj)
+                    n(_n)
                     {
+
+                        obj = ::CORBA::Object::_duplicate(_obj);
                     }
 
                     // Copy constructor
                     __rebind(const __rebind& o) :
-                    n(o.n), obj(o.obj)
+                    n(o.n)
                     {
+
+                        obj = o.obj;
                     }
 
                     template< typename Archive >
@@ -383,14 +524,18 @@ namespace _corbasim_CosNaming
                     }
 
                     __bind_context(const CosNaming::Name& _n, CosNaming::NamingContext_ptr _nc):
-                    n(_n), nc(_nc)
+                    n(_n)
                     {
+
+                        nc = CosNaming::NamingContext::_duplicate(_nc);
                     }
 
                     // Copy constructor
                     __bind_context(const __bind_context& o) :
-                    n(o.n), nc(o.nc)
+                    n(o.n)
                     {
+
+                        nc = o.nc;
                     }
 
                     template< typename Archive >
@@ -418,14 +563,18 @@ namespace _corbasim_CosNaming
                     }
 
                     __rebind_context(const CosNaming::Name& _n, CosNaming::NamingContext_ptr _nc):
-                    n(_n), nc(_nc)
+                    n(_n)
                     {
+
+                        nc = CosNaming::NamingContext::_duplicate(_nc);
                     }
 
                     // Copy constructor
                     __rebind_context(const __rebind_context& o) :
-                    n(o.n), nc(o.nc)
+                    n(o.n)
                     {
+
+                        nc = o.nc;
                     }
 
                     template< typename Archive >
@@ -455,6 +604,7 @@ namespace _corbasim_CosNaming
                     __resolve(const CosNaming::Name& _n):
                     n(_n)
                     {
+
                     }
 
                     // Copy constructor
@@ -462,6 +612,7 @@ namespace _corbasim_CosNaming
                     n(o.n)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -489,12 +640,14 @@ namespace _corbasim_CosNaming
                     __unbind(const CosNaming::Name& _n):
                     n(_n)
                     {
+
                     }
 
                     // Copy constructor
                     __unbind(const __unbind& o) :
                     n(o.n)
                     {
+
                     }
 
                     template< typename Archive >
@@ -521,6 +674,7 @@ namespace _corbasim_CosNaming
 
                     _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -549,6 +703,7 @@ namespace _corbasim_CosNaming
                     __bind_new_context(const CosNaming::Name& _n):
                     n(_n)
                     {
+
                     }
 
                     // Copy constructor
@@ -556,6 +711,7 @@ namespace _corbasim_CosNaming
                     n(o.n)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -579,6 +735,7 @@ namespace _corbasim_CosNaming
                     // Copy constructor
                     __destroy(const __destroy& o)
                     {
+
                     }
 
                     template< typename Archive >
@@ -606,14 +763,18 @@ namespace _corbasim_CosNaming
                     }
 
                     __list(::CORBA::ULong _how_many, CosNaming::BindingList_out _bl, CosNaming::BindingIterator_out _bi):
-                    how_many(_how_many), bl(_bl), bi(_bi)
+                    how_many(_how_many), bl(_bl)
                     {
+
+                        bi = CosNaming::BindingIterator::_duplicate(_bi);
                     }
 
                     // Copy constructor
                     __list(const __list& o) :
-                    how_many(o.how_many), bl(o.bl), bi(o.bi)
+                    how_many(o.how_many), bl(o.bl)
                     {
+
+                        bi = o.bi;
                     }
 
                     template< typename Archive >
@@ -650,6 +811,7 @@ namespace _corbasim_CosNaming
                     __next_one(CosNaming::Binding_out _b):
                     b(_b)
                     {
+
                     }
 
                     // Copy constructor
@@ -657,6 +819,7 @@ namespace _corbasim_CosNaming
                     b(o.b)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -688,6 +851,7 @@ namespace _corbasim_CosNaming
                     __next_n(::CORBA::ULong _how_many, CosNaming::BindingList_out _bl):
                     how_many(_how_many), bl(_bl)
                     {
+
                     }
 
                     // Copy constructor
@@ -695,6 +859,7 @@ namespace _corbasim_CosNaming
                     how_many(o.how_many), bl(o.bl)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -719,6 +884,7 @@ namespace _corbasim_CosNaming
                     // Copy constructor
                     __destroy(const __destroy& o)
                     {
+
                     }
 
                     template< typename Archive >
@@ -752,6 +918,7 @@ namespace _corbasim_CosNaming
                     __to_string(const CosNaming::Name& _n):
                     n(_n)
                     {
+
                     }
 
                     // Copy constructor
@@ -759,6 +926,7 @@ namespace _corbasim_CosNaming
                     n(o.n)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -788,6 +956,7 @@ namespace _corbasim_CosNaming
                     __to_name(const char* _sn):
                     sn(_sn)
                     {
+
                     }
 
                     // Copy constructor
@@ -795,6 +964,7 @@ namespace _corbasim_CosNaming
                     sn(o.sn)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -826,6 +996,7 @@ namespace _corbasim_CosNaming
                     __to_url(const char* _addr, const char* _sn):
                     addr(_addr), sn(_sn)
                     {
+
                     }
 
                     // Copy constructor
@@ -833,6 +1004,7 @@ namespace _corbasim_CosNaming
                     addr(o.addr), sn(o.sn)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -863,6 +1035,7 @@ namespace _corbasim_CosNaming
                     __resolve_str(const char* _n):
                     n(_n)
                     {
+
                     }
 
                     // Copy constructor
@@ -870,6 +1043,7 @@ namespace _corbasim_CosNaming
                     n(o.n)
                     , _return(o._return)
                     {
+
                     }
 
                     template< typename Archive >
@@ -895,38 +1069,28 @@ namespace corbasim
         template< >
         struct interface< CosNaming::NamingContext >
         {
-            typedef cs_mpl::vector< _corbasim_CosNaming::NamingContext::bind,
-                    _corbasim_CosNaming::NamingContext::rebind,
-                    _corbasim_CosNaming::NamingContext::bind_context,
-                    _corbasim_CosNaming::NamingContext::rebind_context,
-                    _corbasim_CosNaming::NamingContext::resolve,
-                    _corbasim_CosNaming::NamingContext::unbind,
-                    _corbasim_CosNaming::NamingContext::new_context,
-                    _corbasim_CosNaming::NamingContext::bind_new_context,
-                    _corbasim_CosNaming::NamingContext::destroy,
-                    _corbasim_CosNaming::NamingContext::list > _op_list;
-            typedef cs_mpl::vector< _corbasim_CosNaming::NamingContext::bind,
-                    _corbasim_CosNaming::NamingContext::bind_context,
-                    _corbasim_CosNaming::NamingContext::bind_new_context,
-                    _corbasim_CosNaming::NamingContext::destroy,
-                    _corbasim_CosNaming::NamingContext::list,
-                    _corbasim_CosNaming::NamingContext::new_context,
-                    _corbasim_CosNaming::NamingContext::rebind,
-                    _corbasim_CosNaming::NamingContext::rebind_context,
-                    _corbasim_CosNaming::NamingContext::resolve,
-                    _corbasim_CosNaming::NamingContext::unbind >
-                    _sorted_op_list;
-            typedef cs_mpl::vector< _corbasim_CosNaming::NamingContext::bind,
-                    _corbasim_CosNaming::NamingContext::rebind,
-                    _corbasim_CosNaming::NamingContext::bind_context,
-                    _corbasim_CosNaming::NamingContext::rebind_context,
-                    _corbasim_CosNaming::NamingContext::resolve,
-                    _corbasim_CosNaming::NamingContext::unbind,
-                    _corbasim_CosNaming::NamingContext::new_context,
-                    _corbasim_CosNaming::NamingContext::bind_new_context,
-                    _corbasim_CosNaming::NamingContext::destroy,
-                    _corbasim_CosNaming::NamingContext::list > _own_op_list;
-            typedef cs_mpl::vector< > _parent_list;
+            typedef cs_mpl::list<
+                    _corbasim_CosNaming::NamingContext::bind,
+                    cs_mpl::list<
+                            _corbasim_CosNaming::NamingContext::rebind,
+                            cs_mpl::list<
+                                    _corbasim_CosNaming::NamingContext::bind_context,
+                                    cs_mpl::list<
+                                            _corbasim_CosNaming::NamingContext::rebind_context,
+                                            cs_mpl::list<
+                                                    _corbasim_CosNaming::NamingContext::resolve,
+                                                    cs_mpl::list<
+                                                            _corbasim_CosNaming::NamingContext::unbind,
+                                                            cs_mpl::list<
+                                                                    _corbasim_CosNaming::NamingContext::new_context,
+                                                                    cs_mpl::list<
+                                                                            _corbasim_CosNaming::NamingContext::bind_new_context,
+                                                                            cs_mpl::list<
+                                                                                    _corbasim_CosNaming::NamingContext::destroy,
+                                                                                    cs_mpl::list<
+                                                                                            _corbasim_CosNaming::NamingContext::list > > > > > > > > > >
+                    _op_list;
+
         };
 
     } // adapted
@@ -1308,21 +1472,14 @@ namespace corbasim
         template< >
         struct interface< CosNaming::BindingIterator >
         {
-            typedef cs_mpl::vector<
+            typedef cs_mpl::list<
                     _corbasim_CosNaming::BindingIterator::next_one,
-                    _corbasim_CosNaming::BindingIterator::next_n,
-                    _corbasim_CosNaming::BindingIterator::destroy > _op_list;
-            typedef cs_mpl::vector<
-                    _corbasim_CosNaming::BindingIterator::destroy,
-                    _corbasim_CosNaming::BindingIterator::next_n,
-                    _corbasim_CosNaming::BindingIterator::next_one >
-                    _sorted_op_list;
-            typedef cs_mpl::vector<
-                    _corbasim_CosNaming::BindingIterator::next_one,
-                    _corbasim_CosNaming::BindingIterator::next_n,
-                    _corbasim_CosNaming::BindingIterator::destroy >
-                    _own_op_list;
-            typedef cs_mpl::vector< > _parent_list;
+                    cs_mpl::list<
+                            _corbasim_CosNaming::BindingIterator::next_n,
+                            cs_mpl::list<
+                                    _corbasim_CosNaming::BindingIterator::destroy > > >
+                    _op_list;
+
         };
 
     } // adapted
@@ -1446,43 +1603,36 @@ namespace corbasim
         template< >
         struct interface< CosNaming::NamingContextExt >
         {
-            typedef cs_mpl::vector<
+            typedef cs_mpl::list<
                     _corbasim_CosNaming::NamingContextExt::to_string,
-                    _corbasim_CosNaming::NamingContextExt::to_name,
-                    _corbasim_CosNaming::NamingContextExt::to_url,
-                    _corbasim_CosNaming::NamingContextExt::resolve_str,
-                    _corbasim_CosNaming::NamingContext::bind,
-                    _corbasim_CosNaming::NamingContext::rebind,
-                    _corbasim_CosNaming::NamingContext::bind_context,
-                    _corbasim_CosNaming::NamingContext::rebind_context,
-                    _corbasim_CosNaming::NamingContext::resolve,
-                    _corbasim_CosNaming::NamingContext::unbind,
-                    _corbasim_CosNaming::NamingContext::new_context,
-                    _corbasim_CosNaming::NamingContext::bind_new_context,
-                    _corbasim_CosNaming::NamingContext::destroy,
-                    _corbasim_CosNaming::NamingContext::list > _op_list;
-            typedef cs_mpl::vector< _corbasim_CosNaming::NamingContext::bind,
-                    _corbasim_CosNaming::NamingContext::bind_context,
-                    _corbasim_CosNaming::NamingContext::bind_new_context,
-                    _corbasim_CosNaming::NamingContext::destroy,
-                    _corbasim_CosNaming::NamingContext::list,
-                    _corbasim_CosNaming::NamingContext::new_context,
-                    _corbasim_CosNaming::NamingContext::rebind,
-                    _corbasim_CosNaming::NamingContext::rebind_context,
-                    _corbasim_CosNaming::NamingContext::resolve,
-                    _corbasim_CosNaming::NamingContextExt::resolve_str,
-                    _corbasim_CosNaming::NamingContextExt::to_name,
-                    _corbasim_CosNaming::NamingContextExt::to_string,
-                    _corbasim_CosNaming::NamingContextExt::to_url,
-                    _corbasim_CosNaming::NamingContext::unbind >
-                    _sorted_op_list;
-            typedef cs_mpl::vector<
-                    _corbasim_CosNaming::NamingContextExt::to_string,
-                    _corbasim_CosNaming::NamingContextExt::to_name,
-                    _corbasim_CosNaming::NamingContextExt::to_url,
-                    _corbasim_CosNaming::NamingContextExt::resolve_str >
-                    _own_op_list;
-            typedef cs_mpl::vector< CosNaming::NamingContext > _parent_list;
+                    cs_mpl::list<
+                            _corbasim_CosNaming::NamingContextExt::to_name,
+                            cs_mpl::list<
+                                    _corbasim_CosNaming::NamingContextExt::to_url,
+                                    cs_mpl::list<
+                                            _corbasim_CosNaming::NamingContextExt::resolve_str,
+                                            cs_mpl::list<
+                                                    _corbasim_CosNaming::NamingContext::bind,
+                                                    cs_mpl::list<
+                                                            _corbasim_CosNaming::NamingContext::rebind,
+                                                            cs_mpl::list<
+                                                                    _corbasim_CosNaming::NamingContext::bind_context,
+                                                                    cs_mpl::list<
+                                                                            _corbasim_CosNaming::NamingContext::rebind_context,
+                                                                            cs_mpl::list<
+                                                                                    _corbasim_CosNaming::NamingContext::resolve,
+                                                                                    cs_mpl::list<
+                                                                                            _corbasim_CosNaming::NamingContext::unbind,
+                                                                                            cs_mpl::list<
+                                                                                                    _corbasim_CosNaming::NamingContext::new_context,
+                                                                                                    cs_mpl::list<
+                                                                                                            _corbasim_CosNaming::NamingContext::bind_new_context,
+                                                                                                            cs_mpl::list<
+                                                                                                                    _corbasim_CosNaming::NamingContext::destroy,
+                                                                                                                    cs_mpl::list<
+                                                                                                                            _corbasim_CosNaming::NamingContext::list > > > > > > > > > > > > > >
+                    _op_list;
+
         };
 
     } // adapted

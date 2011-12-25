@@ -17,7 +17,7 @@ add_custom_command(
 	COMMAND tao_idl ${TAO_IDL_OPTIONS} huge.idl
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(${CORBASIM_PREFIX}huge_idl SHARED ${huge_GENERATED})
+add_library(${CORBASIM_PREFIX}huge_idl SHARED ${huge_GENERATED} huge_adapted.cpp)
 
 	
 	
@@ -29,7 +29,6 @@ target_link_libraries(corbasim_lib_Test_Huge
 	# CORBASIM Libraries
 	corbasim corbasim_qt)
 
-	
 	
 	
 	

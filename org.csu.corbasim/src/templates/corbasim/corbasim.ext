@@ -29,6 +29,7 @@ String getPOAFQN(InterfaceDef this) :
     "POA_" + getFQN();
 
 String getAdaptedFile(TranslationUnit this) : getFileName() + "_adapted" + getHeaderExtension();
+String getAdaptedFileCPP(TranslationUnit this) : getFileName() + "_adapted" + getSourceExtension();
 String getAdaptedServantFile(TranslationUnit this) : getFileName() + "_servant" + getHeaderExtension();
 
 TranslationUnit getTranslationUnit(Container this) : 

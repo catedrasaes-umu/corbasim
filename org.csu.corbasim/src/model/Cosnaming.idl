@@ -3,7 +3,7 @@
 
 module CosNaming {
 
-#pragma prefix "omg.org/CosNaming"
+
        typedef string Istring;
 
        struct NameComponent {
@@ -120,5 +120,4 @@ module CosNaming {
                };
 };
 
-#pragma ID CosNaming "IDL:omg.org/CosNaming:1.0"
 #endif // _COSNAMING_IDL_

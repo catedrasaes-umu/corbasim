@@ -23,7 +23,7 @@ add_custom_command(
 	COMMAND tao_idl ${TAO_IDL_OPTIONS} «filename».idl
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(${CORBASIM_PREFIX}«filename»_idl SHARED ${«filename»_GENERATED})
+add_library(${CORBASIM_PREFIX}«filename»_idl SHARED ${«filename»_GENERATED} «getAdaptedFileCPP()»)
 	«IF !includes.isEmpty-»
 target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
 		«FOREACH includes AS e-»
@@ -58,6 +58,7 @@ target_link_libraries(corbasim_lib_«fqn»
 add_executable(${CORBASIM_PREFIX}«fqn»_client «fqn»_client_main.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_client 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
+	corbasim_lib_«fqn»
 	# CORBASIM Libraries
 	corbasim corbasim_qt)
 	«ENDIF-»
@@ -81,7 +82,7 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_server
 	# Boost
 	boost_program_options)
 	«ENDIF-»
-	
+«REM»	
 	«IF generatePyStim()-»
 # PyStim
 add_executable(${CORBASIM_PREFIX}«fqn»_pystim «fqn»_pystim.cpp)
@@ -99,5 +100,6 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_interpreter
 	# CORBASIM Libraries
 	corbasim corbasim_python)
 	«ENDIF-»
+«ENDREM»	
 «ENDLET»
 «ENDDEFINE»

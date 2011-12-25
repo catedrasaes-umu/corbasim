@@ -23,7 +23,6 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/mpl.hpp>
 #include <corbasim/core/inserter.hpp>
-#include <corbasim/core/request_serializer.hpp>
 #include <corbasim/core/reference_validator.hpp>
 #include <corbasim/core/factory_fwd.hpp>
 #include <corbasim/core/caller.hpp>
@@ -43,13 +42,17 @@ namespace core
 template< typename Value >
 struct operation_factory : public operation_factory_base
 {
-    typedef dialogs::input< Value > input_t;
     typedef event::request_impl< Value > request_t;
     typedef event::response_impl< Value > response_t;
 
     const char * get_name() const
     {
         return adapted::name< Value >::call();
+    }
+
+    tag_t get_tag() const
+    {
+        return tag< Value >::value();
     }
     
     // To JSON
@@ -124,13 +127,13 @@ struct operation_factory : public operation_factory_base
 template< typename Interface >
 struct factory : public factory_base
 {
-    typedef typename  adapted::interface< Interface >::_op_list 
-        operations_t;
-
     factory()
     {
+        typedef typename  adapted::interface< Interface >::_op_list 
+            operations_t;
+
         typedef core::impl::inserter< factory > inserter_t;
-        cs_mpl::for_each< operations_t >(inserter_t(this));
+        cs_mpl::for_each_list< operations_t >(inserter_t(this));
     }
 
     core::interface_caller_base* create_caller() const
@@ -162,14 +165,12 @@ struct factory : public factory_base
     }
 
     template< typename Value >
-    void append()
+    inline void append()
     {
         typedef operation_factory< Value > factory_t;
+        operation_factory_base * f = factory_t::get_instance();
 
-        insert_factory(
-                adapted::name< Value >::call(),
-                tag< Value >::value(),
-                factory_t::get_instance());
+        insert_factory(f->get_name(), f->get_tag(), f);
     }
 
     static inline factory * get_instance()

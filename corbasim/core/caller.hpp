@@ -35,13 +35,13 @@ namespace core
 template < typename Value >
 struct oneway_caller
 {
-    typedef event::request_impl< Value > request_t;
-    typedef adapted::call< Value > caller_t;
-
     template < typename Interface >
     static inline event::event* invoke(Interface * ref, 
             event::request * req)
     {
+        typedef event::request_impl< Value > request_t;
+        typedef adapted::call< Value > caller_t;
+
         request_t * reqi = static_cast< request_t * >(req);
         caller_t::invoke(ref, reqi->m_values);
         return NULL;
@@ -51,14 +51,14 @@ struct oneway_caller
 template < typename Value >
 struct default_caller
 {
-    typedef event::request_impl< Value > request_t;
-    typedef event::response_impl< Value > response_t;
-    typedef adapted::call< Value > caller_t;
-
     template < typename Interface >
     static inline event::event* invoke(Interface * ref, 
             event::request * req)
     {
+        typedef event::request_impl< Value > request_t;
+        typedef event::response_impl< Value > response_t;
+        typedef adapted::call< Value > caller_t;
+
         request_t * reqi = static_cast< request_t * >(req);
         response_t * resp = new response_t(reqi->m_values);
 
@@ -115,13 +115,13 @@ struct interface_caller : public interface_caller_base
     interface_caller(Interface * ref)
         : m_ref(Interface::_duplicate(ref))
     {
-        cs_mpl::for_each< operations_t >(inserter_t(this));
+        _init();
     }
 
     interface_caller()
         : m_ref(Interface::_nil())
     {
-        cs_mpl::for_each< operations_t >(inserter_t(this));
+        _init();
     }
 
     ~interface_caller()
@@ -141,7 +141,7 @@ struct interface_caller : public interface_caller_base
     }
 
     template < typename Value >
-    void append()
+    inline void append()
     {
         typedef operation_caller_impl< Interface, Value > caller_t;
         m_callers.insert(std::make_pair(tag< Value >::value(),
@@ -150,8 +150,6 @@ struct interface_caller : public interface_caller_base
 
     typedef impl::inserter< interface_caller > inserter_t;
     typedef operation_caller_base< Interface > caller_base_t;
-    typedef adapted::interface< Interface > adapted_t;
-    typedef typename adapted_t::_op_list operations_t;
     typedef std::map< tag_t, caller_base_t* > callers_t;
 
     event::event * do_call(event::request * req) const
@@ -184,6 +182,15 @@ struct interface_caller : public interface_caller_base
 
     Interface * m_ref;
     callers_t m_callers;
+
+private:
+
+    void _init()
+    {
+        typedef adapted::interface< Interface > adapted_t;
+        typedef typename adapted_t::_op_list operations_t;
+        cs_mpl::for_each_list< operations_t >(inserter_t(this));
+    }
 };
 
 } // namespace core

@@ -23,7 +23,9 @@
 #include <vector>
 #include <string>
 #include <corbasim/event.hpp>
+// TODO fwd
 #include <corbasim/gui/dialogs.hpp>
+
 
 class QTreeWidgetItem;
 
@@ -31,7 +33,7 @@ namespace corbasim
 {
 namespace core 
 {
-class request_serializer_base;
+// class request_serializer_base;
 class factory_base;
 } // namespace core
 
@@ -58,7 +60,7 @@ struct gui_factory_base
     QTreeWidgetItem * create_tree(event::event* ev) const;
 
     virtual ~gui_factory_base();
-    virtual core::request_serializer_base * get_serializer() const = 0;
+    // virtual core::request_serializer_base * get_serializer() const = 0;
 
     void insert_factory(const std::string& name,
             tag_t tag, operation_factory_base * factory);

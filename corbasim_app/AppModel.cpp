@@ -270,7 +270,7 @@ void AppModel::saveFile(const QString& file)
         objrefs_t::const_iterator it = m_objrefs.begin();
         objrefs_t::const_iterator end = m_objrefs.end();
 
-        for (int i = 0; it != m_objrefs.end(); ++it, i++)
+        for (int i = 0; it != end; ++it, i++)
             cfg.objects[i] = it->second->getConfig();
     }
 
@@ -280,7 +280,7 @@ void AppModel::saveFile(const QString& file)
         servants_t::const_iterator it = m_servants.begin();
         servants_t::const_iterator end = m_servants.end();
 
-        for (int i = 0; it != m_servants.end(); ++it, i++)
+        for (int i = 0; it != end; ++it, i++)
             cfg.servants[i] = it->second->getConfig();
     }
 

@@ -11,6 +11,7 @@
 	«ENDIF»
 	
 	«EXPAND templates::corbasim::Adapted::main FOR this»
+	«EXPAND templates::corbasim::AdaptedCPP::main FOR this»
 	«EXPAND templates::corbasim::AdaptedServant::main FOR this»
 	
 	«REM» Específicos «ENDREM»
@@ -25,7 +26,7 @@
 	«IF generateServer()»
 		«EXPAND templates::corbasim::Server::server FOR this»
 	«ENDIF»
-	
+	«REM»
 	«IF generatePyStim()»
 		«EXPAND templates::corbasim::PyStim::stim FOR this»
 	«ENDIF»
@@ -33,7 +34,7 @@
 	«IF generateInterpreter()»
 		«EXPAND templates::corbasim::Interpreter::interpreter FOR this»
 	«ENDIF»
-	
+	«ENDREM»
 	«IF generateLibrary()»
 		«EXPAND templates::corbasim::LibCorbasim::main FOR this»
 	«ENDIF»

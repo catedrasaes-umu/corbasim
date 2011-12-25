@@ -61,7 +61,7 @@ protected:
     AppController * m_controller;
 
     typedef QMap< QString, 
-                  corbasim::core::request_serializer_base const * > 
+                  corbasim::core::factory_base const * > 
             serializers_t;
     serializers_t m_serializers;
 };

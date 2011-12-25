@@ -1,0 +1,146 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+«EXTENSION templates::StructDef»
+«EXTENSION templates::Expression»
+
+«DEFINE main FOR TranslationUnit»
+«FILE getAdaptedFileCPP()-»
+#include "«getAdaptedFile()»"
+
+namespace corbasim
+{
+namespace adapted
+{
+«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+} // namespace adapted
+} // namespace corbasim
+
+«EXPAND values FOREACH contains SEPARATOR "\n\n"»
+
+«ENDFILE»
+«ENDDEFINE»
+
+«REM» ADAPT «ENDREM»
+
+«DEFINE adapt FOR Contained-»«ENDDEFINE»
+
+«DEFINE adapt FOR ModuleDef-»
+	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adapt FOR InterfaceDef-»
+template< >
+const char * full_qualified_name< «getFQN()» >::call()
+{
+	return "«getFQN()»";
+}
+
+template< >
+const char * name< «getFQN()» >::call()
+{
+	return "«identifier»";
+}
+
+template< >
+CORBA::TypeCode const *  typecode< «getFQN()» >::call()
+{
+	return «getTypeCode()»;
+}
+
+	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adapt FOR Container-»
+	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE adapt FOR OperationDef-»
+template< >
+const char * name< _corbasim_«getFQN()» >::call()
+{
+	return "«identifier»";
+}
+«ENDDEFINE»
+
+«DEFINE adapt FOR StructDef-»
+template< >
+const char * full_qualified_name< «getFQN()» >::call()
+{
+	return "«getFQN()»";
+}
+
+template< >
+const char * name< «getFQN()» >::call()
+{
+	return "«identifier»";
+}
+
+	«EXPAND adapt FOREACH getNestedStructs()-»
+«ENDDEFINE»
+
+«DEFINE adapt FOR UnionDef-»
+template< >
+const char * full_qualified_name< «getFQN()» >::call()
+{
+	return "«getFQN()»";
+}
+
+template< >
+const char * name< «getFQN()» >::call()
+{
+	return "«identifier»";
+}
+«ENDDEFINE»
+
+«DEFINE adapt FOR EnumDef-»«ENDDEFINE»
+
+«REM» NAMESPACE ALTERNATIVO «ENDREM»
+
+«DEFINE values FOR Contained-»«ENDDEFINE»
+
+«DEFINE values FOR Container-»
+namespace «IF definedIn == null-»_corbasim_«ENDIF-»«identifier» 
+{
+	«EXPAND values FOREACH contains SEPARATOR "\n\n"»
+} // «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
+«ENDDEFINE»
+
+«DEFINE values FOR OperationDef-»
+«LET parameters.select(e|!ArrayDef.isInstance(e.getOriginalType()) && !e.getType().isObjectRef()) AS initializationList»
+__«identifier»::__«identifier»()
+{
+}
+
+«IF !parameters.isEmpty-»
+__«identifier»::__«identifier»(«FOREACH parameters AS p SEPARATOR ", "»«p.getParamCPPType()» _«p.identifier»«ENDFOREACH»)«IF !initializationList.isEmpty»:
+	«FOREACH initializationList AS p SEPARATOR ", "»«p.identifier»(_«p.identifier»)«ENDFOREACH»«ENDIF»
+{
+	«FOREACH parameters.select(e|ArrayDef.isInstance(e.getOriginalType())) AS p-»
+	«REM»// std::memcpy(«p.identifier», _«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
+	corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(_«p.identifier», «p.identifier»);
+	«ENDFOREACH-»
+	
+	«FOREACH parameters.select(e|e.getType().isObjectRef()) AS p-»
+	«p.identifier» = «p.getType().getFQN_Type()»::_duplicate(_«p.identifier»);
+	«ENDFOREACH-»
+}
+«ENDIF-»
+
+// Copy constructor
+__«identifier»::__«identifier»(const __«identifier»& o)«IF !initializationList.isEmpty || !returnVoid()» :
+	«FOREACH initializationList AS p SEPARATOR ", "»«p.identifier»(o.«p.identifier»)«ENDFOREACH»«ENDIF»
+	«IF !returnVoid()-»«IF !initializationList.isEmpty-», «ENDIF-»_return(o._return)«ENDIF-»
+{
+	«FOREACH parameters.select(e|ArrayDef.isInstance(e.getOriginalType())) AS p-»
+	«REM»// std::memcpy(«p.identifier», o.«p.identifier», sizeof(«p.getType().getMemberCPPType()»));«ENDREM»
+	corbasim::core::copy< «p.getType().getMemberCPPType()» >::invoke(o.«p.identifier», «p.identifier»);
+	«ENDFOREACH-»
+	
+	«FOREACH parameters.select(e|e.getType().isObjectRef()) AS p-»
+	«p.identifier» = o.«p.identifier»;
+	«ENDFOREACH-»
+}
+«ENDLET»
+«ENDDEFINE»
+

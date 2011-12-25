@@ -99,12 +99,12 @@ struct request_serializer : public request_serializer_impl
 {
     request_serializer()
     {
+        typedef typename interface_t::_op_list operations_t;
         typedef impl::inserter< request_serializer > inserter_t;
-        cs_mpl::for_each< operations_t >(inserter_t(this));
+        cs_mpl::for_each_list< operations_t >(inserter_t(this));
     }
 
     typedef adapted::interface< Interface > interface_t;
-    typedef typename interface_t::_op_list operations_t;
 
     template < typename Value >
     void append()

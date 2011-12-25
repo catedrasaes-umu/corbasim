@@ -31,33 +31,6 @@ namespace corbasim
             typedef Test::Huge interface;
         };
 
-        template< >
-        struct full_qualified_name< Test::Huge >
-        {
-            static inline const char * call()
-            {
-                return "Test::Huge";
-            }
-        };
-
-        template< >
-        struct name< Test::Huge >
-        {
-            static inline const char * call()
-            {
-                return "Huge";
-            }
-        };
-
-        template< >
-        struct typecode< Test::Huge >
-        {
-            static inline CORBA::TypeCode const * call()
-            {
-                return Test::_tc_Huge;
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -66,7 +39,6 @@ namespace _corbasim_Test
 {
     namespace Huge
     {
-
         struct __operation1
         {
             typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > >
@@ -76,22 +48,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation1()
-            {
-            }
+            __operation1();
 
-            __operation1(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation1(::CORBA::Long _a);
 
             // Copy constructor
-            __operation1(const __operation1& o) :
-            a(o.a)
-            {
-
-            }
+            __operation1(const __operation1& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -110,22 +72,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation2()
-            {
-            }
+            __operation2();
 
-            __operation2(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation2(::CORBA::Long _a);
 
             // Copy constructor
-            __operation2(const __operation2& o) :
-            a(o.a)
-            {
-
-            }
+            __operation2(const __operation2& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -144,22 +96,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation3()
-            {
-            }
+            __operation3();
 
-            __operation3(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation3(::CORBA::Long _a);
 
             // Copy constructor
-            __operation3(const __operation3& o) :
-            a(o.a)
-            {
-
-            }
+            __operation3(const __operation3& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -178,22 +120,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation4()
-            {
-            }
+            __operation4();
 
-            __operation4(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation4(::CORBA::Long _a);
 
             // Copy constructor
-            __operation4(const __operation4& o) :
-            a(o.a)
-            {
-
-            }
+            __operation4(const __operation4& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -212,22 +144,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation5()
-            {
-            }
+            __operation5();
 
-            __operation5(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation5(::CORBA::Long _a);
 
             // Copy constructor
-            __operation5(const __operation5& o) :
-            a(o.a)
-            {
-
-            }
+            __operation5(const __operation5& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -246,22 +168,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation6()
-            {
-            }
+            __operation6();
 
-            __operation6(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation6(::CORBA::Long _a);
 
             // Copy constructor
-            __operation6(const __operation6& o) :
-            a(o.a)
-            {
-
-            }
+            __operation6(const __operation6& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -280,22 +192,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation7()
-            {
-            }
+            __operation7();
 
-            __operation7(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation7(::CORBA::Long _a);
 
             // Copy constructor
-            __operation7(const __operation7& o) :
-            a(o.a)
-            {
-
-            }
+            __operation7(const __operation7& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -314,22 +216,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation8()
-            {
-            }
+            __operation8();
 
-            __operation8(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation8(::CORBA::Long _a);
 
             // Copy constructor
-            __operation8(const __operation8& o) :
-            a(o.a)
-            {
-
-            }
+            __operation8(const __operation8& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -348,22 +240,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation9()
-            {
-            }
+            __operation9();
 
-            __operation9(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation9(::CORBA::Long _a);
 
             // Copy constructor
-            __operation9(const __operation9& o) :
-            a(o.a)
-            {
-
-            }
+            __operation9(const __operation9& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -382,22 +264,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation10()
-            {
-            }
+            __operation10();
 
-            __operation10(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation10(::CORBA::Long _a);
 
             // Copy constructor
-            __operation10(const __operation10& o) :
-            a(o.a)
-            {
-
-            }
+            __operation10(const __operation10& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -416,22 +288,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation11()
-            {
-            }
+            __operation11();
 
-            __operation11(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation11(::CORBA::Long _a);
 
             // Copy constructor
-            __operation11(const __operation11& o) :
-            a(o.a)
-            {
-
-            }
+            __operation11(const __operation11& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -450,22 +312,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation12()
-            {
-            }
+            __operation12();
 
-            __operation12(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation12(::CORBA::Long _a);
 
             // Copy constructor
-            __operation12(const __operation12& o) :
-            a(o.a)
-            {
-
-            }
+            __operation12(const __operation12& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -484,22 +336,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation13()
-            {
-            }
+            __operation13();
 
-            __operation13(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation13(::CORBA::Long _a);
 
             // Copy constructor
-            __operation13(const __operation13& o) :
-            a(o.a)
-            {
-
-            }
+            __operation13(const __operation13& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -518,22 +360,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation14()
-            {
-            }
+            __operation14();
 
-            __operation14(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation14(::CORBA::Long _a);
 
             // Copy constructor
-            __operation14(const __operation14& o) :
-            a(o.a)
-            {
-
-            }
+            __operation14(const __operation14& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -552,22 +384,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation15()
-            {
-            }
+            __operation15();
 
-            __operation15(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation15(::CORBA::Long _a);
 
             // Copy constructor
-            __operation15(const __operation15& o) :
-            a(o.a)
-            {
-
-            }
+            __operation15(const __operation15& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -586,22 +408,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation16()
-            {
-            }
+            __operation16();
 
-            __operation16(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation16(::CORBA::Long _a);
 
             // Copy constructor
-            __operation16(const __operation16& o) :
-            a(o.a)
-            {
-
-            }
+            __operation16(const __operation16& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -620,22 +432,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation17()
-            {
-            }
+            __operation17();
 
-            __operation17(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation17(::CORBA::Long _a);
 
             // Copy constructor
-            __operation17(const __operation17& o) :
-            a(o.a)
-            {
-
-            }
+            __operation17(const __operation17& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -654,22 +456,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation18()
-            {
-            }
+            __operation18();
 
-            __operation18(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation18(::CORBA::Long _a);
 
             // Copy constructor
-            __operation18(const __operation18& o) :
-            a(o.a)
-            {
-
-            }
+            __operation18(const __operation18& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -688,22 +480,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation19()
-            {
-            }
+            __operation19();
 
-            __operation19(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation19(::CORBA::Long _a);
 
             // Copy constructor
-            __operation19(const __operation19& o) :
-            a(o.a)
-            {
-
-            }
+            __operation19(const __operation19& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -722,22 +504,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation20()
-            {
-            }
+            __operation20();
 
-            __operation20(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation20(::CORBA::Long _a);
 
             // Copy constructor
-            __operation20(const __operation20& o) :
-            a(o.a)
-            {
-
-            }
+            __operation20(const __operation20& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -756,22 +528,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation21()
-            {
-            }
+            __operation21();
 
-            __operation21(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation21(::CORBA::Long _a);
 
             // Copy constructor
-            __operation21(const __operation21& o) :
-            a(o.a)
-            {
-
-            }
+            __operation21(const __operation21& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -790,22 +552,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation22()
-            {
-            }
+            __operation22();
 
-            __operation22(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation22(::CORBA::Long _a);
 
             // Copy constructor
-            __operation22(const __operation22& o) :
-            a(o.a)
-            {
-
-            }
+            __operation22(const __operation22& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -824,22 +576,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation23()
-            {
-            }
+            __operation23();
 
-            __operation23(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation23(::CORBA::Long _a);
 
             // Copy constructor
-            __operation23(const __operation23& o) :
-            a(o.a)
-            {
-
-            }
+            __operation23(const __operation23& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -858,22 +600,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation24()
-            {
-            }
+            __operation24();
 
-            __operation24(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation24(::CORBA::Long _a);
 
             // Copy constructor
-            __operation24(const __operation24& o) :
-            a(o.a)
-            {
-
-            }
+            __operation24(const __operation24& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -892,22 +624,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation25()
-            {
-            }
+            __operation25();
 
-            __operation25(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation25(::CORBA::Long _a);
 
             // Copy constructor
-            __operation25(const __operation25& o) :
-            a(o.a)
-            {
-
-            }
+            __operation25(const __operation25& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -926,22 +648,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation26()
-            {
-            }
+            __operation26();
 
-            __operation26(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation26(::CORBA::Long _a);
 
             // Copy constructor
-            __operation26(const __operation26& o) :
-            a(o.a)
-            {
-
-            }
+            __operation26(const __operation26& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -960,22 +672,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation27()
-            {
-            }
+            __operation27();
 
-            __operation27(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation27(::CORBA::Long _a);
 
             // Copy constructor
-            __operation27(const __operation27& o) :
-            a(o.a)
-            {
-
-            }
+            __operation27(const __operation27& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -994,22 +696,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation28()
-            {
-            }
+            __operation28();
 
-            __operation28(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation28(::CORBA::Long _a);
 
             // Copy constructor
-            __operation28(const __operation28& o) :
-            a(o.a)
-            {
-
-            }
+            __operation28(const __operation28& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1028,22 +720,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation29()
-            {
-            }
+            __operation29();
 
-            __operation29(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation29(::CORBA::Long _a);
 
             // Copy constructor
-            __operation29(const __operation29& o) :
-            a(o.a)
-            {
-
-            }
+            __operation29(const __operation29& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1062,22 +744,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation30()
-            {
-            }
+            __operation30();
 
-            __operation30(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation30(::CORBA::Long _a);
 
             // Copy constructor
-            __operation30(const __operation30& o) :
-            a(o.a)
-            {
-
-            }
+            __operation30(const __operation30& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1096,22 +768,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation31()
-            {
-            }
+            __operation31();
 
-            __operation31(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation31(::CORBA::Long _a);
 
             // Copy constructor
-            __operation31(const __operation31& o) :
-            a(o.a)
-            {
-
-            }
+            __operation31(const __operation31& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1130,22 +792,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation32()
-            {
-            }
+            __operation32();
 
-            __operation32(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation32(::CORBA::Long _a);
 
             // Copy constructor
-            __operation32(const __operation32& o) :
-            a(o.a)
-            {
-
-            }
+            __operation32(const __operation32& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1164,22 +816,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation33()
-            {
-            }
+            __operation33();
 
-            __operation33(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation33(::CORBA::Long _a);
 
             // Copy constructor
-            __operation33(const __operation33& o) :
-            a(o.a)
-            {
-
-            }
+            __operation33(const __operation33& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1198,22 +840,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation34()
-            {
-            }
+            __operation34();
 
-            __operation34(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation34(::CORBA::Long _a);
 
             // Copy constructor
-            __operation34(const __operation34& o) :
-            a(o.a)
-            {
-
-            }
+            __operation34(const __operation34& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1232,22 +864,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation35()
-            {
-            }
+            __operation35();
 
-            __operation35(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation35(::CORBA::Long _a);
 
             // Copy constructor
-            __operation35(const __operation35& o) :
-            a(o.a)
-            {
-
-            }
+            __operation35(const __operation35& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1266,22 +888,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation36()
-            {
-            }
+            __operation36();
 
-            __operation36(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation36(::CORBA::Long _a);
 
             // Copy constructor
-            __operation36(const __operation36& o) :
-            a(o.a)
-            {
-
-            }
+            __operation36(const __operation36& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1300,22 +912,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation37()
-            {
-            }
+            __operation37();
 
-            __operation37(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation37(::CORBA::Long _a);
 
             // Copy constructor
-            __operation37(const __operation37& o) :
-            a(o.a)
-            {
-
-            }
+            __operation37(const __operation37& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1334,22 +936,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation38()
-            {
-            }
+            __operation38();
 
-            __operation38(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation38(::CORBA::Long _a);
 
             // Copy constructor
-            __operation38(const __operation38& o) :
-            a(o.a)
-            {
-
-            }
+            __operation38(const __operation38& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1368,22 +960,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation39()
-            {
-            }
+            __operation39();
 
-            __operation39(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation39(::CORBA::Long _a);
 
             // Copy constructor
-            __operation39(const __operation39& o) :
-            a(o.a)
-            {
-
-            }
+            __operation39(const __operation39& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1402,22 +984,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation40()
-            {
-            }
+            __operation40();
 
-            __operation40(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation40(::CORBA::Long _a);
 
             // Copy constructor
-            __operation40(const __operation40& o) :
-            a(o.a)
-            {
-
-            }
+            __operation40(const __operation40& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1436,22 +1008,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation41()
-            {
-            }
+            __operation41();
 
-            __operation41(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation41(::CORBA::Long _a);
 
             // Copy constructor
-            __operation41(const __operation41& o) :
-            a(o.a)
-            {
-
-            }
+            __operation41(const __operation41& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1470,22 +1032,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation42()
-            {
-            }
+            __operation42();
 
-            __operation42(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation42(::CORBA::Long _a);
 
             // Copy constructor
-            __operation42(const __operation42& o) :
-            a(o.a)
-            {
-
-            }
+            __operation42(const __operation42& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1504,22 +1056,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation43()
-            {
-            }
+            __operation43();
 
-            __operation43(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation43(::CORBA::Long _a);
 
             // Copy constructor
-            __operation43(const __operation43& o) :
-            a(o.a)
-            {
-
-            }
+            __operation43(const __operation43& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1538,22 +1080,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation44()
-            {
-            }
+            __operation44();
 
-            __operation44(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation44(::CORBA::Long _a);
 
             // Copy constructor
-            __operation44(const __operation44& o) :
-            a(o.a)
-            {
-
-            }
+            __operation44(const __operation44& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1572,22 +1104,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation45()
-            {
-            }
+            __operation45();
 
-            __operation45(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation45(::CORBA::Long _a);
 
             // Copy constructor
-            __operation45(const __operation45& o) :
-            a(o.a)
-            {
-
-            }
+            __operation45(const __operation45& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1606,22 +1128,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation46()
-            {
-            }
+            __operation46();
 
-            __operation46(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation46(::CORBA::Long _a);
 
             // Copy constructor
-            __operation46(const __operation46& o) :
-            a(o.a)
-            {
-
-            }
+            __operation46(const __operation46& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1640,22 +1152,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation47()
-            {
-            }
+            __operation47();
 
-            __operation47(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation47(::CORBA::Long _a);
 
             // Copy constructor
-            __operation47(const __operation47& o) :
-            a(o.a)
-            {
-
-            }
+            __operation47(const __operation47& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1674,22 +1176,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation48()
-            {
-            }
+            __operation48();
 
-            __operation48(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation48(::CORBA::Long _a);
 
             // Copy constructor
-            __operation48(const __operation48& o) :
-            a(o.a)
-            {
-
-            }
+            __operation48(const __operation48& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1708,22 +1200,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation49()
-            {
-            }
+            __operation49();
 
-            __operation49(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation49(::CORBA::Long _a);
 
             // Copy constructor
-            __operation49(const __operation49& o) :
-            a(o.a)
-            {
-
-            }
+            __operation49(const __operation49& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1742,22 +1224,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation50()
-            {
-            }
+            __operation50();
 
-            __operation50(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation50(::CORBA::Long _a);
 
             // Copy constructor
-            __operation50(const __operation50& o) :
-            a(o.a)
-            {
-
-            }
+            __operation50(const __operation50& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1776,22 +1248,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation51()
-            {
-            }
+            __operation51();
 
-            __operation51(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation51(::CORBA::Long _a);
 
             // Copy constructor
-            __operation51(const __operation51& o) :
-            a(o.a)
-            {
-
-            }
+            __operation51(const __operation51& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1810,22 +1272,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation52()
-            {
-            }
+            __operation52();
 
-            __operation52(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation52(::CORBA::Long _a);
 
             // Copy constructor
-            __operation52(const __operation52& o) :
-            a(o.a)
-            {
-
-            }
+            __operation52(const __operation52& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1844,22 +1296,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation53()
-            {
-            }
+            __operation53();
 
-            __operation53(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation53(::CORBA::Long _a);
 
             // Copy constructor
-            __operation53(const __operation53& o) :
-            a(o.a)
-            {
-
-            }
+            __operation53(const __operation53& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1878,22 +1320,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation54()
-            {
-            }
+            __operation54();
 
-            __operation54(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation54(::CORBA::Long _a);
 
             // Copy constructor
-            __operation54(const __operation54& o) :
-            a(o.a)
-            {
-
-            }
+            __operation54(const __operation54& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1912,22 +1344,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation55()
-            {
-            }
+            __operation55();
 
-            __operation55(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation55(::CORBA::Long _a);
 
             // Copy constructor
-            __operation55(const __operation55& o) :
-            a(o.a)
-            {
-
-            }
+            __operation55(const __operation55& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1946,22 +1368,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation56()
-            {
-            }
+            __operation56();
 
-            __operation56(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation56(::CORBA::Long _a);
 
             // Copy constructor
-            __operation56(const __operation56& o) :
-            a(o.a)
-            {
-
-            }
+            __operation56(const __operation56& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -1980,22 +1392,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation57()
-            {
-            }
+            __operation57();
 
-            __operation57(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation57(::CORBA::Long _a);
 
             // Copy constructor
-            __operation57(const __operation57& o) :
-            a(o.a)
-            {
-
-            }
+            __operation57(const __operation57& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2014,22 +1416,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation58()
-            {
-            }
+            __operation58();
 
-            __operation58(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation58(::CORBA::Long _a);
 
             // Copy constructor
-            __operation58(const __operation58& o) :
-            a(o.a)
-            {
-
-            }
+            __operation58(const __operation58& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2048,22 +1440,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation59()
-            {
-            }
+            __operation59();
 
-            __operation59(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation59(::CORBA::Long _a);
 
             // Copy constructor
-            __operation59(const __operation59& o) :
-            a(o.a)
-            {
-
-            }
+            __operation59(const __operation59& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2082,22 +1464,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation60()
-            {
-            }
+            __operation60();
 
-            __operation60(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation60(::CORBA::Long _a);
 
             // Copy constructor
-            __operation60(const __operation60& o) :
-            a(o.a)
-            {
-
-            }
+            __operation60(const __operation60& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2116,22 +1488,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation61()
-            {
-            }
+            __operation61();
 
-            __operation61(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation61(::CORBA::Long _a);
 
             // Copy constructor
-            __operation61(const __operation61& o) :
-            a(o.a)
-            {
-
-            }
+            __operation61(const __operation61& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2150,22 +1512,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation62()
-            {
-            }
+            __operation62();
 
-            __operation62(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation62(::CORBA::Long _a);
 
             // Copy constructor
-            __operation62(const __operation62& o) :
-            a(o.a)
-            {
-
-            }
+            __operation62(const __operation62& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2184,22 +1536,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation63()
-            {
-            }
+            __operation63();
 
-            __operation63(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation63(::CORBA::Long _a);
 
             // Copy constructor
-            __operation63(const __operation63& o) :
-            a(o.a)
-            {
-
-            }
+            __operation63(const __operation63& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2218,22 +1560,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation64()
-            {
-            }
+            __operation64();
 
-            __operation64(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation64(::CORBA::Long _a);
 
             // Copy constructor
-            __operation64(const __operation64& o) :
-            a(o.a)
-            {
-
-            }
+            __operation64(const __operation64& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2252,22 +1584,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation65()
-            {
-            }
+            __operation65();
 
-            __operation65(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation65(::CORBA::Long _a);
 
             // Copy constructor
-            __operation65(const __operation65& o) :
-            a(o.a)
-            {
-
-            }
+            __operation65(const __operation65& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2286,22 +1608,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation66()
-            {
-            }
+            __operation66();
 
-            __operation66(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation66(::CORBA::Long _a);
 
             // Copy constructor
-            __operation66(const __operation66& o) :
-            a(o.a)
-            {
-
-            }
+            __operation66(const __operation66& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2320,22 +1632,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation67()
-            {
-            }
+            __operation67();
 
-            __operation67(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation67(::CORBA::Long _a);
 
             // Copy constructor
-            __operation67(const __operation67& o) :
-            a(o.a)
-            {
-
-            }
+            __operation67(const __operation67& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2354,22 +1656,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation68()
-            {
-            }
+            __operation68();
 
-            __operation68(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation68(::CORBA::Long _a);
 
             // Copy constructor
-            __operation68(const __operation68& o) :
-            a(o.a)
-            {
-
-            }
+            __operation68(const __operation68& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2388,22 +1680,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation69()
-            {
-            }
+            __operation69();
 
-            __operation69(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation69(::CORBA::Long _a);
 
             // Copy constructor
-            __operation69(const __operation69& o) :
-            a(o.a)
-            {
-
-            }
+            __operation69(const __operation69& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2422,22 +1704,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation70()
-            {
-            }
+            __operation70();
 
-            __operation70(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation70(::CORBA::Long _a);
 
             // Copy constructor
-            __operation70(const __operation70& o) :
-            a(o.a)
-            {
-
-            }
+            __operation70(const __operation70& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2456,22 +1728,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation71()
-            {
-            }
+            __operation71();
 
-            __operation71(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation71(::CORBA::Long _a);
 
             // Copy constructor
-            __operation71(const __operation71& o) :
-            a(o.a)
-            {
-
-            }
+            __operation71(const __operation71& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2490,22 +1752,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation72()
-            {
-            }
+            __operation72();
 
-            __operation72(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation72(::CORBA::Long _a);
 
             // Copy constructor
-            __operation72(const __operation72& o) :
-            a(o.a)
-            {
-
-            }
+            __operation72(const __operation72& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2524,22 +1776,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation73()
-            {
-            }
+            __operation73();
 
-            __operation73(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation73(::CORBA::Long _a);
 
             // Copy constructor
-            __operation73(const __operation73& o) :
-            a(o.a)
-            {
-
-            }
+            __operation73(const __operation73& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2558,22 +1800,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation74()
-            {
-            }
+            __operation74();
 
-            __operation74(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation74(::CORBA::Long _a);
 
             // Copy constructor
-            __operation74(const __operation74& o) :
-            a(o.a)
-            {
-
-            }
+            __operation74(const __operation74& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2592,22 +1824,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation75()
-            {
-            }
+            __operation75();
 
-            __operation75(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation75(::CORBA::Long _a);
 
             // Copy constructor
-            __operation75(const __operation75& o) :
-            a(o.a)
-            {
-
-            }
+            __operation75(const __operation75& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2626,22 +1848,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation76()
-            {
-            }
+            __operation76();
 
-            __operation76(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation76(::CORBA::Long _a);
 
             // Copy constructor
-            __operation76(const __operation76& o) :
-            a(o.a)
-            {
-
-            }
+            __operation76(const __operation76& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2660,22 +1872,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation77()
-            {
-            }
+            __operation77();
 
-            __operation77(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation77(::CORBA::Long _a);
 
             // Copy constructor
-            __operation77(const __operation77& o) :
-            a(o.a)
-            {
-
-            }
+            __operation77(const __operation77& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2694,22 +1896,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation78()
-            {
-            }
+            __operation78();
 
-            __operation78(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation78(::CORBA::Long _a);
 
             // Copy constructor
-            __operation78(const __operation78& o) :
-            a(o.a)
-            {
-
-            }
+            __operation78(const __operation78& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2728,22 +1920,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation79()
-            {
-            }
+            __operation79();
 
-            __operation79(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation79(::CORBA::Long _a);
 
             // Copy constructor
-            __operation79(const __operation79& o) :
-            a(o.a)
-            {
-
-            }
+            __operation79(const __operation79& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2762,22 +1944,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation80()
-            {
-            }
+            __operation80();
 
-            __operation80(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation80(::CORBA::Long _a);
 
             // Copy constructor
-            __operation80(const __operation80& o) :
-            a(o.a)
-            {
-
-            }
+            __operation80(const __operation80& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2796,22 +1968,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation81()
-            {
-            }
+            __operation81();
 
-            __operation81(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation81(::CORBA::Long _a);
 
             // Copy constructor
-            __operation81(const __operation81& o) :
-            a(o.a)
-            {
-
-            }
+            __operation81(const __operation81& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2830,22 +1992,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation82()
-            {
-            }
+            __operation82();
 
-            __operation82(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation82(::CORBA::Long _a);
 
             // Copy constructor
-            __operation82(const __operation82& o) :
-            a(o.a)
-            {
-
-            }
+            __operation82(const __operation82& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2864,22 +2016,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation83()
-            {
-            }
+            __operation83();
 
-            __operation83(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation83(::CORBA::Long _a);
 
             // Copy constructor
-            __operation83(const __operation83& o) :
-            a(o.a)
-            {
-
-            }
+            __operation83(const __operation83& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2898,22 +2040,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation84()
-            {
-            }
+            __operation84();
 
-            __operation84(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation84(::CORBA::Long _a);
 
             // Copy constructor
-            __operation84(const __operation84& o) :
-            a(o.a)
-            {
-
-            }
+            __operation84(const __operation84& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2932,22 +2064,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation85()
-            {
-            }
+            __operation85();
 
-            __operation85(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation85(::CORBA::Long _a);
 
             // Copy constructor
-            __operation85(const __operation85& o) :
-            a(o.a)
-            {
-
-            }
+            __operation85(const __operation85& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -2966,22 +2088,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation86()
-            {
-            }
+            __operation86();
 
-            __operation86(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation86(::CORBA::Long _a);
 
             // Copy constructor
-            __operation86(const __operation86& o) :
-            a(o.a)
-            {
-
-            }
+            __operation86(const __operation86& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3000,22 +2112,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation87()
-            {
-            }
+            __operation87();
 
-            __operation87(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation87(::CORBA::Long _a);
 
             // Copy constructor
-            __operation87(const __operation87& o) :
-            a(o.a)
-            {
-
-            }
+            __operation87(const __operation87& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3034,22 +2136,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation88()
-            {
-            }
+            __operation88();
 
-            __operation88(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation88(::CORBA::Long _a);
 
             // Copy constructor
-            __operation88(const __operation88& o) :
-            a(o.a)
-            {
-
-            }
+            __operation88(const __operation88& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3068,22 +2160,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation89()
-            {
-            }
+            __operation89();
 
-            __operation89(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation89(::CORBA::Long _a);
 
             // Copy constructor
-            __operation89(const __operation89& o) :
-            a(o.a)
-            {
-
-            }
+            __operation89(const __operation89& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3102,22 +2184,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation90()
-            {
-            }
+            __operation90();
 
-            __operation90(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation90(::CORBA::Long _a);
 
             // Copy constructor
-            __operation90(const __operation90& o) :
-            a(o.a)
-            {
-
-            }
+            __operation90(const __operation90& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3136,22 +2208,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation91()
-            {
-            }
+            __operation91();
 
-            __operation91(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation91(::CORBA::Long _a);
 
             // Copy constructor
-            __operation91(const __operation91& o) :
-            a(o.a)
-            {
-
-            }
+            __operation91(const __operation91& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3170,22 +2232,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation92()
-            {
-            }
+            __operation92();
 
-            __operation92(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation92(::CORBA::Long _a);
 
             // Copy constructor
-            __operation92(const __operation92& o) :
-            a(o.a)
-            {
-
-            }
+            __operation92(const __operation92& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3204,22 +2256,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation93()
-            {
-            }
+            __operation93();
 
-            __operation93(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation93(::CORBA::Long _a);
 
             // Copy constructor
-            __operation93(const __operation93& o) :
-            a(o.a)
-            {
-
-            }
+            __operation93(const __operation93& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3238,22 +2280,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation94()
-            {
-            }
+            __operation94();
 
-            __operation94(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation94(::CORBA::Long _a);
 
             // Copy constructor
-            __operation94(const __operation94& o) :
-            a(o.a)
-            {
-
-            }
+            __operation94(const __operation94& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3272,22 +2304,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation95()
-            {
-            }
+            __operation95();
 
-            __operation95(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation95(::CORBA::Long _a);
 
             // Copy constructor
-            __operation95(const __operation95& o) :
-            a(o.a)
-            {
-
-            }
+            __operation95(const __operation95& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3306,22 +2328,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation96()
-            {
-            }
+            __operation96();
 
-            __operation96(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation96(::CORBA::Long _a);
 
             // Copy constructor
-            __operation96(const __operation96& o) :
-            a(o.a)
-            {
-
-            }
+            __operation96(const __operation96& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3340,22 +2352,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation97()
-            {
-            }
+            __operation97();
 
-            __operation97(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation97(::CORBA::Long _a);
 
             // Copy constructor
-            __operation97(const __operation97& o) :
-            a(o.a)
-            {
-
-            }
+            __operation97(const __operation97& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3374,22 +2376,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation98()
-            {
-            }
+            __operation98();
 
-            __operation98(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation98(::CORBA::Long _a);
 
             // Copy constructor
-            __operation98(const __operation98& o) :
-            a(o.a)
-            {
-
-            }
+            __operation98(const __operation98& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3408,22 +2400,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation99()
-            {
-            }
+            __operation99();
 
-            __operation99(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation99(::CORBA::Long _a);
 
             // Copy constructor
-            __operation99(const __operation99& o) :
-            a(o.a)
-            {
-
-            }
+            __operation99(const __operation99& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3442,22 +2424,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation100()
-            {
-            }
+            __operation100();
 
-            __operation100(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation100(::CORBA::Long _a);
 
             // Copy constructor
-            __operation100(const __operation100& o) :
-            a(o.a)
-            {
-
-            }
+            __operation100(const __operation100& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3476,22 +2448,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation101()
-            {
-            }
+            __operation101();
 
-            __operation101(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation101(::CORBA::Long _a);
 
             // Copy constructor
-            __operation101(const __operation101& o) :
-            a(o.a)
-            {
-
-            }
+            __operation101(const __operation101& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3510,22 +2472,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation102()
-            {
-            }
+            __operation102();
 
-            __operation102(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation102(::CORBA::Long _a);
 
             // Copy constructor
-            __operation102(const __operation102& o) :
-            a(o.a)
-            {
-
-            }
+            __operation102(const __operation102& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3544,22 +2496,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation103()
-            {
-            }
+            __operation103();
 
-            __operation103(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation103(::CORBA::Long _a);
 
             // Copy constructor
-            __operation103(const __operation103& o) :
-            a(o.a)
-            {
-
-            }
+            __operation103(const __operation103& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3578,22 +2520,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation104()
-            {
-            }
+            __operation104();
 
-            __operation104(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation104(::CORBA::Long _a);
 
             // Copy constructor
-            __operation104(const __operation104& o) :
-            a(o.a)
-            {
-
-            }
+            __operation104(const __operation104& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3612,22 +2544,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation105()
-            {
-            }
+            __operation105();
 
-            __operation105(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation105(::CORBA::Long _a);
 
             // Copy constructor
-            __operation105(const __operation105& o) :
-            a(o.a)
-            {
-
-            }
+            __operation105(const __operation105& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3646,22 +2568,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation106()
-            {
-            }
+            __operation106();
 
-            __operation106(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation106(::CORBA::Long _a);
 
             // Copy constructor
-            __operation106(const __operation106& o) :
-            a(o.a)
-            {
-
-            }
+            __operation106(const __operation106& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3680,22 +2592,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation107()
-            {
-            }
+            __operation107();
 
-            __operation107(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation107(::CORBA::Long _a);
 
             // Copy constructor
-            __operation107(const __operation107& o) :
-            a(o.a)
-            {
-
-            }
+            __operation107(const __operation107& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3714,22 +2616,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation108()
-            {
-            }
+            __operation108();
 
-            __operation108(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation108(::CORBA::Long _a);
 
             // Copy constructor
-            __operation108(const __operation108& o) :
-            a(o.a)
-            {
-
-            }
+            __operation108(const __operation108& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3748,22 +2640,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation109()
-            {
-            }
+            __operation109();
 
-            __operation109(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation109(::CORBA::Long _a);
 
             // Copy constructor
-            __operation109(const __operation109& o) :
-            a(o.a)
-            {
-
-            }
+            __operation109(const __operation109& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3782,22 +2664,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation110()
-            {
-            }
+            __operation110();
 
-            __operation110(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation110(::CORBA::Long _a);
 
             // Copy constructor
-            __operation110(const __operation110& o) :
-            a(o.a)
-            {
-
-            }
+            __operation110(const __operation110& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3816,22 +2688,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation111()
-            {
-            }
+            __operation111();
 
-            __operation111(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation111(::CORBA::Long _a);
 
             // Copy constructor
-            __operation111(const __operation111& o) :
-            a(o.a)
-            {
-
-            }
+            __operation111(const __operation111& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3850,22 +2712,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation112()
-            {
-            }
+            __operation112();
 
-            __operation112(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation112(::CORBA::Long _a);
 
             // Copy constructor
-            __operation112(const __operation112& o) :
-            a(o.a)
-            {
-
-            }
+            __operation112(const __operation112& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3884,22 +2736,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation113()
-            {
-            }
+            __operation113();
 
-            __operation113(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation113(::CORBA::Long _a);
 
             // Copy constructor
-            __operation113(const __operation113& o) :
-            a(o.a)
-            {
-
-            }
+            __operation113(const __operation113& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3918,22 +2760,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation114()
-            {
-            }
+            __operation114();
 
-            __operation114(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation114(::CORBA::Long _a);
 
             // Copy constructor
-            __operation114(const __operation114& o) :
-            a(o.a)
-            {
-
-            }
+            __operation114(const __operation114& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3952,22 +2784,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation115()
-            {
-            }
+            __operation115();
 
-            __operation115(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation115(::CORBA::Long _a);
 
             // Copy constructor
-            __operation115(const __operation115& o) :
-            a(o.a)
-            {
-
-            }
+            __operation115(const __operation115& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -3986,22 +2808,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation116()
-            {
-            }
+            __operation116();
 
-            __operation116(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation116(::CORBA::Long _a);
 
             // Copy constructor
-            __operation116(const __operation116& o) :
-            a(o.a)
-            {
-
-            }
+            __operation116(const __operation116& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4020,22 +2832,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation117()
-            {
-            }
+            __operation117();
 
-            __operation117(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation117(::CORBA::Long _a);
 
             // Copy constructor
-            __operation117(const __operation117& o) :
-            a(o.a)
-            {
-
-            }
+            __operation117(const __operation117& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4054,22 +2856,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation118()
-            {
-            }
+            __operation118();
 
-            __operation118(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation118(::CORBA::Long _a);
 
             // Copy constructor
-            __operation118(const __operation118& o) :
-            a(o.a)
-            {
-
-            }
+            __operation118(const __operation118& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4088,22 +2880,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation119()
-            {
-            }
+            __operation119();
 
-            __operation119(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation119(::CORBA::Long _a);
 
             // Copy constructor
-            __operation119(const __operation119& o) :
-            a(o.a)
-            {
-
-            }
+            __operation119(const __operation119& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4122,22 +2904,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation120()
-            {
-            }
+            __operation120();
 
-            __operation120(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation120(::CORBA::Long _a);
 
             // Copy constructor
-            __operation120(const __operation120& o) :
-            a(o.a)
-            {
-
-            }
+            __operation120(const __operation120& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4156,22 +2928,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation121()
-            {
-            }
+            __operation121();
 
-            __operation121(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation121(::CORBA::Long _a);
 
             // Copy constructor
-            __operation121(const __operation121& o) :
-            a(o.a)
-            {
-
-            }
+            __operation121(const __operation121& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4190,22 +2952,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation122()
-            {
-            }
+            __operation122();
 
-            __operation122(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation122(::CORBA::Long _a);
 
             // Copy constructor
-            __operation122(const __operation122& o) :
-            a(o.a)
-            {
-
-            }
+            __operation122(const __operation122& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4224,22 +2976,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation123()
-            {
-            }
+            __operation123();
 
-            __operation123(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation123(::CORBA::Long _a);
 
             // Copy constructor
-            __operation123(const __operation123& o) :
-            a(o.a)
-            {
-
-            }
+            __operation123(const __operation123& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4258,22 +3000,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation124()
-            {
-            }
+            __operation124();
 
-            __operation124(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation124(::CORBA::Long _a);
 
             // Copy constructor
-            __operation124(const __operation124& o) :
-            a(o.a)
-            {
-
-            }
+            __operation124(const __operation124& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4292,22 +3024,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation125()
-            {
-            }
+            __operation125();
 
-            __operation125(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation125(::CORBA::Long _a);
 
             // Copy constructor
-            __operation125(const __operation125& o) :
-            a(o.a)
-            {
-
-            }
+            __operation125(const __operation125& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4326,22 +3048,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation126()
-            {
-            }
+            __operation126();
 
-            __operation126(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation126(::CORBA::Long _a);
 
             // Copy constructor
-            __operation126(const __operation126& o) :
-            a(o.a)
-            {
-
-            }
+            __operation126(const __operation126& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4360,22 +3072,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation127()
-            {
-            }
+            __operation127();
 
-            __operation127(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation127(::CORBA::Long _a);
 
             // Copy constructor
-            __operation127(const __operation127& o) :
-            a(o.a)
-            {
-
-            }
+            __operation127(const __operation127& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4394,22 +3096,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation128()
-            {
-            }
+            __operation128();
 
-            __operation128(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation128(::CORBA::Long _a);
 
             // Copy constructor
-            __operation128(const __operation128& o) :
-            a(o.a)
-            {
-
-            }
+            __operation128(const __operation128& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4428,22 +3120,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation129()
-            {
-            }
+            __operation129();
 
-            __operation129(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation129(::CORBA::Long _a);
 
             // Copy constructor
-            __operation129(const __operation129& o) :
-            a(o.a)
-            {
-
-            }
+            __operation129(const __operation129& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4462,22 +3144,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation130()
-            {
-            }
+            __operation130();
 
-            __operation130(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation130(::CORBA::Long _a);
 
             // Copy constructor
-            __operation130(const __operation130& o) :
-            a(o.a)
-            {
-
-            }
+            __operation130(const __operation130& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4496,22 +3168,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation131()
-            {
-            }
+            __operation131();
 
-            __operation131(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation131(::CORBA::Long _a);
 
             // Copy constructor
-            __operation131(const __operation131& o) :
-            a(o.a)
-            {
-
-            }
+            __operation131(const __operation131& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4530,22 +3192,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation132()
-            {
-            }
+            __operation132();
 
-            __operation132(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation132(::CORBA::Long _a);
 
             // Copy constructor
-            __operation132(const __operation132& o) :
-            a(o.a)
-            {
-
-            }
+            __operation132(const __operation132& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4564,22 +3216,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation133()
-            {
-            }
+            __operation133();
 
-            __operation133(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation133(::CORBA::Long _a);
 
             // Copy constructor
-            __operation133(const __operation133& o) :
-            a(o.a)
-            {
-
-            }
+            __operation133(const __operation133& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4598,22 +3240,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation134()
-            {
-            }
+            __operation134();
 
-            __operation134(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation134(::CORBA::Long _a);
 
             // Copy constructor
-            __operation134(const __operation134& o) :
-            a(o.a)
-            {
-
-            }
+            __operation134(const __operation134& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4632,22 +3264,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation135()
-            {
-            }
+            __operation135();
 
-            __operation135(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation135(::CORBA::Long _a);
 
             // Copy constructor
-            __operation135(const __operation135& o) :
-            a(o.a)
-            {
-
-            }
+            __operation135(const __operation135& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4666,22 +3288,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation136()
-            {
-            }
+            __operation136();
 
-            __operation136(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation136(::CORBA::Long _a);
 
             // Copy constructor
-            __operation136(const __operation136& o) :
-            a(o.a)
-            {
-
-            }
+            __operation136(const __operation136& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4700,22 +3312,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation137()
-            {
-            }
+            __operation137();
 
-            __operation137(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation137(::CORBA::Long _a);
 
             // Copy constructor
-            __operation137(const __operation137& o) :
-            a(o.a)
-            {
-
-            }
+            __operation137(const __operation137& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4734,22 +3336,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation138()
-            {
-            }
+            __operation138();
 
-            __operation138(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation138(::CORBA::Long _a);
 
             // Copy constructor
-            __operation138(const __operation138& o) :
-            a(o.a)
-            {
-
-            }
+            __operation138(const __operation138& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4768,22 +3360,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation139()
-            {
-            }
+            __operation139();
 
-            __operation139(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation139(::CORBA::Long _a);
 
             // Copy constructor
-            __operation139(const __operation139& o) :
-            a(o.a)
-            {
-
-            }
+            __operation139(const __operation139& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4802,22 +3384,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation140()
-            {
-            }
+            __operation140();
 
-            __operation140(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation140(::CORBA::Long _a);
 
             // Copy constructor
-            __operation140(const __operation140& o) :
-            a(o.a)
-            {
-
-            }
+            __operation140(const __operation140& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4836,22 +3408,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation141()
-            {
-            }
+            __operation141();
 
-            __operation141(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation141(::CORBA::Long _a);
 
             // Copy constructor
-            __operation141(const __operation141& o) :
-            a(o.a)
-            {
-
-            }
+            __operation141(const __operation141& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4870,22 +3432,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation142()
-            {
-            }
+            __operation142();
 
-            __operation142(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation142(::CORBA::Long _a);
 
             // Copy constructor
-            __operation142(const __operation142& o) :
-            a(o.a)
-            {
-
-            }
+            __operation142(const __operation142& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4904,22 +3456,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation143()
-            {
-            }
+            __operation143();
 
-            __operation143(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation143(::CORBA::Long _a);
 
             // Copy constructor
-            __operation143(const __operation143& o) :
-            a(o.a)
-            {
-
-            }
+            __operation143(const __operation143& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4938,22 +3480,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation144()
-            {
-            }
+            __operation144();
 
-            __operation144(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation144(::CORBA::Long _a);
 
             // Copy constructor
-            __operation144(const __operation144& o) :
-            a(o.a)
-            {
-
-            }
+            __operation144(const __operation144& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -4972,22 +3504,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation145()
-            {
-            }
+            __operation145();
 
-            __operation145(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation145(::CORBA::Long _a);
 
             // Copy constructor
-            __operation145(const __operation145& o) :
-            a(o.a)
-            {
-
-            }
+            __operation145(const __operation145& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5006,22 +3528,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation146()
-            {
-            }
+            __operation146();
 
-            __operation146(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation146(::CORBA::Long _a);
 
             // Copy constructor
-            __operation146(const __operation146& o) :
-            a(o.a)
-            {
-
-            }
+            __operation146(const __operation146& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5040,22 +3552,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation147()
-            {
-            }
+            __operation147();
 
-            __operation147(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation147(::CORBA::Long _a);
 
             // Copy constructor
-            __operation147(const __operation147& o) :
-            a(o.a)
-            {
-
-            }
+            __operation147(const __operation147& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5074,22 +3576,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation148()
-            {
-            }
+            __operation148();
 
-            __operation148(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation148(::CORBA::Long _a);
 
             // Copy constructor
-            __operation148(const __operation148& o) :
-            a(o.a)
-            {
-
-            }
+            __operation148(const __operation148& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5108,22 +3600,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation149()
-            {
-            }
+            __operation149();
 
-            __operation149(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation149(::CORBA::Long _a);
 
             // Copy constructor
-            __operation149(const __operation149& o) :
-            a(o.a)
-            {
-
-            }
+            __operation149(const __operation149& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5142,22 +3624,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation150()
-            {
-            }
+            __operation150();
 
-            __operation150(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation150(::CORBA::Long _a);
 
             // Copy constructor
-            __operation150(const __operation150& o) :
-            a(o.a)
-            {
-
-            }
+            __operation150(const __operation150& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5176,22 +3648,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation151()
-            {
-            }
+            __operation151();
 
-            __operation151(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation151(::CORBA::Long _a);
 
             // Copy constructor
-            __operation151(const __operation151& o) :
-            a(o.a)
-            {
-
-            }
+            __operation151(const __operation151& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5210,22 +3672,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation152()
-            {
-            }
+            __operation152();
 
-            __operation152(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation152(::CORBA::Long _a);
 
             // Copy constructor
-            __operation152(const __operation152& o) :
-            a(o.a)
-            {
-
-            }
+            __operation152(const __operation152& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5244,22 +3696,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation153()
-            {
-            }
+            __operation153();
 
-            __operation153(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation153(::CORBA::Long _a);
 
             // Copy constructor
-            __operation153(const __operation153& o) :
-            a(o.a)
-            {
-
-            }
+            __operation153(const __operation153& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5278,22 +3720,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation154()
-            {
-            }
+            __operation154();
 
-            __operation154(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation154(::CORBA::Long _a);
 
             // Copy constructor
-            __operation154(const __operation154& o) :
-            a(o.a)
-            {
-
-            }
+            __operation154(const __operation154& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5312,22 +3744,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation155()
-            {
-            }
+            __operation155();
 
-            __operation155(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation155(::CORBA::Long _a);
 
             // Copy constructor
-            __operation155(const __operation155& o) :
-            a(o.a)
-            {
-
-            }
+            __operation155(const __operation155& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5346,22 +3768,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation156()
-            {
-            }
+            __operation156();
 
-            __operation156(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation156(::CORBA::Long _a);
 
             // Copy constructor
-            __operation156(const __operation156& o) :
-            a(o.a)
-            {
-
-            }
+            __operation156(const __operation156& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5380,22 +3792,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation157()
-            {
-            }
+            __operation157();
 
-            __operation157(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation157(::CORBA::Long _a);
 
             // Copy constructor
-            __operation157(const __operation157& o) :
-            a(o.a)
-            {
-
-            }
+            __operation157(const __operation157& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5414,22 +3816,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation158()
-            {
-            }
+            __operation158();
 
-            __operation158(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation158(::CORBA::Long _a);
 
             // Copy constructor
-            __operation158(const __operation158& o) :
-            a(o.a)
-            {
-
-            }
+            __operation158(const __operation158& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5448,22 +3840,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation159()
-            {
-            }
+            __operation159();
 
-            __operation159(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation159(::CORBA::Long _a);
 
             // Copy constructor
-            __operation159(const __operation159& o) :
-            a(o.a)
-            {
-
-            }
+            __operation159(const __operation159& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5482,22 +3864,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation160()
-            {
-            }
+            __operation160();
 
-            __operation160(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation160(::CORBA::Long _a);
 
             // Copy constructor
-            __operation160(const __operation160& o) :
-            a(o.a)
-            {
-
-            }
+            __operation160(const __operation160& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5516,22 +3888,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation161()
-            {
-            }
+            __operation161();
 
-            __operation161(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation161(::CORBA::Long _a);
 
             // Copy constructor
-            __operation161(const __operation161& o) :
-            a(o.a)
-            {
-
-            }
+            __operation161(const __operation161& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5550,22 +3912,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation162()
-            {
-            }
+            __operation162();
 
-            __operation162(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation162(::CORBA::Long _a);
 
             // Copy constructor
-            __operation162(const __operation162& o) :
-            a(o.a)
-            {
-
-            }
+            __operation162(const __operation162& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5584,22 +3936,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation163()
-            {
-            }
+            __operation163();
 
-            __operation163(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation163(::CORBA::Long _a);
 
             // Copy constructor
-            __operation163(const __operation163& o) :
-            a(o.a)
-            {
-
-            }
+            __operation163(const __operation163& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5618,22 +3960,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation164()
-            {
-            }
+            __operation164();
 
-            __operation164(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation164(::CORBA::Long _a);
 
             // Copy constructor
-            __operation164(const __operation164& o) :
-            a(o.a)
-            {
-
-            }
+            __operation164(const __operation164& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5652,22 +3984,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation165()
-            {
-            }
+            __operation165();
 
-            __operation165(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation165(::CORBA::Long _a);
 
             // Copy constructor
-            __operation165(const __operation165& o) :
-            a(o.a)
-            {
-
-            }
+            __operation165(const __operation165& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5686,22 +4008,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation166()
-            {
-            }
+            __operation166();
 
-            __operation166(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation166(::CORBA::Long _a);
 
             // Copy constructor
-            __operation166(const __operation166& o) :
-            a(o.a)
-            {
-
-            }
+            __operation166(const __operation166& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5720,22 +4032,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation167()
-            {
-            }
+            __operation167();
 
-            __operation167(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation167(::CORBA::Long _a);
 
             // Copy constructor
-            __operation167(const __operation167& o) :
-            a(o.a)
-            {
-
-            }
+            __operation167(const __operation167& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5754,22 +4056,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation168()
-            {
-            }
+            __operation168();
 
-            __operation168(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation168(::CORBA::Long _a);
 
             // Copy constructor
-            __operation168(const __operation168& o) :
-            a(o.a)
-            {
-
-            }
+            __operation168(const __operation168& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5788,22 +4080,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation169()
-            {
-            }
+            __operation169();
 
-            __operation169(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation169(::CORBA::Long _a);
 
             // Copy constructor
-            __operation169(const __operation169& o) :
-            a(o.a)
-            {
-
-            }
+            __operation169(const __operation169& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5822,22 +4104,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation170()
-            {
-            }
+            __operation170();
 
-            __operation170(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation170(::CORBA::Long _a);
 
             // Copy constructor
-            __operation170(const __operation170& o) :
-            a(o.a)
-            {
-
-            }
+            __operation170(const __operation170& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5856,22 +4128,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation171()
-            {
-            }
+            __operation171();
 
-            __operation171(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation171(::CORBA::Long _a);
 
             // Copy constructor
-            __operation171(const __operation171& o) :
-            a(o.a)
-            {
-
-            }
+            __operation171(const __operation171& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5890,22 +4152,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation172()
-            {
-            }
+            __operation172();
 
-            __operation172(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation172(::CORBA::Long _a);
 
             // Copy constructor
-            __operation172(const __operation172& o) :
-            a(o.a)
-            {
-
-            }
+            __operation172(const __operation172& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5924,22 +4176,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation173()
-            {
-            }
+            __operation173();
 
-            __operation173(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation173(::CORBA::Long _a);
 
             // Copy constructor
-            __operation173(const __operation173& o) :
-            a(o.a)
-            {
-
-            }
+            __operation173(const __operation173& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5958,22 +4200,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation174()
-            {
-            }
+            __operation174();
 
-            __operation174(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation174(::CORBA::Long _a);
 
             // Copy constructor
-            __operation174(const __operation174& o) :
-            a(o.a)
-            {
-
-            }
+            __operation174(const __operation174& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -5992,22 +4224,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation175()
-            {
-            }
+            __operation175();
 
-            __operation175(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation175(::CORBA::Long _a);
 
             // Copy constructor
-            __operation175(const __operation175& o) :
-            a(o.a)
-            {
-
-            }
+            __operation175(const __operation175& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6026,22 +4248,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation176()
-            {
-            }
+            __operation176();
 
-            __operation176(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation176(::CORBA::Long _a);
 
             // Copy constructor
-            __operation176(const __operation176& o) :
-            a(o.a)
-            {
-
-            }
+            __operation176(const __operation176& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6060,22 +4272,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation177()
-            {
-            }
+            __operation177();
 
-            __operation177(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation177(::CORBA::Long _a);
 
             // Copy constructor
-            __operation177(const __operation177& o) :
-            a(o.a)
-            {
-
-            }
+            __operation177(const __operation177& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6094,22 +4296,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation178()
-            {
-            }
+            __operation178();
 
-            __operation178(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation178(::CORBA::Long _a);
 
             // Copy constructor
-            __operation178(const __operation178& o) :
-            a(o.a)
-            {
-
-            }
+            __operation178(const __operation178& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6128,22 +4320,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation179()
-            {
-            }
+            __operation179();
 
-            __operation179(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation179(::CORBA::Long _a);
 
             // Copy constructor
-            __operation179(const __operation179& o) :
-            a(o.a)
-            {
-
-            }
+            __operation179(const __operation179& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6162,22 +4344,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation180()
-            {
-            }
+            __operation180();
 
-            __operation180(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation180(::CORBA::Long _a);
 
             // Copy constructor
-            __operation180(const __operation180& o) :
-            a(o.a)
-            {
-
-            }
+            __operation180(const __operation180& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6196,22 +4368,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation181()
-            {
-            }
+            __operation181();
 
-            __operation181(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation181(::CORBA::Long _a);
 
             // Copy constructor
-            __operation181(const __operation181& o) :
-            a(o.a)
-            {
-
-            }
+            __operation181(const __operation181& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6230,22 +4392,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation182()
-            {
-            }
+            __operation182();
 
-            __operation182(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation182(::CORBA::Long _a);
 
             // Copy constructor
-            __operation182(const __operation182& o) :
-            a(o.a)
-            {
-
-            }
+            __operation182(const __operation182& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6264,22 +4416,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation183()
-            {
-            }
+            __operation183();
 
-            __operation183(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation183(::CORBA::Long _a);
 
             // Copy constructor
-            __operation183(const __operation183& o) :
-            a(o.a)
-            {
-
-            }
+            __operation183(const __operation183& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6298,22 +4440,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation184()
-            {
-            }
+            __operation184();
 
-            __operation184(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation184(::CORBA::Long _a);
 
             // Copy constructor
-            __operation184(const __operation184& o) :
-            a(o.a)
-            {
-
-            }
+            __operation184(const __operation184& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6332,22 +4464,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation185()
-            {
-            }
+            __operation185();
 
-            __operation185(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation185(::CORBA::Long _a);
 
             // Copy constructor
-            __operation185(const __operation185& o) :
-            a(o.a)
-            {
-
-            }
+            __operation185(const __operation185& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6366,22 +4488,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation186()
-            {
-            }
+            __operation186();
 
-            __operation186(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation186(::CORBA::Long _a);
 
             // Copy constructor
-            __operation186(const __operation186& o) :
-            a(o.a)
-            {
-
-            }
+            __operation186(const __operation186& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6400,22 +4512,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation187()
-            {
-            }
+            __operation187();
 
-            __operation187(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation187(::CORBA::Long _a);
 
             // Copy constructor
-            __operation187(const __operation187& o) :
-            a(o.a)
-            {
-
-            }
+            __operation187(const __operation187& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6434,22 +4536,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation188()
-            {
-            }
+            __operation188();
 
-            __operation188(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation188(::CORBA::Long _a);
 
             // Copy constructor
-            __operation188(const __operation188& o) :
-            a(o.a)
-            {
-
-            }
+            __operation188(const __operation188& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6468,22 +4560,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation189()
-            {
-            }
+            __operation189();
 
-            __operation189(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation189(::CORBA::Long _a);
 
             // Copy constructor
-            __operation189(const __operation189& o) :
-            a(o.a)
-            {
-
-            }
+            __operation189(const __operation189& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6502,22 +4584,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation190()
-            {
-            }
+            __operation190();
 
-            __operation190(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation190(::CORBA::Long _a);
 
             // Copy constructor
-            __operation190(const __operation190& o) :
-            a(o.a)
-            {
-
-            }
+            __operation190(const __operation190& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6536,22 +4608,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation191()
-            {
-            }
+            __operation191();
 
-            __operation191(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation191(::CORBA::Long _a);
 
             // Copy constructor
-            __operation191(const __operation191& o) :
-            a(o.a)
-            {
-
-            }
+            __operation191(const __operation191& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6570,22 +4632,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation192()
-            {
-            }
+            __operation192();
 
-            __operation192(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation192(::CORBA::Long _a);
 
             // Copy constructor
-            __operation192(const __operation192& o) :
-            a(o.a)
-            {
-
-            }
+            __operation192(const __operation192& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6604,22 +4656,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation193()
-            {
-            }
+            __operation193();
 
-            __operation193(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation193(::CORBA::Long _a);
 
             // Copy constructor
-            __operation193(const __operation193& o) :
-            a(o.a)
-            {
-
-            }
+            __operation193(const __operation193& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6638,22 +4680,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation194()
-            {
-            }
+            __operation194();
 
-            __operation194(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation194(::CORBA::Long _a);
 
             // Copy constructor
-            __operation194(const __operation194& o) :
-            a(o.a)
-            {
-
-            }
+            __operation194(const __operation194& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6672,22 +4704,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation195()
-            {
-            }
+            __operation195();
 
-            __operation195(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation195(::CORBA::Long _a);
 
             // Copy constructor
-            __operation195(const __operation195& o) :
-            a(o.a)
-            {
-
-            }
+            __operation195(const __operation195& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6706,22 +4728,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation196()
-            {
-            }
+            __operation196();
 
-            __operation196(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation196(::CORBA::Long _a);
 
             // Copy constructor
-            __operation196(const __operation196& o) :
-            a(o.a)
-            {
-
-            }
+            __operation196(const __operation196& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6740,22 +4752,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation197()
-            {
-            }
+            __operation197();
 
-            __operation197(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation197(::CORBA::Long _a);
 
             // Copy constructor
-            __operation197(const __operation197& o) :
-            a(o.a)
-            {
-
-            }
+            __operation197(const __operation197& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6774,22 +4776,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation198()
-            {
-            }
+            __operation198();
 
-            __operation198(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation198(::CORBA::Long _a);
 
             // Copy constructor
-            __operation198(const __operation198& o) :
-            a(o.a)
-            {
-
-            }
+            __operation198(const __operation198& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6808,22 +4800,12 @@ namespace _corbasim_Test
 
             ::CORBA::Long a;
 
-            __operation199()
-            {
-            }
+            __operation199();
 
-            __operation199(::CORBA::Long _a):
-            a(_a)
-            {
-
-            }
+            __operation199(::CORBA::Long _a);
 
             // Copy constructor
-            __operation199(const __operation199& o) :
-            a(o.a)
-            {
-
-            }
+            __operation199(const __operation199& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -6847,604 +4829,406 @@ namespace corbasim
         template< >
         struct interface< Test::Huge >
         {
-            typedef cs_mpl::vector< _corbasim_Test::Huge::operation1,
-                    _corbasim_Test::Huge::operation2,
-                    _corbasim_Test::Huge::operation3,
-                    _corbasim_Test::Huge::operation4,
-                    _corbasim_Test::Huge::operation5,
-                    _corbasim_Test::Huge::operation6,
-                    _corbasim_Test::Huge::operation7,
-                    _corbasim_Test::Huge::operation8,
-                    _corbasim_Test::Huge::operation9,
-                    _corbasim_Test::Huge::operation10,
-                    _corbasim_Test::Huge::operation11,
-                    _corbasim_Test::Huge::operation12,
-                    _corbasim_Test::Huge::operation13,
-                    _corbasim_Test::Huge::operation14,
-                    _corbasim_Test::Huge::operation15,
-                    _corbasim_Test::Huge::operation16,
-                    _corbasim_Test::Huge::operation17,
-                    _corbasim_Test::Huge::operation18,
-                    _corbasim_Test::Huge::operation19,
-                    _corbasim_Test::Huge::operation20,
-                    _corbasim_Test::Huge::operation21,
-                    _corbasim_Test::Huge::operation22,
-                    _corbasim_Test::Huge::operation23,
-                    _corbasim_Test::Huge::operation24,
-                    _corbasim_Test::Huge::operation25,
-                    _corbasim_Test::Huge::operation26,
-                    _corbasim_Test::Huge::operation27,
-                    _corbasim_Test::Huge::operation28,
-                    _corbasim_Test::Huge::operation29,
-                    _corbasim_Test::Huge::operation30,
-                    _corbasim_Test::Huge::operation31,
-                    _corbasim_Test::Huge::operation32,
-                    _corbasim_Test::Huge::operation33,
-                    _corbasim_Test::Huge::operation34,
-                    _corbasim_Test::Huge::operation35,
-                    _corbasim_Test::Huge::operation36,
-                    _corbasim_Test::Huge::operation37,
-                    _corbasim_Test::Huge::operation38,
-                    _corbasim_Test::Huge::operation39,
-                    _corbasim_Test::Huge::operation40,
-                    _corbasim_Test::Huge::operation41,
-                    _corbasim_Test::Huge::operation42,
-                    _corbasim_Test::Huge::operation43,
-                    _corbasim_Test::Huge::operation44,
-                    _corbasim_Test::Huge::operation45,
-                    _corbasim_Test::Huge::operation46,
-                    _corbasim_Test::Huge::operation47,
-                    _corbasim_Test::Huge::operation48,
-                    _corbasim_Test::Huge::operation49,
-                    _corbasim_Test::Huge::operation50,
-                    _corbasim_Test::Huge::operation51,
-                    _corbasim_Test::Huge::operation52,
-                    _corbasim_Test::Huge::operation53,
-                    _corbasim_Test::Huge::operation54,
-                    _corbasim_Test::Huge::operation55,
-                    _corbasim_Test::Huge::operation56,
-                    _corbasim_Test::Huge::operation57,
-                    _corbasim_Test::Huge::operation58,
-                    _corbasim_Test::Huge::operation59,
-                    _corbasim_Test::Huge::operation60,
-                    _corbasim_Test::Huge::operation61,
-                    _corbasim_Test::Huge::operation62,
-                    _corbasim_Test::Huge::operation63,
-                    _corbasim_Test::Huge::operation64,
-                    _corbasim_Test::Huge::operation65,
-                    _corbasim_Test::Huge::operation66,
-                    _corbasim_Test::Huge::operation67,
-                    _corbasim_Test::Huge::operation68,
-                    _corbasim_Test::Huge::operation69,
-                    _corbasim_Test::Huge::operation70,
-                    _corbasim_Test::Huge::operation71,
-                    _corbasim_Test::Huge::operation72,
-                    _corbasim_Test::Huge::operation73,
-                    _corbasim_Test::Huge::operation74,
-                    _corbasim_Test::Huge::operation75,
-                    _corbasim_Test::Huge::operation76,
-                    _corbasim_Test::Huge::operation77,
-                    _corbasim_Test::Huge::operation78,
-                    _corbasim_Test::Huge::operation79,
-                    _corbasim_Test::Huge::operation80,
-                    _corbasim_Test::Huge::operation81,
-                    _corbasim_Test::Huge::operation82,
-                    _corbasim_Test::Huge::operation83,
-                    _corbasim_Test::Huge::operation84,
-                    _corbasim_Test::Huge::operation85,
-                    _corbasim_Test::Huge::operation86,
-                    _corbasim_Test::Huge::operation87,
-                    _corbasim_Test::Huge::operation88,
-                    _corbasim_Test::Huge::operation89,
-                    _corbasim_Test::Huge::operation90,
-                    _corbasim_Test::Huge::operation91,
-                    _corbasim_Test::Huge::operation92,
-                    _corbasim_Test::Huge::operation93,
-                    _corbasim_Test::Huge::operation94,
-                    _corbasim_Test::Huge::operation95,
-                    _corbasim_Test::Huge::operation96,
-                    _corbasim_Test::Huge::operation97,
-                    _corbasim_Test::Huge::operation98,
-                    _corbasim_Test::Huge::operation99,
-                    _corbasim_Test::Huge::operation100,
-                    _corbasim_Test::Huge::operation101,
-                    _corbasim_Test::Huge::operation102,
-                    _corbasim_Test::Huge::operation103,
-                    _corbasim_Test::Huge::operation104,
-                    _corbasim_Test::Huge::operation105,
-                    _corbasim_Test::Huge::operation106,
-                    _corbasim_Test::Huge::operation107,
-                    _corbasim_Test::Huge::operation108,
-                    _corbasim_Test::Huge::operation109,
-                    _corbasim_Test::Huge::operation110,
-                    _corbasim_Test::Huge::operation111,
-                    _corbasim_Test::Huge::operation112,
-                    _corbasim_Test::Huge::operation113,
-                    _corbasim_Test::Huge::operation114,
-                    _corbasim_Test::Huge::operation115,
-                    _corbasim_Test::Huge::operation116,
-                    _corbasim_Test::Huge::operation117,
-                    _corbasim_Test::Huge::operation118,
-                    _corbasim_Test::Huge::operation119,
-                    _corbasim_Test::Huge::operation120,
-                    _corbasim_Test::Huge::operation121,
-                    _corbasim_Test::Huge::operation122,
-                    _corbasim_Test::Huge::operation123,
-                    _corbasim_Test::Huge::operation124,
-                    _corbasim_Test::Huge::operation125,
-                    _corbasim_Test::Huge::operation126,
-                    _corbasim_Test::Huge::operation127,
-                    _corbasim_Test::Huge::operation128,
-                    _corbasim_Test::Huge::operation129,
-                    _corbasim_Test::Huge::operation130,
-                    _corbasim_Test::Huge::operation131,
-                    _corbasim_Test::Huge::operation132,
-                    _corbasim_Test::Huge::operation133,
-                    _corbasim_Test::Huge::operation134,
-                    _corbasim_Test::Huge::operation135,
-                    _corbasim_Test::Huge::operation136,
-                    _corbasim_Test::Huge::operation137,
-                    _corbasim_Test::Huge::operation138,
-                    _corbasim_Test::Huge::operation139,
-                    _corbasim_Test::Huge::operation140,
-                    _corbasim_Test::Huge::operation141,
-                    _corbasim_Test::Huge::operation142,
-                    _corbasim_Test::Huge::operation143,
-                    _corbasim_Test::Huge::operation144,
-                    _corbasim_Test::Huge::operation145,
-                    _corbasim_Test::Huge::operation146,
-                    _corbasim_Test::Huge::operation147,
-                    _corbasim_Test::Huge::operation148,
-                    _corbasim_Test::Huge::operation149,
-                    _corbasim_Test::Huge::operation150,
-                    _corbasim_Test::Huge::operation151,
-                    _corbasim_Test::Huge::operation152,
-                    _corbasim_Test::Huge::operation153,
-                    _corbasim_Test::Huge::operation154,
-                    _corbasim_Test::Huge::operation155,
-                    _corbasim_Test::Huge::operation156,
-                    _corbasim_Test::Huge::operation157,
-                    _corbasim_Test::Huge::operation158,
-                    _corbasim_Test::Huge::operation159,
-                    _corbasim_Test::Huge::operation160,
-                    _corbasim_Test::Huge::operation161,
-                    _corbasim_Test::Huge::operation162,
-                    _corbasim_Test::Huge::operation163,
-                    _corbasim_Test::Huge::operation164,
-                    _corbasim_Test::Huge::operation165,
-                    _corbasim_Test::Huge::operation166,
-                    _corbasim_Test::Huge::operation167,
-                    _corbasim_Test::Huge::operation168,
-                    _corbasim_Test::Huge::operation169,
-                    _corbasim_Test::Huge::operation170,
-                    _corbasim_Test::Huge::operation171,
-                    _corbasim_Test::Huge::operation172,
-                    _corbasim_Test::Huge::operation173,
-                    _corbasim_Test::Huge::operation174,
-                    _corbasim_Test::Huge::operation175,
-                    _corbasim_Test::Huge::operation176,
-                    _corbasim_Test::Huge::operation177,
-                    _corbasim_Test::Huge::operation178,
-                    _corbasim_Test::Huge::operation179,
-                    _corbasim_Test::Huge::operation180,
-                    _corbasim_Test::Huge::operation181,
-                    _corbasim_Test::Huge::operation182,
-                    _corbasim_Test::Huge::operation183,
-                    _corbasim_Test::Huge::operation184,
-                    _corbasim_Test::Huge::operation185,
-                    _corbasim_Test::Huge::operation186,
-                    _corbasim_Test::Huge::operation187,
-                    _corbasim_Test::Huge::operation188,
-                    _corbasim_Test::Huge::operation189,
-                    _corbasim_Test::Huge::operation190,
-                    _corbasim_Test::Huge::operation191,
-                    _corbasim_Test::Huge::operation192,
-                    _corbasim_Test::Huge::operation193,
-                    _corbasim_Test::Huge::operation194,
-                    _corbasim_Test::Huge::operation195,
-                    _corbasim_Test::Huge::operation196,
-                    _corbasim_Test::Huge::operation197,
-                    _corbasim_Test::Huge::operation198,
-                    _corbasim_Test::Huge::operation199 > _op_list;
-            typedef cs_mpl::vector< _corbasim_Test::Huge::operation1,
-                    _corbasim_Test::Huge::operation10,
-                    _corbasim_Test::Huge::operation100,
-                    _corbasim_Test::Huge::operation101,
-                    _corbasim_Test::Huge::operation102,
-                    _corbasim_Test::Huge::operation103,
-                    _corbasim_Test::Huge::operation104,
-                    _corbasim_Test::Huge::operation105,
-                    _corbasim_Test::Huge::operation106,
-                    _corbasim_Test::Huge::operation107,
-                    _corbasim_Test::Huge::operation108,
-                    _corbasim_Test::Huge::operation109,
-                    _corbasim_Test::Huge::operation11,
-                    _corbasim_Test::Huge::operation110,
-                    _corbasim_Test::Huge::operation111,
-                    _corbasim_Test::Huge::operation112,
-                    _corbasim_Test::Huge::operation113,
-                    _corbasim_Test::Huge::operation114,
-                    _corbasim_Test::Huge::operation115,
-                    _corbasim_Test::Huge::operation116,
-                    _corbasim_Test::Huge::operation117,
-                    _corbasim_Test::Huge::operation118,
-                    _corbasim_Test::Huge::operation119,
-                    _corbasim_Test::Huge::operation12,
-                    _corbasim_Test::Huge::operation120,
-                    _corbasim_Test::Huge::operation121,
-                    _corbasim_Test::Huge::operation122,
-                    _corbasim_Test::Huge::operation123,
-                    _corbasim_Test::Huge::operation124,
-                    _corbasim_Test::Huge::operation125,
-                    _corbasim_Test::Huge::operation126,
-                    _corbasim_Test::Huge::operation127,
-                    _corbasim_Test::Huge::operation128,
-                    _corbasim_Test::Huge::operation129,
-                    _corbasim_Test::Huge::operation13,
-                    _corbasim_Test::Huge::operation130,
-                    _corbasim_Test::Huge::operation131,
-                    _corbasim_Test::Huge::operation132,
-                    _corbasim_Test::Huge::operation133,
-                    _corbasim_Test::Huge::operation134,
-                    _corbasim_Test::Huge::operation135,
-                    _corbasim_Test::Huge::operation136,
-                    _corbasim_Test::Huge::operation137,
-                    _corbasim_Test::Huge::operation138,
-                    _corbasim_Test::Huge::operation139,
-                    _corbasim_Test::Huge::operation14,
-                    _corbasim_Test::Huge::operation140,
-                    _corbasim_Test::Huge::operation141,
-                    _corbasim_Test::Huge::operation142,
-                    _corbasim_Test::Huge::operation143,
-                    _corbasim_Test::Huge::operation144,
-                    _corbasim_Test::Huge::operation145,
-                    _corbasim_Test::Huge::operation146,
-                    _corbasim_Test::Huge::operation147,
-                    _corbasim_Test::Huge::operation148,
-                    _corbasim_Test::Huge::operation149,
-                    _corbasim_Test::Huge::operation15,
-                    _corbasim_Test::Huge::operation150,
-                    _corbasim_Test::Huge::operation151,
-                    _corbasim_Test::Huge::operation152,
-                    _corbasim_Test::Huge::operation153,
-                    _corbasim_Test::Huge::operation154,
-                    _corbasim_Test::Huge::operation155,
-                    _corbasim_Test::Huge::operation156,
-                    _corbasim_Test::Huge::operation157,
-                    _corbasim_Test::Huge::operation158,
-                    _corbasim_Test::Huge::operation159,
-                    _corbasim_Test::Huge::operation16,
-                    _corbasim_Test::Huge::operation160,
-                    _corbasim_Test::Huge::operation161,
-                    _corbasim_Test::Huge::operation162,
-                    _corbasim_Test::Huge::operation163,
-                    _corbasim_Test::Huge::operation164,
-                    _corbasim_Test::Huge::operation165,
-                    _corbasim_Test::Huge::operation166,
-                    _corbasim_Test::Huge::operation167,
-                    _corbasim_Test::Huge::operation168,
-                    _corbasim_Test::Huge::operation169,
-                    _corbasim_Test::Huge::operation17,
-                    _corbasim_Test::Huge::operation170,
-                    _corbasim_Test::Huge::operation171,
-                    _corbasim_Test::Huge::operation172,
-                    _corbasim_Test::Huge::operation173,
-                    _corbasim_Test::Huge::operation174,
-                    _corbasim_Test::Huge::operation175,
-                    _corbasim_Test::Huge::operation176,
-                    _corbasim_Test::Huge::operation177,
-                    _corbasim_Test::Huge::operation178,
-                    _corbasim_Test::Huge::operation179,
-                    _corbasim_Test::Huge::operation18,
-                    _corbasim_Test::Huge::operation180,
-                    _corbasim_Test::Huge::operation181,
-                    _corbasim_Test::Huge::operation182,
-                    _corbasim_Test::Huge::operation183,
-                    _corbasim_Test::Huge::operation184,
-                    _corbasim_Test::Huge::operation185,
-                    _corbasim_Test::Huge::operation186,
-                    _corbasim_Test::Huge::operation187,
-                    _corbasim_Test::Huge::operation188,
-                    _corbasim_Test::Huge::operation189,
-                    _corbasim_Test::Huge::operation19,
-                    _corbasim_Test::Huge::operation190,
-                    _corbasim_Test::Huge::operation191,
-                    _corbasim_Test::Huge::operation192,
-                    _corbasim_Test::Huge::operation193,
-                    _corbasim_Test::Huge::operation194,
-                    _corbasim_Test::Huge::operation195,
-                    _corbasim_Test::Huge::operation196,
-                    _corbasim_Test::Huge::operation197,
-                    _corbasim_Test::Huge::operation198,
-                    _corbasim_Test::Huge::operation199,
-                    _corbasim_Test::Huge::operation2,
-                    _corbasim_Test::Huge::operation20,
-                    _corbasim_Test::Huge::operation21,
-                    _corbasim_Test::Huge::operation22,
-                    _corbasim_Test::Huge::operation23,
-                    _corbasim_Test::Huge::operation24,
-                    _corbasim_Test::Huge::operation25,
-                    _corbasim_Test::Huge::operation26,
-                    _corbasim_Test::Huge::operation27,
-                    _corbasim_Test::Huge::operation28,
-                    _corbasim_Test::Huge::operation29,
-                    _corbasim_Test::Huge::operation3,
-                    _corbasim_Test::Huge::operation30,
-                    _corbasim_Test::Huge::operation31,
-                    _corbasim_Test::Huge::operation32,
-                    _corbasim_Test::Huge::operation33,
-                    _corbasim_Test::Huge::operation34,
-                    _corbasim_Test::Huge::operation35,
-                    _corbasim_Test::Huge::operation36,
-                    _corbasim_Test::Huge::operation37,
-                    _corbasim_Test::Huge::operation38,
-                    _corbasim_Test::Huge::operation39,
-                    _corbasim_Test::Huge::operation4,
-                    _corbasim_Test::Huge::operation40,
-                    _corbasim_Test::Huge::operation41,
-                    _corbasim_Test::Huge::operation42,
-                    _corbasim_Test::Huge::operation43,
-                    _corbasim_Test::Huge::operation44,
-                    _corbasim_Test::Huge::operation45,
-                    _corbasim_Test::Huge::operation46,
-                    _corbasim_Test::Huge::operation47,
-                    _corbasim_Test::Huge::operation48,
-                    _corbasim_Test::Huge::operation49,
-                    _corbasim_Test::Huge::operation5,
-                    _corbasim_Test::Huge::operation50,
-                    _corbasim_Test::Huge::operation51,
-                    _corbasim_Test::Huge::operation52,
-                    _corbasim_Test::Huge::operation53,
-                    _corbasim_Test::Huge::operation54,
-                    _corbasim_Test::Huge::operation55,
-                    _corbasim_Test::Huge::operation56,
-                    _corbasim_Test::Huge::operation57,
-                    _corbasim_Test::Huge::operation58,
-                    _corbasim_Test::Huge::operation59,
-                    _corbasim_Test::Huge::operation6,
-                    _corbasim_Test::Huge::operation60,
-                    _corbasim_Test::Huge::operation61,
-                    _corbasim_Test::Huge::operation62,
-                    _corbasim_Test::Huge::operation63,
-                    _corbasim_Test::Huge::operation64,
-                    _corbasim_Test::Huge::operation65,
-                    _corbasim_Test::Huge::operation66,
-                    _corbasim_Test::Huge::operation67,
-                    _corbasim_Test::Huge::operation68,
-                    _corbasim_Test::Huge::operation69,
-                    _corbasim_Test::Huge::operation7,
-                    _corbasim_Test::Huge::operation70,
-                    _corbasim_Test::Huge::operation71,
-                    _corbasim_Test::Huge::operation72,
-                    _corbasim_Test::Huge::operation73,
-                    _corbasim_Test::Huge::operation74,
-                    _corbasim_Test::Huge::operation75,
-                    _corbasim_Test::Huge::operation76,
-                    _corbasim_Test::Huge::operation77,
-                    _corbasim_Test::Huge::operation78,
-                    _corbasim_Test::Huge::operation79,
-                    _corbasim_Test::Huge::operation8,
-                    _corbasim_Test::Huge::operation80,
-                    _corbasim_Test::Huge::operation81,
-                    _corbasim_Test::Huge::operation82,
-                    _corbasim_Test::Huge::operation83,
-                    _corbasim_Test::Huge::operation84,
-                    _corbasim_Test::Huge::operation85,
-                    _corbasim_Test::Huge::operation86,
-                    _corbasim_Test::Huge::operation87,
-                    _corbasim_Test::Huge::operation88,
-                    _corbasim_Test::Huge::operation89,
-                    _corbasim_Test::Huge::operation9,
-                    _corbasim_Test::Huge::operation90,
-                    _corbasim_Test::Huge::operation91,
-                    _corbasim_Test::Huge::operation92,
-                    _corbasim_Test::Huge::operation93,
-                    _corbasim_Test::Huge::operation94,
-                    _corbasim_Test::Huge::operation95,
-                    _corbasim_Test::Huge::operation96,
-                    _corbasim_Test::Huge::operation97,
-                    _corbasim_Test::Huge::operation98,
-                    _corbasim_Test::Huge::operation99 > _sorted_op_list;
-            typedef cs_mpl::vector< _corbasim_Test::Huge::operation1,
-                    _corbasim_Test::Huge::operation2,
-                    _corbasim_Test::Huge::operation3,
-                    _corbasim_Test::Huge::operation4,
-                    _corbasim_Test::Huge::operation5,
-                    _corbasim_Test::Huge::operation6,
-                    _corbasim_Test::Huge::operation7,
-                    _corbasim_Test::Huge::operation8,
-                    _corbasim_Test::Huge::operation9,
-                    _corbasim_Test::Huge::operation10,
-                    _corbasim_Test::Huge::operation11,
-                    _corbasim_Test::Huge::operation12,
-                    _corbasim_Test::Huge::operation13,
-                    _corbasim_Test::Huge::operation14,
-                    _corbasim_Test::Huge::operation15,
-                    _corbasim_Test::Huge::operation16,
-                    _corbasim_Test::Huge::operation17,
-                    _corbasim_Test::Huge::operation18,
-                    _corbasim_Test::Huge::operation19,
-                    _corbasim_Test::Huge::operation20,
-                    _corbasim_Test::Huge::operation21,
-                    _corbasim_Test::Huge::operation22,
-                    _corbasim_Test::Huge::operation23,
-                    _corbasim_Test::Huge::operation24,
-                    _corbasim_Test::Huge::operation25,
-                    _corbasim_Test::Huge::operation26,
-                    _corbasim_Test::Huge::operation27,
-                    _corbasim_Test::Huge::operation28,
-                    _corbasim_Test::Huge::operation29,
-                    _corbasim_Test::Huge::operation30,
-                    _corbasim_Test::Huge::operation31,
-                    _corbasim_Test::Huge::operation32,
-                    _corbasim_Test::Huge::operation33,
-                    _corbasim_Test::Huge::operation34,
-                    _corbasim_Test::Huge::operation35,
-                    _corbasim_Test::Huge::operation36,
-                    _corbasim_Test::Huge::operation37,
-                    _corbasim_Test::Huge::operation38,
-                    _corbasim_Test::Huge::operation39,
-                    _corbasim_Test::Huge::operation40,
-                    _corbasim_Test::Huge::operation41,
-                    _corbasim_Test::Huge::operation42,
-                    _corbasim_Test::Huge::operation43,
-                    _corbasim_Test::Huge::operation44,
-                    _corbasim_Test::Huge::operation45,
-                    _corbasim_Test::Huge::operation46,
-                    _corbasim_Test::Huge::operation47,
-                    _corbasim_Test::Huge::operation48,
-                    _corbasim_Test::Huge::operation49,
-                    _corbasim_Test::Huge::operation50,
-                    _corbasim_Test::Huge::operation51,
-                    _corbasim_Test::Huge::operation52,
-                    _corbasim_Test::Huge::operation53,
-                    _corbasim_Test::Huge::operation54,
-                    _corbasim_Test::Huge::operation55,
-                    _corbasim_Test::Huge::operation56,
-                    _corbasim_Test::Huge::operation57,
-                    _corbasim_Test::Huge::operation58,
-                    _corbasim_Test::Huge::operation59,
-                    _corbasim_Test::Huge::operation60,
-                    _corbasim_Test::Huge::operation61,
-                    _corbasim_Test::Huge::operation62,
-                    _corbasim_Test::Huge::operation63,
-                    _corbasim_Test::Huge::operation64,
-                    _corbasim_Test::Huge::operation65,
-                    _corbasim_Test::Huge::operation66,
-                    _corbasim_Test::Huge::operation67,
-                    _corbasim_Test::Huge::operation68,
-                    _corbasim_Test::Huge::operation69,
-                    _corbasim_Test::Huge::operation70,
-                    _corbasim_Test::Huge::operation71,
-                    _corbasim_Test::Huge::operation72,
-                    _corbasim_Test::Huge::operation73,
-                    _corbasim_Test::Huge::operation74,
-                    _corbasim_Test::Huge::operation75,
-                    _corbasim_Test::Huge::operation76,
-                    _corbasim_Test::Huge::operation77,
-                    _corbasim_Test::Huge::operation78,
-                    _corbasim_Test::Huge::operation79,
-                    _corbasim_Test::Huge::operation80,
-                    _corbasim_Test::Huge::operation81,
-                    _corbasim_Test::Huge::operation82,
-                    _corbasim_Test::Huge::operation83,
-                    _corbasim_Test::Huge::operation84,
-                    _corbasim_Test::Huge::operation85,
-                    _corbasim_Test::Huge::operation86,
-                    _corbasim_Test::Huge::operation87,
-                    _corbasim_Test::Huge::operation88,
-                    _corbasim_Test::Huge::operation89,
-                    _corbasim_Test::Huge::operation90,
-                    _corbasim_Test::Huge::operation91,
-                    _corbasim_Test::Huge::operation92,
-                    _corbasim_Test::Huge::operation93,
-                    _corbasim_Test::Huge::operation94,
-                    _corbasim_Test::Huge::operation95,
-                    _corbasim_Test::Huge::operation96,
-                    _corbasim_Test::Huge::operation97,
-                    _corbasim_Test::Huge::operation98,
-                    _corbasim_Test::Huge::operation99,
-                    _corbasim_Test::Huge::operation100,
-                    _corbasim_Test::Huge::operation101,
-                    _corbasim_Test::Huge::operation102,
-                    _corbasim_Test::Huge::operation103,
-                    _corbasim_Test::Huge::operation104,
-                    _corbasim_Test::Huge::operation105,
-                    _corbasim_Test::Huge::operation106,
-                    _corbasim_Test::Huge::operation107,
-                    _corbasim_Test::Huge::operation108,
-                    _corbasim_Test::Huge::operation109,
-                    _corbasim_Test::Huge::operation110,
-                    _corbasim_Test::Huge::operation111,
-                    _corbasim_Test::Huge::operation112,
-                    _corbasim_Test::Huge::operation113,
-                    _corbasim_Test::Huge::operation114,
-                    _corbasim_Test::Huge::operation115,
-                    _corbasim_Test::Huge::operation116,
-                    _corbasim_Test::Huge::operation117,
-                    _corbasim_Test::Huge::operation118,
-                    _corbasim_Test::Huge::operation119,
-                    _corbasim_Test::Huge::operation120,
-                    _corbasim_Test::Huge::operation121,
-                    _corbasim_Test::Huge::operation122,
-                    _corbasim_Test::Huge::operation123,
-                    _corbasim_Test::Huge::operation124,
-                    _corbasim_Test::Huge::operation125,
-                    _corbasim_Test::Huge::operation126,
-                    _corbasim_Test::Huge::operation127,
-                    _corbasim_Test::Huge::operation128,
-                    _corbasim_Test::Huge::operation129,
-                    _corbasim_Test::Huge::operation130,
-                    _corbasim_Test::Huge::operation131,
-                    _corbasim_Test::Huge::operation132,
-                    _corbasim_Test::Huge::operation133,
-                    _corbasim_Test::Huge::operation134,
-                    _corbasim_Test::Huge::operation135,
-                    _corbasim_Test::Huge::operation136,
-                    _corbasim_Test::Huge::operation137,
-                    _corbasim_Test::Huge::operation138,
-                    _corbasim_Test::Huge::operation139,
-                    _corbasim_Test::Huge::operation140,
-                    _corbasim_Test::Huge::operation141,
-                    _corbasim_Test::Huge::operation142,
-                    _corbasim_Test::Huge::operation143,
-                    _corbasim_Test::Huge::operation144,
-                    _corbasim_Test::Huge::operation145,
-                    _corbasim_Test::Huge::operation146,
-                    _corbasim_Test::Huge::operation147,
-                    _corbasim_Test::Huge::operation148,
-                    _corbasim_Test::Huge::operation149,
-                    _corbasim_Test::Huge::operation150,
-                    _corbasim_Test::Huge::operation151,
-                    _corbasim_Test::Huge::operation152,
-                    _corbasim_Test::Huge::operation153,
-                    _corbasim_Test::Huge::operation154,
-                    _corbasim_Test::Huge::operation155,
-                    _corbasim_Test::Huge::operation156,
-                    _corbasim_Test::Huge::operation157,
-                    _corbasim_Test::Huge::operation158,
-                    _corbasim_Test::Huge::operation159,
-                    _corbasim_Test::Huge::operation160,
-                    _corbasim_Test::Huge::operation161,
-                    _corbasim_Test::Huge::operation162,
-                    _corbasim_Test::Huge::operation163,
-                    _corbasim_Test::Huge::operation164,
-                    _corbasim_Test::Huge::operation165,
-                    _corbasim_Test::Huge::operation166,
-                    _corbasim_Test::Huge::operation167,
-                    _corbasim_Test::Huge::operation168,
-                    _corbasim_Test::Huge::operation169,
-                    _corbasim_Test::Huge::operation170,
-                    _corbasim_Test::Huge::operation171,
-                    _corbasim_Test::Huge::operation172,
-                    _corbasim_Test::Huge::operation173,
-                    _corbasim_Test::Huge::operation174,
-                    _corbasim_Test::Huge::operation175,
-                    _corbasim_Test::Huge::operation176,
-                    _corbasim_Test::Huge::operation177,
-                    _corbasim_Test::Huge::operation178,
-                    _corbasim_Test::Huge::operation179,
-                    _corbasim_Test::Huge::operation180,
-                    _corbasim_Test::Huge::operation181,
-                    _corbasim_Test::Huge::operation182,
-                    _corbasim_Test::Huge::operation183,
-                    _corbasim_Test::Huge::operation184,
-                    _corbasim_Test::Huge::operation185,
-                    _corbasim_Test::Huge::operation186,
-                    _corbasim_Test::Huge::operation187,
-                    _corbasim_Test::Huge::operation188,
-                    _corbasim_Test::Huge::operation189,
-                    _corbasim_Test::Huge::operation190,
-                    _corbasim_Test::Huge::operation191,
-                    _corbasim_Test::Huge::operation192,
-                    _corbasim_Test::Huge::operation193,
-                    _corbasim_Test::Huge::operation194,
-                    _corbasim_Test::Huge::operation195,
-                    _corbasim_Test::Huge::operation196,
-                    _corbasim_Test::Huge::operation197,
-                    _corbasim_Test::Huge::operation198,
-                    _corbasim_Test::Huge::operation199 > _own_op_list;
-            typedef cs_mpl::vector< > _parent_list;
+            typedef cs_mpl::list<
+                    _corbasim_Test::Huge::operation1,
+                    cs_mpl::list<
+                            _corbasim_Test::Huge::operation2,
+                            cs_mpl::list<
+                                    _corbasim_Test::Huge::operation3,
+                                    cs_mpl::list<
+                                            _corbasim_Test::Huge::operation4,
+                                            cs_mpl::list<
+                                                    _corbasim_Test::Huge::operation5,
+                                                    cs_mpl::list<
+                                                            _corbasim_Test::Huge::operation6,
+                                                            cs_mpl::list<
+                                                                    _corbasim_Test::Huge::operation7,
+                                                                    cs_mpl::list<
+                                                                            _corbasim_Test::Huge::operation8,
+                                                                            cs_mpl::list<
+                                                                                    _corbasim_Test::Huge::operation9,
+                                                                                    cs_mpl::list<
+                                                                                            _corbasim_Test::Huge::operation10,
+                                                                                            cs_mpl::list<
+                                                                                                    _corbasim_Test::Huge::operation11,
+                                                                                                    cs_mpl::list<
+                                                                                                            _corbasim_Test::Huge::operation12,
+                                                                                                            cs_mpl::list<
+                                                                                                                    _corbasim_Test::Huge::operation13,
+                                                                                                                    cs_mpl::list<
+                                                                                                                            _corbasim_Test::Huge::operation14,
+                                                                                                                            cs_mpl::list<
+                                                                                                                                    _corbasim_Test::Huge::operation15,
+                                                                                                                                    cs_mpl::list<
+                                                                                                                                            _corbasim_Test::Huge::operation16,
+                                                                                                                                            cs_mpl::list<
+                                                                                                                                                    _corbasim_Test::Huge::operation17,
+                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                            _corbasim_Test::Huge::operation18,
+                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                    _corbasim_Test::Huge::operation19,
+                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                            _corbasim_Test::Huge::operation20,
+                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                    _corbasim_Test::Huge::operation21,
+                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                            _corbasim_Test::Huge::operation22,
+                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                    _corbasim_Test::Huge::operation23,
+                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                            _corbasim_Test::Huge::operation24,
+                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                    _corbasim_Test::Huge::operation25,
+                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                            _corbasim_Test::Huge::operation26,
+                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation27,
+                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation28,
+                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation29,
+                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation30,
+                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation31,
+                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation32,
+                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation33,
+                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation34,
+                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation35,
+                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation36,
+                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation37,
+                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation38,
+                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation39,
+                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation40,
+                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation41,
+                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation42,
+                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation43,
+                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation44,
+                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation45,
+                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation46,
+                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation47,
+                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation48,
+                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation49,
+                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation50,
+                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation51,
+                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation52,
+                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation53,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation54,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation55,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation56,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation57,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation58,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation59,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation60,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation61,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation62,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation63,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation64,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation65,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation66,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation67,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation68,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation69,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation70,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation71,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation72,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation73,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation74,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation75,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation76,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation77,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation78,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation79,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation80,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation81,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation82,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation83,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation84,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation85,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation86,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation87,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation88,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation89,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation90,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation91,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation92,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation93,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation94,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation95,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation96,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation97,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation98,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation99,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation100,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation101,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation102,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation103,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation104,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation105,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation106,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation107,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation108,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation109,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation110,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation111,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation112,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation113,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation114,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation115,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation116,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation117,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation118,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation119,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation120,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation121,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation122,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation123,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation124,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation125,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation126,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation127,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation128,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation129,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation130,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation131,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation132,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation133,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation134,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation135,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation136,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation137,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation138,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation139,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation140,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation141,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation142,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation143,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation144,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation145,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation146,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation147,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation148,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation149,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation150,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation151,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation152,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation153,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation154,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation155,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation156,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation157,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation158,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation159,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation160,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation161,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation162,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation163,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation164,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation165,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation166,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation167,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation168,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation169,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation170,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation171,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation172,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation173,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation174,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation175,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation176,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation177,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation178,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation179,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation180,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation181,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation182,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation183,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation184,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation185,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation186,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation187,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation188,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation189,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation190,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation191,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation192,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation193,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation194,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation195,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation196,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation197,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            _corbasim_Test::Huge::operation198,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            cs_mpl::list<
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    _corbasim_Test::Huge::operation199 > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >
+                    _op_list;
+
         };
 
     } // adapted
@@ -7474,15 +5258,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation1(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation1 >
-        {
-            static inline const char * call()
-            {
-                return "operation1";
             }
         };
 
@@ -7517,15 +5292,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation2 >
-        {
-            static inline const char * call()
-            {
-                return "operation2";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -7554,15 +5320,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation3(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation3 >
-        {
-            static inline const char * call()
-            {
-                return "operation3";
             }
         };
 
@@ -7597,15 +5354,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation4 >
-        {
-            static inline const char * call()
-            {
-                return "operation4";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -7634,15 +5382,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation5(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation5 >
-        {
-            static inline const char * call()
-            {
-                return "operation5";
             }
         };
 
@@ -7677,15 +5416,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation6 >
-        {
-            static inline const char * call()
-            {
-                return "operation6";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -7714,15 +5444,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation7(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation7 >
-        {
-            static inline const char * call()
-            {
-                return "operation7";
             }
         };
 
@@ -7757,15 +5478,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation8 >
-        {
-            static inline const char * call()
-            {
-                return "operation8";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -7794,15 +5506,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation9(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation9 >
-        {
-            static inline const char * call()
-            {
-                return "operation9";
             }
         };
 
@@ -7837,15 +5540,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation10 >
-        {
-            static inline const char * call()
-            {
-                return "operation10";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -7874,15 +5568,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation11(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation11 >
-        {
-            static inline const char * call()
-            {
-                return "operation11";
             }
         };
 
@@ -7917,15 +5602,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation12 >
-        {
-            static inline const char * call()
-            {
-                return "operation12";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -7954,15 +5630,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation13(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation13 >
-        {
-            static inline const char * call()
-            {
-                return "operation13";
             }
         };
 
@@ -7997,15 +5664,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation14 >
-        {
-            static inline const char * call()
-            {
-                return "operation14";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8034,15 +5692,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation15(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation15 >
-        {
-            static inline const char * call()
-            {
-                return "operation15";
             }
         };
 
@@ -8077,15 +5726,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation16 >
-        {
-            static inline const char * call()
-            {
-                return "operation16";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8114,15 +5754,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation17(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation17 >
-        {
-            static inline const char * call()
-            {
-                return "operation17";
             }
         };
 
@@ -8157,15 +5788,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation18 >
-        {
-            static inline const char * call()
-            {
-                return "operation18";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8194,15 +5816,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation19(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation19 >
-        {
-            static inline const char * call()
-            {
-                return "operation19";
             }
         };
 
@@ -8237,15 +5850,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation20 >
-        {
-            static inline const char * call()
-            {
-                return "operation20";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8274,15 +5878,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation21(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation21 >
-        {
-            static inline const char * call()
-            {
-                return "operation21";
             }
         };
 
@@ -8317,15 +5912,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation22 >
-        {
-            static inline const char * call()
-            {
-                return "operation22";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8354,15 +5940,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation23(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation23 >
-        {
-            static inline const char * call()
-            {
-                return "operation23";
             }
         };
 
@@ -8397,15 +5974,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation24 >
-        {
-            static inline const char * call()
-            {
-                return "operation24";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8434,15 +6002,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation25(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation25 >
-        {
-            static inline const char * call()
-            {
-                return "operation25";
             }
         };
 
@@ -8477,15 +6036,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation26 >
-        {
-            static inline const char * call()
-            {
-                return "operation26";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8514,15 +6064,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation27(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation27 >
-        {
-            static inline const char * call()
-            {
-                return "operation27";
             }
         };
 
@@ -8557,15 +6098,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation28 >
-        {
-            static inline const char * call()
-            {
-                return "operation28";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8594,15 +6126,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation29(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation29 >
-        {
-            static inline const char * call()
-            {
-                return "operation29";
             }
         };
 
@@ -8637,15 +6160,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation30 >
-        {
-            static inline const char * call()
-            {
-                return "operation30";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8674,15 +6188,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation31(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation31 >
-        {
-            static inline const char * call()
-            {
-                return "operation31";
             }
         };
 
@@ -8717,15 +6222,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation32 >
-        {
-            static inline const char * call()
-            {
-                return "operation32";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8754,15 +6250,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation33(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation33 >
-        {
-            static inline const char * call()
-            {
-                return "operation33";
             }
         };
 
@@ -8797,15 +6284,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation34 >
-        {
-            static inline const char * call()
-            {
-                return "operation34";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8834,15 +6312,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation35(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation35 >
-        {
-            static inline const char * call()
-            {
-                return "operation35";
             }
         };
 
@@ -8877,15 +6346,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation36 >
-        {
-            static inline const char * call()
-            {
-                return "operation36";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8914,15 +6374,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation37(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation37 >
-        {
-            static inline const char * call()
-            {
-                return "operation37";
             }
         };
 
@@ -8957,15 +6408,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation38 >
-        {
-            static inline const char * call()
-            {
-                return "operation38";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -8994,15 +6436,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation39(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation39 >
-        {
-            static inline const char * call()
-            {
-                return "operation39";
             }
         };
 
@@ -9037,15 +6470,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation40 >
-        {
-            static inline const char * call()
-            {
-                return "operation40";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9074,15 +6498,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation41(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation41 >
-        {
-            static inline const char * call()
-            {
-                return "operation41";
             }
         };
 
@@ -9117,15 +6532,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation42 >
-        {
-            static inline const char * call()
-            {
-                return "operation42";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9154,15 +6560,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation43(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation43 >
-        {
-            static inline const char * call()
-            {
-                return "operation43";
             }
         };
 
@@ -9197,15 +6594,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation44 >
-        {
-            static inline const char * call()
-            {
-                return "operation44";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9234,15 +6622,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation45(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation45 >
-        {
-            static inline const char * call()
-            {
-                return "operation45";
             }
         };
 
@@ -9277,15 +6656,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation46 >
-        {
-            static inline const char * call()
-            {
-                return "operation46";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9314,15 +6684,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation47(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation47 >
-        {
-            static inline const char * call()
-            {
-                return "operation47";
             }
         };
 
@@ -9357,15 +6718,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation48 >
-        {
-            static inline const char * call()
-            {
-                return "operation48";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9394,15 +6746,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation49(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation49 >
-        {
-            static inline const char * call()
-            {
-                return "operation49";
             }
         };
 
@@ -9437,15 +6780,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation50 >
-        {
-            static inline const char * call()
-            {
-                return "operation50";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9474,15 +6808,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation51(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation51 >
-        {
-            static inline const char * call()
-            {
-                return "operation51";
             }
         };
 
@@ -9517,15 +6842,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation52 >
-        {
-            static inline const char * call()
-            {
-                return "operation52";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9554,15 +6870,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation53(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation53 >
-        {
-            static inline const char * call()
-            {
-                return "operation53";
             }
         };
 
@@ -9597,15 +6904,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation54 >
-        {
-            static inline const char * call()
-            {
-                return "operation54";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9634,15 +6932,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation55(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation55 >
-        {
-            static inline const char * call()
-            {
-                return "operation55";
             }
         };
 
@@ -9677,15 +6966,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation56 >
-        {
-            static inline const char * call()
-            {
-                return "operation56";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9714,15 +6994,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation57(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation57 >
-        {
-            static inline const char * call()
-            {
-                return "operation57";
             }
         };
 
@@ -9757,15 +7028,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation58 >
-        {
-            static inline const char * call()
-            {
-                return "operation58";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9794,15 +7056,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation59(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation59 >
-        {
-            static inline const char * call()
-            {
-                return "operation59";
             }
         };
 
@@ -9837,15 +7090,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation60 >
-        {
-            static inline const char * call()
-            {
-                return "operation60";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9874,15 +7118,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation61(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation61 >
-        {
-            static inline const char * call()
-            {
-                return "operation61";
             }
         };
 
@@ -9917,15 +7152,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation62 >
-        {
-            static inline const char * call()
-            {
-                return "operation62";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -9954,15 +7180,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation63(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation63 >
-        {
-            static inline const char * call()
-            {
-                return "operation63";
             }
         };
 
@@ -9997,15 +7214,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation64 >
-        {
-            static inline const char * call()
-            {
-                return "operation64";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10034,15 +7242,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation65(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation65 >
-        {
-            static inline const char * call()
-            {
-                return "operation65";
             }
         };
 
@@ -10077,15 +7276,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation66 >
-        {
-            static inline const char * call()
-            {
-                return "operation66";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10114,15 +7304,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation67(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation67 >
-        {
-            static inline const char * call()
-            {
-                return "operation67";
             }
         };
 
@@ -10157,15 +7338,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation68 >
-        {
-            static inline const char * call()
-            {
-                return "operation68";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10194,15 +7366,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation69(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation69 >
-        {
-            static inline const char * call()
-            {
-                return "operation69";
             }
         };
 
@@ -10237,15 +7400,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation70 >
-        {
-            static inline const char * call()
-            {
-                return "operation70";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10274,15 +7428,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation71(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation71 >
-        {
-            static inline const char * call()
-            {
-                return "operation71";
             }
         };
 
@@ -10317,15 +7462,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation72 >
-        {
-            static inline const char * call()
-            {
-                return "operation72";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10354,15 +7490,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation73(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation73 >
-        {
-            static inline const char * call()
-            {
-                return "operation73";
             }
         };
 
@@ -10397,15 +7524,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation74 >
-        {
-            static inline const char * call()
-            {
-                return "operation74";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10434,15 +7552,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation75(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation75 >
-        {
-            static inline const char * call()
-            {
-                return "operation75";
             }
         };
 
@@ -10477,15 +7586,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation76 >
-        {
-            static inline const char * call()
-            {
-                return "operation76";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10514,15 +7614,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation77(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation77 >
-        {
-            static inline const char * call()
-            {
-                return "operation77";
             }
         };
 
@@ -10557,15 +7648,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation78 >
-        {
-            static inline const char * call()
-            {
-                return "operation78";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10594,15 +7676,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation79(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation79 >
-        {
-            static inline const char * call()
-            {
-                return "operation79";
             }
         };
 
@@ -10637,15 +7710,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation80 >
-        {
-            static inline const char * call()
-            {
-                return "operation80";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10674,15 +7738,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation81(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation81 >
-        {
-            static inline const char * call()
-            {
-                return "operation81";
             }
         };
 
@@ -10717,15 +7772,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation82 >
-        {
-            static inline const char * call()
-            {
-                return "operation82";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10754,15 +7800,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation83(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation83 >
-        {
-            static inline const char * call()
-            {
-                return "operation83";
             }
         };
 
@@ -10797,15 +7834,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation84 >
-        {
-            static inline const char * call()
-            {
-                return "operation84";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10834,15 +7862,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation85(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation85 >
-        {
-            static inline const char * call()
-            {
-                return "operation85";
             }
         };
 
@@ -10877,15 +7896,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation86 >
-        {
-            static inline const char * call()
-            {
-                return "operation86";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10914,15 +7924,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation87(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation87 >
-        {
-            static inline const char * call()
-            {
-                return "operation87";
             }
         };
 
@@ -10957,15 +7958,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation88 >
-        {
-            static inline const char * call()
-            {
-                return "operation88";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -10994,15 +7986,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation89(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation89 >
-        {
-            static inline const char * call()
-            {
-                return "operation89";
             }
         };
 
@@ -11037,15 +8020,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation90 >
-        {
-            static inline const char * call()
-            {
-                return "operation90";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11074,15 +8048,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation91(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation91 >
-        {
-            static inline const char * call()
-            {
-                return "operation91";
             }
         };
 
@@ -11117,15 +8082,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation92 >
-        {
-            static inline const char * call()
-            {
-                return "operation92";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11154,15 +8110,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation93(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation93 >
-        {
-            static inline const char * call()
-            {
-                return "operation93";
             }
         };
 
@@ -11197,15 +8144,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation94 >
-        {
-            static inline const char * call()
-            {
-                return "operation94";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11234,15 +8172,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation95(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation95 >
-        {
-            static inline const char * call()
-            {
-                return "operation95";
             }
         };
 
@@ -11277,15 +8206,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation96 >
-        {
-            static inline const char * call()
-            {
-                return "operation96";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11314,15 +8234,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation97(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation97 >
-        {
-            static inline const char * call()
-            {
-                return "operation97";
             }
         };
 
@@ -11357,15 +8268,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation98 >
-        {
-            static inline const char * call()
-            {
-                return "operation98";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11394,15 +8296,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation99(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation99 >
-        {
-            static inline const char * call()
-            {
-                return "operation99";
             }
         };
 
@@ -11437,15 +8330,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation100 >
-        {
-            static inline const char * call()
-            {
-                return "operation100";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11474,15 +8358,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation101(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation101 >
-        {
-            static inline const char * call()
-            {
-                return "operation101";
             }
         };
 
@@ -11517,15 +8392,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation102 >
-        {
-            static inline const char * call()
-            {
-                return "operation102";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11554,15 +8420,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation103(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation103 >
-        {
-            static inline const char * call()
-            {
-                return "operation103";
             }
         };
 
@@ -11597,15 +8454,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation104 >
-        {
-            static inline const char * call()
-            {
-                return "operation104";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11634,15 +8482,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation105(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation105 >
-        {
-            static inline const char * call()
-            {
-                return "operation105";
             }
         };
 
@@ -11677,15 +8516,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation106 >
-        {
-            static inline const char * call()
-            {
-                return "operation106";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11714,15 +8544,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation107(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation107 >
-        {
-            static inline const char * call()
-            {
-                return "operation107";
             }
         };
 
@@ -11757,15 +8578,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation108 >
-        {
-            static inline const char * call()
-            {
-                return "operation108";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11794,15 +8606,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation109(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation109 >
-        {
-            static inline const char * call()
-            {
-                return "operation109";
             }
         };
 
@@ -11837,15 +8640,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation110 >
-        {
-            static inline const char * call()
-            {
-                return "operation110";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11874,15 +8668,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation111(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation111 >
-        {
-            static inline const char * call()
-            {
-                return "operation111";
             }
         };
 
@@ -11917,15 +8702,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation112 >
-        {
-            static inline const char * call()
-            {
-                return "operation112";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -11954,15 +8730,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation113(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation113 >
-        {
-            static inline const char * call()
-            {
-                return "operation113";
             }
         };
 
@@ -11997,15 +8764,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation114 >
-        {
-            static inline const char * call()
-            {
-                return "operation114";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12034,15 +8792,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation115(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation115 >
-        {
-            static inline const char * call()
-            {
-                return "operation115";
             }
         };
 
@@ -12077,15 +8826,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation116 >
-        {
-            static inline const char * call()
-            {
-                return "operation116";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12114,15 +8854,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation117(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation117 >
-        {
-            static inline const char * call()
-            {
-                return "operation117";
             }
         };
 
@@ -12157,15 +8888,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation118 >
-        {
-            static inline const char * call()
-            {
-                return "operation118";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12194,15 +8916,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation119(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation119 >
-        {
-            static inline const char * call()
-            {
-                return "operation119";
             }
         };
 
@@ -12237,15 +8950,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation120 >
-        {
-            static inline const char * call()
-            {
-                return "operation120";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12274,15 +8978,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation121(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation121 >
-        {
-            static inline const char * call()
-            {
-                return "operation121";
             }
         };
 
@@ -12317,15 +9012,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation122 >
-        {
-            static inline const char * call()
-            {
-                return "operation122";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12354,15 +9040,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation123(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation123 >
-        {
-            static inline const char * call()
-            {
-                return "operation123";
             }
         };
 
@@ -12397,15 +9074,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation124 >
-        {
-            static inline const char * call()
-            {
-                return "operation124";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12434,15 +9102,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation125(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation125 >
-        {
-            static inline const char * call()
-            {
-                return "operation125";
             }
         };
 
@@ -12477,15 +9136,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation126 >
-        {
-            static inline const char * call()
-            {
-                return "operation126";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12514,15 +9164,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation127(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation127 >
-        {
-            static inline const char * call()
-            {
-                return "operation127";
             }
         };
 
@@ -12557,15 +9198,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation128 >
-        {
-            static inline const char * call()
-            {
-                return "operation128";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12594,15 +9226,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation129(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation129 >
-        {
-            static inline const char * call()
-            {
-                return "operation129";
             }
         };
 
@@ -12637,15 +9260,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation130 >
-        {
-            static inline const char * call()
-            {
-                return "operation130";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12674,15 +9288,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation131(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation131 >
-        {
-            static inline const char * call()
-            {
-                return "operation131";
             }
         };
 
@@ -12717,15 +9322,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation132 >
-        {
-            static inline const char * call()
-            {
-                return "operation132";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12754,15 +9350,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation133(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation133 >
-        {
-            static inline const char * call()
-            {
-                return "operation133";
             }
         };
 
@@ -12797,15 +9384,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation134 >
-        {
-            static inline const char * call()
-            {
-                return "operation134";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12834,15 +9412,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation135(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation135 >
-        {
-            static inline const char * call()
-            {
-                return "operation135";
             }
         };
 
@@ -12877,15 +9446,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation136 >
-        {
-            static inline const char * call()
-            {
-                return "operation136";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12914,15 +9474,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation137(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation137 >
-        {
-            static inline const char * call()
-            {
-                return "operation137";
             }
         };
 
@@ -12957,15 +9508,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation138 >
-        {
-            static inline const char * call()
-            {
-                return "operation138";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -12994,15 +9536,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation139(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation139 >
-        {
-            static inline const char * call()
-            {
-                return "operation139";
             }
         };
 
@@ -13037,15 +9570,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation140 >
-        {
-            static inline const char * call()
-            {
-                return "operation140";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13074,15 +9598,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation141(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation141 >
-        {
-            static inline const char * call()
-            {
-                return "operation141";
             }
         };
 
@@ -13117,15 +9632,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation142 >
-        {
-            static inline const char * call()
-            {
-                return "operation142";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13154,15 +9660,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation143(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation143 >
-        {
-            static inline const char * call()
-            {
-                return "operation143";
             }
         };
 
@@ -13197,15 +9694,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation144 >
-        {
-            static inline const char * call()
-            {
-                return "operation144";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13234,15 +9722,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation145(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation145 >
-        {
-            static inline const char * call()
-            {
-                return "operation145";
             }
         };
 
@@ -13277,15 +9756,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation146 >
-        {
-            static inline const char * call()
-            {
-                return "operation146";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13314,15 +9784,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation147(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation147 >
-        {
-            static inline const char * call()
-            {
-                return "operation147";
             }
         };
 
@@ -13357,15 +9818,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation148 >
-        {
-            static inline const char * call()
-            {
-                return "operation148";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13394,15 +9846,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation149(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation149 >
-        {
-            static inline const char * call()
-            {
-                return "operation149";
             }
         };
 
@@ -13437,15 +9880,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation150 >
-        {
-            static inline const char * call()
-            {
-                return "operation150";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13474,15 +9908,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation151(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation151 >
-        {
-            static inline const char * call()
-            {
-                return "operation151";
             }
         };
 
@@ -13517,15 +9942,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation152 >
-        {
-            static inline const char * call()
-            {
-                return "operation152";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13554,15 +9970,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation153(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation153 >
-        {
-            static inline const char * call()
-            {
-                return "operation153";
             }
         };
 
@@ -13597,15 +10004,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation154 >
-        {
-            static inline const char * call()
-            {
-                return "operation154";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13634,15 +10032,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation155(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation155 >
-        {
-            static inline const char * call()
-            {
-                return "operation155";
             }
         };
 
@@ -13677,15 +10066,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation156 >
-        {
-            static inline const char * call()
-            {
-                return "operation156";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13714,15 +10094,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation157(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation157 >
-        {
-            static inline const char * call()
-            {
-                return "operation157";
             }
         };
 
@@ -13757,15 +10128,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation158 >
-        {
-            static inline const char * call()
-            {
-                return "operation158";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13794,15 +10156,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation159(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation159 >
-        {
-            static inline const char * call()
-            {
-                return "operation159";
             }
         };
 
@@ -13837,15 +10190,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation160 >
-        {
-            static inline const char * call()
-            {
-                return "operation160";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13874,15 +10218,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation161(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation161 >
-        {
-            static inline const char * call()
-            {
-                return "operation161";
             }
         };
 
@@ -13917,15 +10252,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation162 >
-        {
-            static inline const char * call()
-            {
-                return "operation162";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -13954,15 +10280,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation163(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation163 >
-        {
-            static inline const char * call()
-            {
-                return "operation163";
             }
         };
 
@@ -13997,15 +10314,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation164 >
-        {
-            static inline const char * call()
-            {
-                return "operation164";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14034,15 +10342,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation165(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation165 >
-        {
-            static inline const char * call()
-            {
-                return "operation165";
             }
         };
 
@@ -14077,15 +10376,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation166 >
-        {
-            static inline const char * call()
-            {
-                return "operation166";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14114,15 +10404,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation167(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation167 >
-        {
-            static inline const char * call()
-            {
-                return "operation167";
             }
         };
 
@@ -14157,15 +10438,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation168 >
-        {
-            static inline const char * call()
-            {
-                return "operation168";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14194,15 +10466,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation169(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation169 >
-        {
-            static inline const char * call()
-            {
-                return "operation169";
             }
         };
 
@@ -14237,15 +10500,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation170 >
-        {
-            static inline const char * call()
-            {
-                return "operation170";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14274,15 +10528,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation171(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation171 >
-        {
-            static inline const char * call()
-            {
-                return "operation171";
             }
         };
 
@@ -14317,15 +10562,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation172 >
-        {
-            static inline const char * call()
-            {
-                return "operation172";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14354,15 +10590,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation173(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation173 >
-        {
-            static inline const char * call()
-            {
-                return "operation173";
             }
         };
 
@@ -14397,15 +10624,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation174 >
-        {
-            static inline const char * call()
-            {
-                return "operation174";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14434,15 +10652,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation175(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation175 >
-        {
-            static inline const char * call()
-            {
-                return "operation175";
             }
         };
 
@@ -14477,15 +10686,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation176 >
-        {
-            static inline const char * call()
-            {
-                return "operation176";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14514,15 +10714,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation177(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation177 >
-        {
-            static inline const char * call()
-            {
-                return "operation177";
             }
         };
 
@@ -14557,15 +10748,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation178 >
-        {
-            static inline const char * call()
-            {
-                return "operation178";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14594,15 +10776,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation179(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation179 >
-        {
-            static inline const char * call()
-            {
-                return "operation179";
             }
         };
 
@@ -14637,15 +10810,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation180 >
-        {
-            static inline const char * call()
-            {
-                return "operation180";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14674,15 +10838,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation181(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation181 >
-        {
-            static inline const char * call()
-            {
-                return "operation181";
             }
         };
 
@@ -14717,15 +10872,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation182 >
-        {
-            static inline const char * call()
-            {
-                return "operation182";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14754,15 +10900,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation183(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation183 >
-        {
-            static inline const char * call()
-            {
-                return "operation183";
             }
         };
 
@@ -14797,15 +10934,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation184 >
-        {
-            static inline const char * call()
-            {
-                return "operation184";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14834,15 +10962,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation185(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation185 >
-        {
-            static inline const char * call()
-            {
-                return "operation185";
             }
         };
 
@@ -14877,15 +10996,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation186 >
-        {
-            static inline const char * call()
-            {
-                return "operation186";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14914,15 +11024,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation187(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation187 >
-        {
-            static inline const char * call()
-            {
-                return "operation187";
             }
         };
 
@@ -14957,15 +11058,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation188 >
-        {
-            static inline const char * call()
-            {
-                return "operation188";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -14994,15 +11086,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation189(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation189 >
-        {
-            static inline const char * call()
-            {
-                return "operation189";
             }
         };
 
@@ -15037,15 +11120,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation190 >
-        {
-            static inline const char * call()
-            {
-                return "operation190";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -15074,15 +11148,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation191(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation191 >
-        {
-            static inline const char * call()
-            {
-                return "operation191";
             }
         };
 
@@ -15117,15 +11182,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation192 >
-        {
-            static inline const char * call()
-            {
-                return "operation192";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -15154,15 +11210,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation193(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation193 >
-        {
-            static inline const char * call()
-            {
-                return "operation193";
             }
         };
 
@@ -15197,15 +11244,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation194 >
-        {
-            static inline const char * call()
-            {
-                return "operation194";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -15234,15 +11272,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation195(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation195 >
-        {
-            static inline const char * call()
-            {
-                return "operation195";
             }
         };
 
@@ -15277,15 +11306,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation196 >
-        {
-            static inline const char * call()
-            {
-                return "operation196";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -15314,15 +11334,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation197(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation197 >
-        {
-            static inline const char * call()
-            {
-                return "operation197";
             }
         };
 
@@ -15357,15 +11368,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_Test::Huge::operation198 >
-        {
-            static inline const char * call()
-            {
-                return "operation198";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -15394,15 +11396,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation199(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_Test::Huge::operation199 >
-        {
-            static inline const char * call()
-            {
-                return "operation199";
             }
         };
 
