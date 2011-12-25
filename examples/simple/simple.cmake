@@ -17,7 +17,7 @@ add_custom_command(
 	COMMAND tao_idl ${TAO_IDL_OPTIONS} simple.idl
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(${CORBASIM_PREFIX}simple_idl SHARED ${simple_GENERATED})
+add_library(${CORBASIM_PREFIX}simple_idl SHARED ${simple_GENERATED} simple_adapted.cpp)
 
 	
 	
@@ -37,24 +37,10 @@ target_link_libraries(corbasim_lib_SimpleExample_Test
 add_executable(${CORBASIM_PREFIX}SimpleExample_Test_client SimpleExample_Test_client_main.cpp)
 target_link_libraries(${CORBASIM_PREFIX}SimpleExample_Test_client 
 	${CORBASIM_PREFIX}simple_idl
+	corbasim_lib_SimpleExample_Test
 	# CORBASIM Libraries
 	corbasim corbasim_qt)
 	
-# Injector	
-add_executable(${CORBASIM_PREFIX}SimpleExample_Test_injector SimpleExample_Test_injector.cpp)
-target_link_libraries(${CORBASIM_PREFIX}SimpleExample_Test_injector
-	${CORBASIM_PREFIX}simple_idl
-	# CORBASIM Libraries
-	corbasim)
-	
-# Server
-add_executable(${CORBASIM_PREFIX}SimpleExample_Test_server SimpleExample_Test_server.cpp)
-target_link_libraries(${CORBASIM_PREFIX}SimpleExample_Test_server 
-	${CORBASIM_PREFIX}simple_idl
-	# CORBASIM Libraries
-	corbasim
-	# Boost
-	boost_program_options)
 	
 	
 

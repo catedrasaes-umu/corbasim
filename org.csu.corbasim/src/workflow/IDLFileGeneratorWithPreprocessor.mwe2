@@ -1,11 +1,11 @@
 module workflow.IDLFileGeneratorWithPreprocessor
 
-var idlFile = "/home/asenac/svn-corbasim/corbasim/examples/huge/huge.idl"
+var idlFile = "/home/asenac/svn-corbasim/corbasim/examples/simple/simple.idl"
 var fileEncoding = "UTF-8"
 
 // Parameters
-var targetDir = "/home/asenac/svn-corbasim/corbasim/examples/huge"
-var genClient = false
+var targetDir = "/home/asenac/svn-corbasim/corbasim/examples/simple"
+var genClient = true
 var genServer = false
 var genInjector = false
 var genCMake = true

@@ -81,24 +81,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct full_qualified_name< SimpleExample::MyUnion >
-        {
-            static inline const char * call()
-            {
-                return "SimpleExample::MyUnion";
-            }
-        };
-
-        template< >
-        struct name< SimpleExample::MyUnion >
-        {
-            static inline const char * call()
-            {
-                return "MyUnion";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -134,32 +116,6 @@ namespace boost
 
     } // serialization
 } // boost
-
-namespace corbasim
-{
-    namespace adapted
-    {
-
-        template< >
-        struct full_qualified_name< SimpleExample::St >
-        {
-            static inline const char * call()
-            {
-                return "SimpleExample::St";
-            }
-        };
-
-        template< >
-        struct name< SimpleExample::St >
-        {
-            static inline const char * call()
-            {
-                return "St";
-            }
-        };
-
-    } // adapted
-} // corbasim
 
 
 namespace boost
@@ -248,33 +204,6 @@ namespace corbasim
             typedef SimpleExample::Test interface;
         };
 
-        template< >
-        struct full_qualified_name< SimpleExample::Test >
-        {
-            static inline const char * call()
-            {
-                return "SimpleExample::Test";
-            }
-        };
-
-        template< >
-        struct name< SimpleExample::Test >
-        {
-            static inline const char * call()
-            {
-                return "Test";
-            }
-        };
-
-        template< >
-        struct typecode< SimpleExample::Test >
-        {
-            static inline CORBA::TypeCode const * call()
-            {
-                return SimpleExample::_tc_Test;
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -309,32 +238,6 @@ namespace boost
     } // serialization
 } // boost
 
-namespace corbasim
-{
-    namespace adapted
-    {
-
-        template< >
-        struct full_qualified_name< SimpleExample::Hijo >
-        {
-            static inline const char * call()
-            {
-                return "SimpleExample::Hijo";
-            }
-        };
-
-        template< >
-        struct name< SimpleExample::Hijo >
-        {
-            static inline const char * call()
-            {
-                return "Hijo";
-            }
-        };
-
-    } // adapted
-} // corbasim
-
 
 // StructDef: SimpleExample::Padre
 BOOST_FUSION_ADAPT_STRUCT(
@@ -361,32 +264,6 @@ namespace boost
 
     } // serialization
 } // boost
-
-namespace corbasim
-{
-    namespace adapted
-    {
-
-        template< >
-        struct full_qualified_name< SimpleExample::Padre >
-        {
-            static inline const char * call()
-            {
-                return "SimpleExample::Padre";
-            }
-        };
-
-        template< >
-        struct name< SimpleExample::Padre >
-        {
-            static inline const char * call()
-            {
-                return "Padre";
-            }
-        };
-
-    } // adapted
-} // corbasim
 
 
 // StructDef: SimpleExample::Abuelo
@@ -417,32 +294,6 @@ namespace boost
     } // serialization
 } // boost
 
-namespace corbasim
-{
-    namespace adapted
-    {
-
-        template< >
-        struct full_qualified_name< SimpleExample::Abuelo >
-        {
-            static inline const char * call()
-            {
-                return "SimpleExample::Abuelo";
-            }
-        };
-
-        template< >
-        struct name< SimpleExample::Abuelo >
-        {
-            static inline const char * call()
-            {
-                return "Abuelo";
-            }
-        };
-
-    } // adapted
-} // corbasim
-
 
 namespace _corbasim_SimpleExample
 {
@@ -462,7 +313,6 @@ namespace _corbasim_SimpleExample
 
     namespace Test
     {
-
         struct __operation1
         {
             typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long >,
@@ -477,22 +327,12 @@ namespace _corbasim_SimpleExample
             ::CORBA::Long b;
             SimpleExample::St c;
 
-            __operation1()
-            {
-            }
+            __operation1();
 
-            __operation1(::CORBA::Long _a, ::CORBA::Long _b, const SimpleExample::St& _c):
-            a(_a), b(_b), c(_c)
-            {
-
-            }
+            __operation1(::CORBA::Long _a, ::CORBA::Long _b, const SimpleExample::St& _c);
 
             // Copy constructor
-            __operation1(const __operation1& o) :
-            a(o.a), b(o.b), c(o.c)
-            {
-
-            }
+            __operation1(const __operation1& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -513,22 +353,12 @@ namespace _corbasim_SimpleExample
 
             SimpleExample::Test_var a;
 
-            __operation4()
-            {
-            }
+            __operation4();
 
-            __operation4(SimpleExample::Test_ptr _a)
-            {
-
-                a = SimpleExample::Test::_duplicate(_a);
-            }
+            __operation4(SimpleExample::Test_ptr _a);
 
             // Copy constructor
-            __operation4(const __operation4& o)
-            {
-
-                a = o.a;
-            }
+            __operation4(const __operation4& o);
 
             template< typename Archive >
             void serialize(Archive& ar, const unsigned int /* unused */)
@@ -574,13 +404,10 @@ namespace corbasim
         template< >
         struct interface< SimpleExample::Test >
         {
-            typedef cs_mpl::vector< _corbasim_SimpleExample::Test::operation1,
-                    _corbasim_SimpleExample::Test::operation4 > _op_list;
-            typedef cs_mpl::vector< _corbasim_SimpleExample::Test::operation1,
-                    _corbasim_SimpleExample::Test::operation4 > _sorted_op_list;
-            typedef cs_mpl::vector< _corbasim_SimpleExample::Test::operation1,
-                    _corbasim_SimpleExample::Test::operation4 > _own_op_list;
-            typedef cs_mpl::vector< > _parent_list;
+            typedef cs_mpl::list< _corbasim_SimpleExample::Test::operation1,
+                    cs_mpl::list< _corbasim_SimpleExample::Test::operation4 > >
+                    _op_list;
+
         };
 
     } // adapted
@@ -615,15 +442,6 @@ namespace corbasim
             }
         };
 
-        template< >
-        struct name< _corbasim_SimpleExample::Test::operation1 >
-        {
-            static inline const char * call()
-            {
-                return "operation1";
-            }
-        };
-
     } // adapted
 } // corbasim
 
@@ -648,15 +466,6 @@ namespace corbasim
             static inline void invoke(Interface * ref, Value& value)
             {
                 ref->operation4(value.a);
-            }
-        };
-
-        template< >
-        struct name< _corbasim_SimpleExample::Test::operation4 >
-        {
-            static inline const char * call()
-            {
-                return "operation4";
             }
         };
 

@@ -196,7 +196,7 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
     }
 }
 
-void SimpleClient::initialize(gui::gui_factory_base * factory)
+void SimpleClient::initialize(gui::gui_factory_base const * factory)
 {
     QGridLayout * grid = NULL;
     const unsigned int count = factory->operation_count();

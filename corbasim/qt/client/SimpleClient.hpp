@@ -48,7 +48,7 @@ public:
     SimpleClient(QWidget * parent = 0);
     virtual ~SimpleClient();
 
-    void initialize(gui::gui_factory_base *);
+    void initialize(gui::gui_factory_base const *);
     void setReference(CORBA::Object_ptr ref);
 
 public slots:
@@ -64,7 +64,7 @@ public slots:
 
 protected:
     core::interface_caller_ptr m_caller;
-    gui::gui_factory_base * m_factory;
+    gui::gui_factory_base const * m_factory;
     QTabWidget * m_tab;
     LogTreeWidget * m_tree;
     ObjrefWidget * m_ref;

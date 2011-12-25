@@ -1,14 +1,9 @@
 #include <corbasim/impl.hpp>
 #include "simpleC.h"
-#include "simple_adapted.hpp"
-#include "simple_servant.hpp"
-#include <corbasim/gui/widgets.hpp>
-#include <corbasim/gui/dialogs.hpp>
-#include <corbasim/gui/trees.hpp>
 #include <corbasim/qt/client/SimpleClient.hpp>
 
-/*PROTECTED REGION ID(SimpleExample_Test::custom_widgets_region) ENABLED START*/
-/*PROTECTED REGION END*/
+extern "C" const corbasim::gui::gui_factory_base
+        * corbasim_lib_SimpleExample_Test();
 
 int main(int argc, char **argv)
 {
@@ -18,13 +13,16 @@ int main(int argc, char **argv)
     CORBA::ORB_var orb = CORBA::ORB_init( argc, argv);
     CORBA::Object_var obj;
 
+    corbasim::qt::client::SimpleClient window;
+    window.initialize( corbasim_lib_SimpleExample_Test());
+
     if (argc > 1)
+    {
         obj = orb->string_to_object( argv[1]);
 
-    SimpleExample::Test_var _Test = SimpleExample::Test::_narrow( obj.in());
+        window.setReference( obj);
+    }
 
-    corbasim::qt::client::SimpleClient window;
-    window.initialize( _Test.in());
     window.show();
     return app.exec();
 }
