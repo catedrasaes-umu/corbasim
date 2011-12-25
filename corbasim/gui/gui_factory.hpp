@@ -53,17 +53,17 @@ struct operation_factory : public operation_factory_base
         return tag< Value >::value(); 
     }
 
-    static inline operation_factory * get_instance()
+    static inline operation_factory const * get_instance()
     {
         static boost::shared_ptr< operation_factory > _instance(
                 new operation_factory);
         return _instance.get();
     }
 
-    typedef operation_tree_factory< Value > tree_factory_t;
-
     QTreeWidgetItem * create_tree(event::event* ev) const
     {
+        typedef operation_tree_factory< Value > tree_factory_t;
+
         return tree_factory_t::create_tree_impl(ev);
     }
 };
@@ -85,7 +85,7 @@ struct gui_factory : public gui_factory_base
         return core::request_serializer< Interface >::get_instance();
     }
 */
-    core::factory_base * get_core_factory() const
+    core::factory_base const * get_core_factory() const
     {
         return core::factory< Interface >::get_instance();
     }
@@ -94,12 +94,12 @@ struct gui_factory : public gui_factory_base
     inline void append()
     {
         typedef operation_factory< Value > factory_t;
-        operation_factory_base * f = factory_t::get_instance();
+        operation_factory_base const * f = factory_t::get_instance();
 
         insert_factory(f->get_name(), f->get_tag(), f);
     }
 
-    static inline gui_factory * get_instance()
+    static inline gui_factory const * get_instance()
     {
         static boost::shared_ptr< gui_factory > 
             _instance(new gui_factory);

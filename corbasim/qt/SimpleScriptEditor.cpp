@@ -248,7 +248,7 @@ SimpleScriptEditor::~SimpleScriptEditor()
 {
 }
 
-void SimpleScriptEditor::initialize(const gui::gui_factory_base * factory)
+void SimpleScriptEditor::initialize(gui::gui_factory_base const * factory)
 {
     unsigned int count = factory->operation_count();
 
@@ -504,7 +504,7 @@ void SimpleScriptEditor::copySelected()
         event::request_ptr selected = 
             *boost::next(m_requests.begin(), pos);
 
-        const gui::operation_factory_base * op =
+        gui::operation_factory_base const * op =
             m_factory->get_factory_by_tag(selected->get_tag());
 
         int cb_pos = m_selector->findText(

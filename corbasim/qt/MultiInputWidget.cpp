@@ -39,7 +39,7 @@ MultiInputWidget::~MultiInputWidget()
 {
 }
 
-void MultiInputWidget::initialize(const gui::gui_factory_base * factory)
+void MultiInputWidget::initialize(gui::gui_factory_base const * factory)
 {
     m_factory = factory;
 
@@ -126,7 +126,7 @@ MultiInputForm::~MultiInputForm()
 {
 }
 
-void MultiInputForm::initialize(const gui::gui_factory_base * factory)
+void MultiInputForm::initialize(gui::gui_factory_base const * factory)
 {
     unsigned int count = factory->operation_count();
 
@@ -176,7 +176,7 @@ MultiSenderDialog::~MultiSenderDialog()
 {
 }
 
-void MultiSenderDialog::initialize(const gui::gui_factory_base * factory)
+void MultiSenderDialog::initialize(gui::gui_factory_base const * factory)
 {
     unsigned int count = factory->operation_count();
 

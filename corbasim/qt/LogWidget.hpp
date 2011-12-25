@@ -37,7 +37,7 @@ public:
     LogWidget(QWidget * parent = 0);
     virtual ~LogWidget();
 
-    void initialize(gui::gui_factory_base * factory);
+    void initialize(gui::gui_factory_base const * factory);
 
 public slots:
 
@@ -49,7 +49,7 @@ public slots:
 protected:
 
     LogTreeWidget * m_tree;
-    gui::gui_factory_base * m_factory;
+    gui::gui_factory_base const * m_factory;
 };
 
 } // namespace qt

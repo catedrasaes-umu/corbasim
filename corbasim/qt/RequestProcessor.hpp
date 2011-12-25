@@ -48,8 +48,8 @@ public:
     RequestProcessor(QWidget * parent = 0);
     virtual ~RequestProcessor();
 
-    void initialize(gui::gui_factory_base * input_factory,
-            gui::gui_factory_base* output_factory);
+    void initialize(gui::gui_factory_base const * input_factory,
+            gui::gui_factory_base const * output_factory);
 
 public slots:
 
@@ -81,7 +81,7 @@ public:
 
     QPushButton * getSaveButton();
 
-    void initialize(gui::operation_factory_base * factory);
+    void initialize(gui::operation_factory_base const * factory);
 
     QString getCode();
     bool isEnabled();
@@ -98,7 +98,7 @@ protected:
     QCheckBox * m_enabled;
     QTextEdit * m_code;
 
-    gui::operation_factory_base * m_factory;
+    gui::operation_factory_base const * m_factory;
 };
 
 class RequestProcessorMain : public QMainWindow
@@ -108,8 +108,8 @@ public:
     RequestProcessorMain(QWidget * parent = 0);
     virtual ~RequestProcessorMain();
 
-    void initialize(gui::gui_factory_base * input_factory,
-            gui::gui_factory_base* output_factory);
+    void initialize(gui::gui_factory_base const * input_factory,
+            gui::gui_factory_base const * output_factory);
 
 public slots:
 
@@ -146,8 +146,8 @@ protected:
     LogWidget * m_input_log;
     LogWidget * m_output_log;
 
-    gui::gui_factory_base * m_input_factory;
-    gui::gui_factory_base * m_output_factory;
+    gui::gui_factory_base const * m_input_factory;
+    gui::gui_factory_base const * m_output_factory;
 
     SimpleScriptEditor * m_input_stim;
     SimpleScriptEditor * m_output_stim;

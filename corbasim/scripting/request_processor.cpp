@@ -24,7 +24,7 @@ using namespace corbasim;
 using namespace corbasim::scripting;
 
 request_processor::request_processor(interpreter_ptr interpreter_,
-        core::factory_base * factory_) :
+        core::factory_base const * factory_) :
     m_interpreter(interpreter_), m_factory(factory_)
 {
 }

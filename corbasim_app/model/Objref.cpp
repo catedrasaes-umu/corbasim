@@ -18,7 +18,7 @@
  */
 
 #include "Objref.hpp"
-#include <corbasim/core/factory.hpp>
+#include <corbasim/core/factory_fwd.hpp>
 
 using namespace corbasim::app::model;
 

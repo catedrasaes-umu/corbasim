@@ -18,7 +18,7 @@
  */
 
 #include "Servant.hpp"
-#include <corbasim/core/factory.hpp>
+#include <corbasim/core/factory_fwd.hpp>
 #include <corbasim/impl.hpp>
 #include "../AppController.hpp"
 

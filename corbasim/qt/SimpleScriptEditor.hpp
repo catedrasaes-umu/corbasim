@@ -39,7 +39,7 @@ public:
     SimpleScriptEditor(QWidget * parent = 0);
     virtual ~SimpleScriptEditor();
 
-    void initialize(const gui::gui_factory_base * factory);
+    void initialize(gui::gui_factory_base const * factory);
 
 public slots:
     void appendRequest();
@@ -84,7 +84,7 @@ protected:
     
     requests_t m_requests;
 
-    const gui::gui_factory_base * m_factory;
+    gui::gui_factory_base const * m_factory;
 
     void hideEvent(QHideEvent * event);
 };

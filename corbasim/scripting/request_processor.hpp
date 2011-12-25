@@ -52,7 +52,7 @@ public:
 
 
     request_processor(interpreter_ptr interpreter_,
-            core::factory_base * factory_);
+            core::factory_base const * factory_);
 
     virtual ~request_processor();
 
@@ -66,7 +66,7 @@ protected:
 
     interpreter_ptr m_interpreter;
     
-    core::factory_base * m_factory;
+    core::factory_base const * m_factory;
 };
 
 } // namespace scripting

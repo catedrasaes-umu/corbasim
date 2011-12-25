@@ -39,8 +39,8 @@ RequestProcessor::~RequestProcessor()
 }
 
 void RequestProcessor::initialize(
-        gui::gui_factory_base * input_factory,
-        gui::gui_factory_base * output_factory)
+        gui::gui_factory_base const * input_factory,
+        gui::gui_factory_base const * output_factory)
 {
     unsigned int count = input_factory->operation_count();
 
@@ -53,7 +53,7 @@ void RequestProcessor::initialize(
         TriggerConfigurator * trigger = new TriggerConfigurator;
         m_triggers.push_back(trigger);
 
-        gui::operation_factory_base * op =
+        gui::operation_factory_base const * op =
             input_factory->get_factory_by_index(i);
 
         QGroupBox * gb = new QGroupBox(op->get_name());
@@ -156,7 +156,7 @@ TriggerConfigurator::~TriggerConfigurator()
 {
 }
 
-void TriggerConfigurator::initialize(gui::operation_factory_base * factory)
+void TriggerConfigurator::initialize(gui::operation_factory_base const * factory)
 {
     m_factory = factory;
 }
@@ -458,8 +458,8 @@ RequestProcessorMain::~RequestProcessorMain()
 }
 
 void RequestProcessorMain::initialize(
-        gui::gui_factory_base * input_factory,
-        gui::gui_factory_base* output_factory)
+        gui::gui_factory_base const * input_factory,
+        gui::gui_factory_base const * output_factory)
 {
     m_input_factory = input_factory;
     m_output_factory = output_factory;

@@ -183,7 +183,7 @@ ScriptEditor::~ScriptEditor()
 {
 }
 
-void ScriptEditor::initialize(gui::gui_factory_base * factory)
+void ScriptEditor::initialize(gui::gui_factory_base const * factory)
 {
     unsigned int count = factory->operation_count();
 

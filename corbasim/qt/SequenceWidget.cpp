@@ -22,7 +22,7 @@
 using namespace corbasim;
 using namespace corbasim::qt;
 
-SequenceWidget::SequenceWidget(gui::widget_factory_base * factory, QWidget * parent) :
+SequenceWidget::SequenceWidget(gui::widget_factory_base const * factory, QWidget * parent) :
     QWidget(parent), m_factory(factory)
 {
     QVBoxLayout * layout = new QVBoxLayout;

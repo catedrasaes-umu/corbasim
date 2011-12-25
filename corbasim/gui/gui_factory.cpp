@@ -31,7 +31,7 @@ gui_factory_base::~gui_factory_base()
 }
 
 void gui_factory_base::insert_factory(const std::string& name,
-        tag_t tag, operation_factory_base * factory)
+        tag_t tag, operation_factory_base const * factory)
 {
     m_factories.push_back(factory);
 
@@ -45,13 +45,13 @@ unsigned int gui_factory_base::operation_count() const
     return m_factories.size();
 }
 
-operation_factory_base * gui_factory_base::get_factory_by_index(
+operation_factory_base const * gui_factory_base::get_factory_by_index(
         unsigned int idx) const
 {
     return m_factories[idx];
 }
 
-operation_factory_base * gui_factory_base::get_factory_by_name(
+operation_factory_base const * gui_factory_base::get_factory_by_name(
         const std::string& name) const
 {
     factories_by_name_t::const_iterator it;
@@ -63,7 +63,7 @@ operation_factory_base * gui_factory_base::get_factory_by_name(
     return NULL;
 }
 
-operation_factory_base * gui_factory_base::get_factory_by_tag(
+operation_factory_base const * gui_factory_base::get_factory_by_tag(
         tag_t tag) const
 {
     factories_by_tag_t::const_iterator it;

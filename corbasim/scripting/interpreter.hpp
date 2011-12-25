@@ -48,7 +48,7 @@ class interpreter
 {
 public:
 
-    virtual void register_factory(core::factory_base * factory) = 0;
+    virtual void register_factory(core::factory_base const * factory) = 0;
 
     /**
      * @brief Returns the main context of the interpreter.
@@ -82,7 +82,7 @@ public:
      * @param req A request.
      */
     virtual void request_to_context(context_ptr ctx, 
-            core::factory_base * factory,
+            core::factory_base const * factory,
             const char * name,
             event::request_ptr req) = 0;
 
@@ -110,7 +110,7 @@ public:
     interpreter_worker(interpreter_ptr interpreter_);
     virtual ~interpreter_worker();
 
-    void register_factory(core::factory_base * factory);
+    void register_factory(core::factory_base const * factory);
 
     context_ptr main_context();
     
@@ -120,7 +120,7 @@ public:
             const std::string& code);
 
     void request_to_context(context_ptr ctx, 
-            core::factory_base * factory,
+            core::factory_base const * factory,
             const char * name,
             event::request_ptr req);
 
@@ -128,13 +128,13 @@ protected:
 
     typedef boost::shared_ptr< std::string > string_ptr;
 
-    void do_register_factory(core::factory_base * factory);
+    void do_register_factory(core::factory_base const * factory);
 
     void do_exec_code(context_ptr ctx, 
             string_ptr code);
 
     void do_request_to_context(context_ptr ctx, 
-            core::factory_base * factory,
+            core::factory_base const * factory,
             const char * name,
             event::request_ptr req);
 

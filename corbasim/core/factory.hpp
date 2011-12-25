@@ -116,7 +116,7 @@ struct operation_factory : public operation_factory_base
         return impl;
     }
 
-    static inline operation_factory * get_instance()
+    static inline operation_factory const * get_instance()
     {
         static boost::shared_ptr< operation_factory > _instance(
                 new operation_factory);
@@ -168,12 +168,12 @@ struct factory : public factory_base
     inline void append()
     {
         typedef operation_factory< Value > factory_t;
-        operation_factory_base * f = factory_t::get_instance();
+        operation_factory_base const * f = factory_t::get_instance();
 
         insert_factory(f->get_name(), f->get_tag(), f);
     }
 
-    static inline factory * get_instance()
+    static inline factory const * get_instance()
     {
         static boost::shared_ptr< factory > _instance(new factory);
         return _instance.get();

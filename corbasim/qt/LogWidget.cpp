@@ -35,7 +35,7 @@ LogWidget::~LogWidget()
 {
 }
 
-void LogWidget::initialize(gui::gui_factory_base * factory)
+void LogWidget::initialize(gui::gui_factory_base const * factory)
 {
     m_factory = factory;
 }

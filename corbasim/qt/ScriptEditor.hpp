@@ -39,7 +39,7 @@ public:
     ScriptEditor(QWidget * parent = 0);
     virtual ~ScriptEditor();
 
-    void initialize(gui::gui_factory_base * factory);
+    void initialize(gui::gui_factory_base const * factory);
 
 public slots:
     void appendRequest();
@@ -68,7 +68,7 @@ protected:
     QTextEdit * m_code;
     QCheckBox * m_cbInsertAtEnd;
     
-    gui::gui_factory_base * m_factory;
+    gui::gui_factory_base const * m_factory;
 };
 
 } // namespace qt

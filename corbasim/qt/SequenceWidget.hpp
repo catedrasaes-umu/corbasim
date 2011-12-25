@@ -34,7 +34,7 @@ class SequenceWidget : public QWidget
 {
     Q_OBJECT
 public:
-    SequenceWidget(gui::widget_factory_base* factory, QWidget * parent = 0);
+    SequenceWidget(gui::widget_factory_base const * factory, QWidget * parent = 0);
     virtual ~SequenceWidget();
 
     typedef std::vector< widgets::widget_ptr > widgets_t;
@@ -48,7 +48,7 @@ public slots:
 
 protected:
 
-    gui::widget_factory_base* m_factory;
+    gui::widget_factory_base const * m_factory;
 
     QSpinBox * m_sbLength;
     QSpinBox * m_sbCurrentIndex;

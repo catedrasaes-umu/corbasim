@@ -18,7 +18,7 @@
  */
 
 #include "Objref.hpp"
-#include <corbasim/core/factory.hpp>
+#include <corbasim/core/factory_fwd.hpp>
 
 using namespace corbasim::app::view;
 
@@ -157,7 +157,7 @@ corbasim::qt::RequestDialog * Objref::getRequestDialog(int idx)
 
     if (!dlg)
     {
-        gui::operation_factory_base * op = 
+        gui::operation_factory_base const * op = 
             m_factory->get_factory_by_index(idx);
         const char * name = op->get_name();
 

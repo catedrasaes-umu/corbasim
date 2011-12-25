@@ -88,7 +88,7 @@ context_ptr interpreter_worker::new_context()
     return m_interpreter->new_context();
 }
 
-void interpreter_worker::register_factory(core::factory_base * factory)
+void interpreter_worker::register_factory(core::factory_base const * factory)
 {
     m_io_service.post(boost::bind(&interpreter_worker::do_register_factory,
                 this, factory));
@@ -104,7 +104,7 @@ void interpreter_worker::exec_code(context_ptr ctx,
 }
 
 void interpreter_worker::request_to_context(context_ptr ctx, 
-        core::factory_base * factory,
+        core::factory_base const * factory,
         const char * name,
         event::request_ptr req)
 {
@@ -113,7 +113,7 @@ void interpreter_worker::request_to_context(context_ptr ctx,
                 this, ctx, factory, name, req));
 }
 
-void interpreter_worker::do_register_factory(core::factory_base * factory)
+void interpreter_worker::do_register_factory(core::factory_base const * factory)
 {
     m_interpreter->register_factory(factory);
 }
@@ -125,7 +125,7 @@ void interpreter_worker::do_exec_code(context_ptr ctx,
 }
 
 void interpreter_worker::do_request_to_context(context_ptr ctx, 
-        core::factory_base * factory,
+        core::factory_base const * factory,
         const char * name,
         event::request_ptr req)
 {

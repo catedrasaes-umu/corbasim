@@ -52,10 +52,10 @@ struct operation_factory_base
 struct gui_factory_base
 {
     unsigned int operation_count() const;
-    operation_factory_base * get_factory_by_index(unsigned int idx) const;
-    operation_factory_base * get_factory_by_name(
+    operation_factory_base const * get_factory_by_index(unsigned int idx) const;
+    operation_factory_base const * get_factory_by_name(
             const std::string& name) const;
-    operation_factory_base * get_factory_by_tag(tag_t tag) const;
+    operation_factory_base const * get_factory_by_tag(tag_t tag) const;
 
     QTreeWidgetItem * create_tree(event::event* ev) const;
 
@@ -63,19 +63,19 @@ struct gui_factory_base
     // virtual core::request_serializer_base * get_serializer() const = 0;
 
     void insert_factory(const std::string& name,
-            tag_t tag, operation_factory_base * factory);
+            tag_t tag, operation_factory_base const * factory);
 
-    virtual core::factory_base * get_core_factory() const = 0;
+    virtual core::factory_base const * get_core_factory() const = 0;
 
     // Data
-    typedef std::vector< operation_factory_base * > factories_t;
+    typedef std::vector< operation_factory_base const * > factories_t;
     factories_t m_factories;
 
-    typedef std::map< std::string, operation_factory_base * > 
+    typedef std::map< std::string, operation_factory_base const * > 
         factories_by_name_t;
     factories_by_name_t m_factories_by_name;
 
-    typedef std::map< tag_t, operation_factory_base * > 
+    typedef std::map< tag_t, operation_factory_base const * > 
         factories_by_tag_t;
     factories_by_tag_t m_factories_by_tag;
 };
