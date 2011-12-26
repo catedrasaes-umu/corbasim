@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * LogTreeWidget.hpp
+ * dialogs_fwd.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,40 +17,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QT_LOGTREEWIDGET_HPP
-#define CORBASIM_QT_LOGTREEWIDGET_HPP
+#ifndef CORBASIM_DIALOGS_FWD_HPP
+#define CORBASIM_DIALOGS_FWD_HPP
 
-#include <QWidget>
+#include <boost/shared_ptr.hpp>
+#include <corbasim/event_fwd.hpp>
 
-class QTreeWidget;
-class QTreeWidgetItem;
+class QWidget;
 
 namespace corbasim 
 {
-namespace qt 
+namespace dialogs 
 {
 
-class LogTreeWidget : public QWidget
+struct input_base
 {
-    Q_OBJECT
-public:
+    virtual event::request* create_request() = 0;
+    virtual void copy_from_request(event::request*) = 0;
+    virtual QWidget* get_qwidget() = 0;
+    virtual void from_json(const std::string& str) = 0;
+    virtual void to_json(std::string& str) = 0;
 
-    LogTreeWidget(int max_items, QWidget * parent = 0);
-    virtual ~LogTreeWidget();
-
-public slots:
-
-    void appendItem(QTreeWidgetItem * item);
-    void clear();
-
-protected:
-
-    QTreeWidget * m_tree;
-    int m_max_items;
+    virtual const char * get_name() const = 0;
+    
+    virtual ~input_base() {}
 };
 
-} // namespace qt
+typedef boost::shared_ptr< input_base > input_ptr;
+
+} // namespace dialogs
 } // namespace corbasim
 
-#endif /* CORBASIM_QT_LOGTREEWIDGET_HPP */
+#endif /* CORBASIM_DIALOGS_FWD_HPP */
 

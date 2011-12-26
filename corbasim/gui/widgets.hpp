@@ -20,6 +20,8 @@
 #ifndef CORBASIM_WIDGETS_HPP
 #define CORBASIM_WIDGETS_HPP
 
+#include <QLabel>
+
 #include <corbasim/core/config.hpp>
 
 #include <corbasim/gui/widgets_fwd.hpp>

@@ -21,8 +21,11 @@
 #include <fstream>
 #include <iostream>
 #include <corbasim/qt/MultiInputWidget.hpp>
-#include <corbasim/gui/gui_factory.hpp>
+#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/gui/gui_factory_fwd.hpp>
 #include <boost/next_prior.hpp>
+
+#include <QtGui>
 
 using namespace corbasim;
 using namespace corbasim::qt;

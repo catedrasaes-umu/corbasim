@@ -20,7 +20,12 @@
 #ifndef CORBASIM_QT_MULTIFILESELECTIONWIDGET_HPP
 #define CORBASIM_QT_MULTIFILESELECTIONWIDGET_HPP
 
-#include <QtGui>
+#include <QWidget>
+#include <QStringList>
+
+class QLineEdit;
+class QCheckBox;
+class QSpinBox;
 
 namespace corbasim 
 {

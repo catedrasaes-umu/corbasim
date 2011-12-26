@@ -20,10 +20,15 @@
 #ifndef CORBASIM_QT_SCRIPTEDITOR_HPP
 #define CORBASIM_QT_SCRIPTEDITOR_HPP
 
-#include <QtGui>
+#include <QMainWindow>
 #include <list>
-#include <corbasim/event.hpp>
+#include <corbasim/event_fwd.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+
+class QComboBox;
+class QTextEdit;
+class QCheckBox;
+class QSpinBox;
 
 namespace corbasim 
 {

@@ -19,6 +19,8 @@
 
 #include "gui_factory_fwd.hpp"
 
+#include <QTreeWidgetItem>
+
 using namespace corbasim;
 using namespace corbasim::gui;
 

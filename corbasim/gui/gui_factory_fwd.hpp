@@ -22,10 +22,10 @@
 
 #include <vector>
 #include <string>
-#include <corbasim/event.hpp>
-// TODO fwd
-#include <corbasim/gui/dialogs.hpp>
+#include <map>
 
+#include <corbasim/event.hpp>
+#include <corbasim/gui/dialogs_fwd.hpp>
 
 class QTreeWidgetItem;
 

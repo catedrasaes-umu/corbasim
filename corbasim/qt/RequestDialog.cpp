@@ -18,7 +18,7 @@
  */
 
 #include "RequestDialog.hpp"
-#include <corbasim/gui/dialogs.hpp>
+#include <corbasim/gui/dialogs_fwd.hpp>
 #include <corbasim/qt/initialize.hpp>
 
 // Qt widgets
@@ -27,6 +27,12 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QPlainTextEdit>
+#include <QScrollArea>
+#include <QMessageBox>
+#include <QMdiSubWindow>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
 
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <corbasim/qt/private/ScriptEditor.hpp>

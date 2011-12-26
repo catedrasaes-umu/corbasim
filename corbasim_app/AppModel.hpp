@@ -25,6 +25,10 @@
 #include "model/Servant.hpp"
 
 #include <map>
+
+#include <QtCore>
+#include <QStringListModel>
+
 #include <corbasim/qt/types.hpp>
 #include <corbasim/qt/ReferenceModel.hpp>
 

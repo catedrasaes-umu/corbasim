@@ -26,6 +26,8 @@
 
 #include "appC.h"
 
+class QAbstractItemModel;
+
 namespace corbasim 
 {
 namespace app 

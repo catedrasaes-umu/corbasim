@@ -20,6 +20,8 @@
 #ifndef CORBASIM_WIDGETS_ENUM_HPP
 #define CORBASIM_WIDGETS_ENUM_HPP
 
+#include <QComboBox>
+
 #include <corbasim/gui/widgets_fwd.hpp>
 #include <corbasim/adapted.hpp>
 

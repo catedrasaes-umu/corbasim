@@ -20,7 +20,7 @@
 #ifndef CORBASIM_WIDGETS_FWD_HPP
 #define CORBASIM_WIDGETS_FWD_HPP
 
-#include <QtGui>
+#include <QWidget>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/mpl.hpp>
 #include <corbasim/adapted.hpp>

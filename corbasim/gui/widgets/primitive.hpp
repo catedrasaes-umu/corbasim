@@ -20,6 +20,8 @@
 #ifndef CORBASIM_WIDGETS_PRIMITIVE_HPP
 #define CORBASIM_WIDGETS_PRIMITIVE_HPP
 
+#include <QCheckBox>
+
 #include <corbasim/core/range.hpp>
 #include <corbasim/gui/widgets_fwd.hpp>
 

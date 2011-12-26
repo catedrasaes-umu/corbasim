@@ -73,7 +73,7 @@ struct factory_base
     void save(std::ostream& os, event::request * req) const;
     event::request * load(std::istream& is) const;
 
-    virtual core::interface_caller_base* create_caller() const = 0;
+    virtual interface_caller_base* create_caller() const = 0;
 
     virtual ~factory_base();
 

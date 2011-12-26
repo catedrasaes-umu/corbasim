@@ -21,6 +21,9 @@
 #define CORBASIM_WIDGETS_STRUCT_HPP
 
 #include <vector>
+
+#include <QGridLayout>
+
 #include <corbasim/gui/widgets_fwd.hpp>
 #include <corbasim/gui/widgets/grid.hpp>
 

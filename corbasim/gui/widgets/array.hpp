@@ -22,6 +22,10 @@
 
 #include <vector>
 #include <fstream>
+
+#include <QTabWidget>
+#include <QHBoxLayout>
+
 #include <corbasim/gui/widgets_fwd.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 

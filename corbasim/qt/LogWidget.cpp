@@ -18,6 +18,10 @@
  */
 
 #include "LogWidget.hpp"
+#include <corbasim/qt/LogTreeWidget.hpp>
+
+#include <QHBoxLayout>
+#include <QTreeWidgetItem>
 
 using namespace corbasim;
 using namespace corbasim::qt;

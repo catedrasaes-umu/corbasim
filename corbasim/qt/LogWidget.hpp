@@ -20,15 +20,17 @@
 #ifndef CORBASIM_QT_LOGWIDGET_HPP
 #define CORBASIM_QT_LOGWIDGET_HPP
 
-#include <QtGui>
-#include <corbasim/qt/LogTreeWidget.hpp>
+#include <QWidget>
+
+#include <corbasim/event_fwd.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
-#include <corbasim/event.hpp>
 
 namespace corbasim 
 {
 namespace qt 
 {
+
+class LogTreeWidget;
 
 class LogWidget : public QWidget
 {

@@ -172,12 +172,12 @@ struct StructImpl
     // Tipo que contiene el nombre del campo actual
     typedef cs_mpl::name_of_member< S, N > name_t;
 
-    // Helper factory del campo actual
-    typedef helper_factory_impl< S, N > factory_t;
-
     template< typename Map >
     static inline void insert(Map& map)
     {
+        // Helper factory del campo actual
+        typedef helper_factory_impl< S, N > factory_t;
+
         map.insert(std::make_pair(name_t::call(), 
                     factory_t::get_instance()));
 
@@ -340,7 +340,6 @@ struct array_helper : public helper_base
     }
 };
 
-// TODO caso especial de las secuencias de strings
 template< typename T >
 struct corbaseq_helper : public helper_base
 {
@@ -372,6 +371,11 @@ struct corbaseq_helper : public helper_base
     }
 };
 
+/**
+ * @brief Caso especial para secuencias de strings.
+ *
+ * @tparam T Una secuencia de strings.
+ */
 template< typename T >
 struct corbaseq_string_helper : public helper_base
 {

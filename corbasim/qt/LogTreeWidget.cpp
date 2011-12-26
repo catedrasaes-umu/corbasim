@@ -19,6 +19,9 @@
 
 #include "LogTreeWidget.hpp"
 
+#include <QTreeWidget>
+#include <QVBoxLayout>
+
 using namespace corbasim::qt;
 
 LogTreeWidget::LogTreeWidget(int max_items, QWidget * parent) :

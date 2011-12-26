@@ -20,7 +20,7 @@
 #ifndef CORBASIM_QT_MULTIINPUTWIDGET_HPP
 #define CORBASIM_QT_MULTIINPUTWIDGET_HPP
 
-#include <QWidget>
+#include <QDialog>
 #include <vector>
 
 #include <corbasim/impl.hpp>

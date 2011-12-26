@@ -20,9 +20,9 @@
 #ifndef CORBASIM_DIALOGS_HPP
 #define CORBASIM_DIALOGS_HPP
 
-#include <boost/shared_ptr.hpp>
 #include <sstream>
 
+#include <corbasim/gui/dialogs_fwd.hpp>
 #include <corbasim/event.hpp>
 #include <corbasim/gui/widgets/struct.hpp>
 #include <corbasim/json/parser.hpp>
@@ -34,24 +34,6 @@ namespace corbasim
 {
 namespace dialogs 
 {
-namespace detail 
-{
-} // namespace detail
-
-struct input_base
-{
-    virtual event::request* create_request() = 0;
-    virtual void copy_from_request(event::request*) = 0;
-    virtual QWidget* get_qwidget() = 0;
-    virtual void from_json(const std::string& str) = 0;
-    virtual void to_json(std::string& str) = 0;
-
-    virtual const char * get_name() const = 0;
-    
-    virtual ~input_base() {}
-};
-
-typedef boost::shared_ptr< input_base > input_ptr;
 
 using boost::mpl::_;
 

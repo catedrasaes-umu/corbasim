@@ -21,6 +21,12 @@
 #define CORBASIM_WIDGETS_UNION_HPP
 
 #include <vector>
+
+#include <QVBoxLayout>
+#include <QStackedWidget>
+#include <QGridLayout>
+#include <QComboBox>
+
 #include <corbasim/gui/widgets_fwd.hpp>
 #include <corbasim/gui/widgets/grid.hpp>
 

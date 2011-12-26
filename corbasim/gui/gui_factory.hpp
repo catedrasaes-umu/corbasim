@@ -26,6 +26,7 @@
 //#include <corbasim/core/request_serializer.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/gui/tree_factory.hpp>
+#include <corbasim/gui/dialogs.hpp>
 #include <corbasim/core/factory.hpp>
 
 namespace corbasim 

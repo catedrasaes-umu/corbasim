@@ -19,6 +19,15 @@
 
 #include "MultiFileSelectionWidget.hpp"
 
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QFileDialog>
+
 using namespace corbasim::qt;
 
 MultiFileSelectionWidget::MultiFileSelectionWidget(QWidget * parent) :

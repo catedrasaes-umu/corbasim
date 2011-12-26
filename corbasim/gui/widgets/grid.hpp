@@ -20,7 +20,12 @@
 #ifndef CORBASIM_WIDGETS_GRID_HPP
 #define CORBASIM_WIDGETS_GRID_HPP
 
-#include <QtGui>
+#include <QString>
+#include <QLabel>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QVBoxLayout>
+
 #include <corbasim/mpl.hpp>
 
 namespace corbasim 

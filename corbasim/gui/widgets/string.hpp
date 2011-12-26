@@ -20,6 +20,8 @@
 #ifndef CORBASIM_WIDGETS_STRING_HPP
 #define CORBASIM_WIDGETS_STRING_HPP
 
+#include <QLineEdit>
+
 #include <corbasim/gui/widgets_fwd.hpp>
 
 namespace corbasim 

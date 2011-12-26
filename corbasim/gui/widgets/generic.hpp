@@ -20,9 +20,12 @@
 #ifndef CORBASIM_WIDGETS_GENERIC_HPP
 #define CORBASIM_WIDGETS_GENERIC_HPP
 
+#include <sstream>
+
+#include <QTextEdit>
+
 #include <corbasim/gui/widgets_fwd.hpp>
 #include <corbasim/core/archives.hpp>
-#include <sstream>
 
 namespace corbasim 
 {

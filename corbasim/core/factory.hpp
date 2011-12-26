@@ -136,7 +136,7 @@ struct factory : public factory_base
         cs_mpl::for_each_list< operations_t >(inserter_t(this));
     }
 
-    core::interface_caller_base* create_caller() const
+    interface_caller_base* create_caller() const
     {
         return new core::interface_caller< Interface >();
     }
