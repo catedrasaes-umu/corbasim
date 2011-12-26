@@ -250,7 +250,7 @@ struct union_as_stack : public union_base_widget< T >
 
     inline void get_value(T& t)
     {
-        int pos = m_combo->currentIndex();
+        const int pos = m_combo->currentIndex();
 
         if (pos > 0 && pos < size_type::value - 1)
             iterator::Union< T >::get_value(t, base_t::m_children, pos);
@@ -258,7 +258,7 @@ struct union_as_stack : public union_base_widget< T >
 
     inline void set_value(const T& t)
     {
-        int pos = disc_to_pos(t._d());
+        const int pos = disc_to_pos(t._d());
 
         if (pos < size_type::value - 1)
             iterator::Union< T >::set_value(t, base_t::m_children, pos);

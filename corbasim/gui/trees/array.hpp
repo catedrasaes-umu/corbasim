@@ -67,7 +67,7 @@ struct array_as_tree< char[N] >
     static inline QTreeWidgetItem* create_tree(const T& t, 
             const char* name)
     {
-        std::string value = std::string(name) + ": " + 
+        const std::string value = std::string(name) + ": " + 
             std::string (t, N);
         QTreeWidgetItem* parent =
             new QTreeWidgetItem(QStringList(value.c_str()));

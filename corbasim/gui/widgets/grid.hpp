@@ -41,9 +41,9 @@ struct grid_inserter_impl
     template< typename Grid, typename Widget >
     inline void add_widget(Grid* grid, Widget* widget, const char * name) 
     {
-        int row = grid->rowCount();
+        const int row = grid->rowCount();
 
-        QString _name(name);
+        const QString _name(name);
         QLabel * label = new QLabel(_name);
         label->setObjectName(_name + "_label");
 
@@ -58,9 +58,9 @@ struct grid_inserter_impl< T, cs_mpl::false_ >
     template< typename Grid, typename Widget >
     inline void add_widget(Grid* grid, Widget* widget, const char * name) 
     {
-        int row = grid->rowCount();
+        const int row = grid->rowCount();
 
-        QString _name(name);
+        const QString _name(name);
         QGroupBox * g = new QGroupBox(_name);
         g->setObjectName(_name + "_group");
 

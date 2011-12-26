@@ -113,14 +113,14 @@ struct union_as_tree
         return size_type::value;
     }
 
-    typedef tree < discriminator_t > discriminator_tree_t;
-
     static inline QTreeWidgetItem* create_tree(const T& t, 
             const char* name)
     {
+        typedef tree < discriminator_t > discriminator_tree_t;
+
         QTreeWidgetItem* parent = new QTreeWidgetItem(QStringList(name));
 
-        int pos = disc_to_pos(t._d());
+        const int pos = disc_to_pos(t._d());
 
         QTreeWidgetItem* current = discriminator_tree_t::create_tree(
                     t._d(), "discriminator");

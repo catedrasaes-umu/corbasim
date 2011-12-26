@@ -24,7 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/event.hpp>
 #include <corbasim/adapted.hpp>
-#include <corbasim/gui/trees.hpp>
+#include <corbasim/gui/trees_fwd.hpp>
 #include <corbasim/core/inserter.hpp>
 
 namespace corbasim 

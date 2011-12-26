@@ -69,7 +69,7 @@ struct sequence_as_resume
     static inline QTreeWidgetItem* create_tree(const T& t, 
             const char* name)
     {
-        size_t size = t.length();
+        const size_t size = t.length();
 
         std::ostringstream oss;
         oss << name << " (length: " << size << "):";

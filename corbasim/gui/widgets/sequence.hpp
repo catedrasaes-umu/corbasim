@@ -48,7 +48,7 @@ struct sequence_base_widget : public widget_base
 
     inline void set_value(const T& val)
     {
-        size_t length = val.length();
+        const size_t length = val.length();
 
         for (int i = 0; i < length; i++) 
             m_children[i]->set_value(val[i]);
@@ -56,7 +56,7 @@ struct sequence_base_widget : public widget_base
 
     inline void get_value(T& val)
     {
-        size_t length = m_children.size();
+        const size_t length = m_children.size();
         val.length(length);
 
         for (int i = 0; i < length; i++) 
@@ -90,7 +90,7 @@ struct sequence_as_stacked : public widget_base
 
     inline void set_value(const T& val)
     {
-        size_t length = val.length();
+        const size_t length = val.length();
         m_qwidget->lengthChanged(length);
         widgets_t& children = m_qwidget->getWidgets();
 
@@ -103,7 +103,7 @@ struct sequence_as_stacked : public widget_base
     {
         widgets_t& children = m_qwidget->getWidgets();
 
-        size_t length = children.size();
+        const size_t length = children.size();
         val.length(length);
 
         for (size_t i = 0; i < length; i++) 
@@ -213,7 +213,7 @@ struct sequence_from_files : public widget_base
 
         std::streambuf * pbuf = ifs.rdbuf();
 
-        size_t length = pbuf->in_avail() / sizeof(SourceType);
+        const size_t length = pbuf->in_avail() / sizeof(SourceType);
         
         if (!length) return;
 
