@@ -24,7 +24,7 @@
 #include <vector>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/event_fwd.hpp>
-#include <corbasim/core/caller.hpp>
+#include <corbasim/core/caller_fwd.hpp>
 #include <corbasim/qt/LogWidget.hpp>
 #include <corbasim/qt/SimpleScriptEditor.hpp>
 #include <corbasim/qt/Interpreter.hpp>

@@ -23,7 +23,7 @@
 #include <vector>
 #include <QtGui>
 
-#include <corbasim/core/caller.hpp>
+#include <corbasim/core/caller_fwd.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 
 #include <corbasim/qt/ObjrefWidget.hpp>

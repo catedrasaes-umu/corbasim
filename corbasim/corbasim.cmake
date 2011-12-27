@@ -11,6 +11,7 @@ set(corbasim_EXPORTED_HEADERS
     corba_adapted.hpp
     corbasim.hpp
     core/archives.hpp
+    core/caller_fwd.hpp
     core/caller.hpp
     core/callable.hpp
     core/config.hpp
@@ -45,6 +46,7 @@ set(corbasim_EXPORTED_HEADERS
     mpl/vector200.hpp
     mpl/vector50.hpp
     mpl/vector.hpp
+    mpl/list.hpp
     omniorb4.hpp
     serialization.hpp
     tao.hpp

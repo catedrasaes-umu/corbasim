@@ -1,4 +1,5 @@
 set(corbasim_qt_EXPORTED_HEADERS
+    gui/dialogs_fwd.hpp
     gui/dialogs.hpp
     gui/gui_factory_fwd.hpp
     gui/gui_factory.hpp

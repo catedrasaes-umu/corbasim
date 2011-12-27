@@ -23,9 +23,8 @@
 #include <map>
 #include <corbasim/adapted.hpp>
 #include <corbasim/event.hpp>
-#include <corbasim/impl.hpp>
 #include <corbasim/core/inserter.hpp>
-#include <corbasim/core/reference_validator.hpp>
+#include <corbasim/core/caller_fwd.hpp>
 
 namespace corbasim 
 {
@@ -99,15 +98,6 @@ struct operation_caller_impl : public operation_caller_base< Interface >
         return ptr_.get();
     }
 };
-
-struct interface_caller_base : public reference_validator_base
-{
-    virtual event::event * do_call(event::request * req) const = 0;
-
-    virtual ~interface_caller_base();
-};
-
-typedef boost::shared_ptr< interface_caller_base > interface_caller_ptr;
 
 template< typename Interface >
 struct interface_caller : public interface_caller_base

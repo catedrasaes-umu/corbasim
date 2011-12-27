@@ -20,24 +20,12 @@
 #ifndef CORBASIM_CORE_REFERENCE_VALIDATOR_HPP
 #define CORBASIM_CORE_REFERENCE_VALIDATOR_HPP
 
-#include <boost/shared_ptr.hpp>
-#include <corbasim/impl.hpp>
+#include <corbasim/core/caller_fwd.hpp>
 
 namespace corbasim 
 {
 namespace core 
 {
-
-struct reference_validator_base
-{
-    virtual void set_reference(CORBA::Object_ptr ref) = 0;
-    virtual bool is_nil() const = 0;
-    virtual CORBA::Object_ptr get_reference() = 0;
-    virtual ~reference_validator_base();
-};
-
-typedef boost::shared_ptr< reference_validator_base > reference_validator_ptr;
-
 namespace detail 
 {
 
