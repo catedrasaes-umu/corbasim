@@ -38,6 +38,10 @@ typedef boost::shared_ptr< holder_impl_base > holder_impl_ptr;
 
 struct holder
 {
+    holder()
+    {
+    }
+
     /**
      * @brief Assumes its shared ownership.
      *
@@ -130,14 +134,22 @@ struct reflective_base
     /*
     virtual unsigned int get_length(holder const& value) const;
     virtual void set_length(holder& value) const;
+     */
 
-    virtual holder get_child_value(holder const& value, 
-        unsigned int idx) const;
+    virtual holder get_child_value(holder& value, 
+        unsigned int idx) const
+    {
+        return holder();
+    }
+
+    /*
     virtual holder get_child_value(holder_base const& value, 
         unsigned int idx) const;
 
     virtual void to_any(holder_base const& value, boost::any& any) const;
     virtual void from_any(const boost::any& any, holder_base& value) const;
+
+    virtual std::string to_string() const;
      */
 
 protected:
@@ -240,6 +252,30 @@ struct sequence_reflective : public reflective_base
 
 typedef std::vector< reflective_ptr > reflective_children;
 
+struct accessor_base
+{
+    virtual holder get(holder& parent) const = 0;
+    virtual ~accessor_base() {}
+};
+
+typedef boost::shared_ptr< accessor_base > accessor_ptr;
+
+template< typename S, typename N >
+struct accessor : public accessor_base
+{
+    holder get(holder& parent) const
+    {
+        typedef typename cs_mpl::type_of_member< S, N >::type current_t;
+        typedef holder_ref_impl< S > parent_impl;
+        typedef holder_ref_impl< current_t > current_impl;
+
+        parent_impl * p = reinterpret_cast< parent_impl * >(
+                parent.m_impl.get());
+
+        return holder(new current_impl(boost::fusion::at < N >(p->t_)));
+    }
+};
+
 template < typename S, typename Reflective >
 struct create_iterator
 {
@@ -260,9 +296,11 @@ struct create_iterator
         typedef reflective< current_t > reflective_t;
 
         reflective_ptr ptr_(new reflective_t(m_this));
+        accessor_ptr ac_(new accessor< S, N >());
 
         m_this->m_children.push_back(ptr_);
         m_this->m_child_names.push_back(name_t::call());
+        m_this->m_accessors.push_back(ac_);
     }
 };
 
@@ -280,6 +318,7 @@ struct struct_reflective : public reflective_base
         // Reserve
         m_children.reserve(members_count);
         m_child_names.reserve(members_count);
+        m_accessors.reserve(members_count);
 
         // Iterate
         create_iterator< T, struct_reflective > it(this);
@@ -301,8 +340,16 @@ struct struct_reflective : public reflective_base
         return m_children[idx].get();
     }
 
+    // Dynamic information
+    holder get_child_value(holder& value, 
+        unsigned int idx) const
+    {
+        return m_accessors[idx]->get(value);
+    }
+
     reflective_children m_children;
     std::vector< const char * > m_child_names;
+    std::vector< accessor_ptr > m_accessors;
 
     static inline struct_reflective const * get_instance()
     {
