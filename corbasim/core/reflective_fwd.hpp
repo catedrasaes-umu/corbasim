@@ -184,12 +184,24 @@ struct primitive_reflective : public reflective_base
 template< typename T >
 struct array_reflective : public reflective_base
 {
+    typedef typename boost::remove_bounds < T >::type slice_t;
+    typedef reflective < slice_t > slice_reflective_t;
+
+    static const size_t size = sizeof(T) / sizeof(slice_t);
+
     array_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+        reflective_base(parent), m_slice(this)
     {
     }
 
     bool is_repeated() const { return true; }
+
+    reflective_base const * get_slice() const
+    {
+        return &m_slice;
+    }
+
+    slice_reflective_t m_slice;
 };
 
 template< typename T >
@@ -207,13 +219,23 @@ struct string_reflective : public reflective_base
 template< typename T >
 struct sequence_reflective : public reflective_base
 {
+    typedef typename adapted::is_corbaseq < T >::slice_type slice_t;
+    typedef reflective < slice_t > slice_reflective_t;
+
     sequence_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+        reflective_base(parent), m_slice(this)
     {
     }
 
     bool is_repeated() const        { return true; }
     bool is_variable_length() const { return true; }
+    
+    reflective_base const * get_slice() const
+    {
+        return &m_slice;
+    }
+
+    slice_reflective_t m_slice;
 };
 
 typedef std::vector< reflective_ptr > reflective_children;
