@@ -24,6 +24,7 @@
 #include <boost/shared_ptr.hpp>
 // #include <boost/any.hpp>
 #include <corbasim/adapted.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 namespace corbasim 
 {
@@ -35,6 +36,9 @@ struct holder;
 struct holder_impl_base {};
 
 typedef boost::shared_ptr< holder_impl_base > holder_impl_ptr;
+
+template< typename T >
+struct holder_ref_impl;
 
 struct holder
 {
@@ -62,6 +66,17 @@ struct holder
         m_impl = o.m_impl;
 
         return *this;
+    }
+
+    template< typename Value >
+    Value to_value() const
+    {
+        typedef holder_ref_impl< Value > value_impl;
+
+        value_impl const * p = reinterpret_cast< value_impl const * >(
+                m_impl.get());
+
+        return p->t_;
     }
     
     holder_impl_ptr m_impl;
@@ -95,40 +110,51 @@ struct holder_value_impl : public holder_impl_base
 
 // And some other special cases for holders...
 
+enum reflective_type
+{
+    TYPE_INVALID,
+    TYPE_CHAR,
+    TYPE_OCTET,
+    TYPE_BOOL,
+    TYPE_ENUM,
+    TYPE_SHORT,
+    TYPE_USHORT,
+    TYPE_LONG,
+    TYPE_ULONG,
+    TYPE_LONGLONG,
+    TYPE_ULONGLONG,
+    TYPE_FLOAT,
+    TYPE_DOUBLE,
+    TYPE_STRING,
+    TYPE_WSTRING,
+    TYPE_OBJREF,
+    TYPE_STRUCT,
+    TYPE_ARRAY,
+    TYPE_UNION,
+    TYPE_SEQUENCE
+};
 
 struct reflective_base
 {
-    virtual ~reflective_base() {}
+    virtual ~reflective_base();
 
     // static information
     // virtual tag_t get_tag() const = 0;
 
-    reflective_base const * get_parent() const { return m_parent; }
+    reflective_base const * get_parent() const;
 
-    virtual unsigned int get_children_count() const 
-    { 
-        return 0; 
-    }
+    virtual unsigned int get_children_count() const;
+    virtual const char * get_child_name(unsigned int idx) const;
+    virtual reflective_base const * get_child(unsigned int idx) const;
 
-    virtual const char * get_child_name(unsigned int idx) const 
-    { 
-        return 0;
-    }
-    
-    virtual reflective_base const * get_child(unsigned int idx) const
-    {
-        return 0;
-    }
+    virtual bool is_repeated() const;
+    virtual bool is_variable_length() const;
+    virtual bool is_primitive() const;
 
-    virtual bool is_repeated() const        { return false; }
-    virtual bool is_variable_length() const { return false; }
-    virtual bool is_primitive() const       { return false; }
+    virtual reflective_type get_type() const;
 
     // Requires is_repeated
-    virtual reflective_base const * get_slice() const
-    {
-        return 0;
-    }
+    virtual reflective_base const * get_slice() const;
 
     // dynamic information
     /*
@@ -137,26 +163,17 @@ struct reflective_base
      */
 
     virtual holder get_child_value(holder& value, 
-        unsigned int idx) const
-    {
-        return holder();
-    }
+        unsigned int idx) const;
 
     /*
     virtual holder get_child_value(holder_base const& value, 
         unsigned int idx) const;
 
-    virtual void to_any(holder_base const& value, boost::any& any) const;
-    virtual void from_any(const boost::any& any, holder_base& value) const;
-
     virtual std::string to_string() const;
      */
 
 protected:
-    reflective_base(reflective_base const * parent = NULL) : 
-        m_parent(parent)
-    {
-    }
+    reflective_base(reflective_base const * parent = NULL);
 
     reflective_base const * m_parent;
 };
@@ -180,6 +197,11 @@ struct bool_reflective : public reflective_base
     }
     
     bool is_primitive() const { return true; }
+
+    reflective_type get_type() const
+    {
+        return TYPE_BOOL;
+    }
 };
 
 template< typename T >
@@ -213,6 +235,19 @@ struct array_reflective : public reflective_base
         return &m_slice;
     }
 
+    reflective_type get_type() const
+    {
+        return TYPE_ARRAY;
+    }
+
+    // Dynamic information
+    holder get_child_value(holder& value, 
+        unsigned int idx) const
+    {
+        // TODO
+        return holder();
+    }
+
     slice_reflective_t m_slice;
 };
 
@@ -226,6 +261,11 @@ struct string_reflective : public reflective_base
 
     bool is_variable_length() const { return true; }
     bool is_primitive() const       { return true; }
+
+    reflective_type get_type() const
+    {
+        return TYPE_STRING;
+    }
 };
 
 template< typename T >
@@ -242,6 +282,11 @@ struct sequence_reflective : public reflective_base
     bool is_repeated() const        { return true; }
     bool is_variable_length() const { return true; }
     
+    reflective_type get_type() const
+    {
+        return TYPE_SEQUENCE;
+    }
+
     reflective_base const * get_slice() const
     {
         return &m_slice;
@@ -340,6 +385,11 @@ struct struct_reflective : public reflective_base
         return m_children[idx].get();
     }
 
+    reflective_type get_type() const
+    {
+        return TYPE_STRUCT;
+    }
+
     // Dynamic information
     holder get_child_value(holder& value, 
         unsigned int idx) const
@@ -347,16 +397,17 @@ struct struct_reflective : public reflective_base
         return m_accessors[idx]->get(value);
     }
 
-    reflective_children m_children;
-    std::vector< const char * > m_child_names;
-    std::vector< accessor_ptr > m_accessors;
-
     static inline struct_reflective const * get_instance()
     {
         static boost::shared_ptr< struct_reflective > _instance(
                 new struct_reflective);
         return _instance.get();
     }
+
+    // Data
+    reflective_children m_children;
+    std::vector< const char * > m_child_names;
+    std::vector< accessor_ptr > m_accessors;
 };
 
 template< typename T >
@@ -365,6 +416,11 @@ struct union_reflective : public reflective_base
     union_reflective(reflective_base const * parent) :
         reflective_base(parent)
     {
+    }
+
+    reflective_type get_type() const
+    {
+        return TYPE_UNION;
     }
 };
 
@@ -375,6 +431,11 @@ struct enum_reflective : public reflective_base
         reflective_base(parent)
     {
     }
+
+    reflective_type get_type() const
+    {
+        return TYPE_ENUM;
+    }
 };
 
 template< typename T >
@@ -383,6 +444,11 @@ struct objrefvar_reflective : public reflective_base
     objrefvar_reflective(reflective_base const * parent) :
         reflective_base(parent)
     {
+    }
+
+    reflective_type get_type() const
+    {
+        return TYPE_OBJREF;
     }
 };
 
@@ -400,14 +466,17 @@ struct calculate_reflective
 {
     typedef typename 
         // if
-        cs_mpl::eval_if_identity< cs_mpl::is_bool< T >, bool_reflective< T >,
+        cs_mpl::eval_if_identity< cs_mpl::is_bool< T >, 
+            bool_reflective< T >,
         // else if
         cs_mpl::eval_if_identity< boost::is_arithmetic< T >, 
             primitive_reflective< T >,
         // else if
-        cs_mpl::eval_if_identity< boost::is_array< T >, array_reflective< T >,
+        cs_mpl::eval_if_identity< boost::is_array< T >, 
+            array_reflective< T >,
         // else if
-        cs_mpl::eval_if_identity< boost::is_enum< T >, enum_reflective< T >,
+        cs_mpl::eval_if_identity< boost::is_enum< T >, 
+            enum_reflective< T >,
         // else if
         cs_mpl::eval_if_identity< cs_mpl::is_string< T >, 
             string_reflective< T >,

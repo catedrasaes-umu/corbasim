@@ -75,6 +75,8 @@ set(corbasim_SRCS
     core/reference_validator.cpp
     core/request_serializer.cpp
 
+    core/reflective.cpp
+
     scripting/request_processor.cpp
     scripting/interpreter.cpp
 
