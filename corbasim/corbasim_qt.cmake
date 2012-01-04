@@ -86,6 +86,8 @@ set(corbasim_qt_MOC_HDRS
 set(corbasim_qt_SRCS
     gui/tree_factory.cpp
     gui/gui_factory.cpp
+    # Explicit intantiation
+    gui/widgets/primitive.cpp
 
     # private
     qt/private/codeeditor.cpp

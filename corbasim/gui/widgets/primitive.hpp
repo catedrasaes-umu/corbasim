@@ -76,11 +76,12 @@ struct spinbox_impl< CORBA::Double >
     typedef qt::RangedDoubleWidget type;
 };
 
-template< >
-struct spinbox_impl< CORBA::LongDouble >
-{
-    typedef qt::RangedDoubleWidget type;
-};
+// TODO
+// template< >
+// struct spinbox_impl< CORBA::LongDouble >
+// {
+//     typedef qt::RangedDoubleWidget type;
+// };
 
 template< typename T >
 struct primitive_as_spinbox : public widget_base
@@ -89,26 +90,19 @@ struct primitive_as_spinbox : public widget_base
     typedef typename spinbox_impl< T >::type qwidget_t;
     typedef core::detail::range< T > range_t;
 
-    CORBASIM_DEFAULTCREATEWIDGET();
+    static type* create_widget();
 
-    primitive_as_spinbox()
-    {
-        m_qwidget = new qwidget_t(range_t::min(), range_t::max());
-        // TODO permitirá especificar rango
-        m_qwidget->setRange(range_t::min(), range_t::max());
-    }
+    primitive_as_spinbox();
 
-    inline void get_value(T& t)
-    {
-        t = m_qwidget->value();
-    }
+    void get_value(T& t);
 
-    inline void set_value(const T& t)
-    {
-        m_qwidget->setValue(t);
-    }
+    void set_value(const T& t);
 
-    CORBASIM_QWIDGET()
+    qwidget_t* get_QWidget();
+    
+    QWidget * getWidget() const;
+
+    qwidget_t * m_qwidget;
 };
 
 template< typename T >
@@ -117,24 +111,19 @@ struct bool_as_checkbox : public widget_base
     typedef bool_as_checkbox< T > type;
     typedef QCheckBox qwidget_t;
 
-    CORBASIM_DEFAULTCREATEWIDGET();
+    static type* create_widget();
 
-    bool_as_checkbox()
-    {
-        m_qwidget = new qwidget_t;
-    }
+    bool_as_checkbox();
 
-    inline void get_value(T& t)
-    {
-        t = m_qwidget->isChecked();
-    }
+    void get_value(T& t);
 
-    inline void set_value(const T& t)
-    {
-        m_qwidget->setChecked(t);
-    }
+    void set_value(const T& t);
 
-    CORBASIM_QWIDGET()
+    qwidget_t* get_QWidget();
+    
+    QWidget * getWidget() const;
+
+    qwidget_t * m_qwidget;
 };
 
 template< typename T >
@@ -145,40 +134,22 @@ struct spinbox_with_autoincrement : public widget_base
 
     typedef primitive_as_spinbox< T > spinbox_t;
 
+    static type* create_widget();
+
+    spinbox_with_autoincrement();
+
+    void get_value(T& t);
+
+    void set_value(const T& t);
+
+    qwidget_t* get_QWidget();
+    
+    QWidget * getWidget() const;
+
+    // Data
     spinbox_t m_spinbox;
     spinbox_t m_increment;
-
-    CORBASIM_DEFAULTCREATEWIDGET();
-
-    spinbox_with_autoincrement()
-    {
-        m_qwidget = new qwidget_t;
-        QHBoxLayout * layout = new QHBoxLayout;
-
-        layout->addWidget(m_spinbox.get_QWidget());
-        layout->addWidget(new QLabel("Increment"));
-        layout->addWidget(m_increment.get_QWidget());
-
-        m_qwidget->setLayout(layout);
-    }
-
-    inline void get_value(T& t)
-    {
-        m_spinbox.get_value(t);
-
-        T inc;
-        m_increment.get_value(inc);
-
-        m_spinbox.set_value(t + inc);
-    }
-
-    inline void set_value(const T& t)
-    {
-        m_spinbox.set_value(t);
-    }
-
-    CORBASIM_QWIDGET()
-
+    qwidget_t * m_qwidget;
 };
 
 } // namespace detail
