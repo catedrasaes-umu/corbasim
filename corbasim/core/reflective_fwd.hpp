@@ -108,6 +108,12 @@ struct holder_value_impl : public holder_impl_base
     }
 };
 
+template < typename T >
+holder_impl_base * create_holder(T& t)
+{
+    return new holder_ref_impl< T >(t);
+}
+
 // And some other special cases for holders...
 
 enum reflective_type
@@ -244,8 +250,12 @@ struct array_reflective : public reflective_base
     holder get_child_value(holder& value, 
         unsigned int idx) const
     {
-        // TODO
-        return holder();
+        typedef holder_ref_impl< T > parent_impl;
+
+        parent_impl * p = reinterpret_cast< parent_impl * >(
+                value.m_impl.get());
+
+        return holder(create_holder(p->t_[idx]));
     }
 
     slice_reflective_t m_slice;
@@ -292,6 +302,18 @@ struct sequence_reflective : public reflective_base
         return &m_slice;
     }
 
+    // Dynamic information
+    holder get_child_value(holder& value, 
+        unsigned int idx) const
+    {
+        typedef holder_ref_impl< T > parent_impl;
+
+        parent_impl * p = reinterpret_cast< parent_impl * >(
+                value.m_impl.get());
+
+        return holder(create_holder(p->t_[idx]));
+    }
+
     slice_reflective_t m_slice;
 };
 
@@ -312,12 +334,11 @@ struct accessor : public accessor_base
     {
         typedef typename cs_mpl::type_of_member< S, N >::type current_t;
         typedef holder_ref_impl< S > parent_impl;
-        typedef holder_ref_impl< current_t > current_impl;
 
         parent_impl * p = reinterpret_cast< parent_impl * >(
                 parent.m_impl.get());
 
-        return holder(new current_impl(boost::fusion::at < N >(p->t_)));
+        return holder(create_holder(boost::fusion::at < N >(p->t_)));
     }
 };
 
@@ -505,6 +526,20 @@ struct reflective : public detail::calculate_reflective< T >::type
     typedef typename detail::calculate_reflective< T >::type base_t;
 
     reflective(reflective_base const * parent = NULL) : base_t(parent) {}
+};
+
+struct operation_reflective_base {};
+
+struct interface_reflective_base {};
+
+template< typename Value >
+struct operation_reflective : public operation_reflective_base
+{
+};
+
+template< typename Interface >
+struct interface_reflective : public interface_reflective_base
+{
 };
 
 } // namespace core
