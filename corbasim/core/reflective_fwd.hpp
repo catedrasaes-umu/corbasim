@@ -21,10 +21,11 @@
 #define CORBASIM_CORE_REFLECTIVE_FWD_HPP
 
 #include <vector>
+#include <map>
 #include <boost/shared_ptr.hpp>
-// #include <boost/any.hpp>
-#include <corbasim/adapted.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <corbasim/adapted.hpp>
+#include <corbasim/core/inserter.hpp>
 
 namespace corbasim 
 {
@@ -87,29 +88,34 @@ struct holder_ref_impl : public holder_impl_base
 {
     typedef T value_type;
 
+    T * aux;
     T& t_;
 
     holder_ref_impl(T& t) : 
-        t_(t)
+        aux(NULL), t_(t)
     {
     }
-};
 
-template< typename T >
-struct holder_value_impl : public holder_impl_base
-{
-    typedef T value_type;
-
-    T t_;
-
-    holder_value_impl(T const& t) : 
-        t_(t)
+    // String sequence case
+    holder_ref_impl(const T& t) : 
+        aux(new T(t)), t_(*aux)
     {
+    }
+
+    ~holder_ref_impl()
+    {
+        delete aux;
     }
 };
 
 template < typename T >
 holder_impl_base * create_holder(T& t)
+{
+    return new holder_ref_impl< T >(t);
+}
+
+template < typename T >
+holder_impl_base * create_holder(const T& t)
 {
     return new holder_ref_impl< T >(t);
 }
@@ -528,18 +534,89 @@ struct reflective : public detail::calculate_reflective< T >::type
     reflective(reflective_base const * parent = NULL) : base_t(parent) {}
 };
 
-struct operation_reflective_base {};
+struct operation_reflective_base : 
+    public virtual reflective_base
+{
+    virtual const char * get_name() const = 0;
+    virtual tag_t get_tag() const = 0;
+};
 
-struct interface_reflective_base {};
+struct interface_reflective_base
+{
+
+protected:
+
+    void insert_reflective(const std::string& name,
+        tag_t tag, operation_reflective_base const * reflective);
+
+    // Data
+    typedef std::vector< operation_reflective_base const * > 
+        reflectives_t;
+    reflectives_t m_reflectives;
+
+    typedef std::map< std::string, operation_reflective_base const * > 
+        reflectives_by_name_t;
+    reflectives_by_name_t m_reflectives_by_name;
+
+    typedef std::map< tag_t, operation_reflective_base const * > 
+        reflectives_by_tag_t;
+    reflectives_by_tag_t m_reflectives_by_tag;
+};
 
 template< typename Value >
-struct operation_reflective : public operation_reflective_base
+struct operation_reflective : public virtual operation_reflective_base,
+    public virtual detail::struct_reflective< Value >
 {
+    operation_reflective()
+    {
+    }
+
+    const char * get_name() const
+    {
+        return adapted::name< Value >::call();
+    }
+
+    tag_t get_tag() const
+    {
+        return tag< Value >::value();
+    }
+
+    static inline operation_reflective const * get_instance()
+    {
+        static boost::shared_ptr< operation_reflective > _instance(
+                new operation_reflective);
+        return _instance.get();
+    }
 };
 
 template< typename Interface >
 struct interface_reflective : public interface_reflective_base
 {
+    interface_reflective()
+    {
+        typedef typename  adapted::interface< Interface >::_op_list 
+            operations_t;
+
+        typedef core::impl::inserter< interface_reflective > inserter_t;
+        cs_mpl::for_each_list< operations_t >(inserter_t(this));
+    }
+
+    template< typename Value >
+    inline void append()
+    {
+        typedef operation_reflective< Value > reflective_t;
+        operation_reflective_base const * f = 
+            reflective_t::get_instance();
+
+        insert_reflective(f->get_name(), f->get_tag(), f);
+    }
+
+    static inline interface_reflective const * get_instance()
+    {
+        static boost::shared_ptr< interface_reflective > _instance(
+                new interface_reflective);
+        return _instance.get();
+    }
 };
 
 } // namespace core

@@ -34,5 +34,8 @@ int main(int argc, char **argv)
     const corbasim::core::reflective< SimpleExample::Padre > ref;
 
     print(&ref);
+
+    corbasim::core::interface_reflective_base const * iface = 
+        corbasim::core::interface_reflective< SimpleExample::Test >::get_instance();
 }
 

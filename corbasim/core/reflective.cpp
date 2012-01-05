@@ -72,4 +72,16 @@ holder reflective_base::get_child_value(holder& value,
     return holder();
 }
 
+// Interface Reflective Base
+
+void interface_reflective_base::insert_reflective(
+        const std::string& name,
+        tag_t tag, operation_reflective_base const * reflective)
+{
+    m_reflectives.push_back(reflective);
+
+    // Maps
+    m_reflectives_by_name.insert(std::make_pair(name, reflective));
+    m_reflectives_by_tag.insert(std::make_pair(tag, reflective));
+}
 
