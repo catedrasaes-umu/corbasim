@@ -543,6 +543,17 @@ struct operation_reflective_base :
 
 struct interface_reflective_base
 {
+    unsigned int operation_count() const;
+    operation_reflective_base const * get_reflective_by_index(
+            unsigned int idx) const;
+    operation_reflective_base const * get_reflective_by_name(
+            const std::string& name) const;
+    operation_reflective_base const * get_reflective_by_tag(tag_t tag) const;
+
+    virtual ~interface_reflective_base();
+
+    // virtual const char * get_name() const = 0;
+    // virtual const char * get_fqn() const = 0;
 
 protected:
 

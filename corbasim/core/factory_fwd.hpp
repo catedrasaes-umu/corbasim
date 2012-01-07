@@ -64,7 +64,8 @@ struct operation_factory_base
 struct factory_base
 {
     unsigned int operation_count() const;
-    operation_factory_base const * get_factory_by_index(unsigned int idx) const;
+    operation_factory_base const * get_factory_by_index(
+            unsigned int idx) const;
     operation_factory_base const * get_factory_by_name(
             const std::string& name) const;
     operation_factory_base const * get_factory_by_tag(tag_t tag) const;

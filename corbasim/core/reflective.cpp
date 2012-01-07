@@ -85,3 +85,45 @@ void interface_reflective_base::insert_reflective(
     m_reflectives_by_tag.insert(std::make_pair(tag, reflective));
 }
 
+interface_reflective_base::~interface_reflective_base()
+{
+}
+
+unsigned int interface_reflective_base::operation_count() const
+{
+    return m_reflectives.size();
+}
+
+operation_reflective_base const * 
+interface_reflective_base::get_reflective_by_index(
+        unsigned int idx) const
+{
+    return m_reflectives[idx];
+}
+
+operation_reflective_base const * 
+interface_reflective_base::get_reflective_by_name(
+        const std::string& name) const
+{
+    reflectives_by_name_t::const_iterator it;
+    it = m_reflectives_by_name.find(name);
+
+    if (it != m_reflectives_by_name.end())
+        return it->second;
+
+    return NULL;
+}
+
+operation_reflective_base const * 
+interface_reflective_base::get_reflective_by_tag(
+        tag_t tag) const
+{
+    reflectives_by_tag_t::const_iterator it;
+    it = m_reflectives_by_tag.find(tag);
+
+    if (it != m_reflectives_by_tag.end())
+        return it->second;
+
+    return NULL;
+}
+
