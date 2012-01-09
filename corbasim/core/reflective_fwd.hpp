@@ -25,6 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <corbasim/adapted.hpp>
+#include <corbasim/event.hpp>
 #include <corbasim/core/inserter.hpp>
 
 namespace corbasim 
@@ -539,6 +540,10 @@ struct operation_reflective_base :
 {
     virtual const char * get_name() const = 0;
     virtual tag_t get_tag() const = 0;
+
+    virtual holder get_holder(event::request_ptr req) const = 0;
+
+    virtual ~operation_reflective_base() {}
 };
 
 struct interface_reflective_base
@@ -578,6 +583,8 @@ template< typename Value >
 struct operation_reflective : public virtual operation_reflective_base,
     public virtual detail::struct_reflective< Value >
 {
+    typedef event::request_impl< Value > request_t;
+
     operation_reflective()
     {
     }
@@ -590,6 +597,12 @@ struct operation_reflective : public virtual operation_reflective_base,
     tag_t get_tag() const
     {
         return tag< Value >::value();
+    }
+    
+    holder get_holder(event::request_ptr req) const
+    {
+        request_t * r = reinterpret_cast< request_t* >(req.get());
+        return create_holder(r->m_values);
     }
 
     static inline operation_reflective const * get_instance()
