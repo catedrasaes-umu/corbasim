@@ -79,3 +79,8 @@ Servant::sendRequest(corbasim::event::request_ptr req)
     return m_caller->do_call(req.get());
 }
 
+void Servant::set_ns_entry(core::ns_register * entry)
+{
+    m_ns_entry.reset(entry);
+}
+

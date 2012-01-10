@@ -24,6 +24,7 @@
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/core/callable.hpp>
 #include <corbasim/core/caller.hpp>
+#include <corbasim/core/ns_register.hpp>
 
 #include "../appC.h"
 
@@ -54,7 +55,10 @@ public:
 
     PortableServer::ServantBase * getServant() const;
     
-    corbasim::event::event* sendRequest(corbasim::event::request_ptr req);
+    corbasim::event::event* sendRequest(
+            corbasim::event::request_ptr req);
+
+    void set_ns_entry(core::ns_register * entry);
 
 protected:
     AppController * m_controller;
@@ -65,6 +69,7 @@ protected:
     
     core::interface_caller_ptr m_caller;
 
+    core::ns_register_ptr m_ns_entry;
 };
 
 typedef boost::shared_ptr< Servant > Servant_ptr;

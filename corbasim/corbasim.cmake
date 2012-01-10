@@ -20,6 +20,7 @@ set(corbasim_EXPORTED_HEADERS
     core/factory.hpp
     core/injector.hpp
     core/inserter.hpp
+    core/ns_register.hpp
     core/range.hpp
     core/reference_validator.hpp
     core/reference_repository.hpp
@@ -71,6 +72,7 @@ set(corbasim_SRCS
     core/core.cpp
     core/event_notifier.cpp
     core/factory.cpp
+    core/ns_register.cpp
     core/reference_repository.cpp
     core/reference_validator.cpp
     core/request_serializer.cpp

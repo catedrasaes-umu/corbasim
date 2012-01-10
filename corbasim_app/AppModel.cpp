@@ -34,6 +34,9 @@
 
 #include <iostream>
 
+#include <memory>
+#include <cstring>
+
 using namespace corbasim::app;
 
 namespace corbasim 
@@ -195,6 +198,36 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 
         if (m_controller)
             m_controller->notifyServantCreated(id, factory);
+
+        // Naming service registration
+        if (std::strlen(cfg.entry.in()) > 0)
+        {
+            std::auto_ptr< core::ns_register > ptr_(
+                    new core::ns_register(m_data->orb, 
+                        cfg.entry.in(), objSrv));
+
+            if (!ptr_->error())
+            {
+                // Assumes its ownership
+                obj->set_ns_entry(ptr_.release());
+
+                if (m_controller)
+                {
+                    m_controller->notifyMessage(
+                            QString("'%1' registred as '%2'").arg(id).
+                                arg(cfg.entry.in()));
+                }
+            }
+            else
+            {
+                if (m_controller)
+                {
+                    m_controller->notifyError(
+                            QString("Unable to register '%1' as '%2'").
+                                arg(id).arg(cfg.entry.in()));
+                }
+            }
+        }
     }
 }
 
