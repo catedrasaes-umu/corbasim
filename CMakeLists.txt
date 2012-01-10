@@ -55,6 +55,7 @@ endif(NOT Boost_FOUND)
 
 find_package(PythonLibs)
 find_package(Qt4)
+find_package(Qwt6)
 find_package(Boost 1.45.0 
     COMPONENTS serialization regex python system thread)
 
@@ -66,6 +67,12 @@ if(QT_FOUND)
     set(QT_USE_QTSCRIPT 1)
     set(QT_USE_QTSCRIPTTOOLS 1)
     include(${QT_USE_FILE})
+endif()
+
+if(NOT Qwt6_FOUND)
+    message(STATUS "Qwt6 not found! Disabling plotting support!")
+else()
+    message(STATUS "Qwt6 available at: ${Qwt6_INCLUDE_DIR}")
 endif()
 
 add_subdirectory(corbasim)
