@@ -580,13 +580,42 @@ protected:
 };
 
 template< typename Value >
-struct operation_reflective : public virtual operation_reflective_base,
-    public virtual detail::struct_reflective< Value >
+struct operation_reflective : 
+    public virtual operation_reflective_base,
+    public detail::struct_reflective< Value >
 {
     typedef event::request_impl< Value > request_t;
+    typedef detail::struct_reflective< Value > base_t;
 
     operation_reflective()
     {
+    }
+    
+    unsigned int get_children_count() const 
+    { 
+        return base_t::get_children_count();
+    }
+
+    const char * get_child_name(unsigned int idx) const 
+    { 
+        return base_t::get_child_name(idx);
+    }
+    
+    reflective_base const * get_child(unsigned int idx) const
+    {
+        return base_t::get_child(idx);
+    }
+
+    reflective_type get_type() const
+    {
+        return base_t::get_type();
+    }
+
+    // Dynamic information
+    holder get_child_value(holder& value, 
+        unsigned int idx) const
+    {
+        return base_t::get_child_value(value, idx);
     }
 
     const char * get_name() const

@@ -1,94 +1,53 @@
 #include "PlotModel.hpp"
+#include <iostream>
 
 using namespace corbasim::qt;
 
 PlotModel::PlotModel(QObject *parent)
-    : QAbstractItemModel(parent)
+    : QStandardItemModel(parent)
 {
+    QStringList headers;
+    headers << "Object" << "Plot";
+
+    setHorizontalHeaderLabels(headers);
 }
 
 PlotModel::~PlotModel()
 {
 }
 
-int PlotModel::columnCount(const QModelIndex &/*parent*/) const
+void insertRecursive(QStandardItem * parent, 
+        corbasim::core::reflective_base const * reflective)
 {
-    return 1;
-}
+    const unsigned int count = reflective->get_children_count();
 
-QVariant PlotModel::data(const QModelIndex &index, int role) const
-{
-    if (!index.isValid())
-        return QVariant();
-
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    return QVariant();
-}
-
-Qt::ItemFlags PlotModel::flags(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return 0;
-
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-}
-
-QVariant PlotModel::headerData(int section, Qt::Orientation orientation,
-                           int role) const
-{
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    std::cout << count << std::endl;
+    for (unsigned int i = 0; i < count; i++) 
     {
-        switch (section)
+        corbasim::core::reflective_base const * child =
+            reflective->get_child(i);
+
+        QStandardItem * childItem = 
+            new QStandardItem(reflective->get_child_name(i));
+
+        insertRecursive(childItem, child);
+        
+
+        if (child->is_primitive())
         {
-        case 0:
-            return QString("Object");
-        case 1:
-            return QString("Value");
-        default:
-            break;
+            QList< QStandardItem * > list;
+            list << childItem;
+
+            // Do plot?
+            QStandardItem * value = new QStandardItem();
+            value->setData(false, Qt::DisplayRole);
+            list << value;
+
+            parent->appendRow(list);
         }
+        else
+            parent->appendRow(childItem);
     }
-
-    return QVariant();
-}
-
-QModelIndex PlotModel::index(int row, int column, const QModelIndex &parent)
-            const
-{
-    if (!hasIndex(row, column, parent))
-        return QModelIndex();
-
-    return QModelIndex();
-}
-
-QModelIndex PlotModel::parent(const QModelIndex &index) const
-{
-    if (!index.isValid())
-        return QModelIndex();
-
-    int row = 0;
-    return createIndex(row, 0, NULL);
-}
-
-int PlotModel::rowCount(const QModelIndex &parent) const
-{
-    /**
-     * Los hijos son de la columna cero.
-     */
-    if (parent.column() > 0)
-        return 0;
-
-    void * ptr = parent.internalPointer();
-
-    if (ptr)
-    {
-        // TODO
-        return 0;
-    }
-
-    return m_items.size();
 }
 
 void PlotModel::registerInstance(const std::string& name,
@@ -98,6 +57,24 @@ void PlotModel::registerInstance(const std::string& name,
     item.name = name;
     item.reflective = reflective;
     m_items.push_back(item);
+
+    QStandardItem * ifItem = new QStandardItem(name.c_str());
+
+    const unsigned int count = reflective->operation_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        core::operation_reflective_base const * op =
+            reflective->get_reflective_by_index(i);
+
+        QStandardItem * opItem = new QStandardItem(op->get_name());
+
+        insertRecursive(opItem, op);
+
+        ifItem->appendRow(opItem);
+    }
+
+    appendRow(ifItem);
 
     // TODO emit data changed
 }

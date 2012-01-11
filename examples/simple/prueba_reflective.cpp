@@ -5,6 +5,7 @@
 #include <sstream>
 #include <string>
 
+#include <QtGui>
 #include "PlotModel.hpp"
 
 void print(corbasim::core::reflective_base const * current, 
@@ -33,6 +34,8 @@ void print(corbasim::core::reflective_base const * current,
 
 int main(int argc, char **argv)
 {
+    QApplication app (argc, argv);
+
     const corbasim::core::reflective< SimpleExample::Padre > ref;
 
     print(&ref);
@@ -40,8 +43,15 @@ int main(int argc, char **argv)
     corbasim::core::interface_reflective_base const * iface = 
         corbasim::core::interface_reflective< SimpleExample::Test >::get_instance();
 
+
+    QTreeView view;
     corbasim::qt::PlotModel model;
 
     model.registerInstance("prueba", iface);
+
+    view.setModel(&model);
+    view.show();
+
+    return app.exec();
 }
 
