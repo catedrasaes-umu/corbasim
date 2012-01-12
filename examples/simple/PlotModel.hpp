@@ -18,14 +18,18 @@ public:
     PlotModel(QObject *parent = 0);
     virtual ~PlotModel();
 
-    void registerInstance(const std::string& name,
+public slots:
+
+    void registerInstance(const QString& name,
             core::interface_reflective_base const * reflective);
+
+    void unregisterInstance(const QString& name);
 
 protected:
 
     struct FirstLevelItem
     {
-        std::string name;
+        QString name;
         core::interface_reflective_base const * reflective;
     };
 

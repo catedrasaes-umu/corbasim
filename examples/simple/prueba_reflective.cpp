@@ -43,7 +43,6 @@ int main(int argc, char **argv)
     corbasim::core::interface_reflective_base const * iface = 
         corbasim::core::interface_reflective< SimpleExample::Test >::get_instance();
 
-
     QTreeView view;
     corbasim::qt::PlotModel model;
 

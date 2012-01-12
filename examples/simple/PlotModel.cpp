@@ -21,7 +21,6 @@ void insertRecursive(QStandardItem * parent,
 {
     const unsigned int count = reflective->get_children_count();
 
-    std::cout << count << std::endl;
     for (unsigned int i = 0; i < count; i++) 
     {
         corbasim::core::reflective_base const * child =
@@ -29,9 +28,9 @@ void insertRecursive(QStandardItem * parent,
 
         QStandardItem * childItem = 
             new QStandardItem(reflective->get_child_name(i));
+        childItem->setEditable(false);
 
         insertRecursive(childItem, child);
-        
 
         if (child->is_primitive())
         {
@@ -41,6 +40,7 @@ void insertRecursive(QStandardItem * parent,
             // Do plot?
             QStandardItem * value = new QStandardItem();
             value->setData(false, Qt::DisplayRole);
+            value->setEditable(true);
             list << value;
 
             parent->appendRow(list);
@@ -50,7 +50,7 @@ void insertRecursive(QStandardItem * parent,
     }
 }
 
-void PlotModel::registerInstance(const std::string& name,
+void PlotModel::registerInstance(const QString& name,
         core::interface_reflective_base const * reflective)
 {
     FirstLevelItem item;
@@ -58,7 +58,8 @@ void PlotModel::registerInstance(const std::string& name,
     item.reflective = reflective;
     m_items.push_back(item);
 
-    QStandardItem * ifItem = new QStandardItem(name.c_str());
+    QStandardItem * ifItem = new QStandardItem(name);
+    ifItem->setEditable(false);
 
     const unsigned int count = reflective->operation_count();
 
@@ -68,6 +69,7 @@ void PlotModel::registerInstance(const std::string& name,
             reflective->get_reflective_by_index(i);
 
         QStandardItem * opItem = new QStandardItem(op->get_name());
+        opItem->setEditable(false);
 
         insertRecursive(opItem, op);
 
@@ -75,7 +77,21 @@ void PlotModel::registerInstance(const std::string& name,
     }
 
     appendRow(ifItem);
+}
 
-    // TODO emit data changed
+void PlotModel::unregisterInstance(const QString& name)
+{
+    int i = 0;
+    for (FirstLevelItems_t::iterator it = m_items.begin(); 
+            it != m_items.end(); ++it, ++i) 
+    {
+        if (name == it->name)
+        {
+            removeRows(i, 1);
+
+            m_items.erase(it);
+            break;
+        }
+    }
 }
 
