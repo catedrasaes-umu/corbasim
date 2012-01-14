@@ -24,6 +24,8 @@
 #include <corbasim/qt/types.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 
+#include <ostream>
+
 namespace corbasim 
 {
 namespace dialogs 
@@ -51,16 +53,44 @@ signals:
     void sendRequest(QString id, corbasim::event::request_ptr);
 
     void doDelete();
+    void up();
+    void down();
 
 private slots:
 
     void deleteClicked();
+    void upClicked();
+    void downClicked();
+
+    void sendClicked();
 
 protected:
 
     const QString m_id;
     dialogs::input_base* m_dlg;
     QLayout * m_layout;
+};
+
+class CustomLayout : public QVBoxLayout
+{
+    Q_OBJECT
+public:
+
+    CustomLayout(QWidget * parent = 0) :
+        QVBoxLayout(parent)
+    {
+    }
+
+    virtual ~CustomLayout()
+    {
+    }
+
+public slots:
+
+    void insertItem(int idx, QLayoutItem * item)
+    {
+        QBoxLayout::insertItem(idx, item);
+    }
 };
 
 class OperationSequence : public QWidget
@@ -75,13 +105,18 @@ public slots:
     void appendItem(OperationSequenceItem * item);
 
     void deleteItem(OperationSequenceItem * item);
+    void moveUpItem(OperationSequenceItem * item);
+    void moveDownItem(OperationSequenceItem * item);
 
 private slots:
 
     void deleteItem();
+    void moveUpItem();
+    void moveDownItem();
 
 protected:
-    QLayout * m_layout;
+
+    CustomLayout * m_layout;
     QList< OperationSequenceItem * > m_items;
 };
 
@@ -147,6 +182,17 @@ public slots:
             const corbasim::gui::operation_factory_base * op);
 
     OperationSequence* createSequence();
+
+    void closeSequence(int idx);
+
+signals:
+
+    void sendRequest(QString id, corbasim::event::request_ptr);
+
+private slots:
+    
+    void slotSendRequest(const QString& id, 
+            corbasim::event::request_ptr);
 
 protected:
 

@@ -65,7 +65,7 @@ Objref::Objref(QMdiArea * area,
     m_menu->addAction("&Delete", this, SLOT(deleteObjref()));
 
     // Set reference
-    m_sub_reference = new QMdiSubWindow;
+    m_sub_reference = new QMdiSubWindow();
     ReferenceValidatedWidget * w = 
         new ReferenceValidatedWidget(
                 factory->get_core_factory()->create_validator());
@@ -135,7 +135,7 @@ QMdiSubWindow * Objref::getWindow(int idx)
 
     if (!win)
     {
-        m_subwindows[idx] = new QMdiSubWindow;
+        m_subwindows[idx] = new QMdiSubWindow();
 
         m_subwindows[idx]->setWidget(getRequestDialog(idx));
         m_mdi_area->addSubWindow(m_subwindows[idx], Qt::SubWindow);
@@ -180,10 +180,10 @@ void Objref::showScriptEditor()
 {
     if (!m_sub_script)
     {
-        m_script = new qt::SimpleScriptEditor;
+        m_script = new qt::SimpleScriptEditor();
         m_script->initialize(m_factory);
 
-        m_sub_script = new QMdiSubWindow;
+        m_sub_script = new QMdiSubWindow();
         m_sub_script->setWidget(m_script);
         m_sub_script->setWindowTitle(
                 QString("%1: Script editor").arg(m_id));

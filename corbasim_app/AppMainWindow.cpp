@@ -277,8 +277,8 @@ void AppMainWindow::showOpSequenceTool()
 {
     if (!m_sub_seq_tool)
     {
-        m_sub_seq_tool = new QMdiSubWindow;
-        m_seq_tool = new qt::OperationSequenceTool;
+        m_sub_seq_tool = new QMdiSubWindow();
+        m_seq_tool = new qt::OperationSequenceTool();
 
         m_seq_tool->setWindowTitle("");
 
@@ -300,6 +300,11 @@ void AppMainWindow::showOpSequenceTool()
                 m_seq_tool,
                 SLOT(objrefDeleted(const QString&)));
 
+        QObject::connect(m_seq_tool,
+            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+            m_controller, 
+            SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
+
         // Initializes the tool
         objrefs_t::const_iterator it = m_objrefs.begin();
 
@@ -316,8 +321,8 @@ void AppMainWindow::showCreateObjref()
 {
     if (!m_sub_create_objref)
     {
-        m_sub_create_objref = new QMdiSubWindow;
-        m_create_objref = new view::ObjrefCreateDialog;
+        m_sub_create_objref = new QMdiSubWindow();
+        m_create_objref = new view::ObjrefCreateDialog();
 
         m_create_objref->setWindowTitle("Create object reference");
 
@@ -348,8 +353,8 @@ void AppMainWindow::showCreateServant()
 {
     if (!m_sub_create_servant)
     {
-        m_sub_create_servant = new QMdiSubWindow;
-        m_create_servant = new view::ServantCreateDialog;
+        m_sub_create_servant = new QMdiSubWindow();
+        m_create_servant = new view::ServantCreateDialog();
 
         m_create_servant->setWindowTitle("Create servant");
 

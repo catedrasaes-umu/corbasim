@@ -62,17 +62,24 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     QPushButton * btShowInput = new QPushButton("Show input");
     btShowInput->setCheckable(true);
     QPushButton * btSend = new QPushButton("Send");
-    QPushButton * btSendNext = new QPushButton("Send and next");
+    // QPushButton * btSendNext = new QPushButton("Send and next");
 
     bLayout->addWidget(btShowInput);
     bLayout->addWidget(btSend);
-    bLayout->addWidget(btSendNext);
+    // bLayout->addWidget(btSendNext);
     
     QObject::connect(btShowInput, SIGNAL(toggled(bool)),
             m_dlg->get_qwidget(), SLOT(setVisible(bool)));
 
+    QObject::connect(btSend, SIGNAL(clicked()),
+            this, SLOT(sendClicked()));
+
     QObject::connect(btDelete, SIGNAL(clicked()),
             this, SLOT(deleteClicked()));
+    QObject::connect(btUp, SIGNAL(clicked()),
+            this, SLOT(upClicked()));
+    QObject::connect(btDown, SIGNAL(clicked()),
+            this, SLOT(downClicked()));
 
     layout->addLayout(bLayout);
     // End buttons
@@ -84,9 +91,25 @@ OperationSequenceItem::~OperationSequenceItem()
 {
 }
 
+void OperationSequenceItem::sendClicked()
+{
+    event::request_ptr req_(m_dlg->create_request());
+    emit sendRequest(m_id, req_);
+}
+
 void OperationSequenceItem::deleteClicked()
 {
     emit doDelete();
+}
+
+void OperationSequenceItem::upClicked()
+{
+    emit up();
+}
+
+void OperationSequenceItem::downClicked()
+{
+    emit down();
 }
 
 OperationSequence::OperationSequence(QWidget * parent) :
@@ -95,7 +118,7 @@ OperationSequence::OperationSequence(QWidget * parent) :
     QVBoxLayout * layout = new QVBoxLayout();
 
     QWidget * scrollWidget = new QWidget();
-    m_layout = new QVBoxLayout();
+    m_layout = new CustomLayout();
     scrollWidget->setLayout(m_layout);
 
     // Scroll
@@ -118,6 +141,10 @@ void OperationSequence::appendItem(OperationSequenceItem * item)
 
     QObject::connect(item, SIGNAL(doDelete()),
             this, SLOT(deleteItem()));
+    QObject::connect(item, SIGNAL(up()),
+            this, SLOT(moveUpItem()));
+    QObject::connect(item, SIGNAL(down()),
+            this, SLOT(moveDownItem()));
 
     m_items.push_back(item);
 }
@@ -128,6 +155,38 @@ void OperationSequence::deleteItem(OperationSequenceItem * item)
     item->deleteLater();
 }
 
+void OperationSequence::moveUpItem(OperationSequenceItem * item)
+{
+     int idx = m_items.indexOf(item);
+
+     if (idx > 0)
+     {
+         // List
+         m_items.takeAt(idx);
+         m_items.insert(idx - 1, item);
+
+         // Layout
+         QLayoutItem * lItem = m_layout->takeAt(idx);
+         m_layout->insertItem(idx - 1, lItem);
+     }
+}
+
+void OperationSequence::moveDownItem(OperationSequenceItem * item)
+{
+     int idx = m_items.indexOf(item);
+
+     if (idx > -1 && idx < m_items.size() - 1)
+     {
+         // List
+         m_items.takeAt(idx);
+         m_items.insert(idx + 1, item);
+
+         // Layout
+         QLayoutItem * lItem = m_layout->takeAt(idx);
+         m_layout->insertItem(idx + 1, lItem);
+     }
+}
+
 void OperationSequence::deleteItem()
 {
     OperationSequenceItem * sndObj = 
@@ -135,6 +194,24 @@ void OperationSequence::deleteItem()
 
     if (sndObj)
         deleteItem(sndObj);
+}
+
+void OperationSequence::moveUpItem()
+{
+    OperationSequenceItem * sndObj = 
+        qobject_cast< OperationSequenceItem * >(sender());
+
+    if (sndObj)
+        moveUpItem(sndObj);
+}
+
+void OperationSequence::moveDownItem()
+{
+    OperationSequenceItem * sndObj = 
+        qobject_cast< OperationSequenceItem * >(sender());
+
+    if (sndObj)
+        moveDownItem(sndObj);
 }
 
 // View
@@ -159,7 +236,14 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
 
     m_view->setModel(&m_model);
 
+    // Tabs
     m_tabs = new QTabWidget();
+    m_tabs->setTabsClosable(true);
+
+    QToolButton * btNewTab = new QToolButton();
+    btNewTab->setIcon(style()->standardIcon(QStyle::SP_FileIcon));
+    m_tabs->setCornerWidget(btNewTab);
+
     layout->addWidget(m_tabs);
 
     setLayout(layout);
@@ -176,6 +260,12 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
             this,
             SLOT(appendOperation(const QString&, 
                     const corbasim::gui::operation_factory_base *)));
+
+    QObject::connect(btNewTab, SIGNAL(clicked()),
+            this, SLOT(createSequence()));
+
+    QObject::connect(m_tabs, SIGNAL(tabCloseRequested(int)),
+            this, SLOT(closeSequence(int)));
 
     setMinimumHeight(400);
     setMinimumWidth(600);
@@ -209,6 +299,11 @@ void OperationSequenceTool::appendOperation(const QString& id,
         new OperationSequenceItem(id, op->create_input());
 
     seq->appendItem(item);
+
+    QObject::connect(item, SIGNAL(sendRequest(QString,
+                        corbasim::event::request_ptr)),
+                this, SLOT(slotSendRequest(const QString&, 
+                        corbasim::event::request_ptr)));
 }
 
 OperationSequence* OperationSequenceTool::createSequence()
@@ -217,6 +312,22 @@ OperationSequence* OperationSequenceTool::createSequence()
     m_sequences.push_back(seq);
     m_tabs->addTab(seq, "unnamed");
     return seq;
+}
+
+void OperationSequenceTool::closeSequence(int idx)
+{
+    // QT Documentation
+    // Removes the tab at position index from this stack of widgets. 
+    // The page widget itself is not deleted.
+    m_tabs->removeTab(idx);
+
+    delete m_sequences.takeAt(idx);
+}
+
+void OperationSequenceTool::slotSendRequest(const QString& id, 
+        corbasim::event::request_ptr req)
+{
+    emit sendRequest(id, req);
 }
 
 // Model
@@ -284,7 +395,8 @@ void OperationModel::doubleClicked(const QModelIndex& index)
 
     if (parent.isValid())
     {
-        FirstLevelItem& item = *boost::next(m_items.begin(), parent.row());
+        FirstLevelItem& item = *boost::next(m_items.begin(), 
+                parent.row());
 
         // QStandardItem * mItem = itemFromIndex(index);
         // gui::operation_factory_base const * op =
