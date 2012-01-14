@@ -33,6 +33,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/widgets/union.hpp
 
     # QObjects
+    qt/OperationSequence.hpp
     qt/types.hpp
     qt/ReferenceModel.hpp
     qt/Interpreter.hpp
@@ -65,6 +66,7 @@ set(corbasim_qt_MOC_HDRS
     qt/private/ScriptEditor.hpp
     qt/private/MultiScriptEditor.hpp
 
+    qt/OperationSequence.hpp
     qt/ReferenceModel.hpp
     qt/Interpreter.hpp
     qt/client/SimpleClient.hpp
@@ -95,6 +97,7 @@ set(corbasim_qt_SRCS
     qt/private/ScriptEditor.cpp
     qt/private/MultiScriptEditor.cpp
 
+    qt/OperationSequence.cpp
     qt/ReferenceModel.cpp
     qt/Interpreter.cpp
     qt/initialize.cpp

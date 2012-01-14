@@ -28,6 +28,11 @@
 
 namespace corbasim 
 {
+namespace qt 
+{
+class OperationSequenceTool;
+} // namespace qt
+
 namespace app 
 {
 
@@ -46,6 +51,8 @@ public:
     void setEngine(TriggerEngine * engine);
 
 public slots:
+
+    void showOpSequenceTool();
 
     void showCreateObjref();
     void showCreateServant();
@@ -112,11 +119,13 @@ protected:
     QMdiSubWindow * m_sub_create_objref;
     QMdiSubWindow * m_sub_create_servant;
     QMdiSubWindow * m_sub_script;
+    QMdiSubWindow * m_sub_seq_tool;
     
     // Subwindows widgets
     QWidget * m_create_objref;
     QWidget * m_create_servant;
     QWidget * m_script;
+    qt::OperationSequenceTool * m_seq_tool;
 
     // Dock widgets
     QDockWidget * m_dock_app_log;

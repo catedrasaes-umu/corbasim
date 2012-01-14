@@ -22,6 +22,7 @@
 #include "TriggerEngine.hpp"
 #include "view/CreateDialog.hpp"
 #include <corbasim/qt/ScriptWindow.hpp>
+#include <corbasim/qt/OperationSequence.hpp>
 
 using namespace corbasim::app;
 
@@ -32,11 +33,13 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_sub_create_objref(NULL),
     m_sub_create_servant(NULL),
     m_sub_script(NULL),
+    m_sub_seq_tool(NULL),
 
     // Widgets
     m_create_objref(NULL),
     m_create_servant(NULL),
-    m_script(NULL)
+    m_script(NULL),
+    m_seq_tool(NULL)
 {
     m_mdi_area = new QMdiArea;
 
@@ -149,7 +152,10 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     
     QMenu * tools = menu->addMenu("&Tools");
     tools->addAction("&Load script", this, SLOT(showLoadScript()));
-    tools->addAction("&Run script", this, SLOT(showScript()));
+    // TODO tools->addAction("&Run script", this, SLOT(showScript()));
+    tools->addSeparator();
+    tools->addAction("&Operation sequences", 
+            this, SLOT(showOpSequenceTool()));
 
     QMenu * winMenu = menu->addMenu("&Window");
     winMenu->addAction("&Show log", m_dock_log, SLOT(show()));
@@ -266,6 +272,45 @@ void AppMainWindow::setEngine(TriggerEngine * engine)
 }
 
 // Subwindow slot
+
+void AppMainWindow::showOpSequenceTool()
+{
+    if (!m_sub_seq_tool)
+    {
+        m_sub_seq_tool = new QMdiSubWindow;
+        m_seq_tool = new qt::OperationSequenceTool;
+
+        m_seq_tool->setWindowTitle("");
+
+        m_sub_seq_tool->setWidget(m_seq_tool);
+        m_mdi_area->addSubWindow(m_sub_seq_tool);
+
+        QObject::connect(
+                m_controller,
+                SIGNAL(objrefCreated(
+                        QString, 
+                        const corbasim::gui::gui_factory_base *)),
+                m_seq_tool,
+                SLOT(objrefCreated(
+                        const QString&, const 
+                        corbasim::gui::gui_factory_base *)));
+        QObject::connect(
+                m_controller,
+                SIGNAL(objrefDeleted(QString)),
+                m_seq_tool,
+                SLOT(objrefDeleted(const QString&)));
+
+        // Initializes the tool
+        objrefs_t::const_iterator it = m_objrefs.begin();
+
+        for (; it != m_objrefs.end(); it++)
+            m_seq_tool->objrefCreated(it->first,
+                    it->second->getFactory());
+    }
+    m_sub_seq_tool->showNormal();
+    m_seq_tool->show();
+    m_mdi_area->setActiveSubWindow(m_sub_seq_tool);
+}
 
 void AppMainWindow::showCreateObjref()
 {

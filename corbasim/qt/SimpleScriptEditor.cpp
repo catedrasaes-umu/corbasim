@@ -221,6 +221,13 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     toolBar->addAction(loadAction);
     toolBar->addAction(saveAction);
 
+    toolBar = addToolBar("Player");
+    toolBar->addAction(playAction);
+    toolBar->addAction(playSelectedAction);
+    toolBar->addAction(stopAction);
+    toolBar->addSeparator();
+    toolBar->addAction(sendCurrentAction);
+
     toolBar = addToolBar("Script");
     m_cbInsertAtEnd = new QCheckBox("Insert before selected");
     toolBar->addWidget(m_cbInsertAtEnd);
@@ -233,13 +240,6 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     toolBar->addSeparator();
     toolBar->addAction(moveUpAction);
     toolBar->addAction(moveDownAction);
-
-    toolBar = addToolBar("Player");
-    toolBar->addAction(playAction);
-    toolBar->addAction(playSelectedAction);
-    toolBar->addAction(stopAction);
-    toolBar->addSeparator();
-    toolBar->addAction(sendCurrentAction);
     
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
