@@ -377,7 +377,7 @@ void OperationSequenceTool::appendOperation(const QString& id,
 
 OperationSequence* OperationSequenceTool::createSequence()
 {
-    OperationSequence * seq = new OperationSequence("unnamed");
+    OperationSequence * seq = new OperationSequence("no name");
     m_sequences.push_back(seq);
     m_tabs->addTab(seq, seq->getName());
     m_tabs->setCurrentIndex(m_tabs->count() - 1);
