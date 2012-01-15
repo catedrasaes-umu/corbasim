@@ -299,6 +299,8 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
 
     setMinimumHeight(400);
     setMinimumWidth(600);
+
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
 
 OperationSequenceTool::~OperationSequenceTool()
