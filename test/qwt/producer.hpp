@@ -76,6 +76,24 @@ public:
 
 public slots:
 
+    void update()
+    {
+        size_t size = m_data->size();
+
+        if (size - 1 > m_interval.maxValue())
+        {
+            double w = m_interval.width();
+
+            m_interval.setMinValue(size - 1 - w);
+            m_interval.setMaxValue(size - 1);
+
+            setAxisScale(xBottom,
+                m_interval.minValue(), m_interval.maxValue() );
+        }
+
+        replot();
+    }
+
     void append(const QVector< double >& v)
     {
         m_data->append(v);
@@ -83,20 +101,20 @@ public slots:
         // TODO insert a marker
         m_idx++;
 
-        replot();
+        update();
     }
 
     void append(double v)
     {
         m_data->append(v);
-        updateAxes();
-        replot();
+        update();
     }
 
 protected:
     void populate();
 
     unsigned long long m_idx;
+    QwtInterval m_interval;
     HistoricData * m_data;
 };
 

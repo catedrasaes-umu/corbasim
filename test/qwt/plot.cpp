@@ -1,7 +1,7 @@
 #include "producer.hpp"
 
 Plot::Plot( QWidget *parent ):
-    QwtPlot( parent ), m_idx(0)
+    QwtPlot( parent ), m_idx(0), m_interval(0.0, 10.0)
 {
     // panning with the left mouse button
     ( void ) new QwtPlotPanner( canvas() );
@@ -40,6 +40,9 @@ void Plot::populate()
     curve->setLegendAttribute( QwtPlotCurve::LegendShowLine, true );
     curve->setPen( QPen( Qt::red ) );
     curve->attach( this );
+    
+    setAxisScale(xBottom,
+        m_interval.minValue(), m_interval.maxValue() );
 
     m_data = new HistoricData();
     curve->setData(m_data);
