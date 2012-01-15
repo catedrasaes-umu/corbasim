@@ -108,6 +108,16 @@ OperationSequenceItem::~OperationSequenceItem()
 {
 }
 
+const QString& OperationSequenceItem::getObjrefId() const
+{
+    return m_id;
+}
+
+const char * OperationSequenceItem::getOperationName() const
+{
+    return m_dlg->get_name();
+}
+
 void OperationSequenceItem::sendClicked()
 {
     event::request_ptr req_(m_dlg->create_request());

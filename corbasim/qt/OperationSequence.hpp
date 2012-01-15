@@ -48,6 +48,9 @@ public:
             QWidget * parent = 0);
     virtual ~OperationSequenceItem();
 
+    const QString& getObjrefId() const;
+    const char * getOperationName() const;
+
 signals:
 
     void sendRequest(QString id, corbasim::event::request_ptr);
