@@ -34,10 +34,10 @@ IF( QT4_FOUND )
                PATHS ${QT_INCLUDE_DIR}
                /usr/local/qwt/include
                /usr/include/qwt
+               /usr/local/qwt-6.0.2-svn/include/
                /usr/local/qwt-6.0.1-svn/include/
                /usr/local/qwt-6.0.0-rc1/include
                /usr/local/qwt-6.0.0-rc3/include
-               F:/kde/qwt-6.0.0-rc4/src
                PATH_SUFFIXES
                qwt
                qwt6
@@ -69,10 +69,10 @@ IF( QT4_FOUND )
 		      /usr/local/qwt/lib
 		      /usr/local/lib
 		      /usr/local/qwt-6.0.1-svn/lib
+		      /usr/local/qwt-6.0.2-svn/lib
 		      /usr/local/qwt-6.0.0-rc1/lib
 		      /usr/local/qwt-6.0.0-rc3/lib
 		      /usr/lib
-		      F:/kde/qwt-6.0.0-rc4/lib
 		      ${QT_LIBRARY_DIR})
 		      
 		IF( UNIX AND NOT CYGWIN)

@@ -5,4 +5,7 @@ target_link_libraries(test_archives
 
 add_executable(test_mpl_vector mpl_vector.cpp)
 
+if (Qwt6_FOUND)
+    add_subdirectory(qwt)
+endif()
 
