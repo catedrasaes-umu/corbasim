@@ -145,15 +145,15 @@ OperationSequence::OperationSequence(QWidget * parent) :
     scrollLayout->addItem(spacer);
 
     // Scroll
-    QScrollArea * scroll = new QScrollArea();
-    scroll->setObjectName("scroll");
-    scroll->setWidgetResizable(true);
-    scroll->setWidget(scrollWidget);
+    m_scroll = new QScrollArea();
+    m_scroll->setObjectName("scroll");
+    m_scroll->setWidgetResizable(true);
+    m_scroll->setWidget(scrollWidget);
 
-    scroll->setLineWidth(0);
-    scroll->setFrameStyle(QFrame::NoFrame);
+    m_scroll->setLineWidth(0);
+    m_scroll->setFrameStyle(QFrame::NoFrame);
 
-    layout->addWidget(scroll);
+    layout->addWidget(m_scroll);
     setLayout(layout);
 }
 
@@ -165,6 +165,9 @@ void OperationSequence::appendItem(OperationSequenceItem * item)
 {
     // Before spacer
     m_layout->addWidget(item);
+
+    // Scroll to item
+    // m_scroll->ensureWidgetVisible(item);
 
     QObject::connect(item, SIGNAL(doDelete()),
             this, SLOT(deleteItem()));
@@ -338,6 +341,7 @@ OperationSequence* OperationSequenceTool::createSequence()
     OperationSequence * seq = new OperationSequence();
     m_sequences.push_back(seq);
     m_tabs->addTab(seq, "unnamed");
+    m_tabs->setCurrentIndex(m_tabs->count() - 1);
     return seq;
 }
 

@@ -118,6 +118,7 @@ protected:
 
     CustomLayout * m_layout;
     QList< OperationSequenceItem * > m_items;
+    QScrollArea * m_scroll;
 };
 
 class OperationsView : public QTreeView

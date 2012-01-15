@@ -49,14 +49,26 @@ RequestDialog::RequestDialog(dialogs::input_base* dlg,
 {
     corbasim::qt::initialize();
 
-    QVBoxLayout * layout = new QVBoxLayout;
+    QVBoxLayout * layout = new QVBoxLayout();
 
-    QScrollArea * scroll = new QScrollArea;
+    // Input scroll
+    QScrollArea * scroll = new QScrollArea();
     scroll->setObjectName("scroll");
     scroll->setWidgetResizable(true);
     m_dlg->get_qwidget()->setObjectName("form");
-    scroll->setWidget(m_dlg->get_qwidget());
+    
+    QWidget * scrollWidget = new QWidget();
+    QVBoxLayout * scrollLayout = new QVBoxLayout();
+    scrollWidget->setLayout(scrollLayout);
+    scrollLayout->addWidget(m_dlg->get_qwidget());
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Expanding);
+    scrollLayout->addItem(spacer);
+    scroll->setWidget(scrollWidget);
     layout->addWidget(scroll); 
+    scroll->setLineWidth(0);
+    scroll->setFrameStyle(QFrame::NoFrame);
+    // End scroll
 
     QHBoxLayout * periodicLayout = new QHBoxLayout;
 

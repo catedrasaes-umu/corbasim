@@ -54,7 +54,15 @@ void MultiInputWidget::initialize(gui::gui_factory_base const * factory)
         // Envuelve el formulario en un scroll area
         QScrollArea * scroll = new QScrollArea;
         scroll->setWidgetResizable(true);
-        scroll->setWidget(_input->get_qwidget());
+        QWidget * scrollWidget = new QWidget();
+        QVBoxLayout * scrollLayout = new QVBoxLayout();
+        scrollWidget->setLayout(scrollLayout);
+        scrollLayout->addWidget(_input->get_qwidget());
+        QSpacerItem * spacer = new QSpacerItem(40, 20, 
+                QSizePolicy::Expanding, QSizePolicy::Expanding);
+        scrollLayout->addItem(spacer);
+        scroll->setWidget(scrollWidget);
+
 
         // Añade el fomulario al stacked widget
         m_stack->addWidget(scroll);
