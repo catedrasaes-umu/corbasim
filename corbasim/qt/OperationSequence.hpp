@@ -39,7 +39,7 @@ namespace corbasim
 namespace qt 
 {
 
-class OperationSequenceItem : public QWidget
+class OperationSequenceItem : public QFrame
 {
     Q_OBJECT
 public:

@@ -26,14 +26,20 @@ using namespace corbasim::qt;
 OperationSequenceItem::OperationSequenceItem(const QString& id,
         dialogs::input_base* dlg,
         QWidget * parent) : 
-    m_id(id), m_dlg(dlg)
+    QFrame(parent), m_id(id), m_dlg(dlg)
 {
     QVBoxLayout * layout = new QVBoxLayout();
 
     // Title bar
     QHBoxLayout * tLayout = new QHBoxLayout();
-    tLayout->addWidget(new QLabel(
-                QString("Object: '%1' Operation: '%2'").arg(id).arg(dlg->get_name())));
+    QLabel * title = new QLabel(
+        QString("<b>Object: '%1' Operation: '%2'</b>").arg(id).arg(
+            dlg->get_name()));
+    tLayout->addWidget(title);
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+    tLayout->addItem(spacer);
+
     layout->addLayout(tLayout);
 
     // Editor
@@ -44,27 +50,29 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
 
     // Buttons
     QHBoxLayout * bLayout = new QHBoxLayout();
+    QToolButton * btShowInput = new QToolButton();
+    btShowInput->setIcon(style()->standardIcon(
+                QStyle::SP_FileDialogDetailedView));
+    btShowInput->setCheckable(true);
     QToolButton * btUp = new QToolButton();
     btUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
     QToolButton * btDown = new QToolButton();
     btDown->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
     QToolButton * btDelete = new QToolButton();
     btDelete->setIcon(style()->standardIcon(QStyle::SP_TrashIcon));
-    bLayout->addWidget(btUp);
-    bLayout->addWidget(btDown);
-    bLayout->addWidget(btDelete);
+    tLayout->addWidget(btShowInput);
+    tLayout->addWidget(btUp);
+    tLayout->addWidget(btDown);
+    tLayout->addWidget(btDelete);
 
     // Horizontal spacer
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     bLayout->addItem(spacer);
 
-    QPushButton * btShowInput = new QPushButton("Show input");
-    btShowInput->setCheckable(true);
     QPushButton * btSend = new QPushButton("Send");
     // QPushButton * btSendNext = new QPushButton("Send and next");
 
-    bLayout->addWidget(btShowInput);
     bLayout->addWidget(btSend);
     // bLayout->addWidget(btSendNext);
     
@@ -85,6 +93,15 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     // End buttons
 
     setLayout(layout);
+
+    setLineWidth(1);
+    setFrameStyle(QFrame::Box);
+
+    // Tooltips
+    btShowInput->setToolTip("Show/hide detailed input form");
+    btDelete->setToolTip("Delete item");
+    btUp->setToolTip("Move up");
+    btDown->setToolTip("Move down");
 }
 
 OperationSequenceItem::~OperationSequenceItem()
@@ -118,14 +135,23 @@ OperationSequence::OperationSequence(QWidget * parent) :
     QVBoxLayout * layout = new QVBoxLayout();
 
     QWidget * scrollWidget = new QWidget();
+    QVBoxLayout * scrollLayout = new QVBoxLayout();
     m_layout = new CustomLayout();
-    scrollWidget->setLayout(m_layout);
+    scrollWidget->setLayout(scrollLayout);
+    scrollLayout->addLayout(m_layout);
+
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Expanding);
+    scrollLayout->addItem(spacer);
 
     // Scroll
     QScrollArea * scroll = new QScrollArea();
     scroll->setObjectName("scroll");
     scroll->setWidgetResizable(true);
     scroll->setWidget(scrollWidget);
+
+    scroll->setLineWidth(0);
+    scroll->setFrameStyle(QFrame::NoFrame);
 
     layout->addWidget(scroll);
     setLayout(layout);
@@ -137,6 +163,7 @@ OperationSequence::~OperationSequence()
 
 void OperationSequence::appendItem(OperationSequenceItem * item)
 {
+    // Before spacer
     m_layout->addWidget(item);
 
     QObject::connect(item, SIGNAL(doDelete()),
