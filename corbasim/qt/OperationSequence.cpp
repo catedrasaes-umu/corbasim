@@ -21,6 +21,8 @@
 #include <corbasim/gui/dialogs_fwd.hpp>
 #include <boost/next_prior.hpp>
 
+#include <iostream>
+
 using namespace corbasim::qt;
 
 OperationSequenceItem::OperationSequenceItem(const QString& id,
@@ -139,8 +141,8 @@ void OperationSequenceItem::downClicked()
     emit down();
 }
 
-OperationSequence::OperationSequence(QWidget * parent) :
-    QWidget(parent)
+OperationSequence::OperationSequence(const QString& name, QWidget * parent) :
+    QWidget(parent), m_name(name)
 {
     QVBoxLayout * layout = new QVBoxLayout();
 
@@ -171,6 +173,11 @@ OperationSequence::~OperationSequence()
 {
 }
 
+const QString& OperationSequence::getName() const
+{
+    return m_name;
+}
+
 void OperationSequence::appendItem(OperationSequenceItem * item)
 {
     // Before spacer
@@ -187,12 +194,16 @@ void OperationSequence::appendItem(OperationSequenceItem * item)
             this, SLOT(moveDownItem()));
 
     m_items.push_back(item);
+
+    emit modified();
 }
 
 void OperationSequence::deleteItem(OperationSequenceItem * item)
 {
     m_items.removeAll(item);
     item->deleteLater();
+
+    emit modified();
 }
 
 void OperationSequence::moveUpItem(OperationSequenceItem * item)
@@ -208,6 +219,8 @@ void OperationSequence::moveUpItem(OperationSequenceItem * item)
          // Layout
          QLayoutItem * lItem = m_layout->takeAt(idx);
          m_layout->insertItem(idx - 1, lItem);
+
+        emit modified();
      }
 }
 
@@ -224,6 +237,8 @@ void OperationSequence::moveDownItem(OperationSequenceItem * item)
          // Layout
          QLayoutItem * lItem = m_layout->takeAt(idx);
          m_layout->insertItem(idx + 1, lItem);
+
+         emit modified();
      }
 }
 
@@ -307,10 +322,22 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
     QObject::connect(m_tabs, SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeSequence(int)));
 
+    // Context menu
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(showContextMenu(const QPoint&)));
+
     setMinimumHeight(400);
     setMinimumWidth(600);
 
     setWindowIcon(QIcon(":/resources/images/csu.png"));
+
+    // Menu
+    m_menu = new QMenu();
+    m_menu->addAction("Save as...", this, SLOT(saveCurrentSequence()));
+    m_menu->addSeparator();
+    m_menu->addAction("New", this, SLOT(createSequence()));
+    m_menu->addAction("Load", this, SLOT(loadSequence()));
 }
 
 OperationSequenceTool::~OperationSequenceTool()
@@ -350,11 +377,47 @@ void OperationSequenceTool::appendOperation(const QString& id,
 
 OperationSequence* OperationSequenceTool::createSequence()
 {
-    OperationSequence * seq = new OperationSequence();
+    OperationSequence * seq = new OperationSequence("unnamed");
     m_sequences.push_back(seq);
-    m_tabs->addTab(seq, "unnamed");
+    m_tabs->addTab(seq, seq->getName());
     m_tabs->setCurrentIndex(m_tabs->count() - 1);
+
+    QObject::connect(seq, SIGNAL(modified()),
+            this, SLOT(sequenceModified()));
+
     return seq;
+}
+
+void OperationSequenceTool::showContextMenu(const QPoint& pos)
+{
+    if (m_sequences.size() > 0)
+    {
+        m_menu->exec(QCursor::pos());
+    }
+}
+
+void OperationSequenceTool::saveCurrentSequence()
+{
+    QString file = QFileDialog::getSaveFileName( 0, tr(
+                "Select a file"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    // TODO
+}
+
+void OperationSequenceTool::loadSequence()
+{
+    const QStringList files = QFileDialog::getOpenFileNames( 0, tr(
+                "Select some files"), ".");
+
+    // User cancels
+    if (files.isEmpty())
+        return;
+
+    // TODO
 }
 
 void OperationSequenceTool::closeSequence(int idx)
@@ -371,6 +434,18 @@ void OperationSequenceTool::slotSendRequest(const QString& id,
         corbasim::event::request_ptr req)
 {
     emit sendRequest(id, req);
+}
+
+void OperationSequenceTool::sequenceModified()
+{
+    OperationSequence * sndObj = 
+        qobject_cast< OperationSequence * >(sender());
+
+    int idx = -1;
+    if (sndObj && (idx = m_sequences.indexOf(sndObj)) != -1)
+    {
+        m_tabs->setTabText(idx, sndObj->getName() + " *");
+    }
 }
 
 // Model

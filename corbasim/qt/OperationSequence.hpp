@@ -100,8 +100,10 @@ class OperationSequence : public QWidget
 {
     Q_OBJECT
 public:
-    OperationSequence(QWidget * parent = 0);
+    OperationSequence(const QString& name, QWidget * parent = 0);
     virtual ~OperationSequence();
+
+    const QString& getName() const;
 
 public slots:
 
@@ -117,11 +119,18 @@ private slots:
     void moveUpItem();
     void moveDownItem();
 
+signals:
+
+    void modified();
+
 protected:
+
+    QString m_name;
 
     CustomLayout * m_layout;
     QList< OperationSequenceItem * > m_items;
     QScrollArea * m_scroll;
+
 };
 
 class OperationsView : public QTreeView
@@ -189,6 +198,11 @@ public slots:
 
     void closeSequence(int idx);
 
+    void showContextMenu(const QPoint& pos);
+
+    void saveCurrentSequence();
+    void loadSequence();
+
 signals:
 
     void sendRequest(QString id, corbasim::event::request_ptr);
@@ -198,6 +212,8 @@ private slots:
     void slotSendRequest(const QString& id, 
             corbasim::event::request_ptr);
 
+    void sequenceModified();
+
 protected:
 
     OperationModel m_model;
@@ -205,6 +221,8 @@ protected:
     OperationsView * m_view;
     QTabWidget * m_tabs;
     QList< OperationSequence * > m_sequences;
+
+    QMenu * m_menu;
 };
 
 } // namespace qt
