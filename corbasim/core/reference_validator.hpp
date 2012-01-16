@@ -65,7 +65,11 @@ struct reference_validator_impl : public reference_validator_base
     void set_reference(CORBA::Object_ptr ref)
     {
         CORBA::release(m_ref);
-        m_ref = Interface::_narrow(ref);
+        try {
+            m_ref = Interface::_narrow(ref);
+        } catch (...) {
+            m_ref = Interface::_nil();
+        }
     }
 
     CORBA::Object_ptr get_reference()

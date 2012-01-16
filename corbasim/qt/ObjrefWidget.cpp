@@ -44,6 +44,7 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
         // IOR
         m_selector->addItem("IOR");
         m_ior = new QTextEdit;
+        m_ior->setAcceptRichText(false);
         m_stack->addWidget(m_ior);
 
         // IOR from file
