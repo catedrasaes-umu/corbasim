@@ -155,6 +155,7 @@ struct reflective_base
     // virtual tag_t get_tag() const = 0;
 
     reflective_base const * get_parent() const;
+    unsigned int get_child_index() const;
 
     virtual unsigned int get_children_count() const;
     virtual const char * get_child_name(unsigned int idx) const;
@@ -186,9 +187,11 @@ struct reflective_base
      */
 
 protected:
-    reflective_base(reflective_base const * parent = NULL);
+    reflective_base(reflective_base const * parent = NULL, 
+            unsigned int child_index = 0);
 
     reflective_base const * m_parent;
+    unsigned int m_child_index;
 };
 
 typedef boost::shared_ptr< reflective_base > reflective_ptr;
@@ -204,8 +207,8 @@ namespace detail
 template< typename T >
 struct bool_reflective : public reflective_base
 {
-    bool_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+    bool_reflective(reflective_base const * parent, unsigned int idx) :
+        reflective_base(parent, idx)
     {
     }
     
@@ -220,8 +223,9 @@ struct bool_reflective : public reflective_base
 template< typename T >
 struct primitive_reflective : public reflective_base
 {
-    primitive_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+    primitive_reflective(reflective_base const * parent, 
+            unsigned int idx) :
+        reflective_base(parent, idx)
     {
     }
 
@@ -236,8 +240,8 @@ struct array_reflective : public reflective_base
 
     static const size_t size = sizeof(T) / sizeof(slice_t);
 
-    array_reflective(reflective_base const * parent) :
-        reflective_base(parent), m_slice(this)
+    array_reflective(reflective_base const * parent, unsigned int idx) :
+        reflective_base(parent, idx), m_slice(this, 0)
     {
     }
 
@@ -271,8 +275,9 @@ struct array_reflective : public reflective_base
 template< typename T >
 struct string_reflective : public reflective_base
 {
-    string_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+    string_reflective(reflective_base const * parent = NULL,
+            unsigned int idx = 0) :
+        reflective_base(parent, idx)
     {
     }
 
@@ -291,8 +296,9 @@ struct sequence_reflective : public reflective_base
     typedef typename adapted::is_corbaseq < T >::slice_type slice_t;
     typedef reflective < slice_t > slice_reflective_t;
 
-    sequence_reflective(reflective_base const * parent) :
-        reflective_base(parent), m_slice(this)
+    sequence_reflective(reflective_base const * parent = NULL,
+            unsigned int idx = 0) :
+        reflective_base(parent, idx), m_slice(this, 0)
     {
     }
 
@@ -368,7 +374,7 @@ struct create_iterator
 
         typedef reflective< current_t > reflective_t;
 
-        reflective_ptr ptr_(new reflective_t(m_this));
+        reflective_ptr ptr_(new reflective_t(m_this, N::value));
         accessor_ptr ac_(new accessor< S, N >());
 
         m_this->m_children.push_back(ptr_);
@@ -385,8 +391,9 @@ struct struct_reflective : public reflective_base
     typedef boost::mpl::range_c< size_t, 0, members_count > 
         members_range_t;
 
-    struct_reflective(reflective_base const * parent = NULL) :
-        reflective_base(parent)
+    struct_reflective(reflective_base const * parent = NULL, 
+            unsigned int idx = 0) :
+        reflective_base(parent, idx)
     {
         // Reserve
         m_children.reserve(members_count);
@@ -404,7 +411,7 @@ struct struct_reflective : public reflective_base
     }
 
     const char * get_child_name(unsigned int idx) const 
-    { 
+    {
         return m_child_names[idx];
     }
     
@@ -441,8 +448,9 @@ struct struct_reflective : public reflective_base
 template< typename T >
 struct union_reflective : public reflective_base
 {
-    union_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+    union_reflective(reflective_base const * parent = NULL, 
+            unsigned int idx = 0) :
+        reflective_base(parent, idx)
     {
     }
 
@@ -455,8 +463,9 @@ struct union_reflective : public reflective_base
 template< typename T >
 struct enum_reflective : public reflective_base
 {
-    enum_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+    enum_reflective(reflective_base const * parent = NULL, 
+            unsigned int idx = 0) :
+        reflective_base(parent, idx)
     {
     }
 
@@ -469,8 +478,9 @@ struct enum_reflective : public reflective_base
 template< typename T >
 struct objrefvar_reflective : public reflective_base
 {
-    objrefvar_reflective(reflective_base const * parent) :
-        reflective_base(parent)
+    objrefvar_reflective(reflective_base const * parent = NULL,
+            unsigned int idx = 0) :
+        reflective_base(parent, idx)
     {
     }
 
@@ -483,8 +493,9 @@ struct objrefvar_reflective : public reflective_base
 template< typename T >
 struct unsupported_type : public reflective_base
 {
-    unsupported_type(reflective_base const * parent) :
-        reflective_base(parent)
+    unsupported_type(reflective_base const * parent = NULL, 
+            unsigned int idx = 0) :
+        reflective_base(parent, idx)
     {
     }
 };
@@ -532,7 +543,9 @@ struct reflective : public detail::calculate_reflective< T >::type
 {
     typedef typename detail::calculate_reflective< T >::type base_t;
 
-    reflective(reflective_base const * parent = NULL) : base_t(parent) {}
+    reflective(reflective_base const * parent = NULL,
+            unsigned int idx = 0) : base_t(parent, idx) 
+    {}
 };
 
 struct operation_reflective_base : 

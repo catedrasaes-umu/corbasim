@@ -21,8 +21,9 @@
 
 using namespace corbasim::core;
 
-reflective_base::reflective_base(reflective_base const * parent) : 
-    m_parent(parent)
+reflective_base::reflective_base(reflective_base const * parent,
+        unsigned int child_index) : 
+    m_parent(parent), m_child_index(child_index)
 {
 }
 
@@ -33,6 +34,11 @@ reflective_base::~reflective_base()
 reflective_base const * reflective_base::get_parent() const 
 { 
     return m_parent; 
+}
+
+unsigned int reflective_base::get_child_index() const 
+{ 
+    return m_child_index; 
 }
 
 unsigned int reflective_base::get_children_count() const 
