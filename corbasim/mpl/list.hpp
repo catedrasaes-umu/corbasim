@@ -29,7 +29,7 @@ namespace cs_mpl
 
 struct null_type {};
 
-template< typename Head, typename Tail = null_type >
+template< typename Head = null_type, typename Tail = null_type >
 struct list
 {
     typedef Head head_type;
@@ -64,6 +64,14 @@ struct Sequence < null_type >
     template < typename Func >
     static inline void apply(Func f) {}
 };
+
+template < >
+struct Sequence < list < null_type, null_type > >
+{
+    template < typename Func >
+    static inline void apply(Func f) {}
+};
+
 
 } // namespace list_iterator
 } // namespace detail
