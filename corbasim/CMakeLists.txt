@@ -13,6 +13,10 @@ include(corbasim.cmake)
 # CORBASIM QT library
 if(QT_FOUND)
     include(corbasim_qt.cmake)
+
+    if (Qwt6_FOUND)
+        include(corbasim_qwt.cmake)
+    endif()
 endif()
 
 # Not yet!

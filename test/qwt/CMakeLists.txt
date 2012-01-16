@@ -7,5 +7,5 @@ add_executable(qwt_test_plot
     plot.cpp ${example_MOC_SRCS})
 
 target_link_libraries(qwt_test_plot 
-    ${Qwt6_Qt4_LIBRARY} ${QT_LIBRARIES})
+    ${Qwt6_Qt4_LIBRARY} ${QT_LIBRARIES} corbasim_qwt)
 
