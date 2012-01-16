@@ -185,6 +185,8 @@ struct reflective_base
 
     virtual std::string to_string() const;
      */
+    
+    virtual double to_double(holder const& value) const;
 
 protected:
     reflective_base(reflective_base const * parent = NULL, 
@@ -230,6 +232,17 @@ struct primitive_reflective : public reflective_base
     }
 
     bool is_primitive() const { return true; }
+
+
+    double to_double(holder const& value) const
+    {
+        typedef holder_ref_impl< T > impl_t;
+
+        impl_t const * p = reinterpret_cast< impl_t const * >(
+                value.m_impl.get());
+
+        return (double) p->t_;
+    }
 };
 
 template< typename T >

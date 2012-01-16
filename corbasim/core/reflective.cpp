@@ -78,6 +78,11 @@ holder reflective_base::get_child_value(holder& value,
     return holder();
 }
 
+double reflective_base::to_double(holder const& value) const
+{
+    return 0.0;
+}
+
 // Interface Reflective Base
 
 void interface_reflective_base::insert_reflective(

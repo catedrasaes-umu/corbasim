@@ -23,6 +23,7 @@
 #include <QtGui>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/qt/CustomLayouts.hpp>
 
 #include <ostream>
 
@@ -74,28 +75,6 @@ protected:
     QLayout * m_layout;
 };
 
-class CustomLayout : public QVBoxLayout
-{
-    Q_OBJECT
-public:
-
-    CustomLayout(QWidget * parent = 0) :
-        QVBoxLayout(parent)
-    {
-    }
-
-    virtual ~CustomLayout()
-    {
-    }
-
-public slots:
-
-    void insertItem(int idx, QLayoutItem * item)
-    {
-        QBoxLayout::insertItem(idx, item);
-    }
-};
-
 class OperationSequence : public QWidget
 {
     Q_OBJECT
@@ -127,7 +106,7 @@ protected:
 
     QString m_name;
 
-    CustomLayout * m_layout;
+    CustomVLayout * m_layout;
     QList< OperationSequenceItem * > m_items;
     QScrollArea * m_scroll;
 

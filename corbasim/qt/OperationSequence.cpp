@@ -148,7 +148,7 @@ OperationSequence::OperationSequence(const QString& name, QWidget * parent) :
 
     QWidget * scrollWidget = new QWidget();
     QVBoxLayout * scrollLayout = new QVBoxLayout();
-    m_layout = new CustomLayout();
+    m_layout = new CustomVLayout();
     scrollWidget->setLayout(scrollLayout);
     scrollLayout->addLayout(m_layout);
 
