@@ -460,8 +460,11 @@ struct corba_objrefvar_helper : public helper_base
     {
         corbasim::core::reference_repository * rr = 
             corbasim::core::reference_repository::get_instance();
-
-        _t = interface::_narrow(rr->string_to_object(d));
+        try {
+            _t = interface::_narrow(rr->string_to_object(d));
+        } catch (...) {
+            _t = interface::_nil();
+        }
     }
 
     void new_null()
