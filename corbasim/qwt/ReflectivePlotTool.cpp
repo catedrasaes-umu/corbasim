@@ -40,9 +40,34 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
     layout->addWidget(m_group);
 
     setLayout(layout);
+
+    // TODO connect model signals 
 }
 
 ReflectivePlotTool::~ReflectivePlotTool()
+{
+}
+
+void ReflectivePlotTool::registerInstance(const QString& name,
+        core::interface_reflective_base const * reflective)
+{
+    m_model.registerInstance(name, reflective);
+}
+
+void ReflectivePlotTool::unregisterInstance(const QString& name)
+{
+    m_model.unregisterInstance(name);
+}
+
+void ReflectivePlotTool::createPlot(const QString& id, 
+        core::interface_reflective_base const * reflective,
+        const QList< int >& path)
+{
+}
+
+void ReflectivePlotTool::deletePlot(const QString& id, 
+        core::interface_reflective_base const * reflective,
+        const QList< int >& path)
 {
 }
 

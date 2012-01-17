@@ -21,6 +21,7 @@
 #define CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
 
 #include <QWidget>
+#include <corbasim/qt/PlotModel.hpp>
 
 namespace corbasim 
 {
@@ -39,7 +40,23 @@ public:
     ReflectivePlotTool(QWidget * parent = 0);
     virtual ~ReflectivePlotTool();
 
+public slots:
+
+    void registerInstance(const QString& name,
+            core::interface_reflective_base const * reflective);
+
+    void unregisterInstance(const QString& name);
+
+    void createPlot(const QString& id, 
+            core::interface_reflective_base const * reflective,
+            const QList< int >& path);
+
+    void deletePlot(const QString& id, 
+            core::interface_reflective_base const * reflective,
+            const QList< int >& path);
+
 protected:
+    qt::PlotModel m_model;
     qt::SortableGroup * m_group;
 };
 

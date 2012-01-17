@@ -33,6 +33,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/widgets/union.hpp
 
     # QObjects
+    qt/PlotModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
     qt/OperationSequence.hpp
@@ -68,6 +69,7 @@ set(corbasim_qt_MOC_HDRS
     qt/private/ScriptEditor.hpp
     qt/private/MultiScriptEditor.hpp
 
+    qt/PlotModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
     qt/OperationSequence.hpp
@@ -101,6 +103,7 @@ set(corbasim_qt_SRCS
     qt/private/ScriptEditor.cpp
     qt/private/MultiScriptEditor.cpp
 
+    qt/PlotModel.cpp
     qt/CustomLayouts.cpp
     qt/SortableGroup.cpp
     qt/OperationSequence.cpp

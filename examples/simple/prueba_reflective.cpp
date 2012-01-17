@@ -6,7 +6,7 @@
 #include <string>
 
 #include <QtGui>
-#include "PlotModel.hpp"
+#include <corbasim/qt/PlotModel.hpp>
 
 void print(corbasim::core::reflective_base const * current, 
         unsigned int level = 0)
