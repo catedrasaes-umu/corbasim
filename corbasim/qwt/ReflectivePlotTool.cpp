@@ -86,6 +86,11 @@ void ReflectivePlotTool::unregisterInstance(const QString& name)
     m_model.unregisterInstance(name);
 }
 
+void ReflectivePlotTool::processRequest(const QString& id, 
+        corbasim::event::request_ptr req)
+{
+}
+
 void ReflectivePlotTool::createPlot(const QString& id, 
         core::interface_reflective_base const * reflective,
         const QList< int >& path)

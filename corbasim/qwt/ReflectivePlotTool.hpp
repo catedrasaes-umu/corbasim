@@ -65,6 +65,9 @@ public slots:
 
     void unregisterInstance(const QString& name);
 
+    void processRequest(const QString& id, 
+            corbasim::event::request_ptr req);
+
     void createPlot(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);

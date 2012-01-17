@@ -1,5 +1,9 @@
 #include "simpleC.h"
 #include "simple_adapted.hpp"
+#include "simple_servant.hpp"
+#include <corbasim/gui/widgets.hpp>
+#include <corbasim/gui/trees.hpp>
+#include <corbasim/gui/gui_factory.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <iostream>
 #include <sstream>
@@ -7,6 +11,7 @@
 
 #include <QtGui>
 #include <corbasim/qwt/ReflectivePlotTool.hpp>
+#include <corbasim/qt/OperationSequence.hpp>
 
 void print(corbasim::core::reflective_base const * current, 
         unsigned int level = 0)
@@ -43,9 +48,21 @@ int main(int argc, char **argv)
     corbasim::core::interface_reflective_base const * iface = 
         corbasim::core::interface_reflective< SimpleExample::Test >::get_instance();
 
+    corbasim::gui::gui_factory_base const * fac = 
+        corbasim::gui::gui_factory< SimpleExample::Test >::get_instance();
+
+    corbasim::qt::OperationSequenceTool seq;
+    seq.objrefCreated("prueba", fac);
+    seq.show();
+
     corbasim::qwt::ReflectivePlotTool tool;
     tool.registerInstance("prueba", iface);
     tool.show();
+
+    QObject::connect(&seq, 
+            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+            &tool,
+            SLOT(processRequest(const QString&, corbasim::event::request_ptr)));
 
     return app.exec();
 }

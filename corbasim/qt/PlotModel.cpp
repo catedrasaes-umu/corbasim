@@ -74,7 +74,8 @@ void insertRecursive(QStandardItem * parent,
 
         insertRecursive(childItem, child);
 
-        if (child->is_primitive())
+        if (child->is_primitive() || 
+                (child->is_repeated() && child->get_slice()->is_primitive()))
         {
             QList< QStandardItem * > list;
             list << childItem;
