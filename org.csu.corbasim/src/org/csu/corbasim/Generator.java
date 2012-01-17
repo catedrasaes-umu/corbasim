@@ -67,7 +67,7 @@ public class Generator {
 		OutputImpl output = new OutputImpl();
 		Outlet outlet = new Outlet("model");
 		outlet.setOverwrite(true);
-		outlet.addPostprocessor(new CppBeautifier());
+		// outlet.addPostprocessor(new CppBeautifier());
 		outlet.setPath(targetDir);
 		output.addOutlet(outlet);
 
