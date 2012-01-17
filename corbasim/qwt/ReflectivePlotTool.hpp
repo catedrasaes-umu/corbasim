@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <corbasim/qt/PlotModel.hpp>
+#include <corbasim/qwt/SimplePlot.hpp>
 
 namespace corbasim 
 {
@@ -32,6 +33,23 @@ class SortableGroup;
 
 namespace qwt 
 {
+
+class ReflectivePlot : public SimplePlot
+{
+    Q_OBJECT
+public:
+
+    ReflectivePlot(QWidget * parent = 0);
+    virtual ~ReflectivePlot();
+
+protected:
+
+    QString m_id;
+    core::reflective_base const * m_reflective;
+    const QList< int > m_path;
+
+    SimplePlot * m_plot;
+};
 
 class ReflectivePlotTool : public QWidget
 {

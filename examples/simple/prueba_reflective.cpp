@@ -6,7 +6,7 @@
 #include <string>
 
 #include <QtGui>
-#include <corbasim/qt/PlotModel.hpp>
+#include <corbasim/qwt/ReflectivePlotTool.hpp>
 
 void print(corbasim::core::reflective_base const * current, 
         unsigned int level = 0)
@@ -43,13 +43,9 @@ int main(int argc, char **argv)
     corbasim::core::interface_reflective_base const * iface = 
         corbasim::core::interface_reflective< SimpleExample::Test >::get_instance();
 
-    QTreeView view;
-    corbasim::qt::PlotModel model;
-
-    model.registerInstance("prueba", iface);
-
-    view.setModel(&model);
-    view.show();
+    corbasim::qwt::ReflectivePlotTool tool;
+    tool.registerInstance("prueba", iface);
+    tool.show();
 
     return app.exec();
 }

@@ -24,16 +24,27 @@
 
 using namespace corbasim::qwt;
 
+ReflectivePlot::ReflectivePlot(QWidget * parent) :
+    SimplePlot("TODO", parent)
+{
+}
+
+ReflectivePlot::~ReflectivePlot()
+{
+}
+
 ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
     QWidget(parent)
 {
     QHBoxLayout * layout = new QHBoxLayout(this);
 
-    // TODO split
+    // TODO splitter
 
     // Model view
     QTreeView * view = new QTreeView(this);
+    view->setModel(&m_model);
     layout->addWidget(view);
+    view->setMaximumWidth(300);
 
     // Plots
     m_group = new qt::SortableGroup(this);
@@ -41,7 +52,23 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
 
     setLayout(layout);
 
-    // TODO connect model signals 
+    // connect model signals 
+    QObject::connect(&m_model, 
+            SIGNAL(createPlot(const QString&,
+                    core::interface_reflective_base const *,
+                    const QList< int >&)),
+            this,
+            SLOT(createPlot(const QString&,
+                    core::interface_reflective_base const *,
+                    const QList< int >&)));
+    QObject::connect(&m_model, 
+            SIGNAL(deletePlot(const QString&,
+                    core::interface_reflective_base const *,
+                    const QList< int >&)),
+            this,
+            SLOT(deletePlot(const QString&,
+                    core::interface_reflective_base const *,
+                    const QList< int >&)));
 }
 
 ReflectivePlotTool::~ReflectivePlotTool()
@@ -63,11 +90,13 @@ void ReflectivePlotTool::createPlot(const QString& id,
         core::interface_reflective_base const * reflective,
         const QList< int >& path)
 {
+    m_group->appendWidget(new ReflectivePlot(this));
 }
 
 void ReflectivePlotTool::deletePlot(const QString& id, 
         core::interface_reflective_base const * reflective,
         const QList< int >& path)
 {
+    // TODO
 }
 

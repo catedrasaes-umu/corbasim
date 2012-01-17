@@ -1,5 +1,4 @@
 #include <corbasim/qwt/SimplePlot.hpp>
-#include <corbasim/qwt/ReflectivePlotTool.hpp>
 #include <QtGui>
 
 #include "producer.hpp"
@@ -18,9 +17,6 @@ int main( int argc, char **argv )
 
     QObject::connect(&producer, SIGNAL(produced(double)), 
             &plot, SLOT(append(double)));
-
-    ReflectivePlotTool tool;
-    tool.show();
 
     return a.exec();
 }
