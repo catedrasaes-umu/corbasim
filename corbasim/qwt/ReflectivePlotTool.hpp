@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <corbasim/qt/PlotModel.hpp>
 #include <corbasim/qwt/SimplePlot.hpp>
+#include <map>
 
 namespace corbasim 
 {
@@ -39,13 +40,19 @@ class ReflectivePlot : public SimplePlot
     Q_OBJECT
 public:
 
-    ReflectivePlot(QWidget * parent = 0);
+    ReflectivePlot(
+            core::operation_reflective_base const * reflective,
+            const QList< int >& path, QWidget * parent = 0);
     virtual ~ReflectivePlot();
+
+    core::operation_reflective_base const * getReflective() const;
+
+    void process(core::holder& value);
 
 protected:
 
     QString m_id;
-    core::reflective_base const * m_reflective;
+    core::operation_reflective_base const * m_reflective;
     const QList< int > m_path;
 
     SimplePlot * m_plot;
@@ -79,6 +86,8 @@ public slots:
 protected:
     qt::PlotModel m_model;
     qt::SortableGroup * m_group;
+
+    std::map< std::pair< QString, tag_t >, QList< ReflectivePlot * > > m_map;
 };
 
 } // namespace qwt

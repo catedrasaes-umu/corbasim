@@ -24,13 +24,58 @@
 
 using namespace corbasim::qwt;
 
-ReflectivePlot::ReflectivePlot(QWidget * parent) :
-    SimplePlot("TODO", parent)
+ReflectivePlot::ReflectivePlot(
+        core::operation_reflective_base const * reflective,
+        const QList< int >& path, QWidget * parent) :
+    SimplePlot("TODO", parent), m_reflective(reflective), m_path(path)
 {
 }
 
 ReflectivePlot::~ReflectivePlot()
 {
+}
+
+corbasim::core::operation_reflective_base const * 
+ReflectivePlot::getReflective() const
+{
+    return m_reflective;
+}
+
+void ReflectivePlot::process(core::holder& value)
+{
+    core::reflective_base const * reflec = m_reflective;
+
+    int size = m_path.size();
+
+    core::holder tmp = value;
+
+    for (int i = 0; i < size; i++) 
+    {
+        if (i == size - 2 && reflec->is_repeated())
+            break;
+
+        if (reflec->get_type() == core::TYPE_STRUCT)
+        {
+            tmp = reflec->get_child_value(tmp, m_path[i]);
+            reflec = reflec->get_child(m_path[i]);
+        }
+        else if(reflec->is_repeated())
+        {
+            tmp = reflec->get_child_value(tmp, m_path[i]);
+            reflec = reflec->get_slice();
+        }
+    }
+
+    if (reflec->is_primitive())
+    {
+        append(reflec->to_double(tmp));
+    }
+    else if(reflec->is_repeated())
+    {
+        QVector< double > values;
+        // TODO 
+        append(values);
+    }
 }
 
 ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
@@ -89,13 +134,29 @@ void ReflectivePlotTool::unregisterInstance(const QString& name)
 void ReflectivePlotTool::processRequest(const QString& id, 
         corbasim::event::request_ptr req)
 {
+    QList< ReflectivePlot * >& list = 
+        m_map[std::make_pair(id, req->get_tag())];
+
+    int count = list.size();
+    for (int i = 0; i < count; i++) 
+    {
+        core::holder value = list[i]->getReflective()->get_holder(req);
+        list[i]->process(value);
+    }
 }
 
 void ReflectivePlotTool::createPlot(const QString& id, 
         core::interface_reflective_base const * reflective,
         const QList< int >& path)
 {
-    m_group->appendWidget(new ReflectivePlot(this));
+    core::operation_reflective_base const * op =
+        reflective->get_reflective_by_index(path.front());
+
+    ReflectivePlot * plot = new ReflectivePlot(op, path, this);
+
+    m_map[std::make_pair(id, op->get_tag())].push_back(plot);
+
+    m_group->appendWidget(plot);
 }
 
 void ReflectivePlotTool::deletePlot(const QString& id, 
