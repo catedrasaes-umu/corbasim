@@ -18,12 +18,25 @@ public:
     PlotModel(QObject *parent = 0);
     virtual ~PlotModel();
 
+    virtual bool setData(const QModelIndex & index, const QVariant& value, 
+            int role = Qt::EditRole);
+
 public slots:
 
     void registerInstance(const QString& name,
             core::interface_reflective_base const * reflective);
 
     void unregisterInstance(const QString& name);
+
+signals:
+
+    void createPlot(const QString& id, 
+            core::interface_reflective_base const * reflective,
+            const QList< int >& path);
+
+    void deletePlot(const QString& id, 
+            core::interface_reflective_base const * reflective,
+            const QList< int >& path);
 
 protected:
 

@@ -1,5 +1,6 @@
 #include "PlotModel.hpp"
 #include <iostream>
+#include <boost/next_prior.hpp>
 
 using namespace corbasim::qt;
 
@@ -14,6 +15,47 @@ PlotModel::PlotModel(QObject *parent)
 
 PlotModel::~PlotModel()
 {
+}
+
+bool PlotModel::setData(const QModelIndex & index, 
+        const QVariant& value, int role)
+{
+    // TODO get the current value
+    
+    bool res = QStandardItemModel::setData(index, value, role);
+
+    if (res && index.column() == 1 && value.type() == QVariant::Bool)
+    {
+        std::cout << "begin" << std::endl;
+
+        QList< int > path;
+
+        QModelIndex parent = index;
+
+        // Calculate path
+        do {
+            path.push_front(parent.row());
+            parent = parent.parent();
+        } while(parent.isValid());
+        
+        if (path.size() > 2)
+        {
+            const FirstLevelItem& item = 
+                *boost::next(m_items.begin(), path.front());
+
+            // Remove instance index
+            path.pop_front();
+
+            if (value.toBool())
+                emit createPlot(item.name, item.reflective, path);
+            else
+                emit deletePlot(item.name, item.reflective, path);
+        }
+
+        std::cout << "end" << std::endl;
+    }
+
+    return res;
 }
 
 void insertRecursive(QStandardItem * parent, 

@@ -2,6 +2,7 @@ include_directories(${Qwt6_INCLUDE_DIR})
 
 set(corbasim_qwt_EXPORTED_HEADERS
     qwt/SimplePlot.hpp
+    qwt/ReflectivePlotTool.hpp
     )
 
 foreach(_header ${corbasim_qwt_EXPORTED_HEADERS})
@@ -12,11 +13,13 @@ endforeach(_header ${corbasim_qwt_EXPORTED_HEADERS})
 
 set(corbasim_qwt_MOC_HDRS
     qwt/SimplePlot.hpp
+    qwt/ReflectivePlotTool.hpp
     qwt/private/Plot.hpp
     )
 
 set(corbasim_qwt_SRCS
     qwt/SimplePlot.cpp
+    qwt/ReflectivePlotTool.cpp
     qwt/private/Plot.cpp
     qwt/private/HistoricData.cpp
     )
