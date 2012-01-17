@@ -49,7 +49,7 @@ void ReflectivePlot::process(core::holder& value)
 
     core::holder tmp = value;
 
-    for (int i = 0; i < size; i++) 
+    for (int i = 1; i < size; i++) 
     {
         if (i == size - 2 && reflec->is_repeated())
             break;
