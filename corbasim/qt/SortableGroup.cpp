@@ -91,6 +91,11 @@ SortableGroupItem::~SortableGroupItem()
 {
 }
 
+QWidget * SortableGroupItem::getWidget()
+{
+    return m_widget;
+}
+
 void SortableGroupItem::deleteClicked()
 {
     emit doDelete();
@@ -107,7 +112,7 @@ void SortableGroupItem::downClicked()
 }
 
 SortableGroup::SortableGroup(QWidget * parent) :
-    QWidget(parent)
+    QWidget(parent), m_delete(true)
 {
     QVBoxLayout * layout = new QVBoxLayout();
 
@@ -205,7 +210,13 @@ void SortableGroup::deleteItem()
         qobject_cast< SortableGroupItem * >(sender());
 
     if (sndObj)
-        deleteItem(sndObj);
+    {
+        if (m_delete) deleteItem(sndObj);
+        else
+        {
+            emit deleteRequested(sndObj);
+        }
+    }
 }
 
 void SortableGroup::moveUpItem()
@@ -226,3 +237,7 @@ void SortableGroup::moveDownItem()
         moveDownItem(sndObj);
 }
 
+void SortableGroup::setDelete(bool del)
+{
+    m_delete = del;
+}

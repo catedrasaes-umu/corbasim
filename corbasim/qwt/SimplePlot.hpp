@@ -34,7 +34,7 @@ class SimplePlot : public QWidget
     Q_OBJECT
 public:
 
-    SimplePlot(const QString& title, QWidget * parent = 0);
+    SimplePlot(QWidget * parent = 0);
     virtual ~SimplePlot();
 
 public slots:

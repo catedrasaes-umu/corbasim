@@ -27,7 +27,7 @@ using namespace corbasim::qwt;
 ReflectivePlot::ReflectivePlot(
         core::operation_reflective_base const * reflective,
         const QList< int >& path, QWidget * parent) :
-    SimplePlot("TODO", parent), m_reflective(reflective), m_path(path)
+    SimplePlot(parent), m_reflective(reflective), m_path(path)
 {
 }
 
@@ -93,13 +93,20 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
 
     // Plots
     m_group = new qt::SortableGroup(this);
+    m_group->setDelete(false);
     layout->addWidget(m_group);
 
     setLayout(layout);
 
+    // widget signals
+    QObject::connect(m_group, 
+            SIGNAL(deleteRequested(corbasim::qt::SortableGroupItem *)),
+            this, 
+            SLOT(deleteRequested(corbasim::qt::SortableGroupItem *)));
+
     // connect model signals 
     QObject::connect(&m_model, 
-            SIGNAL(createPlot(const QString&,
+            SIGNAL(createdPlot(const QString&,
                     core::interface_reflective_base const *,
                     const QList< int >&)),
             this,
@@ -107,7 +114,7 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
                     core::interface_reflective_base const *,
                     const QList< int >&)));
     QObject::connect(&m_model, 
-            SIGNAL(deletePlot(const QString&,
+            SIGNAL(deletedPlot(const QString&,
                     core::interface_reflective_base const *,
                     const QList< int >&)),
             this,
@@ -129,6 +136,21 @@ void ReflectivePlotTool::registerInstance(const QString& name,
 void ReflectivePlotTool::unregisterInstance(const QString& name)
 {
     m_model.unregisterInstance(name);
+
+    // Maps
+    map_t::iterator it = m_map.begin();
+    for(; it != m_map.end(); it++)
+    {
+        if (name == it->first.first)
+        {
+            m_map.erase(it);
+
+            for (int i = 0; i < it->second.size(); i++) 
+            {
+                m_inverse_map.erase(it->second[i]);
+            }
+        }
+    }
 }
 
 void ReflectivePlotTool::processRequest(const QString& id, 
@@ -152,9 +174,11 @@ void ReflectivePlotTool::createPlot(const QString& id,
     core::operation_reflective_base const * op =
         reflective->get_reflective_by_index(path.front());
 
-    ReflectivePlot * plot = new ReflectivePlot(op, path, this);
+    ReflectivePlot * plot = new ReflectivePlot(op, path);
 
-    m_map[std::make_pair(id, op->get_tag())].push_back(plot);
+    const key_t key(id, op->get_tag());
+    m_map[key].push_back(plot);
+    m_inverse_map[plot] = key;
 
     m_group->appendWidget(plot);
 }
@@ -163,6 +187,45 @@ void ReflectivePlotTool::deletePlot(const QString& id,
         core::interface_reflective_base const * reflective,
         const QList< int >& path)
 {
-    // TODO
+    core::operation_reflective_base const * op =
+        reflective->get_reflective_by_index(path.front());
+
+    const key_t key(id, op->get_tag());
+    QList< ReflectivePlot * >& list = m_map[key];
+
+    for (int i = 0; i < list.size(); i++) 
+    {
+        ReflectivePlot * plot = list[i];
+        if (plot->getPath() == path)
+        {
+            list.removeAt(i);
+            m_inverse_map.erase(plot);
+            m_group->deleteItem(
+                    qobject_cast< qt::SortableGroupItem * >(plot->parent()));
+            break;
+        }
+    }
+}
+
+void ReflectivePlotTool::deleteRequested(qt::SortableGroupItem* item)
+{
+    ReflectivePlot * plot = qobject_cast< ReflectivePlot * >(item->getWidget());
+
+    if (plot)
+    {
+        inverse_map_t::iterator it = m_inverse_map.find(plot);
+
+        if (it != m_inverse_map.end())
+        {
+            const key_t key(it->second);
+            m_map[key].removeAll(plot);
+
+            // notify to model
+            m_model.deletePlot(key.first, plot->getPath());
+
+            m_inverse_map.erase(it);
+        }
+    }
+    m_group->deleteItem(item);
 }
 

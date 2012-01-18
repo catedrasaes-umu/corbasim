@@ -30,6 +30,7 @@ namespace corbasim
 namespace qt 
 {
 class SortableGroup;
+class SortableGroupItem;
 } // namespace qt
 
 namespace qwt 
@@ -46,6 +47,11 @@ public:
     virtual ~ReflectivePlot();
 
     core::operation_reflective_base const * getReflective() const;
+
+    inline const QList< int >& getPath() const
+    {
+        return m_path;
+    }
 
     void process(core::holder& value);
 
@@ -83,11 +89,20 @@ public slots:
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
 
+protected slots:
+
+    void deleteRequested(corbasim::qt::SortableGroupItem *);
+
 protected:
     qt::PlotModel m_model;
     qt::SortableGroup * m_group;
 
-    std::map< std::pair< QString, tag_t >, QList< ReflectivePlot * > > m_map;
+    typedef std::pair< QString, tag_t > key_t;
+    typedef std::map< key_t, QList< ReflectivePlot * > > map_t;
+    typedef std::map< ReflectivePlot *, key_t > inverse_map_t;
+
+    map_t m_map;
+    inverse_map_t m_inverse_map;
 };
 
 } // namespace qwt

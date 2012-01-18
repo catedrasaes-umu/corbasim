@@ -47,9 +47,9 @@ bool PlotModel::setData(const QModelIndex & index,
             path.pop_front();
 
             if (value.toBool())
-                emit createPlot(item.name, item.reflective, path);
+                emit createdPlot(item.name, item.reflective, path);
             else
-                emit deletePlot(item.name, item.reflective, path);
+                emit deletedPlot(item.name, item.reflective, path);
         }
 
         std::cout << "end" << std::endl;
@@ -133,6 +133,34 @@ void PlotModel::unregisterInstance(const QString& name)
             removeRows(i, 1);
 
             m_items.erase(it);
+            break;
+        }
+    }
+}
+void PlotModel::deletePlot(const QString& id, const QList< int >& path)
+{
+    // TODO optimize
+
+    unsigned int i = 0;
+    for (FirstLevelItems_t::const_iterator it = m_items.begin(); 
+            it != m_items.end(); ++it, ++i) 
+    {
+        if (id == it->name)
+        {
+            // navigate until last element
+
+            // Instance element
+            QModelIndex idx = index(i, 0);
+            
+            for (int i = 0; i < path.size() - 1; i++) 
+            {
+                idx = index(path[i], 0, idx);
+            }
+
+            idx = index(path.back(), 1, idx);
+
+            setData(idx, false);
+
             break;
         }
     }

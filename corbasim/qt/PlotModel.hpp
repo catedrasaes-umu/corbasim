@@ -28,13 +28,15 @@ public slots:
 
     void unregisterInstance(const QString& name);
 
+    void deletePlot(const QString& id, const QList< int >& path);
+
 signals:
 
-    void createPlot(const QString& id, 
+    void createdPlot(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
 
-    void deletePlot(const QString& id, 
+    void deletedPlot(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
 

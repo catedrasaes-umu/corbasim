@@ -37,6 +37,8 @@ public:
             QWidget * parent = 0);
     virtual ~SortableGroupItem();
 
+    QWidget * getWidget();
+
 signals:
 
     void doDelete();
@@ -64,6 +66,8 @@ public:
 
 public slots:
 
+    void setDelete(bool del);
+
     void appendWidget(QWidget * item);
 
     void appendItem(SortableGroupItem * item);
@@ -77,7 +81,13 @@ private slots:
     void moveUpItem();
     void moveDownItem();
 
+signals:
+
+    void deleteRequested(corbasim::qt::SortableGroupItem *); 
+
 protected:
+
+    bool m_delete;
 
     CustomVLayout * m_layout;
     QList< SortableGroupItem * > m_items;

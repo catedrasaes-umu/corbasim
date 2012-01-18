@@ -35,7 +35,7 @@ struct SimplePlot::Data
     priv::Plot * plot;
 };
 
-SimplePlot::SimplePlot(const QString& title, QWidget * parent) :
+SimplePlot::SimplePlot(QWidget * parent) :
     QWidget(parent), m_data(new Data())
 {
     QHBoxLayout * mainLayout = new QHBoxLayout();
@@ -44,7 +44,7 @@ SimplePlot::SimplePlot(const QString& title, QWidget * parent) :
     QWidget * plotW = new QWidget(this);
     QHBoxLayout * plotL = new QHBoxLayout(plotW);
     m_data->plot = new priv::Plot(plotW);
-    m_data->plot->setTitle(title);
+    // m_data->plot->setTitle(title);
 
     // plotL->setContentsMargins(0, 0, 0, 0);
     plotL->addWidget(m_data->plot);
