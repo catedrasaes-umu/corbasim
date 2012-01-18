@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QGroupBox>
+#include <QPushButton>
 
 #include <limits>
 
@@ -53,7 +54,14 @@ SimplePlot::SimplePlot(QWidget * parent) :
 
     setMinimumSize(600, 350);
     
+    QPushButton * bt = new QPushButton();
+    bt->setCheckable(true);
+    bt->setMaximumWidth(15);
+    bt->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    mainLayout->addWidget(bt);
+    
     // Options
+    QWidget * gw = new QWidget();
     QGridLayout * gridLayout = new QGridLayout();
     gridLayout->addWidget(new QLabel("Displayed samples"), 0, 0);
     QSpinBox * spSamples = new QSpinBox();
@@ -86,7 +94,8 @@ SimplePlot::SimplePlot(QWidget * parent) :
             QSizePolicy::Minimum, QSizePolicy::Expanding);
     gridLayout->addItem(spacer, 3, 0, 1);
 
-    mainLayout->addLayout(gridLayout);
+    gw->setLayout(gridLayout);
+    mainLayout->addWidget(gw);
 
     // Ranges
     spSamples->setRange(10, std::numeric_limits< int >::max());
@@ -100,6 +109,11 @@ SimplePlot::SimplePlot(QWidget * parent) :
     // Signals
     QObject::connect(spSamples, SIGNAL(valueChanged(int)),
             m_data->plot, SLOT(displayedSamples(int)));
+
+    QObject::connect(bt, SIGNAL(toggled(bool)),
+            gw, SLOT(setVisible(bool)));
+
+    gw->hide();
 
     setLayout(mainLayout);
 }
