@@ -72,6 +72,11 @@ reflective_base const * reflective_base::get_slice() const
 
 // Dynamic information
 
+unsigned int reflective_base::get_length(holder const& value) const
+{
+    return 0;
+}
+
 holder reflective_base::get_child_value(holder& value, 
     unsigned int idx) const
 {

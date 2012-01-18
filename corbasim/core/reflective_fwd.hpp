@@ -171,8 +171,8 @@ struct reflective_base
     virtual reflective_base const * get_slice() const;
 
     // dynamic information
-    /*
     virtual unsigned int get_length(holder const& value) const;
+    /*
     virtual void set_length(holder& value) const;
      */
 
@@ -271,6 +271,11 @@ struct array_reflective : public reflective_base
     }
 
     // Dynamic information
+    unsigned int get_length(holder const& value) const
+    {
+        return size;
+    }
+
     holder get_child_value(holder& value, 
         unsigned int idx) const
     {
@@ -329,6 +334,16 @@ struct sequence_reflective : public reflective_base
     }
 
     // Dynamic information
+    unsigned int get_length(holder const& value) const
+    {
+        typedef holder_ref_impl< T > parent_impl;
+
+        parent_impl const * p = reinterpret_cast< parent_impl const * >(
+                value.m_impl.get());
+
+        return p->t_.length();
+    }
+
     holder get_child_value(holder& value, 
         unsigned int idx) const
     {

@@ -26,8 +26,6 @@ bool PlotModel::setData(const QModelIndex & index,
 
     if (res && index.column() == 1 && value.type() == QVariant::Bool)
     {
-        std::cout << "begin" << std::endl;
-
         QList< int > path;
 
         QModelIndex parent = index;
@@ -51,8 +49,6 @@ bool PlotModel::setData(const QModelIndex & index,
             else
                 emit deletedPlot(item.name, item.reflective, path);
         }
-
-        std::cout << "end" << std::endl;
     }
 
     return res;

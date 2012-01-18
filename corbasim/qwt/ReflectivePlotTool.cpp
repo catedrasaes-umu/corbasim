@@ -22,6 +22,8 @@
 #include <QHBoxLayout>
 #include <QTreeView>
 
+#include <iostream>
+
 using namespace corbasim::qwt;
 
 ReflectivePlot::ReflectivePlot(
@@ -59,22 +61,34 @@ void ReflectivePlot::process(core::holder& value)
             tmp = reflec->get_child_value(tmp, m_path[i]);
             reflec = reflec->get_child(m_path[i]);
         }
-        else if(reflec->is_repeated())
+        else /* if(reflec->is_repeated())
         {
             tmp = reflec->get_child_value(tmp, m_path[i]);
             reflec = reflec->get_slice();
-        }
+        } */
+        return; // TODO unsupported yet!
     }
 
     if (reflec->is_primitive())
     {
         append(reflec->to_double(tmp));
     }
-    else if(reflec->is_repeated())
+    else if(reflec->is_repeated() && 
+            reflec->get_slice()->is_primitive())
     {
         QVector< double > values;
-        // TODO 
-        append(values);
+        
+        const unsigned int length = reflec->get_length(tmp);
+        core::reflective_base const * slice = reflec->get_slice();
+
+        for (unsigned int i = 0; i < length; i++) 
+        {
+            const core::holder h = reflec->get_child_value(tmp, i);
+            values.push_back(slice->to_double(h));
+        }
+
+        if (!values.isEmpty())
+            append(values);
     }
 }
 
