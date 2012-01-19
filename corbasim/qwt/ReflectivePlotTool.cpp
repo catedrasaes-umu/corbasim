@@ -104,6 +104,7 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
     view->setModel(&m_model);
     layout->addWidget(view);
     view->setMaximumWidth(300);
+    view->setColumnWidth(0, 210);
 
     // Plots
     m_group = new qt::SortableGroup(this);
@@ -135,6 +136,8 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
             SLOT(deletePlot(const QString&,
                     core::interface_reflective_base const *,
                     const QList< int >&)));
+    
+    setMinimumSize(600, 400);
 }
 
 ReflectivePlotTool::~ReflectivePlotTool()
