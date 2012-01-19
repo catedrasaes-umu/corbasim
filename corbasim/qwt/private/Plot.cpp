@@ -33,6 +33,8 @@
 #include <qwt_math.h>
 #include <qwt_symbol.h>
 
+#include <limits>
+
 using namespace corbasim::qwt::priv;
 
 Plot::Plot(QWidget *parent):
@@ -48,6 +50,9 @@ Plot::Plot(QWidget *parent):
     // axes
     setAxisTitle(xBottom, "Sample");
     setAxisTitle(yLeft, "Value");
+
+    setAxisScale(yLeft, std::numeric_limits< short >::min(), 
+            std::numeric_limits< short >::max());
 
     // canvas
     canvas()->setLineWidth(1);
@@ -100,6 +105,14 @@ void Plot::update()
 
 void Plot::append(const QVector< double >& v)
 {
+    // TODO
+    QwtPlotMarker *mY = new QwtPlotMarker();
+    mY->setLabel(QTime::currentTime().toString("hh:mm:ss.zzz"));
+    mY->setLabelAlignment(Qt::AlignRight | Qt::AlignTop);
+    mY->setLineStyle(QwtPlotMarker::VLine);
+    mY->setXValue(m_data->size());
+    mY->attach(this);
+
     m_data->append(v);
 
     // TODO insert a marker
