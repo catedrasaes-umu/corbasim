@@ -49,6 +49,25 @@ struct objref_tree
         return new QTreeWidgetItem(QStringList(
                     QString("%1: %2").arg(name).arg(str.in())));
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        QStandardItem* item = new QStandardItem();
+        core::reference_repository * rr =
+            core::reference_repository::get_instance();
+        
+        if (t.in())
+        {
+            CORBA::String_var str = rr->object_to_string(t.in());
+            item->setText(str.in());
+        }
+        else
+        {
+            item->setText("NIL");
+        }
+
+        return item;
+    }
 };
 
 } // namespace detail

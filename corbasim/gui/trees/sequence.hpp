@@ -57,6 +57,36 @@ struct sequence_as_tree
 
         return parent;
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        QStandardItem* parent = new QStandardItem();
+
+        const size_t size = t.length();
+        // parent->appendColumn(
+        //         new QStandardItem(QString("length '%1'").arg(size)));
+
+        for(size_t i=0; i<size; i++)
+        {
+            QStandardItem* child = slice_tree_t::create_item(t[i]);
+            if (child->rowCount() > 0)
+            {
+                child->setText(QString("[%1]").arg(i));
+                parent->appendRow(child);
+            }
+            else
+            {
+                QStandardItem* name = new QStandardItem(QString("[%1]").arg(i));
+                QList< QStandardItem * > list;
+                list << name;
+                list << child;
+
+                parent->appendRow(list);
+            }
+        }
+
+        return parent;
+    }
 };
 
 template< typename T, 
@@ -65,6 +95,7 @@ struct sequence_as_resume
 {
     typedef sequence_as_resume < T > type;
     typedef typename adapted::is_corbaseq < T >::slice_type slice_t;
+    typedef tree < slice_t > slice_tree_t;
 
     static inline QTreeWidgetItem* create_tree(const T& t, 
             const char* name)
@@ -83,6 +114,38 @@ struct sequence_as_resume
 
         return new QTreeWidgetItem(QStringList(oss.str().c_str()));
     }
+
+    // TODO resume
+    static inline QStandardItem* create_item(const T& t)
+    {
+        QStandardItem* parent = new QStandardItem();
+
+        const size_t size = t.length();
+        // parent->appendColumn(
+        //         new QStandardItem(QString("length '%1'").arg(size)));
+
+        for(size_t i=0; i<size; i++)
+        {
+            QStandardItem* child = slice_tree_t::create_item(t[i]);
+            if (child->rowCount() > 0)
+            {
+                child->setText(QString("[%1]").arg(i));
+                parent->appendRow(child);
+            }
+            else
+            {
+                QStandardItem* name = new QStandardItem(QString("[%1]").arg(i));
+                QList< QStandardItem * > list;
+                list << name;
+                list << child;
+
+                parent->appendRow(list);
+            }
+        }
+
+        return parent;
+    }
+
 };
 
 } // namespace detail

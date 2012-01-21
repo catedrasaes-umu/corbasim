@@ -21,6 +21,7 @@
 #define CORBASIM_TREES_FWD_HPP
 
 #include <QTreeWidgetItem>
+#include <QStandardItem>
 #include <corbasim/mpl.hpp>
 
 namespace corbasim 

@@ -50,6 +50,20 @@ struct enum_as_item
             oss << "#Unknown value: " << t;
         return new QTreeWidgetItem(QStringList(oss.str().c_str()));
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        const char ** values = adapted_t::values();
+        QStandardItem* item = new QStandardItem();
+
+        if (static_cast< unsigned int >(t) < adapted_t::size)
+            item->setText(values[static_cast< unsigned int >(t)]);
+        else
+            item->setText(QString("#Unknown value %1").arg(t));
+
+        return item;
+    }
+
 };
 
 } // detail

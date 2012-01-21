@@ -45,9 +45,13 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Log dock widget
     m_dock_log = new QDockWidget("Log", this);
+#if 0
     m_log = new QTreeWidget;
+#else
+    m_log = new QTreeView();
+#endif
 
-    m_log->setColumnWidth(0, 800);
+    // m_log->setColumnWidth(0, 800);
     m_dock_log->setWidget(m_log);
     addDockWidget(Qt::RightDockWidgetArea, m_dock_log);
 
@@ -159,7 +163,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     QMenu * winMenu = menu->addMenu("&Window");
     winMenu->addAction("&Show log", m_dock_log, SLOT(show()));
+#if 0
     winMenu->addAction("&Clear log", m_log, SLOT(clear()));
+#endif
     winMenu->addSeparator();
     winMenu->addAction("Show &application log", 
             m_dock_app_log, SLOT(show()));
@@ -261,6 +267,11 @@ void AppMainWindow::setController(AppController * controller)
             SIGNAL(updatedReference(QString, CORBA::Object_var)),
             this, SLOT(updatedReference(const QString&,
                     const CORBA::Object_var&)));
+}
+
+void AppMainWindow::setLogModel(QAbstractItemModel * model)
+{
+    m_log->setModel(model);
 }
 
 void AppMainWindow::setEngine(TriggerEngine * engine)
@@ -470,6 +481,7 @@ void AppMainWindow::requestSent(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
+#if 0
     objrefs_t::iterator it = m_objrefs.find(id);
     
     if (it != m_objrefs.end())
@@ -511,12 +523,14 @@ void AppMainWindow::requestSent(const QString& id,
         item->setIcon(0, style()->standardIcon(QStyle::SP_ArrowLeft));
         appendToLog(item);
     }
+#endif
 }
 
 void AppMainWindow::requestReceived(const QString& id, 
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
+#if 0
     servants_t::iterator it = m_servants.find(id);
     
     if (it != m_servants.end())
@@ -532,6 +546,7 @@ void AppMainWindow::requestReceived(const QString& id,
         item->setIcon(0, style()->standardIcon(QStyle::SP_ArrowRight));
         appendToLog(item);
     }
+#endif
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -600,7 +615,7 @@ void AppMainWindow::showSave()
 
     emit saveFile(file);
 }
-
+#if 0
 void AppMainWindow::appendToLog(QTreeWidgetItem * item)
 {
     // check log size
@@ -610,7 +625,7 @@ void AppMainWindow::appendToLog(QTreeWidgetItem * item)
     m_log->addTopLevelItem(item);
     m_log->scrollToItem(item);
 }
-
+#endif
 void AppMainWindow::appendToAppLog(QTreeWidgetItem * item)
 {
     // check log size

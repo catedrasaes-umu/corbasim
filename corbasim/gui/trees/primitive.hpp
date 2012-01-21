@@ -42,6 +42,13 @@ struct arithmetic_as_item
 
         return new QTreeWidgetItem(QStringList(oss.str().c_str()));
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        QStandardItem* item = new QStandardItem();
+        item->setData(t, Qt::DisplayRole);
+        return item;
+    }
 };
 
 // represent CORBA::octet as a number

@@ -56,6 +56,35 @@ struct array_as_tree
 
         return parent;
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        QStandardItem* parent = new QStandardItem();
+        
+        // parent->appendColumn(
+        //         new QStandardItem(QString("length '%1'").arg(size)));
+
+        for(size_t i=0; i<size; i++)
+        {
+            QStandardItem* child = slice_tree_t::create_item(t[i]);
+            if (child->rowCount() > 0)
+            {
+                child->setText(QString("[%1]").arg(i));
+                parent->appendRow(child);
+            }
+            else
+            {
+                QStandardItem* name = new QStandardItem(QString("[%1]").arg(i));
+                QList< QStandardItem * > list;
+                list << name;
+                list << child;
+
+                parent->appendRow(list);
+            }
+        }
+
+        return parent;
+    }
 };
 
 template < unsigned int N >
@@ -73,6 +102,12 @@ struct array_as_tree< char[N] >
             new QTreeWidgetItem(QStringList(value.c_str()));
     	return parent;
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        const std::string str(t, N);
+        return new QStandardItem(str.c_str());
+    }
 };
 
 template< typename T, 
@@ -81,6 +116,7 @@ struct array_as_resume
 {
     typedef array_as_resume < T > type;
     typedef typename boost::remove_bounds < T >::type slice_t;
+    typedef tree < slice_t > slice_tree_t;
 
     static const size_t size = sizeof(T) / sizeof(slice_t);
 
@@ -98,6 +134,36 @@ struct array_as_resume
             oss << "...";
 
         return new QTreeWidgetItem(QStringList(oss.str().c_str()));
+    }
+
+    // TODO resume
+    static inline QStandardItem* create_item(const T& t)
+    {
+        QStandardItem* parent = new QStandardItem();
+
+        // parent->appendColumn(
+        //         new QStandardItem(QString("length '%1'").arg(size)));
+
+        for(size_t i=0; i<size; i++)
+        {
+            QStandardItem* child = slice_tree_t::create_item(t[i]);
+            if (child->rowCount() > 0)
+            {
+                child->setText(QString("[%1]").arg(i));
+                parent->appendRow(child);
+            }
+            else
+            {
+                QStandardItem* name = new QStandardItem(QString("[%1]").arg(i));
+                QList< QStandardItem * > list;
+                list << name;
+                list << child;
+
+                parent->appendRow(list);
+            }
+        }
+
+        return parent;
     }
 };
 

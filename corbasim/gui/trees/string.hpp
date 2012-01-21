@@ -44,6 +44,13 @@ struct string_as_item
         return new QTreeWidgetItem(QStringList(str.c_str()));
     }
 
+    template < typename Y >
+    static inline QStandardItem* create_item(Y t)
+    {
+        std::ostringstream oss;
+        oss << t;
+        return new QStandardItem(oss.str().c_str());
+    }
 };
 
 } // namespace detail

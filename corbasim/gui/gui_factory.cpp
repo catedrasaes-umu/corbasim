@@ -20,6 +20,7 @@
 #include "gui_factory_fwd.hpp"
 
 #include <QTreeWidgetItem>
+#include <QStandardItem>
 
 using namespace corbasim;
 using namespace corbasim::gui;
@@ -100,6 +101,37 @@ QTreeWidgetItem * gui_factory_base::create_tree(event::event* ev) const
     case event::MESSAGE:
         item = new QTreeWidgetItem(QStringList(
                     static_cast< event::message* >(ev)->get_message()));
+        break;
+    default:
+        break;
+    }
+
+    return item;
+}
+
+QStandardItem * gui_factory_base::create_item(event::event* ev) const
+{
+    QStandardItem * item = NULL;
+
+    switch (ev->get_type())
+    {
+    case event::REQUEST:
+    case event::RESPONSE:
+    {
+        factories_by_tag_t::const_iterator it = 
+            m_factories_by_tag.find(ev->get_tag());
+
+        if (it != m_factories_by_tag.end())
+            item = it->second->create_item(ev);
+
+        break;
+    }
+    case event::EXCEPTION:
+        item = new QStandardItem("Exception");
+        break;
+    case event::MESSAGE:
+        item = new QStandardItem(
+                static_cast< event::message* >(ev)->get_message());
         break;
     default:
         break;

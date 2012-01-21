@@ -48,6 +48,11 @@ struct unsupported_type
         return new QTreeWidgetItem(QStringList(
                     QString(name) + ": unsupported type!"));
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        return new QStandardItem("Unsupported type!");
+    }
 };
 
 template< typename T >

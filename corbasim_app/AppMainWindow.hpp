@@ -52,6 +52,8 @@ public:
 
 public slots:
 
+    void setLogModel(QAbstractItemModel * model);
+
     void showOpSequenceTool();
 
     void showCreateObjref();
@@ -132,15 +134,20 @@ protected:
     QTreeWidget * m_app_log;
 
     QDockWidget * m_dock_log;
+#if 0
     QTreeWidget * m_log;
+#else
+    QTreeView * m_log;
+#endif
     
     QDockWidget * m_dock_fqn;
     QTreeView * m_fqn;
 
     QCompleter * m_completer;
     QStringList m_op_list;
-
+#if 0
     void appendToLog(QTreeWidgetItem * item);
+#endif
     void appendToAppLog(QTreeWidgetItem * item);
 };
 

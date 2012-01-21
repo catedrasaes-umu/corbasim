@@ -67,6 +67,13 @@ struct operation_factory : public operation_factory_base
 
         return tree_factory_t::create_tree_impl(ev);
     }
+
+    QStandardItem * create_item(event::event* ev) const
+    {
+        typedef operation_tree_factory< Value > tree_factory_t;
+
+        return tree_factory_t::create_item_impl(ev);
+    }
 };
 
 template< typename Interface >

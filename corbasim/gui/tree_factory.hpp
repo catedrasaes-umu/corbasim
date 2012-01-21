@@ -35,6 +35,7 @@ namespace gui
 struct tree_factory_base
 {
     virtual QTreeWidgetItem * create_tree(event::event* ev) = 0;
+    virtual QStandardItem * create_item(event::event* ev) = 0;
     
     virtual ~tree_factory_base();
 };
@@ -47,6 +48,11 @@ struct operation_tree_factory : public tree_factory_base
     QTreeWidgetItem * create_tree(event::event* ev)
     {
         return create_tree_impl(ev);
+    }
+
+    QStandardItem * create_item(event::event* ev)
+    {
+        return create_item_impl(ev);
     }
 
     static inline QTreeWidgetItem * create_tree_impl(event::event* ev)
@@ -81,6 +87,37 @@ struct operation_tree_factory : public tree_factory_base
         return item;
     }
 
+    static inline QStandardItem * create_item_impl(event::event* ev)
+    {
+        typedef event::request_impl< Value > request_t;
+        typedef event::response_impl< Value > response_t;
+        typedef trees::tree< Value > tree_t; 
+        typedef adapted::name< Value > name_t;
+
+        QStandardItem * item = NULL;
+
+        switch (ev->get_type())
+        {
+        case event::REQUEST:
+        {
+            request_t * reqi = static_cast< request_t * >(ev);
+            item = tree_t::create_item(reqi->m_values);
+            item->setText(name_t::call());
+            break;
+        }
+        case event::RESPONSE:
+        {
+            response_t * reqi = static_cast< response_t * >(ev);
+            item = tree_t::create_item(reqi->m_values);
+            item->setText(name_t::call());
+            break;
+        }
+        default:
+            break;
+        }
+
+        return item;
+    }
 };
 
 struct tree_factory_interface : public tree_factory_base

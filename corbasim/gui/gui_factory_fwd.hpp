@@ -28,6 +28,7 @@
 #include <corbasim/gui/dialogs_fwd.hpp>
 
 class QTreeWidgetItem;
+class QStandardItem;
 
 namespace corbasim 
 {
@@ -45,6 +46,7 @@ struct operation_factory_base
     virtual dialogs::input_base * create_input() const = 0;
     virtual const char * get_name() const = 0;
     virtual QTreeWidgetItem * create_tree(event::event* ev) const = 0;
+    virtual QStandardItem * create_item(event::event* ev) const = 0;
     virtual tag_t get_tag() const = 0;
     virtual ~operation_factory_base();
 };
@@ -58,6 +60,7 @@ struct gui_factory_base
     operation_factory_base const * get_factory_by_tag(tag_t tag) const;
 
     QTreeWidgetItem * create_tree(event::event* ev) const;
+    QStandardItem * create_item(event::event* ev) const;
 
     virtual ~gui_factory_base();
     // virtual core::request_serializer_base * get_serializer() const = 0;

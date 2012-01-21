@@ -25,6 +25,7 @@
 #include "TriggerEngine.hpp"
 #include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
+#include <corbasim/qt/LogModel.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
@@ -57,6 +58,7 @@ int main(int argc, char **argv)
     QThread threadEngine;
     QThread threadWatcher;
     QThread threadDumper;
+    QThread threadLogModel;
 
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
@@ -64,9 +66,53 @@ int main(int argc, char **argv)
     corbasim::app::AppFileWatcher watcher;
     corbasim::app::DataDumper dumper;
     corbasim::app::AppMainWindow window;
+    corbasim::qt::LogModel logModel;
+
+    // Signals between models
+    QObject::connect(&controller,
+            SIGNAL(objrefCreated(
+                    QString, const corbasim::gui::gui_factory_base *)),
+            &logModel,
+            SLOT(registerInstance(
+                    const QString&, const 
+                    corbasim::gui::gui_factory_base *)));
+    QObject::connect(&controller,
+            SIGNAL(objrefDeleted(QString)),
+            &logModel,
+            SLOT(unregisterInstance(const QString&)));
+
+    QObject::connect(&controller,
+            SIGNAL(servantCreated(
+                    QString, 
+                    const corbasim::gui::gui_factory_base *)),
+            &logModel,
+            SLOT(registerInstance(
+                    const QString&, 
+                    const corbasim::gui::gui_factory_base *)));
+
+    QObject::connect(&controller,
+            SIGNAL(servantDeleted(QString)),
+            &logModel, SLOT(unregisterInstance(const QString&)));
+
+    QObject::connect(&controller,
+        SIGNAL(requestSent(QString, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)),
+        &logModel,
+        SLOT(outputRequest(const QString&, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)));
+
+    QObject::connect(&controller,
+        SIGNAL(requestReceived(QString, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)),
+        &logModel,
+        SLOT(inputRequest(const QString&, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)));
+    // End signals
 
     // Executed in dedicated threads
     controller.moveToThread(&threadController);
+    // logModel.moveToThread(&threadLogModel);
+    threadLogModel.start();
 
     if (config->enable_scripting)
     {
@@ -99,6 +145,8 @@ int main(int argc, char **argv)
     controller.setModel(&model);
     model.setController(&controller);
 
+    window.setLogModel(&logModel);
+
     window.setController(&controller);
     window.show();
 
@@ -121,11 +169,9 @@ int main(int argc, char **argv)
     }
 
     // borrar
-    /*
-    QListView view;
-    view.setModel(corbasim::qt::ReferenceModel::getDefaultModel());
+    QTreeView view;
+    view.setModel(&logModel);
     view.show();
-    */
     // fin borrar
 
     boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));
@@ -137,11 +183,13 @@ int main(int argc, char **argv)
     threadEngine.quit();
     threadWatcher.quit();
     threadDumper.quit();
+    threadLogModel.quit();
 
     threadController.wait();
     threadEngine.wait();
     threadWatcher.wait();
     threadDumper.wait();
+    threadLogModel.wait();
 
     orb->shutdown(1);
     orbThread.join();

@@ -132,6 +132,12 @@ struct union_as_tree
 
         return parent;
     }
+
+    static inline QStandardItem* create_item(const T& t)
+    {
+        // TODO
+        return new QStandardItem();
+    }
 };
 
 } // namespace detail
