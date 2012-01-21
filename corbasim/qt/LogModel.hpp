@@ -39,6 +39,9 @@ public:
     LogModel(QObject * parent = 0);
     virtual ~LogModel();
 
+    QVariant data(const QModelIndex& index, 
+            int role = Qt::DisplayRole) const; 
+
 public slots:
 
     int maxEntries() const;
@@ -59,7 +62,8 @@ protected:
 
     QStandardItem * append(const QString& id, 
             corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
+            corbasim::event::event_ptr resp,
+            bool is_in);
 
     int m_maxEntries;
 
@@ -69,6 +73,16 @@ protected:
 
     QIcon m_inputIcon;
     QIcon m_outputIcon;
+
+    struct LogEntry
+    {
+        bool is_in_entry;
+        QString id;
+        corbasim::event::request_ptr req;
+        corbasim::event::event_ptr resp;
+    };
+
+    QList< LogEntry > m_entries;
 };
 
 } // namespace qt

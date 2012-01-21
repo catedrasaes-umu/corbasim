@@ -39,6 +39,33 @@ LogModel::~LogModel()
 {
 }
 
+QVariant LogModel::data(const QModelIndex& index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    if (role != Qt::BackgroundRole)
+        return QStandardItemModel::data(index, role);
+
+    QModelIndex parent = index;
+    while(parent.parent().isValid())
+    {
+        parent = parent.parent();
+    }
+
+    const LogEntry& entry = m_entries.at(parent.row());
+
+    // Excepciones
+    if (entry.resp && (entry.resp->get_type() == event::EXCEPTION || 
+            entry.resp->get_type() == event::MESSAGE))
+        return QColor(Qt::red);
+
+    if (entry.is_in_entry)
+        return QColor(Qt::green);
+
+    return QColor(Qt::yellow);
+}
+
 int LogModel::maxEntries() const
 {
     return m_maxEntries;
@@ -46,8 +73,14 @@ int LogModel::maxEntries() const
 
 void LogModel::setMaxEntries(int max)
 {
-    // TODO update model
     m_maxEntries = max;
+
+    while (rowCount() > m_maxEntries)
+    {
+        // Elimina la primera
+        removeRow(0);
+        m_entries.pop_front();
+    }
 }
 
 void LogModel::registerInstance(const QString& id,
@@ -65,15 +98,27 @@ void LogModel::inputRequest(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-    QStandardItem * item = append(id, req, resp);
+    QStandardItem * item = append(id, req, resp, true);
     if (item)
     {
         const QString text (item->text());
-        item->setText(QString("Incoming call ") + id + "." + text);
+        const QString prefix = QString("Incoming call ") + id + "." + text;
+        
+        if(resp && resp->get_type() == event::EXCEPTION)
+        {
+            item->setText(prefix + " (Exception!)");
+        }
+        else if(resp && resp->get_type() == event::MESSAGE)
+        {
+            event::message* msg = static_cast< event::message* >(resp.get());
+            item->setText(prefix + " (" + msg->get_message() + ")");
+        }
+        else
+        {
+            item->setText(prefix);
+        }
 
         item->setIcon(m_inputIcon);
-
-        item->setBackground(Qt::green);
     }
 }
 
@@ -81,21 +126,34 @@ void LogModel::outputRequest(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-    QStandardItem * item = append(id, req, resp);
+    QStandardItem * item = append(id, req, resp, false);
     if (item)
     {
         const QString text (item->text());
-        item->setText(QString("Outgoing call ") + id + "." + text);
+        const QString prefix = QString("Outgoining call ") + id + "." + text;
+        
+        if(resp && resp->get_type() == event::EXCEPTION)
+        {
+            item->setText(prefix + " (Exception!)");
+        }
+        else if(resp && resp->get_type() == event::MESSAGE)
+        {
+            event::message* msg = static_cast< event::message* >(resp.get());
+            item->setText(prefix + " (" + msg->get_message() + ")");
+        }
+        else
+        {
+            item->setText(prefix);
+        }
 
-        item->setIcon(m_outputIcon);
-
-        item->setBackground(Qt::yellow);
+        item->setIcon(m_inputIcon);
     }
 }
 
 QStandardItem* LogModel::append(const QString& id, 
         corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp)
+        corbasim::event::event_ptr resp,
+        bool is_in)
 {
     instances_t::const_iterator it = m_instances.find(id);
     
@@ -104,20 +162,35 @@ QStandardItem* LogModel::append(const QString& id,
         QDateTime dateTime = QDateTime::currentDateTime();
         QList< QStandardItem * > list;
 
-
-        QStandardItem * item = it->second->create_item(req.get());
-
-        // TODO process response
-        
-        list << item << new QStandardItem(dateTime.toString());
-        appendRow(list);
-
-        while (rowCount() > m_maxEntries)
+        // Deja espacio
+        while (rowCount() > m_maxEntries - 1)
         {
             // Elimina la primera
             removeRow(0);
+            m_entries.pop_front();
         }
 
+        QStandardItem * item = it->second->create_item(req.get());
+
+        // process response
+        if (resp && resp->get_type() == event::RESPONSE)
+        {
+            QStandardItem * itemResp = it->second->create_item(resp.get());
+            itemResp->setText("Response");
+            item->appendRow(itemResp);
+        }
+        
+        list << item << new QStandardItem(dateTime.toString());
+
+        // List
+        LogEntry entry;
+        entry.is_in_entry = is_in;
+        entry.id = id;
+        entry.req = req;
+        entry.resp = resp;
+        m_entries.push_back(entry);
+
+        appendRow(list);
         return item;
     }
 
