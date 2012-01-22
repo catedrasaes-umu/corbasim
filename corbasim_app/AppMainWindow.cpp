@@ -51,7 +51,6 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_log = new QTreeView();
 #endif
 
-    // m_log->setColumnWidth(0, 800);
     m_dock_log->setWidget(m_log);
     addDockWidget(Qt::RightDockWidgetArea, m_dock_log);
 
@@ -272,6 +271,7 @@ void AppMainWindow::setController(AppController * controller)
 void AppMainWindow::setLogModel(QAbstractItemModel * model)
 {
     m_log->setModel(model);
+    m_log->setColumnWidth(0, 500);
 }
 
 void AppMainWindow::setEngine(TriggerEngine * engine)
