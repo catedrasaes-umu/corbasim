@@ -162,3 +162,104 @@ void PlotModel::deletePlot(const QString& id, const QList< int >& path)
     }
 }
 
+// Reflective model
+
+ReflectiveModel::ReflectiveModel(QObject *parent)
+    : QStandardItemModel(parent)
+{
+}
+
+ReflectiveModel::~ReflectiveModel()
+{
+}
+
+void insertRecursive2(QStandardItem * parent, 
+        corbasim::core::reflective_base const * reflective)
+{
+    const unsigned int count = reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        corbasim::core::reflective_base const * child =
+            reflective->get_child(i);
+
+        QStandardItem * childItem = 
+            new QStandardItem(reflective->get_child_name(i));
+        childItem->setEditable(false);
+
+        insertRecursive2(childItem, child);
+
+        parent->appendRow(childItem);
+    }
+}
+
+void ReflectiveModel::registerInstance(const QString& name,
+        core::interface_reflective_base const * reflective)
+{
+    FirstLevelItem item = {name, reflective};
+    m_items.push_back(item);
+
+    QStandardItem * ifItem = new QStandardItem(name);
+    ifItem->setEditable(false);
+
+    const unsigned int count = reflective->operation_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        core::operation_reflective_base const * op =
+            reflective->get_reflective_by_index(i);
+
+        QStandardItem * opItem = new QStandardItem(op->get_name());
+        opItem->setEditable(false);
+
+        insertRecursive2(opItem, op);
+
+        ifItem->appendRow(opItem);
+    }
+
+    appendRow(ifItem);
+}
+
+void ReflectiveModel::unregisterInstance(const QString& name)
+{
+    int i = 0;
+    for (FirstLevelItems_t::iterator it = m_items.begin(); 
+            it != m_items.end(); ++it, ++i) 
+    {
+        if (name == it->name)
+        {
+            removeRows(i, 1);
+
+            m_items.erase(it);
+            break;
+        }
+    }
+}
+
+// Checked reflective model
+
+CheckedReflectiveModel::CheckedReflectiveModel(QObject * parent) :
+#if 0
+    QIdentityProxyModel(parent)
+#else
+    QProxyModel(parent)
+#endif
+    , m_model(NULL)
+{
+}
+
+CheckedReflectiveModel::~CheckedReflectiveModel()
+{
+}
+
+void CheckedReflectiveModel::setReflectiveModel(ReflectiveModel * model)
+{
+    m_model = model;
+
+#if 0
+    setSourceModel(model);
+#else
+    setModel(model);
+#endif
+}
+
