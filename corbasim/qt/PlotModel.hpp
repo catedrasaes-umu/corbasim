@@ -105,6 +105,7 @@ public:
 
 protected:
     ReflectiveModel * m_model;
+
 };
 
 } // qt
