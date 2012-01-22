@@ -24,9 +24,13 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <corbasim/impl.hpp>
 #include <corbasim/adapted.hpp>
 #include <corbasim/event.hpp>
 #include <corbasim/core/inserter.hpp>
+#include <corbasim/core/caller.hpp>
+#include <corbasim/core/callable.hpp>
+#include <corbasim/core/reference_validator.hpp>
 
 namespace corbasim 
 {
@@ -164,6 +168,7 @@ struct reflective_base
     virtual bool is_repeated() const;
     virtual bool is_variable_length() const;
     virtual bool is_primitive() const;
+    virtual bool is_enum() const;
 
     virtual reflective_type get_type() const;
 
@@ -491,15 +496,32 @@ struct union_reflective : public reflective_base
 template< typename T >
 struct enum_reflective : public reflective_base
 {
+    typedef adapted::enumeration< T > adapted_t;
+
     enum_reflective(reflective_base const * parent = NULL, 
             unsigned int idx = 0) :
         reflective_base(parent, idx)
     {
     }
 
+    bool is_enum() const
+    {
+        return true;
+    }
+
     reflective_type get_type() const
     {
         return TYPE_ENUM;
+    }
+
+    unsigned int get_children_count() const
+    {
+        return adapted_t::size;
+    }
+
+    const char * get_child_name(unsigned int idx) const
+    {
+        return adapted_t::values()[idx];
     }
 };
 
@@ -598,8 +620,14 @@ struct interface_reflective_base
 
     virtual ~interface_reflective_base();
 
-    // virtual const char * get_name() const = 0;
-    // virtual const char * get_fqn() const = 0;
+    virtual const char * get_name() const = 0;
+    virtual const char * get_fqn() const = 0;
+
+    virtual reference_validator_base * create_validator() const = 0;
+
+    // Servant
+    virtual PortableServer::ServantBase * create_servant(
+            request_processor * proc) const = 0;
 
 protected:
 
@@ -694,6 +722,35 @@ struct interface_reflective : public interface_reflective_base
         typedef core::impl::inserter< interface_reflective > inserter_t;
         cs_mpl::for_each_list< operations_t >(inserter_t(this));
     }
+
+    interface_caller_base* create_caller() const
+    {
+        return new core::interface_caller< Interface >();
+    }
+
+    reference_validator_base * create_validator() const
+    {
+        return new reference_validator_impl< Interface >();
+    }
+
+    // Servant
+    PortableServer::ServantBase * create_servant(
+            request_processor * proc) const
+    {
+        return new typename adapted::servant< Interface >::template 
+            _type< callable >(callable(proc));
+    }
+   
+    const char * get_name() const
+    {
+        return adapted::name< Interface >::call();
+    }
+
+    const char * get_fqn() const
+    {
+        return adapted::full_qualified_name< Interface >::call();
+    }
+
 
     template< typename Value >
     inline void append()

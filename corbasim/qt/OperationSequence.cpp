@@ -72,6 +72,32 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     bLayout->addItem(spacer);
 
+    // periodic
+    bLayout->addWidget(new QLabel("Period (ms)"));
+    m_sbPeriod = new QSpinBox;
+    m_sbPeriod->setRange(0, 999999);
+    m_sbPeriod->setValue(100);
+    bLayout->addWidget(m_sbPeriod);
+
+    bLayout->addWidget(new QLabel("Times"));
+    m_sbTimes = new QSpinBox;
+    m_sbTimes->setRange(-1, 999999);
+    m_sbTimes->setValue(-1);
+    bLayout->addWidget(m_sbTimes);
+
+    bLayout->addWidget(new QLabel("Use stored value"));
+    m_cbUseStored = new QCheckBox;
+    m_cbUseStored->setChecked(true);
+    bLayout->addWidget(m_cbUseStored);
+
+    m_pbStartStop = new QPushButton("S&tart/Stop");
+    m_pbStartStop->setCheckable(true);
+    bLayout->addWidget(m_pbStartStop);
+
+    m_pbUpdate = new QPushButton("&Update");
+    bLayout->addWidget(m_pbUpdate);
+    // end periodic
+
     QPushButton * btSend = new QPushButton("Send");
     // QPushButton * btSendNext = new QPushButton("Send and next");
 
@@ -83,6 +109,12 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
 
     QObject::connect(btSend, SIGNAL(clicked()),
             this, SLOT(sendClicked()));
+    QObject::connect(m_pbUpdate, SIGNAL(clicked()), 
+            this, SLOT(storeRequest()));
+    QObject::connect(m_pbStartStop, SIGNAL(toggled(bool)), 
+            this, SLOT(startStopChecked(bool)));
+    QObject::connect(&m_timer, SIGNAL(timeout()), 
+            this, SLOT(sendStored()));
 
     QObject::connect(btDelete, SIGNAL(clicked()),
             this, SLOT(deleteClicked()));
@@ -124,6 +156,44 @@ void OperationSequenceItem::sendClicked()
 {
     event::request_ptr req_(m_dlg->create_request());
     emit sendRequest(m_id, req_);
+}
+
+void OperationSequenceItem::startStopChecked(bool chk)
+{
+    if (chk)
+    {
+        storeRequest();
+        m_currentPeriodicRequest = 0;
+        m_timer.start(m_sbPeriod->value());
+    }
+    else
+    {
+        m_timer.stop();
+    }
+}
+
+void OperationSequenceItem::storeRequest()
+{
+    m_storedRequest = event::request_ptr(m_dlg->create_request());
+}
+
+void OperationSequenceItem::sendStored()
+{
+    if (m_cbUseStored->isChecked())
+        emit sendRequest(m_id, m_storedRequest);
+    else
+        sendClicked();
+        // emit sendRequest(event::request_ptr(m_dlg->create_request()));
+
+    ++m_currentPeriodicRequest;
+    if (m_sbTimes->value() >= 0 && 
+            m_currentPeriodicRequest >= m_sbTimes->value())
+        m_pbStartStop->setChecked(false);
+}
+
+void OperationSequenceItem::stopTimer()
+{
+    m_pbStartStop->setChecked(false);
 }
 
 void OperationSequenceItem::deleteClicked()

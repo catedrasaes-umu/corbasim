@@ -59,6 +59,7 @@ reflective_base const * reflective_base::get_child(unsigned int idx) const
 bool reflective_base::is_repeated() const        { return false; }
 bool reflective_base::is_variable_length() const { return false; }
 bool reflective_base::is_primitive() const       { return false; }
+bool reflective_base::is_enum() const            { return false; }
 
 reflective_type reflective_base::get_type() const
 {

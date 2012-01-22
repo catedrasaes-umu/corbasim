@@ -68,11 +68,28 @@ private slots:
 
     void sendClicked();
 
+    void sendStored(); 
+	void startStopChecked(bool = true); 
+    void storeRequest();
+    void stopTimer();
+
 protected:
 
     const QString m_id;
     dialogs::input_base* m_dlg;
     QLayout * m_layout;
+
+    // Periodic
+    QSpinBox * m_sbPeriod;
+    QSpinBox * m_sbTimes;
+    QCheckBox * m_cbUseStored;
+    QPushButton * m_pbStartStop;
+    QPushButton * m_pbUpdate;
+
+    QTimer m_timer;
+    int m_currentPeriodicRequest;
+    event::request_ptr m_storedRequest;
+    // End periodic
 };
 
 class OperationSequence : public QWidget
