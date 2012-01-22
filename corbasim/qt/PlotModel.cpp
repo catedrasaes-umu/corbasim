@@ -263,3 +263,11 @@ void CheckedReflectiveModel::setReflectiveModel(ReflectiveModel * model)
 #endif
 }
 
+Qt::ItemFlags CheckedReflectiveModel::flags(const QModelIndex& index) const
+{
+    if (m_model)
+        return m_model->flags(index) & Qt::ItemIsUserCheckable;
+
+    return 0;
+}
+

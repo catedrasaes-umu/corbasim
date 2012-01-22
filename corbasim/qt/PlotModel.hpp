@@ -101,6 +101,8 @@ public:
 
     void setReflectiveModel(ReflectiveModel * model);
 
+    Qt::ItemFlags flags(const QModelIndex& index) const;
+
 protected:
     ReflectiveModel * m_model;
 };
