@@ -146,7 +146,7 @@ void LogModel::outputRequest(const QString& id,
             item->setText(prefix);
         }
 
-        item->setIcon(m_inputIcon);
+        item->setIcon(m_outputIcon);
     }
 }
 
