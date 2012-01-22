@@ -130,7 +130,7 @@ void LogModel::outputRequest(const QString& id,
     if (item)
     {
         const QString text (item->text());
-        const QString prefix = QString("Outgoining call ") + id + "." + text;
+        const QString prefix = QString("Outgoing call ") + id + "." + text;
         
         if(resp && resp->get_type() == event::EXCEPTION)
         {
