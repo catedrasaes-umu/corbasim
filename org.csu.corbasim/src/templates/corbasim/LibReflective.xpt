@@ -1,0 +1,32 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+
+
+«DEFINE main FOR TranslationUnit»
+	«EXPAND main FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE main FOR Contained-»«ENDDEFINE»
+
+«DEFINE main FOR ModuleDef-»
+	«EXPAND main FOREACH contains SEPARATOR "\n\n"»
+«ENDDEFINE»
+
+«DEFINE main FOR InterfaceDef-»
+«LET getFQN("_") AS fqn»
+«FILE fqn+"_lib.cpp"»
+#include "«getTranslationUnit().getFileNameStubHpp()»"
+#include "«getTranslationUnit().getAdaptedFile()»"
+#include "«getTranslationUnit().getAdaptedServantFile()»"
+#include <corbasim/core/reflective_fwd.hpp>
+
+extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»()
+{
+	return corbasim::core::interface_reflective< «getFQN()» >::get_instance();
+}
+
+«ENDFILE»
+«ENDLET»
+«ENDDEFINE»
+

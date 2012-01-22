@@ -53,6 +53,17 @@ target_link_libraries(corbasim_lib_«fqn»
 	corbasim corbasim_qt)
 	«ENDIF-»
 
+«REM»	
+	«IF generateReflectiveLibrary()-»
+# Corbasim reflective library	
+add_library(corbasim_reflective_«fqn» SHARED «fqn»_reflective.cpp)
+target_link_libraries(corbasim_reflective_«fqn»
+	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
+	# CORBASIM Library
+	corbasim)
+	«ENDIF-»
+«ENDREM»
+
 	«IF generateClient()-»
 # Client
 add_executable(${CORBASIM_PREFIX}«fqn»_client «fqn»_client_main.cpp)
