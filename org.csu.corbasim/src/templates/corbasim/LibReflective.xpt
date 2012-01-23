@@ -19,7 +19,7 @@
 #include "«getTranslationUnit().getFileNameStubHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
 #include "«getTranslationUnit().getAdaptedServantFile()»"
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/core/reflective.hpp>
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»()
 {

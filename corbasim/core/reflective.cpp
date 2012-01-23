@@ -21,6 +21,31 @@
 
 using namespace corbasim::core;
 
+// Holder
+holder::holder()
+{
+}
+
+holder::holder(holder_impl_base * impl) :
+    m_impl(holder_impl_ptr(impl))
+{
+}
+
+holder::holder(const holder& o) :
+    m_impl(o.m_impl)
+{
+}
+
+holder& holder::operator=(const holder& o)
+{
+    m_impl = o.m_impl;
+
+    return *this;
+}
+
+
+// Reflective base
+
 reflective_base::reflective_base(reflective_base const * parent,
         unsigned int child_index) : 
     m_parent(parent), m_child_index(child_index)
@@ -142,5 +167,10 @@ interface_reflective_base::get_reflective_by_tag(
         return it->second;
 
     return NULL;
+}
+
+// Operation reflective base
+operation_reflective_base::~operation_reflective_base()
+{
 }
 

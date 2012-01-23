@@ -4,7 +4,7 @@
 #include <corbasim/gui/widgets.hpp>
 #include <corbasim/gui/trees.hpp>
 #include <corbasim/gui/gui_factory.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/core/reflective.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
