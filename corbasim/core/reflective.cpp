@@ -17,7 +17,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "reflective_fwd.hpp"
+#include "reflective.hpp"
+#include "reflective.ipp"
+
+namespace corbasim 
+{
+namespace core 
+{
+namespace detail 
+{
+
+template class bool_reflective< CORBA::Boolean >;
+template class primitive_reflective< CORBA::Short >;
+template class primitive_reflective< CORBA::UShort >;
+template class primitive_reflective< CORBA::Char >;
+template class primitive_reflective< CORBA::Octet >;
+template class primitive_reflective< CORBA::Long >;
+template class primitive_reflective< CORBA::ULong >;
+template class primitive_reflective< CORBA::LongLong >;
+template class primitive_reflective< CORBA::ULongLong >;
+template class primitive_reflective< CORBA::Float >;
+template class primitive_reflective< CORBA::Double >;
+
+} // namespace detail
+} // namespace core
+} // namespace corbasim
 
 using namespace corbasim::core;
 

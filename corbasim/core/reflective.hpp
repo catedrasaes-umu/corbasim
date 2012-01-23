@@ -81,40 +81,22 @@ namespace detail
 template< typename T >
 struct bool_reflective : public reflective_base
 {
-    bool_reflective(reflective_base const * parent, unsigned int idx) :
-        reflective_base(parent, idx)
-    {
-    }
+    bool_reflective(reflective_base const * parent, unsigned int idx);
     
-    bool is_primitive() const { return true; }
+    bool is_primitive() const;
 
-    reflective_type get_type() const
-    {
-        return TYPE_BOOL;
-    }
+    reflective_type get_type() const;
 };
 
 template< typename T >
 struct primitive_reflective : public reflective_base
 {
     primitive_reflective(reflective_base const * parent, 
-            unsigned int idx) :
-        reflective_base(parent, idx)
-    {
-    }
+            unsigned int idx);
 
-    bool is_primitive() const { return true; }
+    bool is_primitive() const;
 
-
-    double to_double(holder const& value) const
-    {
-        typedef holder_ref_impl< T > impl_t;
-
-        impl_t const * p = reinterpret_cast< impl_t const * >(
-                value.m_impl.get());
-
-        return (double) p->t_;
-    }
+    double to_double(holder const& value) const;
 };
 
 template< typename T >
