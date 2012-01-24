@@ -14,6 +14,7 @@
 #include <corbasim/qt/OperationSequence.hpp>
 
 #include <corbasim/reflective_gui/ReflectiveGUI.hpp>
+#include <corbasim/reflective_gui/OperationSequence.hpp>
 
 void print(corbasim::core::reflective_base const * current, 
         unsigned int level = 0)
@@ -66,10 +67,13 @@ int main(int argc, char **argv)
             &tool,
             SLOT(processRequest(const QString&, corbasim::event::request_ptr)));
 
-    corbasim::reflective_gui::StructWidget w(
-            iface->get_reflective_by_index(0));
+//    corbasim::reflective_gui::StructWidget w(
+//            iface->get_reflective_by_index(0));
+//    w.show();
 
-    w.show();
+    corbasim::reflective_gui::OperationSequenceTool seq2;
+    seq2.objrefCreated("prueba", iface);
+    seq2.show();
 
     return app.exec();
 }
