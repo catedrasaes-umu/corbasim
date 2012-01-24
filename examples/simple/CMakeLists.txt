@@ -10,7 +10,7 @@ if (Qwt6_FOUND)
         prueba_reflective.cpp)
     target_link_libraries(prueba_reflective
         simple_idl
-        corbasim corbasim_qt corbasim_qwt
+        corbasim corbasim_qt corbasim_qwt corbasim_reflective_gui
         # TAO
         TAO TAO_PortableServer TAO_AnyTypeCode TAO_CosNaming 
         TAO_ObjRefTemplate)

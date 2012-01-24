@@ -13,6 +13,8 @@
 #include <corbasim/qwt/ReflectivePlotTool.hpp>
 #include <corbasim/qt/OperationSequence.hpp>
 
+#include <corbasim/reflective_gui/ReflectiveGUI.hpp>
+
 void print(corbasim::core::reflective_base const * current, 
         unsigned int level = 0)
 {
@@ -63,6 +65,11 @@ int main(int argc, char **argv)
             SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
             &tool,
             SLOT(processRequest(const QString&, corbasim::event::request_ptr)));
+
+    corbasim::reflective_gui::StructWidget w(
+            iface->get_reflective_by_index(0));
+
+    w.show();
 
     return app.exec();
 }

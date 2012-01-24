@@ -96,6 +96,8 @@ struct primitive_reflective : public reflective_base
 
     bool is_primitive() const;
 
+    reflective_type get_type() const;
+
     double to_double(holder const& value) const;
 };
 

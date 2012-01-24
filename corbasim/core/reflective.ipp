@@ -71,61 +71,61 @@ double primitive_reflective< T >::to_double(holder const& value) const
 }
 
 template< >
-reflective_type bool_reflective< double >::get_type() const
+reflective_type primitive_reflective< double >::get_type() const
 {
     return TYPE_DOUBLE;
 }
 
 template< >
-reflective_type bool_reflective< float >::get_type() const
+reflective_type primitive_reflective< float >::get_type() const
 {
     return TYPE_FLOAT;
 }
 
 template< >
-reflective_type bool_reflective< char >::get_type() const
+reflective_type primitive_reflective< char >::get_type() const
 {
     return TYPE_CHAR;
 }
 
 template< >
-reflective_type bool_reflective< unsigned char >::get_type() const
+reflective_type primitive_reflective< unsigned char >::get_type() const
 {
     return TYPE_OCTET;
 }
 
 template< >
-reflective_type bool_reflective< short >::get_type() const
+reflective_type primitive_reflective< short >::get_type() const
 {
     return TYPE_SHORT;
 }
 
 template< >
-reflective_type bool_reflective< unsigned short >::get_type() const
+reflective_type primitive_reflective< unsigned short >::get_type() const
 {
     return TYPE_USHORT;
 }
 
 template< >
-reflective_type bool_reflective< CORBA::ULong >::get_type() const
+reflective_type primitive_reflective< CORBA::ULong >::get_type() const
 {
     return TYPE_ULONG;
 }
 
 template< >
-reflective_type bool_reflective< CORBA::Long >::get_type() const
+reflective_type primitive_reflective< CORBA::Long >::get_type() const
 {
     return TYPE_LONG;
 }
 
 template< >
-reflective_type bool_reflective< CORBA::ULongLong >::get_type() const
+reflective_type primitive_reflective< CORBA::ULongLong >::get_type() const
 {
     return TYPE_ULONGLONG;
 }
 
 template< >
-reflective_type bool_reflective< CORBA::LongLong >::get_type() const
+reflective_type primitive_reflective< CORBA::LongLong >::get_type() const
 {
     return TYPE_LONGLONG;
 }

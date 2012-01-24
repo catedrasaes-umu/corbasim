@@ -28,6 +28,45 @@ namespace corbasim
 namespace reflective_gui 
 {
 
+class FloatWidget : public QDoubleSpinBox
+{
+    Q_OBJECT
+public:
+    FloatWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~FloatWidget();
+
+protected:
+    core::reflective_base const * m_reflective;
+    
+};
+
+class IntegerWidget : public QSpinBox
+{
+    Q_OBJECT
+public:
+    IntegerWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~IntegerWidget();
+
+protected:
+    core::reflective_base const * m_reflective;
+    
+};
+
+class StringWidget : public QLineEdit
+{
+    Q_OBJECT
+public:
+    StringWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~StringWidget();
+
+protected:
+    core::reflective_base const * m_reflective;
+    
+};
+
 class EnumWidget : public QComboBox
 {
     Q_OBJECT
@@ -35,6 +74,19 @@ public:
     EnumWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
     virtual ~EnumWidget();
+
+protected:
+    core::reflective_base const * m_reflective;
+    
+};
+
+class BoolWidget : public QCheckBox
+{
+    Q_OBJECT
+public:
+    BoolWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~BoolWidget();
 
 protected:
     core::reflective_base const * m_reflective;
@@ -54,6 +106,32 @@ protected:
     
 };
 
+class SequenceWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    SequenceWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~SequenceWidget();
+
+protected slots:
+
+    void lengthChanged(int);
+    void indexChanged(int);
+
+protected:
+
+    typedef std::vector< QWidget* > widgets_t;
+
+    core::reflective_base const * m_reflective;
+    
+    QSpinBox * m_sbLength;
+    QSpinBox * m_sbCurrentIndex;
+
+    QStackedWidget * m_stack;
+
+    widgets_t m_widgets;
+};
 
 } // namespace reflective_gui
 } // namespace corbasim
