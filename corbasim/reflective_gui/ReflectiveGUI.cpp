@@ -19,6 +19,7 @@
 
 #include "ReflectiveGUI.hpp"
 #include <cassert>
+#include <limits>
 
 using namespace corbasim::reflective_gui;
 
@@ -54,10 +55,11 @@ QWidget * createWidget(corbasim::core::reflective_base const * reflective,
             return new StringWidget(reflective, parent);
 
         case TYPE_OBJREF:
-        case TYPE_ARRAY:
         case TYPE_UNION:
             break;
 
+        case TYPE_ARRAY:
+            return new ArrayWidget(reflective, parent);
         case TYPE_SEQUENCE:
             return new SequenceWidget(reflective, parent);
 
@@ -79,6 +81,23 @@ FloatWidget::FloatWidget(core::reflective_base const * reflective,
         QWidget * parent) :
     QDoubleSpinBox(parent), m_reflective(reflective)
 {
+    using namespace corbasim::core;
+
+    const reflective_type type = reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_DOUBLE:
+            setRange(-std::numeric_limits< double >::max(),
+                    std::numeric_limits< double >::max());
+            break;
+        case TYPE_FLOAT:
+            setRange(-std::numeric_limits< float >::max(),
+                    std::numeric_limits< float >::max());
+            break;
+        default:
+            break;
+    }
 }
 
 FloatWidget::~FloatWidget()
@@ -89,6 +108,47 @@ IntegerWidget::IntegerWidget(core::reflective_base const * reflective,
         QWidget * parent) :
     QSpinBox(parent), m_reflective(reflective)
 {
+    using namespace corbasim::core;
+
+    const reflective_type type = reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_OCTET:
+            setRange(std::numeric_limits< unsigned char >::min(),
+                    std::numeric_limits< unsigned char >::max());
+            break;
+        case TYPE_CHAR:
+            setRange(std::numeric_limits< char >::min(),
+                    std::numeric_limits< char >::max());
+            break;
+        case TYPE_SHORT:
+            setRange(std::numeric_limits< short >::min(),
+                    std::numeric_limits< short >::max());
+            break;
+        case TYPE_USHORT:
+            setRange(std::numeric_limits< unsigned short >::min(),
+                    std::numeric_limits< unsigned short >::max());
+            break;
+        case TYPE_LONG:
+            setRange(std::numeric_limits< int32_t >::min(),
+                    std::numeric_limits< int32_t >::max());
+            break;
+        case TYPE_ULONG:
+            setRange(std::numeric_limits< uint32_t >::min(),
+                    std::numeric_limits< uint32_t >::max());
+            break;
+        case TYPE_LONGLONG:
+            setRange(std::numeric_limits< int64_t >::min(),
+                    std::numeric_limits< int64_t >::max());
+            break;
+        case TYPE_ULONGLONG:
+            setRange(std::numeric_limits< uint64_t >::min(),
+                    std::numeric_limits< uint64_t >::max());
+            break;
+        default:
+            break;
+    }
 }
 
 IntegerWidget::~IntegerWidget()
@@ -156,12 +216,18 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
 
         if (child->is_primitive())
         {
-            layout->addWidget(new QLabel(child_name, this), i, 0);
+            QLabel * label = new QLabel(child_name, this);
+
+            label->setObjectName(QString(child_name) + "_label");
+
+            layout->addWidget(label, i, 0);
             layout->addWidget(child_widget, i, 1);
         }
         else
         {
             QGroupBox * gb = new QGroupBox(child_name, this);
+            gb->setObjectName(QString(child_name) + "_group");
+
             QHBoxLayout * cLayout = new QHBoxLayout(gb);
 
             cLayout->addWidget(child_widget);
@@ -251,4 +317,40 @@ void SequenceWidget::indexChanged(int idx)
     m_stack->setCurrentIndex(idx);
 }
 
+ArrayWidget::ArrayWidget(core::reflective_base const * reflective,
+        QWidget * parent) :
+    QWidget(parent), m_reflective(reflective)
+{
+    QVBoxLayout * layout = new QVBoxLayout;
+ 
+    QHBoxLayout * headerLayout = new QHBoxLayout;
+    m_sbCurrentIndex = new QSpinBox;
+
+    headerLayout->addWidget(new QLabel("Index"));
+    headerLayout->addWidget(m_sbCurrentIndex);
+
+    layout->addLayout(headerLayout);
+
+    m_stack = new QStackedWidget;
+    layout->addWidget(m_stack);
+
+    // TODO initialize stack
+    
+    setLayout(layout);
+
+    QObject::connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
+            this, SLOT(indexChanged(int)));
+}
+
+ArrayWidget::~ArrayWidget()
+{
+}
+
+void ArrayWidget::indexChanged(int idx)
+{
+    if (m_widgets.empty())
+        return;
+
+    m_stack->setCurrentIndex(idx);
+}
 

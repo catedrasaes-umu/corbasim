@@ -133,6 +133,32 @@ protected:
     widgets_t m_widgets;
 };
 
+class ArrayWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    ArrayWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~ArrayWidget();
+
+protected slots:
+
+    void indexChanged(int);
+
+protected:
+
+    typedef std::vector< QWidget* > widgets_t;
+
+    core::reflective_base const * m_reflective;
+    
+    QSpinBox * m_sbCurrentIndex;
+
+    QStackedWidget * m_stack;
+
+    widgets_t m_widgets;
+};
+
+
 } // namespace reflective_gui
 } // namespace corbasim
 
