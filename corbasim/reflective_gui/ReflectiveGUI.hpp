@@ -28,20 +28,40 @@ namespace corbasim
 namespace reflective_gui 
 {
 
-class FloatWidget : public QDoubleSpinBox
+class ReflectiveWidgetBase
+{
+protected:
+
+    ReflectiveWidgetBase(core::reflective_base const * reflective);
+
+public:
+
+    virtual ~ReflectiveWidgetBase();
+
+    core::reflective_base const * getReflective() const;
+
+    virtual void toHolder(core::holder& holder) = 0;
+    virtual void fromHolder(core::holder& holder) = 0;
+
+protected:
+
+    core::reflective_base const * m_reflective;
+};
+
+class FloatWidget : public QDoubleSpinBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
     FloatWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
     virtual ~FloatWidget();
-
-protected:
-    core::reflective_base const * m_reflective;
-    
+ 
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+   
 };
 
-class IntegerWidget : public QSpinBox
+class IntegerWidget : public QSpinBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -49,12 +69,12 @@ public:
             QWidget * parent = 0);
     virtual ~IntegerWidget();
 
-protected:
-    core::reflective_base const * m_reflective;
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
     
 };
 
-class StringWidget : public QLineEdit
+class StringWidget : public QLineEdit, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -62,12 +82,12 @@ public:
             QWidget * parent = 0);
     virtual ~StringWidget();
 
-protected:
-    core::reflective_base const * m_reflective;
-    
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+
 };
 
-class EnumWidget : public QComboBox
+class EnumWidget : public QComboBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -75,44 +95,47 @@ public:
             QWidget * parent = 0);
     virtual ~EnumWidget();
 
-protected:
-    core::reflective_base const * m_reflective;
-    
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+
 };
 
-class BoolWidget : public QCheckBox
+class BoolWidget : public QCheckBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
     BoolWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
     virtual ~BoolWidget();
-
-protected:
-    core::reflective_base const * m_reflective;
-    
+ 
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+   
 };
 
-class StructWidget : public QWidget
+class StructWidget : public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
     StructWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
     virtual ~StructWidget();
-
-protected:
-    core::reflective_base const * m_reflective;
-    
+ 
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+   
 };
 
-class SequenceWidget : public QWidget
+class SequenceWidget : public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
     SequenceWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
     virtual ~SequenceWidget();
+
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
 
 protected slots:
 
@@ -122,8 +145,6 @@ protected slots:
 protected:
 
     typedef std::vector< QWidget* > widgets_t;
-
-    core::reflective_base const * m_reflective;
     
     QSpinBox * m_sbLength;
     QSpinBox * m_sbCurrentIndex;
@@ -133,13 +154,16 @@ protected:
     widgets_t m_widgets;
 };
 
-class ArrayWidget : public QWidget
+class ArrayWidget : public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
     ArrayWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
     virtual ~ArrayWidget();
+
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
 
 protected slots:
 
@@ -149,8 +173,6 @@ protected:
 
     typedef std::vector< QWidget* > widgets_t;
 
-    core::reflective_base const * m_reflective;
-    
     QSpinBox * m_sbCurrentIndex;
 
     QStackedWidget * m_stack;

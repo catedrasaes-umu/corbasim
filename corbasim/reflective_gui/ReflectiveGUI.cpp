@@ -77,9 +77,25 @@ QWidget * createWidget(corbasim::core::reflective_base const * reflective,
     return new QLabel("Unsupported item!", parent);
 }
 
+ReflectiveWidgetBase::ReflectiveWidgetBase(
+        core::reflective_base const * reflective) :
+    m_reflective(reflective)
+{
+}
+
+ReflectiveWidgetBase::~ReflectiveWidgetBase()
+{
+}
+
+corbasim::core::reflective_base const * 
+ReflectiveWidgetBase::getReflective() const
+{
+    return m_reflective;
+}
+
 FloatWidget::FloatWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QDoubleSpinBox(parent), m_reflective(reflective)
+    QDoubleSpinBox(parent), ReflectiveWidgetBase(reflective)
 {
     using namespace corbasim::core;
 
@@ -104,9 +120,12 @@ FloatWidget::~FloatWidget()
 {
 }
 
+void FloatWidget::toHolder(core::holder& holder) {}
+void FloatWidget::fromHolder(core::holder& holder){}
+
 IntegerWidget::IntegerWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QSpinBox(parent), m_reflective(reflective)
+    QSpinBox(parent), ReflectiveWidgetBase(reflective)
 {
     using namespace corbasim::core;
 
@@ -155,9 +174,12 @@ IntegerWidget::~IntegerWidget()
 {
 }
 
+void IntegerWidget::toHolder(core::holder& holder) {}
+void IntegerWidget::fromHolder(core::holder& holder){}
+
 StringWidget::StringWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QLineEdit(parent), m_reflective(reflective)
+    QLineEdit(parent), ReflectiveWidgetBase(reflective)
 {
 }
 
@@ -165,9 +187,12 @@ StringWidget::~StringWidget()
 {
 }
 
+void StringWidget::toHolder(core::holder& holder) {}
+void StringWidget::fromHolder(core::holder& holder){}
+
 EnumWidget::EnumWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QComboBox(parent), m_reflective(reflective)
+    QComboBox(parent), ReflectiveWidgetBase(reflective)
 {
     assert(reflective->is_enum());
 
@@ -183,9 +208,12 @@ EnumWidget::~EnumWidget()
 {
 }
 
+void EnumWidget::toHolder(core::holder& holder) {}
+void EnumWidget::fromHolder(core::holder& holder){}
+
 BoolWidget::BoolWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QCheckBox(parent), m_reflective(reflective)
+    QCheckBox(parent), ReflectiveWidgetBase(reflective)
 {
 }
 
@@ -193,9 +221,12 @@ BoolWidget::~BoolWidget()
 {
 }
 
+void BoolWidget::toHolder(core::holder& holder) {}
+void BoolWidget::fromHolder(core::holder& holder){}
+
 StructWidget::StructWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QWidget(parent), m_reflective(reflective)
+    QWidget(parent), ReflectiveWidgetBase(reflective)
 {
     assert(reflective->get_type() == core::TYPE_STRUCT);
 
@@ -244,9 +275,12 @@ StructWidget::~StructWidget()
 {
 }
 
+void StructWidget::toHolder(core::holder& holder) {}
+void StructWidget::fromHolder(core::holder& holder){}
+
 SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QWidget(parent), m_reflective(reflective)
+    QWidget(parent), ReflectiveWidgetBase(reflective)
 {
     QVBoxLayout * layout = new QVBoxLayout;
  
@@ -280,6 +314,9 @@ SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
 SequenceWidget::~SequenceWidget()
 {
 }
+
+void SequenceWidget::toHolder(core::holder& holder) {}
+void SequenceWidget::fromHolder(core::holder& holder){}
 
 void SequenceWidget::lengthChanged(int len)
 {
@@ -319,7 +356,7 @@ void SequenceWidget::indexChanged(int idx)
 
 ArrayWidget::ArrayWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QWidget(parent), m_reflective(reflective)
+    QWidget(parent), ReflectiveWidgetBase(reflective)
 {
     QVBoxLayout * layout = new QVBoxLayout;
  
@@ -345,6 +382,9 @@ ArrayWidget::ArrayWidget(core::reflective_base const * reflective,
 ArrayWidget::~ArrayWidget()
 {
 }
+
+void ArrayWidget::toHolder(core::holder& holder) {}
+void ArrayWidget::fromHolder(core::holder& holder){}
 
 void ArrayWidget::indexChanged(int idx)
 {
