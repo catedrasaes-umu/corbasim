@@ -225,6 +225,16 @@ struct sequence_reflective : public reflective_base
         return p->t_.length();
     }
 
+    void set_length(holder& value, unsigned int length)
+    {
+        typedef holder_ref_impl< T > parent_impl;
+
+        parent_impl const * p = reinterpret_cast< parent_impl const * >(
+                value.m_impl.get());
+
+        p->t_.length(length);
+    }
+
     holder get_child_value(holder& value, 
         unsigned int idx) const
     {

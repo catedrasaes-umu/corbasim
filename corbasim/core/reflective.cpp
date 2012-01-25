@@ -132,6 +132,10 @@ unsigned int reflective_base::get_length(holder const& value) const
     return 0;
 }
 
+void reflective_base::set_length(holder& value, unsigned int length)
+{
+}
+
 holder reflective_base::get_child_value(holder& value, 
     unsigned int idx) const
 {

@@ -128,9 +128,7 @@ struct reflective_base
 
     // dynamic information
     virtual unsigned int get_length(holder const& value) const;
-    /*
-    virtual void set_length(holder& value) const;
-     */
+    virtual void set_length(holder& value, unsigned int length);
 
     virtual holder get_child_value(holder& value, 
         unsigned int idx) const;
