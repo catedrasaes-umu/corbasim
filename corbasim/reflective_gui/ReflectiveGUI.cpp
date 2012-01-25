@@ -514,3 +514,20 @@ corbasim::event::request_ptr OperationInputForm::createRequest()
     return req;
 }
 
+void OperationInputForm::setValue(event::request_ptr req)
+{
+    core::holder holder(m_reflective->get_holder(req));
+
+    const unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            core::holder child_holder(
+                    m_reflective->get_child_value(holder, i));
+            m_widgets[i]->fromHolder(child_holder);
+        }
+    }
+}
+

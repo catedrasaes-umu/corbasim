@@ -196,6 +196,8 @@ public:
 
     event::request_ptr createRequest();
 
+    void setValue(event::request_ptr req);
+
 protected:
 
     core::operation_reflective_base const * m_reflective;
