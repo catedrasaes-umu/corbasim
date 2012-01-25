@@ -122,6 +122,11 @@ reflective_base const * reflective_base::get_slice() const
 
 // Dynamic information
 
+holder reflective_base::create_holder() const
+{
+    return holder();
+}
+
 unsigned int reflective_base::get_length(holder const& value) const
 {
     return 0;

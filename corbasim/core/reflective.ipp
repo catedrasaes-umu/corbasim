@@ -43,7 +43,20 @@ reflective_type bool_reflective< T >::get_type() const
     return TYPE_BOOL;
 }
 
+template< typename T >
+holder bool_reflective< T >::create_holder() const
+{
+    return new holder_ref_impl< T >();
+}
+
+
 // Primitive
+
+template< typename T >
+holder primitive_reflective< T >::create_holder() const
+{
+    return new holder_ref_impl< T >();
+}
 
 template< typename T >
 primitive_reflective< T >::primitive_reflective(

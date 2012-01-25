@@ -32,12 +32,14 @@ namespace corbasim
 namespace reflective_gui 
 {
 
+class OperationInputForm;
+
 class OperationSequenceItem : public QFrame
 {
     Q_OBJECT
 public:
     OperationSequenceItem(const QString& id,
-            QWidget * dlg,
+            OperationInputForm * dlg,
             QWidget * parent = 0);
     virtual ~OperationSequenceItem();
 
@@ -68,6 +70,7 @@ private slots:
 protected:
 
     const QString m_id;
+    OperationInputForm * m_dlg;
     QLayout * m_layout;
 
     // Periodic

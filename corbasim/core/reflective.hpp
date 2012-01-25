@@ -46,6 +46,11 @@ struct holder_ref_impl : public holder_impl_base
     T * aux;
     T& t_;
 
+    holder_ref_impl() : 
+        aux(new T()), t_(*aux)
+    {
+    }
+
     holder_ref_impl(T& t) : 
         aux(NULL), t_(t)
     {
@@ -84,6 +89,8 @@ struct bool_reflective : public reflective_base
     bool_reflective(reflective_base const * parent, unsigned int idx);
     
     bool is_primitive() const;
+    
+    holder create_holder() const;
 
     reflective_type get_type() const;
 };
@@ -97,6 +104,8 @@ struct primitive_reflective : public reflective_base
     bool is_primitive() const;
 
     reflective_type get_type() const;
+    
+    holder create_holder() const;
 
     double to_double(holder const& value) const;
 };
@@ -127,6 +136,12 @@ struct array_reflective : public reflective_base
     }
 
     // Dynamic information
+
+    holder create_holder() const
+    {
+        return new holder_ref_impl< T >();
+    }
+
     unsigned int get_length(holder const& value) const
     {
         return size;
@@ -140,7 +155,7 @@ struct array_reflective : public reflective_base
         parent_impl * p = reinterpret_cast< parent_impl * >(
                 value.m_impl.get());
 
-        return holder(create_holder(p->t_[idx]));
+        return holder( ::corbasim::core::create_holder(p->t_[idx]));
     }
 
     slice_reflective_t m_slice;
@@ -161,6 +176,11 @@ struct string_reflective : public reflective_base
     reflective_type get_type() const
     {
         return TYPE_STRING;
+    }
+
+    holder create_holder() const
+    {
+        return new holder_ref_impl< T >();
     }
 };
 
@@ -190,6 +210,11 @@ struct sequence_reflective : public reflective_base
     }
 
     // Dynamic information
+    holder create_holder() const
+    {
+        return new holder_ref_impl< T >();
+    }
+
     unsigned int get_length(holder const& value) const
     {
         typedef holder_ref_impl< T > parent_impl;
@@ -208,7 +233,7 @@ struct sequence_reflective : public reflective_base
         parent_impl * p = reinterpret_cast< parent_impl * >(
                 value.m_impl.get());
 
-        return holder(create_holder(p->t_[idx]));
+        return holder( ::corbasim::core::create_holder(p->t_[idx]));
     }
 
     slice_reflective_t m_slice;
@@ -235,7 +260,7 @@ struct accessor : public accessor_base
         parent_impl * p = reinterpret_cast< parent_impl * >(
                 parent.m_impl.get());
 
-        return holder(create_holder(boost::fusion::at < N >(p->t_)));
+        return holder( ::corbasim::core::create_holder(boost::fusion::at < N >(p->t_)));
     }
 };
 
@@ -310,6 +335,11 @@ struct struct_reflective : public reflective_base
     }
 
     // Dynamic information
+    holder create_holder() const
+    {
+        return new holder_ref_impl< T >();
+    }
+
     holder get_child_value(holder& value, 
         unsigned int idx) const
     {
@@ -341,6 +371,11 @@ struct union_reflective : public reflective_base
     reflective_type get_type() const
     {
         return TYPE_UNION;
+    }
+
+    holder create_holder() const
+    {
+        return new holder_ref_impl< T >();
     }
 };
 
@@ -374,6 +409,11 @@ struct enum_reflective : public reflective_base
     {
         return adapted_t::values()[idx];
     }
+
+    holder create_holder() const
+    {
+        return new holder_ref_impl< T >();
+    }
 };
 
 template< typename T >
@@ -388,6 +428,11 @@ struct objrefvar_reflective : public reflective_base
     reflective_type get_type() const
     {
         return TYPE_OBJREF;
+    }
+
+    holder create_holder() const
+    {
+        return new holder_ref_impl< T >();
     }
 };
 
@@ -449,6 +494,34 @@ struct reflective : public detail::calculate_reflective< T >::type
     {}
 };
 
+struct direction_inserter
+{
+    std::vector< direction_type >& m_param_direction;
+
+    direction_inserter(std::vector< direction_type >& p) :
+        m_param_direction(p)
+    {
+    }
+
+    template < typename T >
+    void operator()(const Arg_IN< T >& /* unused */)
+    {
+        m_param_direction.push_back(DIRECTION_IN);
+    }
+
+    template < typename T >
+    void operator()(const Arg_OUT< T >& /* unused */)
+    {
+        m_param_direction.push_back(DIRECTION_OUT);
+    }
+
+    template < typename T >
+    void operator()(const Arg_INOUT< T >& /* unused */)
+    {
+        m_param_direction.push_back(DIRECTION_INOUT);
+    }
+};
+
 template< typename Value >
 struct operation_reflective : 
     public virtual operation_reflective_base,
@@ -457,8 +530,14 @@ struct operation_reflective :
     typedef event::request_impl< Value > request_t;
     typedef detail::struct_reflective< Value > base_t;
 
+    std::vector< direction_type > m_param_direction;
+
     operation_reflective()
     {
+        m_param_direction.reserve(get_children_count());
+        direction_inserter insert(m_param_direction);
+
+        boost::mpl::for_each< typename Value::_arg_list >(insert);
     }
     
     unsigned int get_children_count() const 
@@ -498,10 +577,21 @@ struct operation_reflective :
         return tag< Value >::value();
     }
     
+    event::request_ptr create_request() const
+    {
+        return event::request_ptr(new request_t);
+    }
+
+    direction_type get_parameter_direction(
+            unsigned int idx) const
+    {
+        return m_param_direction[idx];
+    }
+
     holder get_holder(event::request_ptr req) const
     {
         request_t * r = reinterpret_cast< request_t* >(req.get());
-        return create_holder(r->m_values);
+        return ::corbasim::core::create_holder(r->m_values);
     }
 
     static inline operation_reflective const * get_instance()

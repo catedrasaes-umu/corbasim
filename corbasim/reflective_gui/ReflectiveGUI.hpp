@@ -123,7 +123,10 @@ public:
  
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
-   
+
+protected:
+
+    std::vector< ReflectiveWidgetBase * > m_widgets;
 };
 
 class SequenceWidget : public QWidget, public ReflectiveWidgetBase
@@ -180,6 +183,26 @@ protected:
     widgets_t m_widgets;
 };
 
+class OperationInputForm : public QWidget
+{
+    Q_OBJECT
+public:
+    OperationInputForm(
+            core::operation_reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~OperationInputForm();
+
+    core::operation_reflective_base const * getReflective() const;
+
+    event::request_ptr createRequest();
+
+protected:
+
+    core::operation_reflective_base const * m_reflective;
+
+    std::vector< ReflectiveWidgetBase * > m_widgets;
+
+};
 
 } // namespace reflective_gui
 } // namespace corbasim

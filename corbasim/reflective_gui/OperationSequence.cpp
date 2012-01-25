@@ -26,16 +26,19 @@
 using namespace corbasim::reflective_gui;
 
 OperationSequenceItem::OperationSequenceItem(const QString& id,
-        QWidget * dlg,
+        OperationInputForm * dlg,
         QWidget * parent) : 
-    QFrame(parent), m_id(id)
+    QFrame(parent), m_id(id), m_dlg(dlg)
 {
+    core::operation_reflective_base const * reflective =
+        dlg->getReflective();
+
     QVBoxLayout * layout = new QVBoxLayout();
 
     // Title bar
     QHBoxLayout * tLayout = new QHBoxLayout();
     QLabel * title = new QLabel(
-        QString("<b>Object: '%1' Operation: '%2'</b>").arg(id).arg("tmp"));
+        QString("<b>Object: '%1' Operation: '%2'</b>").arg(id).arg(reflective->get_name()));
     tLayout->addWidget(title);
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -153,8 +156,7 @@ const char * OperationSequenceItem::getOperationName() const
 
 void OperationSequenceItem::sendClicked()
 {
-    // event::request_ptr req_(m_dlg->create_request());
-    // emit sendRequest(m_id, req_);
+     emit sendRequest(m_id, m_dlg->createRequest());
 }
 
 void OperationSequenceItem::startStopChecked(bool chk)
@@ -173,7 +175,7 @@ void OperationSequenceItem::startStopChecked(bool chk)
 
 void OperationSequenceItem::storeRequest()
 {
-    // m_storedRequest = event::request_ptr(m_dlg->create_request());
+    m_storedRequest = m_dlg->createRequest();
 }
 
 void OperationSequenceItem::sendStored()
@@ -433,7 +435,7 @@ void OperationSequenceTool::appendOperation(const QString& id,
         seq = m_sequences[m_tabs->currentIndex()];
 
     OperationSequenceItem * item = 
-        new OperationSequenceItem(id, new StructWidget(op));
+        new OperationSequenceItem(id, new OperationInputForm(op));
 
     seq->appendItem(item);
 

@@ -93,6 +93,13 @@ enum reflective_type
     TYPE_SEQUENCE
 };
 
+enum direction_type
+{
+    DIRECTION_IN,
+    DIRECTION_OUT,
+    DIRECTION_INOUT
+};
+
 struct reflective_base
 {
     virtual ~reflective_base();
@@ -116,6 +123,8 @@ struct reflective_base
 
     // Requires is_repeated
     virtual reflective_base const * get_slice() const;
+
+    virtual holder create_holder() const;
 
     // dynamic information
     virtual unsigned int get_length(holder const& value) const;
@@ -155,7 +164,12 @@ struct operation_reflective_base :
     virtual const char * get_name() const = 0;
     virtual tag_t get_tag() const = 0;
 
+    virtual event::request_ptr create_request() const = 0;
+
     virtual holder get_holder(event::request_ptr req) const = 0;
+
+    virtual direction_type get_parameter_direction(
+            unsigned int idx) const = 0;
 
     virtual ~operation_reflective_base();
 };

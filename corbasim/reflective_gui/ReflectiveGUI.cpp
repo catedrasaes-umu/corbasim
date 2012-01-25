@@ -234,6 +234,8 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
 
     unsigned int count = reflective->get_children_count();
 
+    m_widgets.resize(count, NULL);
+
     for (unsigned int i = 0; i < count; i++) 
     {
         core::reflective_base const * child = 
@@ -242,6 +244,9 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
         const char * child_name = reflective->get_child_name(i);
 
         QWidget * child_widget = createWidget(child, this);
+
+        m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(
+                child_widget);
 
         child_widget->setObjectName(child_name);
 
@@ -275,8 +280,35 @@ StructWidget::~StructWidget()
 {
 }
 
-void StructWidget::toHolder(core::holder& holder) {}
-void StructWidget::fromHolder(core::holder& holder){}
+void StructWidget::toHolder(core::holder& holder) 
+{
+    const unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            core::holder child_holder(
+                    m_reflective->get_child_value(holder, i));
+            m_widgets[i]->toHolder(child_holder);
+        }
+    }
+}
+
+void StructWidget::fromHolder(core::holder& holder)
+{
+    const unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            core::holder child_holder(
+                    m_reflective->get_child_value(holder, i));
+            m_widgets[i]->fromHolder(child_holder);
+        }
+    }
+}
 
 SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
         QWidget * parent) :
@@ -392,5 +424,93 @@ void ArrayWidget::indexChanged(int idx)
         return;
 
     m_stack->setCurrentIndex(idx);
+}
+
+
+OperationInputForm::OperationInputForm(
+        core::operation_reflective_base const * reflective,
+        QWidget * parent) :
+    QWidget(parent), m_reflective(reflective)
+{
+    QGridLayout * layout = new QGridLayout(this);
+
+    const unsigned int count = reflective->get_children_count();
+
+    m_widgets.resize(count, NULL);
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        const core::direction_type type = 
+            reflective->get_parameter_direction(i);
+
+        if (type == core::DIRECTION_IN || type == core::DIRECTION_INOUT)
+        {
+            core::reflective_base const * child = 
+                reflective->get_child(i);
+
+            const char * child_name = reflective->get_child_name(i);
+
+            QWidget * child_widget = createWidget(child, this);
+
+            m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(
+                    child_widget);
+
+            child_widget->setObjectName(child_name);
+
+            if (child->is_primitive())
+            {
+                QLabel * label = new QLabel(child_name, this);
+
+                label->setObjectName(QString(child_name) + "_label");
+
+                layout->addWidget(label, i, 0);
+                layout->addWidget(child_widget, i, 1);
+            }
+            else
+            {
+                QGroupBox * gb = new QGroupBox(child_name, this);
+                gb->setObjectName(QString(child_name) + "_group");
+
+                QHBoxLayout * cLayout = new QHBoxLayout(gb);
+
+                cLayout->addWidget(child_widget);
+
+                gb->setLayout(cLayout);
+                layout->addWidget(gb, i, 0, 1, 2);
+            }
+        }
+    }
+
+    setLayout(layout);
+}
+
+OperationInputForm::~OperationInputForm()
+{
+}
+
+corbasim::core::operation_reflective_base const * 
+OperationInputForm::getReflective() const
+{
+    return m_reflective;
+}
+
+corbasim::event::request_ptr OperationInputForm::createRequest()
+{
+    event::request_ptr req (m_reflective->create_request());
+    core::holder holder(m_reflective->get_holder(req));
+
+    const unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            core::holder child_holder(
+                    m_reflective->get_child_value(holder, i));
+            m_widgets[i]->toHolder(child_holder);
+        }
+    }
+
+    return req;
 }
 
