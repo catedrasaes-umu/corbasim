@@ -62,7 +62,7 @@ struct holder
     holder& operator=(const holder& o);
 
     template< typename Value >
-    Value to_value() const;
+    Value& to_value();
     
     holder_impl_ptr m_impl;
 };

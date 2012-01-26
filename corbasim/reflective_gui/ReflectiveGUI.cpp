@@ -20,6 +20,7 @@
 #include "ReflectiveGUI.hpp"
 #include <cassert>
 #include <limits>
+#include <corbasim/core/reflective.hpp>
 
 using namespace corbasim::reflective_gui;
 
@@ -120,8 +121,45 @@ FloatWidget::~FloatWidget()
 {
 }
 
-void FloatWidget::toHolder(core::holder& holder) {}
-void FloatWidget::fromHolder(core::holder& holder){}
+void FloatWidget::toHolder(core::holder& holder) 
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = m_reflective->get_type();
+
+    double value_ = value();
+
+    switch(type)
+    {
+        case TYPE_DOUBLE:
+            holder.to_value< double >() = (double) value_;
+            break;
+        case TYPE_FLOAT:
+            holder.to_value< float >() = (float) value_;
+            break;
+        default:
+            break;
+    }
+}
+
+void FloatWidget::fromHolder(core::holder& holder)
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = m_reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_DOUBLE:
+            setValue(holder.to_value< double >());
+            break;
+        case TYPE_FLOAT:
+            setValue(holder.to_value< float >());
+            break;
+        default:
+            break;
+    }
+}
 
 IntegerWidget::IntegerWidget(core::reflective_base const * reflective,
         QWidget * parent) :
@@ -174,8 +212,81 @@ IntegerWidget::~IntegerWidget()
 {
 }
 
-void IntegerWidget::toHolder(core::holder& holder) {}
-void IntegerWidget::fromHolder(core::holder& holder){}
+void IntegerWidget::toHolder(core::holder& holder) 
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = m_reflective->get_type();
+
+    int value_ = value();
+
+    switch(type)
+    {
+        case TYPE_OCTET:
+            holder.to_value< unsigned char >() = (unsigned char) value_;
+            break;
+        case TYPE_CHAR:
+            holder.to_value< char >() = (char) value_;
+            break;
+        case TYPE_SHORT:
+            holder.to_value< short >() = (short) value_;
+            break;
+        case TYPE_USHORT:
+            holder.to_value< unsigned short >() = (unsigned short) value_;
+            break;
+        case TYPE_LONG:
+            holder.to_value< int32_t >() = (int32_t) value_;
+            break;
+        case TYPE_ULONG:
+            holder.to_value< uint32_t >() = (uint32_t) value_;
+            break;
+        case TYPE_LONGLONG:
+            holder.to_value< int64_t >() = (int64_t) value_;
+            break;
+        case TYPE_ULONGLONG:
+            holder.to_value< uint64_t >() = (uint64_t) value_;
+            break;
+        default:
+            break;
+    }
+}
+
+void IntegerWidget::fromHolder(core::holder& holder)
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = m_reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_OCTET:
+            setValue(holder.to_value< unsigned char >());
+            break;
+        case TYPE_CHAR:
+            setValue(holder.to_value< char >());
+            break;
+        case TYPE_SHORT:
+            setValue(holder.to_value< short >());
+            break;
+        case TYPE_USHORT:
+            setValue(holder.to_value< unsigned short >());
+            break;
+        case TYPE_LONG:
+            setValue(holder.to_value< int32_t >());
+            break;
+        case TYPE_ULONG:
+            setValue(holder.to_value< uint32_t >());
+            break;
+        case TYPE_LONGLONG:
+            setValue(holder.to_value< int64_t >());
+            break;
+        case TYPE_ULONGLONG:
+            setValue(holder.to_value< uint64_t >());
+            break;
+        default:
+            break;
+    }
+}
 
 StringWidget::StringWidget(core::reflective_base const * reflective,
         QWidget * parent) :
@@ -221,8 +332,37 @@ BoolWidget::~BoolWidget()
 {
 }
 
-void BoolWidget::toHolder(core::holder& holder) {}
-void BoolWidget::fromHolder(core::holder& holder){}
+void BoolWidget::toHolder(core::holder& holder) 
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = m_reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_BOOL:
+            holder.to_value< bool >() = isChecked();
+            break;
+        default:
+            break;
+    }
+}
+
+void BoolWidget::fromHolder(core::holder& holder)
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = m_reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_OCTET:
+            setChecked(holder.to_value< bool >());
+            break;
+        default:
+            break;
+    }
+}
 
 StructWidget::StructWidget(core::reflective_base const * reflective,
         QWidget * parent) :

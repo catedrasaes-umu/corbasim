@@ -75,6 +75,11 @@ int main(int argc, char **argv)
     seq2.objrefCreated("prueba", iface);
     seq2.show();
 
+    QObject::connect(&seq2, 
+            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+            &tool,
+            SLOT(processRequest(const QString&, corbasim::event::request_ptr)));
+
     return app.exec();
 }
 

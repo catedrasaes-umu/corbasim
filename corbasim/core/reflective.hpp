@@ -28,11 +28,11 @@ namespace core
 {
 
 template< typename Value >
-Value holder::to_value() const
+Value& holder::to_value()
 {
     typedef holder_ref_impl< Value > value_impl;
 
-    value_impl const * p = reinterpret_cast< value_impl const * >(
+    value_impl * p = reinterpret_cast< value_impl * >(
             m_impl.get());
 
     return p->t_;
