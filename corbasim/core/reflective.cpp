@@ -18,7 +18,7 @@
  */
 
 #include "reflective.hpp"
-#include "reflective.ipp"
+#include "reflective_primitive.ipp"
 
 namespace corbasim 
 {
