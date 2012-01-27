@@ -107,6 +107,8 @@ struct reflective_base
     // static information
     // virtual tag_t get_tag() const = 0;
 
+    virtual const char * get_type_name() const;
+
     reflective_base const * get_parent() const;
     unsigned int get_child_index() const;
 

@@ -80,6 +80,11 @@ reflective_base::~reflective_base()
 {
 }
 
+const char * reflective_base::get_type_name() const
+{
+    return "undefined";
+}
+
 reflective_base const * reflective_base::get_parent() const 
 { 
     return m_parent; 
