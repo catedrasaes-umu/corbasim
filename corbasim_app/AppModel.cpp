@@ -25,7 +25,7 @@
 #include <corbasim/json/writer.hpp>
 #include <corbasim/json/parser.hpp>
 
-#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 #include <corbasim/qt/ReferenceModel.hpp>
 
@@ -104,7 +104,7 @@ AppModel::~AppModel()
     delete m_data;
 }
 
-const corbasim::gui::gui_factory_base * 
+const corbasim::core::interface_reflective_base * 
 AppModel::getFactory(const QString& fqn)
 {
     factories_t::iterator it = m_factories.find(fqn);
@@ -138,7 +138,7 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         return;
     }
 
-    const corbasim::gui::gui_factory_base * factory = 
+    const corbasim::core::interface_reflective_base * factory = 
         getFactory(cfg.fqn.in());
 
     if (factory)
@@ -146,7 +146,8 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         model::Objref_ptr obj(new model::Objref(cfg, factory));
         m_objrefs.insert(std::make_pair(id, obj));
 
-        m_ref_model.appendItem(id, cfg.ref, factory);
+#warning TODO
+        // m_ref_model.appendItem(id, cfg.ref, factory);
 
         if (m_controller)
         {
@@ -171,7 +172,7 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
         return;
     }
 
-    const corbasim::gui::gui_factory_base * factory = 
+    const corbasim::core::interface_reflective_base * factory = 
         getFactory(cfg.fqn.in());
 
     if (factory)
@@ -194,7 +195,8 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 
         // End temporal
 
-        m_ref_model.appendItem(id, objSrv, factory);
+#warning TODO
+        // m_ref_model.appendItem(id, objSrv, factory);
 
         if (m_controller)
             m_controller->notifyServantCreated(id, factory);
@@ -402,12 +404,12 @@ void AppModel::loadDirectory(const QString& path)
     }
 }
 
-const corbasim::gui::gui_factory_base * 
+const corbasim::core::interface_reflective_base * 
 AppModel::loadLibrary(const QString& file)
 {
     std::string str(file.toStdString());
 
-    typedef const corbasim::gui::gui_factory_base *(*get_factory_t)();
+    typedef const corbasim::core::interface_reflective_base *(*get_reflective_t)();
 
     void * handle = dlopen(str.c_str(), RTLD_NOW);
 
@@ -426,10 +428,10 @@ AppModel::loadLibrary(const QString& file)
     // lib.truncate(lib.length() - 3); // .so
     str = lib.toStdString();
    
-    get_factory_t get_factory = (get_factory_t) dlsym(handle,
+    get_reflective_t get_reflective = (get_reflective_t) dlsym(handle,
             str.c_str());
 
-    if (!get_factory)
+    if (!get_reflective)
     {
         dlclose (handle);
 
@@ -439,11 +441,11 @@ AppModel::loadLibrary(const QString& file)
         return NULL;
     }
 
-    const corbasim::gui::gui_factory_base * factory = get_factory();
+    const corbasim::core::interface_reflective_base * factory = get_reflective();
     
     if (factory)
     {
-        const QString fqn(factory->get_core_factory()->get_fqn());
+        const QString fqn(factory->get_fqn());
 
         m_libraries.insert(std::make_pair(fqn, handle));
         m_factories.insert(std::make_pair(fqn, factory));

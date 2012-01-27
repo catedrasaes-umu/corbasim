@@ -21,7 +21,7 @@
 #define CORBASIM_APP_APPCONTROLLER_HPP
 
 #include <corbasim/qt/types.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <QObject>
 
 #include "appC.h"
@@ -71,11 +71,11 @@ public slots:
     // Usados por el modelo
 
     void notifyObjrefCreated(const QString& id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void notifyObjrefDeleted(const QString& id);
 
     void notifyServantCreated(const QString& id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void notifyServantDeleted(const QString& id);
 
     void notifyError(const QString& msg);
@@ -97,9 +97,9 @@ signals:
     // Usadas por la vista
 
     void objrefCreated(QString id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void servantCreated(QString id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void objrefDeleted(QString id);
     void servantDeleted(QString id);
 

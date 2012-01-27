@@ -21,7 +21,7 @@
 #include "AppController.hpp"
 #include <iostream>
 #include <fstream>
-#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 using namespace corbasim::app;
 
@@ -46,11 +46,11 @@ void DataDumper::setController(AppController * controller)
             m_controller,
             SIGNAL(objrefCreated(
                     QString, 
-                    const corbasim::gui::gui_factory_base *)),
+                    const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(objrefCreated(
                     const QString&, 
-                    const corbasim::gui::gui_factory_base *)));
+                    const corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(objrefDeleted(QString)),
@@ -61,11 +61,11 @@ void DataDumper::setController(AppController * controller)
             m_controller,
             SIGNAL(servantCreated(
                     QString, 
-                    const corbasim::gui::gui_factory_base *)),
+                    const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(servantCreated(
                     const QString&, 
-                    const corbasim::gui::gui_factory_base *)));
+                    const corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(servantDeleted(QString)),
@@ -87,7 +87,7 @@ void DataDumper::setController(AppController * controller)
 }
 
 void DataDumper::objrefCreated(const QString& id, 
-        const corbasim::gui::gui_factory_base * factory)
+        const corbasim::core::interface_reflective_base * factory)
 {
 }
 
@@ -96,9 +96,9 @@ void DataDumper::objrefDeleted(const QString& id)
 }
 
 void DataDumper::servantCreated(const QString& id, 
-        const corbasim::gui::gui_factory_base * factory)
+        const corbasim::core::interface_reflective_base * factory)
 {
-    m_serializers[id] = factory->get_core_factory();
+    m_serializers[id] = factory;
 }
 
 void DataDumper::servantDeleted(const QString& id)
@@ -121,7 +121,7 @@ void DataDumper::requestReceived(const QString& id,
         if (ofs.good())
         {
             // TODO max file size
-            it.value()->save(ofs, req.get());
+            // it.value()->save(ofs, req.get());
             ofs.close();
         }
     }

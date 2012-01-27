@@ -22,7 +22,7 @@
 #include "TriggerEngine.hpp"
 #include "view/CreateDialog.hpp"
 #include <corbasim/qt/ScriptWindow.hpp>
-#include <corbasim/qt/OperationSequence.hpp>
+#include <corbasim/reflective_gui/OperationSequence.hpp>
 
 using namespace corbasim::app;
 
@@ -209,11 +209,11 @@ void AppMainWindow::setController(AppController * controller)
     QObject::connect(
             m_controller,
             SIGNAL(objrefCreated(
-                    QString, const corbasim::gui::gui_factory_base *)),
+                    QString, const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(objrefCreated(
                     const QString&, const 
-                    corbasim::gui::gui_factory_base *)));
+                    corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(objrefDeleted(QString)),
@@ -224,11 +224,11 @@ void AppMainWindow::setController(AppController * controller)
             m_controller,
             SIGNAL(servantCreated(
                     QString, 
-                    const corbasim::gui::gui_factory_base *)),
+                    const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(servantCreated(
                     const QString&, 
-                    const corbasim::gui::gui_factory_base *)));
+                    const corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(servantDeleted(QString)),
@@ -289,7 +289,7 @@ void AppMainWindow::showOpSequenceTool()
     if (!m_sub_seq_tool)
     {
         m_sub_seq_tool = new QMdiSubWindow();
-        m_seq_tool = new qt::OperationSequenceTool();
+        m_seq_tool = new reflective_gui::OperationSequenceTool();
 
         m_seq_tool->setWindowTitle("");
 
@@ -300,11 +300,11 @@ void AppMainWindow::showOpSequenceTool()
                 m_controller,
                 SIGNAL(objrefCreated(
                         QString, 
-                        const corbasim::gui::gui_factory_base *)),
+                        const corbasim::core::interface_reflective_base *)),
                 m_seq_tool,
                 SLOT(objrefCreated(
                         const QString&, const 
-                        corbasim::gui::gui_factory_base *)));
+                        corbasim::core::interface_reflective_base *)));
         QObject::connect(
                 m_controller,
                 SIGNAL(objrefDeleted(QString)),
@@ -400,7 +400,7 @@ void AppMainWindow::clearConfig()
 // Notificaciones del controlador
 
 void AppMainWindow::objrefCreated(const QString& id,
-    const corbasim::gui::gui_factory_base * factory)
+    const corbasim::core::interface_reflective_base * factory)
 {
     view::Objref_ptr objref(
             new view::Objref(m_mdi_area, id, factory, this));
@@ -442,7 +442,7 @@ void AppMainWindow::objrefDeleted(const QString& id)
 }
 
 void AppMainWindow::servantCreated(const QString& id,
-    const corbasim::gui::gui_factory_base * factory)
+    const corbasim::core::interface_reflective_base * factory)
 {
     view::Servant_ptr servant(
             new view::Servant(m_mdi_area, id, factory, this));
@@ -486,7 +486,7 @@ void AppMainWindow::requestSent(const QString& id,
     
     if (it != m_objrefs.end())
     {
-        const gui::gui_factory_base * factory = it->second->getFactory();
+        const core::interface_reflective_base * factory = it->second->getFactory();
         QTreeWidgetItem * item = factory->create_tree(req.get());
 
         QString text (item->text(0));
@@ -535,7 +535,7 @@ void AppMainWindow::requestReceived(const QString& id,
     
     if (it != m_servants.end())
     {
-        const gui::gui_factory_base * factory = it->second->getFactory();
+        const core::interface_reflective_base * factory = it->second->getFactory();
         QTreeWidgetItem * item = factory->create_tree(req.get());
 
         QString text (item->text(0));

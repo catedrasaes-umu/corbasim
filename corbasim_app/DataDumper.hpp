@@ -21,7 +21,7 @@
 #define CORBASIM_APP_DATADUMPER_HPP
 
 #include <QObject>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/qt/types.hpp>
 #include <QMap>
 
@@ -45,11 +45,11 @@ public:
 public slots:
 
     void objrefCreated(const QString& id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void objrefDeleted(const QString& id);
 
     void servantCreated(const QString& id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void servantDeleted(const QString& id);
 
     void requestReceived(const QString& id, 
@@ -61,7 +61,7 @@ protected:
     AppController * m_controller;
 
     typedef QMap< QString, 
-                  corbasim::core::factory_base const * > 
+                  corbasim::core::interface_reflective_base const * > 
             serializers_t;
     serializers_t m_serializers;
 };

@@ -21,7 +21,7 @@
 #define CORBASIM_APP_APPFILEWATCHER_HPP
 
 #include <QtCore>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 namespace corbasim 
 {
@@ -43,11 +43,11 @@ public:
 public slots:
 
     void objrefCreated(const QString& id,
-        const corbasim::gui::gui_factory_base * factory);
+        const corbasim::core::interface_reflective_base * factory);
     void objrefDeleted(const QString& id);
 
     void servantCreated(const QString& id,
-        const corbasim::gui::gui_factory_base * factory);
+        const corbasim::core::interface_reflective_base * factory);
     void servantDeleted(const QString& id);
 
     void readFile(const QString& path);

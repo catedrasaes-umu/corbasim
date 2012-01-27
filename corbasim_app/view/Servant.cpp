@@ -18,18 +18,18 @@
  */
 
 #include "Servant.hpp"
-#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 using namespace corbasim::app::view;
 
 Servant::Servant(QMdiArea * area,
-        const QString& id, const gui::gui_factory_base* factory,
+        const QString& id, const core::interface_reflective_base* factory,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
     m_sub_script(NULL), m_script(NULL)
 {
     QString menu_entry = QString("%1 (%2)")
-        .arg(m_id).arg(factory->get_core_factory()->get_fqn());
+        .arg(m_id).arg(factory->get_fqn());
 
     m_menu = new QMenu(menu_entry);
     // TODO
@@ -50,7 +50,7 @@ QMenu * Servant::getMenu() const
     return m_menu;
 }
 
-const corbasim::gui::gui_factory_base * Servant::getFactory() const
+const corbasim::core::interface_reflective_base * Servant::getFactory() const
 {
     return m_factory;
 }
@@ -65,7 +65,8 @@ void Servant::showSelfStimulator()
     if (!m_sub_script)
     {
         m_script = new qt::SimpleScriptEditor;
-        m_script->initialize(m_factory);
+#warning TODO
+        // m_script->initialize(m_factory);
 
         m_sub_script = new QMdiSubWindow;
         m_sub_script->setWidget(m_script);

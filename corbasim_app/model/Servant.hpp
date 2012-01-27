@@ -21,7 +21,7 @@
 #define CORBASIM_APP_MODEL_SERVANT_HPP
 
 #include <boost/shared_ptr.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/core/callable.hpp>
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/ns_register.hpp>
@@ -42,7 +42,7 @@ class Servant : public core::request_processor
 {
 public:
     Servant(const ServantConfig& cfg, 
-            const gui::gui_factory_base * factory);
+            const core::interface_reflective_base * factory);
     virtual ~Servant();
 
     void setController(AppController * controller);
@@ -64,7 +64,7 @@ protected:
     AppController * m_controller;
 
     ServantConfig m_cfg;
-    const gui::gui_factory_base * m_factory;
+    const core::interface_reflective_base * m_factory;
     PortableServer::ServantBase * m_servant;
     
     core::interface_caller_ptr m_caller;

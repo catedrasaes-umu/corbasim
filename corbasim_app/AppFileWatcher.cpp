@@ -55,11 +55,11 @@ void AppFileWatcher::setController(AppController * controller)
     QObject::connect(
             m_controller,
             SIGNAL(objrefCreated(
-                    QString, const corbasim::gui::gui_factory_base *)),
+                    QString, const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(objrefCreated(
                     const QString&, const 
-                    corbasim::gui::gui_factory_base *)));
+                    corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(objrefDeleted(QString)),
@@ -70,11 +70,11 @@ void AppFileWatcher::setController(AppController * controller)
             m_controller,
             SIGNAL(servantCreated(
                     QString, 
-                    const corbasim::gui::gui_factory_base *)),
+                    const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(servantCreated(
                     const QString&, 
-                    const corbasim::gui::gui_factory_base *)));
+                    const corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(servantDeleted(QString)),
@@ -91,7 +91,7 @@ void AppFileWatcher::setController(AppController * controller)
 }
 
 void AppFileWatcher::objrefCreated(const QString& id,
-    const corbasim::gui::gui_factory_base * factory)
+    const corbasim::core::interface_reflective_base * factory)
 {
     QString path (m_directory.absoluteFilePath(id));
 
@@ -121,7 +121,7 @@ void AppFileWatcher::objrefDeleted(const QString& id)
 }
 
 void AppFileWatcher::servantCreated(const QString& id,
-    const corbasim::gui::gui_factory_base * factory)
+    const corbasim::core::interface_reflective_base * factory)
 {
 }
 

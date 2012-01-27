@@ -22,7 +22,7 @@
 
 #include <QtGui>
 #include <boost/shared_ptr.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/qt/RequestDialog.hpp>
 #include <corbasim/qt/SimpleScriptEditor.hpp>
 #include "CreateDialog.hpp"
@@ -40,7 +40,7 @@ class Objref : public QObject
 public:
     Objref(QMdiArea * area,
             const QString& id,
-            const gui::gui_factory_base * factory,
+            const core::interface_reflective_base * factory,
             QObject * parent = 0);
     virtual ~Objref();
 
@@ -49,7 +49,7 @@ public:
     qt::RequestDialog * getRequestDialog(int idx);
     QMdiSubWindow * getWindow(int idx);
 
-    const gui::gui_factory_base * getFactory() const;
+    const core::interface_reflective_base * getFactory() const;
 
 public slots:
 
@@ -83,7 +83,7 @@ protected:
     QMdiArea * m_mdi_area;
 
     QString m_id;
-    const gui::gui_factory_base * m_factory;
+    const core::interface_reflective_base * m_factory;
 
     // Operation dialogs
     typedef std::vector< qt::RequestDialog * > dialogs_t;

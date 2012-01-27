@@ -22,7 +22,7 @@
 
 #include <QtGui>
 #include <boost/shared_ptr.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/qt/SimpleScriptEditor.hpp>
 
 namespace corbasim 
@@ -38,13 +38,13 @@ class Servant : public QObject
 public:
     Servant(QMdiArea * area,
             const QString& id,
-            const gui::gui_factory_base * factory,
+            const core::interface_reflective_base * factory,
             QObject * parent = 0);
     virtual ~Servant();
 
     QMenu * getMenu() const;
 
-    const gui::gui_factory_base * getFactory() const;
+    const core::interface_reflective_base * getFactory() const;
 
 public slots:
 
@@ -65,7 +65,7 @@ protected:
     QMdiArea * m_mdi_area;
 
     QString m_id;
-    const gui::gui_factory_base * m_factory;
+    const core::interface_reflective_base * m_factory;
 
     QMdiSubWindow * m_sub_script;
     qt::SimpleScriptEditor * m_script;

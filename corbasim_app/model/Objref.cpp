@@ -18,16 +18,16 @@
  */
 
 #include "Objref.hpp"
-#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 using namespace corbasim::app::model;
 
 Objref::Objref(const ObjrefConfig& cfg, 
-        const gui::gui_factory_base * factory) :
+        const core::interface_reflective_base * factory) :
     m_cfg(cfg), m_factory(factory)
 {
     // Create a caller
-    m_caller.reset(m_factory->get_core_factory()->create_caller());
+    m_caller.reset(m_factory->create_caller());
     m_caller->set_reference(cfg.ref);
 }
 

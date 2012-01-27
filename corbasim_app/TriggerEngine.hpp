@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QtScript>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/qt/types.hpp>
 #include <boost/function.hpp>
 
@@ -41,7 +41,7 @@ public:
     virtual ~ScriptEngine();
 
     typedef boost::function< void() > method_type;
-    typedef std::map< QString, const gui::gui_factory_base * > 
+    typedef std::map< QString, const core::interface_reflective_base * > 
         factories_t;
 
     static QScriptValue _call(QScriptContext *, 
@@ -51,10 +51,10 @@ public:
     static QScriptValue _createServant(QScriptContext *, 
             QScriptEngine *);
 
-    void addFactory(const QString& id, const gui::gui_factory_base *);
+    void addFactory(const QString& id, const core::interface_reflective_base *);
     void removeFactory(const QString& id);
 
-    const gui::gui_factory_base * getFactory(const QString& id);
+    const core::interface_reflective_base * getFactory(const QString& id);
 
 signals:
 
@@ -85,11 +85,11 @@ public slots:
     void runCode(const QString& code);
 
     void objrefCreated(const QString& id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void objrefDeleted(const QString& id);
 
     void servantCreated(const QString& id, 
-            const corbasim::gui::gui_factory_base * factory);
+            const corbasim::core::interface_reflective_base * factory);
     void servantDeleted(const QString& id);
 
     void requestReceived(const QString& id, 

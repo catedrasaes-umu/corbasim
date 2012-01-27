@@ -18,18 +18,18 @@
  */
 
 #include "Servant.hpp"
-#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/impl.hpp>
 #include "../AppController.hpp"
 
 using namespace corbasim::app::model;
 
 Servant::Servant(const ServantConfig& cfg, 
-        const gui::gui_factory_base * factory) :
+        const core::interface_reflective_base * factory) :
     m_controller(NULL),
     m_cfg(cfg), m_factory(factory), m_servant(NULL)
 {
-    m_servant = m_factory->get_core_factory()->create_servant(this);
+    m_servant = m_factory->create_servant(this);
 }
 
 Servant::~Servant()
@@ -65,7 +65,7 @@ corbasim::event::event*
 Servant::sendRequest(corbasim::event::request_ptr req)
 {
     if (!m_caller)
-        m_caller.reset(m_factory->get_core_factory()->create_caller());
+        m_caller.reset(m_factory->create_caller());
 
     if(m_caller->is_nil())
     {

@@ -22,16 +22,16 @@
 
 #include <map>
 #include <QtGui>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include "view/Objref.hpp"
 #include "view/Servant.hpp"
 
 namespace corbasim 
 {
-namespace qt 
+namespace reflective_gui 
 {
 class OperationSequenceTool;
-} // namespace qt
+} // namespace reflective_gui
 
 namespace app 
 {
@@ -72,11 +72,11 @@ public slots:
     // Notificaciones del controlador
 
     void objrefCreated(const QString& id,
-        const corbasim::gui::gui_factory_base * factory);
+        const corbasim::core::interface_reflective_base * factory);
     void objrefDeleted(const QString& id);
 
     void servantCreated(const QString& id,
-        const corbasim::gui::gui_factory_base * factory);
+        const corbasim::core::interface_reflective_base * factory);
     void servantDeleted(const QString& id);
 
     void requestSent(const QString& id, 
@@ -127,7 +127,7 @@ protected:
     QWidget * m_create_objref;
     QWidget * m_create_servant;
     QWidget * m_script;
-    qt::OperationSequenceTool * m_seq_tool;
+    reflective_gui::OperationSequenceTool * m_seq_tool;
 
     // Dock widgets
     QDockWidget * m_dock_app_log;

@@ -18,12 +18,12 @@
  */
 
 #include "Objref.hpp"
-#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 using namespace corbasim::app::view;
 
 Objref::Objref(QMdiArea * area,
-        const QString& id, const gui::gui_factory_base* factory,
+        const QString& id, const core::interface_reflective_base* factory,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
     m_sub_script(NULL), 
@@ -32,7 +32,7 @@ Objref::Objref(QMdiArea * area,
     m_reference(NULL)
 {
     QString menu_entry = QString("%1 (%2)")
-        .arg(m_id).arg(factory->get_core_factory()->get_fqn());
+        .arg(m_id).arg(factory->get_fqn());
 
     m_menu = new QMenu(menu_entry);
     // Takes the ownership
@@ -46,8 +46,8 @@ Objref::Objref(QMdiArea * area,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        const gui::operation_factory_base * op = 
-            factory->get_factory_by_index(i);
+        const core::operation_reflective_base * op = 
+            factory->get_reflective_by_index(i);
 
         const char * name = op->get_name();
 
@@ -68,7 +68,7 @@ Objref::Objref(QMdiArea * area,
     m_sub_reference = new QMdiSubWindow();
     ReferenceValidatedWidget * w = 
         new ReferenceValidatedWidget(
-                factory->get_core_factory()->create_validator());
+                factory->create_validator());
     m_reference = w;
     m_sub_reference->setWidget(m_reference);
     m_mdi_area->addSubWindow(m_sub_reference);
@@ -101,7 +101,7 @@ QMenu * Objref::getMenu() const
     return m_menu;
 }
 
-const corbasim::gui::gui_factory_base * Objref::getFactory() const
+const corbasim::core::interface_reflective_base * Objref::getFactory() const
 {
     return m_factory;
 }
@@ -142,7 +142,7 @@ QMdiSubWindow * Objref::getWindow(int idx)
         
         // Window title
         QString title = QString("%1: %2").arg(m_id).arg(
-            m_factory->get_factory_by_index(idx)->get_name());
+            m_factory->get_reflective_by_index(idx)->get_name());
 
         m_subwindows[idx]->setWindowTitle(title);
         win = m_subwindows[idx];
@@ -157,12 +157,12 @@ corbasim::qt::RequestDialog * Objref::getRequestDialog(int idx)
 
     if (!dlg)
     {
-        gui::operation_factory_base const * op = 
-            m_factory->get_factory_by_index(idx);
+        core::operation_reflective_base const * op = 
+            m_factory->get_reflective_by_index(idx);
         const char * name = op->get_name();
-
-        dialogs::input_base * input = op->create_input();
-        dlg = new qt::RequestDialog(input);
+#warning TODO
+        // dialogs::input_base * input = op->create_input();
+        // dlg = new qt::RequestDialog(input);
         dlg->setWindowTitle(name);
 
         QObject::connect(dlg,
@@ -181,7 +181,8 @@ void Objref::showScriptEditor()
     if (!m_sub_script)
     {
         m_script = new qt::SimpleScriptEditor();
-        m_script->initialize(m_factory);
+#warning TODO
+        // m_script->initialize(m_factory);
 
         m_sub_script = new QMdiSubWindow();
         m_sub_script->setWidget(m_script);

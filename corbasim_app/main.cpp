@@ -71,11 +71,11 @@ int main(int argc, char **argv)
     // Signals between models
     QObject::connect(&controller,
             SIGNAL(objrefCreated(
-                    QString, const corbasim::gui::gui_factory_base *)),
+                    QString, const corbasim::core::interface_reflective_base *)),
             &logModel,
             SLOT(registerInstance(
                     const QString&, const 
-                    corbasim::gui::gui_factory_base *)));
+                    corbasim::core::interface_reflective_base *)));
     QObject::connect(&controller,
             SIGNAL(objrefDeleted(QString)),
             &logModel,
@@ -84,11 +84,11 @@ int main(int argc, char **argv)
     QObject::connect(&controller,
             SIGNAL(servantCreated(
                     QString, 
-                    const corbasim::gui::gui_factory_base *)),
+                    const corbasim::core::interface_reflective_base *)),
             &logModel,
             SLOT(registerInstance(
                     const QString&, 
-                    const corbasim::gui::gui_factory_base *)));
+                    const corbasim::core::interface_reflective_base *)));
 
     QObject::connect(&controller,
             SIGNAL(servantDeleted(QString)),

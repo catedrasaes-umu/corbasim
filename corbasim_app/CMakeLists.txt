@@ -51,6 +51,7 @@ target_link_libraries(corbasim_app
     boost_program_options
     corbasim
     corbasim_qt
+    corbasim_reflective_gui
     corbasim_app_idl)
 
 install(TARGETS corbasim_app DESTINATION bin)
@@ -65,6 +66,7 @@ target_link_libraries(corbasim_app_test
     boost_program_options
     corbasim
     corbasim_qt
+    corbasim_reflective_gui
     corbasim_app_idl)
 
 

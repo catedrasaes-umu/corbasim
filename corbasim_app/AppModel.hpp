@@ -62,7 +62,7 @@ public:
     void loadFile(const QString& file);
     
     void loadDirectory(const QString& path);
-    const gui::gui_factory_base * loadLibrary(const QString& file);
+    const core::interface_reflective_base * loadLibrary(const QString& file);
     
     void clearConfig();
 
@@ -92,11 +92,11 @@ protected:
     typedef std::map< QString, void * > libraries_t;
     libraries_t m_libraries;
 
-    typedef std::map< QString, const gui::gui_factory_base * > 
+    typedef std::map< QString, const core::interface_reflective_base * > 
         factories_t;
     factories_t m_factories;
 
-    const gui::gui_factory_base * getFactory(const QString& fqn);
+    const core::interface_reflective_base * getFactory(const QString& fqn);
 };
 
 } // namespace app

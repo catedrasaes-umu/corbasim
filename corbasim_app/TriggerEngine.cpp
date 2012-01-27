@@ -20,7 +20,7 @@
 #include "TriggerEngine.hpp"
 #include "AppController.hpp"
 #include <iostream>
-#include <corbasim/core/factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 using namespace corbasim::app;
 
@@ -52,9 +52,9 @@ QScriptValue ScriptEngine::_call(QScriptContext * ctx,
 
     if (it != _this->m_factories.end())
     {
-        const core::factory_base * f = it->second->get_core_factory();
-        const core::operation_factory_base * op =
-            f->get_factory_by_name(fn.toStdString());
+        const core::interface_reflective_base * f = it->second;
+        const core::operation_reflective_base * op =
+            f->get_reflective_by_name(fn.toStdString());
 
         // arguments in JSON
         std::string json_request("{}"); // empty request
@@ -70,12 +70,12 @@ QScriptValue ScriptEngine::_call(QScriptContext * ctx,
         }
 
         std::cout << "Request: " << json_request << std::endl;
-
-        corbasim::event::request_ptr request(
-                op->request_from_json(json_request));
+#warning TODO
+//        corbasim::event::request_ptr request(
+//                op->request_from_json(json_request));
 
         // send request
-        _this->doSendRequest(id, request);
+//        _this->doSendRequest(id, request);
     }
 
     return QScriptValue();
@@ -108,7 +108,7 @@ QScriptValue ScriptEngine::_createServant(QScriptContext * ctx,
 }
 
 void ScriptEngine::addFactory(const QString& id, 
-        const gui::gui_factory_base * f) 
+        const core::interface_reflective_base * f) 
 {
     m_factories.insert(std::make_pair(id, f));
 }
@@ -118,7 +118,7 @@ void ScriptEngine::removeFactory(const QString& id)
     m_factories.erase(id);
 }
 
-const corbasim::gui::gui_factory_base * ScriptEngine::getFactory(
+const corbasim::core::interface_reflective_base * ScriptEngine::getFactory(
         const QString& id)
 {
     factories_t::const_iterator it = m_factories.find(id);
@@ -162,11 +162,11 @@ void TriggerEngine::setController(AppController * controller)
             m_controller,
             SIGNAL(objrefCreated(
                     QString, 
-                    const corbasim::gui::gui_factory_base *)),
+                    const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(objrefCreated(
                     const QString&, 
-                    const corbasim::gui::gui_factory_base *)));
+                    const corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(objrefDeleted(QString)),
@@ -177,11 +177,11 @@ void TriggerEngine::setController(AppController * controller)
             m_controller,
             SIGNAL(servantCreated(
                     QString, 
-                    const corbasim::gui::gui_factory_base *)),
+                    const corbasim::core::interface_reflective_base *)),
             this,
             SLOT(servantCreated(
                     const QString&, 
-                    const corbasim::gui::gui_factory_base *)));
+                    const corbasim::core::interface_reflective_base *)));
     QObject::connect(
             m_controller,
             SIGNAL(servantDeleted(QString)),
@@ -209,7 +209,7 @@ void TriggerEngine::setController(AppController * controller)
 }
 
 void TriggerEngine::objrefCreated(const QString& id, 
-        const corbasim::gui::gui_factory_base * factory)
+        const corbasim::core::interface_reflective_base * factory)
 {
     m_engine.addFactory(id, factory);
 
@@ -224,8 +224,8 @@ void TriggerEngine::objrefCreated(const QString& id,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        const gui::operation_factory_base * op =
-            factory->get_factory_by_index(i);
+        const core::operation_reflective_base * op =
+            factory->get_reflective_by_index(i);
 
         // Prototype
         QScriptValue fnProto = m_engine.newObject();
@@ -252,7 +252,7 @@ void TriggerEngine::objrefDeleted(const QString& id)
 }
 
 void TriggerEngine::servantCreated(const QString& id, 
-        const corbasim::gui::gui_factory_base * factory)
+        const corbasim::core::interface_reflective_base * factory)
 {
     m_engine.addFactory(id, factory);
 
@@ -276,8 +276,8 @@ void TriggerEngine::servantCreated(const QString& id,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        const gui::operation_factory_base * op =
-            factory->get_factory_by_index(i);
+        const core::operation_reflective_base * op =
+            factory->get_reflective_by_index(i);
 
         // Prototype
         QScriptValue fnProto = m_engine.newObject();
@@ -318,7 +318,7 @@ void TriggerEngine::requestReceived(const QString& id,
         if (meth.isValid() && meth.isFunction())
         {
             // request to script using JSON
-            const gui::gui_factory_base * factory = 
+            const core::interface_reflective_base * factory = 
                 m_engine.getFactory(id);
             
             if (!factory)
@@ -328,11 +328,8 @@ void TriggerEngine::requestReceived(const QString& id,
             }
 
             // gets the operation factory
-            const core::factory_base * core_factory =
-                factory->get_core_factory();
-
-            const core::operation_factory_base * op =
-                core_factory->get_factory_by_name(req->get_name());
+            const core::operation_reflective_base * op =
+                factory->get_reflective_by_name(req->get_name());
 
             if (!op)
             {
@@ -343,7 +340,8 @@ void TriggerEngine::requestReceived(const QString& id,
             try {
                 // JSON request
                 std::string json_str;
-                op->to_json(req.get(), json_str);
+#warning TODO
+//                 op->to_json(req.get(), json_str);
 
                 std::cout << json_str << std::endl;
 
