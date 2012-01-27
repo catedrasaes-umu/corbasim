@@ -26,48 +26,6 @@ namespace corbasim
 {
 namespace core 
 {
-
-template< typename Value >
-Value& holder::to_value()
-{
-    typedef holder_ref_impl< Value > value_impl;
-
-    value_impl * p = reinterpret_cast< value_impl * >(
-            m_impl.get());
-
-    return p->t_;
-}
-
-template< typename T >
-struct holder_ref_impl : public holder_impl_base
-{
-    typedef T value_type;
-
-    T * aux;
-    T& t_;
-
-    holder_ref_impl() : 
-        aux(new T()), t_(*aux)
-    {
-    }
-
-    holder_ref_impl(T& t) : 
-        aux(NULL), t_(t)
-    {
-    }
-
-    // String sequence case
-    holder_ref_impl(const T& t) : 
-        aux(new T(t)), t_(*aux)
-    {
-    }
-
-    ~holder_ref_impl()
-    {
-        delete aux;
-    }
-};
-
 namespace detail
 {
 
