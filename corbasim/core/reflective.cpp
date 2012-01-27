@@ -18,7 +18,7 @@
  */
 
 #include "reflective.hpp"
-#include "reflective.ipp"
+#include "reflective_primitive.ipp"
 
 namespace corbasim 
 {
@@ -78,6 +78,11 @@ reflective_base::reflective_base(reflective_base const * parent,
 
 reflective_base::~reflective_base()
 {
+}
+
+const char * reflective_base::get_type_name() const
+{
+    return "undefined";
 }
 
 reflective_base const * reflective_base::get_parent() const 

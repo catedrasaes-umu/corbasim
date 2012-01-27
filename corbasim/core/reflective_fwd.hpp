@@ -62,7 +62,7 @@ struct holder
     holder& operator=(const holder& o);
 
     template< typename Value >
-    Value to_value() const;
+    Value& to_value();
     
     holder_impl_ptr m_impl;
 };
@@ -106,6 +106,8 @@ struct reflective_base
 
     // static information
     // virtual tag_t get_tag() const = 0;
+
+    virtual const char * get_type_name() const;
 
     reflective_base const * get_parent() const;
     unsigned int get_child_index() const;

@@ -75,6 +75,28 @@ int main(int argc, char **argv)
     seq2.objrefCreated("prueba", iface);
     seq2.show();
 
+    QObject::connect(&seq2, 
+            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+            &tool,
+            SLOT(processRequest(const QString&, corbasim::event::request_ptr)));
+
+    {
+        corbasim::core::reflective_base const * ref = 
+            corbasim::core::reflective< SimpleExample::Hijo >::get_instance();
+
+        SimpleExample::Hijo hijo;
+
+        corbasim::core::holder h(corbasim::core::create_holder(hijo));
+
+        corbasim::core::reflective_base const * bref = ref->get_child(0);
+
+        corbasim::core::holder bh(ref->get_child_value(h, 0));
+
+        bh.to_value< int32_t >() = 10;
+
+        std::cout << hijo.b << std::endl;
+    }
+
     return app.exec();
 }
 
