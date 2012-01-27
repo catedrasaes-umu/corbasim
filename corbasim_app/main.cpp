@@ -25,7 +25,7 @@
 #include "TriggerEngine.hpp"
 #include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
-#include <corbasim/qt/LogModel.hpp>
+#include <corbasim/reflective_gui/LogModel.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     corbasim::app::AppFileWatcher watcher;
     corbasim::app::DataDumper dumper;
     corbasim::app::AppMainWindow window;
-    corbasim::qt::LogModel logModel;
+    corbasim::reflective_gui::LogModel logModel;
 
     // Signals between models
     QObject::connect(&controller,

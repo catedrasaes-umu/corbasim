@@ -114,7 +114,7 @@ AppModel::getFactory(const QString& fqn)
 
     QString lib (fqn);
     lib.replace("::","_");
-    lib.prepend("libcorbasim_lib_");
+    lib.prepend("libcorbasim_reflective_");
     lib.append(".so");
 
     return loadLibrary(lib);
@@ -393,7 +393,7 @@ void AppModel::loadDirectory(const QString& path)
 {
     const QDir d(path);
     QStringList filters;
-    filters << "libcorbasim_lib_*.so";
+    filters << "libcorbasim_reflective_*.so";
 
     const QFileInfoList files = d.entryInfoList(filters, QDir::Files);
     const int count = files.count();
