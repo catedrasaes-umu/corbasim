@@ -182,6 +182,10 @@ QVariant toQVariant(
 
         case TYPE_STRING:
         case TYPE_WSTRING:
+            {
+                std::string str(reflective->to_string(hold));
+                return QVariant(str.c_str());
+            }
         case TYPE_OBJREF:
             break;
 

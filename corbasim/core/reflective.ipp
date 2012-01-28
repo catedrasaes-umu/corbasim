@@ -156,6 +156,18 @@ holder string_reflective< T >::create_holder() const
     return new holder_ref_impl< T >();
 }
 
+template< typename T >
+std::string string_reflective< T >::to_string(holder const& value) const
+{
+    return std::string(value.to_value< T >());
+}
+
+template< typename T >
+void string_reflective< T >::from_string(holder& value, const std::string& str) const
+{
+    value.to_value< T >() = str.c_str();
+}
+
 // Sequence reflective
 template< typename T >
 sequence_reflective< T >::sequence_reflective(reflective_base const * parent,

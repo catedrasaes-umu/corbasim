@@ -96,6 +96,10 @@ struct string_reflective : public reflective_base
     reflective_type get_type() const;
 
     holder create_holder() const;
+
+    std::string to_string(holder const& h) const;
+
+    void from_string(holder& h, const std::string& str) const;
 };
 
 template< typename T >

@@ -152,6 +152,16 @@ double reflective_base::to_double(holder const& value) const
     return 0.0;
 }
 
+std::string reflective_base::to_string(holder const& value) const
+{
+    return std::string();
+}
+
+void reflective_base::from_string(holder& value, 
+        const std::string& str) const
+{
+}
+
 // Interface Reflective Base
 
 void interface_reflective_base::insert_reflective(
@@ -209,6 +219,10 @@ interface_reflective_base::get_reflective_by_tag(
 
 // Operation reflective base
 operation_reflective_base::~operation_reflective_base()
+{
+}
+
+objrefvar_reflective_base::~objrefvar_reflective_base()
 {
 }
 

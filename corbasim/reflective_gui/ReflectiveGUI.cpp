@@ -298,8 +298,16 @@ StringWidget::~StringWidget()
 {
 }
 
-void StringWidget::toHolder(core::holder& holder) {}
-void StringWidget::fromHolder(core::holder& holder){}
+void StringWidget::toHolder(core::holder& holder)
+{
+    m_reflective->from_string(holder, text().toStdString());
+}
+
+void StringWidget::fromHolder(core::holder& holder)
+{
+    std::string str(m_reflective->to_string(holder));
+    setText(str.c_str());
+}
 
 EnumWidget::EnumWidget(core::reflective_base const * reflective,
         QWidget * parent) :

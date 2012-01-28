@@ -100,6 +100,11 @@ enum direction_type
     DIRECTION_INOUT
 };
 
+struct reflective_base;
+struct objrefvar_reflective_base;
+struct operation_reflective_base;
+struct interface_reflective_base;
+
 struct reflective_base
 {
     virtual ~reflective_base();
@@ -134,15 +139,10 @@ struct reflective_base
 
     virtual holder get_child_value(holder& value, 
         unsigned int idx) const;
-
-    /*
-    virtual holder get_child_value(holder_base const& value, 
-        unsigned int idx) const;
-
-    virtual std::string to_string() const;
-     */
     
     virtual double to_double(holder const& value) const;
+    virtual std::string to_string(holder const& h) const;
+    virtual void from_string(holder& h, const std::string& str) const;
 
 protected:
     reflective_base(reflective_base const * parent = NULL, 
@@ -152,11 +152,20 @@ protected:
     unsigned int m_child_index;
 };
 
+struct objrefvar_reflective_base : public reflective_base
+{
+    virtual CORBA::Object_ptr to_object(holder const& h) const = 0;
+    virtual void from_object(holder& h, CORBA::Object_ptr obj) const = 0;
+
+    virtual interface_reflective_base const * get_interface() const = 0;
+    
+    virtual ~objrefvar_reflective_base();
+};
+
 typedef boost::shared_ptr< reflective_base > reflective_ptr;
 
 template< typename T >
 struct reflective;
-
 
 struct operation_reflective_base : 
     public virtual reflective_base
