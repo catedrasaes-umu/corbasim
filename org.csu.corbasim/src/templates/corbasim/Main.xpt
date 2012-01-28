@@ -38,4 +38,8 @@
 	«IF generateLibrary()»
 		«EXPAND templates::corbasim::LibCorbasim::main FOR this»
 	«ENDIF»
+	
+	«IF generateReflectiveLibrary()»
+		«EXPAND templates::corbasim::LibReflective::main FOR this»
+	«ENDIF»
 «ENDDEFINE»

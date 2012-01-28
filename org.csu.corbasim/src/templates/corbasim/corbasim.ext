@@ -12,7 +12,8 @@ Boolean generateServer() : GLOBALVAR genServer;
 Boolean generatePyStim() : GLOBALVAR genPyStim;
 Boolean generateInterpreter() : GLOBALVAR genInterpreter;
 Boolean generateCMake() : GLOBALVAR genCMake;
-Boolean generateLibrary() : true; // GLOBALVAR genLibrary;
+Boolean generateLibrary() : false; // GLOBALVAR genLibrary;
+Boolean generateReflectiveLibrary() : true; // GLOBALVAR genLibrary;
 
 String getHeaderExtension() : ".hpp";
 String getSourceExtension() : ".cpp";

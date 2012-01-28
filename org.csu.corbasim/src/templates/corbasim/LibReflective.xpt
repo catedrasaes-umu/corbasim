@@ -15,7 +15,7 @@
 
 «DEFINE main FOR InterfaceDef-»
 «LET getFQN("_") AS fqn»
-«FILE fqn+"_lib.cpp"»
+«FILE fqn+"_reflective.cpp"»
 #include "«getTranslationUnit().getFileNameStubHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
 #include "«getTranslationUnit().getAdaptedServantFile()»"
