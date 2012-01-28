@@ -21,6 +21,7 @@
 #include <QStyle>
 #include <QApplication>
 #include <QDateTime>
+#include <corbasim/core/reflective.hpp>
 
 using namespace corbasim::reflective_gui;
 
@@ -150,19 +151,200 @@ void LogModel::outputRequest(const QString& id,
     }
 }
 
+QVariant toQVariant(
+        corbasim::core::reflective_base const * reflective,
+        corbasim::core::holder& hold)
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_BOOL:
+            return QVariant(hold.to_value< bool >());
+        case TYPE_OCTET:
+            return QVariant(hold.to_value< unsigned char >());
+        case TYPE_CHAR:
+            return QVariant(hold.to_value< char >());
+        case TYPE_SHORT:
+            return QVariant(hold.to_value< short >());
+        case TYPE_USHORT:
+            return QVariant(hold.to_value< unsigned short >());
+        case TYPE_LONG:
+            return QVariant(hold.to_value< int32_t >());
+        case TYPE_ULONG:
+            return QVariant(hold.to_value< uint32_t >());
+        case TYPE_LONGLONG:
+            return QVariant(hold.to_value< int64_t >());
+        case TYPE_ULONGLONG:
+            return QVariant(hold.to_value< uint64_t >());
+
+        case TYPE_STRING:
+        case TYPE_WSTRING:
+        case TYPE_OBJREF:
+            break;
+
+        case TYPE_ENUM:
+            {
+                // Maybe it works...
+                int32_t value = hold.to_value< int32_t >();
+
+                const char * str = "Unknown value"; 
+
+                if (value >= 0 && value < reflective->get_children_count())
+                    str = reflective->get_child_name((unsigned int) value);
+
+                return QVariant(str);
+            }
+
+        case TYPE_DOUBLE:
+            return QVariant(hold.to_value< double >());
+        case TYPE_FLOAT:
+            return QVariant(hold.to_value< float >());
+        default:
+            break;
+    }
+   
+    return QVariant();
+}
+
+QStandardItem * createRecursive(
+        corbasim::core::reflective_base const * reflective,
+        corbasim::core::holder& hold)
+{
+    using namespace corbasim::core;
+
+    if (!reflective)
+        return new QStandardItem("Null reflective type!");
+
+    const reflective_type type = reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_BOOL:
+        case TYPE_OCTET:
+        case TYPE_CHAR:
+        case TYPE_SHORT:
+        case TYPE_USHORT:
+        case TYPE_LONG:
+        case TYPE_ULONG:
+        case TYPE_LONGLONG:
+        case TYPE_ULONGLONG:
+        case TYPE_STRING:
+        case TYPE_WSTRING:
+        case TYPE_OBJREF:
+        case TYPE_ENUM:
+        case TYPE_DOUBLE:
+        case TYPE_FLOAT:
+            {
+                QStandardItem * item =  new QStandardItem();
+                item->setData(toQVariant(reflective, hold), Qt::DisplayRole);
+                return item;
+            }
+
+        case TYPE_ARRAY:
+        case TYPE_SEQUENCE:
+            {
+                QStandardItem * parent = new QStandardItem();
+
+                const unsigned int count = reflective->get_length(hold);
+
+                reflective_base const * slice = reflective->get_slice();
+
+                for (unsigned int i = 0; i < count; i++) 
+                {
+                    const QString child_name = QString("[%1]").arg(i);
+
+                    holder child_value = 
+                        reflective->get_child_value(hold, i);
+
+                    QStandardItem * current = 
+                        createRecursive(slice, child_value);
+
+                    if (current->rowCount() > 0)
+                    {
+                        current->setText(child_name);
+                        parent->appendRow(current);
+                    }
+                    else
+                    {
+                        QStandardItem* name = new QStandardItem(child_name);
+                        QList< QStandardItem * > list;
+                        list << name;
+                        list << current;
+
+                        parent->appendRow(list);
+                    }
+                }
+
+                return parent;
+            }
+
+        case TYPE_STRUCT:
+            {
+                QStandardItem * parent = new QStandardItem();
+
+                const unsigned int count = reflective->get_children_count();
+
+                for (unsigned int i = 0; i < count; i++) 
+                {
+                    reflective_base const * child = 
+                        reflective->get_child(i);
+
+                    holder child_value = 
+                        reflective->get_child_value(hold, i);
+
+                    QStandardItem * current = 
+                        createRecursive(child, child_value);
+
+                    const char * child_name = reflective->get_child_name(i);
+
+                    if (current->rowCount() > 0)
+                    {
+                        current->setText(child_name);
+                        parent->appendRow(current);
+                    }
+                    else
+                    {
+                        QStandardItem* name = new QStandardItem(child_name);
+                        QList< QStandardItem * > list;
+                        list << name;
+                        list << current;
+
+                        parent->appendRow(list);
+                    }
+
+                }
+
+                return parent;
+            }
+        case TYPE_UNION:
+        default:
+
+            break;
+    }
+
+    return new QStandardItem("Unsupported item!");
+}
+
 QStandardItem* LogModel::append(const QString& id, 
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp,
         bool is_in)
 {
-#warning TODO
-#if 0
     instances_t::const_iterator it = m_instances.find(id);
     
     if (it != m_instances.end())
     {
         QDateTime dateTime = QDateTime::currentDateTime();
         QList< QStandardItem * > list;
+
+        core::operation_reflective_base const * op =
+            it->second->get_reflective_by_tag(req->get_tag());
+
+        if (!op)
+            return NULL;
 
         // Deja espacio
         while (rowCount() > m_maxEntries - 1)
@@ -172,14 +354,19 @@ QStandardItem* LogModel::append(const QString& id,
             m_entries.pop_front();
         }
 
-        QStandardItem * item = it->second->create_item(req.get());
+        core::holder hold = op->get_holder(req);
+
+        QStandardItem * item = createRecursive(op, hold);
 
         // process response
         if (resp && resp->get_type() == event::RESPONSE)
         {
+#warning TODO
+#if 0
             QStandardItem * itemResp = it->second->create_item(resp.get());
             itemResp->setText("Response");
             item->appendRow(itemResp);
+#endif
         }
         
         list << item << new QStandardItem(dateTime.toString());
@@ -195,7 +382,6 @@ QStandardItem* LogModel::append(const QString& id,
         appendRow(list);
         return item;
     }
-#endif
     return NULL;
 }
 

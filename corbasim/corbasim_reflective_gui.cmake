@@ -1,5 +1,6 @@
 set(corbasim_reflective_gui_EXPORTED_HEADERS
     reflective_gui/OperationSequence.hpp
+    reflective_gui/RequestDialog.hpp
     reflective_gui/LogModel.hpp
     reflective_gui/ReflectiveGUI.hpp)
 
@@ -11,11 +12,13 @@ endforeach(_header ${corbasim_reflective_gui_EXPORTED_HEADERS})
 
 set(corbasim_reflective_gui_MOC_HDRS
     reflective_gui/OperationSequence.hpp
+    reflective_gui/RequestDialog.hpp
     reflective_gui/LogModel.hpp
     reflective_gui/ReflectiveGUI.hpp)
 
 set(corbasim_reflective_gui_SRCS
     reflective_gui/OperationSequence.cpp
+    reflective_gui/RequestDialog.cpp
     reflective_gui/LogModel.cpp
     reflective_gui/ReflectiveGUI.cpp)
 

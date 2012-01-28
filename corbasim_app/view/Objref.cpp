@@ -151,18 +151,18 @@ QMdiSubWindow * Objref::getWindow(int idx)
     return win;
 }
 
-corbasim::qt::RequestDialog * Objref::getRequestDialog(int idx)
+corbasim::reflective_gui::RequestDialog * Objref::getRequestDialog(int idx)
 {
-    qt::RequestDialog * dlg = m_dialogs[idx];
+    reflective_gui::RequestDialog * dlg = m_dialogs[idx];
 
     if (!dlg)
     {
         core::operation_reflective_base const * op = 
             m_factory->get_reflective_by_index(idx);
+
         const char * name = op->get_name();
-#warning TODO
-        // dialogs::input_base * input = op->create_input();
-        // dlg = new qt::RequestDialog(input);
+
+        dlg = new reflective_gui::RequestDialog(op);
         dlg->setWindowTitle(name);
 
         QObject::connect(dlg,
