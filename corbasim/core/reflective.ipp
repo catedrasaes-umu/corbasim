@@ -40,28 +40,27 @@ struct holder_ref_impl : public holder_impl_base
 {
     typedef T value_type;
 
-    T * aux;
+    T aux;
     T& t_;
 
     holder_ref_impl() : 
-        aux(new T()), t_(*aux)
+        t_(aux)
     {
     }
 
     holder_ref_impl(T& t) : 
-        aux(NULL), t_(t)
+        t_(t)
     {
     }
 
     // String sequence case
     holder_ref_impl(const T& t) : 
-        aux(new T(t)), t_(*aux)
+        aux(t), t_(aux)
     {
     }
 
     ~holder_ref_impl()
     {
-        delete aux;
     }
 };
 

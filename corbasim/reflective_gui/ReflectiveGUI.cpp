@@ -398,7 +398,7 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
 
         child_widget->setObjectName(child_name);
 
-        if (child->is_primitive())
+        if (child->is_primitive() || child->is_enum())
         {
             QLabel * label = new QLabel(child_name, this);
 
@@ -605,7 +605,7 @@ OperationInputForm::OperationInputForm(
 
             child_widget->setObjectName(child_name);
 
-            if (child->is_primitive())
+            if (child->is_primitive() || child->is_enum())
             {
                 QLabel * label = new QLabel(child_name, this);
 
