@@ -344,6 +344,9 @@ void SimpleScriptEditor::replaceSelected()
 
     // Añade la nueva
     dialogs::input_ptr dlg = m_multi->getCurrentDialog();
+
+    if (!dlg) return;
+
     event::request_ptr req(dlg->create_request());
     doAppendRequest(req, true);
 
@@ -372,6 +375,8 @@ void SimpleScriptEditor::sendCurrent()
     // Obtiene el dialogo seleccionado
     dialogs::input_ptr dlg = m_multi->getCurrentDialog();
 
+    if (!dlg) return;
+
     event::request_ptr req(dlg->create_request());
 
     emit sendRequest(req);
@@ -381,6 +386,8 @@ void SimpleScriptEditor::appendRequest()
 {
     // Obtiene el dialogo seleccionado
     dialogs::input_ptr dlg = m_multi->getCurrentDialog();
+    
+    if (!dlg) return;
 
     for (int i = 0; i < m_how_many->value(); i++) 
     {
@@ -396,6 +403,8 @@ void SimpleScriptEditor::appendOneRequest()
 {
     // Obtiene el dialogo seleccionado
     dialogs::input_ptr dlg = m_multi->getCurrentDialog();
+    
+    if (!dlg) return;
 
     // Crea una request del tipo seleccionado con los valores
     // del dialogo

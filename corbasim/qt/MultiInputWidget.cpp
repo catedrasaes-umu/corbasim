@@ -93,6 +93,9 @@ corbasim::dialogs::input_ptr MultiInputWidget::getCurrentDialog()
 
 corbasim::dialogs::input_ptr MultiInputWidget::getDialog(int index)
 {
+    if (m_inputs.empty())
+        return corbasim::dialogs::input_ptr();
+
     if (!m_inputs[index])
     {
         dialogs::input_ptr _input( 
