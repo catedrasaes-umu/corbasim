@@ -327,8 +327,20 @@ EnumWidget::~EnumWidget()
 {
 }
 
-void EnumWidget::toHolder(core::holder& holder) {}
-void EnumWidget::fromHolder(core::holder& holder){}
+void EnumWidget::toHolder(core::holder& holder) 
+{
+    holder.to_value< int32_t >() = currentIndex();
+}
+
+void EnumWidget::fromHolder(core::holder& holder)
+{
+    int idx = holder.to_value< int32_t >();
+
+    if (idx > -1 && idx < count())
+    {
+        setCurrentIndex(idx);
+    }
+}
 
 BoolWidget::BoolWidget(core::reflective_base const * reflective,
         QWidget * parent) :
