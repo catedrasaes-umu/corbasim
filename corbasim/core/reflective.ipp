@@ -159,7 +159,7 @@ holder string_reflective< T >::create_holder() const
 template< typename T >
 std::string string_reflective< T >::to_string(holder const& value) const
 {
-    return std::string(value.to_value< T >());
+    return std::string(const_cast< holder& >(value).to_value< T >());
 }
 
 template< typename T >
