@@ -560,10 +560,15 @@ ArrayWidget::ArrayWidget(core::reflective_base const * reflective,
 
     layout->addLayout(headerLayout);
 
-    m_stack = new QStackedWidget;
-    layout->addWidget(m_stack);
+    m_holder = reflective->create_holder();
 
-    // TODO initialize stack
+    m_sbCurrentIndex->setRange(0, reflective->get_length(m_holder) - 1);
+
+    m_slice_widget = createWidget(reflective->get_slice(), this);
+    
+    layout->addWidget(m_slice_widget);
+
+    m_slice = dynamic_cast< ReflectiveWidgetBase * >(m_slice_widget);
     
     setLayout(layout);
 
@@ -575,17 +580,23 @@ ArrayWidget::~ArrayWidget()
 {
 }
 
-void ArrayWidget::toHolder(core::holder& holder) {}
-void ArrayWidget::fromHolder(core::holder& holder){}
+void ArrayWidget::toHolder(core::holder& holder) 
+{
+    // TODO copy holders
+}
+
+void ArrayWidget::fromHolder(core::holder& holder)
+{
+    // TODO copy holders
+}
 
 void ArrayWidget::indexChanged(int idx)
 {
-    if (m_widgets.empty())
-        return;
+    // TODO store current value
 
-    m_stack->setCurrentIndex(idx);
+    core::holder child_value = m_reflective->get_child_value(m_holder, idx);
+    m_slice->fromHolder(child_value);
 }
-
 
 OperationInputForm::OperationInputForm(
         core::operation_reflective_base const * reflective,
