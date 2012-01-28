@@ -33,6 +33,11 @@ namespace reflective_gui
 class OperationSequenceTool;
 } // namespace reflective_gui
 
+namespace qwt 
+{
+class ReflectivePlotTool;
+} // namespace qwt
+
 namespace app 
 {
 
@@ -51,6 +56,8 @@ public:
     void setEngine(TriggerEngine * engine);
 
 public slots:
+
+    void showPlotTool();
 
     void setLogModel(QAbstractItemModel * model);
 
@@ -129,25 +136,20 @@ protected:
     QWidget * m_script;
     reflective_gui::OperationSequenceTool * m_seq_tool;
 
+    qwt::ReflectivePlotTool * m_plot_tool;
+
     // Dock widgets
     QDockWidget * m_dock_app_log;
     QTreeWidget * m_app_log;
 
     QDockWidget * m_dock_log;
-#if 0
-    QTreeWidget * m_log;
-#else
     QTreeView * m_log;
-#endif
     
     QDockWidget * m_dock_fqn;
     QTreeView * m_fqn;
 
     QCompleter * m_completer;
     QStringList m_op_list;
-#if 0
-    void appendToLog(QTreeWidgetItem * item);
-#endif
     void appendToAppLog(QTreeWidgetItem * item);
 };
 

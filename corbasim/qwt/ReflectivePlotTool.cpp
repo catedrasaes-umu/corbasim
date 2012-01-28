@@ -246,3 +246,12 @@ void ReflectivePlotTool::deleteRequested(qt::SortableGroupItem* item)
     m_group->deleteItem(item);
 }
 
+extern "C" {
+
+corbasim::qwt::ReflectivePlotTool * createReflectivePlotTool(QWidget * parent)
+{
+    return new corbasim::qwt::ReflectivePlotTool(parent);
+}
+
+} // extern C
+

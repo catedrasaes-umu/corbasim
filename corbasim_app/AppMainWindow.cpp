@@ -23,6 +23,9 @@
 #include "view/CreateDialog.hpp"
 #include <corbasim/qt/ScriptWindow.hpp>
 #include <corbasim/reflective_gui/OperationSequence.hpp>
+#include <corbasim/qwt/ReflectivePlotTool.hpp>
+
+#include <QLibrary>
 
 using namespace corbasim::app;
 
@@ -39,17 +42,15 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_create_objref(NULL),
     m_create_servant(NULL),
     m_script(NULL),
-    m_seq_tool(NULL)
+    m_seq_tool(NULL),
+
+    m_plot_tool(NULL)
 {
     m_mdi_area = new QMdiArea;
 
     // Log dock widget
     m_dock_log = new QDockWidget("Log", this);
-#if 0
-    m_log = new QTreeWidget;
-#else
     m_log = new QTreeView();
-#endif
 
     m_dock_log->setWidget(m_log);
     addDockWidget(Qt::RightDockWidgetArea, m_dock_log);
@@ -159,6 +160,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     tools->addSeparator();
     tools->addAction("&Operation sequences", 
             this, SLOT(showOpSequenceTool()));
+    tools->addSeparator();
+    tools->addAction("&Plot tool", 
+            this, SLOT(showPlotTool()));
 
     QMenu * winMenu = menu->addMenu("&Window");
     winMenu->addAction("&Show log", m_dock_log, SLOT(show()));
@@ -272,6 +276,31 @@ void AppMainWindow::setLogModel(QAbstractItemModel * model)
 {
     m_log->setModel(model);
     m_log->setColumnWidth(0, 500);
+}
+
+void AppMainWindow::showPlotTool()
+{
+    typedef qwt::ReflectivePlotTool* (*create_t)(QWidget*);
+
+    if (!m_plot_tool)
+    {
+        QLibrary lib("corbasim_qwt");
+
+        if (!lib.load())
+            return;
+
+        create_t create = (create_t) lib.resolve("createReflectivePlotTool");
+
+        if (!create)
+            return;
+
+        m_plot_tool = create(NULL);
+        m_plot_tool->setWindowTitle("corbasim plotting tool");
+        m_plot_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
+    }
+
+    if (m_plot_tool)
+        m_plot_tool->show();
 }
 
 void AppMainWindow::setEngine(TriggerEngine * engine)
@@ -481,72 +510,12 @@ void AppMainWindow::requestSent(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-#if 0
-    objrefs_t::iterator it = m_objrefs.find(id);
-    
-    if (it != m_objrefs.end())
-    {
-        const core::interface_reflective_base * factory = it->second->getFactory();
-        QTreeWidgetItem * item = factory->create_tree(req.get());
-
-        QString text (item->text(0));
-        text.prepend(QString("Sent to %1: ").arg(id));
-
-        if (resp)
-        {
-            using namespace corbasim::event;
-
-            if (resp->get_type() == RESPONSE)
-            {
-                response_ptr ptr_ = 
-                    boost::dynamic_pointer_cast< response >(resp);
-
-                QTreeWidgetItem * resp_item = 
-                    factory->create_tree(ptr_.get());
-
-                resp_item->setText(0, "Response");
-                item->addChild(resp_item);
-            }
-            else if (resp->get_type() == EXCEPTION)
-                text.append(" (Exception!)");
-            else if (resp->get_type() == MESSAGE)
-            {
-                message_ptr ptr_ = 
-                    boost::dynamic_pointer_cast< message >(resp);
-
-                text.append(QString(" (%1)").arg(ptr_->get_message()));
-            }
-        }
-
-        // Add to log
-        item->setText(0, text);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_ArrowLeft));
-        appendToLog(item);
-    }
-#endif
 }
 
 void AppMainWindow::requestReceived(const QString& id, 
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-#if 0
-    servants_t::iterator it = m_servants.find(id);
-    
-    if (it != m_servants.end())
-    {
-        const core::interface_reflective_base * factory = it->second->getFactory();
-        QTreeWidgetItem * item = factory->create_tree(req.get());
-
-        QString text (item->text(0));
-        text.prepend(QString("Received to %1: ").arg(id));
-
-        // Add to log
-        item->setText(0, text);
-        item->setIcon(0, style()->standardIcon(QStyle::SP_ArrowRight));
-        appendToLog(item);
-    }
-#endif
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -615,17 +584,7 @@ void AppMainWindow::showSave()
 
     emit saveFile(file);
 }
-#if 0
-void AppMainWindow::appendToLog(QTreeWidgetItem * item)
-{
-    // check log size
-    if (m_log->topLevelItemCount() >= 200)
-        delete m_log->takeTopLevelItem(0);
 
-    m_log->addTopLevelItem(item);
-    m_log->scrollToItem(item);
-}
-#endif
 void AppMainWindow::appendToAppLog(QTreeWidgetItem * item)
 {
     // check log size
