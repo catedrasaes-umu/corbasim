@@ -39,6 +39,8 @@ struct bool_reflective : public reflective_base
     holder create_holder() const;
 
     reflective_type get_type() const;
+    
+    void copy(holder const& src, holder& dst) const;
 };
 
 template< typename T >
@@ -54,6 +56,8 @@ struct primitive_reflective : public reflective_base
     holder create_holder() const;
 
     double to_double(holder const& value) const;
+    
+    void copy(holder const& src, holder& dst) const;
 };
 
 template< typename T >
@@ -80,6 +84,8 @@ struct array_reflective : public reflective_base
 
     holder get_child_value(holder& value, unsigned int idx) const;
 
+    void copy(holder const& src, holder& dst) const;
+
     slice_reflective_t m_slice;
 };
 
@@ -100,6 +106,8 @@ struct string_reflective : public reflective_base
     std::string to_string(holder const& h) const;
 
     void from_string(holder& h, const std::string& str) const;
+    
+    void copy(holder const& src, holder& dst) const;
 };
 
 template< typename T >
@@ -123,10 +131,12 @@ struct sequence_reflective : public reflective_base
 
     unsigned int get_length(holder const& value) const;
 
-    void set_length(holder& value, unsigned int length);
+    void set_length(holder& value, unsigned int length) const;
 
     holder get_child_value(holder& value, 
         unsigned int idx) const;
+
+    void copy(holder const& src, holder& dst) const;
 
     slice_reflective_t m_slice;
 };
@@ -166,6 +176,8 @@ struct struct_reflective : public reflective_base
     holder get_child_value(holder& value, 
         unsigned int idx) const;
 
+    void copy(holder const& src, holder& dst) const;
+
     static struct_reflective const * get_instance();
 
     // Data
@@ -183,6 +195,8 @@ struct union_reflective : public reflective_base
     reflective_type get_type() const;
 
     holder create_holder() const;
+
+    // void copy(holder const& src, holder& dst) const;
 };
 
 template< typename T >
@@ -202,6 +216,8 @@ struct enum_reflective : public reflective_base
     const char * get_child_name(unsigned int idx) const;
 
     holder create_holder() const;
+
+    void copy(holder const& src, holder& dst) const;
 };
 
 template< typename T >
@@ -213,6 +229,8 @@ struct objrefvar_reflective : public reflective_base
     reflective_type get_type() const;
 
     holder create_holder() const;
+    
+    void copy(holder const& src, holder& dst) const;
 };
 
 template< typename T >

@@ -472,7 +472,7 @@ void StructWidget::fromHolder(core::holder& holder)
 
 SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QWidget(parent), ReflectiveWidgetBase(reflective)
+    QWidget(parent), ReflectiveWidgetBase(reflective), m_old_idx(-1)
 {
     QVBoxLayout * layout = new QVBoxLayout;
  
@@ -488,8 +488,14 @@ SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
 
     layout->addLayout(headerLayout);
 
-    m_stack = new QStackedWidget;
-    layout->addWidget(m_stack);
+    m_holder = reflective->create_holder();
+
+    m_slice_widget = createWidget(reflective->get_slice(), this);
+    m_slice_widget->hide();
+    
+    layout->addWidget(m_slice_widget);
+
+    m_slice = dynamic_cast< ReflectiveWidgetBase * >(m_slice_widget);
 
     setLayout(layout);
 
@@ -507,43 +513,62 @@ SequenceWidget::~SequenceWidget()
 {
 }
 
-void SequenceWidget::toHolder(core::holder& holder) {}
-void SequenceWidget::fromHolder(core::holder& holder){}
+void SequenceWidget::toHolder(core::holder& holder)
+{
+    // store current value
+    if (m_reflective->get_length(m_holder) > 0)
+    {
+        core::holder child_value = m_reflective->get_child_value(
+                m_holder, m_sbCurrentIndex->value());
+        m_slice->toHolder(child_value);
+    }
+
+    m_reflective->copy(m_holder, holder);
+}
+
+void SequenceWidget::fromHolder(core::holder& holder)
+{
+    // Invalidates current value
+    m_old_idx = -1;
+
+    m_reflective->copy(holder, m_holder);
+
+    // show current value
+    m_sbLength->setValue(m_reflective->get_length(m_holder));
+}
 
 void SequenceWidget::lengthChanged(int len)
 {
-    int old_length = m_widgets.size();
-
-    if (len > old_length)
+    if (len == 0)
     {
-        for (int i = 0; i < len - old_length; i++) 
-        {
-            QWidget * w = createWidget(m_reflective->get_slice(), this);
-            m_widgets.push_back(w);
-            m_stack->addWidget(w);
-        }
+        m_slice_widget->hide();
     }
     else
     {
-        for (int i = len; i < old_length; i++) 
-        {
-            QWidget * w = m_widgets[i];
-            m_stack->removeWidget(w);
-        }
-
-        m_widgets.resize(len);
+        m_slice_widget->show();
     }
 
+    m_reflective->set_length(m_holder, len);
+
     m_sbCurrentIndex->setRange(0, len-1);
-    m_sbLength->setValue(len);
 }
 
 void SequenceWidget::indexChanged(int idx)
 {
-    if (m_widgets.empty())
-        return;
+    unsigned int length = m_reflective->get_length(m_holder);
 
-    m_stack->setCurrentIndex(idx);
+    // store current value
+    if (m_old_idx > -1 && m_old_idx < (int) length)
+    {
+        core::holder child_value = m_reflective->get_child_value(
+                m_holder, m_old_idx);
+        m_slice->toHolder(child_value);
+    }
+
+    m_old_idx = idx;
+
+    core::holder child_value = m_reflective->get_child_value(m_holder, idx);
+    m_slice->fromHolder(child_value);
 }
 
 ArrayWidget::ArrayWidget(core::reflective_base const * reflective,
@@ -582,12 +607,16 @@ ArrayWidget::~ArrayWidget()
 
 void ArrayWidget::toHolder(core::holder& holder) 
 {
-    // TODO copy holders
+    // TODO store current value
+
+    m_reflective->copy(m_holder, holder);
 }
 
 void ArrayWidget::fromHolder(core::holder& holder)
 {
-    // TODO copy holders
+    m_reflective->copy(holder, m_holder);
+
+    // TODO show current value
 }
 
 void ArrayWidget::indexChanged(int idx)

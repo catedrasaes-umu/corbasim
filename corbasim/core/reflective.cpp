@@ -137,7 +137,7 @@ unsigned int reflective_base::get_length(holder const& value) const
     return 0;
 }
 
-void reflective_base::set_length(holder& value, unsigned int length)
+void reflective_base::set_length(holder& value, unsigned int length) const
 {
 }
 
@@ -159,6 +159,10 @@ std::string reflective_base::to_string(holder const& value) const
 
 void reflective_base::from_string(holder& value, 
         const std::string& str) const
+{
+}
+
+void reflective_base::copy(holder const & src, holder& dst) const
 {
 }
 

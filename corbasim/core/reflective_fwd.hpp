@@ -135,7 +135,7 @@ struct reflective_base
 
     // dynamic information
     virtual unsigned int get_length(holder const& value) const;
-    virtual void set_length(holder& value, unsigned int length);
+    virtual void set_length(holder& value, unsigned int length) const;
 
     virtual holder get_child_value(holder& value, 
         unsigned int idx) const;
@@ -143,6 +143,7 @@ struct reflective_base
     virtual double to_double(holder const& value) const;
     virtual std::string to_string(holder const& h) const;
     virtual void from_string(holder& h, const std::string& str) const;
+    virtual void copy(holder const& src, holder& dst) const;
 
 protected:
     reflective_base(reflective_base const * parent = NULL, 

@@ -129,6 +129,17 @@ holder array_reflective< T >::get_child_value(holder& value,
     return holder( ::corbasim::core::create_holder(p->t_[idx]));
 }
 
+template< typename T >
+void array_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    for (unsigned i = 0; i < size; i++) 
+    {
+        holder child_src = get_child_value(const_cast< holder& >(src), i);
+        holder child_dst = get_child_value(dst, i);
+        m_slice.copy(child_src, child_dst);
+    }
+}
+
 // String reflective
 template< typename T >
 string_reflective< T >::string_reflective(reflective_base const * parent,
@@ -165,6 +176,12 @@ template< typename T >
 void string_reflective< T >::from_string(holder& value, const std::string& str) const
 {
     value.to_value< T >() = str.c_str();
+}
+
+template< typename T >
+void string_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
 }
 
 // Sequence reflective
@@ -212,7 +229,8 @@ unsigned int sequence_reflective< T >::get_length(holder const& value) const
 }
 
 template< typename T >
-void sequence_reflective< T >::set_length(holder& value, unsigned int length)
+void sequence_reflective< T >::set_length(holder& value, 
+        unsigned int length) const
 {
     typedef holder_ref_impl< T > parent_impl;
 
@@ -232,6 +250,20 @@ holder sequence_reflective< T >::get_child_value(holder& value,
             value.m_impl.get());
 
     return holder( ::corbasim::core::create_holder(p->t_[idx]));
+}
+
+template< typename T >
+void sequence_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    unsigned int length = get_length(src);
+    set_length(dst, length);
+
+    for (unsigned i = 0; i < length; i++) 
+    {
+        holder child_src = get_child_value(const_cast< holder& >(src), i);
+        holder child_dst = get_child_value(dst, i);
+        m_slice.copy(child_src, child_dst);
+    }
 }
 
 // Struct reflective
@@ -319,6 +351,17 @@ reflective_type struct_reflective< T >::get_type() const
     return TYPE_STRUCT;
 }
 
+template< typename T >
+void struct_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    for (unsigned i = 0; i < members_count; i++) 
+    {
+        holder child_src = get_child_value(const_cast< holder& >(src), i);
+        holder child_dst = get_child_value(dst, i);
+        get_child(i)->copy(src, dst);
+    }
+}
+
 // Dynamic information
 template< typename T >
 holder struct_reflective< T >::create_holder() const
@@ -400,6 +443,12 @@ holder enum_reflective< T >::create_holder() const
     return new holder_ref_impl< T >();
 }
 
+template< typename T >
+void enum_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
+}
+
 // Object reflective
 template< typename T >
 objrefvar_reflective< T >::objrefvar_reflective(
@@ -419,6 +468,12 @@ template< typename T >
 holder objrefvar_reflective< T >::create_holder() const
 {
     return new holder_ref_impl< T >();
+}
+
+template< typename T >
+void objrefvar_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
 }
 
 // Unsupported type

@@ -361,6 +361,7 @@ QStandardItem* LogModel::append(const QString& id,
         core::holder hold = op->get_holder(req);
 
         QStandardItem * item = createRecursive(op, hold);
+        item->setText(op->get_name());
 
         // process response
         if (resp && resp->get_type() == event::RESPONSE)

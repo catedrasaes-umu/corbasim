@@ -49,6 +49,11 @@ holder bool_reflective< T >::create_holder() const
     return new holder_ref_impl< T >();
 }
 
+template< typename T >
+void bool_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
+}
 
 // Primitive
 
@@ -143,6 +148,11 @@ reflective_type primitive_reflective< CORBA::LongLong >::get_type() const
     return TYPE_LONGLONG;
 }
 
+template< typename T >
+void primitive_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
+}
 
 } // namespace detail
 } // namespace core

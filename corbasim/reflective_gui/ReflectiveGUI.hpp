@@ -147,14 +147,15 @@ protected slots:
 
 protected:
 
-    typedef std::vector< QWidget* > widgets_t;
-    
+    int m_old_idx;
+
     QSpinBox * m_sbLength;
     QSpinBox * m_sbCurrentIndex;
 
-    QStackedWidget * m_stack;
+    ReflectiveWidgetBase * m_slice;
+    QWidget * m_slice_widget;
 
-    widgets_t m_widgets;
+    core::holder m_holder;
 };
 
 class ArrayWidget : public QWidget, public ReflectiveWidgetBase
