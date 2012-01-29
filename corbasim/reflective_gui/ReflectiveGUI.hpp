@@ -158,6 +158,7 @@ protected:
     core::holder m_holder;
 };
 
+#if 0
 class ArrayWidget : public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -182,6 +183,7 @@ protected:
 
     core::holder m_holder;
 };
+#endif
 
 class OperationInputForm : public QWidget
 {

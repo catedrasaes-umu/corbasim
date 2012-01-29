@@ -60,7 +60,6 @@ QWidget * createWidget(corbasim::core::reflective_base const * reflective,
             break;
 
         case TYPE_ARRAY:
-            return new ArrayWidget(reflective, parent);
         case TYPE_SEQUENCE:
             return new SequenceWidget(reflective, parent);
 
@@ -472,17 +471,21 @@ void StructWidget::fromHolder(core::holder& holder)
 
 SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
         QWidget * parent) :
-    QWidget(parent), ReflectiveWidgetBase(reflective), m_old_idx(-1)
+    QWidget(parent), ReflectiveWidgetBase(reflective), m_old_idx(-1),
+    m_sbLength(NULL), m_sbCurrentIndex(NULL)
 {
     QVBoxLayout * layout = new QVBoxLayout;
  
     QHBoxLayout * headerLayout = new QHBoxLayout;
-    m_sbLength = new QSpinBox;
-    m_sbCurrentIndex = new QSpinBox;
 
-    headerLayout->addWidget(new QLabel("Length"));
-    headerLayout->addWidget(m_sbLength);
+    if (reflective->is_variable_length())
+    {
+        m_sbLength = new QSpinBox();
+        headerLayout->addWidget(new QLabel("Length"));
+        headerLayout->addWidget(m_sbLength);
+    }
 
+    m_sbCurrentIndex = new QSpinBox();
     headerLayout->addWidget(new QLabel("Index"));
     headerLayout->addWidget(m_sbCurrentIndex);
 
@@ -491,7 +494,6 @@ SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
     m_holder = reflective->create_holder();
 
     m_slice_widget = createWidget(reflective->get_slice(), this);
-    m_slice_widget->hide();
     
     layout->addWidget(m_slice_widget);
 
@@ -499,14 +501,25 @@ SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
 
     setLayout(layout);
 
-    QObject::connect(m_sbLength, SIGNAL(valueChanged(int)),
-            this, SLOT(lengthChanged(int)));
+    if (reflective->is_variable_length())
+    {
+        m_slice_widget->hide();
+
+        QObject::connect(m_sbLength, SIGNAL(valueChanged(int)),
+                this, SLOT(lengthChanged(int)));
+
+        // TODO maximo razonable
+        m_sbLength->setRange(0, 9999999);
+        m_sbLength->setValue(0);
+    }
+    else
+    {
+        m_sbCurrentIndex->setRange(0, m_reflective->get_length(m_holder) - 1);
+        indexChanged(0);
+    }
+
     QObject::connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
             this, SLOT(indexChanged(int)));
-
-    // TODO maximo razonable
-    m_sbLength->setRange(0, 9999999);
-    m_sbLength->setValue(0);
 }
 
 SequenceWidget::~SequenceWidget()
@@ -528,17 +541,27 @@ void SequenceWidget::toHolder(core::holder& holder)
 
 void SequenceWidget::fromHolder(core::holder& holder)
 {
-    // Invalidates current value
-    m_old_idx = -1;
-
     m_reflective->copy(holder, m_holder);
 
-    // show current value
-    m_sbLength->setValue(m_reflective->get_length(m_holder));
+    if (m_reflective->is_variable_length())
+    {
+        // Invalidates current value
+        m_old_idx = -1;
+
+        // show current value
+        m_sbLength->setValue(m_reflective->get_length(m_holder));
+    }
+    else if (m_old_idx > -1)
+    {
+        indexChanged(m_old_idx);
+    }
 }
 
 void SequenceWidget::lengthChanged(int len)
 {
+    if (!m_reflective->is_variable_length())
+        return;
+
     if (len == 0)
     {
         m_slice_widget->hide();
@@ -570,7 +593,7 @@ void SequenceWidget::indexChanged(int idx)
     core::holder child_value = m_reflective->get_child_value(m_holder, idx);
     m_slice->fromHolder(child_value);
 }
-
+#if 0
 ArrayWidget::ArrayWidget(core::reflective_base const * reflective,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective)
@@ -626,6 +649,7 @@ void ArrayWidget::indexChanged(int idx)
     core::holder child_value = m_reflective->get_child_value(m_holder, idx);
     m_slice->fromHolder(child_value);
 }
+#endif
 
 OperationInputForm::OperationInputForm(
         core::operation_reflective_base const * reflective,
