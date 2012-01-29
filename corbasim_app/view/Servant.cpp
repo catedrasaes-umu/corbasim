@@ -64,9 +64,8 @@ void Servant::showSelfStimulator()
 {
     if (!m_sub_script)
     {
-        m_script = new qt::SimpleScriptEditor;
-#warning TODO
-        // m_script->initialize(m_factory);
+        m_script = new reflective_gui::SimpleScriptEditor();
+        m_script->initialize(m_factory);
 
         m_sub_script = new QMdiSubWindow;
         m_sub_script->setWidget(m_script);

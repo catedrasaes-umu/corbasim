@@ -24,7 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/reflective_gui/RequestDialog.hpp>
-#include <corbasim/qt/SimpleScriptEditor.hpp>
+#include <corbasim/reflective_gui/SimpleScriptEditor.hpp>
 #include "CreateDialog.hpp"
 
 namespace corbasim 
@@ -95,7 +95,7 @@ protected:
     QMdiSubWindow * m_sub_script;
     QMdiSubWindow * m_sub_reference;
 
-    qt::SimpleScriptEditor * m_script;
+    reflective_gui::SimpleScriptEditor * m_script;
     ReferenceValidatedWidget * m_reference;
 
     QMenu * m_menu;
