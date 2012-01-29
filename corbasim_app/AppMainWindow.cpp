@@ -166,9 +166,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     QMenu * winMenu = menu->addMenu("&Window");
     winMenu->addAction("&Show log", m_dock_log, SLOT(show()));
-#if 0
-    winMenu->addAction("&Clear log", m_log, SLOT(clear()));
-#endif
+    winMenu->addAction("&Clear log", this, SLOT(clearLog()));
     winMenu->addSeparator();
     winMenu->addAction("Show &application log", 
             m_dock_app_log, SLOT(show()));
@@ -201,6 +199,11 @@ AppMainWindow::~AppMainWindow()
     delete m_sub_create_objref;
     delete m_sub_create_servant;
     delete m_sub_script;
+}
+
+void AppMainWindow::clearLog()
+{
+    emit doClearLog();
 }
 
 void AppMainWindow::setController(AppController * controller)
@@ -276,6 +279,9 @@ void AppMainWindow::setLogModel(QAbstractItemModel * model)
 {
     m_log->setModel(model);
     m_log->setColumnWidth(0, 500);
+
+    QObject::connect(this, SIGNAL(doClearLog()),
+            model, SLOT(clearLog()));
 }
 
 void AppMainWindow::showPlotTool()

@@ -44,6 +44,8 @@ public:
 
 public slots:
 
+    void clearLog();
+
     int maxEntries() const;
     void setMaxEntries(int max);
 

@@ -75,6 +75,7 @@ public slots:
     void showScript();
 
     void clearConfig();
+    void clearLog();
 
     // Notificaciones del controlador
 
@@ -107,6 +108,8 @@ signals:
     void loadDirectory(QString);
     
     void loadScriptFile(QString);
+
+    void doClearLog();
 
 protected:
     AppController * m_controller;

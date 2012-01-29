@@ -69,6 +69,12 @@ QVariant LogModel::data(const QModelIndex& index, int role) const
     return QColor(Qt::yellow);
 }
 
+void LogModel::clearLog()
+{
+    clear();
+    m_entries.clear();
+}
+
 int LogModel::maxEntries() const
 {
     return m_maxEntries;
