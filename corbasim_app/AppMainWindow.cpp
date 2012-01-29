@@ -303,6 +303,28 @@ void AppMainWindow::showPlotTool()
         m_plot_tool = create(NULL);
         m_plot_tool->setWindowTitle("corbasim plotting tool");
         m_plot_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
+
+
+        QObject::connect(this, 
+                SIGNAL(doProcessIncomingRequest(QString, corbasim::event::request_ptr)), 
+                m_plot_tool,
+                SLOT(processRequest(const QString&, corbasim::event::request_ptr)));
+
+        QObject::connect(
+                m_controller,
+                SIGNAL(servantCreated(
+                        QString, 
+                        const corbasim::core::interface_reflective_base *)),
+                m_plot_tool,
+                SLOT(registerInstance(
+                        const QString&, 
+                        const corbasim::core::interface_reflective_base *)));
+        QObject::connect(
+                m_controller,
+                SIGNAL(servantDeleted(QString)),
+                m_plot_tool,
+                SLOT(unregisterInstance(const QString&)));
+
     }
 
     if (m_plot_tool)
@@ -522,6 +544,7 @@ void AppMainWindow::requestReceived(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
+    emit doProcessIncomingRequest(id, req);
 }
 
 void AppMainWindow::displayError(const QString& err)

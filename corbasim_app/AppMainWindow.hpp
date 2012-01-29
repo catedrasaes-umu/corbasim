@@ -111,6 +111,9 @@ signals:
 
     void doClearLog();
 
+    void doProcessIncomingRequest(QString,
+            corbasim::event::request_ptr);
+
 protected:
     AppController * m_controller;
     TriggerEngine * m_engine;

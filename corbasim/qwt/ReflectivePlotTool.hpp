@@ -74,7 +74,7 @@ public:
 public slots:
 
     void registerInstance(const QString& name,
-            core::interface_reflective_base const * reflective);
+            const corbasim::core::interface_reflective_base * reflective);
 
     void unregisterInstance(const QString& name);
 

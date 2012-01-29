@@ -64,11 +64,14 @@ void insertRecursive(QStandardItem * parent,
         corbasim::core::reflective_base const * child =
             reflective->get_child(i);
 
+        const corbasim::core::reflective_type type = child->get_type();
+
         QStandardItem * childItem = 
             new QStandardItem(reflective->get_child_name(i));
         childItem->setEditable(false);
 
-        insertRecursive(childItem, child);
+        if (type == corbasim::core::TYPE_STRUCT || child->is_repeated())
+            insertRecursive(childItem, child);
 
         if (child->is_primitive() || 
                 (child->is_repeated() && child->get_slice()->is_primitive()))
