@@ -21,6 +21,7 @@
 #include <cassert>
 #include <limits>
 #include <corbasim/core/reflective.hpp>
+#include <corbasim/qt/MultiFileSelectionWidget.hpp>
 
 using namespace corbasim::reflective_gui;
 
@@ -483,11 +484,13 @@ SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
         m_sbLength = new QSpinBox();
         headerLayout->addWidget(new QLabel("Length"));
         headerLayout->addWidget(m_sbLength);
+        m_sbLength->setObjectName("length");
     }
 
     m_sbCurrentIndex = new QSpinBox();
     headerLayout->addWidget(new QLabel("Index"));
     headerLayout->addWidget(m_sbCurrentIndex);
+    m_sbCurrentIndex->setObjectName("index");
 
     layout->addLayout(headerLayout);
 
@@ -498,6 +501,28 @@ SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
     layout->addWidget(m_slice_widget);
 
     m_slice = dynamic_cast< ReflectiveWidgetBase * >(m_slice_widget);
+
+    // Spacer
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Expanding);
+    layout->addItem(spacer);
+
+    // TODO
+    if (false && reflective->get_slice()->is_primitive())
+    {
+        QWidget * valueWidget = new QWidget();
+        valueWidget->setLayout(layout);
+
+        layout = new QVBoxLayout();
+
+        QTabWidget * tab = new QTabWidget();
+        tab->addTab(valueWidget, "Value");
+
+        QWidget * fileWidget = new qt::MultiFileSelectionWidget();
+        tab->addTab(fileWidget, "File");
+
+        layout->addWidget(tab);
+    }
 
     setLayout(layout);
 

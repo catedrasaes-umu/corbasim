@@ -34,7 +34,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-#ifdef CORBASIM_USE_QTSCRIPT_NOT_YET
+#ifdef CORBASIM_USE_QTSCRIPT
 #include <corbasim/qt/private/ScriptEditor.hpp>
 #endif
 
@@ -116,14 +116,14 @@ RequestDialog::RequestDialog(
             this, SLOT(sendClicked())); 
     btnsLayout->addWidget(btn);
 
-#ifdef CORBASIM_USE_QTSCRIPT_NOT_YET
+#ifdef CORBASIM_USE_QTSCRIPT
     // Reload script button
     btn = new QPushButton("&Reload script");
     btn->setObjectName("reloadButton");
     QObject::connect(btn, SIGNAL(clicked()), 
             this, SLOT(reloadScript())); 
     btnsLayout->addWidget(btn);
-#endif /* CORBASIM_USE_QTSCRIPT_NOT_YET*/
+#endif /* CORBASIM_USE_QTSCRIPT*/
 
     // Close button
     btn = new QPushButton("&Close");
@@ -132,7 +132,7 @@ RequestDialog::RequestDialog(
             this, SLOT(hide())); 
     btnsLayout->addWidget(btn);
 
-#ifdef CORBASIM_USE_QTSCRIPT_NOT_YET
+#ifdef CORBASIM_USE_QTSCRIPT
     QVBoxLayout * mainLayout = new QVBoxLayout;
     m_tabs = new QTabWidget;
     QWidget * w = new QWidget;
@@ -154,13 +154,13 @@ RequestDialog::RequestDialog(
 
     setLayout(layout);
 
-#ifdef CORBASIM_USE_QTSCRIPT_NOT_YET
+#ifdef CORBASIM_USE_QTSCRIPT
 
     m_thisObject = m_engine.newQObject(this);
 
     reloadScript();
 
-#endif /* CORBASIM_USE_QTSCRIPT_NOT_YET*/
+#endif /* CORBASIM_USE_QTSCRIPT*/
 
 }
 
@@ -173,21 +173,9 @@ void RequestDialog::stopTimer()
     m_pbStartStop->setChecked(false);
 }
 
-#ifdef CORBASIM_USE_QTSCRIPT_NOT_YET
+#ifdef CORBASIM_USE_QTSCRIPT
 void RequestDialog::reloadScript()
 {
-    /*
-    QFile file(QString(m_dlg->get_name())+ ".js");
-
-    if (!file.exists() || 
-            !file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        std::cerr << "Could not open program file!" << std::endl;
-        return;
-    }
-
-    QString strProgram = file.readAll();
-    */
     const QString strProgram (m_code->toPlainText());
     if (!m_engine.canEvaluate(strProgram))
     {
@@ -195,7 +183,8 @@ void RequestDialog::reloadScript()
         return;
     }
 
-    m_engine.evaluate(strProgram, QString(m_dlg->get_name())+ ".js");
+    m_engine.evaluate(strProgram, QString(
+                m_dlg->getReflective()->get_name())+ ".js");
 
     if (m_engine.hasUncaughtException())
     {
@@ -211,62 +200,30 @@ void RequestDialog::reloadScript()
     m_preFunc = m_engine.evaluate("pre");
     m_postFunc = m_engine.evaluate("post");
     
-    m_engine.evaluate(
-            "function to_json() { return JSON.stringify(this); }");
-    m_jsonFunc = m_engine.evaluate("to_json");
-
     if (m_initFunc.isFunction())
         m_initFunc.call(m_thisObject);
 
 }
-#endif /* CORBASIM_USE_QTSCRIPT_NOT_YET*/
+#endif /* CORBASIM_USE_QTSCRIPT*/
 
 void RequestDialog::sendClicked()
 {
 
-#ifdef CORBASIM_USE_QTSCRIPT_NOT_YET
+#ifdef CORBASIM_USE_QTSCRIPT
     if (m_preFunc.isFunction())
     {
-        // Convierte el contenido del diálogo a JSON
-        std::string str;
-        m_dlg->to_json(str);
-
-        // Evalua la cadena y la asigna como propiedad
-        QScriptValue json_value = m_engine.evaluate(
-                QString('(') + str.c_str() + ')');
-        m_thisObject.setProperty("request", json_value);
-
         m_preFunc.call(m_thisObject);
-
-        // property -> JSON
-        QScriptValue val = m_jsonFunc.call(json_value);
-
-        // JSON -> dialog
-        str = val.toString().toStdString();
-        m_dlg->from_json(str);
     }
-#endif /* CORBASIM_USE_QTSCRIPT_NOT_YET*/
+#endif /* CORBASIM_USE_QTSCRIPT*/
 
     emit sendRequest(m_dlg->createRequest());
 
-#ifdef CORBASIM_USE_QTSCRIPT_NOT_YET
+#ifdef CORBASIM_USE_QTSCRIPT
     if (m_postFunc.isFunction())
     {
         m_postFunc.call(m_thisObject);
-
-        // property -> JSON
-        QScriptValue json_value = m_thisObject.property("request");
-
-        if (json_value.isObject())
-        {
-            QScriptValue val = m_jsonFunc.call(json_value);
-
-            // JSON -> dialog
-            const std::string str = val.toString().toStdString();
-            m_dlg->from_json(str);
-        }
     }
-#endif /* CORBASIM_USE_QTSCRIPT_NOT_YET*/
+#endif /* CORBASIM_USE_QTSCRIPT*/
 }
 
 void RequestDialog::startStopChecked(bool chk)
