@@ -57,6 +57,7 @@ QWidget * createWidget(corbasim::core::reflective_base const * reflective,
             return new StringWidget(reflective, parent);
 
         case TYPE_OBJREF:
+            return new ObjrefvarWidget(reflective, parent);
         case TYPE_UNION:
             break;
 
@@ -675,6 +676,27 @@ void ArrayWidget::indexChanged(int idx)
     m_slice->fromHolder(child_value);
 }
 #endif
+
+ObjrefvarWidget::ObjrefvarWidget(core::reflective_base const * reflective,
+        QWidget * parent) :
+    qt::ObjrefWidget(0, parent), ReflectiveWidgetBase(reflective)
+{
+    // TODO set validator
+}
+
+ObjrefvarWidget::~ObjrefvarWidget()
+{
+}
+
+void ObjrefvarWidget::toHolder(core::holder& holder) 
+{
+    // TODO
+}
+
+void ObjrefvarWidget::fromHolder(core::holder& holder)
+{
+    // TODO
+}
 
 OperationInputForm::OperationInputForm(
         core::operation_reflective_base const * reflective,

@@ -22,6 +22,7 @@
 
 #include <QtGui>
 #include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/qt/ObjrefWidget.hpp>
 
 namespace corbasim 
 {
@@ -184,6 +185,18 @@ protected:
     core::holder m_holder;
 };
 #endif
+
+class ObjrefvarWidget : public qt::ObjrefWidget, public ReflectiveWidgetBase
+{
+    Q_OBJECT
+public:
+    ObjrefvarWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~ObjrefvarWidget();
+ 
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+};
 
 class OperationInputForm : public QWidget
 {
