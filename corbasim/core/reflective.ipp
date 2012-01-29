@@ -16,8 +16,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "reflective.hpp"
+#ifndef CORBASIM_CORE_REFLECTIVE_IPP
+#define CORBASIM_CORE_REFLECTIVE_IPP
 
 namespace corbasim 
 {
@@ -454,7 +454,7 @@ template< typename T >
 objrefvar_reflective< T >::objrefvar_reflective(
         reflective_base const * parent,
         unsigned int idx) :
-    reflective_base(parent, idx)
+    objrefvar_reflective_base(parent, idx)
 {
 }
 
@@ -474,6 +474,66 @@ template< typename T >
 void objrefvar_reflective< T >::copy(holder const& src, holder& dst) const
 {
     dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
+}
+
+template< typename T >
+CORBA::Object_ptr objrefvar_reflective< T >::to_object(holder const& h) const
+{
+    typedef typename T::_obj_type iface_t;
+
+    return iface_t::_duplicate(const_cast< holder& >(h).to_value< T >());
+}
+
+template< typename T >
+void objrefvar_reflective< T >::from_object(holder& h, 
+        CORBA::Object_ptr obj) const
+{
+    typedef typename T::_obj_type iface_t;
+    
+    h.to_value< T >() = iface_t::_narrow(obj);;
+}
+
+template< >
+CORBA::Object_ptr 
+objrefvar_reflective< CORBA::Object_var >::to_object(holder const& h) const
+{
+    return CORBA::Object::_duplicate(
+            const_cast< holder& >(h).to_value< CORBA::Object_var >());
+}
+
+template< >
+void objrefvar_reflective< CORBA::Object_var >::from_object(holder& h, 
+        CORBA::Object_ptr obj) const
+{
+    h.to_value< CORBA::Object_var >() = CORBA::Object::_duplicate(obj);;
+}
+
+
+#if 0
+template< typename T >
+interface_reflective_base const * 
+objrefvar_reflective< T >::get_interface() const
+{
+    typedef interface_reflective< typename T::_obj_type > iface_t;
+
+    return iface_t::get_instance();
+}
+#endif
+
+template< typename T >
+reference_validator_base * 
+objrefvar_reflective< T >::create_validator() const
+{
+    typedef typename T::_obj_type iface_t;
+    
+    return new reference_validator_impl< iface_t >();
+}
+
+template< >
+reference_validator_base * 
+objrefvar_reflective< CORBA::Object_var >::create_validator() const
+{
+    return new reference_validator_impl< CORBA::Object >();
 }
 
 // Unsupported type
@@ -666,4 +726,4 @@ interface_reflective< Interface >::get_instance()
 
 } // namespace core
 } // namespace corbasim
-
+#endif /* CORBASIM_CORE_REFLECTIVE_IPP */

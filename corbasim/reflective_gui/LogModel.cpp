@@ -21,6 +21,8 @@
 #include <QStyle>
 #include <QApplication>
 #include <QDateTime>
+
+#define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 
 using namespace corbasim::reflective_gui;

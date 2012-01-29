@@ -39,6 +39,8 @@ template class primitive_reflective< CORBA::ULongLong >;
 template class primitive_reflective< CORBA::Float >;
 template class primitive_reflective< CORBA::Double >;
 
+template class objrefvar_reflective< CORBA::Object_var >;
+
 } // namespace detail
 } // namespace core
 } // namespace corbasim
@@ -227,6 +229,13 @@ operation_reflective_base::~operation_reflective_base()
 }
 
 objrefvar_reflective_base::~objrefvar_reflective_base()
+{
+}
+
+objrefvar_reflective_base::objrefvar_reflective_base(
+        reflective_base const * parent, 
+            unsigned int child_index) :
+    reflective_base(parent, child_index)
 {
 }
 

@@ -221,7 +221,7 @@ struct enum_reflective : public reflective_base
 };
 
 template< typename T >
-struct objrefvar_reflective : public reflective_base
+struct objrefvar_reflective : public objrefvar_reflective_base
 {
     objrefvar_reflective(reflective_base const * parent = NULL,
             unsigned int idx = 0);
@@ -231,6 +231,15 @@ struct objrefvar_reflective : public reflective_base
     holder create_holder() const;
     
     void copy(holder const& src, holder& dst) const;
+    
+    // objrefvar_reflective_base
+    CORBA::Object_ptr to_object(holder const& h) const;
+
+    void from_object(holder& h, CORBA::Object_ptr obj) const;
+
+    // interface_reflective_base const * get_interface() const;
+
+    reference_validator_base * create_validator() const;
 };
 
 template< typename T >
@@ -352,7 +361,9 @@ struct interface_reflective : public interface_reflective_base
 } // namespace core
 } // namespace corbasim
 
+#ifndef CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.ipp>
+#endif
 
 #endif /* CORBASIM_CORE_REFLECTIVE_HPP */
 

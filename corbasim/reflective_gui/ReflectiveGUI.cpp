@@ -20,6 +20,7 @@
 #include "ReflectiveGUI.hpp"
 #include <cassert>
 #include <limits>
+#define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 
@@ -681,21 +682,36 @@ ObjrefvarWidget::ObjrefvarWidget(core::reflective_base const * reflective,
         QWidget * parent) :
     qt::ObjrefWidget(0, parent), ReflectiveWidgetBase(reflective)
 {
-    // TODO set validator
+    // set validator
+    core::objrefvar_reflective_base const * ref = 
+        static_cast< core::objrefvar_reflective_base const * >(m_reflective);
+
+    setValidator(ref->create_validator());
 }
 
 ObjrefvarWidget::~ObjrefvarWidget()
 {
+    delete m_validator;
 }
 
 void ObjrefvarWidget::toHolder(core::holder& holder) 
 {
-    // TODO
+    core::objrefvar_reflective_base const * ref = 
+        static_cast< core::objrefvar_reflective_base const * >(m_reflective);
+
+    ref->from_object(holder, m_validator->get_reference());
 }
 
 void ObjrefvarWidget::fromHolder(core::holder& holder)
 {
-    // TODO
+    core::objrefvar_reflective_base const * ref = 
+        static_cast< core::objrefvar_reflective_base const * >(m_reflective);
+
+    CORBA::Object_var obj = ref->to_object(holder);
+
+    m_validator->set_reference(obj);
+
+    validatorHasChanged();
 }
 
 OperationInputForm::OperationInputForm(

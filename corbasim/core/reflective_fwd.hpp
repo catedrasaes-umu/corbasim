@@ -158,9 +158,14 @@ struct objrefvar_reflective_base : public reflective_base
     virtual CORBA::Object_ptr to_object(holder const& h) const = 0;
     virtual void from_object(holder& h, CORBA::Object_ptr obj) const = 0;
 
-    virtual interface_reflective_base const * get_interface() const = 0;
+    // virtual interface_reflective_base const * get_interface() const = 0;
+    virtual reference_validator_base * create_validator() const = 0;
     
     virtual ~objrefvar_reflective_base();
+
+protected:
+    objrefvar_reflective_base(reflective_base const * parent = NULL, 
+            unsigned int child_index = 0);
 };
 
 typedef boost::shared_ptr< reflective_base > reflective_ptr;
