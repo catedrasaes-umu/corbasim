@@ -24,6 +24,19 @@ namespace corbasim
 {
 namespace core 
 {
+
+template CORBA::Boolean& holder::to_value< CORBA::Boolean >();
+template CORBA::Short& holder::to_value< CORBA::Short >();
+template CORBA::UShort& holder::to_value< CORBA::UShort >();
+template CORBA::Char& holder::to_value< CORBA::Char >();
+template CORBA::Octet& holder::to_value< CORBA::Octet >();
+template CORBA::Long& holder::to_value< CORBA::Long >();
+template CORBA::ULong& holder::to_value< CORBA::ULong >();
+template CORBA::LongLong& holder::to_value< CORBA::LongLong >();
+template CORBA::ULongLong& holder::to_value< CORBA::ULongLong >();
+template CORBA::Float& holder::to_value< CORBA::Float >();
+template CORBA::Double& holder::to_value< CORBA::Double >();
+
 namespace detail 
 {
 

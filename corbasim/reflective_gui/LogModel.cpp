@@ -178,9 +178,9 @@ QVariant toQVariant(
         case TYPE_ULONG:
             return QVariant(hold.to_value< uint32_t >());
         case TYPE_LONGLONG:
-            return QVariant(hold.to_value< int64_t >());
+            return QVariant((qint64) hold.to_value< int64_t >());
         case TYPE_ULONGLONG:
-            return QVariant(hold.to_value< uint64_t >());
+            return QVariant((quint64) hold.to_value< uint64_t >());
 
         case TYPE_STRING:
         case TYPE_WSTRING:
