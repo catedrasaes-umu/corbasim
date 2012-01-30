@@ -99,6 +99,12 @@ struct is_string< orbimpl::String_Manager > :
 };
 
 template< >
+struct is_string< orbimpl::string_for_seq > : 
+    public true_
+{
+};
+
+template< >
 struct is_string< CORBA::String_var > : 
     public true_
 {

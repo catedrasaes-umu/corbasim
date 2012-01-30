@@ -163,7 +163,9 @@ reflective_type string_reflective< T >::get_type() const
 template< typename T >
 holder string_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    // Note: you can not use this method for slice member 
+    // of a sequence.
+    return new holder_ref_impl< orbimpl::String_Manager >();
 }
 
 template< typename T >
