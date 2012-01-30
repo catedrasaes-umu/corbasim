@@ -25,6 +25,7 @@
 #include "TriggerEngine.hpp"
 #include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
+#include "NSBrowser.hpp"
 #include <corbasim/reflective_gui/LogModel.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
@@ -58,7 +59,7 @@ int main(int argc, char **argv)
     QThread threadEngine;
     QThread threadWatcher;
     QThread threadDumper;
-    QThread threadLogModel;
+    // QThread threadLogModel;
 
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
@@ -112,7 +113,7 @@ int main(int argc, char **argv)
     // Executed in dedicated threads
     controller.moveToThread(&threadController);
     // logModel.moveToThread(&threadLogModel);
-    threadLogModel.start();
+    // threadLogModel.start();
 
     if (config->enable_scripting)
     {
@@ -172,6 +173,9 @@ int main(int argc, char **argv)
     QTreeView view;
     view.setModel(&logModel);
     view.show();
+
+    // corbasim::app::NSBrowser bw;
+    // bw.show();
     // fin borrar
 
     boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));
@@ -183,13 +187,13 @@ int main(int argc, char **argv)
     threadEngine.quit();
     threadWatcher.quit();
     threadDumper.quit();
-    threadLogModel.quit();
+    // threadLogModel.quit();
 
     threadController.wait();
     threadEngine.wait();
     threadWatcher.wait();
     threadDumper.wait();
-    threadLogModel.wait();
+    // threadLogModel.wait();
 
     orb->shutdown(1);
     orbThread.join();

@@ -23,6 +23,8 @@ set(corbasim_app_SRCS
 
     model/Objref.cpp
     model/Servant.cpp
+
+    NSBrowser.cpp
     )
 
 set(corbasim_app_MOC_HDRS
@@ -36,6 +38,8 @@ set(corbasim_app_MOC_HDRS
     view/CreateDialog.hpp
     view/Objref.hpp
     view/Servant.hpp
+
+    NSBrowser.hpp
     )
 
 # NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
