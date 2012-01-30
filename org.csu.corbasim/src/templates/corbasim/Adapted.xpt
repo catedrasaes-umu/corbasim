@@ -111,7 +111,11 @@ namespace adapted
 template < >
 struct is_corbaseq< «fqn» > : public cs_mpl::true_
 {
+	«IF getType().isString()-»
+	typedef corbasim::orbimpl::string_for_seq slice_type;
+	«ELSE-»
 	typedef «getType().getMemberCPPType()» slice_type;
+	«ENDIF-»
 };
 
 } // adapted
