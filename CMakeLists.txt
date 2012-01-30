@@ -8,6 +8,9 @@ set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(${PROJECT_NAME}_VERSION
         "${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL}")
 
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE) 
+set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
+
 # Compilación en modo Release por defecto
 if(NOT DEFINED CMAKE_BUILD_TYPE OR "${CMAKE_BUILD_TYPE}" STREQUAL "")
     set(CMAKE_BUILD_TYPE Release)
@@ -84,6 +87,8 @@ endif()
 
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 add_subdirectory(test EXCLUDE_FROM_ALL)
+
+# add_subdirectory(private EXCLUDE_FROM_ALL)
 
 # Opciones de empaquetado
 set(CPACK_GENERATOR "TGZ")
