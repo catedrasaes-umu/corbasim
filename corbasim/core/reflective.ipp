@@ -654,6 +654,13 @@ holder operation_reflective< Value >::get_holder(event::request_ptr req) const
 }
 
 template < typename Value >
+holder operation_reflective< Value >::get_holder(event::response_ptr req) const
+{
+    response_t * r = reinterpret_cast< response_t* >(req.get());
+    return ::corbasim::core::create_holder(r->m_values);
+}
+
+template < typename Value >
 operation_reflective< Value > const * 
 operation_reflective< Value >::get_instance()
 {

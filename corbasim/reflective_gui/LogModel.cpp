@@ -22,6 +22,8 @@
 #include <QApplication>
 #include <QDateTime>
 
+#include <corbasim/core/reference_repository.hpp>
+
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 
@@ -195,6 +197,30 @@ QVariant toQVariant(
                 return QVariant(str.c_str());
             }
         case TYPE_OBJREF:
+            {
+                objrefvar_reflective_base const * objref = 
+                    static_cast< objrefvar_reflective_base const * >(
+                            reflective);
+
+                CORBA::Object_var obj = objref->to_object(hold);
+
+                if (CORBA::is_nil(obj))
+                    return QVariant("NIL");
+                
+                try {
+                    reference_repository * rr =
+                        reference_repository::get_instance();
+
+                    CORBA::String_var str = 
+                        rr->object_to_string(obj);
+
+                    return QVariant(str.in());
+
+                } catch (...) {
+                    return QVariant("NIL");
+                }
+
+            }
             break;
 
         case TYPE_ENUM:
@@ -374,12 +400,14 @@ QStandardItem* LogModel::append(const QString& id,
         // process response
         if (resp && resp->get_type() == event::RESPONSE)
         {
-#warning TODO
-#if 0
-            QStandardItem * itemResp = it->second->create_item(resp.get());
+            event::response_ptr respi =
+                boost::static_pointer_cast< event::response >(resp);
+
+            core::holder respHolder = op->get_holder(respi);
+
+            QStandardItem * itemResp = createRecursive(op, hold);
             itemResp->setText("Response");
             item->appendRow(itemResp);
-#endif
         }
         
         list << item << new QStandardItem(dateTime.toString());

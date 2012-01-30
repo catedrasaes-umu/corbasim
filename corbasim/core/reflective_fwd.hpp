@@ -183,6 +183,7 @@ struct operation_reflective_base :
     virtual event::request_ptr create_request() const = 0;
 
     virtual holder get_holder(event::request_ptr req) const = 0;
+    virtual holder get_holder(event::response_ptr req) const = 0;
 
     virtual direction_type get_parameter_direction(
             unsigned int idx) const = 0;

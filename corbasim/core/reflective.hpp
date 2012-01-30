@@ -303,6 +303,7 @@ struct operation_reflective :
     public detail::struct_reflective< Value >
 {
     typedef event::request_impl< Value > request_t;
+    typedef event::response_impl< Value > response_t;
     typedef detail::struct_reflective< Value > base_t;
 
     std::vector< direction_type > m_param_direction;
@@ -331,6 +332,7 @@ struct operation_reflective :
             unsigned int idx) const;
 
     holder get_holder(event::request_ptr req) const;
+    holder get_holder(event::response_ptr req) const;
 
     static operation_reflective const * get_instance();
 };
