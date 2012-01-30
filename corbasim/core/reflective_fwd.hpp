@@ -97,7 +97,8 @@ enum direction_type
 {
     DIRECTION_IN,
     DIRECTION_OUT,
-    DIRECTION_INOUT
+    DIRECTION_INOUT,
+    DIRECTION_RETURN
 };
 
 struct reflective_base;

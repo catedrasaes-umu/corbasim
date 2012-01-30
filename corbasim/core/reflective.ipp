@@ -358,7 +358,7 @@ void struct_reflective< T >::copy(holder const& src, holder& dst) const
     {
         holder child_src = get_child_value(const_cast< holder& >(src), i);
         holder child_dst = get_child_value(dst, i);
-        get_child(i)->copy(src, dst);
+        get_child(i)->copy(child_src, child_dst);
     }
 }
 
@@ -640,6 +640,9 @@ template < typename Value >
 direction_type operation_reflective< Value >::get_parameter_direction(
         unsigned int idx) const
 {
+    if (idx >= m_param_direction.size())
+        return DIRECTION_RETURN;
+
     return m_param_direction[idx];
 }
 
