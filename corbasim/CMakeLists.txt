@@ -28,3 +28,5 @@ endif()
 #     include(corbasim_http.cmake)
 # endif()
 
+add_subdirectory(cosnaming)
+
