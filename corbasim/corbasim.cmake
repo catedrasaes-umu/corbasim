@@ -81,9 +81,6 @@ set(corbasim_SRCS
 
     core/reflective.cpp
 
-    scripting/request_processor.cpp
-    scripting/interpreter.cpp
-
     event.cpp
 
     # JSON

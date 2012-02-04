@@ -54,13 +54,6 @@ target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_server
 	# Boost
 	boost_program_options)
 	
-# PyStim
-add_executable(${CORBASIM_PREFIX}HelloApp_Hello_pystim HelloApp_Hello_pystim.cpp)
-target_link_libraries(${CORBASIM_PREFIX}HelloApp_Hello_pystim 
-	${CORBASIM_PREFIX}hello_idl
-	# CORBASIM Libraries
-	corbasim corbasim_python corbasim_qt)
-	
 
 
 

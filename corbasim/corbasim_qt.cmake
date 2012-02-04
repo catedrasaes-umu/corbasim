@@ -40,7 +40,6 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/OperationSequence.hpp
     qt/types.hpp
     qt/ReferenceModel.hpp
-    qt/Interpreter.hpp
     qt/Status.hpp
     qt/MultiInputWidget.hpp
     qt/RangedWidget.hpp
@@ -49,8 +48,6 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/MultiFileSelectionWidget.hpp
     qt/TemplatedSpinBox.hpp
     qt/RequestDialog.hpp
-    qt/RequestNotifier.hpp
-    qt/RequestProcessor.hpp
     qt/SimpleScriptEditor.hpp
     qt/ScriptWindow.hpp
     qt/ScriptEditor.hpp
@@ -76,7 +73,6 @@ set(corbasim_qt_MOC_HDRS
     qt/SortableGroup.hpp
     qt/OperationSequence.hpp
     qt/ReferenceModel.hpp
-    qt/Interpreter.hpp
     qt/client/SimpleClient.hpp
     qt/SimpleScriptEditor.hpp
     qt/ScriptWindow.hpp
@@ -86,8 +82,6 @@ set(corbasim_qt_MOC_HDRS
     qt/MultiInputWidget.hpp
     qt/SequenceWidget.hpp
     qt/RequestDialog.hpp
-    qt/RequestNotifier.hpp
-    qt/RequestProcessor.hpp
     qt/RangedWidget.hpp
     qt/LogWidget.hpp
     qt/LogTreeWidget.hpp
@@ -111,7 +105,6 @@ set(corbasim_qt_SRCS
     qt/SortableGroup.cpp
     qt/OperationSequence.cpp
     qt/ReferenceModel.cpp
-    qt/Interpreter.cpp
     qt/initialize.cpp
     qt/client/SimpleClient.cpp
     qt/SimpleScriptEditor.cpp
@@ -122,7 +115,6 @@ set(corbasim_qt_SRCS
     qt/LogTreeWidget.cpp
     qt/MultiFileSelectionWidget.cpp
     qt/MultiInputWidget.cpp
-    qt/RequestProcessor.cpp
     qt/SequenceWidget.cpp
     qt/RequestDialog.cpp
     qt/Status.cpp)
