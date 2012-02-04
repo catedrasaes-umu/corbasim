@@ -72,7 +72,6 @@ set(corbasim_LIBS
 set(corbasim_SRCS
     core/archives.cpp
     core/core.cpp
-    core/event_notifier.cpp
     core/factory.cpp
     core/ns_register.cpp
     core/reference_repository.cpp
