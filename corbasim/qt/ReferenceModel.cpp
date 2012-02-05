@@ -19,7 +19,7 @@
 
 #include "ReferenceModel.hpp"
 #include <corbasim/qt/types.hpp>
-#include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <memory>
 
 using namespace corbasim::qt;
@@ -109,7 +109,7 @@ int ReferenceModel::rowCount(const QModelIndex &parent) const
 
 void ReferenceModel::appendItem(const QString& id, 
         const CORBA::Object_var& ref,
-        corbasim::gui::gui_factory_base const * factory)
+        corbasim::core::interface_reflective_base const * factory)
 {
     int idx;
     if ((idx = m_ids.indexOf(id)) == -1)

@@ -146,8 +146,7 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
         model::Objref_ptr obj(new model::Objref(cfg, factory));
         m_objrefs.insert(std::make_pair(id, obj));
 
-#warning TODO
-        // m_ref_model.appendItem(id, cfg.ref, factory);
+        m_ref_model.appendItem(id, cfg.ref, factory);
 
         if (m_controller)
         {
@@ -195,8 +194,7 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 
         // End temporal
 
-#warning TODO
-        // m_ref_model.appendItem(id, objSrv, factory);
+        m_ref_model.appendItem(id, objSrv, factory);
 
         if (m_controller)
             m_controller->notifyServantCreated(id, factory);

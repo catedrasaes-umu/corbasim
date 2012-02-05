@@ -28,10 +28,10 @@ namespace corbasim
 {
 
 // fwd
-namespace gui 
+namespace core 
 {
-struct gui_factory_base;
-} // namespace gui
+struct interface_reflective_base;
+} // namespace core
 
 namespace qt
 {
@@ -55,7 +55,7 @@ public:
 
     void appendItem(const QString& id, 
             const CORBA::Object_var& ref,
-            gui::gui_factory_base const * factory);
+            core::interface_reflective_base const * factory);
     void removeItem(const QString& id);
 
     static ReferenceModel * getDefaultModel();
@@ -64,7 +64,7 @@ protected:
 
     QList< QString > m_ids;
     QList< CORBA::Object_var > m_refs;
-    QList< gui::gui_factory_base const * > m_factories;
+    QList< core::interface_reflective_base const * > m_factories;
 };
 
 } // qt
