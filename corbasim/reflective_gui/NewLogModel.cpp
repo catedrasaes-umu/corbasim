@@ -27,6 +27,8 @@
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 
+#include <iostream>
+
 using namespace corbasim::reflective_gui;
 
 extern QVariant toQVariant(
@@ -49,6 +51,21 @@ int NewLogModel::columnCount(const QModelIndex &/*parent*/) const
     return 2;
 }
 
+QString getNodeName(Node const * node)
+{
+    if (node->parent && node->parent->reflective->is_repeated())
+    {
+        return QString("[%1]").arg(node->index);
+    }
+    else if (node->parent && node->parent->reflective->get_type() ==
+            corbasim::core::TYPE_STRUCT)
+    {
+        return node->parent->reflective->get_child_name(node->index);
+    }
+
+    return "Error!";
+}
+
 QVariant NewLogModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
@@ -65,23 +82,47 @@ QVariant NewLogModel::data(const QModelIndex& index, int role) const
 
         const LogEntry& entry = m_entries.at(parent.row());
 
-        // Excepciones
-        if (entry.resp && (entry.resp->get_type() == event::EXCEPTION || 
-                entry.resp->get_type() == event::MESSAGE))
-            return QColor(Qt::red);
-
-        if (entry.is_in_entry)
-            return QColor(Qt::green);
-
-        return QColor(Qt::yellow);
+        return entry.color;
     }
     else if (role == Qt::DisplayRole)
     {
-        // TODO
-        return QVariant(QString("tmp"));
+        Node * node = static_cast< Node * >(index.internalPointer());
+        node->check_for_initialized();
+
+        // First level item
+        if (!index.parent().isValid())
+        {
+            // Value
+            if (index.column())
+                return m_entries[index.row()].dateTime;
+
+            return m_entries[index.row()].text;
+        }
+        else
+        {
+            // Value
+            if (index.column())
+                return toQVariant(node->reflective, node->holder);
+
+            // Name
+            return getNodeName(node);
+        }
+    }
+    else if (!index.parent().isValid() && index.column() == 0
+            && role == Qt::DecorationRole)
+    {
+        const LogEntry& entry = m_entries.at(index.row());
+        return *(entry.icon);
     }
 
     return QVariant();
+}
+
+bool NewLogModel::setData(const QModelIndex & index, 
+        const QVariant& value, int role)
+{
+    // TODO
+    return false;
 }
 
 Qt::ItemFlags NewLogModel::flags(const QModelIndex &index) const
@@ -89,11 +130,17 @@ Qt::ItemFlags NewLogModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
+    // Value is editable by default
+    if (index.column())
+        return Qt::ItemIsEnabled 
+            | Qt::ItemIsSelectable 
+            | Qt::ItemIsEditable;
+
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QVariant NewLogModel::headerData(int section, Qt::Orientation orientation,
-                           int role) const
+QVariant NewLogModel::headerData(int section, 
+        Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
@@ -111,18 +158,24 @@ QVariant NewLogModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-QModelIndex NewLogModel::index(int row, int column, const QModelIndex &parent)
-            const
+QModelIndex NewLogModel::index(int row, int column, 
+        const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
         return QModelIndex();
+
+    if (!parent.isValid())
+    {
+        return createIndex(row, column, (void *) m_nodes[row].get());
+    }
 
     Node * node = static_cast< Node * >(parent.internalPointer());
     node->check_for_initialized();
 
     if (row < node->children.size())
     {
-        return createIndex(row, column, (void *) node->children[row].get());
+        return createIndex(row, column, 
+                (void *) node->children[row].get());
     }
 
     return QModelIndex();
@@ -191,7 +244,7 @@ void NewLogModel::inputRequest(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-     append(id, req, resp, true);
+    append(id, req, resp, true);
 }
 
 void NewLogModel::outputRequest(const QString& id, 
@@ -218,6 +271,8 @@ void NewLogModel::append(const QString& id,
 
         if (!op)
             return;
+
+        entry.reflective = op;
 
         // Deja espacio
         int nRowsToBeRemoved = m_entries.size() - m_maxEntries + 1;
@@ -246,8 +301,42 @@ void NewLogModel::append(const QString& id,
         entry.id = id;
         entry.req = req;
         entry.resp = resp;
+
+        if (is_in)
+        {
+            entry.text = QString("Incoming call ") + id + "." 
+                + op->get_name();
+            entry.icon = &m_inputIcon;
+            
+            // Background color
+            if (resp && (resp->get_type() == event::EXCEPTION || 
+                    resp->get_type() == event::MESSAGE))
+            {
+                entry.text += " (Exception!)";
+                entry.color = QColor(Qt::red);
+            }
+            else
+                entry.color = QColor(Qt::green);
+        }
+        else
+        {
+            entry.text = QString("Outgoing call ") + id + "." 
+                + op->get_name();
+            entry.icon = &m_outputIcon;
+
+            // Background Color
+            if (resp && (resp->get_type() == event::EXCEPTION || 
+                    resp->get_type() == event::MESSAGE))
+            {
+                entry.text += " (Exception!)";
+                entry.color = QColor(Qt::red);
+            }
+            else
+                entry.color = QColor(Qt::yellow);
+        }
+
         m_entries.push_back(entry);
-        
+
         endInsertRows();
     }
 }

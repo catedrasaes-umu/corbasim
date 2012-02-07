@@ -44,6 +44,8 @@ public:
 
     QVariant data(const QModelIndex& index, 
             int role = Qt::DisplayRole) const; 
+    bool setData(const QModelIndex & index, 
+            const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant headerData(int section, Qt::Orientation orientation,
@@ -92,9 +94,14 @@ protected:
     {
         bool is_in_entry;
         QString id;
+        QString text;
+        core::operation_reflective_base const * reflective;
         corbasim::event::request_ptr req;
         corbasim::event::event_ptr resp;
         QDateTime dateTime;
+        QIcon * icon;
+        QColor color;
+        bool exception;
     };
 
     QList< LogEntry > m_entries;
