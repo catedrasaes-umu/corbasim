@@ -80,8 +80,10 @@ QVariant NewLogModel::data(const QModelIndex& index, int role) const
             parent = parent.parent();
         }
 
+        // std::cout << parent.row() << std::endl;
         const LogEntry& entry = m_entries.at(parent.row());
 
+        // return QVariant();
         return entry.color;
     }
     else if (role == Qt::DisplayRole)
@@ -188,8 +190,21 @@ QModelIndex NewLogModel::parent(const QModelIndex &index) const
 
     Node * node = static_cast< Node * >(index.internalPointer());
 
-    if (!node->parent)
+    if (!node || !node->parent)
         return QModelIndex();
+
+    // parent is first level item
+    if (!node->parent->parent)
+    {
+        // index could be changed
+        int row = 0;
+        bool found = false;
+        for (; row < m_nodes.size() && !found; row++) 
+            if (m_nodes.at(row).get() == node->parent)
+                return createIndex(row, 0, (void *) node->parent);
+
+        return QModelIndex();
+    }
 
     return createIndex(node->index, 0, (void *) node->parent);
 }
