@@ -27,6 +27,7 @@
 #include "AppFileWatcher.hpp"
 #include "NSBrowser.hpp"
 #include <corbasim/reflective_gui/LogModel.hpp>
+#include <corbasim/reflective_gui/NewLogModel.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
@@ -68,6 +69,7 @@ int main(int argc, char **argv)
     corbasim::app::DataDumper dumper;
     corbasim::app::AppMainWindow window;
     corbasim::reflective_gui::LogModel logModel;
+    corbasim::reflective_gui::NewLogModel newLogModel;
 
     // Signals between models
     QObject::connect(&controller,
@@ -106,6 +108,47 @@ int main(int argc, char **argv)
         SIGNAL(requestReceived(QString, corbasim::event::request_ptr,
                 corbasim::event::event_ptr)),
         &logModel,
+        SLOT(inputRequest(const QString&, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)));
+    // End signals
+
+    // New Signals between models
+    QObject::connect(&controller,
+            SIGNAL(objrefCreated(
+                    QString, const corbasim::core::interface_reflective_base *)),
+            &newLogModel,
+            SLOT(registerInstance(
+                    const QString&, const 
+                    corbasim::core::interface_reflective_base *)));
+    QObject::connect(&controller,
+            SIGNAL(objrefDeleted(QString)),
+            &newLogModel,
+            SLOT(unregisterInstance(const QString&)));
+
+    QObject::connect(&controller,
+            SIGNAL(servantCreated(
+                    QString, 
+                    const corbasim::core::interface_reflective_base *)),
+            &newLogModel,
+            SLOT(registerInstance(
+                    const QString&, 
+                    const corbasim::core::interface_reflective_base *)));
+
+    QObject::connect(&controller,
+            SIGNAL(servantDeleted(QString)),
+            &newLogModel, SLOT(unregisterInstance(const QString&)));
+
+    QObject::connect(&controller,
+        SIGNAL(requestSent(QString, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)),
+        &newLogModel,
+        SLOT(outputRequest(const QString&, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)));
+
+    QObject::connect(&controller,
+        SIGNAL(requestReceived(QString, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)),
+        &newLogModel,
         SLOT(inputRequest(const QString&, corbasim::event::request_ptr,
                 corbasim::event::event_ptr)));
     // End signals
@@ -171,7 +214,7 @@ int main(int argc, char **argv)
 
     // borrar
     QTreeView view;
-    view.setModel(&logModel);
+    view.setModel(&newLogModel);
     view.show();
 
     // corbasim::app::NSBrowser bw;

@@ -67,13 +67,21 @@ bool fromQVariant(
             return QVariant((qint64) hold.to_value< int64_t >());
         case TYPE_ULONGLONG:
             return QVariant((quint64) hold.to_value< uint64_t >());
+#endif
 
         case TYPE_STRING:
         case TYPE_WSTRING:
             {
-                std::string str(reflective->to_string(hold));
-                return QVariant(str.c_str());
+                bool canConvert = var.canConvert(QVariant::String);
+
+                if (canConvert)
+                    reflective->from_string(hold, 
+                            var.toString().toStdString());
+
+                return canConvert;
             }
+
+#if 0
         case TYPE_OBJREF:
             {
                 objrefvar_reflective_base const * objref = 
@@ -113,12 +121,27 @@ bool fromQVariant(
 
                 return QVariant(str);
             }
+#endif
 
         case TYPE_DOUBLE:
-            return QVariant(hold.to_value< double >());
+            {
+                bool canConvert = var.canConvert(QVariant::Double);
+
+                if (canConvert)
+                    hold.to_value< double >() = var.toDouble();
+
+                return canConvert;
+            }
         case TYPE_FLOAT:
-            return QVariant(hold.to_value< float >());
-#endif
+            {
+                bool canConvert = var.canConvert(QVariant::Double);
+
+                if (canConvert)
+                    hold.to_value< float >() = var.toFloat();
+
+                return canConvert;
+            }
+
         default:
             break;
     }
@@ -278,7 +301,7 @@ QModelIndex NewLogModel::index(int row, int column,
     Node * node = static_cast< Node * >(parent.internalPointer());
     node->check_for_initialized();
 
-    if (row < node->children.size())
+    if (row < (int) node->children.size())
     {
         return createIndex(row, column, 
                 (void *) node->children[row].get());
