@@ -35,6 +35,98 @@ extern QVariant toQVariant(
         corbasim::core::reflective_base const * reflective,
         corbasim::core::holder& hold);
 
+bool fromQVariant(
+        corbasim::core::reflective_base const * reflective,
+        corbasim::core::holder& hold,
+        const QVariant& var)
+{
+    using namespace corbasim::core;
+
+    const reflective_type type = reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_BOOL:
+            hold.to_value< bool >() = var.toBool();
+            return true;
+
+#if 0
+        case TYPE_OCTET:
+            return QVariant(hold.to_value< unsigned char >());
+        case TYPE_CHAR:
+            return QVariant(hold.to_value< char >());
+        case TYPE_SHORT:
+            return QVariant(hold.to_value< short >());
+        case TYPE_USHORT:
+            return QVariant(hold.to_value< unsigned short >());
+        case TYPE_LONG:
+            return QVariant(hold.to_value< int32_t >());
+        case TYPE_ULONG:
+            return QVariant(hold.to_value< uint32_t >());
+        case TYPE_LONGLONG:
+            return QVariant((qint64) hold.to_value< int64_t >());
+        case TYPE_ULONGLONG:
+            return QVariant((quint64) hold.to_value< uint64_t >());
+
+        case TYPE_STRING:
+        case TYPE_WSTRING:
+            {
+                std::string str(reflective->to_string(hold));
+                return QVariant(str.c_str());
+            }
+        case TYPE_OBJREF:
+            {
+                objrefvar_reflective_base const * objref = 
+                    static_cast< objrefvar_reflective_base const * >(
+                            reflective);
+
+                CORBA::Object_var obj = objref->to_object(hold);
+
+                if (CORBA::is_nil(obj))
+                    return QVariant("NIL");
+                
+                try {
+                    reference_repository * rr =
+                        reference_repository::get_instance();
+
+                    CORBA::String_var str = 
+                        rr->object_to_string(obj);
+
+                    return QVariant(str.in());
+
+                } catch (...) {
+                    return QVariant("NIL");
+                }
+
+            }
+            break;
+
+        case TYPE_ENUM:
+            {
+                // Maybe it works...
+                int32_t value = hold.to_value< int32_t >();
+
+                const char * str = "Unknown value"; 
+
+                if (value >= 0 && value < reflective->get_children_count())
+                    str = reflective->get_child_name((unsigned int) value);
+
+                return QVariant(str);
+            }
+
+        case TYPE_DOUBLE:
+            return QVariant(hold.to_value< double >());
+        case TYPE_FLOAT:
+            return QVariant(hold.to_value< float >());
+#endif
+        default:
+            break;
+    }
+
+    return false;
+}
+
+
 NewLogModel::NewLogModel(QObject * parent) :
     QAbstractItemModel(parent), m_maxEntries(100)
 {
@@ -86,7 +178,7 @@ QVariant NewLogModel::data(const QModelIndex& index, int role) const
         // return QVariant();
         return entry.color;
     }
-    else if (role == Qt::DisplayRole)
+    else if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
         Node * node = static_cast< Node * >(index.internalPointer());
         node->check_for_initialized();
@@ -123,8 +215,20 @@ QVariant NewLogModel::data(const QModelIndex& index, int role) const
 bool NewLogModel::setData(const QModelIndex & index, 
         const QVariant& value, int role)
 {
-    // TODO
-    return false;
+    Node * node = static_cast< Node * >(index.internalPointer());
+    
+    if (!node) return false;
+
+    node->check_for_initialized();
+
+    bool res = fromQVariant(node->reflective, node->holder, value);
+
+    if (res)
+    {
+        emit dataChanged(index, index);
+    }
+
+    return res;
 }
 
 Qt::ItemFlags NewLogModel::flags(const QModelIndex &index) const
@@ -227,6 +331,11 @@ int NewLogModel::rowCount(const QModelIndex &parent) const
 }
 
 void NewLogModel::clearLog()
+{
+    reset();
+}
+
+void NewLogModel::resetInternalData()
 {
     m_entries.clear();
     m_nodes.clear();

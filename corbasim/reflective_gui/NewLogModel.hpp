@@ -74,6 +74,10 @@ public slots:
             corbasim::event::request_ptr req,
             corbasim::event::event_ptr resp);
 
+private slots:
+
+    void resetInternalData();
+
 protected:
 
     void append(const QString& id, 
