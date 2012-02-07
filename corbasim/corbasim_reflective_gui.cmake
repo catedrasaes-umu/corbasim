@@ -1,8 +1,10 @@
 set(corbasim_reflective_gui_EXPORTED_HEADERS
+    reflective_gui/ModelNode.hpp
     reflective_gui/OperationSequence.hpp
     reflective_gui/SimpleScriptEditor.hpp
     reflective_gui/RequestDialog.hpp
     reflective_gui/LogModel.hpp
+    reflective_gui/NewLogModel.hpp
     reflective_gui/ReflectiveGUI.hpp)
 
 foreach(_header ${corbasim_reflective_gui_EXPORTED_HEADERS})
@@ -16,13 +18,16 @@ set(corbasim_reflective_gui_MOC_HDRS
     reflective_gui/SimpleScriptEditor.hpp
     reflective_gui/RequestDialog.hpp
     reflective_gui/LogModel.hpp
+    reflective_gui/NewLogModel.hpp
     reflective_gui/ReflectiveGUI.hpp)
 
 set(corbasim_reflective_gui_SRCS
+    reflective_gui/ModelNode.cpp
     reflective_gui/OperationSequence.cpp
     reflective_gui/SimpleScriptEditor.cpp
     reflective_gui/RequestDialog.cpp
     reflective_gui/LogModel.cpp
+    reflective_gui/NewLogModel.cpp
     reflective_gui/ReflectiveGUI.cpp)
 
 set(corbasim_reflective_gui_LIBS

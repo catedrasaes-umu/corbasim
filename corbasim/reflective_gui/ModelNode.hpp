@@ -36,49 +36,19 @@ struct Node
     core::reflective_base const * reflective;
     core::holder holder;
 
+    Node const * parent;
+    unsigned int index;
+
     bool initialized;
     std::vector< Node_ptr > children;
 
-    inline Node(core::reflective_base const * r,
-            core::holder h) :
-        m_reflective(r), holder(h), initialized(false)
-    {
-    }
+    Node(core::reflective_base const * r,
+            core::holder h, Node const * p = 0, 
+            unsigned int idx = 0);
 
-    inline void initialize()
-    {
-        if (reflective->is_repeated())
-        {
-            const unsigned int count = reflective->get_length(holder);
-            children.reserve(count);
+    void initialize();
 
-            core::reflective_base const * slice =
-                reflective->get_slice();
-
-            for (unsigned int i = 0; i < count; i++) 
-            {
-                Node_ptr child(slice, 
-                        reflective->get_child_value(holder, i));
-
-                children.push_back(child);
-            }
-        }
-        else if(reflective->get_type() == core::TYPE_STRUCT)
-        {
-            const unsigned int count = reflective->get_children_count();
-            children.reserve(count);
-
-            for (unsigned int i = 0; i < count; i++) 
-            {
-                Node_ptr child(reflective->get_child(i), 
-                        reflective->get_child_value(holder, i));
-
-                children.push_back(child);
-            }
-        }
-
-        initialized = true;
-    }
+    void check_for_initialized();
 };
 
 } // namespace reflective_gui
