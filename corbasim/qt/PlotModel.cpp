@@ -8,7 +8,7 @@ PlotModel::PlotModel(QObject *parent)
     : QStandardItemModel(parent)
 {
     QStringList headers;
-    headers << "Object" << "Plot";
+    headers << "Plotable parameters";
 
     setHorizontalHeaderLabels(headers);
 }
@@ -24,7 +24,7 @@ bool PlotModel::setData(const QModelIndex & index,
     
     bool res = QStandardItemModel::setData(index, value, role);
 
-    if (res && index.column() == 1 && value.type() == QVariant::Bool)
+    if (role == Qt::CheckStateRole)
     {
         QList< int > path;
 
@@ -44,7 +44,9 @@ bool PlotModel::setData(const QModelIndex & index,
             // Remove instance index
             path.pop_front();
 
-            if (value.toBool())
+            QStandardItem * mitem = itemFromIndex(index);
+
+            if (mitem->checkState() == Qt::Checked)
                 emit createdPlot(item.name, item.reflective, path);
             else
                 emit deletedPlot(item.name, item.reflective, path);
@@ -66,28 +68,36 @@ void insertRecursive(QStandardItem * parent,
 
         const corbasim::core::reflective_type type = child->get_type();
 
+        bool isCheckable = false;
+
         QStandardItem * childItem = 
             new QStandardItem(reflective->get_child_name(i));
         childItem->setEditable(false);
 
-        if (type == corbasim::core::TYPE_STRUCT || child->is_repeated())
-            insertRecursive(childItem, child);
-
-        if (child->is_primitive() || 
-                (child->is_repeated() && child->get_slice()->is_primitive()))
+        // Recursive
+        if (type == corbasim::core::TYPE_STRUCT || 
+                child->is_repeated())
         {
-            QList< QStandardItem * > list;
-            list << childItem;
-
-            // Do plot?
-            QStandardItem * value = new QStandardItem();
-            value->setData(false, Qt::DisplayRole);
-            value->setEditable(true);
-            list << value;
-
-            parent->appendRow(list);
+            insertRecursive(childItem, child);
         }
+
+        // Just primitive types are plotables
+        if (child->is_primitive() || 
+                (child->is_repeated() && 
+                 child->get_slice()->is_primitive()))
+        {
+            childItem->setCheckable(true);
+
+            isCheckable = true;
+        }
+
+        // Removes innecessary items
+        // Still necessary
+        /*
+        if (!isCheckable && !childItem->rowCount())
+            delete childItem;
         else
+        */
             parent->appendRow(childItem);
     }
 }
@@ -115,7 +125,11 @@ void PlotModel::registerInstance(const QString& name,
 
         insertRecursive(opItem, op);
 
-        ifItem->appendRow(opItem);
+        /*
+        if (opItem->rowCount())*/
+            ifItem->appendRow(opItem);
+        /*else
+            delete opItem;*/
     }
 
     appendRow(ifItem);
@@ -151,126 +165,17 @@ void PlotModel::deletePlot(const QString& id, const QList< int >& path)
             // Instance element
             QModelIndex idx = index(i, 0);
             
-            for (int i = 0; i < path.size() - 1; i++) 
+            for (int i = 0; i < path.size(); i++) 
             {
                 idx = index(path[i], 0, idx);
             }
 
-            idx = index(path.back(), 1, idx);
+            QStandardItem * item = itemFromIndex(idx);
 
-            setData(idx, false);
+            item->setCheckState(Qt::Unchecked);
 
             break;
         }
     }
-}
-
-// Reflective model
-
-ReflectiveModel::ReflectiveModel(QObject *parent)
-    : QStandardItemModel(parent)
-{
-}
-
-ReflectiveModel::~ReflectiveModel()
-{
-}
-
-void insertRecursive2(QStandardItem * parent, 
-        corbasim::core::reflective_base const * reflective)
-{
-    const unsigned int count = reflective->get_children_count();
-
-    for (unsigned int i = 0; i < count; i++) 
-    {
-        corbasim::core::reflective_base const * child =
-            reflective->get_child(i);
-
-        QStandardItem * childItem = 
-            new QStandardItem(reflective->get_child_name(i));
-        childItem->setEditable(false);
-
-        insertRecursive2(childItem, child);
-
-        parent->appendRow(childItem);
-    }
-}
-
-void ReflectiveModel::registerInstance(const QString& name,
-        core::interface_reflective_base const * reflective)
-{
-    FirstLevelItem item = {name, reflective};
-    m_items.push_back(item);
-
-    QStandardItem * ifItem = new QStandardItem(name);
-    ifItem->setEditable(false);
-
-    const unsigned int count = reflective->operation_count();
-
-    for (unsigned int i = 0; i < count; i++) 
-    {
-        core::operation_reflective_base const * op =
-            reflective->get_reflective_by_index(i);
-
-        QStandardItem * opItem = new QStandardItem(op->get_name());
-        opItem->setEditable(false);
-
-        insertRecursive2(opItem, op);
-
-        ifItem->appendRow(opItem);
-    }
-
-    appendRow(ifItem);
-}
-
-void ReflectiveModel::unregisterInstance(const QString& name)
-{
-    int i = 0;
-    for (FirstLevelItems_t::iterator it = m_items.begin(); 
-            it != m_items.end(); ++it, ++i) 
-    {
-        if (name == it->name)
-        {
-            removeRows(i, 1);
-
-            m_items.erase(it);
-            break;
-        }
-    }
-}
-
-// Checked reflective model
-
-CheckedReflectiveModel::CheckedReflectiveModel(QObject * parent) :
-#if 0
-    QIdentityProxyModel(parent)
-#else
-    QProxyModel(parent)
-#endif
-    , m_model(NULL)
-{
-}
-
-CheckedReflectiveModel::~CheckedReflectiveModel()
-{
-}
-
-void CheckedReflectiveModel::setReflectiveModel(ReflectiveModel * model)
-{
-    m_model = model;
-
-#if 0
-    setSourceModel(model);
-#else
-    setModel(model);
-#endif
-}
-
-Qt::ItemFlags CheckedReflectiveModel::flags(const QModelIndex& index) const
-{
-    if (m_model)
-        return m_model->flags(index) | Qt::ItemIsUserCheckable;
-
-    return 0;
 }
 
