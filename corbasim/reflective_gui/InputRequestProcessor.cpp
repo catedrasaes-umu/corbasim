@@ -21,6 +21,13 @@
 
 using namespace corbasim::reflective_gui;
 
+InputRequestController * 
+corbasim::reflective_gui::getDefaultInputRequestController()
+{
+    static InputRequestController _instance;
+    return &_instance;
+}
+
 namespace  
 {
 

@@ -37,14 +37,36 @@ class SortableGroupItem;
 namespace qwt 
 {
 
+class PlotProcessor : public QObject,
+    public reflective_gui::RequestProcessor
+{
+    Q_OBJECT
+public:
+
+    PlotProcessor(const QString& id,
+            const reflective_gui::ReflectivePath_t path);
+    ~PlotProcessor();
+
+    void process(event::request_ptr req, 
+            core::reflective_base const * ref,
+            core::holder hold);
+
+signals:
+
+    void append(corbasim::event::request_ptr, 
+            const corbasim::core::reflective_base *,
+            corbasim::core::holder);
+};
+
 class ReflectivePlot : public SimplePlot
 {
     Q_OBJECT
 public:
 
-    ReflectivePlot(
+    ReflectivePlot(const QString& id,
             core::operation_reflective_base const * reflective,
-            const QList< int >& path, QWidget * parent = 0);
+            const QList< int >& path, 
+            QWidget * parent = 0);
     virtual ~ReflectivePlot();
 
     core::operation_reflective_base const * getReflective() const;
@@ -54,11 +76,22 @@ public:
         return m_path;
     }
 
-    void process(core::holder& value);
+    inline reflective_gui::RequestProcessor_ptr getProcessor() const
+    {
+        return m_processor;
+    }
+
+public slots:
+
+    void appendValue(corbasim::event::request_ptr, 
+            const corbasim::core::reflective_base *,
+            corbasim::core::holder);
 
 protected:
 
-    QString m_id;
+    reflective_gui::RequestProcessor_ptr m_processor;
+
+    const QString m_id;
     core::operation_reflective_base const * m_reflective;
     const QList< int > m_path;
 
@@ -79,9 +112,6 @@ public slots:
 
     void unregisterInstance(const QString& name);
 
-    void processRequest(const QString& id, 
-            corbasim::event::request_ptr req);
-
     void createPlot(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
@@ -89,6 +119,11 @@ public slots:
     void deletePlot(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
+
+signals:
+
+    void addProcessor(corbasim::reflective_gui::RequestProcessor_ptr);
+    void removeProcessor(corbasim::reflective_gui::RequestProcessor_ptr);
 
 protected slots:
 

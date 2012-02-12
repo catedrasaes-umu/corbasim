@@ -109,6 +109,8 @@ protected:
 
 };
 
+InputRequestController * getDefaultInputRequestController();
+
 } // namespace reflective_gui
 } // namespace corbasim
 

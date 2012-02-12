@@ -22,6 +22,7 @@
 #include <corbasim/event_fwd.hpp>
 #include <corbasim/impl.hpp>
 #include <corbasim/qt/ReferenceModel.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/reflective_gui/InputRequestProcessor.hpp>
 
 namespace  
@@ -42,6 +43,9 @@ public:
             ("corbasim::event::event_ptr");
         qRegisterMetaType< corbasim::event::exception_ptr >
             ("corbasim::event::exception_ptr");
+
+        qRegisterMetaType< corbasim::core::holder >
+            ("corbasim::core::holder");
 
         qRegisterMetaType< corbasim::reflective_gui::ReflectivePath_t >
             ("corbasim::reflective_gui::ReflectivePath_t");

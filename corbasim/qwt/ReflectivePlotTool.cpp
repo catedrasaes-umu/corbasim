@@ -26,11 +26,46 @@
 
 using namespace corbasim::qwt;
 
-ReflectivePlot::ReflectivePlot(
-        core::operation_reflective_base const * reflective,
-        const QList< int >& path, QWidget * parent) :
-    SimplePlot(parent), m_reflective(reflective), m_path(path)
+PlotProcessor::PlotProcessor(const QString& id,
+        const reflective_gui::ReflectivePath_t path) :
+    reflective_gui::RequestProcessor(id, path)
 {
+
+}
+
+PlotProcessor::~PlotProcessor()
+{
+}
+
+void PlotProcessor::process(event::request_ptr req, 
+        core::reflective_base const * ref,
+        core::holder hold)
+{
+    emit append(req, ref, hold);
+}
+
+// Reflective plot
+
+ReflectivePlot::ReflectivePlot(const QString& id,
+        core::operation_reflective_base const * reflective,
+        const QList< int >& path, 
+        QWidget * parent) :
+    SimplePlot(parent), m_id(id), m_reflective(reflective), m_path(path)
+{
+    PlotProcessor * processor =
+        new PlotProcessor(m_id, m_path);
+
+    m_processor.reset(processor);
+
+    // connect signal
+    QObject::connect(processor,
+            SIGNAL(append(corbasim::event::request_ptr,
+                    const corbasim::core::reflective_base *,
+                    corbasim::core::holder)),
+            this,
+            SLOT(appendValue(corbasim::event::request_ptr,
+                    const corbasim::core::reflective_base *,
+                    corbasim::core::holder)));
 }
 
 ReflectivePlot::~ReflectivePlot()
@@ -43,47 +78,25 @@ ReflectivePlot::getReflective() const
     return m_reflective;
 }
 
-void ReflectivePlot::process(core::holder& value)
+void ReflectivePlot::appendValue(corbasim::event::request_ptr req, 
+        const corbasim::core::reflective_base * reflec,
+        corbasim::core::holder hold)
 {
-    core::reflective_base const * reflec = m_reflective;
-
-    int size = m_path.size();
-
-    core::holder tmp = value;
-
-    for (int i = 1; i < size; i++) 
-    {
-        if (i == size - 2 && reflec->is_repeated())
-            break;
-
-        if (reflec->get_type() == core::TYPE_STRUCT)
-        {
-            tmp = reflec->get_child_value(tmp, m_path[i]);
-            reflec = reflec->get_child(m_path[i]);
-        }
-        else /* if(reflec->is_repeated())
-        {
-            tmp = reflec->get_child_value(tmp, m_path[i]);
-            reflec = reflec->get_slice();
-        } */
-        return; // TODO unsupported yet!
-    }
-
     if (reflec->is_primitive())
     {
-        append(reflec->to_double(tmp));
+        append(reflec->to_double(hold));
     }
     else if(reflec->is_repeated() && 
             reflec->get_slice()->is_primitive())
     {
         QVector< double > values;
         
-        const unsigned int length = reflec->get_length(tmp);
+        const unsigned int length = reflec->get_length(hold);
         core::reflective_base const * slice = reflec->get_slice();
 
         for (unsigned int i = 0; i < length; i++) 
         {
-            const core::holder h = reflec->get_child_value(tmp, i);
+            const core::holder h = reflec->get_child_value(hold, i);
             values.push_back(slice->to_double(h));
         }
 
@@ -137,6 +150,16 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
                     core::interface_reflective_base const *,
                     const QList< int >&)));
     
+    // connect with the processor
+    QObject::connect(this, 
+            SIGNAL(addProcessor(corbasim::reflective_gui::RequestProcessor_ptr)),
+            reflective_gui::getDefaultInputRequestController(),
+            SLOT(addProcessor(corbasim::reflective_gui::RequestProcessor_ptr)));
+    QObject::connect(this, 
+            SIGNAL(removeProcessor(corbasim::reflective_gui::RequestProcessor_ptr)),
+            reflective_gui::getDefaultInputRequestController(),
+            SLOT(removeProcessor(corbasim::reflective_gui::RequestProcessor_ptr)));
+
     setMinimumSize(650, 400);
 }
 
@@ -170,20 +193,6 @@ void ReflectivePlotTool::unregisterInstance(const QString& name)
     }
 }
 
-void ReflectivePlotTool::processRequest(const QString& id, 
-        corbasim::event::request_ptr req)
-{
-    QList< ReflectivePlot * >& list = 
-        m_map[std::make_pair(id, req->get_tag())];
-
-    int count = list.size();
-    for (int i = 0; i < count; i++) 
-    {
-        core::holder value = list[i]->getReflective()->get_holder(req);
-        list[i]->process(value);
-    }
-}
-
 void ReflectivePlotTool::createPlot(const QString& id, 
         core::interface_reflective_base const * reflective,
         const QList< int >& path)
@@ -191,13 +200,16 @@ void ReflectivePlotTool::createPlot(const QString& id,
     core::operation_reflective_base const * op =
         reflective->get_reflective_by_index(path.front());
 
-    ReflectivePlot * plot = new ReflectivePlot(op, path);
+    ReflectivePlot * plot = new ReflectivePlot(id, op, path);
 
     const key_t key(id, op->get_tag());
     m_map[key].push_back(plot);
     m_inverse_map[plot] = key;
 
     m_group->appendWidget(plot);
+    
+    // Notify to the processor
+    emit addProcessor(plot->getProcessor());
 }
 
 void ReflectivePlotTool::deletePlot(const QString& id, 
@@ -219,6 +231,9 @@ void ReflectivePlotTool::deletePlot(const QString& id,
             m_inverse_map.erase(plot);
             m_group->deleteItem(
                     qobject_cast< qt::SortableGroupItem * >(plot->parent()));
+
+            // Notify to the processor
+            emit removeProcessor(plot->getProcessor());
             break;
         }
     }

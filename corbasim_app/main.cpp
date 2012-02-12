@@ -63,17 +63,20 @@ int main(int argc, char **argv)
     QThread threadDumper;
     QThread threadInputReqCntl;
 
+    corbasim::reflective_gui::InputRequestController& inputReqCntl = 
+        *corbasim::reflective_gui::getDefaultInputRequestController();
+
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
     corbasim::app::TriggerEngine engine;
     corbasim::app::AppFileWatcher watcher;
     corbasim::app::DataDumper dumper;
     corbasim::app::AppMainWindow window;
-    corbasim::reflective_gui::LogModel logModel;
+    // corbasim::reflective_gui::LogModel logModel;
     corbasim::reflective_gui::NewLogModel newLogModel;
-    corbasim::reflective_gui::InputRequestController inputReqCntl;
 
     // Signals between models
+#if 0
     QObject::connect(&controller,
             SIGNAL(objrefCreated(
                     QString, const corbasim::core::interface_reflective_base *)),
@@ -113,7 +116,7 @@ int main(int argc, char **argv)
         SLOT(inputRequest(const QString&, corbasim::event::request_ptr,
                 corbasim::event::event_ptr)));
     // End signals
-
+#endif
     // New Signals between models
     QObject::connect(&controller,
             SIGNAL(objrefCreated(
@@ -213,7 +216,7 @@ int main(int argc, char **argv)
     controller.setModel(&model);
     model.setController(&controller);
 
-    window.setLogModel(&logModel);
+    window.setLogModel(&newLogModel);
 
     window.setController(&controller);
     window.show();

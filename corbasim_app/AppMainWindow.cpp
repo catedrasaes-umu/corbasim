@@ -304,12 +304,6 @@ void AppMainWindow::showPlotTool()
         m_plot_tool->setWindowTitle("corbasim plotting tool");
         m_plot_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
 
-
-        QObject::connect(this, 
-                SIGNAL(doProcessIncomingRequest(QString, corbasim::event::request_ptr)), 
-                m_plot_tool,
-                SLOT(processRequest(const QString&, corbasim::event::request_ptr)));
-
         QObject::connect(
                 m_controller,
                 SIGNAL(servantCreated(
