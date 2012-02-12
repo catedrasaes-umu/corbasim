@@ -26,7 +26,7 @@
 #include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
 #include "NSBrowser.hpp"
-#include <corbasim/reflective_gui/LogModel.hpp>
+// #include <corbasim/reflective_gui/LogModel.hpp>
 #include <corbasim/reflective_gui/NewLogModel.hpp>
 #include <corbasim/reflective_gui/InputRequestProcessor.hpp>
 #include <boost/thread.hpp>
@@ -240,9 +240,9 @@ int main(int argc, char **argv)
     }
 
     // borrar
-    QTreeView view;
-    view.setModel(&newLogModel);
-    view.show();
+    // QTreeView view;
+    // view.setModel(&newLogModel);
+    // view.show();
 
     // corbasim::app::NSBrowser bw;
     // bw.show();
