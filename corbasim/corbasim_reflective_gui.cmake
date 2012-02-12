@@ -1,4 +1,5 @@
 set(corbasim_reflective_gui_EXPORTED_HEADERS
+    reflective_gui/utils.hpp
     reflective_gui/InputRequestProcessor.hpp
     reflective_gui/ModelNode.hpp
     reflective_gui/OperationSequence.hpp
@@ -24,6 +25,7 @@ set(corbasim_reflective_gui_MOC_HDRS
     reflective_gui/ReflectiveGUI.hpp)
 
 set(corbasim_reflective_gui_SRCS
+    reflective_gui/utils.cpp
     reflective_gui/InputRequestProcessor.cpp
     reflective_gui/ModelNode.cpp
     reflective_gui/OperationSequence.cpp

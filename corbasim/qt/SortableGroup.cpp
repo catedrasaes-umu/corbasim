@@ -29,12 +29,9 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
 
     // Title bar
     QHBoxLayout * tLayout = new QHBoxLayout();
-    /*
-    QLabel * title = new QLabel(
-        QString("<b>Object: '%1' Operation: '%2'</b>").arg(id).arg(
-            dlg->get_name()));
-    tLayout->addWidget(title);
-    */
+    m_title = new QLabel();
+    tLayout->addWidget(m_title);
+
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     tLayout->addItem(spacer);
@@ -94,6 +91,16 @@ SortableGroupItem::~SortableGroupItem()
 QWidget * SortableGroupItem::getWidget()
 {
     return m_widget;
+}
+
+QString SortableGroupItem::title() const
+{
+    return m_title->text();
+}
+
+void SortableGroupItem::setTitle(const QString& title)
+{
+    m_title->setText(QString("<b>%1</b>").arg(title));
 }
 
 void SortableGroupItem::deleteClicked()

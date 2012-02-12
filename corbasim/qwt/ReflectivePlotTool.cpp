@@ -19,6 +19,7 @@
 
 #include "ReflectivePlotTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
+#include <corbasim/reflective_gui/utils.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
 
@@ -152,13 +153,17 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
     
     // connect with the processor
     QObject::connect(this, 
-            SIGNAL(addProcessor(corbasim::reflective_gui::RequestProcessor_ptr)),
+            SIGNAL(addProcessor(
+                    corbasim::reflective_gui::RequestProcessor_ptr)),
             reflective_gui::getDefaultInputRequestController(),
-            SLOT(addProcessor(corbasim::reflective_gui::RequestProcessor_ptr)));
+            SLOT(addProcessor(
+                    corbasim::reflective_gui::RequestProcessor_ptr)));
     QObject::connect(this, 
-            SIGNAL(removeProcessor(corbasim::reflective_gui::RequestProcessor_ptr)),
+            SIGNAL(removeProcessor(
+                    corbasim::reflective_gui::RequestProcessor_ptr)),
             reflective_gui::getDefaultInputRequestController(),
-            SLOT(removeProcessor(corbasim::reflective_gui::RequestProcessor_ptr)));
+            SLOT(removeProcessor(
+                    corbasim::reflective_gui::RequestProcessor_ptr)));
 
     setMinimumSize(650, 400);
 }
@@ -206,7 +211,13 @@ void ReflectivePlotTool::createPlot(const QString& id,
     m_map[key].push_back(plot);
     m_inverse_map[plot] = key;
 
-    m_group->appendWidget(plot);
+    qt::SortableGroupItem * item = 
+        new qt::SortableGroupItem(plot, m_group);
+
+    const QString title(reflective_gui::getFieldName(op, path));
+    item->setTitle(id + "." + title);
+
+    m_group->appendItem(item);
     
     // Notify to the processor
     emit addProcessor(plot->getProcessor());
@@ -230,7 +241,8 @@ void ReflectivePlotTool::deletePlot(const QString& id,
             list.removeAt(i);
             m_inverse_map.erase(plot);
             m_group->deleteItem(
-                    qobject_cast< qt::SortableGroupItem * >(plot->parent()));
+                    qobject_cast< qt::SortableGroupItem * >
+                        (plot->parent()));
 
             // Notify to the processor
             emit removeProcessor(plot->getProcessor());

@@ -20,19 +20,16 @@
 #ifndef CORBASIM_REFLECTIVE_GUI_INPUTREQUESTPROCESSOR_HPP
 #define CORBASIM_REFLECTIVE_GUI_INPUTREQUESTPROCESSOR_HPP
 
-#include <QList>
 #include <QString>
 #include <QObject>
 #include <map>
-#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/event_fwd.hpp>
+#include <corbasim/reflective_gui/utils.hpp>
 
 namespace corbasim 
 {
 namespace reflective_gui 
 {
-
-typedef QList< int > ReflectivePath_t;
 
 class RequestProcessor
 {

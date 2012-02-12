@@ -31,6 +31,8 @@ namespace qt
 
 class SortableGroupItem : public QFrame
 {
+    Q_PROPERTY(QString title READ title WRITE setTitle)
+    // Q_PROPERTY(bool expanded READ isExpanded WRITE setExpanded)
     Q_OBJECT
 public:
     SortableGroupItem(QWidget * widget,
@@ -38,6 +40,11 @@ public:
     virtual ~SortableGroupItem();
 
     QWidget * getWidget();
+
+public slots:
+
+    QString title() const;
+    void setTitle(const QString& title);
 
 signals:
 
@@ -55,6 +62,7 @@ protected:
 
     QWidget * m_widget;
     QLayout * m_layout;
+    QLabel * m_title;
 };
 
 class SortableGroup : public QWidget
