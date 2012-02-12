@@ -137,7 +137,7 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
                     core::interface_reflective_base const *,
                     const QList< int >&)));
     
-    setMinimumSize(600, 400);
+    setMinimumSize(650, 400);
 }
 
 ReflectivePlotTool::~ReflectivePlotTool()

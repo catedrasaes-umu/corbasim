@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <corbasim/qt/PlotModel.hpp>
 #include <corbasim/qwt/SimplePlot.hpp>
+#include <corbasim/reflective_gui/InputRequestProcessor.hpp>
 #include <map>
 
 namespace corbasim 
