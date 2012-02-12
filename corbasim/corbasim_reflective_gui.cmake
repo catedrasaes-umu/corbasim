@@ -1,4 +1,5 @@
 set(corbasim_reflective_gui_EXPORTED_HEADERS
+    reflective_gui/InputRequestProcessor.hpp
     reflective_gui/ModelNode.hpp
     reflective_gui/OperationSequence.hpp
     reflective_gui/SimpleScriptEditor.hpp
@@ -14,6 +15,7 @@ foreach(_header ${corbasim_reflective_gui_EXPORTED_HEADERS})
 endforeach(_header ${corbasim_reflective_gui_EXPORTED_HEADERS})
 
 set(corbasim_reflective_gui_MOC_HDRS
+    reflective_gui/InputRequestProcessor.hpp
     reflective_gui/OperationSequence.hpp
     reflective_gui/SimpleScriptEditor.hpp
     reflective_gui/RequestDialog.hpp
@@ -22,6 +24,7 @@ set(corbasim_reflective_gui_MOC_HDRS
     reflective_gui/ReflectiveGUI.hpp)
 
 set(corbasim_reflective_gui_SRCS
+    reflective_gui/InputRequestProcessor.cpp
     reflective_gui/ModelNode.cpp
     reflective_gui/OperationSequence.cpp
     reflective_gui/SimpleScriptEditor.cpp

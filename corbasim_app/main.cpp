@@ -28,6 +28,7 @@
 #include "NSBrowser.hpp"
 #include <corbasim/reflective_gui/LogModel.hpp>
 #include <corbasim/reflective_gui/NewLogModel.hpp>
+#include <corbasim/reflective_gui/InputRequestProcessor.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
@@ -60,7 +61,7 @@ int main(int argc, char **argv)
     QThread threadEngine;
     QThread threadWatcher;
     QThread threadDumper;
-    // QThread threadLogModel;
+    QThread threadInputReqCntl;
 
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
@@ -70,6 +71,7 @@ int main(int argc, char **argv)
     corbasim::app::AppMainWindow window;
     corbasim::reflective_gui::LogModel logModel;
     corbasim::reflective_gui::NewLogModel newLogModel;
+    corbasim::reflective_gui::InputRequestController inputReqCntl;
 
     // Signals between models
     QObject::connect(&controller,
@@ -153,10 +155,32 @@ int main(int argc, char **argv)
                 corbasim::event::event_ptr)));
     // End signals
 
+    // Input request controller
+    QObject::connect(&controller,
+            SIGNAL(servantCreated(
+                    QString, 
+                    const corbasim::core::interface_reflective_base *)),
+            &inputReqCntl,
+            SLOT(registerInstance(
+                    const QString&, 
+                    const corbasim::core::interface_reflective_base *)));
+
+    QObject::connect(&controller,
+            SIGNAL(servantDeleted(QString)),
+            &inputReqCntl, SLOT(unregisterInstance(const QString&)));
+
+    QObject::connect(&controller,
+        SIGNAL(requestReceived(QString, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)),
+        &inputReqCntl,
+        SLOT(processRequest(const QString&, corbasim::event::request_ptr,
+                corbasim::event::event_ptr)));
+    // End input request controller
+
     // Executed in dedicated threads
     controller.moveToThread(&threadController);
-    // logModel.moveToThread(&threadLogModel);
-    // threadLogModel.start();
+    inputReqCntl.moveToThread(&threadInputReqCntl);
+    threadInputReqCntl.start();
 
     if (config->enable_scripting)
     {
@@ -230,13 +254,13 @@ int main(int argc, char **argv)
     threadEngine.quit();
     threadWatcher.quit();
     threadDumper.quit();
-    // threadLogModel.quit();
+    threadInputReqCntl.quit();
 
     threadController.wait();
     threadEngine.wait();
     threadWatcher.wait();
     threadDumper.wait();
-    // threadLogModel.wait();
+    threadInputReqCntl.wait();
 
     orb->shutdown(1);
     orbThread.join();
