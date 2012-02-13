@@ -25,6 +25,7 @@
 #include <vector>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/reflective_gui/NewLogModel.hpp>
 
 namespace corbasim 
 {
@@ -81,8 +82,9 @@ protected:
     QStackedWidget * m_multi;
     QSpinBox * m_diff; 
     QSpinBox * m_how_many; 
-    QTreeWidget * m_tree;
+    QTreeView * m_tree;
     QCheckBox * m_cbInsertAtEnd;
+    NewLogModel m_model;
     
     forms_t m_forms;
     requests_t m_requests;

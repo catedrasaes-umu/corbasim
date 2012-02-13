@@ -225,28 +225,80 @@ namespace reflective_gui
                 }
 
             case TYPE_BOOL:
-                hold.to_value< bool >() = var.toBool();
-                return true;
+                {
+                    if (!var.canConvert(QVariant::Bool)) return false;
 
-#if 0
+                    hold.to_value< bool >() = var.toBool();
+
+                    return true;
+                }
+
             case TYPE_OCTET:
-                return QVariant(hold.to_value< unsigned char >());
-            case TYPE_CHAR:
-                return QVariant(hold.to_value< char >());
-            case TYPE_SHORT:
-                return QVariant(hold.to_value< short >());
-            case TYPE_USHORT:
-                return QVariant(hold.to_value< unsigned short >());
-            case TYPE_LONG:
-                return QVariant(hold.to_value< int32_t >());
-            case TYPE_ULONG:
-                return QVariant(hold.to_value< uint32_t >());
-            case TYPE_LONGLONG:
-                return QVariant((qint64) hold.to_value< int64_t >());
-            case TYPE_ULONGLONG:
-                return QVariant((quint64) hold.to_value< uint64_t >());
-#endif
+                {
+                    if (!var.canConvert< unsigned char >()) return false;
 
+                    hold.to_value< unsigned char >() = 
+                        var.value< unsigned char >();
+
+                    return true;
+                }
+            case TYPE_CHAR:
+                {
+                    if (!var.canConvert< char >()) return false;
+
+                    hold.to_value< char >() = var.value< char >();
+
+                    return true;
+                }
+            case TYPE_SHORT:
+                {
+                    if (!var.canConvert< short >()) return false;
+
+                    hold.to_value< short >() = var.value< short >();
+
+                    return true;
+                }
+            case TYPE_USHORT:
+                {
+                    if (!var.canConvert< unsigned short >()) return false;
+
+                    hold.to_value< unsigned short >() = 
+                        var.value< unsigned short >();
+
+                    return true;
+                }
+            case TYPE_LONG:
+                {
+                    if (!var.canConvert< int32_t >()) return false;
+
+                    hold.to_value< int32_t >() = var.value< int32_t >();
+
+                    return true;
+                }
+            case TYPE_ULONG:
+                {
+                    if (!var.canConvert< uint32_t >()) return false;
+
+                    hold.to_value< uint32_t >() = var.value< uint32_t >();
+
+                    return true;
+                }
+            case TYPE_LONGLONG:
+                {
+                    if (!var.canConvert< int64_t >()) return false;
+
+                    hold.to_value< int64_t >() = var.value< int64_t >();
+
+                    return true;
+                }
+            case TYPE_ULONGLONG:
+                {
+                    if (!var.canConvert< uint64_t >()) return false;
+
+                    hold.to_value< uint64_t >() = var.value< uint64_t >();
+
+                    return true;
+                }
             case TYPE_STRING:
             case TYPE_WSTRING:
                 {

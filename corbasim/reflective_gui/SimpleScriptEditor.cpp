@@ -33,17 +33,19 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     QWidget * central = new QWidget();
     setCentralWidget(central);
 
-    m_tree = new QTreeWidget;
-    m_tree->setHeaderLabel("Script");
-    m_selector = new QComboBox;
+    m_tree = new QTreeView();
+    m_tree->setModel(&m_model);
+
+    m_selector = new QComboBox();
     m_selector->setEditable(true);
     m_selector->setInsertPolicy(QComboBox::NoInsert);
-    m_diff = new QSpinBox;
+
+    m_diff = new QSpinBox();
     m_diff->setRange(0, 9999);
     m_diff->setValue(200);
     m_diff->setSuffix(" ms");
 
-    m_how_many = new QSpinBox;
+    m_how_many = new QSpinBox();
     m_how_many->setRange(1, 9999);
     m_how_many->setValue(1);
 
@@ -167,7 +169,8 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     QAction * playSelectedAction = new QAction(
             style()->standardIcon(QStyle::SP_MediaPlay),
             "Play &from selected item", this);
-    playSelectedAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Space));
+    playSelectedAction->setShortcut(
+            QKeySequence(Qt::CTRL + Qt::Key_Space));
     QObject::connect(playSelectedAction, SIGNAL(triggered()), 
             this, SLOT(playFromSelected()));
 
@@ -253,13 +256,21 @@ void SimpleScriptEditor::initialize(
     unsigned int count = factory->operation_count();
     m_forms.reserve(count);
 
+    m_model.registerInstance("self", factory);
+
     for (unsigned int i = 0; i < count; i++) 
     {
         core::operation_reflective_base const * op =
             factory->get_reflective_by_index(i);
 
         OperationInputForm * form = new OperationInputForm(op);
-        m_multi->addWidget(form);
+
+        // Scroll
+        QScrollArea * scroll = new QScrollArea();
+        scroll->setWidgetResizable(true);
+        scroll->setWidget(form);
+        m_multi->addWidget(scroll);
+
         m_forms.push_back(form);
 
         m_selector->addItem(op->get_name());
@@ -270,54 +281,15 @@ void SimpleScriptEditor::initialize(
 
 void SimpleScriptEditor::moveUp()
 {
-    int pos = getSelected();
-
-    if (pos > 0)
-    {
-        // La elimina de la posición actual
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        event::request_ptr selected = *it;
-        m_requests.erase(it);
-
-        // La añade en la nueva
-        it = boost::next(m_requests.begin(), pos - 1);
-        m_requests.insert(it, selected);
-
-        // Tree
-        QTreeWidgetItem * item = m_tree->takeTopLevelItem(pos);
-        m_tree->insertTopLevelItem(pos - 1, item);
-
-        // Selecciona el elemento
-        m_tree->setCurrentItem(item);
-    }
 }
 
 void SimpleScriptEditor::moveDown()
 {
-    int pos = getSelected();
-
-    if (pos >= 0 && pos < (int) m_requests.size() - 1)
-    {
-        // La elimina de la posición actual
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        event::request_ptr selected = *it;
-        m_requests.erase(it);
-
-        // La añade en la nueva
-        it = boost::next(m_requests.begin(), pos + 1);
-        m_requests.insert(it, selected);
-
-        // Tree
-        QTreeWidgetItem * item = m_tree->takeTopLevelItem(pos);
-        m_tree->insertTopLevelItem(pos + 1, item);
-       
-        // Selecciona el elemento
-        m_tree->setCurrentItem(item);
-    }
 }
 
 void SimpleScriptEditor::playFromSelected()
 {
+#if 0
     int pos = getSelected();
 
     if (pos >= 0)
@@ -331,10 +303,12 @@ void SimpleScriptEditor::playFromSelected()
 
         m_timer.start(m_diff->value());
     }
+#endif
 }
 
 void SimpleScriptEditor::deleteSelected()
 {
+#if 0
     int pos = getSelected();
 
     assert(m_tree->topLevelItemCount() == (int) m_requests.size());
@@ -345,6 +319,7 @@ void SimpleScriptEditor::deleteSelected()
         m_requests.erase(it);
         delete m_tree->takeTopLevelItem(pos);
     }
+#endif
 }
 
 void SimpleScriptEditor::replaceSelected()
@@ -363,14 +338,16 @@ void SimpleScriptEditor::replaceSelected()
 
     // Elimina el actual
     deleteSelected();
-    
+#if 0 
     // Selecciona la nueva entrada
     QTreeWidgetItem * item = m_tree->topLevelItem(pos);
     m_tree->setCurrentItem(item);
+#endif
 }
 
 void SimpleScriptEditor::sendNextRequest()
 {
+#if 0
     if (m_current_request < m_requests.size())
     {
         // Selecciona la siguiente request en el arbol
@@ -379,55 +356,43 @@ void SimpleScriptEditor::sendNextRequest()
     }
     else
         m_timer.stop();
+#endif
 }
 
 void SimpleScriptEditor::sendCurrent()
 {
-#if 0
-    // Obtiene el dialogo seleccionado
-    dialogs::input_ptr dlg = m_multi->getCurrentDialog();
+    int idx = m_selector->currentIndex();
 
-    if (!dlg) return;
+    if (idx == -1) return;
 
-    event::request_ptr req(dlg->create_request());
+    event::request_ptr req = m_forms[idx]->createRequest();
 
     emit sendRequest(req);
-#endif
 }
 
 void SimpleScriptEditor::appendRequest()
 {
-#if 0
-    // Obtiene el dialogo seleccionado
-    dialogs::input_ptr dlg = m_multi->getCurrentDialog();
-    
-    if (!dlg) return;
+    int idx = m_selector->currentIndex();
+
+    if (idx == -1) return;
 
     for (int i = 0; i < m_how_many->value(); i++) 
     {
-        // Crea una request del tipo seleccionado con los valores
-        // del dialogo
-        event::request_ptr req(dlg->create_request());
+        event::request_ptr req = m_forms[idx]->createRequest();
 
-        doAppendRequest(req, m_cbInsertAtEnd->isChecked());
+        m_model.outputRequest("self", req, event::event_ptr());
     }
-#endif
 }
 
 void SimpleScriptEditor::appendOneRequest()
 {
-#if 0
-    // Obtiene el dialogo seleccionado
-    dialogs::input_ptr dlg = m_multi->getCurrentDialog();
-    
-    if (!dlg) return;
+    int idx = m_selector->currentIndex();
 
-    // Crea una request del tipo seleccionado con los valores
-    // del dialogo
-    event::request_ptr req(dlg->create_request());
+    if (idx == -1) return;
 
-    doAppendRequest(req, m_cbInsertAtEnd->isChecked());
-#endif
+    event::request_ptr req = m_forms[idx]->createRequest();
+
+    m_model.outputRequest("self", req, event::event_ptr());
 }
 
 void SimpleScriptEditor::playClicked()
@@ -444,8 +409,10 @@ void SimpleScriptEditor::playClicked()
 
 void SimpleScriptEditor::clearClicked()
 {
+#if 0
     m_tree->clear();
     m_requests.clear();
+#endif
 }
 
 void SimpleScriptEditor::stopClicked()
@@ -515,6 +482,7 @@ void SimpleScriptEditor::doLoad()
 
 int SimpleScriptEditor::getSelected()
 {
+#if 0
     QTreeWidgetItem* current = m_tree->currentItem();
  
     // Obtiene el elemento de nivel superior 
@@ -523,7 +491,7 @@ int SimpleScriptEditor::getSelected()
 
     if (current)
         return m_tree->indexOfTopLevelItem(current);
-
+#endif
     return -1;
 }
 

@@ -256,7 +256,7 @@ void TriggerEngine::servantCreated(const QString& id,
 
     m_engine.evaluate(QString(
     //      "var %1 = new Object;"
-            "%1.on = function (op, func)"
+            "this[\"%1\"].on = function (op, func)"
             "{"
             "   print('Registred method ' + op + ' in %1!');"
             "   this['_dispatch_' + op] = func;"
