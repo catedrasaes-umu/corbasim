@@ -180,22 +180,25 @@ void ReflectivePlotTool::registerInstance(const QString& name,
 
 void ReflectivePlotTool::unregisterInstance(const QString& name)
 {
-    m_model.unregisterInstance(name);
-
     // Maps
     map_t::iterator it = m_map.begin();
     for(; it != m_map.end(); it++)
     {
         if (name == it->first.first)
         {
-            m_map.erase(it);
-
             for (int i = 0; i < it->second.size(); i++) 
             {
-                m_inverse_map.erase(it->second[i]);
+                ReflectivePlot * plot = it->second[i];
+
+                m_inverse_map.erase(plot);
+                m_model.deletePlot(it->first.first, plot->getPath());
             }
+
+            m_map.erase(it);
         }
     }
+
+    m_model.unregisterInstance(name);
 }
 
 void ReflectivePlotTool::createPlot(const QString& id, 
@@ -253,7 +256,8 @@ void ReflectivePlotTool::deletePlot(const QString& id,
 
 void ReflectivePlotTool::deleteRequested(qt::SortableGroupItem* item)
 {
-    ReflectivePlot * plot = qobject_cast< ReflectivePlot * >(item->getWidget());
+    ReflectivePlot * plot = 
+        qobject_cast< ReflectivePlot * >(item->getWidget());
 
     if (plot)
     {
@@ -273,21 +277,22 @@ void ReflectivePlotTool::deleteRequested(qt::SortableGroupItem* item)
     m_group->deleteItem(item);
 }
 
-extern "C" {
-
-corbasim::qwt::ReflectivePlotTool * createReflectivePlotTool(
-        QWidget * parent)
+extern "C" 
 {
-    return new corbasim::qwt::ReflectivePlotTool(parent);
-}
 
-void registerInstanceInPlotTool(QWidget * tool, 
-        const QString& id, 
-        corbasim::core::interface_reflective_base const * factory)
-{
-    static_cast< corbasim::qwt::ReflectivePlotTool * >(tool)->
-        registerInstance(id, factory);
-}
+    corbasim::qwt::ReflectivePlotTool * createReflectivePlotTool(
+            QWidget * parent)
+    {
+        return new corbasim::qwt::ReflectivePlotTool(parent);
+    }
+
+    void registerInstanceInPlotTool(QWidget * tool, 
+            const QString& id, 
+            corbasim::core::interface_reflective_base const * factory)
+    {
+        static_cast< corbasim::qwt::ReflectivePlotTool * >(tool)->
+            registerInstance(id, factory);
+    }
 
 } // extern C
 
