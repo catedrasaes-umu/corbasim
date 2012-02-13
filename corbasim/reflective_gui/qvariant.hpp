@@ -22,6 +22,8 @@
 
 #include <corbasim/core/reflective_fwd.hpp>
 #include <QVariant>
+#include <QScriptValue>
+#include <QScriptEngine>
 
 namespace corbasim 
 {
@@ -36,6 +38,17 @@ namespace reflective_gui
             corbasim::core::reflective_base const * reflective,
             corbasim::core::holder& hold,
             const QVariant& var);
+
+    QScriptValue toQScriptValue(
+            QScriptEngine * engine,
+            corbasim::core::reflective_base const * reflective,
+            corbasim::core::holder& hold);
+
+    bool fromQScriptValue(
+            QScriptEngine * engine,
+            corbasim::core::reflective_base const * reflective,
+            corbasim::core::holder& hold,
+            const QScriptValue& var);
 
 } // namespace reflective_gui
 } // namespace corbasim

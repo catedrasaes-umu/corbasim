@@ -328,8 +328,7 @@ void TriggerEngine::requestReceived(const QString& id,
             core::holder holder = op->get_holder(req);
 
             // Adds the object to the arguments
-            args << m_engine.newVariant(
-                    corbasim::reflective_gui::toQVariant(op, holder));
+            args << reflective_gui::toQScriptValue(&m_engine, op, holder);
 
             // Call the trigger
             meth.call(obj, args);

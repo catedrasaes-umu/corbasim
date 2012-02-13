@@ -36,6 +36,7 @@
 
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <corbasim/qt/private/ScriptEditor.hpp>
+#include <corbasim/reflective_gui/qvariant.hpp>
 #endif
 
 #include <iostream>
