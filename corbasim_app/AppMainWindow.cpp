@@ -287,6 +287,8 @@ void AppMainWindow::setLogModel(QAbstractItemModel * model)
 void AppMainWindow::showPlotTool()
 {
     typedef qwt::ReflectivePlotTool* (*create_t)(QWidget*);
+    typedef void (*init_t)(QWidget*, const QString&,
+            corbasim::core::interface_reflective_base const *);
 
     if (!m_plot_tool)
     {
@@ -295,7 +297,8 @@ void AppMainWindow::showPlotTool()
         if (!lib.load())
             return;
 
-        create_t create = (create_t) lib.resolve("createReflectivePlotTool");
+        create_t create = (create_t) 
+            lib.resolve("createReflectivePlotTool");
 
         if (!create)
             return;
@@ -303,6 +306,18 @@ void AppMainWindow::showPlotTool()
         m_plot_tool = create(NULL);
         m_plot_tool->setWindowTitle("corbasim plotting tool");
         m_plot_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
+
+        // Register current instances
+        init_t init = (init_t) lib.resolve("registerInstanceInPlotTool");
+
+        if (init)
+        {
+            for (servants_t::const_iterator it = m_servants.begin(); 
+                    it != m_servants.end(); ++it) 
+            {
+                init(m_plot_tool, it->first, it->second->getFactory());
+            }
+        }
 
         QObject::connect(
                 m_controller,
