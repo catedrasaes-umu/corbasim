@@ -22,21 +22,22 @@
 using namespace corbasim::app::view;
 
 ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
-    QWidget(parent)
+    QDialog(parent)
 {
     QVBoxLayout * layout = new QVBoxLayout;
 
     layout->addWidget(m_widget.getWidget());
 
-    QHBoxLayout * hLayout = new QHBoxLayout;
-
-    // Horizontal spacer
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
-            QSizePolicy::Expanding, QSizePolicy::Minimum);
-    hLayout->addItem(spacer);
+            QSizePolicy::Expanding, QSizePolicy::Expanding);
+    layout->addItem(spacer);
 
-    QPushButton * createButton = new QPushButton("&Create");
-    QPushButton * cancelButton = new QPushButton("C&ancel");
+    QDialogButtonBox * btns = new QDialogButtonBox();
+
+    QPushButton * createButton = btns->addButton("&Create", QDialogButtonBox::AcceptRole);
+    QPushButton * cancelButton = btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
+
+    layout->addWidget(btns);
 
     QObject::connect(createButton, SIGNAL(clicked()),
             this, SLOT(createClicked()));
@@ -44,10 +45,6 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     QObject::connect(cancelButton, SIGNAL(clicked()),
             window(), SLOT(hide()));
 
-    hLayout->addWidget(createButton);
-    hLayout->addWidget(cancelButton);
-
-    layout->addLayout(hLayout);
     setLayout(layout);
 }
 
@@ -80,21 +77,22 @@ void ObjrefCreateDialog::hideEvent(QHideEvent* event)
 // Servant
 
 ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
-    QWidget(parent)
+    QDialog(parent)
 {
     QVBoxLayout * layout = new QVBoxLayout;
 
     layout->addWidget(m_widget.getWidget());
 
-    QHBoxLayout * hLayout = new QHBoxLayout;
-
-    // Horizontal spacer
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
-            QSizePolicy::Expanding, QSizePolicy::Minimum);
-    hLayout->addItem(spacer);
+            QSizePolicy::Expanding, QSizePolicy::Expanding);
+    layout->addItem(spacer);
 
-    QPushButton * createButton = new QPushButton("&Create");
-    QPushButton * cancelButton = new QPushButton("C&ancel");
+    QDialogButtonBox * btns = new QDialogButtonBox();
+
+    QPushButton * createButton = btns->addButton("&Create", QDialogButtonBox::AcceptRole);
+    QPushButton * cancelButton = btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
+
+    layout->addWidget(btns);
 
     QObject::connect(createButton, SIGNAL(clicked()),
             this, SLOT(createClicked()));
@@ -102,11 +100,9 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     QObject::connect(cancelButton, SIGNAL(clicked()),
             window(), SLOT(hide()));
 
-    hLayout->addWidget(createButton);
-    hLayout->addWidget(cancelButton);
-
-    layout->addLayout(hLayout);
     setLayout(layout);
+
+    setMinimumWidth(400);
 }
 
 ServantCreateDialog::~ServantCreateDialog()
@@ -145,6 +141,8 @@ ReferenceValidatedWidget::ReferenceValidatedWidget(
     m_widget = new qt::ObjrefWidget(validator, this);
     l->addWidget(m_widget);
 
+    // TODO use QDialogButtonBox
+    
     QPushButton * applyBtn = new QPushButton("&Apply", this);
     QPushButton * pasteBtn = new QPushButton("&Paste IOR from clipboard", this);
 

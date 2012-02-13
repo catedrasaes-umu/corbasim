@@ -23,6 +23,7 @@
 #include <QDateTime>
 
 #include <corbasim/core/reference_repository.hpp>
+#include <corbasim/reflective_gui/qvariant.hpp>
 
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
@@ -30,125 +31,6 @@
 #include <iostream>
 
 using namespace corbasim::reflective_gui;
-
-extern QVariant toQVariant(
-        corbasim::core::reflective_base const * reflective,
-        corbasim::core::holder& hold);
-
-bool fromQVariant(
-        corbasim::core::reflective_base const * reflective,
-        corbasim::core::holder& hold,
-        const QVariant& var)
-{
-    using namespace corbasim::core;
-
-    const reflective_type type = reflective->get_type();
-
-    switch(type)
-    {
-        case TYPE_BOOL:
-            hold.to_value< bool >() = var.toBool();
-            return true;
-
-#if 0
-        case TYPE_OCTET:
-            return QVariant(hold.to_value< unsigned char >());
-        case TYPE_CHAR:
-            return QVariant(hold.to_value< char >());
-        case TYPE_SHORT:
-            return QVariant(hold.to_value< short >());
-        case TYPE_USHORT:
-            return QVariant(hold.to_value< unsigned short >());
-        case TYPE_LONG:
-            return QVariant(hold.to_value< int32_t >());
-        case TYPE_ULONG:
-            return QVariant(hold.to_value< uint32_t >());
-        case TYPE_LONGLONG:
-            return QVariant((qint64) hold.to_value< int64_t >());
-        case TYPE_ULONGLONG:
-            return QVariant((quint64) hold.to_value< uint64_t >());
-#endif
-
-        case TYPE_STRING:
-        case TYPE_WSTRING:
-            {
-                bool canConvert = var.canConvert(QVariant::String);
-
-                if (canConvert)
-                    reflective->from_string(hold, 
-                            var.toString().toStdString());
-
-                return canConvert;
-            }
-
-#if 0
-        case TYPE_OBJREF:
-            {
-                objrefvar_reflective_base const * objref = 
-                    static_cast< objrefvar_reflective_base const * >(
-                            reflective);
-
-                CORBA::Object_var obj = objref->to_object(hold);
-
-                if (CORBA::is_nil(obj))
-                    return QVariant("NIL");
-                
-                try {
-                    reference_repository * rr =
-                        reference_repository::get_instance();
-
-                    CORBA::String_var str = 
-                        rr->object_to_string(obj);
-
-                    return QVariant(str.in());
-
-                } catch (...) {
-                    return QVariant("NIL");
-                }
-
-            }
-            break;
-
-        case TYPE_ENUM:
-            {
-                // Maybe it works...
-                int32_t value = hold.to_value< int32_t >();
-
-                const char * str = "Unknown value"; 
-
-                if (value >= 0 && value < reflective->get_children_count())
-                    str = reflective->get_child_name((unsigned int) value);
-
-                return QVariant(str);
-            }
-#endif
-
-        case TYPE_DOUBLE:
-            {
-                bool canConvert = var.canConvert(QVariant::Double);
-
-                if (canConvert)
-                    hold.to_value< double >() = var.toDouble();
-
-                return canConvert;
-            }
-        case TYPE_FLOAT:
-            {
-                bool canConvert = var.canConvert(QVariant::Double);
-
-                if (canConvert)
-                    hold.to_value< float >() = var.toFloat();
-
-                return canConvert;
-            }
-
-        default:
-            break;
-    }
-
-    return false;
-}
-
 
 NewLogModel::NewLogModel(QObject * parent) :
     QAbstractItemModel(parent), m_maxEntries(100)

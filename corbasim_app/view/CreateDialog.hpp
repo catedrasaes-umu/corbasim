@@ -32,7 +32,7 @@ namespace app
 namespace view 
 {
 
-class ObjrefCreateDialog : public QWidget
+class ObjrefCreateDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -53,7 +53,7 @@ protected:
     void hideEvent(QHideEvent* event);
 };
 
-class ServantCreateDialog : public QWidget
+class ServantCreateDialog : public QDialog
 {
     Q_OBJECT
 public:
