@@ -21,6 +21,7 @@
 #include "AppController.hpp"
 #include <iostream>
 #include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/reflective_gui/qvariant.hpp>
 
 using namespace corbasim::app;
 
@@ -56,26 +57,22 @@ QScriptValue ScriptEngine::_call(QScriptContext * ctx,
         const core::operation_reflective_base * op =
             f->get_reflective_by_name(fn.toStdString());
 
-        // arguments in JSON
-        std::string json_request("{}"); // empty request
+        QVariant var;
 
         if (ctx->argumentCount() > 0)
         {
             QScriptValue val = ctx->argument(0);
 
-            // JSON string
-            if (val.isString())
-                json_request = 
-                    val.toString().toStdString();
+            var = val.toVariant();
         }
 
-        std::cout << "Request: " << json_request << std::endl;
-#warning TODO
-//        corbasim::event::request_ptr request(
-//                op->request_from_json(json_request));
+        corbasim::event::request_ptr request = op->create_request();
+        core::holder holder = op->get_holder(request);
+
+        reflective_gui::fromQVariant(op, holder, var);
 
         // send request
-//        _this->doSendRequest(id, request);
+        _this->doSendRequest(id, request);
     }
 
     return QScriptValue();
@@ -234,13 +231,7 @@ void TriggerEngine::objrefCreated(const QString& id,
         QScriptValue fn = m_engine.newFunction(ScriptEngine::_call,
                 fnProto);
 
-        obj.setProperty(QString("_%1").arg(op->get_name()), fn);
-
-        // Convert into JSON
-        m_engine.evaluate(
-                QString("%1.%2 = function(request) "
-                    "{ this._%2(JSON.stringify(request)); }")
-                .arg(id).arg(op->get_name()));
+        obj.setProperty(op->get_name(), fn);
     }
 }
 
@@ -286,13 +277,7 @@ void TriggerEngine::servantCreated(const QString& id,
         QScriptValue fn = m_engine.newFunction(ScriptEngine::_call,
                 fnProto);
 
-        obj.setProperty(QString("_%1").arg(op->get_name()), fn);
-
-        // Convert into JSON
-        m_engine.evaluate(
-                QString("%1.%2 = function(request) "
-                    "{ this._%2(JSON.stringify(request)); }")
-                .arg(id).arg(op->get_name()));
+        obj.setProperty(op->get_name(), fn);
     }
 }
 
@@ -337,31 +322,19 @@ void TriggerEngine::requestReceived(const QString& id,
                 return;
             }
 
-            try {
-                // JSON request
-                std::string json_str;
-#warning TODO
-//                 op->to_json(req.get(), json_str);
+            // Script object with the request
+            QScriptValueList args;
 
-                std::cout << json_str << std::endl;
+            core::holder holder = op->get_holder(req);
 
-                // Script object with the request
-                QScriptValueList args;
+            // Adds the object to the arguments
+            args << m_engine.newVariant(
+                    corbasim::reflective_gui::toQVariant(op, holder));
 
-                QString code = QString("(%1)")
-                    .arg(json_str.c_str());
+            // Call the trigger
+            meth.call(obj, args);
 
-                QScriptValue val = m_engine.evaluate(code);
-
-                // Adds the object to the arguments
-                args << val;
-
-                // Call the trigger
-                meth.call(obj, args);
-
-                // TODO check uncaught exceptions
-            } catch(...) {
-            }
+            // TODO check uncaught exceptions
         }
     }
 }
