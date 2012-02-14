@@ -193,17 +193,18 @@ IntegerWidget::IntegerWidget(core::reflective_base const * reflective,
             setRange(std::numeric_limits< int32_t >::min(),
                     std::numeric_limits< int32_t >::max());
             break;
+            // TODO custom widget
         case TYPE_ULONG:
             setRange(std::numeric_limits< uint32_t >::min(),
-                    std::numeric_limits< uint32_t >::max());
+                    std::numeric_limits< int32_t >::max());
             break;
         case TYPE_LONGLONG:
-            setRange(std::numeric_limits< int64_t >::min(),
-                    std::numeric_limits< int64_t >::max());
+            setRange(std::numeric_limits< int32_t >::min(),
+                    std::numeric_limits< int32_t >::max());
             break;
         case TYPE_ULONGLONG:
-            setRange(std::numeric_limits< uint64_t >::min(),
-                    std::numeric_limits< uint64_t >::max());
+            setRange(std::numeric_limits< uint32_t >::min(),
+                    std::numeric_limits< int32_t >::max());
             break;
         default:
             break;
@@ -378,7 +379,7 @@ void BoolWidget::fromHolder(core::holder& holder)
 
     switch(type)
     {
-        case TYPE_OCTET:
+        case TYPE_BOOL:
             setChecked(holder.to_value< bool >());
             break;
         default:
