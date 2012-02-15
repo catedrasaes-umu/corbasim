@@ -25,6 +25,7 @@ set(corbasim_app_SRCS
     model/Servant.cpp
 
     NSBrowser.cpp
+    IDLBuilder.cpp
     )
 
 set(corbasim_app_MOC_HDRS
@@ -40,6 +41,7 @@ set(corbasim_app_MOC_HDRS
     view/Servant.hpp
 
     NSBrowser.hpp
+    IDLBuilder.hpp
     )
 
 # NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
@@ -62,9 +64,7 @@ install(TARGETS corbasim_app DESTINATION bin)
 install(TARGETS corbasim_app_idl DESTINATION lib)
 
 add_executable(corbasim_app_test EXCLUDE_FROM_ALL
-    test.cpp
-    ${corbasim_app_MOC_SRCS}
-    ${corbasim_app_SRCS})
+    test.cpp)
 target_link_libraries(corbasim_app_test
     dl # for dlopen, dlsym
     boost_program_options

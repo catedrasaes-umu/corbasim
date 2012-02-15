@@ -114,6 +114,8 @@ signals:
     void doProcessIncomingRequest(QString,
             corbasim::event::request_ptr);
 
+    void buildIDL(const QString&, const QStringList&);
+
 protected:
     AppController * m_controller;
     TriggerEngine * m_engine;

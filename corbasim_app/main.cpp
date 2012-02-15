@@ -26,6 +26,7 @@
 #include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
 #include "NSBrowser.hpp"
+#include "IDLBuilder.hpp"
 // #include <corbasim/reflective_gui/LogModel.hpp>
 #include <corbasim/reflective_gui/NewLogModel.hpp>
 #include <corbasim/reflective_gui/InputRequestProcessor.hpp>
@@ -61,6 +62,7 @@ int main(int argc, char **argv)
     QThread threadEngine;
     QThread threadWatcher;
     QThread threadDumper;
+    QThread threadBuilder;
     QThread threadInputReqCntl;
 
     corbasim::reflective_gui::InputRequestController& inputReqCntl = 
@@ -71,6 +73,7 @@ int main(int argc, char **argv)
     corbasim::app::TriggerEngine engine;
     corbasim::app::AppFileWatcher watcher;
     corbasim::app::DataDumper dumper;
+    corbasim::app::IDLBuilder builder;
     corbasim::app::AppMainWindow window;
     // corbasim::reflective_gui::LogModel logModel;
     corbasim::reflective_gui::NewLogModel newLogModel;
@@ -210,6 +213,9 @@ int main(int argc, char **argv)
         dumper.moveToThread(&threadDumper);
         threadDumper.start();
     }
+    
+    builder.moveToThread(&threadBuilder);
+    threadBuilder.start();
 
     threadController.start();
 
@@ -257,12 +263,14 @@ int main(int argc, char **argv)
     threadEngine.quit();
     threadWatcher.quit();
     threadDumper.quit();
+    threadBuilder.quit();
     threadInputReqCntl.quit();
 
     threadController.wait();
     threadEngine.wait();
     threadWatcher.wait();
     threadDumper.wait();
+    threadBuilder.wait();
     threadInputReqCntl.wait();
 
     orb->shutdown(1);

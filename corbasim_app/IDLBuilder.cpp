@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * test.cpp
+ * IDLBuilder.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,29 +17,41 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <QtCore>
+#include "IDLBuilder.hpp"
 
-int main(int argc, char **argv)
+using namespace corbasim::app;
+
+IDLBuilder::IDLBuilder(QObject * parent) :
+    QObject(parent)
 {
-    QCoreApplication app(argc, argv);
+    m_tmpDir = QString("/tmp/corbasim-%1").arg(
+            QCoreApplication::applicationPid());
 
-    const QString jobName("prueba");
-    const QString workingDir = QString("/tmp/corbasim/") + jobName;
+    m_fs.mkdir(m_tmpDir, true);
+}
+
+IDLBuilder::~IDLBuilder()
+{
+    m_fs.rmdir(m_tmpDir, true);
+}
+
+void IDLBuilder::build(const QString& installDir, const QStringList& files)
+{
+    int step = 0;
+    // Step 0 - TODO check input files
+
+    emit progress(step++);
+
+    // Random job name
+    const QString jobName(
+            QDateTime::currentDateTime().toString("YYYYMMDDhhmmsszzz"));
+    const QString workingDir = m_tmpDir + jobName;
     const QString buildDir = workingDir + "/build";
     const QString idlFile = workingDir + "/" + jobName + ".idl";
-    QStringList idlFiles;
-    const QString installDir("/tmp/path_to_install_corbasim");
 
-    idlFiles << "file.idl";
+    m_fs.mkdir(workingDir, true);
+    m_fs.mkdir(buildDir, true);
 
-    std::cout << QCoreApplication::applicationFilePath().toStdString() 
-        << std::endl;
-
-    QFSFileEngine fs;
-    fs.mkdir(workingDir, true);
-    fs.mkdir(buildDir, true);
-    
     // Step 1 - IDL preprocessing
     QProcess cat;
     QProcess cpp;
@@ -49,7 +61,7 @@ int main(int argc, char **argv)
     cpp.setStandardOutputProcess(&grep);
     grep.setStandardOutputFile(idlFile);
 
-    cat.start("cat", idlFiles);
+    cat.start("cat", files);
     cpp.start("cpp");
     // Elimina las lineas de preprocesado
     grep.start("grep", QStringList() << "-v" << "^#");
@@ -58,7 +70,7 @@ int main(int argc, char **argv)
     cpp.waitForFinished(-1);
     cat.waitForFinished(-1);
 
-    std::cout << "IDL file generated!" << std::endl;
+    emit progress(step++);
 
     // Step 2 - IDL Compilation
     QProcess corbasim_idl;
@@ -72,13 +84,13 @@ int main(int argc, char **argv)
 
     if (!corbasim_idl.waitForStarted())
     {
-        std::cerr << "C++ files generation error!" << std::endl;
-        return -1;
+        emit error("C++ files generation error!");
+        return;
     }
 
     corbasim_idl.waitForFinished(-1);
-    
-    std::cout << "C++ files generated!" << std::endl;
+
+    emit progress(step++);
 
     // Step 3 - Generate CMakeLists.txt
     QFile cmakelists(workingDir + "/CMakeLists.txt");
@@ -97,6 +109,10 @@ int main(int argc, char **argv)
 
     os << "include(" << jobName << ".cmake)\n";
 
+    cmakelists.close();
+
+    emit progress(step++);
+
     // Step 4 - Create compilation cache
     QProcess cmake;
     QStringList cmakeOptions;
@@ -109,6 +125,8 @@ int main(int argc, char **argv)
 
     cmake.start("cmake", cmakeOptions);
     cmake.waitForFinished(-1);
+    
+    emit progress(step++);
 
     // Step 5 - Compiling
     QProcess make;
@@ -116,12 +134,14 @@ int main(int argc, char **argv)
     make.start("make");
     make.waitForFinished(-1);
 
+    emit progress(step++);
+
     // Step 6 - Installing
     QProcess install;
     install.setWorkingDirectory(buildDir);
     install.start("make", QStringList() << "install");
     install.waitForFinished(-1);
 
-    return 0;
-    // return app.exec();
+    emit progress(step++);
 }
+
