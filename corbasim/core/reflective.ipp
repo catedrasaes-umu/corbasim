@@ -186,12 +186,34 @@ void string_reflective< T >::copy(holder const& src, holder& dst) const
     dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
 }
 
+template< typename T, typename Y >
+reflective_base const * create_slice_reflective(
+    T t, Y y, // dummy parameters
+    reflective_base const * parent, unsigned int idx)
+{
+    return new typename calculate_reflective< T, Y >::type(parent, idx);
+}
+
 // Sequence reflective
 template< typename T >
 sequence_reflective< T >::sequence_reflective(reflective_base const * parent,
         unsigned int idx) :
-    reflective_base(parent, idx), m_slice(this, 0)
+    reflective_base(parent, idx)
 {
+    // Type used to calculate
+    slice_t t;
+
+    // Real one
+    T y;
+    y.length(1);
+
+    m_slice = create_slice_reflective(t, y[0], this, 0);
+}
+
+template< typename T >
+sequence_reflective< T >::~sequence_reflective()
+{
+    delete m_slice;
 }
 
 template< typename T >
@@ -209,7 +231,7 @@ reflective_type sequence_reflective< T >::get_type() const
 template< typename T >
 reflective_base const * sequence_reflective< T >::get_slice() const
 {
-    return &m_slice;
+    return m_slice;
 }
 
 // Dynamic information
@@ -264,7 +286,7 @@ void sequence_reflective< T >::copy(holder const& src, holder& dst) const
     {
         holder child_src = get_child_value(const_cast< holder& >(src), i);
         holder child_dst = get_child_value(dst, i);
-        m_slice.copy(child_src, child_dst);
+        m_slice->copy(child_src, child_dst);
     }
 }
 
@@ -451,91 +473,70 @@ void enum_reflective< T >::copy(holder const& src, holder& dst) const
     dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
 }
 
+template< typename Var >
+struct calculate_iface
+{
+    typedef typename Var::_obj_type type;
+};
+
+template< >
+struct calculate_iface< CORBA::Object_var >
+{
+    typedef CORBA::Object type;
+};
+
 // Object reflective
-template< typename T >
-objrefvar_reflective< T >::objrefvar_reflective(
+template< typename T, typename Y >
+objrefvar_reflective< T, Y >::objrefvar_reflective(
         reflective_base const * parent,
         unsigned int idx) :
     objrefvar_reflective_base(parent, idx)
 {
 }
 
-template< typename T >
-reflective_type objrefvar_reflective< T >::get_type() const
+template< typename T, typename Y >
+reflective_type objrefvar_reflective< T, Y >::get_type() const
 {
     return TYPE_OBJREF;
 }
 
-template< typename T >
-holder objrefvar_reflective< T >::create_holder() const
+template< typename T, typename Y >
+holder objrefvar_reflective< T, Y >::create_holder() const
 {
+    // Just when Y == T
     return new holder_ref_impl< T >();
 }
 
-template< typename T >
-void objrefvar_reflective< T >::copy(holder const& src, holder& dst) const
+template< typename T, typename Y >
+void objrefvar_reflective< T, Y >::copy(holder const& src, holder& dst) const
 {
-    dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
+    dst.to_value< Y >() = const_cast< holder& >(src).to_value< Y >();
 }
 
-template< typename T >
-CORBA::Object_ptr objrefvar_reflective< T >::to_object(holder const& h) const
+template< typename T, typename Y >
+CORBA::Object_ptr objrefvar_reflective< T, Y >::to_object(holder const& h) const
 {
-    typedef typename T::_obj_type iface_t;
+    typedef typename calculate_iface< T >::type iface_t;
 
-    return iface_t::_duplicate(const_cast< holder& >(h).to_value< T >());
+    return iface_t::_duplicate(const_cast< holder& >(h).to_value< Y >());
 }
 
-template< typename T >
-void objrefvar_reflective< T >::from_object(holder& h, 
+template< typename T, typename Y >
+void objrefvar_reflective< T, Y >::from_object(holder& h, 
         CORBA::Object_ptr obj) const
 {
-    typedef typename T::_obj_type iface_t;
+    typedef typename calculate_iface< T >::type iface_t;
     
-    h.to_value< T >() = iface_t::_narrow(obj);;
+    h.to_value< Y >() = iface_t::_narrow(obj);;
 }
 
-template< >
-CORBA::Object_ptr 
-objrefvar_reflective< CORBA::Object_var >::to_object(holder const& h) const
-{
-    return CORBA::Object::_duplicate(
-            const_cast< holder& >(h).to_value< CORBA::Object_var >());
-}
-
-template< >
-void objrefvar_reflective< CORBA::Object_var >::from_object(holder& h, 
-        CORBA::Object_ptr obj) const
-{
-    h.to_value< CORBA::Object_var >() = CORBA::Object::_duplicate(obj);;
-}
-
-
-#if 0
-template< typename T >
-interface_reflective_base const * 
-objrefvar_reflective< T >::get_interface() const
-{
-    typedef interface_reflective< typename T::_obj_type > iface_t;
-
-    return iface_t::get_instance();
-}
-#endif
-
-template< typename T >
+template< typename T, typename Y>
 reference_validator_base * 
-objrefvar_reflective< T >::create_validator() const
+objrefvar_reflective< T, Y >::create_validator() const
 {
-    typedef typename T::_obj_type iface_t;
+    typedef typename calculate_iface< T >::type iface_t;
     
     return new reference_validator_impl< iface_t >();
-}
-
-template< >
-reference_validator_base * 
-objrefvar_reflective< CORBA::Object_var >::create_validator() const
-{
-    return new reference_validator_impl< CORBA::Object >();
 }
 
 // Unsupported type

@@ -114,10 +114,12 @@ template< typename T >
 struct sequence_reflective : public reflective_base
 {
     typedef typename adapted::is_corbaseq < T >::slice_type slice_t;
-    typedef reflective < slice_t > slice_reflective_t;
+    // typedef reflective < slice_t > slice_reflective_t;
 
     sequence_reflective(reflective_base const * parent = NULL,
             unsigned int idx = 0);
+    
+    ~sequence_reflective();
 
     bool is_repeated() const;
     bool is_variable_length() const;
@@ -138,7 +140,7 @@ struct sequence_reflective : public reflective_base
 
     void copy(holder const& src, holder& dst) const;
 
-    slice_reflective_t m_slice;
+    reflective_base const * m_slice;
 };
 
 typedef std::vector< reflective_ptr > reflective_children;
@@ -220,7 +222,7 @@ struct enum_reflective : public reflective_base
     void copy(holder const& src, holder& dst) const;
 };
 
-template< typename T >
+template< typename T, typename Y = T >
 struct objrefvar_reflective : public objrefvar_reflective_base
 {
     objrefvar_reflective(reflective_base const * parent = NULL,
@@ -228,6 +230,13 @@ struct objrefvar_reflective : public objrefvar_reflective_base
 
     reflective_type get_type() const;
 
+    /**
+     * @brief You can't use this method when in a sequence slice. 
+     *
+     * Y must be the same type than T.
+     *
+     * @return A new holder o a null holder.
+     */
     holder create_holder() const;
     
     void copy(holder const& src, holder& dst) const;
@@ -249,39 +258,46 @@ struct unsupported_type : public reflective_base
             unsigned int idx = 0);
 };
 
-template< typename T >
+
+/**
+ * @brief Calculates the reflective type for a type Y based on a type T.
+ *
+ * @tparam T A basic CORBA type.
+ * @tparam Y Must have the same basic usage than T.
+ */
+template< typename T, typename Y = T >
 struct calculate_reflective
 {
     typedef typename 
         // if
         cs_mpl::eval_if_identity< cs_mpl::is_bool< T >, 
-            bool_reflective< T >,
+            bool_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< boost::is_arithmetic< T >, 
-            primitive_reflective< T >,
+            primitive_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< boost::is_array< T >, 
-            array_reflective< T >,
+            array_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< boost::is_enum< T >, 
-            enum_reflective< T >,
+            enum_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< cs_mpl::is_string< T >, 
-            string_reflective< T >,
+            string_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< adapted::is_corbaseq< T >, 
-            sequence_reflective< T >,
+            sequence_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< adapted::is_union< T >, 
-            union_reflective< T >,
+            union_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< cs_mpl::is_struct< T >, 
-            struct_reflective< T >,
+            struct_reflective< Y >,
         // else if
         cs_mpl::eval_if_identity< adapted::is_objrefvar< T >, 
-            objrefvar_reflective< T >,
+            objrefvar_reflective< T, Y >,
         // else
-            boost::mpl::identity< unsupported_type< T > >
+            boost::mpl::identity< unsupported_type< Y > >
         > > > > > > > > >::type type;
 };
 
