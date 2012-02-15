@@ -18,6 +18,7 @@
  */
 
 #include "IDLBuilder.hpp"
+#include <iostream>
 
 using namespace corbasim::app;
 
@@ -28,6 +29,39 @@ IDLBuilder::IDLBuilder(QObject * parent) :
             QCoreApplication::applicationPid());
 
     m_fs.mkdir(m_tmpDir, true);
+#if 0
+    QProcess ldd;
+    ldd.start("ldd", QStringList() << QCoreApplication::applicationFilePath());
+
+    if (ldd.waitForStarted())
+    {
+        ldd.waitForFinished(-1);
+
+        const QString output(ldd.readAllStandardOutput());
+        
+        const QStringList list = output.split(" ", QString::SkipEmptyParts);
+        
+        foreach (const QString &path, list)
+        {
+            QFileInfo info(path);
+
+            if (info.exists())
+            {
+                QDir libDir = info.absoluteDir();
+                m_libDirs << libDir.absolutePath();
+
+                libDir.cdUp();
+                QFileInfo inc(libDir, "include");
+
+                if (inc.exists() && inc.isDir())
+                    m_includeDirs << inc.absoluteFilePath();
+            }
+        }
+
+        m_libDirs.removeDuplicates();
+        m_includeDirs.removeDuplicates();
+    }
+#endif
 }
 
 IDLBuilder::~IDLBuilder()
@@ -100,12 +134,19 @@ void IDLBuilder::build(const QString& installDir, const QStringList& files)
 
     os << "cmake_minimum_required(VERSION 2.6)\n";
     os << "project(" << jobName << " CXX)\n\n";
-
+#if 0
     os << "if(UNIX)\n";
     os << "\tset(Boost_USE_MULTITHREADED OFF)\n";
     os << "endif()\n";
     os << "find_package(Boost 1.45.0 REQUIRED)\n";
     os << "include_directories(${Boost_INCLUDE_DIRS})\n";
+#endif
+    
+    foreach (const QString &path, m_includeDirs)
+        os << "include_directories(" << path << ")\n";
+
+    foreach (const QString &path, m_libDirs)
+        os << "link_directories(" << path << ")\n";
 
     os << "include(" << jobName << ".cmake)\n";
 
