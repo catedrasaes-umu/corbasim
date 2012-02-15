@@ -26,6 +26,8 @@ set(corbasim_EXPORTED_HEADERS
     core/reference_repository.hpp
     core/reflective_fwd.hpp
     core/reflective.hpp
+    core/reflective.ipp
+    core/reflective_primitive.ipp
     core/request_serializer.hpp
     core/servant.hpp
     event_fwd.hpp
