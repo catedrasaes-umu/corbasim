@@ -23,6 +23,7 @@
 #include <QtGui>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/qt/ObjrefWidget.hpp>
+#include <corbasim/qt/MultiFileSelectionWidget.hpp>
 
 namespace corbasim 
 {
@@ -125,9 +126,15 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
+protected slots:
+
+    void changeWidget(bool checked);
+
 protected:
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
+
+    QVector< QPushButton * > m_buttons;
 };
 
 class SequenceWidget : public QWidget, public ReflectiveWidgetBase
@@ -198,6 +205,19 @@ public:
     virtual void fromHolder(core::holder& holder);
 };
 
+class FilesWidget : public qt::MultiFileSelectionWidget, 
+    public ReflectiveWidgetBase
+{
+    Q_OBJECT
+public:
+    FilesWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~FilesWidget();
+ 
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+};
+
 class OperationInputForm : public QWidget
 {
     Q_OBJECT
@@ -213,11 +233,17 @@ public:
 
     void setValue(event::request_ptr req);
 
+protected slots:
+
+    void changeWidget(bool checked);
+
 protected:
 
     core::operation_reflective_base const * m_reflective;
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
+
+    QVector< QPushButton * > m_buttons;
 
 };
 

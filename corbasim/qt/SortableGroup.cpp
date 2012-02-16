@@ -122,6 +122,7 @@ SortableGroup::SortableGroup(QWidget * parent) :
     QWidget(parent), m_delete(true)
 {
     QVBoxLayout * layout = new QVBoxLayout();
+    layout->setMargin(0);
 
     QWidget * scrollWidget = new QWidget();
     QVBoxLayout * scrollLayout = new QVBoxLayout();

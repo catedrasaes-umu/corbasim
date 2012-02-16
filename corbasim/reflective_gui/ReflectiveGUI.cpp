@@ -398,6 +398,7 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
     unsigned int count = reflective->get_children_count();
 
     m_widgets.resize(count, NULL);
+    m_buttons.resize(count);
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -433,6 +434,23 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
 
             gb->setLayout(cLayout);
             layout->addWidget(gb, i, 0, 1, 2);
+
+            // Toggle from file
+            if (child->is_repeated() && 
+                    child->get_slice()->is_primitive())
+            {
+                QPushButton * btn = new QPushButton("F");
+                m_buttons[i] = btn;
+
+                QObject::connect(btn, SIGNAL(toggled(bool)),
+                        this, SLOT(changeWidget(bool)));
+
+                btn->setCheckable(true);
+                btn->setMaximumSize(20, 20);
+                btn->setFlat(true);
+
+                layout->addWidget(btn, i, 2);
+            }
         }
     }
 
@@ -473,6 +491,34 @@ void StructWidget::fromHolder(core::holder& holder)
     }
 }
 
+void StructWidget::changeWidget(bool checked)
+{
+    int i = m_buttons.indexOf(qobject_cast< QPushButton * >(sender()));
+
+    QWidget * current = findChild< QWidget * >(
+            m_reflective->get_child_name(i));
+
+    QLayout * layout = current->parentWidget()->layout();
+    delete layout->takeAt(layout->indexOf(current));
+    delete current;
+
+    // File widget
+    if (checked)
+    {
+        FilesWidget * w = new FilesWidget(m_reflective->get_child(i), this);
+        m_widgets[i] = w;
+        w->setObjectName(m_reflective->get_child_name(i));
+        layout->addWidget(w);
+    }
+    else
+    {
+        QWidget * w = createWidget(m_reflective->get_child(i), this);
+        m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(w);
+        w->setObjectName(m_reflective->get_child_name(i));
+        layout->addWidget(w);
+    }
+}
+
 SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective), m_old_idx(-1),
@@ -509,23 +555,6 @@ SequenceWidget::SequenceWidget(core::reflective_base const * reflective,
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addItem(spacer);
-
-    // TODO
-    if (false && reflective->get_slice()->is_primitive())
-    {
-        QWidget * valueWidget = new QWidget();
-        valueWidget->setLayout(layout);
-
-        layout = new QVBoxLayout();
-
-        QTabWidget * tab = new QTabWidget();
-        tab->addTab(valueWidget, "Value");
-
-        QWidget * fileWidget = new qt::MultiFileSelectionWidget();
-        tab->addTab(fileWidget, "File");
-
-        layout->addWidget(tab);
-    }
 
     setLayout(layout);
 
@@ -715,6 +744,27 @@ void ObjrefvarWidget::fromHolder(core::holder& holder)
     validatorHasChanged();
 }
 
+// Files
+
+FilesWidget::FilesWidget(core::reflective_base const * reflective,
+        QWidget * parent) :
+    qt::MultiFileSelectionWidget(parent), 
+    ReflectiveWidgetBase(reflective)
+{
+}
+
+FilesWidget::~FilesWidget()
+{
+}
+
+void FilesWidget::toHolder(core::holder& holder) 
+{
+}
+
+void FilesWidget::fromHolder(core::holder& holder)
+{
+}
+
 OperationInputForm::OperationInputForm(
         core::operation_reflective_base const * reflective,
         QWidget * parent) :
@@ -725,6 +775,7 @@ OperationInputForm::OperationInputForm(
     const unsigned int count = reflective->get_children_count();
 
     m_widgets.resize(count, NULL);
+    m_buttons.resize(count);
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -765,6 +816,23 @@ OperationInputForm::OperationInputForm(
 
                 gb->setLayout(cLayout);
                 layout->addWidget(gb, i, 0, 1, 2);
+
+                // Toggle from file
+                if (child->is_repeated() && 
+                        child->get_slice()->is_primitive())
+                {
+                    QPushButton * btn = new QPushButton("F");
+                    m_buttons[i] = btn;
+
+                    QObject::connect(btn, SIGNAL(toggled(bool)),
+                            this, SLOT(changeWidget(bool)));
+
+                    btn->setCheckable(true);
+                    btn->setMaximumSize(20, 20);
+                    btn->setFlat(true);
+
+                    layout->addWidget(btn, i, 2);
+                }
             }
         }
     }
@@ -816,6 +884,34 @@ void OperationInputForm::setValue(event::request_ptr req)
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->fromHolder(child_holder);
         }
+    }
+}
+
+void OperationInputForm::changeWidget(bool checked)
+{
+    int i = m_buttons.indexOf(qobject_cast< QPushButton * >(sender()));
+
+    QWidget * current = findChild< QWidget * >(
+            m_reflective->get_child_name(i));
+
+    QLayout * layout = current->parentWidget()->layout();
+    delete layout->takeAt(layout->indexOf(current));
+    delete current;
+
+    // File widget
+    if (checked)
+    {
+        FilesWidget * w = new FilesWidget(m_reflective->get_child(i), this);
+        m_widgets[i] = w;
+        w->setObjectName(m_reflective->get_child_name(i));
+        layout->addWidget(w);
+    }
+    else
+    {
+        QWidget * w = createWidget(m_reflective->get_child(i), this);
+        m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(w);
+        w->setObjectName(m_reflective->get_child_name(i));
+        layout->addWidget(w);
     }
 }
 

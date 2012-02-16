@@ -69,10 +69,17 @@ MultiFileSelectionWidget::MultiFileSelectionWidget(QWidget * parent) :
     mainLayout->addWidget(m_ckRepeat, 3, 1);
 
     // Restart
+    QHBoxLayout * restartLayout = new QHBoxLayout();
+    // Spacer
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Expanding);
+    restartLayout->addItem(spacer);
+
     QPushButton * btnRestart = new QPushButton("&Restart");
     QObject::connect(btnRestart, SIGNAL(clicked()), 
             this, SLOT(restart()));
-    mainLayout->addWidget(btnRestart, 4, 1);
+    restartLayout->addWidget(btnRestart);
+    mainLayout->addLayout(restartLayout, 4, 1);
 
     setLayout(mainLayout);
 }
