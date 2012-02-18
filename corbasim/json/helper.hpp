@@ -23,6 +23,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <list>
 #include <deque>
 #include <boost/shared_ptr.hpp>
 //#include <boost/variant.hpp> // TODO

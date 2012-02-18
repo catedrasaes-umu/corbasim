@@ -33,6 +33,7 @@ set(corbasim_EXPORTED_HEADERS
     event_fwd.hpp
     event.hpp
     impl.hpp
+    json/reflective.hpp
     json/parser.hpp
     json/writer.hpp
     json/helper.hpp
@@ -86,6 +87,7 @@ set(corbasim_SRCS
 
     # JSON
     json/detail/modp_b64.c
+    json/reflective.cpp
     )
 add_library(corbasim SHARED ${corbasim_SRCS})
 target_link_libraries(corbasim
