@@ -25,6 +25,10 @@
 #include <corbasim/qt/ObjrefWidget.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 
+#ifdef CORBASIM_USE_QTSCRIPT
+#include <QtScript>
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
 namespace corbasim 
 {
 namespace reflective_gui 
@@ -255,11 +259,32 @@ public:
 
     void setValue(event::request_ptr req);
 
+public slots:    
+
+#ifdef CORBASIM_USE_QTSCRIPT
+    void reloadScript();
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
+
 protected:
 
     core::operation_reflective_base const * m_reflective;
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
+
+#ifdef CORBASIM_USE_QTSCRIPT
+    // widgets
+    QTabWidget * m_tabs;
+    QPlainTextEdit * m_code;
+
+    QScriptEngine m_engine;
+    QScriptValue m_thisObject;
+    QScriptValue m_initFunc;
+    QScriptValue m_preFunc;
+    QScriptValue m_postFunc;
+
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
 };
 
 } // namespace reflective_gui

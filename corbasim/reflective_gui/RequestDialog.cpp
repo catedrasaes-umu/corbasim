@@ -27,17 +27,11 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QPlainTextEdit>
-#include <QScrollArea>
 #include <QMessageBox>
 #include <QMdiSubWindow>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
-
-#ifdef CORBASIM_USE_QTSCRIPT
-#include <corbasim/qt/private/ScriptEditor.hpp>
-#include <corbasim/reflective_gui/qvariant.hpp>
-#endif
 
 #include <iostream>
 
@@ -61,6 +55,7 @@ RequestDialog::RequestDialog(
     
     QWidget * scrollWidget = new QWidget();
     QVBoxLayout * scrollLayout = new QVBoxLayout();
+    scrollLayout->setMargin(0);
     scrollWidget->setLayout(scrollLayout);
     scrollLayout->addWidget(m_dlg);
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
@@ -73,6 +68,10 @@ RequestDialog::RequestDialog(
     // End scroll
 
     QHBoxLayout * periodicLayout = new QHBoxLayout;
+
+    spacer = new QSpacerItem(20, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+    periodicLayout->addItem(spacer);
 
     periodicLayout->addWidget(new QLabel("Period (ms)"));
     m_sbPeriod = new QSpinBox;
@@ -96,6 +95,10 @@ RequestDialog::RequestDialog(
     // Botones 
     QHBoxLayout * btnsLayout = new QHBoxLayout;
 
+    spacer = new QSpacerItem(20, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+    btnsLayout->addItem(spacer);
+
     // Start stop
     m_pbStartStop = new QPushButton("S&tart/Stop");
     m_pbStartStop->setCheckable(true);
@@ -117,35 +120,12 @@ RequestDialog::RequestDialog(
             this, SLOT(sendClicked())); 
     btnsLayout->addWidget(btn);
 
-#ifdef CORBASIM_USE_QTSCRIPT
-    // Reload script button
-    btn = new QPushButton("&Reload script");
-    btn->setObjectName("reloadButton");
-    QObject::connect(btn, SIGNAL(clicked()), 
-            this, SLOT(reloadScript())); 
-    btnsLayout->addWidget(btn);
-#endif /* CORBASIM_USE_QTSCRIPT*/
-
     // Close button
     btn = new QPushButton("&Close");
     btn->setObjectName("closeButton");
     QObject::connect(btn, SIGNAL(clicked()), 
             this, SLOT(hide())); 
     btnsLayout->addWidget(btn);
-
-#ifdef CORBASIM_USE_QTSCRIPT
-    QVBoxLayout * mainLayout = new QVBoxLayout;
-    m_tabs = new QTabWidget;
-    QWidget * w = new QWidget;
-    w->setLayout(layout);
-    m_tabs->addTab(w, "Form");
-
-    m_code = new qt::priv::ScriptEditor;
-    m_tabs->addTab(m_code, "Script");
-
-    mainLayout->addWidget(m_tabs);
-    layout = mainLayout;
-#endif
 
     layout->addLayout(btnsLayout);
    
@@ -154,15 +134,6 @@ RequestDialog::RequestDialog(
             this, SLOT(sendStored()));
 
     setLayout(layout);
-
-#ifdef CORBASIM_USE_QTSCRIPT
-
-    m_thisObject = m_engine.newQObject(this);
-
-    reloadScript();
-
-#endif /* CORBASIM_USE_QTSCRIPT*/
-
 }
 
 RequestDialog::~RequestDialog()
@@ -174,57 +145,9 @@ void RequestDialog::stopTimer()
     m_pbStartStop->setChecked(false);
 }
 
-#ifdef CORBASIM_USE_QTSCRIPT
-void RequestDialog::reloadScript()
-{
-    const QString strProgram (m_code->toPlainText());
-    if (!m_engine.canEvaluate(strProgram))
-    {
-        std::cerr << "Could not evaluate program!" << std::endl;
-        return;
-    }
-
-    m_engine.evaluate(strProgram, QString(
-                m_dlg->getReflective()->get_name())+ ".js");
-
-    if (m_engine.hasUncaughtException())
-    {
-        QString error = QString("%1\n\n%2")
-            .arg(m_engine.uncaughtException().toString())
-            .arg(m_engine.uncaughtExceptionBacktrace().join("\n"));
-
-        QMessageBox::critical(this, "Error", error);
-        return;
-    }
-
-    m_initFunc = m_engine.evaluate("init");
-    m_preFunc = m_engine.evaluate("pre");
-    m_postFunc = m_engine.evaluate("post");
-    
-    if (m_initFunc.isFunction())
-        m_initFunc.call(m_thisObject);
-
-}
-#endif /* CORBASIM_USE_QTSCRIPT*/
-
 void RequestDialog::sendClicked()
 {
-
-#ifdef CORBASIM_USE_QTSCRIPT
-    if (m_preFunc.isFunction())
-    {
-        m_preFunc.call(m_thisObject);
-    }
-#endif /* CORBASIM_USE_QTSCRIPT*/
-
     emit sendRequest(m_dlg->createRequest());
-
-#ifdef CORBASIM_USE_QTSCRIPT
-    if (m_postFunc.isFunction())
-    {
-        m_postFunc.call(m_thisObject);
-    }
-#endif /* CORBASIM_USE_QTSCRIPT*/
 }
 
 void RequestDialog::startStopChecked(bool chk)

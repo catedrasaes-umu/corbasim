@@ -24,6 +24,13 @@
 #include <corbasim/core/reflective.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 
+#ifdef CORBASIM_USE_QTSCRIPT
+#include <corbasim/qt/private/ScriptEditor.hpp>
+#include <corbasim/reflective_gui/qvariant.hpp>
+#endif
+
+#include <iostream>
+
 using namespace corbasim::reflective_gui;
 
 // should be a singleton instance of a factory
@@ -807,6 +814,7 @@ OperationInputForm::OperationInputForm(
     QWidget(parent), m_reflective(reflective)
 {
     QGridLayout * layout = new QGridLayout(this);
+    QLayout * mlayout = layout;
 
     const unsigned int count = reflective->get_children_count();
 
@@ -856,7 +864,24 @@ OperationInputForm::OperationInputForm(
         }
     }
 
-    setLayout(layout);
+#ifdef CORBASIM_USE_QTSCRIPT
+    QVBoxLayout * mainLayout = new QVBoxLayout();
+    m_tabs = new QTabWidget();
+    QWidget * w = new QWidget();
+    w->setLayout(mlayout);
+    m_tabs->addTab(w, "Form");
+
+    m_code = new qt::priv::ScriptEditor();
+    m_tabs->addTab(m_code, "Script");
+
+    mainLayout->addWidget(m_tabs);
+    mlayout = mainLayout;
+
+    m_thisObject = m_engine.newQObject(this);
+    reloadScript();
+#endif
+
+    setLayout(mlayout);
 }
 
 OperationInputForm::~OperationInputForm()
@@ -871,6 +896,13 @@ OperationInputForm::getReflective() const
 
 corbasim::event::request_ptr OperationInputForm::createRequest()
 {
+#ifdef CORBASIM_USE_QTSCRIPT
+    if (m_preFunc.isFunction())
+    {
+        m_preFunc.call(m_thisObject);
+    }
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
     event::request_ptr req (m_reflective->create_request());
     core::holder holder(m_reflective->get_holder(req));
 
@@ -885,6 +917,13 @@ corbasim::event::request_ptr OperationInputForm::createRequest()
             m_widgets[i]->toHolder(child_holder);
         }
     }
+
+#ifdef CORBASIM_USE_QTSCRIPT
+    if (m_postFunc.isFunction())
+    {
+        m_postFunc.call(m_thisObject);
+    }
+#endif /* CORBASIM_USE_QTSCRIPT*/
 
     return req;
 }
@@ -905,4 +944,36 @@ void OperationInputForm::setValue(event::request_ptr req)
         }
     }
 }
+#ifdef CORBASIM_USE_QTSCRIPT
+void OperationInputForm::reloadScript()
+{
+    const QString strProgram (m_code->toPlainText());
+    if (!m_engine.canEvaluate(strProgram))
+    {
+        std::cerr << "Could not evaluate program!" << std::endl;
+        return;
+    }
+
+    m_engine.evaluate(strProgram, QString(
+                m_reflective->get_name())+ ".js");
+
+    if (m_engine.hasUncaughtException())
+    {
+        QString error = QString("%1\n\n%2")
+            .arg(m_engine.uncaughtException().toString())
+            .arg(m_engine.uncaughtExceptionBacktrace().join("\n"));
+
+        QMessageBox::critical(this, "Error", error);
+        return;
+    }
+
+    m_initFunc = m_engine.evaluate("init");
+    m_preFunc = m_engine.evaluate("pre");
+    m_postFunc = m_engine.evaluate("post");
+    
+    if (m_initFunc.isFunction())
+        m_initFunc.call(m_thisObject);
+
+}
+#endif /* CORBASIM_USE_QTSCRIPT*/
 

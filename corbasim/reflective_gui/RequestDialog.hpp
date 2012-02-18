@@ -25,10 +25,6 @@
 #include <corbasim/qt/types.hpp>
 #include <corbasim/reflective_gui/ReflectiveGUI.hpp>
 
-#ifdef CORBASIM_USE_QTSCRIPT
-#include <QtScript>
-#endif /* CORBASIM_USE_QTSCRIPT*/
-
 // fwd
 class QSpinBox;
 class QCheckBox;
@@ -58,14 +54,12 @@ public slots:
     void storeRequest();
     void stopTimer();
 
-#ifdef CORBASIM_USE_QTSCRIPT
-    void reloadScript();
-#endif /* CORBASIM_USE_QTSCRIPT*/
-
 signals:
+
     void sendRequest(corbasim::event::request_ptr);
 
 protected:
+
     OperationInputForm * m_dlg;
 
     QSpinBox * m_sbPeriod;
@@ -79,19 +73,6 @@ protected:
     int m_currentPeriodicRequest;
 
     event::request_ptr m_storedRequest;
-
-#ifdef CORBASIM_USE_QTSCRIPT
-    // widgets
-    QTabWidget * m_tabs;
-    QPlainTextEdit * m_code;
-
-    QScriptEngine m_engine;
-    QScriptValue m_thisObject;
-    QScriptValue m_initFunc;
-    QScriptValue m_preFunc;
-    QScriptValue m_postFunc;
-
-#endif /* CORBASIM_USE_QTSCRIPT*/
 
     void hideEvent(QHideEvent * event);
 };

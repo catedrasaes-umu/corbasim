@@ -38,7 +38,8 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     // Title bar
     QHBoxLayout * tLayout = new QHBoxLayout();
     QLabel * title = new QLabel(
-        QString("<b>Object: '%1' Operation: '%2'</b>").arg(id).arg(reflective->get_name()));
+        QString("<b>Object: '%1' Operation: '%2'</b>")
+            .arg(id).arg(reflective->get_name()));
     tLayout->addWidget(title);
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -215,6 +216,7 @@ OperationSequence::OperationSequence(const QString& name, QWidget * parent) :
     QWidget(parent), m_name(name)
 {
     QVBoxLayout * layout = new QVBoxLayout();
+    layout->setMargin(0);
 
     QWidget * scrollWidget = new QWidget();
     QVBoxLayout * scrollLayout = new QVBoxLayout();
