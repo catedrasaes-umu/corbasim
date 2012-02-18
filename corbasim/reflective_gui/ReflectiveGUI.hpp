@@ -50,6 +50,34 @@ protected:
     core::reflective_base const * m_reflective;
 };
 
+class AlternativesWidget : public QWidget, public ReflectiveWidgetBase
+{
+    Q_OBJECT
+public:
+    AlternativesWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~AlternativesWidget();
+ 
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+
+    void addAlternative(const QString& id,
+            const QString& toolTip,
+            ReflectiveWidgetBase * widget);
+
+protected slots:
+
+    void changeWidget(int);
+
+protected:
+
+    QButtonGroup m_group;
+    QStackedWidget * m_stack;
+    QVBoxLayout * m_btnLayout;
+
+    std::vector< ReflectiveWidgetBase * > m_widgets;
+};
+
 class FloatWidget : public QDoubleSpinBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -126,15 +154,9 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-protected slots:
-
-    void changeWidget(bool checked);
-
 protected:
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
-
-    QVector< QPushButton * > m_buttons;
 };
 
 class SequenceWidget : public QWidget, public ReflectiveWidgetBase
@@ -233,18 +255,11 @@ public:
 
     void setValue(event::request_ptr req);
 
-protected slots:
-
-    void changeWidget(bool checked);
-
 protected:
 
     core::operation_reflective_base const * m_reflective;
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
-
-    QVector< QPushButton * > m_buttons;
-
 };
 
 } // namespace reflective_gui

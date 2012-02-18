@@ -64,6 +64,21 @@ QWidget * createWidget(corbasim::core::reflective_base const * reflective,
 
         case TYPE_ARRAY:
         case TYPE_SEQUENCE:
+
+            if (reflective->get_slice()->is_primitive())
+            {
+                AlternativesWidget * alt = 
+                    new AlternativesWidget(reflective, parent);
+
+                alt->addAlternative("W", "", 
+                        new SequenceWidget(reflective, parent));
+
+                alt->addAlternative("F", "", 
+                        new FilesWidget(reflective, parent));
+
+                return alt;
+            }
+
             return new SequenceWidget(reflective, parent);
 
         case TYPE_DOUBLE:
@@ -94,6 +109,73 @@ corbasim::core::reflective_base const *
 ReflectiveWidgetBase::getReflective() const
 {
     return m_reflective;
+}
+
+AlternativesWidget::AlternativesWidget(core::reflective_base const * reflective,
+        QWidget * parent) :
+    QWidget(parent), ReflectiveWidgetBase(reflective), m_group(this)
+{
+    m_group.setExclusive(true);
+
+    QHBoxLayout * layout = new QHBoxLayout();
+
+    m_stack = new QStackedWidget();
+    layout->addWidget(m_stack);
+
+    m_btnLayout = new QVBoxLayout();
+    QSpacerItem * spacer = new QSpacerItem(20, 20, 
+            QSizePolicy::Minimum, QSizePolicy::Expanding);
+    m_btnLayout->addSpacerItem(spacer);
+    layout->addLayout(m_btnLayout);
+
+    setLayout(layout);
+
+    QObject::connect(&m_group, SIGNAL(buttonClicked(int)), 
+            this, SLOT(changeWidget(int)));
+}
+
+AlternativesWidget::~AlternativesWidget()
+{
+}
+
+void AlternativesWidget::toHolder(core::holder& holder) 
+{
+    if (!m_widgets.empty())
+        m_widgets[m_stack->currentIndex()]->toHolder(holder);
+}
+
+void AlternativesWidget::fromHolder(core::holder& holder)
+{
+    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    {
+        m_widgets[i]->fromHolder(holder);
+    }    
+}
+
+void AlternativesWidget::addAlternative(const QString& id,
+        const QString& toolTip,
+        ReflectiveWidgetBase * widget)
+{
+    QPushButton * btn = new QPushButton(id);
+
+    btn->setToolTip(toolTip);
+    btn->setCheckable(true);
+    btn->setMaximumSize(20, 20);
+    btn->setFlat(true);
+    // before the spacer
+    m_btnLayout->insertWidget(m_btnLayout->count() - 1, btn);
+
+    if (m_widgets.empty()) btn->setChecked(true);
+
+    m_group.addButton(btn, m_widgets.size());
+
+    m_stack->addWidget(dynamic_cast< QWidget * >(widget));
+    m_widgets.push_back(widget);
+}
+
+void AlternativesWidget::changeWidget(int idx)
+{
+    m_stack->setCurrentIndex(idx);
 }
 
 FloatWidget::FloatWidget(core::reflective_base const * reflective,
@@ -398,7 +480,6 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
     unsigned int count = reflective->get_children_count();
 
     m_widgets.resize(count, NULL);
-    m_buttons.resize(count);
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -434,23 +515,6 @@ StructWidget::StructWidget(core::reflective_base const * reflective,
 
             gb->setLayout(cLayout);
             layout->addWidget(gb, i, 0, 1, 2);
-
-            // Toggle from file
-            if (child->is_repeated() && 
-                    child->get_slice()->is_primitive())
-            {
-                QPushButton * btn = new QPushButton("F");
-                m_buttons[i] = btn;
-
-                QObject::connect(btn, SIGNAL(toggled(bool)),
-                        this, SLOT(changeWidget(bool)));
-
-                btn->setCheckable(true);
-                btn->setMaximumSize(20, 20);
-                btn->setFlat(true);
-
-                layout->addWidget(btn, i, 2);
-            }
         }
     }
 
@@ -488,34 +552,6 @@ void StructWidget::fromHolder(core::holder& holder)
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->fromHolder(child_holder);
         }
-    }
-}
-
-void StructWidget::changeWidget(bool checked)
-{
-    int i = m_buttons.indexOf(qobject_cast< QPushButton * >(sender()));
-
-    QWidget * current = findChild< QWidget * >(
-            m_reflective->get_child_name(i));
-
-    QLayout * layout = current->parentWidget()->layout();
-    delete layout->takeAt(layout->indexOf(current));
-    delete current;
-
-    // File widget
-    if (checked)
-    {
-        FilesWidget * w = new FilesWidget(m_reflective->get_child(i), this);
-        m_widgets[i] = w;
-        w->setObjectName(m_reflective->get_child_name(i));
-        layout->addWidget(w);
-    }
-    else
-    {
-        QWidget * w = createWidget(m_reflective->get_child(i), this);
-        m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(w);
-        w->setObjectName(m_reflective->get_child_name(i));
-        layout->addWidget(w);
     }
 }
 
@@ -775,7 +811,6 @@ OperationInputForm::OperationInputForm(
     const unsigned int count = reflective->get_children_count();
 
     m_widgets.resize(count, NULL);
-    m_buttons.resize(count);
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -817,22 +852,6 @@ OperationInputForm::OperationInputForm(
                 gb->setLayout(cLayout);
                 layout->addWidget(gb, i, 0, 1, 2);
 
-                // Toggle from file
-                if (child->is_repeated() && 
-                        child->get_slice()->is_primitive())
-                {
-                    QPushButton * btn = new QPushButton("F");
-                    m_buttons[i] = btn;
-
-                    QObject::connect(btn, SIGNAL(toggled(bool)),
-                            this, SLOT(changeWidget(bool)));
-
-                    btn->setCheckable(true);
-                    btn->setMaximumSize(20, 20);
-                    btn->setFlat(true);
-
-                    layout->addWidget(btn, i, 2);
-                }
             }
         }
     }
@@ -884,34 +903,6 @@ void OperationInputForm::setValue(event::request_ptr req)
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->fromHolder(child_holder);
         }
-    }
-}
-
-void OperationInputForm::changeWidget(bool checked)
-{
-    int i = m_buttons.indexOf(qobject_cast< QPushButton * >(sender()));
-
-    QWidget * current = findChild< QWidget * >(
-            m_reflective->get_child_name(i));
-
-    QLayout * layout = current->parentWidget()->layout();
-    delete layout->takeAt(layout->indexOf(current));
-    delete current;
-
-    // File widget
-    if (checked)
-    {
-        FilesWidget * w = new FilesWidget(m_reflective->get_child(i), this);
-        m_widgets[i] = w;
-        w->setObjectName(m_reflective->get_child_name(i));
-        layout->addWidget(w);
-    }
-    else
-    {
-        QWidget * w = createWidget(m_reflective->get_child(i), this);
-        m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(w);
-        w->setObjectName(m_reflective->get_child_name(i));
-        layout->addWidget(w);
     }
 }
 
