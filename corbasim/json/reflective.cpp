@@ -92,7 +92,24 @@ void reflective_helper::new_string(const std::string& d)
             break;
 
         case TYPE_OBJREF:
-            // TODO
+            {
+                core::reference_repository * rr =
+                    core::reference_repository::get_instance();
+
+                objrefvar_reflective_base const * objref = 
+                    static_cast< objrefvar_reflective_base const * >(
+                            m_reflective);
+
+
+                CORBA::Object_var obj;
+
+                try {
+                    obj = rr->string_to_object(d.c_str());
+                } catch (...) {
+                }
+
+                objref->from_object(m_holder, obj);
+            }
             break;
 
         default:
@@ -121,7 +138,15 @@ void reflective_helper::new_null()
     switch(type)
     {
         case TYPE_OBJREF:
-            // TODO
+            {
+                objrefvar_reflective_base const * objref = 
+                    static_cast< objrefvar_reflective_base const * >(
+                            m_reflective);
+
+                CORBA::Object_var obj;
+
+                objref->from_object(m_holder, obj);
+            }
             break;
         default:
             throw "Error!";
