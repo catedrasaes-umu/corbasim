@@ -330,7 +330,7 @@ void corbasim::json::write(std::ostream& os,
         core::reflective_base const * reflective, 
         core::holder& holder, bool indent)
 {
-    writer_t w(os);
+    writer_t w(os, indent);
 
     do_write(w, reflective, holder);
 }

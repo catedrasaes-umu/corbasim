@@ -118,7 +118,8 @@ ReflectiveWidgetBase::getReflective() const
     return m_reflective;
 }
 
-AlternativesWidget::AlternativesWidget(core::reflective_base const * reflective,
+AlternativesWidget::AlternativesWidget(
+        core::reflective_base const * reflective,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective), m_group(this)
 {
@@ -653,7 +654,10 @@ void SequenceWidget::fromHolder(core::holder& holder)
     }
     else if (m_old_idx > -1)
     {
-        indexChanged(m_old_idx);
+        core::holder child_value = 
+            m_reflective->get_child_value(m_holder, m_old_idx);
+
+        m_slice->fromHolder(child_value);
     }
 }
 
