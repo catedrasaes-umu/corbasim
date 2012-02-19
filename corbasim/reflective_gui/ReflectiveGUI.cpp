@@ -870,6 +870,7 @@ OperationInputForm::OperationInputForm(
 
 #ifdef CORBASIM_USE_QTSCRIPT
     QVBoxLayout * mainLayout = new QVBoxLayout();
+    mainLayout->setMargin(0);
     m_tabs = new QTabWidget();
     QWidget * w = new QWidget();
     w->setLayout(mlayout);

@@ -256,7 +256,7 @@ void SimpleScriptEditor::initialize(
     unsigned int count = factory->operation_count();
     m_forms.reserve(count);
 
-    m_model.registerInstance("self", factory);
+    m_model.initialize(factory);
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -380,7 +380,7 @@ void SimpleScriptEditor::appendRequest()
     {
         event::request_ptr req = m_forms[idx]->createRequest();
 
-        m_model.outputRequest("self", req, event::event_ptr());
+        m_model.addRequest(req);
     }
 }
 
@@ -392,7 +392,7 @@ void SimpleScriptEditor::appendOneRequest()
 
     event::request_ptr req = m_forms[idx]->createRequest();
 
-    m_model.outputRequest("self", req, event::event_ptr());
+    m_model.addRequest(req);
 }
 
 void SimpleScriptEditor::playClicked()
@@ -402,17 +402,11 @@ void SimpleScriptEditor::playClicked()
     if (m_timer.isActive())
         m_timer.stop();
 
-    m_current_iterator = m_requests.begin();
-
     m_timer.start(m_diff->value());
 }
 
 void SimpleScriptEditor::clearClicked()
 {
-#if 0
-    m_tree->clear();
-    m_requests.clear();
-#endif
 }
 
 void SimpleScriptEditor::stopClicked()
@@ -501,8 +495,7 @@ void SimpleScriptEditor::copySelected()
 
     if (pos >= 0)
     {
-        event::request_ptr selected = 
-            *boost::next(m_requests.begin(), pos);
+        event::request_ptr selected = m_model.getRequest(pos);
 
         core::operation_reflective_base const * op =
             m_factory->get_reflective_by_tag(selected->get_tag());

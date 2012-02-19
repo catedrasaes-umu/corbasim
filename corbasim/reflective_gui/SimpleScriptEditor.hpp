@@ -25,7 +25,7 @@
 #include <vector>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/reflective_gui/NewLogModel.hpp>
+#include <corbasim/reflective_gui/ScriptModel.hpp>
 
 namespace corbasim 
 {
@@ -68,7 +68,6 @@ signals:
 protected:
 
     typedef std::vector< OperationInputForm * > forms_t;
-    typedef std::list< corbasim::event::request_ptr > requests_t;
 
     void doAppendRequest(corbasim::event::request_ptr, 
             bool beforeSelected = false);
@@ -76,7 +75,6 @@ protected:
 
     QTimer m_timer;
     unsigned int m_current_request;
-    requests_t::iterator m_current_iterator;
 
     QComboBox * m_selector;
     QStackedWidget * m_multi;
@@ -84,10 +82,9 @@ protected:
     QSpinBox * m_how_many; 
     QTreeView * m_tree;
     QCheckBox * m_cbInsertAtEnd;
-    NewLogModel m_model;
+    ScriptModel m_model;
     
     forms_t m_forms;
-    requests_t m_requests;
 
     core::interface_reflective_base const * m_factory;
 
