@@ -62,11 +62,13 @@ namespace reflective_gui
                     QVariantList res;
 
                     const unsigned int length = reflective->get_length(hold);
-                    core::reflective_base const * slice = reflective->get_slice();
+                    core::reflective_base const * slice = 
+                        reflective->get_slice();
 
                     for (unsigned int i = 0; i < length; i++) 
                     {
-                        core::holder child = reflective->get_child_value(hold, i);
+                        core::holder child = 
+                            reflective->get_child_value(hold, i);
 
                         res.push_back(toQVariant(slice, child));
                     }
@@ -172,7 +174,8 @@ namespace reflective_gui
 
                     QVariantMap map = var.toMap();
 
-                    const unsigned int count = reflective->get_children_count();
+                    const unsigned int count = 
+                        reflective->get_children_count();
 
                     for (unsigned int i = 0; i < count; i++) 
                     {
@@ -181,9 +184,11 @@ namespace reflective_gui
 
                         if (it != map.end())
                         {
-                            core::holder child = reflective->get_child_value(hold, i);
+                            core::holder child = 
+                                reflective->get_child_value(hold, i);
                             
-                            if (!fromQVariant(reflective->get_child(i), child, it.value()))
+                            if (!fromQVariant(reflective->get_child(i), 
+                                        child, it.value()))
                                 return false;
                         }
                     }
@@ -211,11 +216,13 @@ namespace reflective_gui
                         return false;
                     }
 
-                    core::reflective_base const * slice = reflective->get_slice();
+                    core::reflective_base const * slice = 
+                        reflective->get_slice();
 
                     for (unsigned int i = 0; i < length; i++) 
                     {
-                        core::holder child = reflective->get_child_value(hold, i);
+                        core::holder child = 
+                            reflective->get_child_value(hold, i);
                         
                         if (!fromQVariant(slice, child, list.at(i)))
                             return false;
@@ -346,8 +353,10 @@ namespace reflective_gui
 
                     const char * str = "Unknown value"; 
 
-                    if (value >= 0 && value < reflective->get_children_count())
-                        str = reflective->get_child_name((unsigned int) value);
+                    if (value >= 0 && 
+                            value < reflective->get_children_count())
+                        str = reflective->get_child_name(
+                                (unsigned int) value);
 
                     return QVariant(str);
                 }
@@ -541,7 +550,8 @@ namespace reflective_gui
 
                     QVariantMap map = var.toMap();
 
-                    const unsigned int count = reflective->get_children_count();
+                    const unsigned int count = 
+                        reflective->get_children_count();
 
                     for (unsigned int i = 0; i < count; i++) 
                     {
@@ -550,9 +560,11 @@ namespace reflective_gui
 
                         if (it != map.end())
                         {
-                            core::holder child = reflective->get_child_value(hold, i);
+                            core::holder child = 
+                                reflective->get_child_value(hold, i);
                             
-                            if (!fromQVariant(reflective->get_child(i), child, it.value()))
+                            if (!fromQVariant(reflective->get_child(i), 
+                                        child, it.value()))
                                 return false;
                         }
                     }
@@ -580,11 +592,13 @@ namespace reflective_gui
                         return false;
                     }
 
-                    core::reflective_base const * slice = reflective->get_slice();
+                    core::reflective_base const * slice = 
+                        reflective->get_slice();
 
                     for (unsigned int i = 0; i < length; i++) 
                     {
-                        core::holder child = reflective->get_child_value(hold, i);
+                        core::holder child = 
+                            reflective->get_child_value(hold, i);
                         
                         if (!fromQVariant(slice, child, list.at(i)))
                             return false;
@@ -663,8 +677,10 @@ namespace reflective_gui
 
                     const char * str = "Unknown value"; 
 
-                    if (value >= 0 && value < reflective->get_children_count())
-                        str = reflective->get_child_name((unsigned int) value);
+                    if (value >= 0 && 
+                            value < reflective->get_children_count())
+                        str = reflective->get_child_name(
+                                (unsigned int) value);
 
                     return QVariant(str);
                 }

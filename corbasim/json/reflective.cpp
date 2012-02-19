@@ -24,6 +24,8 @@
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 
+#include <corbasim/core/reference_repository.hpp>
+
 using namespace corbasim::json;
 using namespace corbasim::core;
 
@@ -88,9 +90,11 @@ void reflective_helper::new_string(const std::string& d)
         case TYPE_STRING:
             m_reflective->from_string(m_holder, d);
             break;
+
         case TYPE_OBJREF:
             // TODO
             break;
+
         default:
             throw "Error!";
     }
@@ -181,11 +185,41 @@ namespace
             corbasim::core::reflective_base const * reflective, 
             corbasim::core::holder holder)
     {
+        using namespace corbasim::core;
+
         const reflective_type type = reflective->get_type();
 
         switch(type)
         {
             case TYPE_OBJREF:
+                {
+                    objrefvar_reflective_base const * objref = 
+                        static_cast< objrefvar_reflective_base const * >(
+                                reflective);
+
+                    CORBA::Object_var obj = objref->to_object(holder);
+
+                    if (CORBA::is_nil(obj))
+                    {
+                        w.new_null();
+                        break;
+                    }
+                    
+                    try {
+                        reference_repository * rr =
+                            reference_repository::get_instance();
+
+                        CORBA::String_var str = 
+                            rr->object_to_string(obj);
+
+                        w.new_string(str.in());
+
+                    } catch (...) {
+                        w.new_null();
+                    }
+
+                }
+
                 break;
 
             case TYPE_DOUBLE:
