@@ -47,6 +47,29 @@ int ScriptModel::columnCount(const QModelIndex &/*parent*/) const
     return 2;
 }
 
+int ScriptModel::indexToPosition(const QModelIndex& index)
+{
+    if (!index.isValid())
+        return -1;
+
+    QModelIndex parent = index;
+
+    while (parent.parent().isValid())
+        parent = parent.parent();
+
+    return parent.row();
+}
+
+void ScriptModel::deletePosition(int pos)
+{
+    beginRemoveRows(QModelIndex(), pos, pos);
+
+    m_entries.removeAt(pos);
+    m_nodes.removeAt(pos);
+
+    endRemoveRows();
+}
+
 namespace  
 {
     QString getNodeName(Node const * node)

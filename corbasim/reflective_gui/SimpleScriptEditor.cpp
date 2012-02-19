@@ -289,7 +289,6 @@ void SimpleScriptEditor::moveDown()
 
 void SimpleScriptEditor::playFromSelected()
 {
-#if 0
     int pos = getSelected();
 
     if (pos >= 0)
@@ -299,64 +298,46 @@ void SimpleScriptEditor::playFromSelected()
         if (m_timer.isActive())
             m_timer.stop();
 
-        m_current_iterator = boost::next(m_requests.begin(), pos);
-
         m_timer.start(m_diff->value());
     }
-#endif
 }
 
 void SimpleScriptEditor::deleteSelected()
 {
-#if 0
     int pos = getSelected();
 
-    assert(m_tree->topLevelItemCount() == (int) m_requests.size());
-
-    if (pos >= 0 && pos < m_tree->topLevelItemCount())
-    {
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        m_requests.erase(it);
-        delete m_tree->takeTopLevelItem(pos);
-    }
-#endif
+    m_model.deletePosition(pos);
 }
 
 void SimpleScriptEditor::replaceSelected()
 {
     int pos = getSelected();
 
-#if 0
-    // Añade la nueva
-    dialogs::input_ptr dlg = m_multi->getCurrentDialog();
+    int form = m_selector->currentIndex();
 
-    if (!dlg) return;
+    if (form == -1) return;
 
-    event::request_ptr req(dlg->create_request());
+    event::request_ptr req(m_forms[form]->createRequest());
+
     doAppendRequest(req, true);
-#endif
 
     // Elimina el actual
     deleteSelected();
-#if 0 
-    // Selecciona la nueva entrada
-    QTreeWidgetItem * item = m_tree->topLevelItem(pos);
-    m_tree->setCurrentItem(item);
-#endif
+    
+    m_tree->setCurrentIndex(m_model.index(pos, 0));
 }
 
 void SimpleScriptEditor::sendNextRequest()
 {
-#if 0
-    if (m_current_request < m_requests.size())
+    if (m_current_request < m_model.rowCount())
     {
         // Selecciona la siguiente request en el arbol
-        m_tree->setCurrentItem(m_tree->topLevelItem(m_current_request++));
-        emit sendRequest(*(m_current_iterator++));
+        m_tree->setCurrentIndex(m_model.index(m_current_request, 0));
+
+        emit sendRequest(m_model.getRequest(m_current_request++));
     }
     else
         m_timer.stop();
-#endif
 }
 
 void SimpleScriptEditor::sendCurrent()
@@ -380,7 +361,7 @@ void SimpleScriptEditor::appendRequest()
     {
         event::request_ptr req = m_forms[idx]->createRequest();
 
-        m_model.addRequest(req);
+        doAppendRequest(req, m_cbInsertAtEnd->isChecked());
     }
 }
 
@@ -392,7 +373,7 @@ void SimpleScriptEditor::appendOneRequest()
 
     event::request_ptr req = m_forms[idx]->createRequest();
 
-    m_model.addRequest(req);
+    doAppendRequest(req, m_cbInsertAtEnd->isChecked());
 }
 
 void SimpleScriptEditor::playClicked()
@@ -476,17 +457,7 @@ void SimpleScriptEditor::doLoad()
 
 int SimpleScriptEditor::getSelected()
 {
-#if 0
-    QTreeWidgetItem* current = m_tree->currentItem();
- 
-    // Obtiene el elemento de nivel superior 
-    while(current && current->parent())
-        current = current->parent();
-
-    if (current)
-        return m_tree->indexOfTopLevelItem(current);
-#endif
-    return -1;
+    return m_model.indexToPosition(m_tree->currentIndex());
 }
 
 void SimpleScriptEditor::copySelected()
@@ -503,40 +474,24 @@ void SimpleScriptEditor::copySelected()
         int cb_pos = m_selector->findText(
                 QString(op->get_name()),
                 Qt::MatchFixedString| Qt::MatchCaseSensitive);
-#if 0
+
         // copiar 'it' al editor correspondiente
-        m_multi->getDialog(cb_pos)->copy_from_request(selected.get());
+        m_forms[cb_pos]->setValue(selected);
 
         // mostrar el editor correspondiente
         m_selector->setCurrentIndex(cb_pos);
-#endif
     }
 }
 
 void SimpleScriptEditor::doAppendRequest(event::request_ptr _request, 
         bool beforeSelected)
 {
-#if 0
     int pos = getSelected();
 
-    // La inserta en el árbol
-    QTreeWidgetItem * req_item = 
-        m_factory->create_tree(_request.get());
-
     if (pos >= 0 && beforeSelected)
-    {
-        requests_t::iterator it = boost::next(m_requests.begin(), pos);
-        m_requests.insert(it, _request);
-        m_tree->insertTopLevelItem(pos, req_item);
-    }
+        m_model.addRequest(_request, pos);
     else
-    {
-        m_requests.push_back(_request);
-        m_tree->addTopLevelItem(req_item);
-    }
-
-    m_tree->scrollToItem(req_item);
-#endif
+        m_model.addRequest(_request, -1);
 }
 
 void SimpleScriptEditor::hideEvent(QHideEvent * event)

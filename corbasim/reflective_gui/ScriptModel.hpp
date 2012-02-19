@@ -58,6 +58,10 @@ public:
 
     void initialize(core::interface_reflective_base const * instance);
 
+    int indexToPosition(const QModelIndex& index);
+
+    void deletePosition(int pos);
+
 public slots:
 
     void clearLog();
