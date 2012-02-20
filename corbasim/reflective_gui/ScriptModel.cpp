@@ -273,7 +273,10 @@ void ScriptModel::initialize(core::interface_reflective_base const * instance)
 
 void ScriptModel::clearLog()
 {
+    beginResetModel();
     reset();
+    resetInternalData();
+    endResetModel();
 }
 
 void ScriptModel::resetInternalData()

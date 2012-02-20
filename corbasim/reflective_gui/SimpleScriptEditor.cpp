@@ -388,6 +388,7 @@ void SimpleScriptEditor::playClicked()
 
 void SimpleScriptEditor::clearClicked()
 {
+    m_model.clearLog();
 }
 
 void SimpleScriptEditor::stopClicked()

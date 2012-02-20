@@ -237,7 +237,10 @@ int NewLogModel::rowCount(const QModelIndex &parent) const
 
 void NewLogModel::clearLog()
 {
+    beginResetModel();
     reset();
+    resetInternalData();
+    endResetModel();
 }
 
 void NewLogModel::resetInternalData()
