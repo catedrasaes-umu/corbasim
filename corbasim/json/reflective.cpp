@@ -180,6 +180,13 @@ helper::helper_base* reflective_helper::new_child()
         {
             m_reflective->set_length(m_holder, m_currentIndex + 1);
         }
+        else
+        {
+            unsigned int length = m_reflective->get_length(m_holder);
+
+            if (m_currentIndex >= length)
+                throw "Error!";
+        }
 
         return new reflective_helper(m_reflective->get_slice(),
                 m_reflective->get_child_value(m_holder, m_currentIndex++));

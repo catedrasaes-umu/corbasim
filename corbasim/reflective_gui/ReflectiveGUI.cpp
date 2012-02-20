@@ -30,6 +30,8 @@
 #endif
 
 #include <iostream>
+#include <sstream>
+#include <corbasim/json/reflective.hpp>
 
 using namespace corbasim::reflective_gui;
 
@@ -887,6 +889,8 @@ OperationInputForm::OperationInputForm(
 #endif
 
     setLayout(mlayout);
+
+    setAcceptDrops(true);
 }
 
 OperationInputForm::~OperationInputForm()
@@ -981,4 +985,30 @@ void OperationInputForm::reloadScript()
 
 }
 #endif /* CORBASIM_USE_QTSCRIPT*/
+
+void OperationInputForm::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("text/plain"))
+         event->acceptProposedAction();
+}
+
+void OperationInputForm::dropEvent(QDropEvent *event)
+{
+    std::string str = event->mimeData()->text().toStdString();
+    try {
+        event::request_ptr req = m_reflective->create_request();
+        core::holder holder = m_reflective->get_holder(req);
+
+        bool res = json::parse(m_reflective, holder, 
+                str.c_str(), str.size());
+
+        if (res)
+        {
+            setValue(req);
+            event->acceptProposedAction();
+        }
+    } catch(...) {
+
+    }
+}
 

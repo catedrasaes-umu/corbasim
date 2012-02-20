@@ -259,6 +259,10 @@ public:
 
     void setValue(event::request_ptr req);
 
+    void dragEnterEvent(QDragEnterEvent *event);
+
+    void dropEvent(QDropEvent *event);
+
 public slots:    
 
 #ifdef CORBASIM_USE_QTSCRIPT
