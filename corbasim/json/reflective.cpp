@@ -208,138 +208,131 @@ bool corbasim::json::parse(core::reflective_base const * reflective,
     return csu::corbasim::json::parser::grammar::gram::match(_st);
 }
 
-namespace  
+void corbasim::json::write(std_writer_t& w, 
+        corbasim::core::reflective_base const * reflective, 
+        corbasim::core::holder holder)
 {
-    typedef csu::corbasim::json::writer::json_writer< 
-        std::ostream > writer_t;
+    using namespace corbasim::core;
 
-    void do_write(writer_t& w, 
-            corbasim::core::reflective_base const * reflective, 
-            corbasim::core::holder holder)
+    const reflective_type type = reflective->get_type();
+
+    switch(type)
     {
-        using namespace corbasim::core;
+        case TYPE_OBJREF:
+            {
+                objrefvar_reflective_base const * objref = 
+                    static_cast< objrefvar_reflective_base const * >(
+                            reflective);
 
-        const reflective_type type = reflective->get_type();
+                CORBA::Object_var obj = objref->to_object(holder);
 
-        switch(type)
-        {
-            case TYPE_OBJREF:
+                if (CORBA::is_nil(obj))
                 {
-                    objrefvar_reflective_base const * objref = 
-                        static_cast< objrefvar_reflective_base const * >(
-                                reflective);
+                    w.new_null();
+                    break;
+                }
+                
+                try {
+                    reference_repository * rr =
+                        reference_repository::get_instance();
 
-                    CORBA::Object_var obj = objref->to_object(holder);
+                    CORBA::String_var str = 
+                        rr->object_to_string(obj);
 
-                    if (CORBA::is_nil(obj))
-                    {
-                        w.new_null();
-                        break;
-                    }
-                    
-                    try {
-                        reference_repository * rr =
-                            reference_repository::get_instance();
+                    w.new_string(str.in());
 
-                        CORBA::String_var str = 
-                            rr->object_to_string(obj);
-
-                        w.new_string(str.in());
-
-                    } catch (...) {
-                        w.new_null();
-                    }
-
+                } catch (...) {
+                    w.new_null();
                 }
 
-                break;
+            }
 
-            case TYPE_DOUBLE:
-                w.new_double((double) holder.to_value< double >());
-                break;
-            case TYPE_FLOAT:
-                w.new_double((double) holder.to_value< float >());
-                break;
-            case TYPE_OCTET:
-                w.new_double((double) holder.to_value< unsigned char >());
-                break;
-            case TYPE_CHAR:
-                w.new_double((double) holder.to_value< char >());
-                break;
-            case TYPE_SHORT:
-                w.new_double((double) holder.to_value< short >());
-                break;
-            case TYPE_USHORT:
-                w.new_double((double) holder.to_value< unsigned short >());
-                break;
-            case TYPE_LONG:
-                w.new_double((double) holder.to_value< int32_t >());
-                break;
-            case TYPE_ULONG:
-                w.new_double((double) holder.to_value< uint32_t >());
-                break;
-            case TYPE_LONGLONG:
-                w.new_double((double) holder.to_value< int64_t >());
-                break;
-            case TYPE_ULONGLONG:
-                w.new_double((double) holder.to_value< uint64_t >());
-                break;
+            break;
 
-            case TYPE_ARRAY:
-            case TYPE_SEQUENCE:
+        case TYPE_DOUBLE:
+            w.new_double((double) holder.to_value< double >());
+            break;
+        case TYPE_FLOAT:
+            w.new_double((double) holder.to_value< float >());
+            break;
+        case TYPE_OCTET:
+            w.new_double((double) holder.to_value< unsigned char >());
+            break;
+        case TYPE_CHAR:
+            w.new_double((double) holder.to_value< char >());
+            break;
+        case TYPE_SHORT:
+            w.new_double((double) holder.to_value< short >());
+            break;
+        case TYPE_USHORT:
+            w.new_double((double) holder.to_value< unsigned short >());
+            break;
+        case TYPE_LONG:
+            w.new_double((double) holder.to_value< int32_t >());
+            break;
+        case TYPE_ULONG:
+            w.new_double((double) holder.to_value< uint32_t >());
+            break;
+        case TYPE_LONGLONG:
+            w.new_double((double) holder.to_value< int64_t >());
+            break;
+        case TYPE_ULONGLONG:
+            w.new_double((double) holder.to_value< uint64_t >());
+            break;
+
+        case TYPE_ARRAY:
+        case TYPE_SEQUENCE:
+            {
+                const unsigned int count = 
+                    reflective->get_length(holder);
+
+                w.array_start();
+
+                for (unsigned int i = 0; i < count; i++) 
                 {
-                    const unsigned int count = 
-                        reflective->get_length(holder);
-
-                    w.array_start();
-
-                    for (unsigned int i = 0; i < count; i++) 
-                    {
-                        // Value
-                        do_write(w, reflective->get_slice(),
-                                reflective->get_child_value(holder, i));
-                    }
-
-                    w.array_end();
+                    // Value
+                    write(w, reflective->get_slice(),
+                            reflective->get_child_value(holder, i));
                 }
-                break;
 
-            case TYPE_STRUCT:
+                w.array_end();
+            }
+            break;
+
+        case TYPE_STRUCT:
+            {
+                const unsigned int count = 
+                    reflective->get_children_count();
+
+                w.object_start();
+
+                for (unsigned int i = 0; i < count; i++) 
                 {
-                    const unsigned int count = 
-                        reflective->get_children_count();
+                    // Name
+                    w.new_string(reflective->get_child_name(i));
 
-                    w.object_start();
-
-                    for (unsigned int i = 0; i < count; i++) 
-                    {
-                        // Name
-                        w.new_string(reflective->get_child_name(i));
-
-                        // Value
-                        do_write(w, reflective->get_child(i),
-                                reflective->get_child_value(holder, i));
-                    }
-
-                    w.object_end();
+                    // Value
+                    write(w, reflective->get_child(i),
+                            reflective->get_child_value(holder, i));
                 }
-                break;
 
-            default:
-                break;
-        }
+                w.object_end();
+            }
+            break;
+
+        default:
+            break;
     }
-
-} // namespace 
+}
 
 // Write
 void corbasim::json::write(std::ostream& os, 
         core::reflective_base const * reflective, 
         core::holder& holder, bool indent)
 {
-    writer_t w(os, indent);
+    std_writer_t w(os, indent);
 
-    do_write(w, reflective, holder);
+    write(w, reflective, holder);
 }
 
 

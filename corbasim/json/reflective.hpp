@@ -23,6 +23,7 @@
 #include <ostream>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/json/helper.hpp>
+#include <corbasim/json/writer.hpp>
 
 namespace corbasim 
 {
@@ -54,6 +55,13 @@ struct reflective_helper : public helper::helper_base
     core::holder m_holder;
     unsigned int m_currentIndex;
 };
+
+typedef csu::corbasim::json::writer::json_writer< std::ostream > 
+    std_writer_t;
+
+void write(std_writer_t& w, 
+        corbasim::core::reflective_base const * reflective, 
+        corbasim::core::holder holder);
 
 bool parse(core::reflective_base const * reflective, 
         core::holder& holder, const char * str, size_t size);
