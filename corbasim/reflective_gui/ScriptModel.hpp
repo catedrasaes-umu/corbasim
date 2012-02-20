@@ -54,11 +54,13 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
+    QMimeData *	mimeData(const QModelIndexList& indexes) const;
+
     corbasim::event::request_ptr getRequest(int pos);
 
     void initialize(core::interface_reflective_base const * instance);
 
-    int indexToPosition(const QModelIndex& index);
+    int indexToPosition(const QModelIndex& index) const;
 
     void deletePosition(int pos);
 

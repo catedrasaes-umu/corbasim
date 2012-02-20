@@ -289,7 +289,7 @@ namespace
                     for (unsigned int i = 0; i < count; i++) 
                     {
                         // Value
-                        do_write(w, reflective->get_child(i),
+                        do_write(w, reflective->get_slice(),
                                 reflective->get_child_value(holder, i));
                     }
 

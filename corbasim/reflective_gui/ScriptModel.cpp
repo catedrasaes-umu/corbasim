@@ -21,14 +21,18 @@
 #include <QStyle>
 #include <QApplication>
 #include <QDateTime>
+#include <QMimeData>
 
 #include <corbasim/core/reference_repository.hpp>
 #include <corbasim/reflective_gui/qvariant.hpp>
+
+#include <corbasim/json/reflective.hpp>
 
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 
 #include <iostream>
+#include <sstream>
 
 using namespace corbasim::reflective_gui;
 
@@ -36,10 +40,37 @@ ScriptModel::ScriptModel(QObject * parent) :
     QAbstractItemModel(parent), m_instance(NULL)
 {
     m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
+
+    setSupportedDragActions(Qt::CopyAction);
 }
 
 ScriptModel::~ScriptModel()
 {
+}
+
+
+QMimeData *	ScriptModel::mimeData(const QModelIndexList& indexes) const
+{
+    if (indexes.size() == 2) // both columns
+    {
+        int pos = indexToPosition(indexes.at(0));
+
+        std::ostringstream oss;
+
+        const LogEntry& entry = m_entries.at(pos);
+
+        core::operation_reflective_base const * reflective = entry.reflective;
+        core::holder holder = reflective->get_holder(entry.req);
+
+        json::write(oss, reflective, holder);
+
+        QMimeData *mimeData = new QMimeData;
+        mimeData->setText(oss.str().c_str());
+
+        return mimeData;
+    }
+
+    return NULL;
 }
 
 int ScriptModel::columnCount(const QModelIndex &/*parent*/) const
@@ -47,7 +78,7 @@ int ScriptModel::columnCount(const QModelIndex &/*parent*/) const
     return 2;
 }
 
-int ScriptModel::indexToPosition(const QModelIndex& index)
+int ScriptModel::indexToPosition(const QModelIndex& index) const
 {
     if (!index.isValid())
         return -1;
@@ -170,9 +201,10 @@ Qt::ItemFlags ScriptModel::flags(const QModelIndex &index) const
     if (index.column())
         return Qt::ItemIsEnabled 
             | Qt::ItemIsSelectable 
-            | Qt::ItemIsEditable;
+            | Qt::ItemIsEditable
+            | Qt::ItemIsDragEnabled;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
 }
 
 QVariant ScriptModel::headerData(int section, 

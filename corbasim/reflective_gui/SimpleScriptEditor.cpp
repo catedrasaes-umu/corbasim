@@ -35,6 +35,8 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
 
     m_tree = new QTreeView();
     m_tree->setModel(&m_model);
+    m_tree->setDragDropMode(QAbstractItemView::DragOnly);
+    m_tree->setDragEnabled(true);
 
     m_selector = new QComboBox();
     m_selector->setEditable(true);
