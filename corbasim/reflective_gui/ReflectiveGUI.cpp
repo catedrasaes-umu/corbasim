@@ -1012,3 +1012,34 @@ void OperationInputForm::dropEvent(QDropEvent *event)
     }
 }
 
+void OperationInputForm::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+        m_dragStartPosition = event->pos();
+}
+
+void OperationInputForm::mouseMoveEvent(QMouseEvent *event)
+{
+    if (!(event->buttons() & Qt::LeftButton))
+        return;
+
+    if ((event->pos() - m_dragStartPosition).manhattanLength()
+            < QApplication::startDragDistance())
+        return;
+
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+
+    std::ostringstream oss;
+    event::request_ptr req = createRequest();
+    
+    core::holder holder = m_reflective->get_holder(req);
+
+    json::write(oss, m_reflective, holder);
+
+    mimeData->setText(oss.str().c_str());
+    drag->setMimeData(mimeData);
+
+    Qt::DropAction dropAction = drag->exec(Qt::CopyAction);
+}
+

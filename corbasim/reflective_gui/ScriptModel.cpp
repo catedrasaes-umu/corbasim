@@ -59,7 +59,9 @@ QMimeData *	ScriptModel::mimeData(const QModelIndexList& indexes) const
 
         const LogEntry& entry = m_entries.at(pos);
 
-        core::operation_reflective_base const * reflective = entry.reflective;
+        core::operation_reflective_base const * reflective = 
+            entry.reflective;
+
         core::holder holder = reflective->get_holder(entry.req);
 
         json::write(oss, reflective, holder);
@@ -112,7 +114,8 @@ namespace
         else if (node->parent && node->parent->reflective->get_type() ==
                 corbasim::core::TYPE_STRUCT)
         {
-            return node->parent->reflective->get_child_name(node->index);
+            return node->parent->reflective->get_child_name(
+                    node->index);
         }
 
         return "Error!";
@@ -204,7 +207,9 @@ Qt::ItemFlags ScriptModel::flags(const QModelIndex &index) const
             | Qt::ItemIsEditable
             | Qt::ItemIsDragEnabled;
 
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+    return Qt::ItemIsEnabled | 
+        Qt::ItemIsSelectable | 
+        Qt::ItemIsDragEnabled;
 }
 
 QVariant ScriptModel::headerData(int section, 

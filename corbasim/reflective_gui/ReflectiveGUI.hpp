@@ -263,6 +263,10 @@ public:
 
     void dropEvent(QDropEvent *event);
 
+    void mousePressEvent(QMouseEvent *event);
+
+    void mouseMoveEvent(QMouseEvent *event);
+
 public slots:    
 
 #ifdef CORBASIM_USE_QTSCRIPT
@@ -275,6 +279,8 @@ protected:
     core::operation_reflective_base const * m_reflective;
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
+
+    QPoint m_dragStartPosition;
 
 #ifdef CORBASIM_USE_QTSCRIPT
     // widgets
