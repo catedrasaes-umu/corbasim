@@ -260,6 +260,8 @@ public:
     void setValue(event::request_ptr req);
 
     void dragEnterEvent(QDragEnterEvent *event);
+    
+    void dragLeaveEvent(QDragLeaveEvent *event);
 
     void dropEvent(QDropEvent *event);
 

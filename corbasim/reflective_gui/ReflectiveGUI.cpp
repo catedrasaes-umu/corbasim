@@ -986,10 +986,16 @@ void OperationInputForm::reloadScript()
 }
 #endif /* CORBASIM_USE_QTSCRIPT*/
 
+void OperationInputForm::dragLeaveEvent(QDragLeaveEvent *event)
+{
+}
+
 void OperationInputForm::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("text/plain"))
-         event->acceptProposedAction();
+    {
+        event->acceptProposedAction();
+    }
 }
 
 void OperationInputForm::dropEvent(QDropEvent *event)
