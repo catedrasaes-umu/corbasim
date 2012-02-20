@@ -250,6 +250,10 @@ void corbasim::json::write(std_writer_t& w,
 
             break;
 
+        case TYPE_BOOL:
+            w.new_bool(holder.to_value< bool >());
+            break;
+
         case TYPE_DOUBLE:
             w.new_double((double) holder.to_value< double >());
             break;
