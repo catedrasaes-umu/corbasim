@@ -62,7 +62,8 @@ void reflective_helper::new_double(double value_)
             m_holder.to_value< short >() = (short) value_;
             break;
         case TYPE_USHORT:
-            m_holder.to_value< unsigned short >() = (unsigned short) value_;
+            m_holder.to_value< unsigned short >() = 
+                (unsigned short) value_;
             break;
         case TYPE_LONG:
             m_holder.to_value< int32_t >() = (int32_t) value_;
@@ -320,6 +321,12 @@ void corbasim::json::write(std_writer_t& w,
             }
             break;
 
+        case TYPE_STRING:
+            {
+                std::string str = reflective->to_string(holder);
+                w.new_string(str.c_str());
+            }
+            break;
         default:
             break;
     }
