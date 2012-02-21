@@ -92,6 +92,22 @@ void reflective_helper::new_string(const std::string& d)
             m_reflective->from_string(m_holder, d);
             break;
 
+        case TYPE_ENUM:
+            {
+                const unsigned int count = 
+                    m_reflective->get_children_count();
+
+                for (int i = 0; i < (int) count; i++) 
+                {
+                    if (d == m_reflective->get_child_name(i))
+                    {
+                        m_holder.to_value< int32_t >() = i;
+                        break;
+                    }
+                }
+            }
+            break;
+
         case TYPE_OBJREF:
             {
                 core::reference_repository * rr =
@@ -248,6 +264,23 @@ void corbasim::json::write(std_writer_t& w,
 
             }
 
+            break;
+
+        case TYPE_ENUM:
+            {
+                const int count = (int) reflective->get_children_count();
+
+                int32_t idx = holder.to_value< int32_t >();
+
+                if (idx >= 0 && idx < count)
+                {
+                    w.new_string(reflective->get_child_name(idx));
+                }
+                else
+                {
+                    w.new_string("Invalid value!");
+                }
+            }
             break;
 
         case TYPE_BOOL:

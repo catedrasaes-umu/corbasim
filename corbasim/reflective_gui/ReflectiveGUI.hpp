@@ -269,6 +269,8 @@ public:
 
     void mouseMoveEvent(QMouseEvent *event);
 
+    // bool eventFilter(QObject * watched, QEvent * event);
+
 public slots:    
 
 #ifdef CORBASIM_USE_QTSCRIPT
