@@ -100,6 +100,8 @@ public slots:
     void updatedReference(const QString& id,
             const CORBA::Object_var& ref);
 
+    void scrollToItem(const QModelIndex& parent, int start, int end);
+
 signals:
 
     void saveFile(QString);

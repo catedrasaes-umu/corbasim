@@ -282,6 +282,15 @@ void AppMainWindow::setLogModel(QAbstractItemModel * model)
 
     QObject::connect(this, SIGNAL(doClearLog()),
             model, SLOT(clearLog()));
+
+    QObject::connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+            this, SLOT(scrollToItem(const QModelIndex&, int, int)));
+}
+
+void AppMainWindow::scrollToItem(const QModelIndex & parent, int start, int end)
+{
+    QModelIndex index = m_log->model()->index(start, 0, parent);
+    m_log->scrollTo(index);
 }
 
 void AppMainWindow::showPlotTool()
