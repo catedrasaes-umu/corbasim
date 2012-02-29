@@ -21,13 +21,14 @@
 #define CORBASIM_QT_CUSTOMLAYOUTS_HPP
 
 #include <QVBoxLayout>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
 namespace qt 
 {
 
-class CustomVLayout : public QVBoxLayout
+class CORBASIM_QT_DECLSPEC CustomVLayout : public QVBoxLayout
 {
     Q_OBJECT
 public:

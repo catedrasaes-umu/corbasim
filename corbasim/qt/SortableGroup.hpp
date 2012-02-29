@@ -23,13 +23,14 @@
 #include <QtGui>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/qt/CustomLayouts.hpp>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
 namespace qt 
 {
 
-class SortableGroupItem : public QFrame
+class CORBASIM_QT_DECLSPEC SortableGroupItem : public QFrame
 {
     Q_PROPERTY(QString title READ title WRITE setTitle)
     // Q_PROPERTY(bool expanded READ isExpanded WRITE setExpanded)
@@ -65,7 +66,7 @@ protected:
     QLabel * m_title;
 };
 
-class SortableGroup : public QWidget
+class CORBASIM_QT_DECLSPEC SortableGroup : public QWidget
 {
     Q_OBJECT
 public:

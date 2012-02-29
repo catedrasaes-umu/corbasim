@@ -43,7 +43,8 @@ set(corbasim_reflective_gui_SRCS
 
 set(corbasim_reflective_gui_LIBS
     ${QT_LIBRARIES}
-    corbasim)
+    corbasim
+    corbasim_qt)
 
 # NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
 qt4_wrap_cpp(corbasim_reflective_gui_MOC_SRCS ${corbasim_reflective_gui_MOC_HDRS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
