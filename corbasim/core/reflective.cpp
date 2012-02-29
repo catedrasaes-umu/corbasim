@@ -25,34 +25,34 @@ namespace corbasim
 namespace core 
 {
 
-template CORBA::Boolean& holder::to_value< CORBA::Boolean >();
-template CORBA::Short& holder::to_value< CORBA::Short >();
-template CORBA::UShort& holder::to_value< CORBA::UShort >();
-template CORBA::Char& holder::to_value< CORBA::Char >();
-template CORBA::Octet& holder::to_value< CORBA::Octet >();
-template CORBA::Long& holder::to_value< CORBA::Long >();
-template CORBA::ULong& holder::to_value< CORBA::ULong >();
-template CORBA::LongLong& holder::to_value< CORBA::LongLong >();
-template CORBA::ULongLong& holder::to_value< CORBA::ULongLong >();
-template CORBA::Float& holder::to_value< CORBA::Float >();
-template CORBA::Double& holder::to_value< CORBA::Double >();
+template CORBASIM_CORE_DECLSPEC CORBA::Boolean& holder::to_value< CORBA::Boolean >();
+template CORBASIM_CORE_DECLSPEC CORBA::Short& holder::to_value< CORBA::Short >();
+template CORBASIM_CORE_DECLSPEC CORBA::UShort& holder::to_value< CORBA::UShort >();
+template CORBASIM_CORE_DECLSPEC CORBA::Char& holder::to_value< CORBA::Char >();
+template CORBASIM_CORE_DECLSPEC CORBA::Octet& holder::to_value< CORBA::Octet >();
+template CORBASIM_CORE_DECLSPEC CORBA::Long& holder::to_value< CORBA::Long >();
+template CORBASIM_CORE_DECLSPEC CORBA::ULong& holder::to_value< CORBA::ULong >();
+template CORBASIM_CORE_DECLSPEC CORBA::LongLong& holder::to_value< CORBA::LongLong >();
+template CORBASIM_CORE_DECLSPEC CORBA::ULongLong& holder::to_value< CORBA::ULongLong >();
+template CORBASIM_CORE_DECLSPEC CORBA::Float& holder::to_value< CORBA::Float >();
+template CORBASIM_CORE_DECLSPEC CORBA::Double& holder::to_value< CORBA::Double >();
 
 namespace detail 
 {
 
-template class bool_reflective< CORBA::Boolean >;
-template class primitive_reflective< CORBA::Short >;
-template class primitive_reflective< CORBA::UShort >;
-template class primitive_reflective< CORBA::Char >;
-template class primitive_reflective< CORBA::Octet >;
-template class primitive_reflective< CORBA::Long >;
-template class primitive_reflective< CORBA::ULong >;
-template class primitive_reflective< CORBA::LongLong >;
-template class primitive_reflective< CORBA::ULongLong >;
-template class primitive_reflective< CORBA::Float >;
-template class primitive_reflective< CORBA::Double >;
+template class CORBASIM_CORE_DECLSPEC bool_reflective< CORBA::Boolean >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Short >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::UShort >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Char >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Octet >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Long >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::ULong >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::LongLong >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::ULongLong >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Float >;
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Double >;
 
-template class objrefvar_reflective< CORBA::Object_var >;
+template class CORBASIM_CORE_DECLSPEC objrefvar_reflective< CORBA::Object_var >;
 
 } // namespace detail
 } // namespace core

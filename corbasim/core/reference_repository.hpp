@@ -24,13 +24,14 @@
 #include <string>
 #include <corbasim/impl.hpp>
 #include <corbasim/cosnaming/CosnamingC.h>
+#include <corbasim/core/export.hpp>
 
 namespace corbasim 
 {
 namespace core 
 {
 
-class reference_repository
+class CORBASIM_CORE_DECLSPEC reference_repository
 {
 public:
 
