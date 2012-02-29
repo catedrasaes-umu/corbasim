@@ -103,7 +103,7 @@ void insertRecursive(QStandardItem * parent,
 }
 
 void PlotModel::registerInstance(const QString& name,
-        core::interface_reflective_base const * reflective)
+		corbasim::core::interface_reflective_base const * reflective)
 {
     FirstLevelItem item;
     item.name = name;

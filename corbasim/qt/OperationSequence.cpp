@@ -26,7 +26,7 @@
 using namespace corbasim::qt;
 
 OperationSequenceItem::OperationSequenceItem(const QString& id,
-        dialogs::input_base* dlg,
+		corbasim::dialogs::input_base* dlg,
         QWidget * parent) : 
     QFrame(parent), m_id(id), m_dlg(dlg)
 {
@@ -426,7 +426,7 @@ void OperationSequenceTool::objrefDeleted(const QString& id)
 }
 
 void OperationSequenceTool::appendOperation(const QString& id, 
-        gui::operation_factory_base const * op)
+		corbasim::gui::operation_factory_base const * op)
 {
     OperationSequence * seq = NULL;
     if (m_sequences.isEmpty())
@@ -533,7 +533,7 @@ OperationModel::~OperationModel()
 }
 
 void OperationModel::registerInstance(const QString& name,
-        gui::gui_factory_base const * factory)
+		corbasim::gui::gui_factory_base const * factory)
 {
     FirstLevelItem item;
     item.name = name;
