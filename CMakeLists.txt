@@ -62,7 +62,7 @@ find_package(PythonLibs)
 find_package(Qt4)
 find_package(Qwt6)
 find_package(Boost 1.45.0 
-    COMPONENTS serialization regex python system thread)
+    COMPONENTS serialization regex system thread program_options)
 
 message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 

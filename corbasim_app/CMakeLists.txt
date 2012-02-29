@@ -54,7 +54,7 @@ add_executable(corbasim_app
     ${corbasim_app_SRCS})
 target_link_libraries(corbasim_app
     dl # for dlopen, dlsym
-    boost_program_options
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
     corbasim
     corbasim_qt
     corbasim_reflective_gui
