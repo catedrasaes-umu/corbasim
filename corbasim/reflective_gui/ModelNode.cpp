@@ -21,8 +21,8 @@
 
 using namespace corbasim::reflective_gui;
 
-Node::Node(core::reflective_base const * r,
-        core::holder h, Node const * p, unsigned int idx) :
+Node::Node(corbasim::core::reflective_base const * r,
+        corbasim::core::holder h, Node const * p, unsigned int idx) :
     reflective(r), holder(h), parent(p), index(idx), initialized(false)
 {
 }

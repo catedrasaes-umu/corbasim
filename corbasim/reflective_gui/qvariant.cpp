@@ -22,6 +22,14 @@
 #include <corbasim/core/reference_repository.hpp>
 #include <iostream>
 
+#include <boost/cstdint.hpp>
+#ifdef _MSC_VER
+using boost::uint32_t;
+using boost::int32_t;
+using boost::uint64_t;
+using boost::int64_t;
+#endif
+
 namespace corbasim 
 {
 namespace reflective_gui 

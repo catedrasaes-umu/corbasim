@@ -428,7 +428,7 @@ void OperationSequenceTool::objrefDeleted(const QString& id)
 }
 
 void OperationSequenceTool::appendOperation(const QString& id, 
-        core::operation_reflective_base const * op)
+		corbasim::core::operation_reflective_base const * op)
 {
     OperationSequence * seq = NULL;
     if (m_sequences.isEmpty())
@@ -535,7 +535,7 @@ OperationModel::~OperationModel()
 }
 
 void OperationModel::registerInstance(const QString& name,
-        core::interface_reflective_base const * factory)
+        corbasim::core::interface_reflective_base const * factory)
 {
     FirstLevelItem item;
     item.name = name;

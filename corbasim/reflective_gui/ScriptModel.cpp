@@ -303,7 +303,7 @@ corbasim::event::request_ptr ScriptModel::getRequest(int pos)
 }
 
 void ScriptModel::initialize(
-        core::interface_reflective_base const * instance)
+		corbasim::core::interface_reflective_base const * instance)
 {
     m_instance = instance;
 }

@@ -413,7 +413,7 @@ void SimpleScriptEditor::doSave()
 
     std::ofstream ofs(log_file.toStdString().c_str());
 
-#warning "TODO"
+//#warning "TODO"
 #if 0
     for (requests_t::const_iterator it = m_requests.begin(); 
             it != m_requests.end(); it++) 
@@ -433,7 +433,7 @@ void SimpleScriptEditor::doLoad()
     if (log_file.isEmpty())
         return;
 
-#warning "TODO"
+//#warning "TODO"
 #if 0
     for (int i = 0; i < log_file.length(); i++) 
     {
