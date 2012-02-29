@@ -26,12 +26,20 @@
 
 #include <corbasim/core/reference_repository.hpp>
 
+#ifdef _MSC_VER
+#include <boost/cstdint.hpp>
+using boost::uint32_t;
+using boost::int32_t;
+using boost::uint64_t;
+using boost::int64_t;
+#endif
+
 using namespace corbasim::json;
 using namespace corbasim::core;
 
 reflective_helper::reflective_helper(
-        core::reflective_base const * reflective,
-        core::holder holder) :
+		corbasim::core::reflective_base const * reflective,
+        corbasim::core::holder holder) :
     m_reflective(reflective), m_holder(holder), m_currentIndex(0)
 {
 }

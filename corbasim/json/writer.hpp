@@ -33,7 +33,7 @@ template< typename Ostream, typename T >
 inline void write(Ostream& os, const T& t, bool indent = false);
 
 template< typename Ostream, typename T >
-inline void write(Ostream& os, const T& t, bool indent = false)
+inline void write(Ostream& os, const T& t, bool indent)
 {
     typedef csu::corbasim::json::writer::json_writer< Ostream > writer_t;
     writer_t w(os);
