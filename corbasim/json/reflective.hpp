@@ -24,13 +24,14 @@
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/json/helper.hpp>
 #include <corbasim/json/writer.hpp>
+#include <corbasim/core/export.hpp>
 
 namespace corbasim 
 {
 namespace json 
 {
 
-struct reflective_helper : public helper::helper_base
+struct CORBASIM_CORE_DECLSPEC reflective_helper : public helper::helper_base
 {
     reflective_helper(core::reflective_base const * reflective,
             core::holder holder);
@@ -59,14 +60,15 @@ struct reflective_helper : public helper::helper_base
 typedef csu::corbasim::json::writer::json_writer< std::ostream > 
     std_writer_t;
 
-void write(std_writer_t& w, 
+CORBASIM_CORE_DECLSPEC void write(std_writer_t& w, 
         corbasim::core::reflective_base const * reflective, 
         corbasim::core::holder holder);
 
-bool parse(core::reflective_base const * reflective, 
+CORBASIM_CORE_DECLSPEC bool parse(core::reflective_base const * reflective, 
         core::holder& holder, const char * str, size_t size);
 
-void write(std::ostream& os, core::reflective_base const * reflective, 
+CORBASIM_CORE_DECLSPEC void write(std::ostream& os, 
+        core::reflective_base const * reflective, 
         core::holder& holder, bool indent = false);
 
 } // namespace json

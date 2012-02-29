@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <corbasim/gui/widgets_fwd.hpp>
+#include <corbasim/qt/export.hpp>
 
 class QComboBox;
 class QStackedWidget;
@@ -40,7 +41,7 @@ namespace qt
 
 class Status;
 
-class ObjrefWidget : public QWidget
+class CORBASIM_QT_DECLSPEC ObjrefWidget : public QWidget
 {
     Q_OBJECT
 public:

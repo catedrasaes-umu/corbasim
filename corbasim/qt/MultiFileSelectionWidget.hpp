@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QStringList>
+#include <corbasim/qt/export.hpp>
 
 class QLineEdit;
 class QCheckBox;
@@ -32,7 +33,7 @@ namespace corbasim
 namespace qt 
 {
 
-class MultiFileSelectionWidget : public QWidget
+class CORBASIM_QT_DECLSPEC MultiFileSelectionWidget : public QWidget
 {
     Q_OBJECT
 public:

@@ -23,6 +23,7 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/adapted.hpp>
+#include <corbasim/core/export.hpp>
 
 namespace corbasim 
 {
@@ -31,7 +32,7 @@ namespace event
 
 enum event_types { EXCEPTION, REQUEST, RESPONSE, MESSAGE};
 
-struct event
+struct CORBASIM_CORE_DECLSPEC event
 {
     // virtual void serialize(std::ostream& out) const = 0;
     virtual event_types get_type() const = 0;
@@ -42,7 +43,7 @@ struct event
 
 typedef boost::shared_ptr< event > event_ptr;
 
-struct exception : public event
+struct CORBASIM_CORE_DECLSPEC exception : public event
 {
     event_types get_type() const;
 
@@ -51,7 +52,7 @@ struct exception : public event
 
 typedef boost::shared_ptr< exception > exception_ptr;
 
-struct message : public event
+struct CORBASIM_CORE_DECLSPEC message : public event
 {
     message(const char * msg);
 
@@ -66,7 +67,7 @@ struct message : public event
 
 typedef boost::shared_ptr< message > message_ptr;
 
-struct request : public event
+struct CORBASIM_CORE_DECLSPEC request : public event
 {
     event_types get_type() const;
     
@@ -77,7 +78,7 @@ struct request : public event
 
 typedef boost::shared_ptr< request > request_ptr;
 
-struct response : public event
+struct CORBASIM_CORE_DECLSPEC response : public event
 {
     event_types get_type() const;
 

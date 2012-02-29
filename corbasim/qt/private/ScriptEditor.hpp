@@ -22,6 +22,7 @@
 
 #include "codeeditor.h"
 #include "qscriptsyntaxhighlighter_p.h"
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
@@ -30,7 +31,7 @@ namespace qt
 namespace priv
 {
 
-class ScriptEditor : public CodeEditor
+class CORBASIM_QT_DECLSPEC ScriptEditor : public CodeEditor
 {
     Q_OBJECT
 public:

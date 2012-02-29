@@ -1,4 +1,5 @@
 set(corbasim_reflective_gui_EXPORTED_HEADERS
+    reflecitve_gui/export.hpp
     reflective_gui/utils.hpp
     reflective_gui/qvariant.hpp
     reflective_gui/InputRequestProcessor.hpp

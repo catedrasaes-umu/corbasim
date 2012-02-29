@@ -20,12 +20,14 @@
 #ifndef CORBASIM_QT_INITIALIZE_HPP
 #define CORBASIM_QT_INITIALIZE_HPP
 
+#include <corbasim/qt/export.hpp>
+
 namespace corbasim 
 {
 namespace qt 
 {
 
-void initialize();
+CORBASIM_QT_DECLSPEC void initialize();
 
 } // namespace qt
 } // namespace corbasim

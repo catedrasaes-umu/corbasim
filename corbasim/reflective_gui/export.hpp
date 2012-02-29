@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * config.hpp
+ * export.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -15,22 +15,22 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
-#ifndef CORBASIM_CORE_CONFIG_HPP
-#define CORBASIM_CORE_CONFIG_HPP
+#ifndef CORBASIM_REFLECTIVE_GUI_EXPORT_HPP
+#define CORBASIM_REFLECTIVE_GUI_EXPORT_HPP
 
-#ifndef CORBASIM_TAO
-#define CORBASIM_TAO
-#endif // CORBASIM_TAO
+#if defined(_MSC_VER)
 
-#ifndef CORBASIM_ARRAY_RESUME_CONDITION
-    #define CORBASIM_ARRAY_RESUME_CONDITION 100
+    #if defined(corbasim_reflective_gui_EXPORTS)
+        #define CORBASIM_REFLECTIVE_GUI_DECLSPEC __declspec(dllexport)
+    #else
+        #define CORBASIM_REFLECTIVE_GUI_DECLSPEC __declspec(dllimport)
+    #endif
+
+#else
+    #define CORBASIM_REFLECTIVE_GUI_DECLSPEC 
 #endif
 
-#ifndef CORBASIM_MPL_VECTOR_MAX_SIZE
-    #define CORBASIM_MPL_VECTOR_MAX_SIZE 50
-#endif
-
-#endif /* CORBASIM_CORE_CONFIG_HPP */
+#endif /* CORBASIM_REFLECTIVE_GUI_EXPORT_HPP */
 

@@ -32,6 +32,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     gui/widgets/struct.hpp
     gui/widgets/union.hpp
 
+    qt/export.hpp
     # QObjects
     qt/LogModel.hpp
     qt/PlotModel.hpp
