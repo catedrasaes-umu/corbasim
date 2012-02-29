@@ -48,7 +48,6 @@ ScriptModel::~ScriptModel()
 {
 }
 
-
 QMimeData *	ScriptModel::mimeData(const QModelIndexList& indexes) const
 {
     if (indexes.size() == 2) // both columns
@@ -303,7 +302,8 @@ corbasim::event::request_ptr ScriptModel::getRequest(int pos)
     return m_entries.at(pos).req;
 }
 
-void ScriptModel::initialize(core::interface_reflective_base const * instance)
+void ScriptModel::initialize(
+        core::interface_reflective_base const * instance)
 {
     m_instance = instance;
 }
@@ -340,8 +340,7 @@ void ScriptModel::append(corbasim::event::request_ptr req,
     core::operation_reflective_base const * op =
         m_instance->get_reflective_by_tag(req->get_tag());
 
-    if (!op)
-        return;
+    if (!op) return;
 
     entry.reflective = op;
 
@@ -353,7 +352,6 @@ void ScriptModel::append(corbasim::event::request_ptr req,
 
     // List
     entry.req = req;
-
     entry.text = QString("Outgoing call ") + op->get_name();
     entry.icon = &m_outputIcon;
 

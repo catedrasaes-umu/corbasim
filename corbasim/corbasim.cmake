@@ -10,6 +10,7 @@ set(corbasim_EXPORTED_HEADERS
     adapted.hpp
     corba_adapted.hpp
     corbasim.hpp
+    core/export.hpp
     core/archives.hpp
     core/caller_fwd.hpp
     core/caller.hpp

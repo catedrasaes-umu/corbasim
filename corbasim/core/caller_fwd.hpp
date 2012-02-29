@@ -23,13 +23,14 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/impl.hpp>
 #include <corbasim/event_fwd.hpp>
+#include <corbasim/core/export.hpp>
 
 namespace corbasim 
 {
 namespace core 
 {
 
-struct reference_validator_base
+struct CORBASIM_CORE_DECLSPEC reference_validator_base
 {
     virtual void set_reference(CORBA::Object_ptr ref) = 0;
     virtual bool is_nil() const = 0;
@@ -40,7 +41,8 @@ struct reference_validator_base
 typedef boost::shared_ptr< reference_validator_base > 
     reference_validator_ptr;
 
-struct interface_caller_base : public reference_validator_base
+struct CORBASIM_CORE_DECLSPEC interface_caller_base : 
+    public reference_validator_base
 {
     virtual event::event * do_call(event::request * req) const = 0;
 

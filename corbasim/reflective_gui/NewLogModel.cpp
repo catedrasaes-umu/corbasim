@@ -301,8 +301,7 @@ void NewLogModel::append(const QString& id,
         core::operation_reflective_base const * op =
             it->second->get_reflective_by_tag(req->get_tag());
 
-        if (!op)
-            return;
+        if (!op) return;
 
         entry.reflective = op;
 

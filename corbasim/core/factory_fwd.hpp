@@ -25,6 +25,7 @@
 #include <map>
 #include <corbasim/event.hpp>
 #include <corbasim/impl.hpp> // For PortableServer::ServantBase
+#include <corbasim/core/export.hpp>
 
 namespace corbasim 
 {
@@ -34,7 +35,7 @@ class interface_caller_base;
 class request_processor;
 class reference_validator_base;
 
-struct operation_factory_base
+struct CORBASIM_CORE_DECLSPEC operation_factory_base
 {
     virtual const char * get_name() const = 0;
     virtual tag_t get_tag() const = 0;
@@ -61,7 +62,7 @@ struct operation_factory_base
     virtual ~operation_factory_base();
 };
 
-struct factory_base
+struct CORBASIM_CORE_DECLSPEC factory_base
 {
     unsigned int operation_count() const;
     operation_factory_base const * get_factory_by_index(

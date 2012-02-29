@@ -31,22 +31,23 @@
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/callable.hpp>
 #include <corbasim/core/reference_validator.hpp>
+#include <corbasim/core/export.hpp>
 
 namespace corbasim 
 {
 namespace core 
 {
 
-struct holder;
+struct CORBASIM_CORE_DECLSPEC holder;
 
-struct holder_impl_base {};
+struct CORBASIM_CORE_DECLSPEC holder_impl_base {};
 
 typedef boost::shared_ptr< holder_impl_base > holder_impl_ptr;
 
 template< typename T >
 struct holder_ref_impl;
 
-struct holder
+struct CORBASIM_CORE_DECLSPEC holder
 {
     holder();
 
@@ -106,7 +107,7 @@ struct objrefvar_reflective_base;
 struct operation_reflective_base;
 struct interface_reflective_base;
 
-struct reflective_base
+struct CORBASIM_CORE_DECLSPEC reflective_base
 {
     virtual ~reflective_base();
 
@@ -154,7 +155,8 @@ protected:
     unsigned int m_child_index;
 };
 
-struct objrefvar_reflective_base : public reflective_base
+struct CORBASIM_CORE_DECLSPEC objrefvar_reflective_base : 
+    public reflective_base
 {
     virtual CORBA::Object_ptr to_object(holder const& h) const = 0;
     virtual void from_object(holder& h, CORBA::Object_ptr obj) const = 0;
@@ -174,7 +176,7 @@ typedef boost::shared_ptr< reflective_base > reflective_ptr;
 template< typename T >
 struct reflective;
 
-struct operation_reflective_base : 
+struct CORBASIM_CORE_DECLSPEC operation_reflective_base : 
     public virtual reflective_base
 {
     virtual const char * get_name() const = 0;
@@ -191,7 +193,7 @@ struct operation_reflective_base :
     virtual ~operation_reflective_base();
 };
 
-struct interface_reflective_base
+struct CORBASIM_CORE_DECLSPEC interface_reflective_base
 {
     unsigned int operation_count() const;
     operation_reflective_base const * get_reflective_by_index(
