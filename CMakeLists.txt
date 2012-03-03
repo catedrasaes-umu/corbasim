@@ -58,7 +58,6 @@ else(NOT Boost_FOUND)
     message(STATUS "Boost libraries directory: ${Boost_LIBRARY_DIRS}")
 endif(NOT Boost_FOUND)
 
-find_package(PythonLibs)
 find_package(Qt4)
 find_package(Qwt6)
 find_package(Boost 1.45.0 
@@ -90,7 +89,7 @@ endif()
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 add_subdirectory(test EXCLUDE_FROM_ALL)
 
-# add_subdirectory(private EXCLUDE_FROM_ALL)
+add_subdirectory(private EXCLUDE_FROM_ALL)
 
 # Opciones de empaquetado
 set(CPACK_GENERATOR "TGZ")
