@@ -25,13 +25,14 @@
 #include <map>
 #include <corbasim/event_fwd.hpp>
 #include <corbasim/reflective_gui/utils.hpp>
+#include <corbasim/reflective_gui/export.hpp>
 
 namespace corbasim 
 {
 namespace reflective_gui 
 {
 
-class RequestProcessor
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC RequestProcessor
 {
 public:
 
@@ -62,7 +63,8 @@ typedef boost::shared_ptr< RequestProcessor > RequestProcessor_ptr;
  *
  * Use moveToThread to process its events in other thread.
  */
-class InputRequestController : public QObject
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC InputRequestController : 
+    public QObject
 {
     Q_OBJECT
 public:
@@ -106,6 +108,7 @@ protected:
 
 };
 
+CORBASIM_REFLECTIVE_GUI_DECLSPEC 
 InputRequestController * getDefaultInputRequestController();
 
 } // namespace reflective_gui

@@ -25,13 +25,15 @@
 #include <QStandardItemModel>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/reflective_gui/export.hpp>
 
 namespace corbasim 
 {
 namespace reflective_gui
 {
 
-class LogModel : public QStandardItemModel
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC LogModel : 
+    public QStandardItemModel
 {
     Q_OBJECT
     Q_PROPERTY(int maxEntries READ maxEntries WRITE setMaxEntries)

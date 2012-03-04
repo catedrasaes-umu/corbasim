@@ -36,7 +36,8 @@ namespace corbasim
 namespace reflective_gui
 {
 
-class CORBASIM_REFLECTIVE_GUI_DECLSPEC NewLogModel : public QAbstractItemModel
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC NewLogModel : 
+    public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(int maxEntries READ maxEntries WRITE setMaxEntries)

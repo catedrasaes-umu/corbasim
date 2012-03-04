@@ -25,25 +25,30 @@
 #include <QScriptValue>
 #include <QScriptEngine>
 
+#include <corbasim/reflective_gui/export.hpp>
+
 namespace corbasim 
 {
 namespace reflective_gui 
 {
-
+    CORBASIM_REFLECTIVE_GUI_DECLSPEC 
     QVariant toQVariant(
             corbasim::core::reflective_base const * reflective,
             corbasim::core::holder& hold);
 
+    CORBASIM_REFLECTIVE_GUI_DECLSPEC 
     bool fromQVariant(
             corbasim::core::reflective_base const * reflective,
             corbasim::core::holder& hold,
             const QVariant& var);
 
+    CORBASIM_REFLECTIVE_GUI_DECLSPEC 
     QScriptValue toQScriptValue(
             QScriptEngine * engine,
             corbasim::core::reflective_base const * reflective,
             corbasim::core::holder& hold);
 
+    CORBASIM_REFLECTIVE_GUI_DECLSPEC 
     bool fromQScriptValue(
             QScriptEngine * engine,
             corbasim::core::reflective_base const * reflective,

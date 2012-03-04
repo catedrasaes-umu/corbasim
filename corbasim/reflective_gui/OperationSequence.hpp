@@ -24,6 +24,7 @@
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/qt/CustomLayouts.hpp>
+#include <corbasim/reflective_gui/export.hpp>
 
 #include <ostream>
 
@@ -34,7 +35,8 @@ namespace reflective_gui
 
 class OperationInputForm;
 
-class OperationSequenceItem : public QFrame
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationSequenceItem : 
+    public QFrame
 {
     Q_OBJECT
 public:
@@ -86,7 +88,7 @@ protected:
     // End periodic
 };
 
-class OperationSequence : public QWidget
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationSequence : public QWidget
 {
     Q_OBJECT
 public:
@@ -123,7 +125,7 @@ protected:
 
 };
 
-class OperationsView : public QTreeView
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationsView : public QTreeView
 {
     Q_OBJECT
 public:
@@ -131,7 +133,8 @@ public:
     virtual ~OperationsView();
 };
 
-class OperationModel : public QStandardItemModel
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationModel : 
+    public QStandardItemModel
 {
     Q_OBJECT
 
@@ -168,7 +171,8 @@ protected:
     FirstLevelItems_t m_items;
 };
 
-class OperationSequenceTool : public QWidget
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationSequenceTool : 
+    public QWidget
 {
     Q_OBJECT
 public:

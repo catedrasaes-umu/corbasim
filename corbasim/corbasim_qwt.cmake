@@ -1,6 +1,7 @@
 include_directories(${Qwt6_INCLUDE_DIR})
 
 set(corbasim_qwt_EXPORTED_HEADERS
+    qwt/export.hpp
     qwt/SimplePlot.hpp
     qwt/ReflectivePlotTool.hpp
     )

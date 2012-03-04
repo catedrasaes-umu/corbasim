@@ -26,6 +26,8 @@
 #include <corbasim/reflective_gui/InputRequestProcessor.hpp>
 #include <map>
 
+#include <corbasim/qwt/export.hpp>
+
 namespace corbasim 
 {
 namespace qt 
@@ -37,7 +39,7 @@ class SortableGroupItem;
 namespace qwt 
 {
 
-class PlotProcessor : public QObject,
+class CORBASIM_QWT_DECLSPEC PlotProcessor : public QObject,
     public reflective_gui::RequestProcessor
 {
     Q_OBJECT
@@ -58,7 +60,7 @@ signals:
             corbasim::core::holder);
 };
 
-class ReflectivePlot : public SimplePlot
+class CORBASIM_QWT_DECLSPEC ReflectivePlot : public SimplePlot
 {
     Q_OBJECT
 public:
@@ -98,10 +100,11 @@ protected:
     SimplePlot * m_plot;
 };
 
-class ReflectivePlotTool : public QWidget
+class CORBASIM_QWT_DECLSPEC ReflectivePlotTool : public QWidget
 {
     Q_OBJECT
 public:
+
     ReflectivePlotTool(QWidget * parent = 0);
     virtual ~ReflectivePlotTool();
 

@@ -27,13 +27,15 @@
 #include <corbasim/qt/types.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/reflective_gui/ModelNode.hpp>
+#include <corbasim/reflective_gui/export.hpp>
 
 namespace corbasim 
 {
 namespace reflective_gui
 {
 
-class ScriptModel : public QAbstractItemModel
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC ScriptModel : 
+    public QAbstractItemModel
 {
     Q_OBJECT
 public:

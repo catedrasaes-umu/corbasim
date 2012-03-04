@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * SimplePlot.hpp
+ * export.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,42 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QWT_SIMPLEPLOT_HPP
-#define CORBASIM_QWT_SIMPLEPLOT_HPP
+#ifndef CORBASIM_QWT_EXPORT_HPP
+#define CORBASIM_QWT_EXPORT_HPP
 
-#include <QWidget>
-#include <QString>
-#include <QVector>
+#if defined(_MSC_VER)
 
-#include <corbasim/qwt/export.hpp>
+    #if defined(corbasim_qwt_EXPORTS)
+        #define CORBASIM_QWT_DECLSPEC __declspec(dllexport)
+    #else
+        #define CORBASIM_QWT_DECLSPEC __declspec(dllimport)
+    #endif
 
-namespace corbasim 
-{
-namespace qwt 
-{
+#else
+    #define CORBASIM_QWT_DECLSPEC 
+#endif
 
-class CORBASIM_QWT_DECLSPEC SimplePlot : public QWidget
-{
-    Q_OBJECT
-public:
-
-    SimplePlot(QWidget * parent = 0);
-    virtual ~SimplePlot();
-
-public slots:
-
-    void append(const QVector< double >& v);
-    void append(double v);
-
-protected:
-
-    struct Data;
-
-    Data * m_data;
-};
-
-} // namespace qwt
-} // namespace corbasim
-
-#endif /* CORBASIM_QWT_SIMPLEPLOT_HPP */
+#endif /* CORBASIM_QWT_EXPORT_HPP */
 
