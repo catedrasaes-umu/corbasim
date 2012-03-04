@@ -36,7 +36,7 @@ elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni
 endif()
 
-add_definitions(-Wall)
+#add_definitions(-Wall)
 add_definitions(-DCORBASIM_USE_QTSCRIPT)
 
 #
@@ -89,7 +89,7 @@ endif()
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 add_subdirectory(test EXCLUDE_FROM_ALL)
 
-add_subdirectory(private EXCLUDE_FROM_ALL)
+# add_subdirectory(private EXCLUDE_FROM_ALL)
 
 # Opciones de empaquetado
 set(CPACK_GENERATOR "TGZ")

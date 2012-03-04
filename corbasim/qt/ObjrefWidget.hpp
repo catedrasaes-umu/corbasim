@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <corbasim/gui/widgets_fwd.hpp>
 #include <corbasim/qt/export.hpp>
+#include <corbasim/core/caller_fwd.hpp>
 
 class QComboBox;
 class QStackedWidget;
@@ -31,11 +32,6 @@ class QAbstractItemModel;
 
 namespace corbasim 
 {
-namespace core 
-{
-class reference_validator_base;
-} // namespace core
-
 namespace qt 
 {
 

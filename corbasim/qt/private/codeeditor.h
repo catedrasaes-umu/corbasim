@@ -44,6 +44,7 @@
 
 #include <QPlainTextEdit>
 #include <QObject>
+#include <corbasim/qt/export.hpp>
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -56,7 +57,7 @@ class LineNumberArea;
 
 //![codeeditordefinition]
 
-class CodeEditor : public QPlainTextEdit
+class CORBASIM_QT_DECLSPEC CodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 

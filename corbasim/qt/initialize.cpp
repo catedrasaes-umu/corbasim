@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "initialize.hpp"
+
 #include <QMetaType>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/event_fwd.hpp>
@@ -24,6 +26,7 @@
 #include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/reflective_gui/InputRequestProcessor.hpp>
+
 
 namespace  
 {
@@ -61,17 +64,9 @@ public:
 
 } // namespace
 
-namespace corbasim 
-{
-namespace qt 
-{
-
-void initialize()
+CORBASIM_QT_DECLSPEC void corbasim::qt::initialize()
 {
     static boost::shared_ptr< Initializer > instance(new Initializer);
 }
-
-} // namespace qt
-} // namespace corbasim
 
 
