@@ -881,7 +881,7 @@ OperationInputForm::OperationInputForm(
 #ifdef CORBASIM_USE_QTSCRIPT
     QVBoxLayout * mainLayout = new QVBoxLayout();
     mainLayout->setMargin(0);
-    m_tabs = new QTabWidget();
+    m_tabs = new qt::TabWidget();
     QWidget * w = new QWidget();
     w->setLayout(mlayout);
     m_tabs->addTab(w, "Form");
@@ -894,6 +894,19 @@ OperationInputForm::OperationInputForm(
 
     m_thisObject = m_engine.newQObject(this);
     reloadScript();
+
+    // reload button
+    QTabBar * tabBar = m_tabs->tabBar();
+    QPushButton* button = new QPushButton();
+    button->setIcon(
+            style()->standardIcon(QStyle::SP_DialogApplyButton)); 
+    button->setIconSize(QSize(16, 16));
+    button->resize(20, 20);
+    tabBar->setTabButton(1, QTabBar::LeftSide, button);
+
+    QObject::connect(button, SIGNAL(clicked()),
+            this, SLOT(reloadScript()));
+
 #endif
 
     setLayout(mlayout);

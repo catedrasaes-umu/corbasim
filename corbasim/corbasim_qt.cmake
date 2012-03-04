@@ -34,6 +34,7 @@ set(corbasim_qt_EXPORTED_HEADERS
 
     qt/export.hpp
     # QObjects
+    qt/TabWidget.hpp
     qt/LogModel.hpp
     qt/PlotModel.hpp
     qt/CustomLayouts.hpp
@@ -68,6 +69,7 @@ set(corbasim_qt_MOC_HDRS
     qt/private/ScriptEditor.hpp
     qt/private/MultiScriptEditor.hpp
 
+    qt/TabWidget.hpp
     qt/LogModel.hpp
     qt/PlotModel.hpp
     qt/CustomLayouts.hpp
@@ -100,6 +102,7 @@ set(corbasim_qt_SRCS
     qt/private/ScriptEditor.cpp
     qt/private/MultiScriptEditor.cpp
 
+    qt/TabWidget.cpp
     qt/LogModel.cpp
     qt/PlotModel.cpp
     qt/CustomLayouts.cpp

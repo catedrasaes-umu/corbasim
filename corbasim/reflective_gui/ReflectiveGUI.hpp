@@ -24,6 +24,7 @@
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/qt/ObjrefWidget.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
+#include <corbasim/qt/TabWidget.hpp>
 
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <QtScript>
@@ -288,7 +289,7 @@ protected:
 
 #ifdef CORBASIM_USE_QTSCRIPT
     // widgets
-    QTabWidget * m_tabs;
+    qt::TabWidget * m_tabs;
     QPlainTextEdit * m_code;
 
     QScriptEngine m_engine;

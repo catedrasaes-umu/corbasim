@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * config.hpp
+ * TabWidget.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -15,22 +15,31 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
-#ifndef CORBASIM_CORE_CONFIG_HPP
-#define CORBASIM_CORE_CONFIG_HPP
+#ifndef CORBASIM_QT_TABWIDGET_HPP
+#define CORBASIM_QT_TABWIDGET_HPP
 
-#ifndef CORBASIM_TAO
-#define CORBASIM_TAO
-#endif // CORBASIM_TAO
+#include <QTabWidget>
+#include <corbasim/qt/export.hpp>
 
-#ifndef CORBASIM_ARRAY_RESUME_CONDITION
-    #define CORBASIM_ARRAY_RESUME_CONDITION 100
-#endif
+namespace corbasim 
+{
+namespace qt 
+{
 
-#ifndef CORBASIM_MPL_VECTOR_MAX_SIZE
-    #define CORBASIM_MPL_VECTOR_MAX_SIZE 50
-#endif
+class CORBASIM_QT_DECLSPEC TabWidget : public QTabWidget
+{
+    Q_OBJECT
+public:
+    TabWidget(QWidget * parent = 0);
+    virtual ~TabWidget();
 
-#endif /* CORBASIM_CORE_CONFIG_HPP */
+    QTabBar * tabBar() const;
+};
+
+} // namespace qt
+} // namespace corbasim
+
+#endif /* CORBASIM_QT_TABWIDGET_HPP */
 
