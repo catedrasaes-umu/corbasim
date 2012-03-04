@@ -132,7 +132,7 @@ void ServantCreateDialog::hideEvent(QHideEvent* event)
 }
 
 ReferenceValidatedWidget::ReferenceValidatedWidget(
-        core::reference_validator_base * validator,
+	corbasim::core::reference_validator_base * validator,
         QWidget * parent) :
     QWidget(parent), m_validator(validator)
 {

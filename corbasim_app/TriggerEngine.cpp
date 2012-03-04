@@ -105,7 +105,7 @@ QScriptValue ScriptEngine::_createServant(QScriptContext * ctx,
 }
 
 void ScriptEngine::addFactory(const QString& id, 
-        const core::interface_reflective_base * f) 
+							  const corbasim::core::interface_reflective_base * f) 
 {
     m_factories.insert(std::make_pair(id, f));
 }
