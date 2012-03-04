@@ -25,6 +25,8 @@
 #include <QAbstractItemModel>
 #include <QDateTime>
 #include <QIcon>
+
+#include <corbasim/reflective_gui/export.hpp>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/reflective_gui/ModelNode.hpp>
@@ -34,7 +36,7 @@ namespace corbasim
 namespace reflective_gui
 {
 
-class NewLogModel : public QAbstractItemModel
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC NewLogModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(int maxEntries READ maxEntries WRITE setMaxEntries)

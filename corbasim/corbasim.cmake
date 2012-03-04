@@ -9,7 +9,6 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/core/config.hpp.in"
 set(corbasim_EXPORTED_HEADERS
     adapted.hpp
     corba_adapted.hpp
-    corbasim.hpp
     core/export.hpp
     core/archives.hpp
     core/caller_fwd.hpp

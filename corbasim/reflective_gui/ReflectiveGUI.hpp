@@ -26,6 +26,8 @@
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 #include <corbasim/qt/TabWidget.hpp>
 
+#include <corbasim/reflective_gui/export.hpp>
+
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <QtScript>
 #endif /* CORBASIM_USE_QTSCRIPT*/
@@ -35,7 +37,7 @@ namespace corbasim
 namespace reflective_gui 
 {
 
-class ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC ReflectiveWidgetBase
 {
 protected:
 
@@ -55,7 +57,8 @@ protected:
     core::reflective_base const * m_reflective;
 };
 
-class AlternativesWidget : public QWidget, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC AlternativesWidget : 
+    public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -83,7 +86,8 @@ protected:
     std::vector< ReflectiveWidgetBase * > m_widgets;
 };
 
-class FloatWidget : public QDoubleSpinBox, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC FloatWidget : 
+    public QDoubleSpinBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -96,7 +100,8 @@ public:
    
 };
 
-class IntegerWidget : public QSpinBox, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC IntegerWidget : 
+    public QSpinBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -109,7 +114,8 @@ public:
     
 };
 
-class StringWidget : public QLineEdit, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC StringWidget : 
+    public QLineEdit, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -122,7 +128,8 @@ public:
 
 };
 
-class EnumWidget : public QComboBox, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC EnumWidget : 
+    public QComboBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -135,7 +142,8 @@ public:
 
 };
 
-class BoolWidget : public QCheckBox, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC BoolWidget :
+    public QCheckBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -148,7 +156,8 @@ public:
    
 };
 
-class StructWidget : public QWidget, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC StructWidget : 
+    public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -164,7 +173,8 @@ protected:
     std::vector< ReflectiveWidgetBase * > m_widgets;
 };
 
-class SequenceWidget : public QWidget, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC SequenceWidget : 
+    public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -193,7 +203,8 @@ protected:
     core::holder m_holder;
 };
 
-class ComplexSequenceWidget : public QWidget, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC ComplexSequenceWidget : 
+    public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -216,7 +227,8 @@ protected:
     QSpinBox * m_sbCurrentIndex;
 };
 
-class ObjrefvarWidget : public qt::ObjrefWidget, public ReflectiveWidgetBase
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC ObjrefvarWidget : 
+    public qt::ObjrefWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
@@ -228,7 +240,8 @@ public:
     virtual void fromHolder(core::holder& holder);
 };
 
-class FilesWidget : public qt::MultiFileSelectionWidget, 
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC FilesWidget : 
+    public qt::MultiFileSelectionWidget, 
     public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -241,7 +254,8 @@ public:
     virtual void fromHolder(core::holder& holder);
 };
 
-class OperationInputForm : public QWidget
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationInputForm : 
+    public QWidget
 {
     Q_OBJECT
 public:
@@ -273,7 +287,6 @@ public slots:
 #ifdef CORBASIM_USE_QTSCRIPT
     void reloadScript();
 #endif /* CORBASIM_USE_QTSCRIPT*/
-
 
 protected:
 

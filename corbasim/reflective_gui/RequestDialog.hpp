@@ -23,6 +23,7 @@
 #include <QDialog>
 #include <QTimer>
 #include <corbasim/qt/types.hpp>
+#include <corbasim/reflective_gui/export.hpp>
 #include <corbasim/reflective_gui/ReflectiveGUI.hpp>
 
 // fwd
@@ -37,7 +38,8 @@ namespace corbasim
 namespace reflective_gui 
 {
 
-class RequestDialog : public QDialog
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC RequestDialog : 
+    public QDialog
 {
     Q_OBJECT
 public:
@@ -48,6 +50,7 @@ public:
     virtual ~RequestDialog();
 
 public slots:
+
 	void sendClicked(); 
 	void sendStored(); 
 	void startStopChecked(bool = true); 

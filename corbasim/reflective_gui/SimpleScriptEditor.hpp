@@ -23,6 +23,8 @@
 #include <QtGui>
 #include <list>
 #include <vector>
+
+#include <corbasim/reflective_gui/export.hpp>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/reflective_gui/ScriptModel.hpp>
@@ -34,16 +36,19 @@ namespace reflective_gui
 
 class OperationInputForm;
 
-class SimpleScriptEditor : public QMainWindow
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC SimpleScriptEditor : 
+    public QMainWindow
 {
     Q_OBJECT
 public:
+
     SimpleScriptEditor(QWidget * parent = 0);
     virtual ~SimpleScriptEditor();
 
     void initialize(core::interface_reflective_base const * factory);
 
 public slots:
+
     void appendRequest();
     void appendOneRequest();
     void sendNextRequest();
@@ -63,6 +68,7 @@ public slots:
     void moveDown();
 
 signals:
+
     void sendRequest(corbasim::event::request_ptr);
 
 protected:
