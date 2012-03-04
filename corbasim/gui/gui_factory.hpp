@@ -23,7 +23,6 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/mpl.hpp>
 #include <corbasim/core/inserter.hpp>
-//#include <corbasim/core/request_serializer.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
 #include <corbasim/gui/tree_factory.hpp>
 #include <corbasim/gui/dialogs.hpp>
@@ -87,12 +86,7 @@ struct gui_factory : public gui_factory_base
         typedef core::impl::inserter< gui_factory > inserter_t;
         cs_mpl::for_each_list< operations_t >(inserter_t(this));
     }
-/*
-    core::request_serializer_base * get_serializer() const
-    {
-        return core::request_serializer< Interface >::get_instance();
-    }
-*/
+
     core::factory_base const * get_core_factory() const
     {
         return core::factory< Interface >::get_instance();

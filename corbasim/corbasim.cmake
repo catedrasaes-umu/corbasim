@@ -28,7 +28,6 @@ set(corbasim_EXPORTED_HEADERS
     core/reflective.hpp
     core/reflective.ipp
     core/reflective_primitive.ipp
-    core/request_serializer.hpp
     core/servant.hpp
     event_fwd.hpp
     event.hpp
@@ -79,7 +78,6 @@ set(corbasim_SRCS
     core/ns_register.cpp
     core/reference_repository.cpp
     core/reference_validator.cpp
-    core/request_serializer.cpp
 
     core/reflective.cpp
 

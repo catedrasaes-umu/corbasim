@@ -25,12 +25,14 @@
 #include <corbasim/impl.hpp>
 #include <corbasim/cosnaming/CosnamingC.h>
 
+#include <corbasim/core/export.hpp>
+
 namespace corbasim 
 {
 namespace core 
 {
 
-class ns_register 
+class CORBASIM_CORE_DECLSPEC ns_register 
 {
 public :
    

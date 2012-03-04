@@ -31,12 +31,15 @@ namespace corbasim
 {
 namespace core 
 {
+
 class interface_caller_base;
 class request_processor;
 class reference_validator_base;
 
-struct CORBASIM_CORE_DECLSPEC operation_factory_base
+class CORBASIM_CORE_DECLSPEC operation_factory_base
 {
+public:
+
     virtual const char * get_name() const = 0;
     virtual tag_t get_tag() const = 0;
 
@@ -62,8 +65,10 @@ struct CORBASIM_CORE_DECLSPEC operation_factory_base
     virtual ~operation_factory_base();
 };
 
-struct CORBASIM_CORE_DECLSPEC factory_base
+class CORBASIM_CORE_DECLSPEC factory_base
 {
+public:
+
     unsigned int operation_count() const;
     operation_factory_base const * get_factory_by_index(
             unsigned int idx) const;
@@ -90,6 +95,8 @@ struct CORBASIM_CORE_DECLSPEC factory_base
     // Servant
     virtual PortableServer::ServantBase * create_servant(
             request_processor * proc) const = 0;
+
+protected:
 
     // Data
     typedef std::vector< operation_factory_base const * > factories_t;
