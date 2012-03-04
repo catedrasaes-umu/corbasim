@@ -193,32 +193,28 @@ protected:
     core::holder m_holder;
 };
 
-#if 0
-class ArrayWidget : public QWidget, public ReflectiveWidgetBase
+class ComplexSequenceWidget : public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:
-    ArrayWidget(core::reflective_base const * reflective,
+    ComplexSequenceWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
-    virtual ~ArrayWidget();
+    virtual ~ComplexSequenceWidget();
 
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
 protected slots:
 
+    void lengthChanged(int);
     void indexChanged(int);
 
 protected:
 
+    QStackedWidget * m_stack;
+    QSpinBox * m_sbLength;
     QSpinBox * m_sbCurrentIndex;
-
-    ReflectiveWidgetBase * m_slice;
-    QWidget * m_slice_widget;
-
-    core::holder m_holder;
 };
-#endif
 
 class ObjrefvarWidget : public qt::ObjrefWidget, public ReflectiveWidgetBase
 {

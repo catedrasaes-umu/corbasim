@@ -96,7 +96,7 @@ QWidget * createWidget(corbasim::core::reflective_base const * reflective,
                 return alt;
             }
 
-            return new SequenceWidget(reflective, parent);
+            return new ComplexSequenceWidget(reflective, parent);
 
         case TYPE_DOUBLE:
         case TYPE_FLOAT:
@@ -707,65 +707,148 @@ void SequenceWidget::indexChanged(int idx)
     core::holder child_value = m_reflective->get_child_value(m_holder, idx);
     m_slice->fromHolder(child_value);
 }
-#if 0
-ArrayWidget::ArrayWidget(corbasim::core::reflective_base const * reflective,
+
+// Complex Sequence Widget
+
+ComplexSequenceWidget::ComplexSequenceWidget(
+        corbasim::core::reflective_base const * reflective,
         QWidget * parent) :
-    QWidget(parent), ReflectiveWidgetBase(reflective)
+    QWidget(parent), ReflectiveWidgetBase(reflective), 
+    m_sbLength(NULL), m_sbCurrentIndex(NULL)
 {
     QVBoxLayout * layout = new QVBoxLayout;
  
     QHBoxLayout * headerLayout = new QHBoxLayout;
-    m_sbCurrentIndex = new QSpinBox;
 
+    if (reflective->is_variable_length())
+    {
+        m_sbLength = new QSpinBox();
+        headerLayout->addWidget(new QLabel("Length"));
+        headerLayout->addWidget(m_sbLength);
+        m_sbLength->setObjectName("length");
+    }
+
+    m_sbCurrentIndex = new QSpinBox();
     headerLayout->addWidget(new QLabel("Index"));
     headerLayout->addWidget(m_sbCurrentIndex);
+    m_sbCurrentIndex->setObjectName("index");
 
     layout->addLayout(headerLayout);
 
-    m_holder = reflective->create_holder();
+    m_stack = new QStackedWidget();
+    layout->addWidget(m_stack);
 
-    m_sbCurrentIndex->setRange(0, reflective->get_length(m_holder) - 1);
+    // Spacer
+    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Expanding);
+    layout->addItem(spacer);
 
-    m_slice_widget = createWidget(reflective->get_slice(), this);
-    
-    layout->addWidget(m_slice_widget);
-
-    m_slice = dynamic_cast< ReflectiveWidgetBase * >(m_slice_widget);
-    
     setLayout(layout);
+
+    if (reflective->is_variable_length())
+    {
+        QObject::connect(m_sbLength, SIGNAL(valueChanged(int)),
+                this, SLOT(lengthChanged(int)));
+
+        // TODO maximo razonable
+        m_sbLength->setRange(0, 99999);
+        m_sbLength->setValue(0);
+    }
+    else
+    {
+        core::holder holder = m_reflective->create_holder();
+
+        unsigned int length = m_reflective->get_length(holder);
+
+        for (unsigned int i = 0; i < length; i++) 
+        {
+            m_stack->addWidget(createWidget(reflective->get_slice(), this));
+        }
+
+        m_sbCurrentIndex->setRange(0, length - 1);
+
+        indexChanged(0);
+    }
 
     QObject::connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
             this, SLOT(indexChanged(int)));
 }
 
-ArrayWidget::~ArrayWidget()
+ComplexSequenceWidget::~ComplexSequenceWidget()
 {
 }
 
-void ArrayWidget::toHolder(corbasim::core::holder& holder) 
+void ComplexSequenceWidget::toHolder(corbasim::core::holder& holder)
 {
-    // TODO store current value
+    unsigned int len = 0;
 
-    m_reflective->copy(m_holder, holder);
+    if (m_reflective->is_variable_length())
+    {
+        len = (unsigned int) m_sbLength->value();
+    }
+    else
+    {
+        len = m_reflective->get_length(holder);
+    }
+
+    for (unsigned int i = 0; i < len; i++) 
+    {
+        core::holder child_value = m_reflective->get_child_value(holder, i);
+
+        ReflectiveWidgetBase * w = 
+            dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));
+
+        if (w) w->toHolder(child_value);
+    }
 }
 
-void ArrayWidget::fromHolder(corbasim::core::holder& holder)
+void ComplexSequenceWidget::fromHolder(corbasim::core::holder& holder)
 {
-    m_reflective->copy(holder, m_holder);
+    unsigned int len = m_reflective->get_length(holder);
 
-    // TODO show current value
+    if (m_reflective->is_variable_length())
+    {
+        m_sbLength->setValue(len);
+    }
+
+    for (unsigned int i = 0; i < len; i++) 
+    {
+        core::holder child_value = m_reflective->get_child_value(holder, i);
+
+        ReflectiveWidgetBase * w = 
+            dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));
+
+        if (w) w->fromHolder(child_value);
+    }
 }
 
-void ArrayWidget::indexChanged(int idx)
+void ComplexSequenceWidget::lengthChanged(int len)
 {
-    // TODO store current value
+    if (!m_reflective->is_variable_length())
+        return;
 
-    core::holder child_value = m_reflective->get_child_value(m_holder, idx);
-    m_slice->fromHolder(child_value);
+    if (len == 0)
+        m_stack->hide();
+    else
+        m_stack->show();
+
+    int diff = len - m_stack->count();
+
+    for (int i = 0; i < diff; i++) 
+    {
+        m_stack->addWidget(createWidget(m_reflective->get_slice(), this));
+    }
+
+    m_sbCurrentIndex->setRange(0, len-1);
 }
-#endif
 
-ObjrefvarWidget::ObjrefvarWidget(corbasim::core::reflective_base const * reflective,
+void ComplexSequenceWidget::indexChanged(int idx)
+{
+    m_stack->setCurrentIndex(idx);
+}
+
+ObjrefvarWidget::ObjrefvarWidget(
+        corbasim::core::reflective_base const * reflective,
         QWidget * parent) :
     qt::ObjrefWidget(0, parent), ReflectiveWidgetBase(reflective)
 {
