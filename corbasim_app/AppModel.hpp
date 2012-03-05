@@ -89,8 +89,10 @@ protected:
     typedef std::map< QString, model::Servant_ptr > servants_t;
     servants_t m_servants;
 
+#if 0
     typedef std::map< QString, void * > libraries_t;
     libraries_t m_libraries;
+#endif
 
     typedef std::map< QString, const core::interface_reflective_base * > 
         factories_t;

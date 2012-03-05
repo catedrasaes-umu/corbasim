@@ -30,7 +30,7 @@
 #include <corbasim/qt/ReferenceModel.hpp>
 
 #include <fstream>
-#include <dlfcn.h>
+#include <QLibrary>
 
 #include <iostream>
 
@@ -114,8 +114,7 @@ AppModel::getFactory(const QString& fqn)
 
     QString lib (fqn);
     lib.replace("::","_");
-    lib.prepend("libcorbasim_reflective_");
-    lib.append(".so");
+    lib.prepend("corbasim_reflective_");
 
     return loadLibrary(lib);
 }
@@ -391,7 +390,12 @@ void AppModel::loadDirectory(const QString& path)
 {
     const QDir d(path);
     QStringList filters;
+
+#ifdef _MSC_VER
+    filters << "corbasim_reflective_*.dll";
+#else
     filters << "libcorbasim_reflective_*.so";
+#endif
 
     const QFileInfoList files = d.entryInfoList(filters, QDir::Files);
     const int count = files.count();
@@ -405,13 +409,24 @@ void AppModel::loadDirectory(const QString& path)
 const corbasim::core::interface_reflective_base * 
 AppModel::loadLibrary(const QString& file)
 {
-    std::string str(file.toStdString());
+    QFileInfo info(file);
+    QString symbol(info.baseName());
 
-    typedef const corbasim::core::interface_reflective_base *(*get_reflective_t)();
+    symbol.remove(".so");
+    symbol.remove(".dll");
+    symbol.replace("libcorbasim_", "corbasim_");
 
-    void * handle = dlopen(str.c_str(), RTLD_NOW);
+    const std::string str(symbol.toStdString());
 
-    if (!handle)
+    std::cout << str << std::endl;
+    
+
+    typedef const corbasim::core::interface_reflective_base *
+        (*get_reflective_t)();
+
+    QLibrary lib(file);
+
+    if (!lib.load())
     {
         if (m_controller)
             m_controller->notifyError(
@@ -419,33 +434,27 @@ AppModel::loadLibrary(const QString& file)
         return NULL;
     }
 
-    const QFileInfo info(file);
-    QString lib(info.baseName());
-    lib.remove(0, 3); // lib
-    // basename has no extension
-    // lib.truncate(lib.length() - 3); // .so
-    str = lib.toStdString();
-   
-    get_reflective_t get_reflective = (get_reflective_t) dlsym(handle,
-            str.c_str());
+    get_reflective_t get_reflective = 
+        (get_reflective_t) lib.resolve(str.c_str());
 
     if (!get_reflective)
     {
-        dlclose (handle);
+        lib.unload();
 
         if (m_controller)
             m_controller->notifyError(
-                    QString("Symbol '%1' not found!").arg(lib));
+                    QString("Symbol '%1' not found!").arg(file));
         return NULL;
     }
 
-    const corbasim::core::interface_reflective_base * factory = get_reflective();
+    const corbasim::core::interface_reflective_base * factory = 
+        get_reflective();
     
     if (factory)
     {
         const QString fqn(factory->get_fqn());
 
-        m_libraries.insert(std::make_pair(fqn, handle));
+        // m_libraries.insert(std::make_pair(fqn, handle));
         m_factories.insert(std::make_pair(fqn, factory));
 
         // I don't like this solution because I need to set the list
@@ -464,9 +473,9 @@ AppModel::loadLibrary(const QString& file)
         // Impossible is nothing!
         if (m_controller)
             m_controller->notifyError(
-                    QString("Erroneus library '%1'!").arg(lib));
+                    QString("Erroneus library '%1'!").arg(info.baseName()));
 
-        dlclose(handle);
+        lib.unload();
     }
 
     return factory;
