@@ -25,13 +25,14 @@
 #include <QStandardItemModel>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
 namespace qt 
 {
 
-class LogModel : public QStandardItemModel
+class CORBASIM_QT_DECLSPEC LogModel : public QStandardItemModel
 {
     Q_OBJECT
     Q_PROPERTY(int maxEntries READ maxEntries WRITE setMaxEntries)

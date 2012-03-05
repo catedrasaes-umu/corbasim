@@ -24,13 +24,14 @@
 #include <vector>
 #include <corbasim/gui/widget_factory_fwd.hpp>
 #include <corbasim/gui/widgets/sequence_fwd.hpp>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
 namespace qt 
 {
 
-class SequenceWidget : public QWidget
+class CORBASIM_QT_DECLSPEC SequenceWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -58,7 +59,7 @@ protected:
     widgets_t m_widgets;
 };
 
-class SequenceWidget2 : public QWidget
+class CORBASIM_QT_DECLSPEC SequenceWidget2 : public QWidget
 {
     Q_OBJECT
 public:

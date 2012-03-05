@@ -21,6 +21,7 @@
 #define CORBASIM_QT_LOGTREEWIDGET_HPP
 
 #include <QWidget>
+#include <corbasim/qt/export.hpp>
 
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -30,7 +31,7 @@ namespace corbasim
 namespace qt 
 {
 
-class LogTreeWidget : public QWidget
+class CORBASIM_QT_DECLSPEC LogTreeWidget : public QWidget
 {
     Q_OBJECT
 public:

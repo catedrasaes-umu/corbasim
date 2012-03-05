@@ -2,20 +2,16 @@
 #define CORBASIM_QT_PLOTMODEL_HPP
 
 #include <QStandardItemModel>
-#if 0
-#include <QIdentityProxyModel>
-#else
-#include <QProxyModel>
-#endif
 #include <corbasim/core/reflective_fwd.hpp>
 #include <list>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim
 {
 namespace qt
 {
 
-class PlotModel : public QStandardItemModel
+class CORBASIM_QT_DECLSPEC PlotModel : public QStandardItemModel
 {
     Q_OBJECT
 

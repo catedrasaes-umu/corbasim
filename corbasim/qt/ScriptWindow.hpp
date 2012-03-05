@@ -21,13 +21,14 @@
 #define CORBASIM_QT_SCRIPTWINDOW_HPP
 
 #include <QtGui>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
 namespace qt 
 {
 
-class ScriptWindow : public QMainWindow
+class CORBASIM_QT_DECLSPEC ScriptWindow : public QMainWindow
 {
     Q_OBJECT
 public:

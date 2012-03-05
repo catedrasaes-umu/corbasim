@@ -23,20 +23,15 @@
 #include <QAbstractItemModel>
 #include <QList>
 #include <corbasim/impl.hpp>
+#include <corbasim/qt/export.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 
 namespace corbasim
 {
-
-// fwd
-namespace core 
-{
-struct interface_reflective_base;
-} // namespace core
-
 namespace qt
 {
 
-class ReferenceModel : public QAbstractItemModel
+class CORBASIM_QT_DECLSPEC ReferenceModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:

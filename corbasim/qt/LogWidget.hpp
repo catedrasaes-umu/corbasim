@@ -24,6 +24,7 @@
 
 #include <corbasim/event_fwd.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
@@ -32,7 +33,7 @@ namespace qt
 
 class LogTreeWidget;
 
-class LogWidget : public QWidget
+class CORBASIM_QT_DECLSPEC LogWidget : public QWidget
 {
     Q_OBJECT
 public:

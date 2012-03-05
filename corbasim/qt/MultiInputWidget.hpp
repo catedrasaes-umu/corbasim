@@ -26,7 +26,7 @@
 #include <corbasim/impl.hpp>
 #include <corbasim/adapted.hpp>
 #include <corbasim/gui/gui_factory_fwd.hpp>
-
+#include <corbasim/qt/export.hpp>
 #include <corbasim/qt/types.hpp>
 
 class QStackedWidget;
@@ -37,7 +37,7 @@ namespace corbasim
 namespace qt 
 {
 
-class MultiInputWidget : public QWidget
+class CORBASIM_QT_DECLSPEC MultiInputWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -64,7 +64,7 @@ protected:
     gui::gui_factory_base const * m_factory;
 };
 
-class MultiInputForm : public QWidget
+class CORBASIM_QT_DECLSPEC MultiInputForm : public QWidget
 {
     Q_OBJECT
 public:
@@ -78,7 +78,7 @@ protected:
     MultiInputWidget * m_multi;
 };
 
-class MultiSenderDialog : public QDialog
+class CORBASIM_QT_DECLSPEC MultiSenderDialog : public QDialog
 {
     Q_OBJECT
 public:
