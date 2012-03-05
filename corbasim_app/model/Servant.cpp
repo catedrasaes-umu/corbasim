@@ -24,8 +24,8 @@
 
 using namespace corbasim::app::model;
 
-Servant::Servant(const ServantConfig& cfg, 
-        const core::interface_reflective_base * factory) :
+Servant::Servant(const corbasim::app::ServantConfig& cfg, 
+				 const corbasim::core::interface_reflective_base * factory) :
     m_controller(NULL),
     m_cfg(cfg), m_factory(factory), m_servant(NULL)
 {
@@ -37,7 +37,7 @@ Servant::~Servant()
     delete m_servant;
 }
 
-void Servant::setController(AppController * controller)
+void Servant::setController(corbasim::app::AppController * controller)
 {
     m_controller = controller;
 }
@@ -47,8 +47,8 @@ const corbasim::app::ServantConfig& Servant::getConfig() const
     return m_cfg;
 }
 
-corbasim::event::event_ptr Servant::operator()(event::request_ptr req,
-        event::response_ptr resp)
+corbasim::event::event_ptr Servant::operator()(corbasim::event::request_ptr req,
+											   corbasim::event::response_ptr resp)
 {
     if (m_controller)
         m_controller->notifyRequestReceived(m_cfg.id.in(), req, resp);
@@ -79,7 +79,7 @@ Servant::sendRequest(corbasim::event::request_ptr req)
     return m_caller->do_call(req.get());
 }
 
-void Servant::set_ns_entry(core::ns_register * entry)
+void Servant::set_ns_entry(corbasim::core::ns_register * entry)
 {
     m_ns_entry.reset(entry);
 }

@@ -53,7 +53,6 @@ add_executable(corbasim_app
     ${corbasim_app_MOC_SRCS}
     ${corbasim_app_SRCS})
 target_link_libraries(corbasim_app
-    dl # for dlopen, dlsym
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     corbasim
     corbasim_qt
@@ -66,8 +65,7 @@ install(TARGETS corbasim_app_idl DESTINATION lib)
 add_executable(corbasim_app_test EXCLUDE_FROM_ALL
     test.cpp)
 target_link_libraries(corbasim_app_test
-    dl # for dlopen, dlsym
-    boost_program_options
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
     corbasim
     corbasim_qt
     corbasim_reflective_gui

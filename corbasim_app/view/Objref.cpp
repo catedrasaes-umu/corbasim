@@ -23,7 +23,7 @@
 using namespace corbasim::app::view;
 
 Objref::Objref(QMdiArea * area,
-        const QString& id, const core::interface_reflective_base* factory,
+			   const QString& id, const corbasim::core::interface_reflective_base* factory,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
     m_sub_script(NULL), 
