@@ -253,9 +253,11 @@ namespace serialization
 template < class Archive >
 void serialize(Archive& ar, «getFQN()»& t, const unsigned int /* unused */)
 {	
+	«REM»
 	«FOREACH unionMembers AS member-»
 	// TODO case ar & boost::serialization::make_nvp("«member.identifier»", t.«member.identifier»);
 	«ENDFOREACH-»
+	«ENDREM»
 }
 
 «IF isVariableLen()»
@@ -308,11 +310,32 @@ namespace adapted
 template< >
 struct is_union< «getFQN()» > : public cs_mpl::true_
 {
-	static inline «discrim.getIN_CPPType()»* discriminators()
+	typedef «discrim.getIN_CPPType()» discriminator_t;
+	
+	static const size_t size = «unionMembers.label.size»;
+	
+	static inline discriminator_t* discriminators()
 	{
-		static «discrim.getIN_CPPType()» _disc[] = { «FOREACH unionMembers AS member SEPARATOR ", "-» 
-			«member.label.first().exp2str(true)»«REM»TODO corregir el metamodelo«ENDREM»«ENDFOREACH-»};		
+		static discriminator_t _disc[] = { 
+			«FOREACH unionMembers AS member SEPARATOR ", "-»
+				«FOREACH member.label AS label SEPARATOR ", "-»
+					«label.exp2str(true)»
+				«ENDFOREACH-»
+			«ENDFOREACH-»
+			};		
 		return _disc;
+	}
+	
+	static inline unsigned int* member()
+	{
+		static unsigned int _members[] = { 
+			«FOREACH unionMembers AS member ITERATOR it SEPARATOR ", "-»
+				«FOREACH member.label AS label SEPARATOR ", "-»
+					«it.counter1»
+				«ENDFOREACH-»
+			«ENDFOREACH-»
+			};		
+		return _members;
 	}
 };
 
