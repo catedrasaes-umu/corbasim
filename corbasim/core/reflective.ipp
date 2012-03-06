@@ -196,7 +196,8 @@ reflective_base const * create_slice_reflective(
 
 // Sequence reflective
 template< typename T >
-sequence_reflective< T >::sequence_reflective(reflective_base const * parent,
+sequence_reflective< T >::sequence_reflective(
+        reflective_base const * parent,
         unsigned int idx) :
     reflective_base(parent, idx)
 {
@@ -294,16 +295,22 @@ void sequence_reflective< T >::copy(holder const& src, holder& dst) const
 template< typename S, typename N >
 struct accessor : public accessor_base
 {
+    typedef typename cs_mpl::type_of_member< S, N >::type current_t;
+
     holder get(holder& parent) const
     {
-        typedef typename cs_mpl::type_of_member< S, N >::type current_t;
-        typedef holder_ref_impl< S > parent_impl;
-
-        parent_impl * p = reinterpret_cast< parent_impl * >(
-                parent.m_impl.get());
+        S& t_ = parent.to_value< S >();
 
         return holder( ::corbasim::core::create_holder(
-                    boost::fusion::at < N >(p->t_)));
+                    boost::fusion::at < N >(t_)));
+    }
+
+    void set(holder& parent, holder& value) const
+    {
+        S& t_ = parent.to_value< S >();
+
+        // TODO problem with arrays
+        // boost::fusion::at < N >(t_) = value.to_value<  current_t >();
     }
 };
 
@@ -487,7 +494,7 @@ template< typename T >
 void union_reflective< T >::set_child_value(holder& value, 
     unsigned int idx, holder& child_value) const
 {
-    // TODO
+    m_accessors[idx]->set(value, child_value);
 }
 
 template< typename T >

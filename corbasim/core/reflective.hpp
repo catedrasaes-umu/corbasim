@@ -148,6 +148,7 @@ typedef std::vector< reflective_ptr > reflective_children;
 struct accessor_base
 {
     virtual holder get(holder& parent) const = 0;
+    virtual void set(holder& parent, holder& value) const = 0;
     virtual ~accessor_base() {}
 };
 
