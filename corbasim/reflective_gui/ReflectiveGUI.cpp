@@ -706,10 +706,42 @@ void UnionWidget::discriminatorChanged()
 
 void UnionWidget::toHolder(corbasim::core::holder& holder) 
 {
+    core::reflective_base const * _dr = m_widgets[0]->getReflective();
+
+    core::holder _d = _dr->create_holder();
+    m_widgets[0]->toHolder(_d);
+
+    // 0 for invalid widget/value
+    unsigned int idx = m_reflective->get_length(holder);
+
+    if (idx > 0)
+    {
+        core::reflective_base const * _chr = m_widgets[idx]->getReflective();
+
+        core::holder _ch = _chr->create_holder();
+        m_widgets[idx]->toHolder(_ch);
+       
+        m_reflective->set_child_value(holder, idx, _ch);
+    }
+
+    m_reflective->set_child_value(holder, 0, _d);
 }
 
 void UnionWidget::fromHolder(corbasim::core::holder& holder)
 {
+    core::holder _d = m_reflective->get_child_value(holder, 0);
+
+    m_widgets[0]->fromHolder(_d);
+
+    unsigned int idx = m_reflective->get_length(holder);
+    m_stack->setCurrentIndex(idx);
+
+    if (idx > 0)
+    {
+        core::holder ch = m_reflective->get_child_value(holder, idx);
+
+        m_widgets[idx]->fromHolder(ch);
+    }
 }
 
 SequenceWidget::SequenceWidget(
