@@ -162,6 +162,20 @@ holder reflective_base::get_child_value(holder& value,
     return holder();
 }
 
+void reflective_base::set_child_value(holder& value, 
+    unsigned int idx, holder& child_value) const
+{
+    // Default implementation
+    // Not valid for corba unions
+    if (idx < get_children_count())
+    {
+        reflective_base const * ch = get_child(idx);
+        core::holder chv = get_child_value(value, idx);
+
+        ch->copy(child_value, chv);
+    }
+}
+
 double reflective_base::to_double(holder const& value) const
 {
     return 0.0;

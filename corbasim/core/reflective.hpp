@@ -220,6 +220,9 @@ struct union_reflective : public reflective_base
 
     holder get_child_value(holder& value, unsigned int idx) const;
 
+    void set_child_value(holder& value, 
+        unsigned int idx, holder& child_value) const;
+
     void copy(holder const& src, holder& dst) const;
   
     static union_reflective const * get_instance();

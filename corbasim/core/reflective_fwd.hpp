@@ -141,6 +141,9 @@ struct CORBASIM_CORE_DECLSPEC reflective_base
 
     virtual holder get_child_value(holder& value, 
         unsigned int idx) const;
+
+    virtual void set_child_value(holder& value, 
+        unsigned int idx, holder& child_value) const;
     
     virtual double to_double(holder const& value) const;
     virtual std::string to_string(holder const& h) const;

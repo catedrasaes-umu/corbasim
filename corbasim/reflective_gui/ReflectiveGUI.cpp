@@ -697,10 +697,9 @@ void UnionWidget::discriminatorChanged()
 
     m_widgets[0]->toHolder(_d);
 
-    core::holder _d2 = m_reflective->get_child_value(_this, 0);
+    m_reflective->set_child_value(_this, 0, _d);
 
-    _dr->copy(_d, _d2);
-
+    // 0 for invalid widget/value
     unsigned int page = m_reflective->get_length(_this);
     m_stack->setCurrentIndex(page);
 }

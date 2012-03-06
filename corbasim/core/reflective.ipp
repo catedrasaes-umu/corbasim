@@ -484,6 +484,13 @@ holder union_reflective< T >::get_child_value(holder& value,
 }
 
 template< typename T >
+void union_reflective< T >::set_child_value(holder& value, 
+    unsigned int idx, holder& child_value) const
+{
+    // TODO
+}
+
+template< typename T >
 void union_reflective< T >::copy(holder const& src, holder& dst) const
 {
     dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
