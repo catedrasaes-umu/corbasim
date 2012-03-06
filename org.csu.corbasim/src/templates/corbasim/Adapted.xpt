@@ -235,10 +235,11 @@ void serialize(Archive& ar, «getFQN()»_var& t, const unsigned int /* unused */
 «ENDDEFINE»
 
 «DEFINE adapt FOR UnionDef-»
+«LET (sharedDiscrim == null? containedDiscrim : sharedDiscrim) AS discrim-»
 // UnionDef: «getFQN()»
 BOOST_FUSION_ADAPT_ADT(
 	«getFQN_Type()-»,
-	( «containedDiscrim.getIN_CPPType()», «containedDiscrim.getIN_CPPType()», obj._d(), obj._d(val)) // Discriminator
+	( «discrim.getIN_CPPType()», «discrim.getIN_CPPType()», obj._d(), obj._d(val)) // Discriminator
 	«FOREACH unionMembers AS member-»
 	( «member.getType().getIN_CPPType()», «member.getType().getIN_CPPType()», obj.«member.identifier»(), obj.«member.identifier»(val))
 	«ENDFOREACH-»
@@ -307,9 +308,9 @@ namespace adapted
 template< >
 struct is_union< «getFQN()» > : public cs_mpl::true_
 {
-	static inline «containedDiscrim.getIN_CPPType()»* discriminators()
+	static inline «discrim.getIN_CPPType()»* discriminators()
 	{
-		static «containedDiscrim.getIN_CPPType()» _disc[] = { «FOREACH unionMembers AS member SEPARATOR ", "-» 
+		static «discrim.getIN_CPPType()» _disc[] = { «FOREACH unionMembers AS member SEPARATOR ", "-» 
 			«member.label.first().exp2str(true)»«REM»TODO corregir el metamodelo«ENDREM»«ENDFOREACH-»};		
 		return _disc;
 	}
@@ -318,6 +319,7 @@ struct is_union< «getFQN()» > : public cs_mpl::true_
 } // adapted
 } // corbasim
 
+«ENDLET-»
 «ENDDEFINE»
 
 «DEFINE adapt FOR EnumDef-»
