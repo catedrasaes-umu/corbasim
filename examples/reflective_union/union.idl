@@ -1,0 +1,28 @@
+
+module MyModule
+{
+
+    enum MyEnum
+    {
+        AAA,
+        BBB,
+        CCC
+    };
+
+    union MyUnion switch(MyEnum)
+    {
+        case AAA :
+            long one;
+        case BBB :
+        case CCC :
+            long other;
+    };
+
+
+    interface MyInterface
+    {
+        void operation(in MyUnion uni);
+    };
+
+};
+
