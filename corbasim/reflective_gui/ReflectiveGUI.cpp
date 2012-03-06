@@ -76,8 +76,9 @@ QWidget * createWidget(corbasim::core::reflective_base const * reflective,
 
         case TYPE_OBJREF:
             return new ObjrefvarWidget(reflective, parent);
+
         case TYPE_UNION:
-            break;
+            return new UnionWidget(reflective, parent);
 
         case TYPE_ARRAY:
         case TYPE_SEQUENCE:
@@ -487,7 +488,8 @@ void BoolWidget::fromHolder(corbasim::core::holder& holder)
     }
 }
 
-StructWidget::StructWidget(corbasim::core::reflective_base const * reflective,
+StructWidget::StructWidget(
+        corbasim::core::reflective_base const * reflective,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective)
 {
@@ -543,6 +545,7 @@ StructWidget::~StructWidget()
 {
 }
 
+
 void StructWidget::toHolder(corbasim::core::holder& holder) 
 {
     const unsigned int count = m_reflective->get_children_count();
@@ -573,7 +576,145 @@ void StructWidget::fromHolder(corbasim::core::holder& holder)
     }
 }
 
-SequenceWidget::SequenceWidget(corbasim::core::reflective_base const * reflective,
+UnionWidget::UnionWidget(
+        corbasim::core::reflective_base const * reflective,
+        QWidget * parent) :
+    QWidget(parent), ReflectiveWidgetBase(reflective)
+{
+    assert(reflective->get_type() == core::TYPE_UNION);
+
+    QGridLayout * layout = new QGridLayout(this);
+
+    unsigned int count = reflective->get_children_count();
+
+    m_widgets.resize(count, NULL);
+
+    // discriminator
+    {
+        const char * child_name = reflective->get_child_name(0);
+
+        core::reflective_base const * child = reflective->get_child(0);
+
+        QWidget * child_widget = createWidget(child, this);
+        
+        child_widget->setObjectName(child_name);
+
+        m_widgets[0] = 
+            dynamic_cast< ReflectiveWidgetBase* >(child_widget);
+
+        child_widget->setObjectName(child_name);
+
+        layout->addWidget(new QLabel(child_name), 0, 0);
+        layout->addWidget(child_widget, 0, 1);
+
+        if (qobject_cast< QComboBox * >(child_widget))
+        {
+            QObject::connect(child_widget, 
+                    SIGNAL(currentIndexChanged(int)),
+                    this,
+                    SLOT(discriminatorChanged()));
+        }
+        else if (qobject_cast< QSpinBox * >(child_widget))
+        {
+            QObject::connect(child_widget, 
+                    SIGNAL(valueChanged(int)),
+                    this,
+                    SLOT(discriminatorChanged()));
+        }
+        else if (qobject_cast< QDoubleSpinBox * >(child_widget))
+        {
+            QObject::connect(child_widget, 
+                    SIGNAL(valueChanged(double)),
+                    this,
+                    SLOT(discriminatorChanged()));
+        }
+    }
+
+    m_stack = new QStackedWidget();
+    layout->addWidget(m_stack, 1, 0, 1, 2);
+
+    m_stack->addWidget(new QWidget()); // empty widget
+
+    for (unsigned int i = 1; i < count; i++) 
+    {
+        core::reflective_base const * child = 
+            reflective->get_child(i);
+
+        const char * child_name = reflective->get_child_name(i);
+
+        QWidget * child_widget = createWidget(child, this);
+
+        m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(
+                child_widget);
+
+        child_widget->setObjectName(child_name);
+
+        if (child->is_primitive() || child->is_enum())
+        {
+            QWidget * w = new QWidget();
+            QGridLayout * layout = new QGridLayout();
+            QLabel * label = new QLabel(child_name);
+
+            label->setObjectName(QString(child_name) + "_label");
+
+            layout->addWidget(label, 0, 0);
+            layout->addWidget(child_widget, 0, 1);
+
+            w->setLayout(layout);
+            m_stack->addWidget(w);
+        }
+        else
+        {
+            QGroupBox * gb = new QGroupBox(child_name, this);
+            gb->setObjectName(QString(child_name) + "_group");
+
+            QHBoxLayout * cLayout = new QHBoxLayout(gb);
+
+            cLayout->addWidget(child_widget);
+
+            gb->setLayout(cLayout);
+            m_stack->addWidget(gb);
+        }
+    }
+
+    setLayout(layout);
+
+    discriminatorChanged();
+}
+
+UnionWidget::~UnionWidget()
+{
+}
+
+void UnionWidget::discriminatorChanged()
+{
+    std::cout << __FUNCTION__ << std::endl;
+
+    core::reflective_base const * _dr = m_widgets[0]->getReflective();
+
+    core::holder _d = _dr->create_holder();
+    core::holder _this = m_reflective->create_holder();
+
+    m_widgets[0]->toHolder(_d);
+
+    core::holder _d2 = m_reflective->get_child_value(_this, 0);
+
+    _dr->copy(_d, _d2);
+
+    unsigned int page = m_reflective->get_length(_this);
+    m_stack->setCurrentIndex(page);
+}
+
+void UnionWidget::toHolder(corbasim::core::holder& holder) 
+{
+}
+
+void UnionWidget::fromHolder(corbasim::core::holder& holder)
+{
+}
+
+SequenceWidget::SequenceWidget(
+        corbasim::core::reflective_base const * reflective,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective), m_old_idx(-1),
     m_sbLength(NULL), m_sbCurrentIndex(NULL)

@@ -336,7 +336,8 @@ struct create_iterator
 };
 
 template< typename T >
-struct_reflective< T >::struct_reflective(reflective_base const * parent, 
+struct_reflective< T >::struct_reflective(
+        reflective_base const * parent, 
         unsigned int idx) :
     reflective_base(parent, idx)
 {
@@ -357,7 +358,8 @@ unsigned int struct_reflective< T >::get_children_count() const
 }
 
 template< typename T >
-const char * struct_reflective< T >::get_child_name(unsigned int idx) const 
+const char * struct_reflective< T >::get_child_name(
+        unsigned int idx) const 
 {
     return m_child_names[idx];
 }
@@ -380,8 +382,11 @@ void struct_reflective< T >::copy(holder const& src, holder& dst) const
 {
     for (unsigned i = 0; i < members_count; i++) 
     {
-        holder child_src = get_child_value(const_cast< holder& >(src), i);
+        holder child_src = get_child_value(
+                const_cast< holder& >(src), i);
+
         holder child_dst = get_child_value(dst, i);
+
         get_child(i)->copy(child_src, child_dst);
     }
 }
@@ -415,6 +420,34 @@ union_reflective< T >::union_reflective(reflective_base const * parent,
         unsigned int idx) :
     reflective_base(parent, idx)
 {
+    // Reserve
+    m_children.reserve(members_count);
+    m_child_names.reserve(members_count);
+    m_accessors.reserve(members_count);
+
+    // Iterate
+    create_iterator< T, union_reflective > it(this);
+    boost::mpl::for_each< members_range_t >(it);
+}
+
+template< typename T >
+unsigned int union_reflective< T >::get_children_count() const 
+{ 
+    return m_children.size();
+}
+
+template< typename T >
+const char * union_reflective< T >::get_child_name(
+        unsigned int idx) const 
+{
+    return m_child_names[idx];
+}
+
+template< typename T >
+reflective_base const * union_reflective< T >::get_child(
+        unsigned int idx) const
+{
+    return m_children[idx].get();
 }
 
 template< typename T >
@@ -427,6 +460,53 @@ template< typename T >
 holder union_reflective< T >::create_holder() const
 {
     return new holder_ref_impl< T >();
+}
+
+template< typename T >
+reflective_base const * union_reflective< T >::get_slice() const
+{
+    return m_children[0].get();
+}
+
+template< typename T >
+union_reflective< T > const * union_reflective< T >::get_instance()
+{
+    static boost::shared_ptr< union_reflective > _instance(
+            new union_reflective);
+    return _instance.get();
+}
+
+template< typename T >
+holder union_reflective< T >::get_child_value(holder& value, 
+    unsigned int idx) const
+{
+    return m_accessors[idx]->get(value);
+}
+
+template< typename T >
+void union_reflective< T >::copy(holder const& src, holder& dst) const
+{
+    dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
+}
+
+template< typename T >
+unsigned int union_reflective< T >::get_length(
+        holder const& value) const
+{
+    T& t = const_cast< holder& >(value).to_value< T >();
+    discriminator_t _d = t._d();
+
+    for (unsigned int i = 0; i < adapted_t::size; i++) 
+    {
+        if (_d == adapted_t::discriminators()[i])
+        {
+            return adapted_t::member()[i];
+        }
+    }
+
+    // TODO default
+
+    return 0; // invalid
 }
 
 // Enum reflective

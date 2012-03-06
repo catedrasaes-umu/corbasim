@@ -173,6 +173,29 @@ protected:
     std::vector< ReflectiveWidgetBase * > m_widgets;
 };
 
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC UnionWidget : 
+    public QWidget, public ReflectiveWidgetBase
+{
+    Q_OBJECT
+public:
+    UnionWidget(core::reflective_base const * reflective,
+            QWidget * parent = 0);
+    virtual ~UnionWidget();
+ 
+    virtual void toHolder(core::holder& holder);
+    virtual void fromHolder(core::holder& holder);
+
+protected slots:
+
+    void discriminatorChanged();
+
+protected:
+
+    std::vector< ReflectiveWidgetBase * > m_widgets;
+
+    QStackedWidget * m_stack;
+};
+
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC SequenceWidget : 
     public QWidget, public ReflectiveWidgetBase
 {

@@ -191,14 +191,42 @@ struct struct_reflective : public reflective_base
 template< typename T >
 struct union_reflective : public reflective_base
 {
+    typedef adapted::is_union< T > adapted_t;
+    typedef typename adapted_t::discriminator_t discriminator_t;
+
+    static const std::size_t members_count = 
+        boost::fusion::result_of::size< T >::value;
+    typedef boost::mpl::range_c< size_t, 0, members_count > 
+        members_range_t;
+
     union_reflective(reflective_base const * parent = NULL, 
             unsigned int idx = 0);
 
     reflective_type get_type() const;
 
+    unsigned int get_children_count() const;
+
+    const char * get_child_name(unsigned int idx) const;
+    
+    reflective_base const * get_child(unsigned int idx) const;
+
     holder create_holder() const;
 
-    // void copy(holder const& src, holder& dst) const;
+    reflective_base const * get_slice() const;
+
+    // Devuelve el indice del hijo con valor valido.
+    // 0 si no hay hijo valido.
+    unsigned int get_length(holder const& value) const;
+
+    holder get_child_value(holder& value, unsigned int idx) const;
+
+    void copy(holder const& src, holder& dst) const;
+  
+    static union_reflective const * get_instance();
+    
+    reflective_children m_children;
+    std::vector< const char * > m_child_names;
+    std::vector< accessor_ptr > m_accessors;
 };
 
 template< typename T >
