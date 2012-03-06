@@ -58,6 +58,24 @@ void Node::initialize()
             children.push_back(child);
         }
     }
+    else if(reflective->get_type() == core::TYPE_UNION)
+    {
+        children.clear();
+
+        // discriminator
+        Node_ptr child(new Node(reflective->get_child(0), 
+                reflective->get_child_value(holder, 0), this, 0));
+        children.push_back(child);
+
+        unsigned int idx = 0;
+        if ((idx = reflective->get_length(holder)) > 0)
+        {
+            Node_ptr child(new Node(reflective->get_child(idx), 
+                    reflective->get_child_value(holder, idx), this, idx));
+
+            children.push_back(child);
+        }
+    }
 
     initialized = true;
 }
