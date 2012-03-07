@@ -97,6 +97,28 @@ int main(int argc, char **argv)
         std::cout << hijo.b << std::endl;
     }
 
+    {
+        QStandardItemModel * model = new QStandardItemModel();
+        QTreeView * view = new QTreeView();
+
+        for (int i = 0; i < 10; i++) 
+        {
+            QStandardItem * item = new QStandardItem("Prueba");
+            item->setCheckable(true);
+            model->appendRow(item);
+
+            for (int j = 0; j < 10; j++) 
+            {
+                QStandardItem * item2 = new QStandardItem("Prueba");
+                item2->setCheckable(true);
+                item->appendRow(item2);
+            }
+        }
+
+        view->setModel(model);
+        view->show();
+    }
+
     return app.exec();
 }
 

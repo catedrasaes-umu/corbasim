@@ -46,6 +46,12 @@ struct copy< T[N] >
     }
 };
 
+template< typename T >
+void do_copy(const T& src, T& dst)
+{
+    copy< T >::invoke(src, dst);
+}
+
 } // namespace core
 } // namespace corbasim
 

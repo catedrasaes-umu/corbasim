@@ -20,6 +20,20 @@ const char * name< MyModule::MyUnion >::call()
 
 
 template< >
+const char * full_qualified_name< MyModule::MyStruct >::call()
+{
+	return "MyModule::MyStruct";
+}
+
+template< >
+const char * name< MyModule::MyStruct >::call()
+{
+	return "MyStruct";
+}
+
+
+
+template< >
 const char * full_qualified_name< MyModule::MyInterface >::call()
 {
 	return "MyModule::MyInterface";
@@ -44,12 +58,21 @@ const char * name< _corbasim_MyModule::MyInterface::operation >::call()
 }
 
 
+template< >
+const char * name< _corbasim_MyModule::MyInterface::operation2 >::call()
+{
+	return "operation2";
+}
+
+
 
 } // namespace adapted
 } // namespace corbasim
 
 namespace _corbasim_MyModule 
 {
+
+
 
 
 
@@ -69,6 +92,26 @@ __operation::__operation(const MyModule::MyUnion& _uni):
 
 // Copy constructor
 __operation::__operation(const __operation& o) :
+	uni(o.uni)
+{
+	
+}
+
+
+
+
+__operation2::__operation2()
+{
+}
+
+__operation2::__operation2(const MyModule::MyStruct& _uni):
+	uni(_uni)
+{
+	
+}
+
+// Copy constructor
+__operation2::__operation2(const __operation2& o) :
 	uni(o.uni)
 {
 	

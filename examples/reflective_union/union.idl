@@ -19,9 +19,15 @@ module MyModule
     };
 
 
+    struct MyStruct
+    {
+        long a[11];
+    };
+
     interface MyInterface
     {
         void operation(in MyUnion uni);
+        void operation2(in MyStruct uni);
     };
 
 };

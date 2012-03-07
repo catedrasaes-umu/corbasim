@@ -129,6 +129,32 @@ struct is_union< MyModule::MyUnion > : public cs_mpl::true_
 
 
 
+// StructDef: MyModule::MyStruct
+BOOST_FUSION_ADAPT_STRUCT(
+	MyModule::MyStruct,
+	( MyModule::MyStruct::_a, a)
+     )
+
+namespace boost
+{
+namespace serialization
+{
+
+template < class Archive >
+void serialize(Archive& ar, MyModule::MyStruct& t, const unsigned int /* unused */)
+{	
+	ar & boost::serialization::make_nvp("a", t.a);
+}
+
+
+
+} // serialization
+} // boost
+
+	
+
+
+
 namespace boost
 {
 namespace serialization
@@ -161,10 +187,19 @@ struct is_objrefvar< MyModule::MyInterface_var > : public cs_mpl::true_
 
 
 
+
+
 namespace _corbasim_MyModule 
 {
 
 
+
+
+struct MyStruct
+{
+	typedef corbasim::adapted::member< ::MyModule::MyStruct, 0 > a_corbasim_member;
+	
+};
 
 
 namespace MyInterface 
@@ -194,9 +229,37 @@ struct __operation
 
 typedef __operation operation;
 
+
+struct __operation2
+{
+	typedef boost::mpl::vector< corbasim::Arg_IN< const MyModule::MyStruct& > > _arg_list;
+
+	typedef corbasim::adapted::member< __operation2, 0 > uni_corbasim_member;
+
+	MyModule::MyStruct uni;
+	
+	
+	__operation2();
+	
+	__operation2(const MyModule::MyStruct& _uni);
+	
+	// Copy constructor
+	__operation2(const __operation2& o);
+
+    template< typename Archive >
+    void serialize(Archive& ar, const unsigned int /* unused */)
+    {
+		ar & boost::serialization::make_nvp("uni", uni);
+	}
+};
+
+typedef __operation2 operation2;
+
 } // MyInterface
 
 } // _corbasim_MyModule
+
+
 
 
 
@@ -212,7 +275,7 @@ namespace adapted
 template < >
 struct interface < MyModule::MyInterface >
 {
-	typedef cs_mpl::list< _corbasim_MyModule::MyInterface::operation  >   _op_list;
+	typedef cs_mpl::list< _corbasim_MyModule::MyInterface::operation, cs_mpl::list< _corbasim_MyModule::MyInterface::operation2  >  >   _op_list;
 	
 };
 
@@ -239,6 +302,33 @@ struct call< _corbasim_MyModule::MyInterface::operation >
     static inline void invoke(Interface * ref, Value& value)
     {
  ref->operation(value.uni);
+    }
+};
+
+} // adapted
+} // corbasim
+
+
+// OperationDef: MyModule::MyInterface::operation2
+BOOST_FUSION_ADAPT_STRUCT(
+	_corbasim_MyModule::MyInterface::operation2,
+	( MyModule::MyStruct, uni)
+     )
+
+namespace corbasim
+{
+namespace adapted
+{     
+
+template< >
+struct call< _corbasim_MyModule::MyInterface::operation2 >
+{
+	typedef _corbasim_MyModule::MyInterface::operation2 Value;
+	
+    template < typename Interface >
+    static inline void invoke(Interface * ref, Value& value)
+    {
+ ref->operation2(value.uni);
     }
 };
 

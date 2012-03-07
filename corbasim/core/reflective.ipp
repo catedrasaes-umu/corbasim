@@ -19,6 +19,8 @@
 #ifndef CORBASIM_CORE_REFLECTIVE_IPP
 #define CORBASIM_CORE_REFLECTIVE_IPP
 
+#include <corbasim/core/copy.hpp>
+
 namespace corbasim 
 {
 namespace core 
@@ -309,7 +311,9 @@ struct accessor : public accessor_base
     {
         S& t_ = parent.to_value< S >();
 
-        // TODO problem with arrays
+        do_copy(boost::fusion::at < N >(t_),
+                value.to_value<  current_t >());
+
         // boost::fusion::at < N >(t_) = value.to_value<  current_t >();
     }
 };
@@ -335,6 +339,55 @@ struct create_iterator
 
         reflective_ptr ptr_(new reflective_t(m_this, N::value));
         accessor_ptr ac_(new accessor< S, N >());
+
+        m_this->m_children.push_back(ptr_);
+        m_this->m_child_names.push_back(name_t::call());
+        m_this->m_accessors.push_back(ac_);
+    }
+};
+
+template< typename S, typename N >
+struct union_accessor : public accessor_base
+{
+    typedef typename cs_mpl::type_of_member< S, N >::type current_t;
+
+    holder get(holder& parent) const
+    {
+        S& t_ = parent.to_value< S >();
+
+        return holder( ::corbasim::core::create_holder(
+                    boost::fusion::at < N >(t_)));
+    }
+
+    void set(holder& parent, holder& value) const
+    {
+        S& t_ = parent.to_value< S >();
+
+        boost::fusion::at < N >(t_) = value.to_value<  current_t >();
+    }
+};
+
+template < typename S, typename Reflective >
+struct union_create_iterator
+{
+    Reflective * m_this;
+
+    union_create_iterator(Reflective * _this) : m_this(_this)
+    {}
+
+    template < typename N >
+    void operator()(N const& nn)
+    {
+        // Tipo del campo actual
+        typedef typename cs_mpl::type_of_member< S, N >::type current_t;
+
+        // Tipo que contiene el nombre del campo actual
+        typedef cs_mpl::name_of_member< S, N > name_t;
+
+        typedef reflective< current_t > reflective_t;
+
+        reflective_ptr ptr_(new reflective_t(m_this, N::value));
+        accessor_ptr ac_(new union_accessor< S, N >());
 
         m_this->m_children.push_back(ptr_);
         m_this->m_child_names.push_back(name_t::call());
@@ -433,7 +486,7 @@ union_reflective< T >::union_reflective(reflective_base const * parent,
     m_accessors.reserve(members_count);
 
     // Iterate
-    create_iterator< T, union_reflective > it(this);
+    union_create_iterator< T, union_reflective > it(this);
     boost::mpl::for_each< members_range_t >(it);
 }
 
