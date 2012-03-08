@@ -140,25 +140,34 @@ bool NewLogModel::setData(const QModelIndex & index,
         if (node->parent && 
                 node->parent->reflective->get_type() == core::TYPE_UNION)
         {
+            /*
+            bool _d = (node->reflective->get_child_index() == 0);
+            QModelIndex parent = index.parent();
+
+
+            if (_d)
+            {
+
+                beginRemoveRows(parent, 0, node->parent->children.size());
+                node->parent->reset();
+            }
+            */
             // No es una referencia
             node->parent->reflective->set_child_value(node->parent->holder, 
                     node->reflective->get_child_index(), node->holder);
+            /*
+            if (_d)
+            {
+                endRemoveRows();
+                
+                emit dataChanged(parent, parent);
+            }
+            else
+            */
+            {
+                emit dataChanged(index, index);
+            }
         }
-
-        // Si se cambia el discriminate...
-        if (node->parent && 
-                node->parent->reflective->get_type() == core::TYPE_UNION &&
-                node->reflective->get_child_index() == 0)
-        {
-            QModelIndex parent = index.parent();
-
-            beginRemoveRows(parent, 0, node->parent->children.size());
-            // reset model
-            node->parent->reset();
-            endRemoveRows();
-
-            emit dataChanged(parent, parent);
-        }   
         else
         {
             emit dataChanged(index, index);

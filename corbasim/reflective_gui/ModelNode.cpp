@@ -30,7 +30,6 @@ Node::Node(corbasim::core::reflective_base const * r,
 void Node::reset()
 {
     initialized = false;
-    children.clear();
 }
 
 void Node::initialize()
