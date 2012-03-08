@@ -136,7 +136,34 @@ bool NewLogModel::setData(const QModelIndex & index,
 
     if (res)
     {
-        emit dataChanged(index, index);
+        // Temporal
+        if (node->parent && 
+                node->parent->reflective->get_type() == core::TYPE_UNION)
+        {
+            // No es una referencia
+            node->parent->reflective->set_child_value(node->parent->holder, 
+                    node->reflective->get_child_index(), node->holder);
+            
+            std::cout << "Changing union field" << std::endl;
+        }
+
+        // Si se cambia el discriminate...
+        if (node->parent && 
+                node->parent->reflective->get_type() == core::TYPE_UNION &&
+                node->reflective->get_child_index() == 0)
+        {
+            std::cout << "Changing _d" << std::endl;
+            
+            // reset model
+            node->parent->reset();
+
+            QModelIndex parent = index.parent();
+            emit dataChanged(parent, parent);
+        }   
+        else
+        {
+            emit dataChanged(index, index);
+        }
     }
 
     return res;

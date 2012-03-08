@@ -36,19 +36,21 @@ struct Node
     core::reflective_base const * reflective;
     core::holder holder;
 
-    Node const * parent;
+    Node * parent;
     unsigned int index;
 
     bool initialized;
     std::vector< Node_ptr > children;
 
     Node(core::reflective_base const * r,
-            core::holder h, Node const * p = 0, 
+            core::holder h, Node * p = 0, 
             unsigned int idx = 0);
 
     void initialize();
 
     void check_for_initialized();
+
+    void reset();
 };
 
 } // namespace reflective_gui

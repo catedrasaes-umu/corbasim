@@ -22,9 +22,15 @@
 using namespace corbasim::reflective_gui;
 
 Node::Node(corbasim::core::reflective_base const * r,
-        corbasim::core::holder h, Node const * p, unsigned int idx) :
+        corbasim::core::holder h, Node * p, unsigned int idx) :
     reflective(r), holder(h), parent(p), index(idx), initialized(false)
 {
+}
+
+void Node::reset()
+{
+    initialized = false;
+    children.clear();
 }
 
 void Node::initialize()

@@ -628,6 +628,14 @@ UnionWidget::UnionWidget(
                     this,
                     SLOT(discriminatorChanged()));
         }
+        else if (qobject_cast< QCheckBox * >(child_widget))
+        {
+            QObject::connect(child_widget, 
+                    SIGNAL(stateChanged(int)),
+                    this,
+                    SLOT(discriminatorChanged()));
+        }
+
     }
 
     m_stack = new QStackedWidget();
