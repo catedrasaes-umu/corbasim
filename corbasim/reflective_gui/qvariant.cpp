@@ -353,22 +353,33 @@ namespace reflective_gui
 
                 }
                 break;
+#endif
 
             case TYPE_ENUM:
                 {
                     // Maybe it works...
-                    int32_t value = hold.to_value< int32_t >();
+                    int32_t& value = hold.to_value< int32_t >();
 
-                    const char * str = "Unknown value"; 
+                    bool canConvert = var.canConvert(QVariant::String);
 
-                    if (value >= 0 && 
-                            value < reflective->get_children_count())
-                        str = reflective->get_child_name(
-                                (unsigned int) value);
+                    if (canConvert)
+                    {
+                        const QString val = var.toString();
+                        const unsigned int count =
+                            reflective->get_children_count();
 
-                    return QVariant(str);
+                        for (int32_t i = 0; i < (int32_t) count; i++) 
+                        {
+                            if (val == reflective->get_child_name(i))
+                            {
+                                value = i;
+                                return true;
+                            }
+                        }
+                    }
+
+                    return false;
                 }
-#endif
 
             case TYPE_DOUBLE:
                 {
