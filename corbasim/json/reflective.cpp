@@ -366,6 +366,29 @@ void corbasim::json::write(std_writer_t& w,
             }
             break;
 
+        case TYPE_UNION:
+            {
+                w.object_start();
+
+                unsigned int idx =  reflective->get_length(holder);
+
+                w.new_string(reflective->get_child_name(0));
+
+                write(w, reflective->get_child(0),
+                        reflective->get_child_value(holder, 0));
+
+                if (idx > 0)
+                {
+                    w.new_string(reflective->get_child_name(idx));
+
+                    write(w, reflective->get_child(idx),
+                            reflective->get_child_value(holder, idx));
+                }
+
+                w.object_end();
+            }
+            break;
+
         case TYPE_STRING:
             {
                 std::string str = reflective->to_string(holder);

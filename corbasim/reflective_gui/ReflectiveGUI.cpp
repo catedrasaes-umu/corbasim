@@ -711,11 +711,16 @@ void UnionWidget::toHolder(corbasim::core::holder& holder)
     core::holder _d = _dr->create_holder();
     m_widgets[0]->toHolder(_d);
 
+    m_reflective->set_child_value(holder, 0, _d);
+
     // 0 for invalid widget/value
     unsigned int idx = m_reflective->get_length(holder);
+    // int idx = m_stack->currentIndex();
 
     if (idx > 0)
     {
+        std::cout << idx << std::endl;
+
         core::reflective_base const * _chr = m_widgets[idx]->getReflective();
 
         core::holder _ch = _chr->create_holder();
