@@ -10,6 +10,10 @@
 
 
 
+
+
+
+
 namespace corbasim
 {
 namespace adapted
@@ -37,9 +41,25 @@ struct servant< MyModule::MyInterface >
 			
 		}
 		
+		void operation1(const MyModule::MyUnion2& uni)
+		{
+			_corbasim_MyModule::MyInterface::operation1 _val(uni);
+	
+			__f(_val);		
+			
+		}
+		
 		void operation2(const MyModule::MyStruct& uni)
 		{
 			_corbasim_MyModule::MyInterface::operation2 _val(uni);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation3(const MyModule::MyUnion3& uni)
+		{
+			_corbasim_MyModule::MyInterface::operation3 _val(uni);
 	
 			__f(_val);		
 			

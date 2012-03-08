@@ -696,8 +696,6 @@ UnionWidget::~UnionWidget()
 
 void UnionWidget::discriminatorChanged()
 {
-    std::cout << __FUNCTION__ << std::endl;
-
     core::reflective_base const * _dr = m_widgets[0]->getReflective();
 
     core::holder _d = _dr->create_holder();
@@ -727,8 +725,6 @@ void UnionWidget::toHolder(corbasim::core::holder& holder)
 
     if (idx > 0)
     {
-        std::cout << idx << std::endl;
-
         core::reflective_base const * _chr = m_widgets[idx]->getReflective();
 
         core::holder _ch = _chr->create_holder();

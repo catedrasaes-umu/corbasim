@@ -129,6 +129,200 @@ struct is_union< MyModule::MyUnion > : public cs_mpl::true_
 
 
 
+// UnionDef: MyModule::MyUnion2
+BOOST_FUSION_ADAPT_ADT(
+	MyModule::MyUnion2,
+	( ::CORBA::Long, ::CORBA::Long, obj._d(), obj._d(val)) // Discriminator
+	( const MyModule::MyUnion&, const MyModule::MyUnion&, obj.one(), obj.one(val))
+	( ::CORBA::Long, ::CORBA::Long, obj.other(), obj.other(val))
+     )
+
+namespace boost
+{
+namespace serialization
+{
+
+template < class Archive >
+void serialize(Archive& ar, MyModule::MyUnion2& t, const unsigned int /* unused */)
+{	
+	
+}
+
+
+
+} // serialization
+} // boost
+
+namespace boost
+{
+namespace fusion
+{
+namespace extension
+{
+
+template< >
+struct struct_member_name< MyModule::MyUnion2, 0>
+{
+	static inline const char * call()
+	{
+		return "_d";
+	}
+};
+
+template< >
+struct struct_member_name< MyModule::MyUnion2, 1>
+{
+	static inline const char * call()
+	{
+		return "one";
+	}
+};
+template< >
+struct struct_member_name< MyModule::MyUnion2, 2>
+{
+	static inline const char * call()
+	{
+		return "other";
+	}
+};
+
+} // extension
+} // fusion
+} // boost
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct is_union< MyModule::MyUnion2 > : public cs_mpl::true_
+{
+	typedef ::CORBA::Long discriminator_t;
+	
+	static const size_t size = 2;
+	
+	static inline discriminator_t* discriminators()
+	{
+		static discriminator_t _disc[] = { 
+					100
+			, 									200
+			};		
+		return _disc;
+	}
+	
+	static inline unsigned int* member()
+	{
+		static unsigned int _members[] = { 
+					1
+			, 									2
+			};		
+		return _members;
+	}
+};
+
+} // adapted
+} // corbasim
+
+
+
+// UnionDef: MyModule::MyUnion3
+BOOST_FUSION_ADAPT_ADT(
+	MyModule::MyUnion3,
+	( ::CORBA::Boolean, ::CORBA::Boolean, obj._d(), obj._d(val)) // Discriminator
+	( const MyModule::MyUnion&, const MyModule::MyUnion&, obj.one(), obj.one(val))
+	( ::CORBA::Long, ::CORBA::Long, obj.other(), obj.other(val))
+     )
+
+namespace boost
+{
+namespace serialization
+{
+
+template < class Archive >
+void serialize(Archive& ar, MyModule::MyUnion3& t, const unsigned int /* unused */)
+{	
+	
+}
+
+
+
+} // serialization
+} // boost
+
+namespace boost
+{
+namespace fusion
+{
+namespace extension
+{
+
+template< >
+struct struct_member_name< MyModule::MyUnion3, 0>
+{
+	static inline const char * call()
+	{
+		return "_d";
+	}
+};
+
+template< >
+struct struct_member_name< MyModule::MyUnion3, 1>
+{
+	static inline const char * call()
+	{
+		return "one";
+	}
+};
+template< >
+struct struct_member_name< MyModule::MyUnion3, 2>
+{
+	static inline const char * call()
+	{
+		return "other";
+	}
+};
+
+} // extension
+} // fusion
+} // boost
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct is_union< MyModule::MyUnion3 > : public cs_mpl::true_
+{
+	typedef ::CORBA::Boolean discriminator_t;
+	
+	static const size_t size = 2;
+	
+	static inline discriminator_t* discriminators()
+	{
+		static discriminator_t _disc[] = { 
+					true
+			, 									false
+			};		
+		return _disc;
+	}
+	
+	static inline unsigned int* member()
+	{
+		static unsigned int _members[] = { 
+					1
+			, 									2
+			};		
+		return _members;
+	}
+};
+
+} // adapted
+} // corbasim
+
+
+
 // StructDef: MyModule::MyStruct
 BOOST_FUSION_ADAPT_STRUCT(
 	MyModule::MyStruct,
@@ -189,8 +383,16 @@ struct is_objrefvar< MyModule::MyInterface_var > : public cs_mpl::true_
 
 
 
+
+
+
+
 namespace _corbasim_MyModule 
 {
+
+
+
+
 
 
 
@@ -230,6 +432,32 @@ struct __operation
 typedef __operation operation;
 
 
+struct __operation1
+{
+	typedef boost::mpl::vector< corbasim::Arg_IN< const MyModule::MyUnion2& > > _arg_list;
+
+	typedef corbasim::adapted::member< __operation1, 0 > uni_corbasim_member;
+
+	MyModule::MyUnion2 uni;
+	
+	
+	__operation1();
+	
+	__operation1(const MyModule::MyUnion2& _uni);
+	
+	// Copy constructor
+	__operation1(const __operation1& o);
+
+    template< typename Archive >
+    void serialize(Archive& ar, const unsigned int /* unused */)
+    {
+		ar & boost::serialization::make_nvp("uni", uni);
+	}
+};
+
+typedef __operation1 operation1;
+
+
 struct __operation2
 {
 	typedef boost::mpl::vector< corbasim::Arg_IN< const MyModule::MyStruct& > > _arg_list;
@@ -255,9 +483,39 @@ struct __operation2
 
 typedef __operation2 operation2;
 
+
+struct __operation3
+{
+	typedef boost::mpl::vector< corbasim::Arg_IN< const MyModule::MyUnion3& > > _arg_list;
+
+	typedef corbasim::adapted::member< __operation3, 0 > uni_corbasim_member;
+
+	MyModule::MyUnion3 uni;
+	
+	
+	__operation3();
+	
+	__operation3(const MyModule::MyUnion3& _uni);
+	
+	// Copy constructor
+	__operation3(const __operation3& o);
+
+    template< typename Archive >
+    void serialize(Archive& ar, const unsigned int /* unused */)
+    {
+		ar & boost::serialization::make_nvp("uni", uni);
+	}
+};
+
+typedef __operation3 operation3;
+
 } // MyInterface
 
 } // _corbasim_MyModule
+
+
+
+
 
 
 
@@ -275,7 +533,7 @@ namespace adapted
 template < >
 struct interface < MyModule::MyInterface >
 {
-	typedef cs_mpl::list< _corbasim_MyModule::MyInterface::operation, cs_mpl::list< _corbasim_MyModule::MyInterface::operation2  >  >   _op_list;
+	typedef cs_mpl::list< _corbasim_MyModule::MyInterface::operation, cs_mpl::list< _corbasim_MyModule::MyInterface::operation1, cs_mpl::list< _corbasim_MyModule::MyInterface::operation2, cs_mpl::list< _corbasim_MyModule::MyInterface::operation3  >  >  >  >   _op_list;
 	
 };
 
@@ -309,6 +567,33 @@ struct call< _corbasim_MyModule::MyInterface::operation >
 } // corbasim
 
 
+// OperationDef: MyModule::MyInterface::operation1
+BOOST_FUSION_ADAPT_STRUCT(
+	_corbasim_MyModule::MyInterface::operation1,
+	( MyModule::MyUnion2, uni)
+     )
+
+namespace corbasim
+{
+namespace adapted
+{     
+
+template< >
+struct call< _corbasim_MyModule::MyInterface::operation1 >
+{
+	typedef _corbasim_MyModule::MyInterface::operation1 Value;
+	
+    template < typename Interface >
+    static inline void invoke(Interface * ref, Value& value)
+    {
+ ref->operation1(value.uni);
+    }
+};
+
+} // adapted
+} // corbasim
+
+
 // OperationDef: MyModule::MyInterface::operation2
 BOOST_FUSION_ADAPT_STRUCT(
 	_corbasim_MyModule::MyInterface::operation2,
@@ -329,6 +614,33 @@ struct call< _corbasim_MyModule::MyInterface::operation2 >
     static inline void invoke(Interface * ref, Value& value)
     {
  ref->operation2(value.uni);
+    }
+};
+
+} // adapted
+} // corbasim
+
+
+// OperationDef: MyModule::MyInterface::operation3
+BOOST_FUSION_ADAPT_STRUCT(
+	_corbasim_MyModule::MyInterface::operation3,
+	( MyModule::MyUnion3, uni)
+     )
+
+namespace corbasim
+{
+namespace adapted
+{     
+
+template< >
+struct call< _corbasim_MyModule::MyInterface::operation3 >
+{
+	typedef _corbasim_MyModule::MyInterface::operation3 Value;
+	
+    template < typename Interface >
+    static inline void invoke(Interface * ref, Value& value)
+    {
+ ref->operation3(value.uni);
     }
 };
 

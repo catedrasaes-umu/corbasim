@@ -18,6 +18,21 @@ module MyModule
             long other;
     };
 
+    union MyUnion2 switch(long)
+    {
+        case 100 :
+            MyUnion one;
+        case 200 :
+            long other;
+    };
+
+    union MyUnion3 switch(boolean)
+    {
+        case TRUE :
+            MyUnion one;
+        case FALSE :
+            long other;
+    };
 
     struct MyStruct
     {
@@ -27,7 +42,9 @@ module MyModule
     interface MyInterface
     {
         void operation(in MyUnion uni);
+        void operation1(in MyUnion2 uni);
         void operation2(in MyStruct uni);
+        void operation3(in MyUnion3 uni);
     };
 
 };

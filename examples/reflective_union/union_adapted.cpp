@@ -20,6 +20,32 @@ const char * name< MyModule::MyUnion >::call()
 
 
 template< >
+const char * full_qualified_name< MyModule::MyUnion2 >::call()
+{
+	return "MyModule::MyUnion2";
+}
+
+template< >
+const char * name< MyModule::MyUnion2 >::call()
+{
+	return "MyUnion2";
+}
+
+
+template< >
+const char * full_qualified_name< MyModule::MyUnion3 >::call()
+{
+	return "MyModule::MyUnion3";
+}
+
+template< >
+const char * name< MyModule::MyUnion3 >::call()
+{
+	return "MyUnion3";
+}
+
+
+template< >
 const char * full_qualified_name< MyModule::MyStruct >::call()
 {
 	return "MyModule::MyStruct";
@@ -59,9 +85,23 @@ const char * name< _corbasim_MyModule::MyInterface::operation >::call()
 
 
 template< >
+const char * name< _corbasim_MyModule::MyInterface::operation1 >::call()
+{
+	return "operation1";
+}
+
+
+template< >
 const char * name< _corbasim_MyModule::MyInterface::operation2 >::call()
 {
 	return "operation2";
+}
+
+
+template< >
+const char * name< _corbasim_MyModule::MyInterface::operation3 >::call()
+{
+	return "operation3";
 }
 
 
@@ -71,6 +111,10 @@ const char * name< _corbasim_MyModule::MyInterface::operation2 >::call()
 
 namespace _corbasim_MyModule 
 {
+
+
+
+
 
 
 
@@ -100,6 +144,26 @@ __operation::__operation(const __operation& o) :
 
 
 
+__operation1::__operation1()
+{
+}
+
+__operation1::__operation1(const MyModule::MyUnion2& _uni):
+	uni(_uni)
+{
+	
+}
+
+// Copy constructor
+__operation1::__operation1(const __operation1& o) :
+	uni(o.uni)
+{
+	
+}
+
+
+
+
 __operation2::__operation2()
 {
 }
@@ -112,6 +176,26 @@ __operation2::__operation2(const MyModule::MyStruct& _uni):
 
 // Copy constructor
 __operation2::__operation2(const __operation2& o) :
+	uni(o.uni)
+{
+	
+}
+
+
+
+
+__operation3::__operation3()
+{
+}
+
+__operation3::__operation3(const MyModule::MyUnion3& _uni):
+	uni(_uni)
+{
+	
+}
+
+// Copy constructor
+__operation3::__operation3(const __operation3& o) :
 	uni(o.uni)
 {
 	
