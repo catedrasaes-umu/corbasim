@@ -59,6 +59,12 @@ QString getNodeName(Node const * node)
     {
         return node->parent->reflective->get_child_name(node->index);
     }
+    else if (node->parent && node->parent->reflective->get_type() ==
+            corbasim::core::TYPE_UNION)
+    {
+        return node->parent->reflective->get_child_name(
+                node->reflective->get_child_index());
+    }
 
     return "Error!";
 }

@@ -355,8 +355,9 @@ struct union_accessor : public accessor_base
     {
         S& t_ = parent.to_value< S >();
 
-        return holder( ::corbasim::core::create_holder(
-                    boost::fusion::at < N >(t_)));
+        const current_t current(boost::fusion::at < N >(t_));
+
+        return holder( ::corbasim::core::create_holder(current));
     }
 
     void set(holder& parent, holder& value) const
