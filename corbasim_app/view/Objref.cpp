@@ -216,3 +216,7 @@ void Objref::updateReference(const CORBA::Object_var& ref)
     // TODO
 }
 
+// Settings
+void Objref::save(QSettings& settings) {}
+void Objref::load(QSettings& settings) {}
+

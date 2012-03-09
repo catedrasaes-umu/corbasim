@@ -596,4 +596,46 @@ void OperationModel::doubleClicked(const QModelIndex& index)
     }
 }
 
+// Settings
+
+void OperationSequenceItem::save(QSettings& settings)
+{
+}
+
+void OperationSequenceItem::load(QSettings& settings)
+{
+}
+
+void OperationSequence::save(QSettings& settings)
+{
+}
+
+void OperationSequence::load(QSettings& settings)
+{
+}
+/*
+void OperationsView::save(QSettings& settings)
+{
+}
+
+void OperationsView::load(QSettings& settings)
+{
+}
+
+void OperationModel::save(QSettings& settings)
+{
+}
+
+void OperationModel::load(QSettings& settings)
+{
+}
+*/
+void OperationSequenceTool::save(QSettings& settings)
+{
+}
+
+void OperationSequenceTool::load(QSettings& settings)
+{
+}
+
 

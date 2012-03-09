@@ -48,6 +48,9 @@ public:
     const QString& getObjrefId() const;
     const char * getOperationName() const;
 
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 signals:
 
     void sendRequest(QString id, corbasim::event::request_ptr);
@@ -96,6 +99,9 @@ public:
     virtual ~OperationSequence();
 
     const QString& getName() const;
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 public slots:
 
@@ -178,6 +184,9 @@ class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationSequenceTool :
 public:
     OperationSequenceTool(QWidget * parent = 0);
     virtual ~OperationSequenceTool();
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 public slots:
 

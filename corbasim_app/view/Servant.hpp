@@ -46,6 +46,9 @@ public:
 
     const core::interface_reflective_base * getFactory() const;
 
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 public slots:
 
     void sendRequest(corbasim::event::request_ptr req);

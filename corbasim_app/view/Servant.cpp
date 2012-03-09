@@ -87,3 +87,8 @@ void Servant::sendRequest(corbasim::event::request_ptr req)
     emit sendRequest(m_id, req);
 }
 
+// Settings
+void Servant::save(QSettings& settings) {}
+void Servant::load(QSettings& settings) {}
+
+

@@ -52,6 +52,9 @@ public:
     virtual void toHolder(core::holder& holder) = 0;
     virtual void fromHolder(core::holder& holder) = 0;
 
+    virtual void save(QSettings& settings) = 0;
+    virtual void load(QSettings& settings) = 0;
+
 protected:
 
     core::reflective_base const * m_reflective;
@@ -72,6 +75,9 @@ public:
     void addAlternative(const QString& id,
             const QString& toolTip,
             ReflectiveWidgetBase * widget);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 protected slots:
 
@@ -98,6 +104,9 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
    
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 };
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC IntegerWidget : 
@@ -112,6 +121,9 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
     
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 };
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC StringWidget : 
@@ -125,6 +137,9 @@ public:
 
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 };
 
@@ -140,6 +155,9 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 };
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC BoolWidget :
@@ -154,6 +172,9 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
    
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 };
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC StructWidget : 
@@ -167,6 +188,9 @@ public:
  
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 protected:
 
@@ -184,6 +208,9 @@ public:
  
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 protected slots:
 
@@ -207,6 +234,9 @@ public:
 
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 protected slots:
 
@@ -238,6 +268,9 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 protected slots:
 
     void lengthChanged(int);
@@ -261,6 +294,10 @@ public:
  
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 };
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC FilesWidget : 
@@ -275,6 +312,10 @@ public:
  
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 };
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationInputForm : 
@@ -304,6 +345,9 @@ public:
     void mouseMoveEvent(QMouseEvent *event);
 
     // bool eventFilter(QObject * watched, QEvent * event);
+
+    void save(QSettings& settings);
+    void load(QSettings& settings);
 
 public slots:    
 

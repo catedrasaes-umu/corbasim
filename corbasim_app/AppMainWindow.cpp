@@ -92,12 +92,28 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             this, SLOT(showCreateServant()));
 
     // Load
+    QAction * loadScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogOpenButton),
+            "&Load escenario", this);
+    loadScenarioAction->setShortcut(QKeySequence::Open);
+    QObject::connect(loadScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showLoad()));
+
+    // Save
+    QAction * saveScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogSaveButton),
+            "&Save escenario", this);
+    saveScenarioAction->setShortcut(QKeySequence::SaveAs);
+    QObject::connect(saveScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showSave()));
+
+    // Load
     QAction * loadAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load configuration", this);
     loadAction->setShortcut(QKeySequence::Open);
     QObject::connect(loadAction, SIGNAL(triggered()), 
-            this, SLOT(showLoad()));
+            this, SLOT(doLoad()));
 
     // Save
     QAction * saveAction = new QAction(
@@ -105,7 +121,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             "&Save configuration", this);
     saveAction->setShortcut(QKeySequence::SaveAs);
     QObject::connect(saveAction, SIGNAL(triggered()), 
-            this, SLOT(showSave()));
+            this, SLOT(doSave()));
 
     // Append
     QAction * appendAction = new QAction(
@@ -117,8 +133,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Tool bar
     QToolBar * toolBar = addToolBar("File");
-    toolBar->addAction(loadAction);
-    toolBar->addAction(saveAction);
+    toolBar->addAction(loadScenarioAction);
+    toolBar->addAction(saveScenarioAction);
     toolBar->addAction(newObjAction);
     toolBar->addAction(newSrvAction);
    
@@ -140,10 +156,15 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuFile->addAction(newObjAction);
     menuFile->addAction(newSrvAction);
     menuFile->addSeparator();
+    menuFile->addAction(loadScenarioAction);
+    menuFile->addAction(saveScenarioAction);
+    menuFile->addSeparator();
     menuFile->addAction(loadAction);
     menuFile->addAction(saveAction);
+/*
     menuFile->addAction("&Clear configuration", this, 
             SLOT(clearConfig()));
+ */
     menuFile->addSeparator();
     menuFile->addAction(appendAction);
     menuFile->addSeparator();
@@ -663,5 +684,102 @@ void AppMainWindow::showScript()
     m_sub_script->showNormal();
     m_script->show();
     m_mdi_area->setActiveSubWindow(m_sub_script);
+}
+
+// Settings
+void AppMainWindow::doLoad() 
+{
+    const QStringList files = QFileDialog::getOpenFileNames( 0, tr(
+                "Select some files"), ".");
+
+    // User cancels
+    if (files.isEmpty())
+        return;
+
+    QSettings settings(file, QSettings::NativeFormat);
+    load(settings);
+}
+
+void AppMainWindow::doSave() 
+{
+    QString file = QFileDialog::getSaveFileName( 0, tr(
+                "Select a file"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    QSettings settings(file, QSettings::NativeFormat);
+    save(settings);
+
+    settings.sync();
+}
+
+void AppMainWindow::save(QSettings& settings) 
+{
+    beginGroup("Objrefs");
+    for (objrefs_t::iterator it = m_objrefs.begin(); 
+	    it != m_objrefs.end(); ++it) 
+    {
+        beginGroup(it->first);
+        it->second->save(settings);
+        endGroup();
+    }
+    endGroup();
+
+    beginGroup("Servants");
+    for (servants_t::iterator it = m_servants.begin(); 
+	    it != m_servants.end(); ++it) 
+    {
+        beginGroup(it->first);
+        it->second->save(settings);
+        endGroup();
+    }
+    endGroup();
+
+    if (m_seq_tool)
+    {
+        beginGroup("Operation sequences");
+        m_seq_tool->save(settings);
+        endGroup();
+    }
+}
+
+void AppMainWindow::load(QSettings& settings)
+{
+    beginGroup("Objrefs");
+    for (objrefs_t::iterator it = m_objrefs.begin(); 
+	    it != m_objrefs.end(); ++it) 
+    {
+        if (settings.contains(it->first))
+        {
+            beginGroup(it->first);
+            it->second->load(settings);
+            endGroup();
+        }
+    }
+    endGroup();
+
+    beginGroup("Servants");
+    for (servants_t::iterator it = m_servants.begin(); 
+	    it != m_servants.end(); ++it) 
+    {
+        if (settings.contains(it->first))
+        {
+            beginGroup(it->first);
+            it->second->load(settings);
+            endGroup();
+        }
+    }
+    endGroup();
+
+    if (settings.contains("Operation sequences"))
+    {
+        if (!m_seq_tool) showOpSequenceTool(); // Do not show but initialize
+
+        beginGroup("Operation sequences");
+        m_seq_tool->load(settings);
+        endGroup();
+    }
 }
 

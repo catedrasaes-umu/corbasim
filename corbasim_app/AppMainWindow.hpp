@@ -55,7 +55,13 @@ public:
     void setController(AppController * controller);
     void setEngine(TriggerEngine * engine);
 
+    void save(QSettings& settings);
+    void load(QSettings& settings);
+
 public slots:
+
+    void doLoad();
+    void doSave();
 
     void showPlotTool();
 

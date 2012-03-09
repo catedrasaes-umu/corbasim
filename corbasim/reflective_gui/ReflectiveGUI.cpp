@@ -1334,3 +1334,223 @@ void OperationInputForm::mouseMoveEvent(QMouseEvent *event)
     Qt::DropAction dropAction = drag->exec(Qt::CopyAction);
 }
 
+// Settings
+
+#define SAVE_Q_PROPERTY(prop) 					\
+	settings.setValue(prop, property(prop));		\
+	/***/
+
+#define LOAD_Q_PROPERTY(prop) 					\
+	setProperty(prop, settings.value(prop));		\
+	/***/
+
+void AlternativesWidget::save(QSettings& settings)
+{
+    // TODO selected
+
+    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    {
+        settings.beginGroup(QString::number(i));
+        if (m_widgets[i]) m_widgets[i]->save(settings);
+        settings.endGroup();
+    }
+}
+
+void AlternativesWidget::load(QSettings& settings)
+{
+    // TODO selected
+
+    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    {
+        settings.beginGroup(QString::number(i));
+        if (m_widgets[i]) m_widgets[i]->load(settings);
+        settings.endGroup();
+    }
+}
+
+void FloatWidget::save(QSettings& settings)
+{
+    SAVE_Q_PROPERTY("value");
+}
+
+void FloatWidget::load(QSettings& settings)
+{
+    LOAD_Q_PROPERTY("value");
+}
+
+void IntegerWidget::save(QSettings& settings)
+{
+    SAVE_Q_PROPERTY("value");
+}
+
+void IntegerWidget::load(QSettings& settings)
+{
+    LOAD_Q_PROPERTY("value");
+}
+
+void StringWidget::save(QSettings& settings)
+{
+    SAVE_Q_PROPERTY("text");
+}
+
+void StringWidget::load(QSettings& settings)
+{
+    LOAD_Q_PROPERTY("text");
+}
+
+void EnumWidget::save(QSettings& settings)
+{
+    SAVE_Q_PROPERTY("currentText");
+}
+
+void EnumWidget::load(QSettings& settings)
+{
+    // TODO find current text
+}
+
+void BoolWidget::save(QSettings& settings)
+{
+    SAVE_Q_PROPERTY("checked");
+}
+
+void BoolWidget::load(QSettings& settings)
+{
+    LOAD_Q_PROPERTY("checked");
+}
+
+void StructWidget::save(QSettings& settings)
+{
+    unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        settings.beginGroup(m_reflective->get_child_name(i));
+        if (m_widgets[i]) m_widgets[i]->save(settings);
+        settings.endGroup();
+    }
+}
+
+void StructWidget::load(QSettings& settings)
+{
+    unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        settings.beginGroup(m_reflective->get_child_name(i));
+        if (m_widgets[i]) m_widgets[i]->load(settings);
+        settings.endGroup();
+    }
+}
+
+void UnionWidget::save(QSettings& settings)
+{
+}
+
+void UnionWidget::load(QSettings& settings)
+{
+}
+
+void SequenceWidget::save(QSettings& settings)
+{
+    if (m_reflective->is_variable_length())
+    {
+        settings.setValue("length", m_sbLength->value());
+    }
+
+    settings.setValue("index", m_sbCurrentIndex->value());
+
+    // TODO value
+}
+
+void SequenceWidget::load(QSettings& settings)
+{
+}
+
+void ComplexSequenceWidget::save(QSettings& settings)
+{
+    if (m_reflective->is_variable_length())
+    {
+        settings.setValue("length", m_sbLength->value());
+    }
+
+    settings.setValue("index", m_sbCurrentIndex->value());
+
+    settings.beginWriteArray("value");
+
+    for(int i = 0; i < m_sbLength->value(); i++)
+    {
+        ReflectiveWidgetBase * w = 
+            dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));
+
+        settings.setArrayIndex(i);
+
+        if (w)
+        {
+            w->save(settings);
+        }
+    }
+
+    settings.endWriteArray();
+}
+
+void ComplexSequenceWidget::load(QSettings& settings)
+{
+}
+
+void ObjrefvarWidget::save(QSettings& settings)
+{
+    // TODO properties
+}
+
+void ObjrefvarWidget::load(QSettings& settings)
+{
+    // TODO properties
+}
+
+void FilesWidget::save(QSettings& settings)
+{
+    // TODO properties
+}
+
+void FilesWidget::load(QSettings& settings)
+{
+    // TODO properties
+}
+
+void OperationInputForm::save(QSettings& settings)
+{
+    // TODO buttons, expanded...
+
+    unsigned int count = m_reflective->get_children_count();
+
+    settings.setValue("script", m_code->plainText());
+
+    settings.beginGroup("value");
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        settings.beginGroup(m_reflective->get_child_name(i));
+        if (m_widgets[i]) m_widgets[i]->save(settings);
+        settings.endGroup();
+    }
+    settings.endGroup();
+}
+
+void OperationInputForm::load(QSettings& settings)
+{
+    // TODO buttons, expanded...
+
+    unsigned int count = m_reflective->get_children_count();
+
+    settings.beginGroup("value");
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        settings.beginGroup(m_reflective->get_child_name(i));
+        if (m_widgets[i]) m_widgets[i]->load(settings);
+        settings.endGroup();
+    }
+    settings.endGroup();
+}
+
+
+
+
