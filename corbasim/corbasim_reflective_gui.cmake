@@ -1,5 +1,6 @@
 set(corbasim_reflective_gui_EXPORTED_HEADERS
-    reflecitve_gui/export.hpp
+    reflective_gui/export.hpp
+    reflective_gui/json.hpp
     reflective_gui/utils.hpp
     reflective_gui/qvariant.hpp
     reflective_gui/InputRequestProcessor.hpp
@@ -29,6 +30,8 @@ set(corbasim_reflective_gui_MOC_HDRS
     reflective_gui/ReflectiveGUI.hpp)
 
 set(corbasim_reflective_gui_SRCS
+    reflective_gui/json.cpp
+    reflective_gui/utils.hpp
     reflective_gui/utils.cpp
     reflective_gui/qvariant.cpp
     reflective_gui/InputRequestProcessor.cpp

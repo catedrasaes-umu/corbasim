@@ -598,43 +598,71 @@ void OperationModel::doubleClicked(const QModelIndex& index)
 
 // Settings
 
-void OperationSequenceItem::save(QSettings& settings)
+void OperationSequenceItem::save(QVariant& settings)
+{
+    QVariantMap map;
+
+    map["object"] = m_id;
+    map["operation"] = m_dlg->getReflective()->get_name();
+
+    m_dlg->save(map["dialog"]);
+
+    settings = map;
+}
+
+void OperationSequenceItem::load(const QVariant& settings)
 {
 }
 
-void OperationSequenceItem::load(QSettings& settings)
+void OperationSequence::save(QVariant& settings)
 {
+    QVariantList list;
+    
+    for (int i = 0; i < m_items.size(); i++) 
+    {
+        QVariant v;
+        m_items.at(i)->save(v);
+        list << v;
+    }
+
+    settings = list;
 }
 
-void OperationSequence::save(QSettings& settings)
-{
-}
-
-void OperationSequence::load(QSettings& settings)
+void OperationSequence::load(const QVariant& settings)
 {
 }
 /*
-void OperationsView::save(QSettings& settings)
+void OperationsView::save(QVariant& settings)
 {
 }
 
-void OperationsView::load(QSettings& settings)
+void OperationsView::load(const QVariant& settings)
 {
 }
 
-void OperationModel::save(QSettings& settings)
+void OperationModel::save(QVariant& settings)
 {
 }
 
-void OperationModel::load(QSettings& settings)
+void OperationModel::load(const QVariant& settings)
 {
 }
 */
-void OperationSequenceTool::save(QSettings& settings)
+void OperationSequenceTool::save(QVariant& settings)
 {
+    QVariantList list;
+    
+    for (int i = 0; i < m_sequences.size(); i++) 
+    {
+        QVariant v;
+        m_sequences.at(i)->save(v);
+        list << v;
+    }
+
+    settings = list;
 }
 
-void OperationSequenceTool::load(QSettings& settings)
+void OperationSequenceTool::load(const QVariant& settings)
 {
 }
 

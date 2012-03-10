@@ -24,8 +24,10 @@
 #include <corbasim/qt/ScriptWindow.hpp>
 #include <corbasim/reflective_gui/OperationSequence.hpp>
 #include <corbasim/qwt/ReflectivePlotTool.hpp>
+#include <corbasim/reflective_gui/json.hpp>
 
 #include <QLibrary>
+#include <QtScript>
 
 using namespace corbasim::app;
 
@@ -696,8 +698,6 @@ void AppMainWindow::doLoad()
     if (file.isEmpty())
         return;
 
-    QSettings settings(file, QSettings::IniFormat);
-    load(settings);
 }
 
 void AppMainWindow::doSave() 
@@ -709,44 +709,47 @@ void AppMainWindow::doSave()
     if (file.isEmpty())
         return;
 
-    QSettings settings(file, QSettings::IniFormat);
-    save(settings);
+    QVariant v;
+    save(v);
 
-    settings.sync();
+    std::ofstream ofs(file.toStdString().c_str());
+    json::ostream_writer_t ow(ofs, true);
+
+    reflective_gui::toJson(ow, v);
 }
 
-void AppMainWindow::save(QSettings& settings) 
+void AppMainWindow::save(QVariant& settings) 
 {
-    settings.beginGroup("Objrefs");
+    QVariantMap window;
+    QVariantMap objrefs;
+    QVariantMap servants;
+
     for (objrefs_t::iterator it = m_objrefs.begin(); 
 	    it != m_objrefs.end(); ++it) 
     {
-        settings.beginGroup(it->first);
-        it->second->save(settings);
-        settings.endGroup();
+        // TODO it->second->save(objrefs[it->first]);
     }
-    settings.endGroup();
 
-    settings.beginGroup("Servants");
     for (servants_t::iterator it = m_servants.begin(); 
 	    it != m_servants.end(); ++it) 
     {
-        settings.beginGroup(it->first);
-        it->second->save(settings);
-        settings.endGroup();
+        // TODO it->second->save(servants[it->first]);
     }
-    settings.endGroup();
+
+    window["objrefs"] = objrefs;
+    window["servants"] = servants;
 
     if (m_seq_tool)
     {
-        settings.beginGroup("Operation sequences");
-        m_seq_tool->save(settings);
-        settings.endGroup();
+        m_seq_tool->save(window["sequences"]);
     }
+
+    settings = window;
 }
 
-void AppMainWindow::load(QSettings& settings)
+void AppMainWindow::load(const QVariant& settings)
 {
+    /*
     settings.beginGroup("Objrefs");
     for (objrefs_t::iterator it = m_objrefs.begin(); 
 	    it != m_objrefs.end(); ++it) 
@@ -781,5 +784,6 @@ void AppMainWindow::load(QSettings& settings)
         m_seq_tool->load(settings);
         settings.endGroup();
     }
+    */
 }
 

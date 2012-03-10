@@ -48,8 +48,8 @@ public:
     const QString& getObjrefId() const;
     const char * getOperationName() const;
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 signals:
 
@@ -100,8 +100,8 @@ public:
 
     const QString& getName() const;
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 public slots:
 
@@ -185,8 +185,8 @@ public:
     OperationSequenceTool(QWidget * parent = 0);
     virtual ~OperationSequenceTool();
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 public slots:
 

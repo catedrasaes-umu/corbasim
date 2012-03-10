@@ -52,8 +52,8 @@ public:
     virtual void toHolder(core::holder& holder) = 0;
     virtual void fromHolder(core::holder& holder) = 0;
 
-    virtual void save(QSettings& settings) = 0;
-    virtual void load(QSettings& settings) = 0;
+    virtual void save(QVariant& settings) = 0;
+    virtual void load(const QVariant& settings) = 0;
 
 protected:
 
@@ -76,8 +76,8 @@ public:
             const QString& toolTip,
             ReflectiveWidgetBase * widget);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 protected slots:
 
@@ -104,8 +104,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
    
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 };
 
@@ -121,8 +121,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
     
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 };
 
@@ -138,8 +138,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 };
 
@@ -155,8 +155,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 };
 
@@ -172,8 +172,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
    
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 };
 
@@ -189,8 +189,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 protected:
 
@@ -209,8 +209,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 protected slots:
 
@@ -235,8 +235,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 protected slots:
 
@@ -268,8 +268,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 protected slots:
 
@@ -295,8 +295,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 };
 
@@ -313,8 +313,8 @@ public:
     virtual void toHolder(core::holder& holder);
     virtual void fromHolder(core::holder& holder);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 };
 
@@ -346,8 +346,8 @@ public:
 
     // bool eventFilter(QObject * watched, QEvent * event);
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 public slots:    
 
