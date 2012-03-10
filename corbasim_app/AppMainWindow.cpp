@@ -689,14 +689,14 @@ void AppMainWindow::showScript()
 // Settings
 void AppMainWindow::doLoad() 
 {
-    const QStringList files = QFileDialog::getOpenFileNames( 0, tr(
+    const QString file = QFileDialog::getOpenFileName( 0, tr(
                 "Select some files"), ".");
 
     // User cancels
-    if (files.isEmpty())
+    if (file.isEmpty())
         return;
 
-    QSettings settings(file, QSettings::NativeFormat);
+    QSettings settings(file, QSettings::IniFormat);
     load(settings);
 }
 
@@ -709,7 +709,7 @@ void AppMainWindow::doSave()
     if (file.isEmpty())
         return;
 
-    QSettings settings(file, QSettings::NativeFormat);
+    QSettings settings(file, QSettings::IniFormat);
     save(settings);
 
     settings.sync();
@@ -717,69 +717,69 @@ void AppMainWindow::doSave()
 
 void AppMainWindow::save(QSettings& settings) 
 {
-    beginGroup("Objrefs");
+    settings.beginGroup("Objrefs");
     for (objrefs_t::iterator it = m_objrefs.begin(); 
 	    it != m_objrefs.end(); ++it) 
     {
-        beginGroup(it->first);
+        settings.beginGroup(it->first);
         it->second->save(settings);
-        endGroup();
+        settings.endGroup();
     }
-    endGroup();
+    settings.endGroup();
 
-    beginGroup("Servants");
+    settings.beginGroup("Servants");
     for (servants_t::iterator it = m_servants.begin(); 
 	    it != m_servants.end(); ++it) 
     {
-        beginGroup(it->first);
+        settings.beginGroup(it->first);
         it->second->save(settings);
-        endGroup();
+        settings.endGroup();
     }
-    endGroup();
+    settings.endGroup();
 
     if (m_seq_tool)
     {
-        beginGroup("Operation sequences");
+        settings.beginGroup("Operation sequences");
         m_seq_tool->save(settings);
-        endGroup();
+        settings.endGroup();
     }
 }
 
 void AppMainWindow::load(QSettings& settings)
 {
-    beginGroup("Objrefs");
+    settings.beginGroup("Objrefs");
     for (objrefs_t::iterator it = m_objrefs.begin(); 
 	    it != m_objrefs.end(); ++it) 
     {
         if (settings.contains(it->first))
         {
-            beginGroup(it->first);
+            settings.beginGroup(it->first);
             it->second->load(settings);
-            endGroup();
+            settings.endGroup();
         }
     }
-    endGroup();
+    settings.endGroup();
 
-    beginGroup("Servants");
+    settings.beginGroup("Servants");
     for (servants_t::iterator it = m_servants.begin(); 
 	    it != m_servants.end(); ++it) 
     {
         if (settings.contains(it->first))
         {
-            beginGroup(it->first);
+            settings.beginGroup(it->first);
             it->second->load(settings);
-            endGroup();
+            settings.endGroup();
         }
     }
-    endGroup();
+    settings.endGroup();
 
     if (settings.contains("Operation sequences"))
     {
         if (!m_seq_tool) showOpSequenceTool(); // Do not show but initialize
 
-        beginGroup("Operation sequences");
+        settings.beginGroup("Operation sequences");
         m_seq_tool->load(settings);
-        endGroup();
+        settings.endGroup();
     }
 }
 

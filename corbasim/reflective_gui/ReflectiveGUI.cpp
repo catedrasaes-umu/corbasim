@@ -1490,7 +1490,7 @@ void ComplexSequenceWidget::save(QSettings& settings)
         }
     }
 
-    settings.endWriteArray();
+    settings.endArray();
 }
 
 void ComplexSequenceWidget::load(QSettings& settings)
@@ -1523,7 +1523,7 @@ void OperationInputForm::save(QSettings& settings)
 
     unsigned int count = m_reflective->get_children_count();
 
-    settings.setValue("script", m_code->plainText());
+    settings.setValue("script", m_code->toPlainText());
 
     settings.beginGroup("value");
     for (unsigned int i = 0; i < count; i++) 
