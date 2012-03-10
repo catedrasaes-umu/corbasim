@@ -1533,7 +1533,6 @@ void FilesWidget::load(const QVariant& settings)
 void OperationInputForm::save(QVariant& settings)
 {
     QVariantMap map; 
-    QVariantMap map; 
     unsigned int count = m_reflective->get_children_count();
 
     map["script"] = m_code->toPlainText();
