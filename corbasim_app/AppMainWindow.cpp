@@ -727,7 +727,7 @@ void AppMainWindow::save(QVariant& settings)
     for (objrefs_t::iterator it = m_objrefs.begin(); 
 	    it != m_objrefs.end(); ++it) 
     {
-        // TODO it->second->save(objrefs[it->first]);
+        it->second->save(objrefs[it->first]);
     }
 
     for (servants_t::iterator it = m_servants.begin(); 

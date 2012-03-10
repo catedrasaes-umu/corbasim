@@ -605,7 +605,12 @@ void OperationSequenceItem::save(QVariant& settings)
     map["object"] = m_id;
     map["operation"] = m_dlg->getReflective()->get_name();
 
-    m_dlg->save(map["dialog"]);
+    map["period"] = m_sbPeriod->value();
+    map["times"] = m_sbTimes->value();
+    map["use_stored"] = m_cbUseStored->isChecked();
+    map["start_stop"] = m_pbStartStop->isChecked();
+
+    m_dlg->save(map["form"]);
 
     settings = map;
 }

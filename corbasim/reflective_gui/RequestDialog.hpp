@@ -48,6 +48,11 @@ public:
             core::operation_reflective_base const * reflective,
             QWidget * parent = 0);
     virtual ~RequestDialog();
+            
+    core::operation_reflective_base const * getReflective() const;
+
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 public slots:
 

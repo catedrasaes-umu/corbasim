@@ -1532,8 +1532,7 @@ void FilesWidget::load(const QVariant& settings)
 
 void OperationInputForm::save(QVariant& settings)
 {
-    // TODO buttons, expanded...
-
+    QVariantMap map; 
     QVariantMap map; 
     unsigned int count = m_reflective->get_children_count();
 

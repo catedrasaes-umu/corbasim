@@ -217,6 +217,25 @@ void Objref::updateReference(const CORBA::Object_var& ref)
 }
 
 // Settings
-void Objref::save(QSettings& settings) {}
-void Objref::load(QSettings& settings) {}
+void Objref::save(QVariant& settings) 
+{
+    QVariantMap map;
+    QVariantList list;
+
+    for (unsigned int i = 0; i < m_dialogs.size(); i++) 
+    {
+        if (m_dialogs[i])
+        {
+            QVariantMap op;
+            op["operation"] = m_dialogs[i]->getReflective()->get_name();
+            m_dialogs[i]->save(op["value"]);
+            list << op;
+        }
+    }
+
+    map["dialogs"] = list;
+    settings = map;
+}
+
+void Objref::load(const QVariant& settings) {}
 

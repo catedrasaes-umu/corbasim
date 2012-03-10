@@ -65,7 +65,17 @@ void toJson(json::ostream_writer_t& os, const QVariant& var)
             os.new_string(var.toString().toStdString().c_str());
         }
         break;
+    case QVariant::Bool:
+        {
+            os.new_bool(var.toBool());
+        }
+        break;
     default:
+        if (var.canConvert< double >())
+        {
+            os.new_double(var.toDouble());
+            break;
+        }
         os.new_string("unsupported yet!");
         break;
     }

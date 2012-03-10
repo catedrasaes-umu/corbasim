@@ -51,8 +51,8 @@ public:
 
     const core::interface_reflective_base * getFactory() const;
 
-    void save(QSettings& settings);
-    void load(QSettings& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 public slots:
 
