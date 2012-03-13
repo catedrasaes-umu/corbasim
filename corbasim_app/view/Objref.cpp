@@ -23,7 +23,8 @@
 using namespace corbasim::app::view;
 
 Objref::Objref(QMdiArea * area,
-			   const QString& id, const corbasim::core::interface_reflective_base* factory,
+        const QString& id, 
+        const corbasim::core::interface_reflective_base* factory,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
     m_sub_script(NULL), 
@@ -237,5 +238,24 @@ void Objref::save(QVariant& settings)
     settings = map;
 }
 
-void Objref::load(const QVariant& settings) {}
+void Objref::load(const QVariant& settings) 
+{
+    const QVariantMap map = settings.toMap();
+
+    if (map.contains("dialogs"))
+    {
+        const QVariantList list = map.value("dialogs").toList();
+
+        for (QVariantList::const_iterator it = list.begin(); 
+                it != list.end(); ++it) 
+        {
+            const QVariantMap map = it->toMap();
+
+            if (map.contains("operation") && map.contains("value"))
+            {
+                // TODO
+            }
+        }
+    }
+}
 

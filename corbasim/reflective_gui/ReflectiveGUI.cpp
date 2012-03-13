@@ -1382,7 +1382,10 @@ void FloatWidget::save(QVariant& settings)
 
 void FloatWidget::load(const QVariant& settings)
 {
-    LOAD_Q_PROPERTY("value");
+    if (settings.canConvert< double >())
+    {
+        setValue(settings.toDouble());
+    }
 }
 
 void IntegerWidget::save(QVariant& settings)
@@ -1392,7 +1395,10 @@ void IntegerWidget::save(QVariant& settings)
 
 void IntegerWidget::load(const QVariant& settings)
 {
-    LOAD_Q_PROPERTY("value");
+    if (settings.canConvert< int >())
+    {
+        setValue(settings.toInt());
+    }
 }
 
 void StringWidget::save(QVariant& settings)
@@ -1402,7 +1408,10 @@ void StringWidget::save(QVariant& settings)
 
 void StringWidget::load(const QVariant& settings)
 {
-    LOAD_Q_PROPERTY("text");
+    if (settings.canConvert< QString >())
+    {
+        setText(settings.toString());
+    }
 }
 
 void EnumWidget::save(QVariant& settings)
@@ -1412,7 +1421,16 @@ void EnumWidget::save(QVariant& settings)
 
 void EnumWidget::load(const QVariant& settings)
 {
-    // TODO find current text
+    if (settings.canConvert< QString >())
+    {
+        const QString text(settings.toString());
+
+        // find corresponding index to convert text
+        
+        int idx = findText(text);
+
+        if (idx != -1) setCurrentIndex(idx);
+    }
 }
 
 void BoolWidget::save(QVariant& settings)
@@ -1422,7 +1440,10 @@ void BoolWidget::save(QVariant& settings)
 
 void BoolWidget::load(const QVariant& settings)
 {
-    LOAD_Q_PROPERTY("checked");
+    if (settings.canConvert< bool >())
+    {
+        setChecked(settings.toBool());
+    }
 }
 
 void StructWidget::save(QVariant& settings)
@@ -1447,6 +1468,18 @@ void StructWidget::save(QVariant& settings)
 
 void StructWidget::load(const QVariant& settings)
 {
+    const QVariantMap value = settings.toMap();
+
+    unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->load(
+                    value[m_reflective->get_child_name(i)]);
+        }
+    }
 }
 
 void UnionWidget::save(QVariant& settings)

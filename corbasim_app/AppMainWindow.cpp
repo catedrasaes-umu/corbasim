@@ -775,6 +775,36 @@ void AppMainWindow::load(const QVariant& settings)
         m_seq_tool->load(seq);
     }
 
-    // TODO objrefs, servants...
+    if (window.contains("objrefs"))
+    {
+        const QVariantMap map = window.value("objrefs").toMap();
+
+        for (QVariantMap::const_iterator it = map.begin(); 
+                it != map.end(); ++it) 
+        {
+            objrefs_t::iterator found = m_objrefs.find(it.key());
+
+            if (found != m_objrefs.end())
+            {
+                found->second->load(it.value());
+            }
+        }
+    }
+
+    if (window.contains("servants"))
+    {
+        const QVariantMap map = window.value("servants").toMap();
+
+        for (QVariantMap::const_iterator it = map.begin(); 
+                it != map.end(); ++it) 
+        {
+            servants_t::iterator found = m_servants.find(it.key());
+
+            if (found != m_servants.end())
+            {
+                // TODO found->second->load(it.value());
+            }
+        }
+    }
 }
 
