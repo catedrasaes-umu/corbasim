@@ -662,7 +662,30 @@ void OperationSequenceItem::load(const QVariant& settings)
 
     if (map.contains("form")) m_dlg->load(map.value("form"));
 
-    // TODO other things...
+    // other things...
+    if (map.contains("period") && 
+            map.value("period").canConvert< int >())
+    {
+        m_sbPeriod->setValue(map.value("period").toInt());
+    }
+
+    if (map.contains("times") && 
+            map.value("times").canConvert< int >())
+    {
+        m_sbTimes->setValue(map.value("times").toInt());
+    }
+
+    if (map.contains("use_stored") && 
+            map.value("use_stored").canConvert< bool >())
+    {
+        m_cbUseStored->setChecked(map.value("use_stored").toBool());
+    }
+
+    if (map.contains("start_stop") && 
+            map.value("start_stop").canConvert< bool >())
+    {
+        m_pbStartStop->setChecked(map.value("start_stop").toBool());
+    }
 }
 
 void OperationSequence::save(QVariant& settings)

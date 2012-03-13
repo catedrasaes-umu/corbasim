@@ -1336,12 +1336,6 @@ void OperationInputForm::mouseMoveEvent(QMouseEvent *event)
 
 // Settings
 
-#define SAVE_Q_PROPERTY(prop) 					\
-	/***/
-
-#define LOAD_Q_PROPERTY(prop) 					\
-	/***/
-
 void AlternativesWidget::save(QVariant& settings)
 {
     // TODO selected
@@ -1364,14 +1358,17 @@ void AlternativesWidget::save(QVariant& settings)
 void AlternativesWidget::load(const QVariant& settings)
 {
     // TODO selected
+    
+    const QVariantList list = settings.toList();
 
-    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    int j = 0;
+    for (unsigned int i = 0; i < m_widgets.size() && 
+            j < list.size(); i++) 
     {
-        /* 
-        settings.beginGroup(QString::number(i));
-        if (m_widgets[i]) m_widgets[i]->load(settings);
-        settings.endGroup();
-        */
+        if (m_widgets[i]) 
+        {
+            m_widgets[i]->load(list.at(j++));
+        }
     }
 }
 
@@ -1492,16 +1489,18 @@ void UnionWidget::load(const QVariant& settings)
 
 void SequenceWidget::save(QVariant& settings)
 {
-#if 0
+    QVariantMap map;
+
     if (m_reflective->is_variable_length())
     {
-        settings.setValue("length", m_sbLength->value());
+        map["length"] = m_sbLength->value();
     }
 
-    settings.setValue("index", m_sbCurrentIndex->value());
+    map["index"] = m_sbCurrentIndex->value();
 
     // TODO value
-#endif
+
+    settings = map;
 }
 
 void SequenceWidget::load(const QVariant& settings)
