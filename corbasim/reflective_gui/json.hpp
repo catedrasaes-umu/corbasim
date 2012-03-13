@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <ostream>
 #include <corbasim/json/writer.hpp>
+#include <corbasim/json/parser.hpp>
 
 namespace corbasim 
 {
@@ -30,6 +31,8 @@ namespace reflective_gui
 {
 
 void toJson(json::ostream_writer_t& os, const QVariant& var);
+bool fromJson(QVariant& var, const char * str, size_t size);
+bool fromJsonFile(const char * file, QVariant& var);
 
 } // namespace reflective_gui
 } // namespace corbasim

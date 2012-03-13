@@ -245,6 +245,11 @@ int main(int argc, char **argv)
         controller.loadFile(it->c_str());
     }
 
+    if (!config->load_configuration.empty())
+    {
+        // TODO...
+    }
+
     // borrar
     // QTreeView view;
     // view.setModel(&newLogModel);

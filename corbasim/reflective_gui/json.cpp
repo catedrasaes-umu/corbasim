@@ -18,11 +18,126 @@
  */
 
 #include "json.hpp"
+#include <fstream>
 
 namespace corbasim 
 {
 namespace reflective_gui 
 {
+
+struct qvariant_helper : public json::helper::helper_base
+{
+    QVariant& dst;
+    QVariantMap map;
+    QVariantList list;
+
+    enum NodeType
+    {
+        VARIANT,
+        MAP,
+        LIST
+    };
+
+    NodeType type;
+
+    qvariant_helper(QVariant& dst_) : dst(dst_), type(VARIANT)
+    {
+    }
+
+    virtual ~qvariant_helper()
+    {
+        switch(type)
+        {
+        case MAP:
+            dst = map;
+            break;
+        case LIST:
+            dst = list;
+            break;
+        default:
+            break;
+        }
+    }
+
+    void new_double(double d)
+    {
+        dst = d;
+    }
+
+    void new_string(const std::string& d)
+    {
+        dst = d.c_str();
+    }
+
+    void new_bool(bool d)
+    {
+        dst = d;
+    }
+
+    void new_null()
+    {
+        // QVariant is null by default
+    }
+
+    json::helper::helper_base* new_child(const std::string& name)
+    {
+        type = MAP;
+        return new qvariant_helper(map[name.c_str()]);
+    }
+
+    json::helper::helper_base* new_child()
+    {
+        type = LIST;
+
+        QVariant tmp;
+        list.push_back(tmp);
+
+        return new qvariant_helper(list.last());
+    }
+};
+
+bool fromJson(QVariant& var, const char * str, size_t size)
+{
+    qvariant_helper * initial_helper = new qvariant_helper(var);
+    json::semantic_state _ss(initial_helper);
+    json::state _st(_ss, str, size);
+
+    return csu::corbasim::json::parser::grammar::gram::match(_st);
+}
+
+bool fromJsonFile(const char * file, QVariant& var)
+{
+    int length;
+    char * buffer = NULL;
+    bool res = false;
+
+    try {
+
+        std::ifstream is(file);
+
+        if (!is.is_open()) return false;
+   
+        // get length of file:
+        is.seekg (0, std::ios::end);
+        length = is.tellg();
+        is.seekg (0, std::ios::beg);
+
+        // allocate memory:
+        buffer = new char [length];
+
+        // read data as a block:
+        is.read (buffer, length);
+        is.close();
+
+        res = fromJson(var, buffer, length);
+
+    } catch (...) {
+    }
+
+    delete [] buffer;
+
+    return res;
+}
 
 void toJson(json::ostream_writer_t& os, const QVariant& var)
 {

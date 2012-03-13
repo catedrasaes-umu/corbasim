@@ -148,6 +148,9 @@ public:
     OperationModel(QObject *parent = 0);
     virtual ~OperationModel();
 
+    core::operation_reflective_base const * 
+    getOperation(const QString& obj, const QString& op) const;
+
 public slots:
 
     void registerInstance(const QString& name,
@@ -194,7 +197,7 @@ public slots:
         const corbasim::core::interface_reflective_base * factory);
     void objrefDeleted(const QString& id);
 
-    void appendOperation(const QString& id, 
+    OperationSequenceItem * appendOperation(const QString& id, 
             const corbasim::core::operation_reflective_base * op);
 
     OperationSequence* createSequence();

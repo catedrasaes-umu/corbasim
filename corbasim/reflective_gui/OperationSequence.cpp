@@ -19,8 +19,10 @@
 
 #include "OperationSequence.hpp"
 #include <corbasim/reflective_gui/ReflectiveGUI.hpp>
+#include <corbasim/reflective_gui/json.hpp>
 #include <boost/next_prior.hpp>
 
+#include <fstream>
 #include <iostream>
 
 using namespace corbasim::reflective_gui;
@@ -427,7 +429,8 @@ void OperationSequenceTool::objrefDeleted(const QString& id)
     m_model.unregisterInstance(id);
 }
 
-void OperationSequenceTool::appendOperation(const QString& id, 
+OperationSequenceItem * 
+OperationSequenceTool::appendOperation(const QString& id, 
 		corbasim::core::operation_reflective_base const * op)
 {
     OperationSequence * seq = NULL;
@@ -445,6 +448,8 @@ void OperationSequenceTool::appendOperation(const QString& id,
                         corbasim::event::request_ptr)),
                 this, SLOT(slotSendRequest(const QString&, 
                         corbasim::event::request_ptr)));
+
+    return item;
 }
 
 OperationSequence* OperationSequenceTool::createSequence()
@@ -477,19 +482,37 @@ void OperationSequenceTool::saveCurrentSequence()
     if (file.isEmpty())
         return;
 
-    // TODO
+    QVariant v;
+    save(v);
+
+    std::ofstream ofs(file.toStdString().c_str());
+    json::ostream_writer_t ow(ofs, true);
+
+    toJson(ow, v);
 }
 
 void OperationSequenceTool::loadSequence()
 {
-    const QStringList files = QFileDialog::getOpenFileNames( 0, tr(
-                "Select some files"), ".");
+    const QString file = QFileDialog::getOpenFileName( 0, tr(
+                "Select some file"), ".");
 
     // User cancels
-    if (files.isEmpty())
+    if (file.isEmpty())
         return;
 
-    // TODO
+    QVariant var;
+
+    // Try to Read a JSON file
+    bool res = fromJsonFile(file.toStdString().c_str(), var);
+
+    if (res)
+    {
+        load(var);
+    }
+    else
+    {
+        // TODO display error
+    }
 }
 
 void OperationSequenceTool::closeSequence(int idx)
@@ -596,6 +619,24 @@ void OperationModel::doubleClicked(const QModelIndex& index)
     }
 }
 
+corbasim::core::operation_reflective_base const * 
+OperationModel::getOperation(
+        const QString& obj, const QString& operation) const
+{
+    for (FirstLevelItems_t::const_iterator it = m_items.begin(); 
+            it != m_items.end(); ++it) 
+    {
+        if (it->name == obj)
+        {
+            const std::string op (operation.toStdString());
+
+            return it->factory->get_reflective_by_name(op.c_str());
+        }
+    }
+
+    return NULL;
+}    
+
 // Settings
 
 void OperationSequenceItem::save(QVariant& settings)
@@ -617,6 +658,11 @@ void OperationSequenceItem::save(QVariant& settings)
 
 void OperationSequenceItem::load(const QVariant& settings)
 {
+    const QVariantMap map = settings.toMap();
+
+    if (map.contains("form")) m_dlg->load(map.value("form"));
+
+    // TODO other things...
 }
 
 void OperationSequence::save(QVariant& settings)
@@ -635,24 +681,9 @@ void OperationSequence::save(QVariant& settings)
 
 void OperationSequence::load(const QVariant& settings)
 {
-}
-/*
-void OperationsView::save(QVariant& settings)
-{
+    // TODO currently impossible
 }
 
-void OperationsView::load(const QVariant& settings)
-{
-}
-
-void OperationModel::save(QVariant& settings)
-{
-}
-
-void OperationModel::load(const QVariant& settings)
-{
-}
-*/
 void OperationSequenceTool::save(QVariant& settings)
 {
     QVariantList list;
@@ -669,6 +700,42 @@ void OperationSequenceTool::save(QVariant& settings)
 
 void OperationSequenceTool::load(const QVariant& settings)
 {
+    // Clear its current configuration
+    m_tabs->clear();
+    for (int i = 0; i < m_sequences.size(); i++) 
+    {
+        delete m_sequences.at(i);
+    }
+    m_sequences.clear();
+
+    const QVariantList list = settings.toList();
+
+    for (int i = 0; i < list.size(); i++) 
+    {
+        OperationSequence * seq = createSequence();
+        // It is not possible seq->load(list.at(i));
+
+        const QVariantList seqList = list.at(i).toList();
+
+        for (int j = 0; j < seqList.size(); j++) 
+        {
+            const QVariantMap map = seqList.at(i).toMap();
+
+            if (map.contains("object") && map.contains("operation"))
+            {
+                // TODO display errors
+                const QString obj = map.value("object").toString();
+                const QString operation = 
+                    map.value("operation").toString();
+
+                core::operation_reflective_base const * op =
+                    m_model.getOperation(obj, operation);
+
+                // Create and load
+                if (op) appendOperation(obj, op)->load(seqList.at(i));
+            }
+        }
+    }
 }
 
 

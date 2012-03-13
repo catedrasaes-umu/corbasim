@@ -51,6 +51,8 @@ public:
     std::string watch_directory;
     std::string dump_directory;
 
+    std::string load_configuration;
+
 protected:
 
     AppConfiguration();

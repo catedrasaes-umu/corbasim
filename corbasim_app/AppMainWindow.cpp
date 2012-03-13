@@ -96,7 +96,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     // Load
     QAction * loadScenarioAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
-            "&Load escenario", this);
+            "&Load scenario", this);
     loadScenarioAction->setShortcut(QKeySequence::Open);
     QObject::connect(loadScenarioAction, SIGNAL(triggered()), 
             this, SLOT(showLoad()));
@@ -104,7 +104,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     // Save
     QAction * saveScenarioAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogSaveButton),
-            "&Save escenario", this);
+            "&Save scenario", this);
     saveScenarioAction->setShortcut(QKeySequence::SaveAs);
     QObject::connect(saveScenarioAction, SIGNAL(triggered()), 
             this, SLOT(showSave()));
@@ -113,7 +113,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     QAction * loadAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load configuration", this);
-    loadAction->setShortcut(QKeySequence::Open);
+    //loadAction->setShortcut(QKeySequence::Open);
     QObject::connect(loadAction, SIGNAL(triggered()), 
             this, SLOT(doLoad()));
 
@@ -121,7 +121,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     QAction * saveAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save configuration", this);
-    saveAction->setShortcut(QKeySequence::SaveAs);
+    //saveAction->setShortcut(QKeySequence::SaveAs);
     QObject::connect(saveAction, SIGNAL(triggered()), 
             this, SLOT(doSave()));
 
@@ -698,6 +698,20 @@ void AppMainWindow::doLoad()
     if (file.isEmpty())
         return;
 
+    QVariant var;
+
+    // Try to Read a JSON file
+    bool res = 
+        reflective_gui::fromJsonFile(file.toStdString().c_str(), var);
+
+    if (res)
+    {
+        load(var);
+    }
+    else
+    {
+        // TODO display error
+    }
 }
 
 void AppMainWindow::doSave() 
@@ -749,41 +763,18 @@ void AppMainWindow::save(QVariant& settings)
 
 void AppMainWindow::load(const QVariant& settings)
 {
-    /*
-    settings.beginGroup("Objrefs");
-    for (objrefs_t::iterator it = m_objrefs.begin(); 
-	    it != m_objrefs.end(); ++it) 
-    {
-        if (settings.contains(it->first))
-        {
-            settings.beginGroup(it->first);
-            it->second->load(settings);
-            settings.endGroup();
-        }
-    }
-    settings.endGroup();
+    const QVariantMap window = settings.toMap();
 
-    settings.beginGroup("Servants");
-    for (servants_t::iterator it = m_servants.begin(); 
-	    it != m_servants.end(); ++it) 
+    if (window.contains("sequences"))
     {
-        if (settings.contains(it->first))
-        {
-            settings.beginGroup(it->first);
-            it->second->load(settings);
-            settings.endGroup();
-        }
-    }
-    settings.endGroup();
+        const QVariant seq = window.value("sequences");
 
-    if (settings.contains("Operation sequences"))
-    {
-        if (!m_seq_tool) showOpSequenceTool(); // Do not show but initialize
+        // TODO do not show but ensure created
+        if (!m_seq_tool) showOpSequenceTool();
 
-        settings.beginGroup("Operation sequences");
-        m_seq_tool->load(settings);
-        settings.endGroup();
+        m_seq_tool->load(seq);
     }
-    */
+
+    // TODO objrefs, servants...
 }
 

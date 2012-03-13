@@ -50,8 +50,11 @@ void AppConfiguration::processCmdLine(int argc, char** argv)
         ("plugin-directory,d", 
             po::value< strings_t >(&plugin_directories)->composing(), 
             "add a directory with corbasim plugins")
-        ("load-file,l", 
+        ("load-scenario,l", 
             po::value< strings_t >(&load_files)->composing(), 
+            "load a scenario configuration file")
+        ("load-configuration,c", 
+            po::value< std::string >(&load_configuration),
             "load a configuration file");
     
     po::options_description scripting_("Scripting options");

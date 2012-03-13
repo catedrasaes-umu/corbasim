@@ -1535,7 +1535,9 @@ void OperationInputForm::save(QVariant& settings)
     QVariantMap map; 
     unsigned int count = m_reflective->get_children_count();
 
+#ifdef CORBASIM_USE_QTSCRIPT
     map["script"] = m_code->toPlainText();
+#endif /* CORBASIM_USE_QTSCRIPT*/
 
     QVariantMap value;
     for (unsigned int i = 0; i < count; i++) 
@@ -1557,22 +1559,31 @@ void OperationInputForm::save(QVariant& settings)
 
 void OperationInputForm::load(const QVariant& settings)
 {
-    /* 
-    // TODO buttons, expanded...
+    const QVariantMap map = settings.toMap();
 
-    unsigned int count = m_reflective->get_children_count();
-
-    settings.beginGroup("value");
-    for (unsigned int i = 0; i < count; i++) 
+#ifdef CORBASIM_USE_QTSCRIPT
+    if (map.contains("script"))
     {
-        settings.beginGroup(m_reflective->get_child_name(i));
-        if (m_widgets[i]) m_widgets[i]->load(settings);
-        settings.endGroup();
+        m_code->setPlainText(map.value("script").toString());
+        reloadScript();
     }
-    settings.endGroup();
-    */
+#endif /* CORBASIM_USE_QTSCRIPT*/
+
+    if (map.contains("value"))
+    {
+        unsigned int count = m_reflective->get_children_count();
+
+        const QVariantMap value = map.value("value").toMap();
+
+        for (unsigned int i = 0; i < count; i++) 
+        {
+            if (m_widgets[i])
+            {
+                m_widgets[i]->load(
+                        value[m_reflective->get_child_name(i)]);
+            }
+        }
+    }
 }
-
-
 
 
