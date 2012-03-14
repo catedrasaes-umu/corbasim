@@ -1511,16 +1511,24 @@ void ComplexSequenceWidget::save(QVariant& settings)
 {
     QVariantMap map;
 
+    int length = 0;
+
     if (m_reflective->is_variable_length())
     {
-        map["length"] = m_sbLength->value();
+        length = m_sbLength->value();
+        map["length"] = length;
+    }
+    else
+    {
+        core::holder h;
+        length = (int) m_reflective->get_length(h);
     }
 
     map["index"] = m_sbCurrentIndex->value();
 
     QVariantList list;
 
-    for(int i = 0; i < m_sbLength->value(); i++)
+    for(int i = 0; i < length; i++)
     {
         ReflectiveWidgetBase * w = 
             dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));

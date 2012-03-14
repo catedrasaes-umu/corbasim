@@ -742,7 +742,7 @@ void OperationSequenceTool::load(const QVariant& settings)
 
         for (int j = 0; j < seqList.size(); j++) 
         {
-            const QVariantMap map = seqList.at(i).toMap();
+            const QVariantMap map = seqList.at(j).toMap();
 
             if (map.contains("object") && map.contains("operation"))
             {
