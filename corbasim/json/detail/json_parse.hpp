@@ -847,30 +847,6 @@ struct spaces_ : star_ < space >
 {
 };
 
-// blobs -- like strings, but binary, and with a size specified at the beginning
-struct blob_data_
-{
-    template <typename S>
-    static inline bool match (S& state)
-    {
-        size_t length =
-            *reinterpret_cast<const size_t*>(state.pos());
-        state.skip(sizeof(size_t));
-
-        // Build the blob itself. Will be treated as a match too
-        state.semantic_state().new_blob(match_pair(state.pos(), length));
-
-        // skip the blob
-        state.skip(length);
-
-        return true;
-    }
-};
-
-struct blob_ : seq_< char_<'@'>,  blob_data_, char_<'@'> >
-{
-};
-
 
 // strings
 struct string_ :
@@ -1020,7 +996,7 @@ struct array_;
 struct object_;
 
 // atom
-struct atom : or_ < bool_, double_, string_ , blob_ , array_, object_, null_ >
+struct atom : or_ < bool_, double_, string_ , array_, object_, null_ >
 {
 };
 
@@ -1085,11 +1061,6 @@ struct SemanticState
     inline void new_bool(bool b)
     {
         //std::cout << "new bool: " << b << std::endl;
-    }
-
-    inline void new_blob(match_pair const& p)
-    {
-        //std::cout << "new blob, size: " << p.second << std::endl;
     }
 
     inline void object_start()

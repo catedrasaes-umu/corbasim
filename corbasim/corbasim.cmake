@@ -36,12 +36,9 @@ set(corbasim_EXPORTED_HEADERS
     json/parser.hpp
     json/writer.hpp
     json/helper.hpp
-    json/detail/modp_b64.h
     json/detail/json_writer.hpp
     json/detail/json.hpp
     json/detail/json_parse.hpp
-    json/detail/modp_b64_data.h
-    json/detail/base64_blob.hpp
     json/converter.hpp
     cosnaming/Cosnaming_adapted.hpp
     cosnaming/CosnamingC.h
@@ -84,7 +81,6 @@ set(corbasim_SRCS
     event.cpp
 
     # JSON
-    json/detail/modp_b64.c
     json/reflective.cpp
     )
 add_library(corbasim SHARED ${corbasim_SRCS})

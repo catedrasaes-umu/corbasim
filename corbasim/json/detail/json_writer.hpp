@@ -60,17 +60,6 @@ inline void encode(std::string& data)
 }
 
 
-struct binary_blob_emitter
-{
-    template<typename Ostream>
-    static void new_blob_to_ostream (Ostream& os, match_pair const& p)
-    {
-        os.write((const char*)&(p.second),sizeof(size_t));
-        os.write(p.first, p.second);
-    }
-};
-
-
 // States
 enum State
 {
@@ -85,7 +74,7 @@ enum State
 
 
 // JSON semantic state
-template <typename Ostream, typename BlobEmitter = binary_blob_emitter >
+template <typename Ostream >
 class json_writer
 {
     struct state_struct
@@ -151,17 +140,6 @@ public:
         _check_pre();
 
         o_ << (b ? "true" : "false");
-
-        _check_post();
-    }
-
-    inline void new_blob(match_pair const& p)
-    {
-        _check_pre();
-
-        o_ << '@';
-        BlobEmitter::template new_blob_to_ostream<Ostream>(o_, p);
-        o_ << '@';
 
         _check_post();
     }

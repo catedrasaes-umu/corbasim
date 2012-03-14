@@ -213,5 +213,19 @@ void RequestDialog::save(QVariant& settings)
     settings = map;
 }
 
-void RequestDialog::load(const QVariant& settings) {}
+void RequestDialog::load(const QVariant& settings) 
+{
+    if (!settings.canConvert(QVariant::Map))
+        return;
+
+    const QVariantMap map = settings.toMap();
+
+    m_sbPeriod->setValue(map["period"].toInt());
+    m_sbTimes->setValue(map["times"].toInt());
+    m_cbUseStored->setChecked(map["use_stored"].toBool());
+    m_pbStartStop->setChecked(map["start_stop"].toBool());
+
+    if (map.contains("form"))
+        m_dlg->load(map["form"]);
+}
 
