@@ -31,6 +31,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 #include <corbasim/json/reflective.hpp>
 
 using namespace corbasim::reflective_gui;
@@ -1112,13 +1113,88 @@ FilesWidget::~FilesWidget()
 {
 }
 
+namespace  
+{
+
+template< typename T >
+void fromFile(const std::string& file, 
+        corbasim::core::reflective_base const * seq,
+        corbasim::core::holder& h)
+{
+    size_t size = 0;
+
+    std::ifstream ifs(file.c_str(), 
+            std::ios::in | std::ios::binary);
+    std::streambuf * pbuf = ifs.rdbuf();
+
+    if (seq->is_variable_length())
+    {
+        size = pbuf->in_avail() / sizeof(T);
+        seq->set_length(h, size);
+    }
+    else
+    {
+        size = seq->get_length(h);
+    }
+
+    for (size_t i = 0; i < size && pbuf->in_avail(); i++) 
+    {
+        T& t = seq->get_child_value(h, i).to_value< T >();
+        pbuf->sgetn(reinterpret_cast< char* >(&t), sizeof(T));
+    }
+}
+
+} // namespace 
+
 void FilesWidget::toHolder(corbasim::core::holder& holder) 
 {
     const QString * nextFile = getNext();
 
     if (nextFile)
     {
-        // TODO
+        core::reflective_type type = m_reflective->get_slice()->get_type();
+
+        switch (type)
+        {
+        case core::TYPE_LONG:
+            fromFile< int32_t >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_ULONG:
+            fromFile< uint32_t >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_LONGLONG:
+            fromFile< int64_t >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_ULONGLONG:
+            fromFile< uint64_t >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_SHORT:
+            fromFile< short >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_USHORT:
+            fromFile< unsigned short >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_OCTET:
+            fromFile< unsigned char >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_FLOAT:
+            fromFile< float >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        case core::TYPE_DOUBLE:
+            fromFile< double >(nextFile->toStdString(), 
+                    m_reflective, holder);
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -1604,7 +1680,7 @@ void SequenceWidget::save(QVariant& settings)
 
     map["index"] = m_sbCurrentIndex->value();
 
-    // TODO value
+    // map["sequence"] = value();
 
     settings = map;
 }
