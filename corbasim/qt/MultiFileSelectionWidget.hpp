@@ -36,11 +36,27 @@ namespace qt
 class CORBASIM_QT_DECLSPEC MultiFileSelectionWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList selectedFiles 
+            READ selectedFiles WRITE setSelectedFiles)
+    Q_PROPERTY(bool repeat 
+            READ repeat WRITE setRepeat)
+    Q_PROPERTY(int currentIndex 
+            READ currentIndex WRITE setCurrentIndex)
+
 public:
     MultiFileSelectionWidget(QWidget * parent = 0);
     virtual ~MultiFileSelectionWidget();
 
     const QString * getNext();
+
+    const QStringList& selectedFiles() const;
+    void setSelectedFiles(const QStringList& list);
+
+    bool repeat() const;
+    void setRepeat(bool r);
+
+    int currentIndex() const;
+    void setCurrentIndex(int i);
 
 public slots:
     void showSelectionDialog();

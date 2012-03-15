@@ -88,6 +88,36 @@ MultiFileSelectionWidget::~MultiFileSelectionWidget()
 {
 }
 
+const QStringList& MultiFileSelectionWidget::selectedFiles() const
+{
+    return m_selectedFiles;
+}
+
+void MultiFileSelectionWidget::setSelectedFiles(const QStringList& list)
+{
+    m_selectedFiles = list;
+}
+
+bool MultiFileSelectionWidget::repeat() const 
+{ 
+    return m_ckRepeat->isChecked(); 
+}
+
+void MultiFileSelectionWidget::setRepeat(bool r)
+{
+    m_ckRepeat->setChecked(r);
+}
+
+int MultiFileSelectionWidget::currentIndex() const
+{
+    return m_sbCurrentIndex->value();
+}
+
+void MultiFileSelectionWidget::setCurrentIndex(int i)
+{
+    m_sbCurrentIndex->setValue(i);
+}
+
 const QString* MultiFileSelectionWidget::getNext()
 {
     const QString * res = 0;

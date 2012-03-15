@@ -1338,8 +1338,6 @@ void OperationInputForm::mouseMoveEvent(QMouseEvent *event)
 
 void AlternativesWidget::save(QVariant& settings)
 {
-    // TODO selected
-
     QVariantMap map;
     QVariantList list;
 
@@ -1638,12 +1636,24 @@ void ObjrefvarWidget::load(const QVariant& settings)
 
 void FilesWidget::save(QVariant& settings)
 {
-    // TODO properties
+    QVariantMap map;
+
+    map["files"] = selectedFiles();
+    map["index"] = currentIndex();
+    map["repeat"] = repeat();
+
+    settings = map;
 }
 
 void FilesWidget::load(const QVariant& settings)
 {
-    // TODO properties
+    const QVariantMap map = settings.toMap();
+/* 
+ * TODO
+    map["files"] = selectedFiles();
+    map["index"] = currentIndex();
+    map["repeat"] = repeat();
+ */
 }
 
 void OperationInputForm::save(QVariant& settings)
