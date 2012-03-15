@@ -1340,7 +1340,10 @@ void AlternativesWidget::save(QVariant& settings)
 {
     // TODO selected
 
+    QVariantMap map;
     QVariantList list;
+
+    map["index"] = m_stack->currentIndex();
 
     for (unsigned int i = 0; i < m_widgets.size(); i++) 
     {
@@ -1352,22 +1355,31 @@ void AlternativesWidget::save(QVariant& settings)
         }
     }
 
-    settings = list;
+    map["alternatives"] = list;
+    settings = map;
 }
 
 void AlternativesWidget::load(const QVariant& settings)
 {
-    // TODO selected
-    
-    const QVariantList list = settings.toList();
+    const QVariantMap map = settings.toMap();
 
-    int j = 0;
-    for (unsigned int i = 0; i < m_widgets.size() && 
-            j < list.size(); i++) 
+    if (map.contains("index"))
     {
-        if (m_widgets[i]) 
+        m_stack->setCurrentIndex(map.value("index").toInt());
+    }
+
+    if (map.contains("alternatives"))
+    {
+        const QVariantList list = map.value("alternatives").toList();
+
+        int j = 0;
+        for (unsigned int i = 0; i < m_widgets.size() && 
+                j < list.size(); i++) 
         {
-            m_widgets[i]->load(list.at(j++));
+            if (m_widgets[i]) 
+            {
+                m_widgets[i]->load(list.at(j++));
+            }
         }
     }
 }
@@ -1481,10 +1493,38 @@ void StructWidget::load(const QVariant& settings)
 
 void UnionWidget::save(QVariant& settings)
 {
+    unsigned int count = m_reflective->get_children_count();
+
+    QVariantMap value;
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            QVariant child;
+
+            m_widgets[i]->save(child);
+
+            value[m_reflective->get_child_name(i)] = child;
+        }
+    }
+
+    settings = value;
 }
 
 void UnionWidget::load(const QVariant& settings)
 {
+    const QVariantMap value = settings.toMap();
+
+    unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->load(
+                    value[m_reflective->get_child_name(i)]);
+        }
+    }
 }
 
 void SequenceWidget::save(QVariant& settings)
@@ -1505,6 +1545,16 @@ void SequenceWidget::save(QVariant& settings)
 
 void SequenceWidget::load(const QVariant& settings)
 {
+    const QVariantMap map = settings.toMap();
+
+    if (m_reflective->is_variable_length())
+    {
+        m_sbLength->setValue(map["length"].toInt());
+    }
+
+    m_sbCurrentIndex->setValue(map["index"].toInt());
+
+    // TODO value
 }
 
 void ComplexSequenceWidget::save(QVariant& settings)
@@ -1541,13 +1591,39 @@ void ComplexSequenceWidget::save(QVariant& settings)
         }
     }
 
-    map["value"] = list;
+    map["sequence"] = list;
 
     settings = map;
 }
 
 void ComplexSequenceWidget::load(const QVariant& settings)
 {
+    const QVariantMap map = settings.toMap();
+
+    int length = 0;
+
+    if (m_reflective->is_variable_length())
+    {
+        length = map["length"].toInt();
+        m_sbLength->setValue(length);
+    }
+    else
+    {
+        core::holder h;
+        length = (int) m_reflective->get_length(h);
+    }
+
+    m_sbCurrentIndex->setValue(map["index"].toInt());
+
+    const QVariantList list = map["sequence"].toList();
+
+    for(int i = 0; i < list.size() && i < length; i++)
+    {
+        ReflectiveWidgetBase * w = 
+            dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));
+
+        if (w) w->load(list.at(i));
+    }
 }
 
 void ObjrefvarWidget::save(QVariant& settings)
