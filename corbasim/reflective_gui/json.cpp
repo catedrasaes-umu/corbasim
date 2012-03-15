@@ -162,6 +162,7 @@ void toJson(json::ostream_writer_t& os, const QVariant& var)
         }
         break;
     case QVariant::List:
+    case QVariant::StringList:
         {
             const QVariantList list = var.toList();
 

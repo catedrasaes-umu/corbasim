@@ -96,6 +96,8 @@ const QStringList& MultiFileSelectionWidget::selectedFiles() const
 void MultiFileSelectionWidget::setSelectedFiles(const QStringList& list)
 {
     m_selectedFiles = list;
+
+    m_leSelectedFiles->setText(m_selectedFiles.join(", "));
 }
 
 bool MultiFileSelectionWidget::repeat() const 

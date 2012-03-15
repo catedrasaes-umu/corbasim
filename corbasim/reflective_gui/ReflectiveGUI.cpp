@@ -1363,7 +1363,13 @@ void AlternativesWidget::load(const QVariant& settings)
 
     if (map.contains("index"))
     {
-        m_stack->setCurrentIndex(map.value("index").toInt());
+        int idx = map.value("index").toInt();
+
+        if (idx < m_stack->count())
+        {
+            m_group.button(idx)->setChecked(true);
+            m_stack->setCurrentIndex(idx);
+        }
     }
 
     if (map.contains("alternatives"))
@@ -1648,12 +1654,14 @@ void FilesWidget::save(QVariant& settings)
 void FilesWidget::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
-/* 
- * TODO
-    map["files"] = selectedFiles();
-    map["index"] = currentIndex();
-    map["repeat"] = repeat();
- */
+
+    QVariant list = map["files"];
+    bool res = list.convert(QVariant::StringList);
+
+    if (res) setSelectedFiles(list.value< QStringList >());
+
+    setCurrentIndex(map["index"].toInt());
+    setRepeat(map["repeat"].toBool());
 }
 
 void OperationInputForm::save(QVariant& settings)
