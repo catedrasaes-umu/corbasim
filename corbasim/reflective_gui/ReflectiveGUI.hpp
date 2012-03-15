@@ -181,6 +181,7 @@ class CORBASIM_REFLECTIVE_GUI_DECLSPEC StructWidget :
     public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
     StructWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
@@ -191,6 +192,9 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+
+    void setValue(const QVariant& var);
+    QVariant value();
 
 protected:
 
@@ -227,6 +231,7 @@ class CORBASIM_REFLECTIVE_GUI_DECLSPEC SequenceWidget :
     public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
     SequenceWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
@@ -237,6 +242,9 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+
+    void setValue(const QVariant& var);
+    QVariant value() const;
 
 protected slots:
 
@@ -322,6 +330,7 @@ class CORBASIM_REFLECTIVE_GUI_DECLSPEC OperationInputForm :
     public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
     OperationInputForm(
             core::operation_reflective_base const * reflective,
@@ -329,6 +338,9 @@ public:
     virtual ~OperationInputForm();
 
     core::operation_reflective_base const * getReflective() const;
+
+    void setValue(const QVariant& var);
+    QVariant value();
 
     event::request_ptr createRequest();
 

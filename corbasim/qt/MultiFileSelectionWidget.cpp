@@ -98,6 +98,8 @@ void MultiFileSelectionWidget::setSelectedFiles(const QStringList& list)
     m_selectedFiles = list;
 
     m_leSelectedFiles->setText(m_selectedFiles.join(", "));
+
+    m_sbCurrentIndex->setRange(0, m_selectedFiles.length());
 }
 
 bool MultiFileSelectionWidget::repeat() const 

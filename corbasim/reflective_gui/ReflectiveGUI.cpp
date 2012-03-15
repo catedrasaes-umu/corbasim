@@ -576,6 +576,23 @@ void StructWidget::fromHolder(corbasim::core::holder& holder)
     }
 }
 
+void StructWidget::setValue(const QVariant& var)
+{
+    core::holder h = m_reflective->create_holder();
+
+    if (fromQVariant(m_reflective, h, var))
+    {
+        fromHolder(h);
+    }
+}
+
+QVariant StructWidget::value() 
+{
+    core::holder h = m_reflective->create_holder();
+    toHolder(h);
+    return toQVariant(m_reflective, h);
+}
+
 UnionWidget::UnionWidget(
         corbasim::core::reflective_base const * reflective,
         QWidget * parent) :
@@ -816,6 +833,23 @@ SequenceWidget::SequenceWidget(
 
 SequenceWidget::~SequenceWidget()
 {
+}
+
+void SequenceWidget::setValue(const QVariant& var)
+{
+    core::holder h = m_reflective->create_holder();
+
+    if (fromQVariant(m_reflective, h, var))
+    {
+        fromHolder(h);
+    }
+}
+
+QVariant SequenceWidget::value() const
+{
+    core::holder h = m_reflective->create_holder();
+    m_reflective->copy(m_holder, h);
+    return toQVariant(m_reflective, h);
 }
 
 void SequenceWidget::toHolder(corbasim::core::holder& holder)
@@ -1080,10 +1114,17 @@ FilesWidget::~FilesWidget()
 
 void FilesWidget::toHolder(corbasim::core::holder& holder) 
 {
+    const QString * nextFile = getNext();
+
+    if (nextFile)
+    {
+        // TODO
+    }
 }
 
 void FilesWidget::fromHolder(corbasim::core::holder& holder)
 {
+    // does nothing...
 }
 
 OperationInputForm::OperationInputForm(
@@ -1180,6 +1221,27 @@ OperationInputForm::OperationInputForm(
 
 OperationInputForm::~OperationInputForm()
 {
+}
+
+void OperationInputForm::setValue(const QVariant& var)
+{
+    core::holder h = m_reflective->create_holder();
+
+    if (fromQVariant(m_reflective, h, var))
+    {
+        // TODO fromHolder(h);
+    }
+}
+
+QVariant OperationInputForm::value()
+{
+    // TODO
+    /*
+    core::holder h = m_reflective->create_holder();
+    toHolder(h);
+    return toQVariant(m_reflective, h);
+    */
+    return QVariant();
 }
 
 corbasim::core::operation_reflective_base const * 
