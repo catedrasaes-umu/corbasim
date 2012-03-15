@@ -28,6 +28,7 @@
 
 #include <QLibrary>
 #include <QtScript>
+#include <fstream>
 
 using namespace corbasim::app;
 

@@ -23,7 +23,7 @@
 #include <QtGui>
 #include "../appC.h"
 #include "../app_adapted.hpp"
-#include <corbasim/gui/widgets.hpp>
+#include <corbasim/reflective_gui/ReflectiveGUI.hpp>
 
 namespace corbasim 
 {
@@ -48,7 +48,8 @@ signals:
     void createObjref(corbasim::app::ObjrefConfig);
 
 protected:
-    widgets::widget< ObjrefConfig > m_widget;
+
+    reflective_gui::StructWidget m_widget;
     
     void hideEvent(QHideEvent* event);
 };
@@ -69,7 +70,8 @@ signals:
     void createServant(corbasim::app::ServantConfig);
 
 protected:
-    widgets::widget< ServantConfig > m_widget;
+
+    reflective_gui::StructWidget m_widget;
 
     void hideEvent(QHideEvent* event);
 };

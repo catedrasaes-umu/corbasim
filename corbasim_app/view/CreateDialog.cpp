@@ -18,15 +18,17 @@
  */
 
 #include "CreateDialog.hpp"
+#include <corbasim/core/reflective.hpp>
 
 using namespace corbasim::app::view;
 
 ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
-    QDialog(parent)
+    QDialog(parent), 
+    m_widget(corbasim::core::reflective< ObjrefConfig >::get_instance())
 {
     QVBoxLayout * layout = new QVBoxLayout;
 
-    layout->addWidget(m_widget.getWidget());
+    layout->addWidget(&m_widget);
 
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -34,8 +36,10 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     QDialogButtonBox * btns = new QDialogButtonBox();
 
-    QPushButton * createButton = btns->addButton("&Create", QDialogButtonBox::AcceptRole);
-    QPushButton * cancelButton = btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
+    QPushButton * createButton = 
+        btns->addButton("&Create", QDialogButtonBox::AcceptRole);
+    QPushButton * cancelButton = 
+        btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
 
     layout->addWidget(btns);
 
@@ -46,6 +50,12 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
             window(), SLOT(hide()));
 
     setLayout(layout);
+
+    m_widget.findChild< QLabel * >("id_label")->setText("Identifier");
+    m_widget.findChild< QLabel * >("fqn_label")->setText("Interface");
+    m_widget.findChild< QWidget * >("entry")->hide();
+    m_widget.findChild< QWidget * >("entry_label")->hide();
+    m_widget.findChild< QGroupBox * >("ref_group")->setTitle("Reference");
 }
 
 ObjrefCreateDialog::~ObjrefCreateDialog()
@@ -54,12 +64,10 @@ ObjrefCreateDialog::~ObjrefCreateDialog()
 
 void ObjrefCreateDialog::createClicked()
 {
-    ObjrefConfig config;
-    m_widget.get_value(config);
+    core::holder h = m_widget.getReflective()->create_holder();
+    m_widget.toHolder(h);
 
-    // TODO validate
-
-    emit createObjref(config);
+    emit createObjref(h.to_value< ObjrefConfig >());
 
     hide();
 }
@@ -77,11 +85,12 @@ void ObjrefCreateDialog::hideEvent(QHideEvent* event)
 // Servant
 
 ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
-    QDialog(parent)
+    QDialog(parent),
+    m_widget(corbasim::core::reflective< ServantConfig >::get_instance())
 {
     QVBoxLayout * layout = new QVBoxLayout;
 
-    layout->addWidget(m_widget.getWidget());
+    layout->addWidget(&m_widget);
 
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -89,8 +98,10 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
 
     QDialogButtonBox * btns = new QDialogButtonBox();
 
-    QPushButton * createButton = btns->addButton("&Create", QDialogButtonBox::AcceptRole);
-    QPushButton * cancelButton = btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
+    QPushButton * createButton = 
+        btns->addButton("&Create", QDialogButtonBox::AcceptRole);
+    QPushButton * cancelButton = 
+        btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
 
     layout->addWidget(btns);
 
@@ -103,6 +114,12 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     setLayout(layout);
 
     setMinimumWidth(400);
+
+    m_widget.findChild< QLabel * >("id_label")->setText("Identifier");
+    m_widget.findChild< QLabel * >("fqn_label")->setText("Interface");
+    m_widget.findChild< QLabel * >("entry_label")->setText("Name service entry");
+    m_widget.findChild< QWidget * >("behaviour")->hide();
+    m_widget.findChild< QWidget * >("behaviour_label")->hide();
 }
 
 ServantCreateDialog::~ServantCreateDialog()
@@ -111,12 +128,10 @@ ServantCreateDialog::~ServantCreateDialog()
 
 void ServantCreateDialog::createClicked()
 {
-    ServantConfig config;
-    m_widget.get_value(config);
+    core::holder h = m_widget.getReflective()->create_holder();
+    m_widget.toHolder(h);
 
-    // TODO validate
-
-    emit createServant(config);
+    emit createServant(h.to_value< ServantConfig >());
 
     hide();
 }
