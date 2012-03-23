@@ -57,6 +57,8 @@ struct servant< «this.getFQN()» >
 			return CORBA::string_dup(_val._return);
 			«ELSEIF op.returnWString()-»
 			return CORBA::wstring_dup(_val._return);
+			«ELSEIF op.returnPointer()-»
+			return _val._return._retn();
 			«ELSE-»
 			return _val._return;
 			«ENDIF-»
