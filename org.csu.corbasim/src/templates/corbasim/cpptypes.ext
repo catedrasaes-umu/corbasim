@@ -41,7 +41,7 @@ Boolean isString(IDLType this) :
 
 // Chapuza
 Boolean returnPointer(OperationDef this) :
-	let t = getOriginalType():
+	let t = getType():
 	let r = t.getReturn_CPPType():
 	r.endsWith("*") || r.endsWith("_ptr")
 ;
