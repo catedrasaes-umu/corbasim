@@ -1001,6 +1001,8 @@ void ComplexSequenceWidget::toHolder(corbasim::core::holder& holder)
     if (m_reflective->is_variable_length())
     {
         len = (unsigned int) m_sbLength->value();
+
+        m_reflective->set_length(holder, len);
     }
     else
     {
