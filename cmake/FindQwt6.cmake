@@ -38,6 +38,7 @@ IF( QT4_FOUND )
                /usr/local/qwt-6.0.1-svn/include/
                /usr/local/qwt-6.0.0-rc1/include
                /usr/local/qwt-6.0.0-rc3/include
+               $ENV{HOME}/local/qwt-6.0.2-svn/include
                PATH_SUFFIXES
                qwt
                qwt6
@@ -72,6 +73,7 @@ IF( QT4_FOUND )
 		      /usr/local/qwt-6.0.2-svn/lib
 		      /usr/local/qwt-6.0.0-rc1/lib
 		      /usr/local/qwt-6.0.0-rc3/lib
+               $ENV{HOME}/local/qwt-6.0.2-svn/lib
 		      /usr/lib
 		      ${QT_LIBRARY_DIR})
 		      
