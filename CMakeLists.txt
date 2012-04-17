@@ -18,6 +18,9 @@ if(NOT DEFINED CMAKE_BUILD_TYPE OR "${CMAKE_BUILD_TYPE}" STREQUAL "")
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH true)
+set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 if(NOT DEFINED CORBASIM_ORBIMPL)
@@ -51,6 +54,8 @@ find_package(Boost 1.45.0)
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost not found!")
 else(NOT Boost_FOUND)
+    message(STATUS "Boost found!")
+    message(STATUS "Boost library: ${Boost_LIBRARY_DIRS}")
     include_directories(${Boost_INCLUDE_DIRS})
     link_directories(${Boost_LIBRARY_DIRS})
 
