@@ -71,7 +71,8 @@ public slots:
     // Usados por el modelo
 
     void notifyObjrefCreated(const QString& id, 
-            const corbasim::core::interface_reflective_base * factory);
+            const corbasim::core::interface_reflective_base * factory,
+            const corbasim::app::ObjrefConfig& cfg);
     void notifyObjrefDeleted(const QString& id);
 
     void notifyServantCreated(const QString& id, 
@@ -98,6 +99,9 @@ signals:
 
     void objrefCreated(QString id, 
             const corbasim::core::interface_reflective_base * factory);
+    void objrefCreated(const QString& id, 
+            const corbasim::core::interface_reflective_base * factory,
+            const corbasim::app::ObjrefConfig& cfg);
     void servantCreated(QString id, 
             const corbasim::core::interface_reflective_base * factory);
     void objrefDeleted(QString id);

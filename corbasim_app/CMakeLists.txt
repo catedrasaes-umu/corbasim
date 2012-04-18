@@ -24,6 +24,9 @@ set(corbasim_app_SRCS
     model/Objref.cpp
     model/Servant.cpp
 
+    NSWatcher.cpp
+
+    # TODO
     NSBrowser.cpp
     IDLBuilder.cpp
     )
@@ -40,6 +43,9 @@ set(corbasim_app_MOC_HDRS
     view/Objref.hpp
     view/Servant.hpp
 
+    NSWatcher.hpp
+
+    # TODO
     NSBrowser.hpp
     IDLBuilder.hpp
     )

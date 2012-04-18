@@ -67,7 +67,11 @@ void ObjrefCreateDialog::createClicked()
     core::holder h = m_widget.getReflective()->create_holder();
     m_widget.toHolder(h);
 
-    emit createObjref(h.to_value< ObjrefConfig >());
+    ObjrefConfig& cfg = h.to_value< ObjrefConfig >();
+    
+    cfg.entry = m_widget.findChild< qt::ObjrefWidget * >("ref")->getNSEntry().toStdString().c_str();
+
+    emit createObjref(cfg);;
 
     hide();
 }

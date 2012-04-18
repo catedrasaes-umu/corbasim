@@ -142,6 +142,11 @@ void ObjrefWidget::setModel(QAbstractItemModel * model)
     }
 }
 
+const QString& ObjrefWidget::getNSEntry() const
+{
+    return m_nsEntry;
+}
+
 void ObjrefWidget::modelChanged()
 {
     if (m_stack->currentIndex() == 3)
@@ -150,6 +155,8 @@ void ObjrefWidget::modelChanged()
 
 void ObjrefWidget::valueChanged()
 {
+    m_nsEntry.clear();
+
     if (!m_validator)
     {
         m_status->setRedLight();
@@ -169,14 +176,18 @@ void ObjrefWidget::valueChanged()
                 CosNaming::Name name;
                 static_cast< resolve_wt* >(m_resolve)->get_value(name);
                 ref = rr->resolve(name);
+
+                // TODO convert name to m_nsEntry
             }
             break;
         // NS query from str
         case 2:
             {
-                std::string str = 
+                const std::string str = 
                     m_resolve_str->toPlainText().toStdString();
                 ref = rr->resolve_str(str);
+
+                m_nsEntry = str.c_str();
             }
             break;
         // Well-known objects
@@ -204,6 +215,7 @@ void ObjrefWidget::valueChanged()
             break;
         }
     } catch (...) {
+        m_nsEntry.clear();
     }
 
     m_validator->set_reference(ref);

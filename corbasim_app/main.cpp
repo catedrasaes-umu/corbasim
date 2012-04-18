@@ -26,6 +26,7 @@
 #include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
 #include "NSBrowser.hpp"
+#include "NSWatcher.hpp"
 #include "IDLBuilder.hpp"
 // #include <corbasim/reflective_gui/LogModel.hpp>
 #include <corbasim/reflective_gui/NewLogModel.hpp>
@@ -62,7 +63,9 @@ int main(int argc, char **argv)
     QThread threadEngine;
     QThread threadWatcher;
     QThread threadDumper;
+#ifdef CORBASIM_FUTURE_FEATURES
     QThread threadBuilder;
+#endif
     QThread threadInputReqCntl;
 
     corbasim::reflective_gui::InputRequestController& inputReqCntl = 
@@ -73,10 +76,13 @@ int main(int argc, char **argv)
     corbasim::app::TriggerEngine engine;
     corbasim::app::AppFileWatcher watcher;
     corbasim::app::DataDumper dumper;
+#ifdef CORBASIM_FUTURE_FEATURES
     corbasim::app::IDLBuilder builder;
+#endif
     corbasim::app::AppMainWindow window;
     // corbasim::reflective_gui::LogModel logModel;
     corbasim::reflective_gui::NewLogModel newLogModel;
+    corbasim::app::NSWatcher nsWatcher;
 
     // Signals between models
 #if 0
@@ -121,6 +127,20 @@ int main(int argc, char **argv)
     // End signals
 #endif
     // New Signals between models
+    QObject::connect(&controller,
+            SIGNAL(objrefCreated(
+                    QString, const corbasim::core::interface_reflective_base *,
+                    const corbasim::app::ObjrefConfig&)),
+            &nsWatcher,
+            SLOT(objrefCreated(
+                    const QString&, 
+                    const corbasim::core::interface_reflective_base *,
+                    const corbasim::app::ObjrefConfig&)));
+    QObject::connect(&controller,
+            SIGNAL(objrefDeleted(QString)),
+            &nsWatcher,
+            SLOT(objrefDeleted(const QString&)));
+
     QObject::connect(&controller,
             SIGNAL(objrefCreated(
                     QString, const corbasim::core::interface_reflective_base *)),
@@ -214,8 +234,14 @@ int main(int argc, char **argv)
         threadDumper.start();
     }
     
+#ifdef CORBASIM_FUTURE_FEATURES
     builder.moveToThread(&threadBuilder);
     threadBuilder.start();
+#endif
+
+    nsWatcher.moveToThread(&threadWatcher);
+    threadWatcher.start();
+    nsWatcher.start();
 
     threadController.start();
 
@@ -268,14 +294,22 @@ int main(int argc, char **argv)
     threadEngine.quit();
     threadWatcher.quit();
     threadDumper.quit();
+
+#ifdef CORBASIM_FUTURE_FEATURES
     threadBuilder.quit();
+#endif
+
     threadInputReqCntl.quit();
 
     threadController.wait();
     threadEngine.wait();
     threadWatcher.wait();
     threadDumper.wait();
+
+#ifdef CORBASIM_FUTURE_FEATURES
     threadBuilder.wait();
+#endif
+
     threadInputReqCntl.wait();
 
     orb->shutdown(1);

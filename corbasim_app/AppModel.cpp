@@ -149,7 +149,7 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
 
         if (m_controller)
         {
-            m_controller->notifyObjrefCreated(id, factory);
+            m_controller->notifyObjrefCreated(id, factory, cfg);
 
             // Also notifies its reference
             m_controller->notifyUpdatedReference(id, cfg.ref);

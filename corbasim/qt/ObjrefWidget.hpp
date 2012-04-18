@@ -45,6 +45,8 @@ public:
             QWidget * parent = 0);
     virtual ~ObjrefWidget();
 
+    const QString& getNSEntry() const;
+
 public slots:
     void setValidator(core::reference_validator_base * validator);
     void valueChanged();
@@ -71,6 +73,8 @@ protected:
 
     QComboBox * m_object_selector;
     QAbstractItemModel * m_model;
+
+    QString m_nsEntry;
 };
 
 } // namespace qt
