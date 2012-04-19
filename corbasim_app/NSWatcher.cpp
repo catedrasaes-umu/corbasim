@@ -41,8 +41,6 @@ void NSWatcher::start()
 
 void NSWatcher::refreshNS()
 {
-    std::cout << __FUNCTION__ << std::endl;
-
     core::reference_repository * rr = 
         core::reference_repository::get_instance();
 
@@ -52,14 +50,32 @@ void NSWatcher::refreshNS()
     for (; it != end; it++)
     {
         CORBA::Object_var oldRef = it.value().ref;
-        CORBA::Object_var newRef = rr->resolve_str(it.value().entry);
+        CORBA::Object_var newRef;
+        bool is_equivalent = true;
 
-        if ((!CORBA::is_nil(oldRef) &&
-                it.value().ref->_is_equivalent(newRef)) ||
-                (CORBA::is_nil(oldRef) && !CORBA::is_nil(newRef)))
+        try {
+            
+            newRef = rr->resolve_str(it.value().entry);
+
+            if (!CORBA::is_nil(oldRef))
+            {
+                is_equivalent = oldRef->_is_equivalent(newRef);
+            }
+            else if ((CORBA::is_nil(oldRef) && !CORBA::is_nil(newRef)))
+            {
+                is_equivalent = false;
+            }
+
+        } catch(...) {
+
+            is_equivalent = CORBA::is_nil(newRef);
+        }
+
+        if (!is_equivalent)
         {
             it.value().ref = newRef;
-            emit updateReference(it.value().entry.c_str(), newRef);
+
+            emit updateReference(it.key(), newRef);
         }
     }
 }

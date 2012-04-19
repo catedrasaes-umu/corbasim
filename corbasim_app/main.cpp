@@ -140,6 +140,11 @@ int main(int argc, char **argv)
             SIGNAL(objrefDeleted(QString)),
             &nsWatcher,
             SLOT(objrefDeleted(const QString&)));
+    QObject::connect(&nsWatcher,
+            SIGNAL(updateReference(const QString&, const CORBA::Object_var&)),
+            &controller, 
+            SLOT(updateReference(const QString&,
+                    const CORBA::Object_var&)));
 
     QObject::connect(&controller,
             SIGNAL(objrefCreated(

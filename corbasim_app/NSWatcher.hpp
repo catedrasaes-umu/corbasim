@@ -50,8 +50,8 @@ public slots:
 
 signals:
 
-    void updateReference(const QString& id,
-            const CORBA::Object_var& ref);
+    void updateReference(const QString&,
+            const CORBA::Object_var&);
 
 protected:
 
