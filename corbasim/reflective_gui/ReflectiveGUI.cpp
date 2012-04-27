@@ -204,6 +204,8 @@ FloatWidget::FloatWidget(corbasim::core::reflective_base const * reflective,
 {
     using namespace corbasim::core;
 
+    setDecimals(10);
+
     const reflective_type type = reflective->get_type();
 
     switch(type)

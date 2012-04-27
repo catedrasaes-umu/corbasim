@@ -321,7 +321,7 @@ void AppModel::saveFile(const QString& file)
 
     // convert to JSON and save
     try {
-        json::write(ofs, cfg);
+        json::write(ofs, cfg, true);
 
         if (m_controller)
             m_controller->notifyMessage(
