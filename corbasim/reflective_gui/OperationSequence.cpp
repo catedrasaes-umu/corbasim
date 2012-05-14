@@ -755,7 +755,7 @@ void OperationSequenceTool::load(const QVariant& settings)
                     m_model.getOperation(obj, operation);
 
                 // Create and load
-                if (op) appendOperation(obj, op)->load(seqList.at(i));
+                if (op) appendOperation(obj, op)->load(seqList.at(j));
             }
         }
     }
