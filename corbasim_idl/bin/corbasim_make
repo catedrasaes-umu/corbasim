@@ -72,4 +72,9 @@ include(__PROJECTNAME__.cmake)
     | sed -e 's|__INSTALLPREFIX__|'${INSTALLPREFIX}'|g'   \
     > CMakeLists.txt
 
+# Compilation
+# mkdir -p build
+# cd build
+# cmake .. && make 
+# cd ..
 
