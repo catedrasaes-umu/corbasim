@@ -7,3 +7,5 @@ add_subdirectory(reflective_union)
 
 add_subdirectory(return)
 
+add_subdirectory(string)
+

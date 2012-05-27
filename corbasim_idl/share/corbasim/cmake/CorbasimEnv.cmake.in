@@ -4,3 +4,14 @@ set(CORBASIM_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
 
+# Boost C++ Libraries
+include_directories(@Boost_INCLUDE_DIRS@)
+link_directories(@Boost_LIBRARY_DIRS@)
+
+# ACE+TAO
+include_directories(
+    @ACE_INCLUDE_DIR@
+    @TAO_INCLUDE_DIR@
+    @TAO_INCLUDE_DIR@/orbsvcs)
+link_directories(@TAO_LIBRARY_DIR@)
+
