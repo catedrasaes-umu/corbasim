@@ -49,6 +49,17 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
 
     layout->addLayout(tLayout);
 
+    // User-defined title
+    {
+        tLayout = new QHBoxLayout();
+        title = new QLabel("title");
+        m_title = new QLineEdit();
+
+        tLayout->addWidget(title);
+        tLayout->addWidget(m_title);
+        layout->addLayout(tLayout);
+    }
+
     // Editor
     m_layout = new QVBoxLayout();
     m_layout->addWidget(dlg);
@@ -646,6 +657,9 @@ void OperationSequenceItem::save(QVariant& settings)
     map["object"] = m_id;
     map["operation"] = m_dlg->getReflective()->get_name();
 
+    // User-defined title
+    map["title"] = m_title->text();
+
     map["period"] = m_sbPeriod->value();
     map["times"] = m_sbTimes->value();
     map["use_stored"] = m_cbUseStored->isChecked();
@@ -661,6 +675,12 @@ void OperationSequenceItem::load(const QVariant& settings)
     const QVariantMap map = settings.toMap();
 
     if (map.contains("form")) m_dlg->load(map.value("form"));
+
+    // User-defined title
+    if (map.contains("title"))
+    {
+        m_title->setText(map.value("title").toString());
+    }
 
     // other things...
     if (map.contains("period") && 

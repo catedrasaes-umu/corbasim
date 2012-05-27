@@ -77,6 +77,7 @@ protected:
     const QString m_id;
     OperationInputForm * m_dlg;
     QLayout * m_layout;
+    QLineEdit * m_title;
 
     // Periodic
     QSpinBox * m_sbPeriod;
