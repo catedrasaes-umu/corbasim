@@ -49,6 +49,39 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
 
     layout->addLayout(tLayout);
 
+    // Corner buttons
+    {
+        QToolButton * btShowInput = new QToolButton();
+        btShowInput->setIcon(style()->standardIcon(
+                    QStyle::SP_FileDialogDetailedView));
+        btShowInput->setCheckable(true);
+        QToolButton * btUp = new QToolButton();
+        btUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
+        QToolButton * btDown = new QToolButton();
+        btDown->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
+        QToolButton * btDelete = new QToolButton();
+        btDelete->setIcon(style()->standardIcon(QStyle::SP_TrashIcon));
+        tLayout->addWidget(btShowInput);
+        tLayout->addWidget(btUp);
+        tLayout->addWidget(btDown);
+        tLayout->addWidget(btDelete);
+
+        QObject::connect(btShowInput, SIGNAL(toggled(bool)),
+                dlg, SLOT(setVisible(bool)));
+        QObject::connect(btDelete, SIGNAL(clicked()),
+                this, SLOT(deleteClicked()));
+        QObject::connect(btUp, SIGNAL(clicked()),
+                this, SLOT(upClicked()));
+        QObject::connect(btDown, SIGNAL(clicked()),
+                this, SLOT(downClicked()));
+
+        // Tooltips
+        btShowInput->setToolTip("Show/hide detailed input form");
+        btDelete->setToolTip("Delete item");
+        btUp->setToolTip("Move up");
+        btDown->setToolTip("Move down");
+    }
+
     // User-defined title
     {
         tLayout = new QHBoxLayout();
@@ -66,22 +99,8 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     dlg->hide();
     layout->addLayout(m_layout);
 
-    // Buttons
+    // Bottom buttons and options
     QHBoxLayout * bLayout = new QHBoxLayout();
-    QToolButton * btShowInput = new QToolButton();
-    btShowInput->setIcon(style()->standardIcon(
-                QStyle::SP_FileDialogDetailedView));
-    btShowInput->setCheckable(true);
-    QToolButton * btUp = new QToolButton();
-    btUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
-    QToolButton * btDown = new QToolButton();
-    btDown->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
-    QToolButton * btDelete = new QToolButton();
-    btDelete->setIcon(style()->standardIcon(QStyle::SP_TrashIcon));
-    tLayout->addWidget(btShowInput);
-    tLayout->addWidget(btUp);
-    tLayout->addWidget(btDown);
-    tLayout->addWidget(btDelete);
 
     // Horizontal spacer
     spacer = new QSpacerItem(40, 20, 
@@ -119,10 +138,7 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
 
     bLayout->addWidget(btSend);
     // bLayout->addWidget(btSendNext);
-    
-    QObject::connect(btShowInput, SIGNAL(toggled(bool)),
-            dlg, SLOT(setVisible(bool)));
-
+   
     QObject::connect(btSend, SIGNAL(clicked()),
             this, SLOT(sendClicked()));
     QObject::connect(m_pbUpdate, SIGNAL(clicked()), 
@@ -132,13 +148,6 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     QObject::connect(&m_timer, SIGNAL(timeout()), 
             this, SLOT(sendStored()));
 
-    QObject::connect(btDelete, SIGNAL(clicked()),
-            this, SLOT(deleteClicked()));
-    QObject::connect(btUp, SIGNAL(clicked()),
-            this, SLOT(upClicked()));
-    QObject::connect(btDown, SIGNAL(clicked()),
-            this, SLOT(downClicked()));
-
     layout->addLayout(bLayout);
     // End buttons
 
@@ -146,12 +155,6 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
 
     setLineWidth(1);
     setFrameStyle(QFrame::Box);
-
-    // Tooltips
-    btShowInput->setToolTip("Show/hide detailed input form");
-    btDelete->setToolTip("Delete item");
-    btUp->setToolTip("Move up");
-    btDown->setToolTip("Move down");
 }
 
 OperationSequenceItem::~OperationSequenceItem()
