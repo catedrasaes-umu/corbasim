@@ -61,7 +61,7 @@ done
 echo "Project: $PROJECTNAME"
 echo "Processing files: $INPUTFILES"
 
-cat $INPUTFILES | cpp -E $PREPROCESSOROPTIONS | grep -v ^# > $PROJECTNAME.idl
+cat $INPUTFILES | cpp -E -P $PREPROCESSOROPTIONS -o $PROJECTNAME.idl || exit 1
 
 echo "Generated temporary file: $PROJECTNAME.idl"
 
