@@ -50,7 +50,7 @@ done
 echo "Project: $PROJECTNAME"
 echo "Processing files: $@"
 
-cpp -E $@ | grep -v ^# | cat > $PROJECTNAME.idl
+cat $@ | cpp -E | grep -v ^# | cat > $PROJECTNAME.idl
 
 echo "Generated temporary file: $PROJECTNAME.idl"
 
