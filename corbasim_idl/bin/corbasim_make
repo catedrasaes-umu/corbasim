@@ -45,7 +45,13 @@ if [ $# -lt 1 ]; then
     exit 1
 fi
 
+INPUTFILES=
 for i in $@; do
+    # Avoiding loops
+    if [ "$i" != "$PROJECTNAME.idl" ]; then
+        INPUTFILES="$INPUTFILES $i"
+    fi
+
     if [ ! -f $i ]; then
         echo "File $i does not exist"
         exit 1
@@ -53,9 +59,9 @@ for i in $@; do
 done
 
 echo "Project: $PROJECTNAME"
-echo "Processing files: $@"
+echo "Processing files: $INPUTFILES"
 
-cat $@ | cpp -E $PREPROCESSOROPTIONS | grep -v ^# > $PROJECTNAME.idl
+cat $INPUTFILES | cpp -E $PREPROCESSOROPTIONS | grep -v ^# > $PROJECTNAME.idl
 
 echo "Generated temporary file: $PROJECTNAME.idl"
 
