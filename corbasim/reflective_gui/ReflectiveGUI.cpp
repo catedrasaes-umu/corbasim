@@ -158,6 +158,16 @@ AlternativesWidget::~AlternativesWidget()
 {
 }
 
+void AlternativesWidget::setSelectionIndex(int index)
+{
+    m_stack->setCurrentIndex(index);
+}
+
+int AlternativesWidget::selectionIndex() const
+{
+    return m_stack->currentIndex();
+}
+
 void AlternativesWidget::toHolder(corbasim::core::holder& holder) 
 {
     if (!m_widgets.empty())
@@ -412,8 +422,18 @@ void StringWidget::toHolder(corbasim::core::holder& holder)
 
 void StringWidget::fromHolder(corbasim::core::holder& holder)
 {
-    std::string str(m_reflective->to_string(holder));
+    const std::string str(m_reflective->to_string(holder));
     setText(str.c_str());
+}
+
+QString StringWidget::value() const 
+{
+    return text();
+}
+
+void StringWidget::setValue(const QString& value) 
+{
+    setText(value);
 }
 
 EnumWidget::EnumWidget(corbasim::core::reflective_base const * reflective,
@@ -1427,8 +1447,10 @@ void OperationInputForm::dragEnterEvent(QDragEnterEvent *event)
 
 void OperationInputForm::dropEvent(QDropEvent *event)
 {
-    std::string str = event->mimeData()->text().toStdString();
-    try {
+    const std::string str = event->mimeData()->text().toStdString();
+
+    try 
+    {
         event::request_ptr req = m_reflective->create_request();
         core::holder holder = m_reflective->get_holder(req);
 
@@ -1440,8 +1462,9 @@ void OperationInputForm::dropEvent(QDropEvent *event)
             setValue(req);
             event->acceptProposedAction();
         }
-    } catch(...) {
-
+    } 
+    catch(...) 
+    {
     }
 }
 

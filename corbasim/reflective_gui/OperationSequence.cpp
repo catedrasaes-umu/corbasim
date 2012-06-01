@@ -85,7 +85,7 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     // User-defined title
     {
         tLayout = new QHBoxLayout();
-        title = new QLabel("title");
+        title = new QLabel("Title");
         m_title = new QLineEdit();
 
         tLayout->addWidget(title);

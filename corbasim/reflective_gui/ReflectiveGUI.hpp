@@ -64,6 +64,9 @@ class CORBASIM_REFLECTIVE_GUI_DECLSPEC AlternativesWidget :
     public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
+    Q_PROPERTY(int selectionIndex 
+            READ selectionIndex 
+            WRITE setSelectionIndex)
 public:
     AlternativesWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
@@ -78,6 +81,9 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+
+    int selectionIndex() const;
+    void setSelectionIndex(int index);
 
 protected slots:
 
@@ -130,6 +136,7 @@ class CORBASIM_REFLECTIVE_GUI_DECLSPEC StringWidget :
     public QLineEdit, public ReflectiveWidgetBase
 {
     Q_OBJECT
+    Q_PROPERTY(QString value READ value WRITE setValue)
 public:
     StringWidget(core::reflective_base const * reflective,
             QWidget * parent = 0);
@@ -141,6 +148,8 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    QString value() const;
+    void setValue(const QString& value);
 };
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC EnumWidget : 
