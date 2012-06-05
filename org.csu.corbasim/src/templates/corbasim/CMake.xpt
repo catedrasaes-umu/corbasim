@@ -23,7 +23,7 @@ add_custom_command(
 	COMMAND tao_idl ${TAO_IDL_OPTIONS} «filename».idl
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(${CORBASIM_PREFIX}«filename»_idl ${«filename»_GENERATED} «getAdaptedFileCPP()»)
+add_library(${CORBASIM_PREFIX}«filename»_idl SHARED ${«filename»_GENERATED} «getAdaptedFileCPP()»)
 	«IF !includes.isEmpty-»
 target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
 		«FOREACH includes AS e-»
