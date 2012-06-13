@@ -413,12 +413,25 @@ void SimpleScriptEditor::doSave()
 
     std::ofstream ofs(log_file.toStdString().c_str());
 
-//#warning "TODO"
-#if 0
-    for (requests_t::const_iterator it = m_requests.begin(); 
-            it != m_requests.end(); it++) 
-        m_factory->get_core_factory()->save(ofs, (*it).get());
-#endif
+    typedef ::corbasim::event::request_ptr request_ptr;
+    typedef ::corbasim::core::operation_reflective_base const * op_ptr;
+
+    for (int i = 0; i < m_model.rowCount(); i++) 
+    {
+        request_ptr req (m_model.getRequest(i));
+
+        if (!req) continue; // Not possible!
+
+        op_ptr op (m_factory->get_reflective_by_tag(req->get_tag()));
+        
+        if (!op)  continue; // Not possible!
+
+        ofs << op->get_name() << ' ';
+
+        // TODO save
+
+        ofs << std::endl;
+    }
 }
 
 void SimpleScriptEditor::doLoad()
@@ -433,8 +446,9 @@ void SimpleScriptEditor::doLoad()
     if (log_file.isEmpty())
         return;
 
-//#warning "TODO"
-#if 0
+    typedef ::corbasim::event::request_ptr request_ptr;
+    typedef ::corbasim::core::operation_reflective_base const * op_ptr;
+
     for (int i = 0; i < log_file.length(); i++) 
     {
         std::ifstream ifs(log_file.at(i).toStdString().c_str());
@@ -442,20 +456,32 @@ void SimpleScriptEditor::doLoad()
         try {
             while(ifs.good())
             {
-                event::request_ptr _request(
-                        m_factory->get_core_factory()->load(ifs));
+                std::string name;
+                std::string line;
 
-                if (!_request)
-                    continue;
+                // read the operation name
+                ifs >> name;
 
-                doAppendRequest(_request);
+                // read line
+                std::getline(ifs, line);
+
+                op_ptr op (m_factory->get_reflective_by_name(name));
+
+                if (!op)  continue; // Possible in deprecated files! 
+
+                request_ptr req (op->create_request());
+                
+                if (!req) continue; // Not possible!
+
+                // TODO fill request with line in the old-fashion format
+
+                doAppendRequest(req);
             }
         } catch (...) 
         {
             std::cerr << "Error loading file!" << std::endl;
         }
     }
-#endif
 }
 
 int SimpleScriptEditor::getSelected()
