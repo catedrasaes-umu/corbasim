@@ -33,8 +33,8 @@ reference_repository * reference_repository::get_instance()
 
 void reference_repository::load_file(const std::string& file)
 {
-    int length;
-    char * buffer = NULL;
+    std::size_t length;
+    std::vector< char > buffer;
 
     try {
         std::ifstream is(file.c_str());
@@ -45,17 +45,15 @@ void reference_repository::load_file(const std::string& file)
         is.seekg (0, std::ios::beg);
 
         // allocate memory:
-        buffer = new char [length];
+        buffer.resize(length);
 
         // read data as a block:
-        is.read (buffer, length);
+        is.read (&(*buffer.begin()), length);
         is.close();
 
-        corbasim::json::parse(m_loaded_entries, buffer, length);
+        corbasim::json::parse(m_loaded_entries, &(*buffer.begin()), length);
     } catch (...) {
     }
-
-    delete [] buffer;
 }
 
 void reference_repository::update()

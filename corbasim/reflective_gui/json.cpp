@@ -107,8 +107,8 @@ bool fromJson(QVariant& var, const char * str, size_t size)
 
 bool fromJsonFile(const char * file, QVariant& var)
 {
-    int length;
-    char * buffer = NULL;
+    std::size_t length;
+    std::vector< char > buffer;
     bool res = false;
 
     try {
@@ -123,18 +123,16 @@ bool fromJsonFile(const char * file, QVariant& var)
         is.seekg (0, std::ios::beg);
 
         // allocate memory:
-        buffer = new char [length];
+        buffer.resize(length);
 
         // read data as a block:
-        is.read (buffer, length);
+        is.read (&(*buffer.begin()), length);
         is.close();
 
-        res = fromJson(var, buffer, length);
+        res = fromJson(var, &(*buffer.begin()), length);
 
     } catch (...) {
     }
-
-    delete [] buffer;
 
     return res;
 }

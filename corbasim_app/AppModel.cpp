@@ -339,7 +339,7 @@ void AppModel::loadFile(const QString& file)
     // clear current config
     clearConfig();
 
-    char * buffer = NULL;
+    std::vector< char > buffer;
     size_t length = 0;
 
     Configuration cfg;
@@ -354,14 +354,14 @@ void AppModel::loadFile(const QString& file)
         ifs.seekg (0, std::ios::beg);
 
         // allocate memory:
-        buffer = new char [length];
+        buffer.resize(length);
 
         // read data as a block:
-        ifs.read (buffer, length);
+        ifs.read (&(*buffer.begin()), length);
         ifs.close();
 
         // parse JSON
-        json::parse(cfg, buffer, length);
+        json::parse(cfg, &(*buffer.begin()), length);
 
         if (m_controller)
             m_controller->notifyMessage(
@@ -382,8 +382,6 @@ void AppModel::loadFile(const QString& file)
             m_controller->notifyError(
                     QString("Error parsing file '%1'").arg(file));
     }
-
-    delete [] buffer;
 }
 
 void AppModel::loadDirectory(const QString& path)
