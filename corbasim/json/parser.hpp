@@ -211,14 +211,20 @@ struct semantic_state
 
 typedef csu::corbasim::json::parser::State< semantic_state > state;
 
-template< typename T >
-inline bool parse(T& t, const char * str, size_t size)
+inline bool parse(helper::helper_base * initial_helper, 
+        const char * str, size_t size)
 {
-    helper::helper_base * initial_helper = helper::create_helper(t);
     semantic_state _ss(initial_helper);
     state _st(_ss, str, size);
 
     return csu::corbasim::json::parser::grammar::gram::match(_st);
+}
+
+template< typename T >
+inline bool parse(T& t, const char * str, size_t size)
+{
+    helper::helper_base * initial_helper = helper::create_helper(t);
+    return parse(initial_helper, str, size);
 }
 
 template< typename T >

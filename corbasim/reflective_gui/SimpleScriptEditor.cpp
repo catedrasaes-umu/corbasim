@@ -22,6 +22,8 @@
 #include <iostream>
 #include <boost/next_prior.hpp>
 #include <corbasim/reflective_gui/ReflectiveGUI.hpp>
+#include <corbasim/json/reflective.hpp>
+#include <corbasim/json/parser.hpp> // for parse
 
 using namespace corbasim;
 using namespace corbasim::reflective_gui;
@@ -412,12 +414,17 @@ void SimpleScriptEditor::doSave()
         return;
 
     std::ofstream ofs(log_file.toStdString().c_str());
+    json::std_writer_t writer(ofs, true);
 
     typedef ::corbasim::event::request_ptr request_ptr;
     typedef ::corbasim::core::operation_reflective_base const * op_ptr;
 
+    writer.array_start();
+
     for (int i = 0; i < m_model.rowCount(); i++) 
     {
+        writer.object_start();
+
         request_ptr req (m_model.getRequest(i));
 
         if (!req) continue; // Not possible!
@@ -426,60 +433,132 @@ void SimpleScriptEditor::doSave()
         
         if (!op)  continue; // Not possible!
 
-        ofs << op->get_name() << ' ';
+        writer.new_string(op->get_name());
 
-        // TODO save
+        core::holder holder(op->get_holder(req));
 
-        ofs << std::endl;
+        json::write(writer, op, holder);
+
+        writer.object_end();
     }
+
+    writer.array_end();
 }
+
+namespace 
+{
+
+typedef corbasim::reflective_gui::ScriptModel ScriptModel;
+typedef ::corbasim::core::operation_reflective_base const * op_ptr;
+typedef ::corbasim::core::interface_reflective_base const * interface_ptr;
+
+using ::corbasim::event::request_ptr;
+using ::corbasim::core::holder;
+
+struct operation_helper : public corbasim::json::helper::helper_base
+{
+
+    ScriptModel& m_model;
+    corbasim::json::helper::helper_base *  m_helper;
+    request_ptr m_request;
+
+    operation_helper(ScriptModel& model, op_ptr op) : 
+        m_model(model)
+    {
+        m_request = op->create_request();
+        holder h(op->get_holder(m_request));
+
+        m_helper = new corbasim::json::reflective_helper(op, h);
+    }
+
+    virtual ~operation_helper()
+    {
+        m_model.addRequest(m_request);
+
+        delete m_helper;
+    }
+
+    corbasim::json::helper::helper_base* new_child(const std::string& name)
+    {
+        return m_helper->new_child(name);
+    }
+};
+
+struct script_helper : public corbasim::json::helper::helper_base
+{
+    ScriptModel& m_model;
+    interface_ptr m_factory;
+
+    script_helper(ScriptModel& model, interface_ptr factory) : 
+        m_model(model), m_factory(factory)
+    {}
+
+
+    corbasim::json::helper::helper_base* new_child(const std::string& name)
+    {
+        op_ptr op (m_factory->get_reflective_by_name(name.c_str()));
+
+        if (!op) throw "Error";
+
+        return new operation_helper(m_model, op);
+    }
+
+    // For arrays
+    corbasim::json::helper::helper_base* new_child()
+    {
+        return new script_helper(m_model, m_factory);
+    }
+};
+
+} // namespace
 
 void SimpleScriptEditor::doLoad()
 {
     if (!m_factory)
         return;
 
-    const QStringList log_file = QFileDialog::getOpenFileNames( 0, tr(
+    const QStringList script_files = QFileDialog::getOpenFileNames( 0, tr(
                 "Select some script files"), ".");
 
     // User cancels
-    if (log_file.isEmpty())
+    if (script_files.isEmpty())
         return;
 
     typedef ::corbasim::event::request_ptr request_ptr;
     typedef ::corbasim::core::operation_reflective_base const * op_ptr;
 
-    for (int i = 0; i < log_file.length(); i++) 
+    std::vector< char > buf;
+
+    for (int i = 0; i < script_files.length(); i++) 
     {
-        std::ifstream ifs(log_file.at(i).toStdString().c_str());
-
         try {
-            while(ifs.good())
-            {
-                std::string name;
-                std::string line;
 
-                // read the operation name
-                ifs >> name;
+            std::ifstream is(script_files.at(i).toStdString().c_str());
+            
+            if (!is.is_open()) continue;
+   
+            // get length of file:
+            is.seekg (0, std::ios::end);
+            std::size_t length = is.tellg();
+            is.seekg (0, std::ios::beg);
 
-                // read line
-                std::getline(ifs, line);
+            // allocate memory:
+            buf.resize(length);
 
-                op_ptr op (m_factory->get_reflective_by_name(name));
+            // read data as a block:
+            is.read (&(*buf.begin()), length);
+            is.close();
 
-                if (!op)  continue; // Possible in deprecated files! 
+            corbasim::json::parse(
+                new script_helper(m_model, m_factory),
+                &(*buf.begin()), length);
 
-                request_ptr req (op->create_request());
-                
-                if (!req) continue; // Not possible!
-
-                // TODO fill request with line in the old-fashion format
-
-                doAppendRequest(req);
-            }
         } catch (...) 
         {
             std::cerr << "Error loading file!" << std::endl;
+
+            QMessageBox::critical(this, "Error", 
+                    QString("Error loading file %1").arg(script_files.at(i)));
         }
     }
 }
