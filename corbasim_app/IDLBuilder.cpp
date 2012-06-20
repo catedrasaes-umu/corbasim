@@ -29,39 +29,6 @@ IDLBuilder::IDLBuilder(QObject * parent) :
             QCoreApplication::applicationPid());
 
     m_fs.mkdir(m_tmpDir, true);
-#if 0
-    QProcess ldd;
-    ldd.start("ldd", QStringList() << QCoreApplication::applicationFilePath());
-
-    if (ldd.waitForStarted())
-    {
-        ldd.waitForFinished(-1);
-
-        const QString output(ldd.readAllStandardOutput());
-        
-        const QStringList list = output.split(" ", QString::SkipEmptyParts);
-        
-        foreach (const QString &path, list)
-        {
-            QFileInfo info(path);
-
-            if (info.exists())
-            {
-                QDir libDir = info.absoluteDir();
-                m_libDirs << libDir.absolutePath();
-
-                libDir.cdUp();
-                QFileInfo inc(libDir, "include");
-
-                if (inc.exists() && inc.isDir())
-                    m_includeDirs << inc.absoluteFilePath();
-            }
-        }
-
-        m_libDirs.removeDuplicates();
-        m_includeDirs.removeDuplicates();
-    }
-#endif
 }
 
 IDLBuilder::~IDLBuilder()
@@ -81,80 +48,32 @@ void IDLBuilder::build(const QString& installDir, const QStringList& files)
             QDateTime::currentDateTime().toString("YYYYMMDDhhmmsszzz"));
     const QString workingDir = m_tmpDir + jobName;
     const QString buildDir = workingDir + "/build";
-    const QString idlFile = workingDir + "/" + jobName + ".idl";
 
     m_fs.mkdir(workingDir, true);
     m_fs.mkdir(buildDir, true);
 
-    // Step 1 - IDL preprocessing
-    QProcess cat;
-    QProcess cpp;
-    QProcess grep;
-
-    cat.setStandardOutputProcess(&cpp);
-    cpp.setStandardOutputProcess(&grep);
-    grep.setStandardOutputFile(idlFile);
-
-    cat.start("cat", files);
-    cpp.start("cpp");
-    // Elimina las lineas de preprocesado
-    grep.start("grep", QStringList() << "-v" << "^#");
-
-    grep.waitForFinished(-1);
-    cpp.waitForFinished(-1);
-    cat.waitForFinished(-1);
-
-    emit progress(step++);
-
-    // Step 2 - IDL Compilation
-    QProcess corbasim_idl;
-    corbasim_idl.setWorkingDirectory(workingDir);
+    // Step 1 - IDL Compilation
+    QProcess corbasim_make;
+    corbasim_make.setWorkingDirectory(workingDir);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert("PATH", 
             QCoreApplication::applicationDirPath() + ":" +
             env.value("PATH"));
-    corbasim_idl.setProcessEnvironment(env);
-    corbasim_idl.start("corbasim_idl", QStringList() << idlFile);
+    corbasim_make.setProcessEnvironment(env);
+    corbasim_make.start("corbasim_make", 
+            QStringList() << "-n" << jobName << files);
 
-    if (!corbasim_idl.waitForStarted())
+    if (!corbasim_make.waitForStarted())
     {
         emit error("C++ files generation error!");
         return;
     }
 
-    corbasim_idl.waitForFinished(-1);
+    corbasim_make.waitForFinished(-1);
 
     emit progress(step++);
 
-    // Step 3 - Generate CMakeLists.txt
-    QFile cmakelists(workingDir + "/CMakeLists.txt");
-    cmakelists.open(QIODevice::WriteOnly);
-
-    QTextStream os(&cmakelists);
-
-    os << "cmake_minimum_required(VERSION 2.6)\n";
-    os << "project(" << jobName << " CXX)\n\n";
-#if 0
-    os << "if(UNIX)\n";
-    os << "\tset(Boost_USE_MULTITHREADED OFF)\n";
-    os << "endif()\n";
-    os << "find_package(Boost 1.45.0 REQUIRED)\n";
-    os << "include_directories(${Boost_INCLUDE_DIRS})\n";
-#endif
-    
-    foreach (const QString &path, m_includeDirs)
-        os << "include_directories(" << path << ")\n";
-
-    foreach (const QString &path, m_libDirs)
-        os << "link_directories(" << path << ")\n";
-
-    os << "include(" << jobName << ".cmake)\n";
-
-    cmakelists.close();
-
-    emit progress(step++);
-
-    // Step 4 - Create compilation cache
+    // Step 2 - Create compilation cache
     QProcess cmake;
     QStringList cmakeOptions;
 
@@ -169,7 +88,7 @@ void IDLBuilder::build(const QString& installDir, const QStringList& files)
     
     emit progress(step++);
 
-    // Step 5 - Compiling
+    // Step 3 - Compiling
     QProcess make;
     make.setWorkingDirectory(buildDir);
     make.start("make");
@@ -177,7 +96,7 @@ void IDLBuilder::build(const QString& installDir, const QStringList& files)
 
     emit progress(step++);
 
-    // Step 6 - Installing
+    // Step 4 - Installing
     QProcess install;
     install.setWorkingDirectory(buildDir);
     install.start("make", QStringList() << "install");

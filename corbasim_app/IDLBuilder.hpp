@@ -49,9 +49,6 @@ protected:
 
     QFSFileEngine m_fs;
     QString m_tmpDir;
-    QStringList m_libDirs;
-    QStringList m_includeDirs;
-
 };
 
 } // namespace app
