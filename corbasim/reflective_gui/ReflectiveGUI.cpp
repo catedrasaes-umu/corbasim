@@ -1325,23 +1325,33 @@ OperationInputForm::~OperationInputForm()
 
 void OperationInputForm::setValue(const QVariant& var)
 {
-    core::holder h = m_reflective->create_holder();
+    event::request_ptr req = m_reflective->create_request();
+    core::holder h = m_reflective->get_holder(req);
 
     if (fromQVariant(m_reflective, h, var))
     {
-        // TODO fromHolder(h);
+        setValue(req);
     }
 }
 
 QVariant OperationInputForm::value()
 {
-    // TODO
-    /*
-    core::holder h = m_reflective->create_holder();
-    toHolder(h);
-    return toQVariant(m_reflective, h);
-    */
-    return QVariant();
+    event::request_ptr req (m_reflective->create_request());
+    core::holder holder(m_reflective->get_holder(req));
+
+    const unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            core::holder child_holder(
+                    m_reflective->get_child_value(holder, i));
+            m_widgets[i]->toHolder(child_holder);
+        }
+    }
+
+    return toQVariant(m_reflective, holder);
 }
 
 corbasim::core::operation_reflective_base const * 
