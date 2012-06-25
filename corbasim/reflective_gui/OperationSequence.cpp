@@ -127,6 +127,7 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
 
     m_pbStartStop = new QPushButton("S&tart/Stop");
     m_pbStartStop->setCheckable(true);
+    m_pbStartStop->setObjectName("start-stop");
     bLayout->addWidget(m_pbStartStop);
 
     m_pbUpdate = new QPushButton("&Update");
@@ -254,11 +255,49 @@ OperationSequence::OperationSequence(const QString& name, QWidget * parent) :
     m_scroll->setFrameStyle(QFrame::NoFrame);
 
     layout->addWidget(m_scroll);
+
+    // Start/stop
+    {
+        QHBoxLayout * hLayout = new QHBoxLayout();
+        hLayout->setMargin(5);
+
+        // Spacer
+        QSpacerItem * spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+        hLayout->addItem(spacer);
+
+        // Button
+        QPushButton * stBtn = new QPushButton("&Start/stop");
+        stBtn->setCheckable(true);
+        hLayout->addWidget(stBtn);
+
+        QObject::connect(stBtn, SIGNAL(clicked(bool)), 
+                this, SLOT(startOrStopAll(bool)));
+
+        layout->addLayout(hLayout);
+    }
+
     setLayout(layout);
 }
 
 OperationSequence::~OperationSequence()
 {
+}
+
+void OperationSequence::startOrStopAll(bool checked)
+{
+    // TODO better implementation
+    typedef QList< QPushButton * > list_t;
+
+    const list_t list = findChildren< QPushButton * >("start-stop");
+
+    list_t::const_iterator it = list.begin();
+    list_t::const_iterator end = list.end();
+
+    for (; it != end; it++)
+    {
+        (*it)->setChecked(checked);
+    }
 }
 
 const QString& OperationSequence::getName() const

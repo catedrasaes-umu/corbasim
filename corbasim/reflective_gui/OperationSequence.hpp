@@ -114,6 +114,8 @@ public slots:
 
 private slots:
 
+    void startOrStopAll(bool checked);
+
     void deleteItem();
     void moveUpItem();
     void moveDownItem();
