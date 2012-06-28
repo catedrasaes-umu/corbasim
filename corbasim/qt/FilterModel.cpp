@@ -89,6 +89,8 @@ void FilterModel::registerInstance(const QString& name,
     }
 
     appendRow(ifItem);
+    
+    emit filterChanged();
 }
 
 void FilterModel::unregisterInstance(const QString& name)
@@ -107,6 +109,8 @@ void FilterModel::unregisterInstance(const QString& name)
     }
     
     m_itemsByName.erase(name);
+
+    emit filterChanged();
 }
 
 bool FilterModel::visibleOperation(const QString& name, tag_t tag) const
