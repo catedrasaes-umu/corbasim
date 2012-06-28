@@ -26,6 +26,9 @@ public:
 
     bool visibleOperation(const QString& name, tag_t tag) const;
 
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
 public slots:
 
     void registerInstance(const QString& name,

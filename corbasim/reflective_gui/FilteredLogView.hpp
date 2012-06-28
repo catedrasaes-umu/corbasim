@@ -36,6 +36,9 @@ public:
     FilteredLogView(QWidget * parent = 0);
     virtual ~FilteredLogView();
 
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
 public slots:
 
     void registerInstance(const QString& name,

@@ -64,3 +64,14 @@ void FilteredLogView::setLogModel(QAbstractItemModel * model)
     m_model.setSourceModel(model);
 }
 
+void FilteredLogView::save(QVariant& settings)
+{
+    m_filterModel.save(settings);
+}
+
+void FilteredLogView::load(const QVariant& settings)
+{
+    // TODO
+}
+
+

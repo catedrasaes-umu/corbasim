@@ -20,40 +20,10 @@ FilterModel::~FilterModel()
 bool FilterModel::setData(const QModelIndex & index, 
         const QVariant& value, int role)
 {
-    // TODO get the current value
-    
     bool res = QStandardItemModel::setData(index, value, role);
 
     if (role == Qt::CheckStateRole)
     {
-        /*
-        QList< int > path;
-
-        QModelIndex parent = index;
-
-        // Calculate path
-        do {
-            path.push_front(parent.row());
-            parent = parent.parent();
-        } while(parent.isValid());
-        
-        if (path.size() > 2)
-        {
-            const FirstLevelItem& item = 
-                *boost::next(m_items.begin(), path.front());
-
-            // Remove instance index
-            path.pop_front();
-
-            QStandardItem * mitem = itemFromIndex(index);
-
-            if (mitem->checkState() == Qt::Checked)
-                emit createdPlot(item.name, item.reflective, path);
-            else
-                emit deletedPlot(item.name, item.reflective, path);
-        }
-        */
-
         emit filterChanged();
     }
 
@@ -134,5 +104,38 @@ bool FilterModel::visibleOperation(const QString& name, tag_t tag) const
     }
 
     return false;
+}
+
+void FilterModel::save(QVariant& settings)
+{
+    QVariantList list;
+
+    int i = 0;
+    for (FirstLevelItems_t::iterator it = m_items.begin(); 
+            it != m_items.end(); ++it, ++i) 
+    {
+        QVariantMap map;
+
+        map["instance"] = it->name;
+
+        QVariantMap ops;
+
+        for (unsigned int j = 0; j < it->reflective->operation_count(); j++) 
+        {
+            ops[it->reflective->get_reflective_by_index(j)->get_name()] = 
+                (item(i)->child(j)->checkState() == Qt::Checked);
+        }
+
+        map["operations"] = ops;
+
+        list << map;
+    }
+
+    settings = list;
+}
+
+void FilterModel::load(const QVariant& settings)
+{
+    // TODO
 }
 
