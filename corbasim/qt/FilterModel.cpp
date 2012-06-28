@@ -8,7 +8,7 @@ FilterModel::FilterModel(QObject *parent)
     : QStandardItemModel(parent)
 {
     QStringList headers;
-    headers << "Plotable parameters";
+    headers << "Log filter";
 
     setHorizontalHeaderLabels(headers);
 }
@@ -100,6 +100,8 @@ bool FilterModel::visibleOperation(const QString& name, tag_t tag) const
                     return (item(i)->child(j)->checkState() == Qt::Checked);
                 }
             }
+
+            return false;
         }
     }
 

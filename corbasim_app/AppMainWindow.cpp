@@ -80,7 +80,21 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     setCentralWidget(m_mdi_area);
 
+    QDialog * filtered_log_dlg = new QDialog(this);
+    // Filtered log
+    {
+        m_filtered_log = new reflective_gui::FilteredLogView();
+
+        QVBoxLayout * l = new QVBoxLayout();
+        l->addWidget(m_filtered_log);
+        l->setMargin(0);
+
+        filtered_log_dlg->setLayout(l);
+
+        filtered_log_dlg->setWindowTitle("Filtered log");
+    }
     // Actions
+   
     // New object
     QAction * newObjAction = new QAction(
             style()->standardIcon(QStyle::SP_FileIcon),
@@ -188,7 +202,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     tools->addAction("&Operation sequences", 
             this, SLOT(showOpSequenceTool()));
     tools->addAction("&Filtered log", 
-            this, SLOT(showFilteredLog()));
+            filtered_log_dlg, SLOT(show()));
     tools->addSeparator();
     tools->addAction("&Plot tool", 
             this, SLOT(showPlotTool()));
@@ -212,13 +226,6 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     
     setWindowIcon(QIcon(":/resources/images/csu.png"));
     setWindowTitle("corbasim generic application");
-
-    // Filtered log
-    {
-        m_filtered_log = new reflective_gui::FilteredLogView();
-
-        // m_filtered_log->setWindowTitle("");
-    }
 
     // Regiter types
     qRegisterMetaType< corbasim::app::ObjrefConfig >

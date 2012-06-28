@@ -20,6 +20,7 @@
 #include "FilteredLogView.hpp"
 #include <QHBoxLayout>
 #include <QTreeView>
+#include <QSplitter>
 
 using namespace corbasim::reflective_gui;
 
@@ -27,6 +28,8 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     QWidget(parent), m_filterModel(this), m_model(this)
 {
     QHBoxLayout * layout = new QHBoxLayout();
+
+    QSplitter * splitter = new QSplitter(Qt::Horizontal);
 
     QTreeView * filterView = new QTreeView();
     QTreeView * logView = new QTreeView();
@@ -37,8 +40,10 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     // links between models
     m_model.setFilterModel(&m_filterModel);
 
-    layout->addWidget(filterView);
-    layout->addWidget(logView);
+    splitter->addWidget(filterView);
+    splitter->addWidget(logView);
+
+    layout->addWidget(splitter);
     
     setLayout(layout);
 }
