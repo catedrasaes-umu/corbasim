@@ -812,6 +812,12 @@ void AppMainWindow::save(QVariant& settings)
         m_seq_tool->save(window["sequences"]);
     }
 
+    if (m_filtered_log)
+    {
+        m_filtered_log->save(window["filtered_log"]);
+    }
+
+
     settings = window;
 }
 
