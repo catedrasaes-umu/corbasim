@@ -23,6 +23,7 @@
 #include <map>
 
 #include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
 #include <QDateTime>
 #include <QIcon>
 
@@ -33,8 +34,15 @@
 
 namespace corbasim 
 {
+namespace qt 
+{
+class FilterModel;
+} // namespace qt
+
 namespace reflective_gui
 {
+
+class FilteredLogModel;
 
 class CORBASIM_REFLECTIVE_GUI_DECLSPEC NewLogModel : 
     public QAbstractItemModel
@@ -111,8 +119,34 @@ protected:
         bool exception;
     };
 
+    const LogEntry& getLogEntry(int row) const { return m_entries.at(row); };
+
     QList< LogEntry > m_entries;
     QList< Node_ptr > m_nodes;
+
+    friend class FilteredLogModel;
+};
+
+class CORBASIM_REFLECTIVE_GUI_DECLSPEC FilteredLogModel : 
+    public QSortFilterProxyModel
+{
+    Q_OBJECT
+public:
+
+    FilteredLogModel(QObject * parent = 0);
+    virtual ~FilteredLogModel();
+
+    void setFilterModel(qt::FilterModel * filter);
+
+protected slots:
+
+    void resetModel();
+
+protected:
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+
+    qt::FilterModel * m_filter;
 };
 
 } // namespace reflective_gui

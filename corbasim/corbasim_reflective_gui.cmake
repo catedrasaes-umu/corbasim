@@ -10,6 +10,7 @@ set(corbasim_reflective_gui_EXPORTED_HEADERS
     reflective_gui/RequestDialog.hpp
     reflective_gui/LogModel.hpp
     reflective_gui/NewLogModel.hpp
+    reflective_gui/FilteredLogView.hpp
     reflective_gui/ScriptModel.hpp
     reflective_gui/ReflectiveGUI.hpp)
 
@@ -25,6 +26,7 @@ set(corbasim_reflective_gui_MOC_HDRS
     reflective_gui/SimpleScriptEditor.hpp
     reflective_gui/RequestDialog.hpp
     reflective_gui/LogModel.hpp
+    reflective_gui/FilteredLogView.hpp
     reflective_gui/NewLogModel.hpp
     reflective_gui/ScriptModel.hpp
     reflective_gui/ReflectiveGUI.hpp)
@@ -40,6 +42,7 @@ set(corbasim_reflective_gui_SRCS
     reflective_gui/SimpleScriptEditor.cpp
     reflective_gui/RequestDialog.cpp
     reflective_gui/LogModel.cpp
+    reflective_gui/FilteredLogView.cpp
     reflective_gui/NewLogModel.cpp
     reflective_gui/ScriptModel.cpp
     reflective_gui/ReflectiveGUI.cpp)

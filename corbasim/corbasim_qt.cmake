@@ -37,6 +37,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/TabWidget.hpp
     qt/LogModel.hpp
     qt/PlotModel.hpp
+    qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
     qt/OperationSequence.hpp
@@ -72,6 +73,7 @@ set(corbasim_qt_MOC_HDRS
     qt/TabWidget.hpp
     qt/LogModel.hpp
     qt/PlotModel.hpp
+    qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
     qt/OperationSequence.hpp
@@ -105,6 +107,7 @@ set(corbasim_qt_SRCS
     qt/TabWidget.cpp
     qt/LogModel.cpp
     qt/PlotModel.cpp
+    qt/FilterModel.cpp
     qt/CustomLayouts.cpp
     qt/SortableGroup.cpp
     qt/OperationSequence.cpp

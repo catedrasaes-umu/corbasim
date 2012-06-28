@@ -25,6 +25,8 @@
 #include <corbasim/core/reference_repository.hpp>
 #include <corbasim/reflective_gui/qvariant.hpp>
 
+#include <corbasim/qt/FilterModel.hpp>
+
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 
@@ -407,5 +409,52 @@ void NewLogModel::append(const QString& id,
 
         endInsertRows();
     }
+}
+
+FilteredLogModel::FilteredLogModel(QObject * parent) : 
+    QSortFilterProxyModel(parent), m_filter(NULL)
+{
+}
+
+FilteredLogModel::~FilteredLogModel()
+{
+}
+
+bool FilteredLogModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+    if (sourceParent.isValid()) return true;
+
+    if (!m_filter) return false;
+
+    NewLogModel const * model = dynamic_cast< NewLogModel const * >(sourceModel());
+
+    if (model)
+    {
+        const NewLogModel::LogEntry& entry(model->getLogEntry(sourceRow));
+
+        return m_filter->visibleOperation(entry.id, entry.reflective->get_tag());
+    }
+
+    return false;
+}
+
+void FilteredLogModel::setFilterModel(qt::FilterModel * filter)
+{
+    if (m_filter)
+    {
+        QObject::disconnect(m_filter, SIGNAL(filterChanged()), this, SLOT(resetModel()));
+    }
+
+    m_filter = filter;
+
+    if (m_filter)
+    {
+        QObject::connect(m_filter, SIGNAL(filterChanged()), this, SLOT(resetModel()));
+    }
+}
+
+void FilteredLogModel::resetModel()
+{
+    invalidateFilter();
 }
 
