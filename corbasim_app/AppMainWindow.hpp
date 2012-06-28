@@ -31,6 +31,7 @@ namespace corbasim
 namespace reflective_gui 
 {
 class OperationSequenceTool;
+class FilteredLogView;
 } // namespace reflective_gui
 
 namespace qwt 
@@ -68,6 +69,7 @@ public slots:
     void setLogModel(QAbstractItemModel * model);
 
     void showOpSequenceTool();
+    void showFilteredLog();
 
     void showCreateObjref();
     void showCreateServant();
@@ -151,6 +153,8 @@ protected:
     QWidget * m_create_servant;
     QWidget * m_script;
     reflective_gui::OperationSequenceTool * m_seq_tool;
+
+    reflective_gui::FilteredLogView * m_filtered_log;
 
     qwt::ReflectivePlotTool * m_plot_tool;
 

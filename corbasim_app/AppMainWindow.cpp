@@ -23,6 +23,7 @@
 #include "view/CreateDialog.hpp"
 #include <corbasim/qt/ScriptWindow.hpp>
 #include <corbasim/reflective_gui/OperationSequence.hpp>
+#include <corbasim/reflective_gui/FilteredLogView.hpp>
 #include <corbasim/qwt/ReflectivePlotTool.hpp>
 #include <corbasim/reflective_gui/json.hpp>
 
@@ -46,6 +47,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_create_servant(NULL),
     m_script(NULL),
     m_seq_tool(NULL),
+
+    m_filtered_log(NULL),
 
     m_plot_tool(NULL)
 {
@@ -184,6 +187,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     tools->addSeparator();
     tools->addAction("&Operation sequences", 
             this, SLOT(showOpSequenceTool()));
+    tools->addAction("&Filtered log", 
+            this, SLOT(showFilteredLog()));
     tools->addSeparator();
     tools->addAction("&Plot tool", 
             this, SLOT(showPlotTool()));
@@ -207,6 +212,13 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     
     setWindowIcon(QIcon(":/resources/images/csu.png"));
     setWindowTitle("corbasim generic application");
+
+    // Filtered log
+    {
+        m_filtered_log = new reflective_gui::FilteredLogView();
+
+        // m_filtered_log->setWindowTitle("");
+    }
 
     // Regiter types
     qRegisterMetaType< corbasim::app::ObjrefConfig >
@@ -297,12 +309,47 @@ void AppMainWindow::setController(AppController * controller)
             SIGNAL(updatedReference(QString, CORBA::Object_var)),
             this, SLOT(updatedReference(const QString&,
                     const CORBA::Object_var&)));
+
+    // Filtered log
+    {
+        QObject::connect(
+                m_controller,
+                SIGNAL(objrefCreated(
+                        QString, 
+                        const corbasim::core::interface_reflective_base *)),
+                m_filtered_log,
+                SLOT(registerInstance(
+                        const QString&, const 
+                        corbasim::core::interface_reflective_base *)));
+        QObject::connect(
+                m_controller,
+                SIGNAL(objrefDeleted(QString)),
+                m_filtered_log,
+                SLOT(unregisterInstance(const QString&)));
+
+        QObject::connect(
+                m_controller,
+                SIGNAL(servantCreated(
+                        QString, 
+                        const corbasim::core::interface_reflective_base *)),
+                m_filtered_log,
+                SLOT(registerInstance(
+                        const QString&, const 
+                        corbasim::core::interface_reflective_base *)));
+        QObject::connect(
+                m_controller,
+                SIGNAL(servantDeleted(QString)),
+                m_filtered_log,
+                SLOT(unregisterInstance(const QString&)));
+    }
 }
 
 void AppMainWindow::setLogModel(QAbstractItemModel * model)
 {
     m_log->setModel(model);
     m_log->setColumnWidth(0, 500);
+
+    m_filtered_log->setLogModel(model);
 
     QObject::connect(this, SIGNAL(doClearLog()),
             model, SLOT(clearLog()));
@@ -426,6 +473,12 @@ void AppMainWindow::showOpSequenceTool()
     m_seq_tool->show();
     m_mdi_area->setActiveSubWindow(m_sub_seq_tool);
 }
+
+void AppMainWindow::showFilteredLog()
+{
+    m_filtered_log->show();
+}
+
 
 void AppMainWindow::showCreateObjref()
 {
