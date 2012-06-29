@@ -24,6 +24,20 @@ bool FilterModel::setData(const QModelIndex & index,
 
     if (role == Qt::CheckStateRole)
     {
+        if (!index.parent().isValid())
+        {
+            QStandardItem * item = itemFromIndex(index);
+            Qt::CheckState st = item->checkState(); 
+
+            if (st != Qt::PartiallyChecked)
+            {
+                for (int i = 0; i < item->rowCount(); i++) 
+                {
+                    item->child(i)->setCheckState(st);
+                }
+            }
+        }
+
         emit filterChanged();
     }
 
@@ -42,6 +56,9 @@ void FilterModel::registerInstance(const QString& name,
 
     QStandardItem * ifItem = new QStandardItem(name);
     ifItem->setEditable(false);
+    ifItem->setCheckable(true);
+    ifItem->setTristate(true);
+    ifItem->setCheckState(Qt::Checked);
 
     const unsigned int count = reflective->operation_count();
 
