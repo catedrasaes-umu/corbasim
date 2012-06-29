@@ -873,5 +873,10 @@ void AppMainWindow::load(const QVariant& settings)
             }
         }
     }
+
+    if (window.contains("filtered_log"))
+    {
+        m_filtered_log->load(window["filtered_log"]);
+    }
 }
 

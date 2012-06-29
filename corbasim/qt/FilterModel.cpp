@@ -51,7 +51,6 @@ void FilterModel::registerInstance(const QString& name,
     item.name = name;
     item.reflective = reflective;
     m_items.push_back(item);
-
     m_itemsByName.insert(std::make_pair(name, &m_items.back()));
 
     QStandardItem * ifItem = new QStandardItem(name);
@@ -73,6 +72,9 @@ void FilterModel::registerInstance(const QString& name,
         opItem->setCheckState(Qt::Checked);
 
         ifItem->appendRow(opItem);
+
+        m_items.back().operations.insert(std::make_pair(
+                    op->get_name(), opItem));
     }
 
     appendRow(ifItem);
@@ -139,7 +141,8 @@ void FilterModel::save(QVariant& settings)
 
         QVariantMap ops;
 
-        for (unsigned int j = 0; j < it->reflective->operation_count(); j++) 
+        for (unsigned int j = 0; 
+                j < it->reflective->operation_count(); j++) 
         {
             ops[it->reflective->get_reflective_by_index(j)->get_name()] = 
                 (item(i)->child(j)->checkState() == Qt::Checked);
@@ -155,6 +158,47 @@ void FilterModel::save(QVariant& settings)
 
 void FilterModel::load(const QVariant& settings)
 {
-    // TODO
+    const QVariantList list = settings.toList();
+
+    for (QVariantList::const_iterator it = list.begin(); 
+            it != list.end(); ++it) 
+    {
+        const QVariantMap map = it->toMap();
+
+        if (!map.contains("instance") || !map.contains("operations"))
+            continue;
+
+        const QString instance = map["instance"].toString();
+
+        if (instance.isEmpty()) continue;
+
+        FirstLevelItemsByName_t::iterator it = 
+            m_itemsByName.find(instance);
+
+        if (it == m_itemsByName.end()) continue;
+
+        const QVariantMap operations = map["operations"].toMap();
+
+        QVariantMap::const_iterator mit = operations.begin();
+
+        for (; mit != operations.end(); mit++)
+        {
+            if (mit.value().canConvert< bool >())
+            {
+                const QString name = mit.key();
+
+                OperationsMap_t::iterator opt = 
+                    it->second->operations.find(name);
+
+                if (opt != it->second->operations.end())
+                {
+                    bool state = mit.value().toBool();
+
+                    opt->second->setCheckState((state)?
+                            Qt::Checked: Qt::Unchecked);
+                }
+            }
+        }
+    }
 }
 

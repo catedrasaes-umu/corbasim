@@ -76,7 +76,7 @@ void FilteredLogView::save(QVariant& settings)
 
 void FilteredLogView::load(const QVariant& settings)
 {
-    // TODO
+    m_filterModel.load(settings);
 }
 
 

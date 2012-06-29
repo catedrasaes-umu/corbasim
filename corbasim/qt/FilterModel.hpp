@@ -42,10 +42,13 @@ signals:
 
 protected:
 
+    typedef std::map< QString, QStandardItem * > OperationsMap_t;
+
     struct FirstLevelItem
     {
         QString name;
         core::interface_reflective_base const * reflective;
+        OperationsMap_t operations;
     };
 
     typedef std::list< FirstLevelItem > FirstLevelItems_t;
