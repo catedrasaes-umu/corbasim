@@ -80,16 +80,12 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     setCentralWidget(m_mdi_area);
 
-    QDialog * filtered_log_dlg = new QDialog(this);
+    QMainWindow * filtered_log_dlg = new QMainWindow(this);
     // Filtered log
     {
         m_filtered_log = new reflective_gui::FilteredLogView();
 
-        QVBoxLayout * l = new QVBoxLayout();
-        l->addWidget(m_filtered_log);
-        l->setMargin(0);
-
-        filtered_log_dlg->setLayout(l);
+        filtered_log_dlg->setCentralWidget(m_filtered_log);
 
         filtered_log_dlg->setWindowTitle("Filtered log");
     }
