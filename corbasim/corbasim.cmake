@@ -16,8 +16,6 @@ set(corbasim_EXPORTED_HEADERS
     core/callable.hpp
     core/config.hpp
     core/copy.hpp
-    core/factory_fwd.hpp
-    core/factory.hpp
     core/injector.hpp
     core/inserter.hpp
     core/ns_register.hpp
@@ -71,7 +69,6 @@ set(corbasim_LIBS
 set(corbasim_SRCS
     core/archives.cpp
     core/core.cpp
-    core/factory.cpp
     core/ns_register.cpp
     core/reference_repository.cpp
     core/reference_validator.cpp

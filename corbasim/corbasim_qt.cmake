@@ -1,37 +1,4 @@
 set(corbasim_qt_EXPORTED_HEADERS
-    gui/dialogs_fwd.hpp
-    gui/dialogs.hpp
-    gui/gui_factory_fwd.hpp
-    gui/gui_factory.hpp
-    gui/macros.hpp
-    gui/macros_impl.hpp
-    gui/tree_factory.hpp
-    gui/trees/array.hpp
-    gui/trees/enum.hpp
-    gui/trees_fwd.hpp
-    gui/trees.hpp
-    gui/trees/objref.hpp
-    gui/trees/primitive.hpp
-    gui/trees/sequence.hpp
-    gui/trees/string.hpp
-    gui/trees/struct.hpp
-    gui/trees/union.hpp
-    gui/widget_factory_fwd.hpp
-    gui/widget_factory.hpp
-    gui/widgets/array.hpp
-    gui/widgets/enum.hpp
-    gui/widgets_fwd.hpp
-    gui/widgets/generic.hpp
-    gui/widgets/grid.hpp
-    gui/widgets.hpp
-    gui/widgets/objrefvar.hpp
-    gui/widgets/primitive.hpp
-    gui/widgets/sequence_fwd.hpp
-    gui/widgets/sequence.hpp
-    gui/widgets/string.hpp
-    gui/widgets/struct.hpp
-    gui/widgets/union.hpp
-
     qt/export.hpp
     # QObjects
     qt/TabWidget.hpp
@@ -47,7 +14,6 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/TemplatedSpinBox.hpp
     qt/ScriptWindow.hpp
     qt/ObjrefWidget.hpp
-    qt/SequenceWidget.hpp
 )
 
 foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
@@ -73,15 +39,9 @@ set(corbasim_qt_MOC_HDRS
     qt/MultiFileSelectionWidget.hpp
     qt/RangedWidget.hpp
     qt/Status.hpp
-    qt/SequenceWidget.hpp
 )
 
 set(corbasim_qt_SRCS
-    gui/tree_factory.cpp
-    gui/gui_factory.cpp
-    # Explicit intantiation
-    gui/widgets/primitive.cpp
-
     # private
     qt/private/codeeditor.cpp
     qt/private/qscriptsyntaxhighlighter.cpp
@@ -99,7 +59,6 @@ set(corbasim_qt_SRCS
     qt/ObjrefWidget.cpp
     qt/MultiFileSelectionWidget.cpp
     qt/Status.cpp
-    qt/SequenceWidget.cpp
 )
 
 message(STATUS "Qt libraries: ${QT_LIBRARIES}")

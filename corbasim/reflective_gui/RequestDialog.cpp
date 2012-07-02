@@ -18,7 +18,6 @@
  */
 
 #include "RequestDialog.hpp"
-#include <corbasim/gui/dialogs_fwd.hpp>
 #include <corbasim/qt/initialize.hpp>
 
 // Qt widgets
