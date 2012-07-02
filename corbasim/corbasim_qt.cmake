@@ -35,28 +35,20 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/export.hpp
     # QObjects
     qt/TabWidget.hpp
-    qt/LogModel.hpp
     qt/PlotModel.hpp
     qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
-    qt/OperationSequence.hpp
     qt/types.hpp
     qt/ReferenceModel.hpp
     qt/Status.hpp
-    qt/MultiInputWidget.hpp
     qt/RangedWidget.hpp
-    qt/LogTreeWidget.hpp
-    qt/LogWidget.hpp
     qt/MultiFileSelectionWidget.hpp
     qt/TemplatedSpinBox.hpp
-    qt/RequestDialog.hpp
-    qt/SimpleScriptEditor.hpp
     qt/ScriptWindow.hpp
-    qt/ScriptEditor.hpp
-    qt/client/SimpleClient.hpp
     qt/ObjrefWidget.hpp
-    qt/SequenceWidget.hpp)
+    qt/SequenceWidget.hpp
+)
 
 foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
     get_filename_component(_header_path ${_header} PATH)
@@ -71,26 +63,18 @@ set(corbasim_qt_MOC_HDRS
     qt/private/MultiScriptEditor.hpp
 
     qt/TabWidget.hpp
-    qt/LogModel.hpp
     qt/PlotModel.hpp
     qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
-    qt/OperationSequence.hpp
     qt/ReferenceModel.hpp
-    qt/client/SimpleClient.hpp
-    qt/SimpleScriptEditor.hpp
     qt/ScriptWindow.hpp
-    qt/ScriptEditor.hpp
     qt/ObjrefWidget.hpp
     qt/MultiFileSelectionWidget.hpp
-    qt/MultiInputWidget.hpp
-    qt/SequenceWidget.hpp
-    qt/RequestDialog.hpp
     qt/RangedWidget.hpp
-    qt/LogWidget.hpp
-    qt/LogTreeWidget.hpp
-    qt/Status.hpp)
+    qt/Status.hpp
+    qt/SequenceWidget.hpp
+)
 
 set(corbasim_qt_SRCS
     gui/tree_factory.cpp
@@ -105,26 +89,18 @@ set(corbasim_qt_SRCS
     qt/private/MultiScriptEditor.cpp
 
     qt/TabWidget.cpp
-    qt/LogModel.cpp
     qt/PlotModel.cpp
     qt/FilterModel.cpp
     qt/CustomLayouts.cpp
     qt/SortableGroup.cpp
-    qt/OperationSequence.cpp
     qt/ReferenceModel.cpp
     qt/initialize.cpp
-    qt/client/SimpleClient.cpp
-    qt/SimpleScriptEditor.cpp
     qt/ScriptWindow.cpp
-    qt/ScriptEditor.cpp
     qt/ObjrefWidget.cpp
-    qt/LogWidget.cpp
-    qt/LogTreeWidget.cpp
     qt/MultiFileSelectionWidget.cpp
-    qt/MultiInputWidget.cpp
+    qt/Status.cpp
     qt/SequenceWidget.cpp
-    qt/RequestDialog.cpp
-    qt/Status.cpp)
+)
 
 message(STATUS "Qt libraries: ${QT_LIBRARIES}")
 
