@@ -24,6 +24,10 @@ using namespace corbasim::event;
 event::~event() {}
 
 // Exception
+exception::exception(const char * msg) :
+    m_msg(msg)
+{
+}
 
 event_types exception::get_type() const 
 {
@@ -33,6 +37,11 @@ event_types exception::get_type() const
 corbasim::tag_t exception::get_tag() const
 {
     return tag< exception >::value();
+}
+
+const char * exception::get_message() const
+{
+    return m_msg.c_str();
 }
 
 // Message

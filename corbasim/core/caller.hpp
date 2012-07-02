@@ -157,12 +157,17 @@ struct interface_caller : public interface_caller_base
 
         if (it != m_callers.end())
         {
-            try {
-                return it->second->call(m_ref, req);
-            } catch (...)
+            try 
             {
-                // TODO
-                return new event::exception; 
+                return it->second->call(m_ref, req);
+            } 
+            catch (const CORBA::Exception& ex)
+            {
+                return new event::exception(ex._name());
+            }
+            catch (...)
+            {
+                return new event::exception();
             }
         }
 

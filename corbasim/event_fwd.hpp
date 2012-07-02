@@ -45,9 +45,17 @@ typedef boost::shared_ptr< event > event_ptr;
 
 struct CORBASIM_CORE_DECLSPEC exception : public event
 {
+    exception(const char * msg = "");
+
     event_types get_type() const;
 
     tag_t get_tag() const;
+
+    const char * get_message() const;
+
+protected:
+
+    const std::string m_msg;
 };
 
 typedef boost::shared_ptr< exception > exception_ptr;

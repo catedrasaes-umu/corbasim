@@ -37,6 +37,9 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     filterView->setModel(&m_filterModel);
     logView->setModel(&m_model);
 
+    logView->setDragDropMode(QAbstractItemView::DragOnly);
+    logView->setDragEnabled(true);
+
     // links between models
     m_model.setFilterModel(&m_filterModel);
 
