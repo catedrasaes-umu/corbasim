@@ -3,6 +3,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     # QObjects
     qt/TabWidget.hpp
     qt/PlotModel.hpp
+    qt/ParametersModel.hpp
     qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
@@ -30,6 +31,7 @@ set(corbasim_qt_MOC_HDRS
 
     qt/TabWidget.hpp
     qt/PlotModel.hpp
+    qt/ParametersModel.hpp
     qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
@@ -50,6 +52,7 @@ set(corbasim_qt_SRCS
 
     qt/TabWidget.cpp
     qt/PlotModel.cpp
+    qt/ParametersModel.cpp
     qt/FilterModel.cpp
     qt/CustomLayouts.cpp
     qt/SortableGroup.cpp
