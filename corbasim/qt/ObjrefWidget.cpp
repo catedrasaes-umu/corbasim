@@ -3,22 +3,16 @@
 #include <iostream>
 
 #include <corbasim/cosnaming/Cosnaming_adapted.hpp>
-#include <corbasim/gui/widgets.hpp>
 #include <corbasim/core/reference_repository.hpp>
 #include <corbasim/core/reference_validator.hpp>
 #include <corbasim/qt/Status.hpp>
 #include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/qt/types.hpp>
 
-#include <QComboBox>
-#include <QStackedWidget>
-#include <QTextEdit>
+#include <QtGui>
 
 using namespace corbasim;
 using namespace corbasim::qt;
-
-typedef corbasim::widgets::widget< 
-    CosNaming::Name > resolve_wt;
 
 ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
         QWidget * parent) :
@@ -52,8 +46,8 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
         // NameService query
         m_selector->addItem("Name service query");
-        m_resolve = new resolve_wt;
-        m_stack->addWidget(m_resolve->getWidget());
+        // TODO m_resolve = new resolve_wt;
+        m_stack->addWidget(new QWidget());
         
         m_selector->addItem("Name service query from string");
         m_resolve_str = new QTextEdit;
@@ -96,7 +90,7 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
 ObjrefWidget::~ObjrefWidget()
 {
-    delete m_resolve;
+    // TODO delete m_resolve;
     delete m_resolve_str;
 }
 
@@ -173,10 +167,11 @@ void ObjrefWidget::valueChanged()
         // NS query
         case 1:
             {
+                /*
                 CosNaming::Name name;
                 static_cast< resolve_wt* >(m_resolve)->get_value(name);
                 ref = rr->resolve(name);
-
+                */
                 // TODO convert name to m_nsEntry
             }
             break;

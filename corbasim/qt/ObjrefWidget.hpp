@@ -21,7 +21,6 @@
 #define CORBASIM_QT_OBJREFWIDGET_HPP
 
 #include <QWidget>
-#include <corbasim/gui/widgets_fwd.hpp>
 #include <corbasim/qt/export.hpp>
 #include <corbasim/core/caller_fwd.hpp>
 
@@ -68,7 +67,7 @@ protected:
     QTextEdit * m_ior;
 
     core::reference_validator_base * m_validator;
-    widgets::widget_base * m_resolve;
+    // TODO widgets::widget_base * m_resolve;
     QTextEdit * m_resolve_str;
 
     QComboBox * m_object_selector;
