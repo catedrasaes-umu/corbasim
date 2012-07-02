@@ -22,10 +22,7 @@
 #include "«getTranslationUnit().getFileNameSkelHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
 
-#include <corbasim/core/archives.hpp>
-
 #include <iostream>
-#include <sstream>
 #include <fstream>
 #include <boost/program_options.hpp>
 
@@ -37,8 +34,7 @@ class «fqn»_impl : virtual public «this.getPOAFQN()»
 public:
 
 	«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::___public"»
-	«fqn»_impl(const std::string& log_file, «getFQN()»_ptr _reference) :
-		__m_ofstream(log_file.c_str()), 
+	«fqn»_impl(«getFQN()»_ptr _reference) :
 		__m_reference(«getFQN()»::_duplicate(_reference))
 	{
 	}
@@ -47,32 +43,12 @@ public:
 	«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op»
 	«op.getSignature()»
 	{
-		std::ostringstream __oss;
-		std::cout << ">";
-		__oss << "«op.identifier» ";
-		
 		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_impl::"+op.getFQN("_")+"___pre"»
 		«ENDPROTECT»
 		
 		«IF !op.parameters.isEmpty || !op.returnVoid()-»
 		_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
-		try {
-			corbasim::core::text_oarchive toa(__oss);
-			toa << _val;
-		} catch(...) {
-			std::cerr << "Serialization exception!" << std::endl;
-		}
-		«ELSE-»
-		__oss << std::endl;
 		«ENDIF-»
-		
-		std::cout << __oss.str();
-		
-		if (__m_ofstream.is_open())
-		{
-			__m_ofstream << __oss.str();
-			__m_ofstream.flush();
-		}
 			
 		try {
 			if (!CORBA::is_nil(__m_reference))
@@ -100,8 +76,6 @@ public:
 
 protected:
 
-	std::ofstream __m_ofstream;
-	
 	«getFQN()»_var __m_reference;
 };
 
@@ -114,15 +88,15 @@ int main(int argc, char **argv)
 	
 	// Program options
 	std::string register_servant;
-	std::string log_file;
 	std::string proxy_reference;
 	
 	_po::options_description _desc("Proxy Server options");
 	_desc.add_options()
 	    ("help,h", "produce help message")
-	    ("register-servant,r", _po::value< std::string >(&register_servant), "register the servant into the name service")
-	    ("proxy-reference,p", _po::value< std::string >(&proxy_reference), "forward received calls to another servant")
-	    ("log-file,l", _po::value< std::string >(&log_file), "store received calls in CORBASIM script format");
+	    ("register-servant,r", _po::value< std::string >(&register_servant), 
+         "register the servant into the name service")
+	    ("proxy-reference,p", _po::value< std::string >(&proxy_reference),
+         "forward received calls to another servant");
 	
 	_po::variables_map _vm;
 	_po::store(_po::parse_command_line(argc, argv, _desc), _vm);
@@ -169,7 +143,7 @@ int main(int argc, char **argv)
     }
 
 	// Servant
-    «fqn»_impl _impl(log_file, reference.in());
+    «fqn»_impl _impl(reference.in());
    
 	CORBA::Object_var rootPOAObj = 
 			orb->resolve_initial_references("RootPOA");

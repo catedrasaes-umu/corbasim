@@ -44,15 +44,6 @@ target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
 
 «DEFINE cmake FOR InterfaceDef»
 «LET getFQN("_") AS fqn»
-	«IF generateLibrary()-»
-# Corbasim library	
-add_library(corbasim_lib_«fqn» SHARED «fqn»_lib.cpp)
-target_link_libraries(corbasim_lib_«fqn»
-	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
-	# CORBASIM Libraries
-	corbasim corbasim_qt)
-	«ENDIF-»
-	
 	«IF generateReflectiveLibrary()-»
 # Corbasim reflective library	
 add_library(corbasim_reflective_«fqn» SHARED «fqn»_reflective.cpp)
@@ -74,15 +65,6 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_client
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_client DESTINATION bin)
 	«ENDIF-»
 	
-	«IF generateInjector()-»
-# Injector	
-add_executable(${CORBASIM_PREFIX}«fqn»_injector «fqn»_injector.cpp)
-target_link_libraries(${CORBASIM_PREFIX}«fqn»_injector
-	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
-	# CORBASIM Libraries
-	corbasim)
-	«ENDIF-»
-	
 	«IF generateServer()-»
 # Server
 add_executable(${CORBASIM_PREFIX}«fqn»_server «fqn»_server.cpp)
@@ -95,24 +77,5 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_server
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_server DESTINATION bin)
 	«ENDIF-»
 
-«REM»	
-	«IF generatePyStim()-»
-# PyStim
-add_executable(${CORBASIM_PREFIX}«fqn»_pystim «fqn»_pystim.cpp)
-target_link_libraries(${CORBASIM_PREFIX}«fqn»_pystim 
-	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
-	# CORBASIM Libraries
-	corbasim corbasim_python corbasim_qt)
-	«ENDIF-»
-	
-	«IF generateInterpreter()-»
-# Interpreter
-add_executable(${CORBASIM_PREFIX}«fqn»_interpreter «fqn»_interpreter.cpp)
-target_link_libraries(${CORBASIM_PREFIX}«fqn»_interpreter 
-	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
-	# CORBASIM Libraries
-	corbasim corbasim_python)
-	«ENDIF-»
-«ENDREM»	
 «ENDLET»
 «ENDDEFINE»
