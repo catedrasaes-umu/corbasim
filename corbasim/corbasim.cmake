@@ -15,7 +15,6 @@ set(corbasim_EXPORTED_HEADERS
     core/callable.hpp
     core/config.hpp
     core/copy.hpp
-    core/injector.hpp
     core/inserter.hpp
     core/ns_register.hpp
     core/range.hpp
