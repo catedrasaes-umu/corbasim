@@ -10,7 +10,6 @@ set(corbasim_EXPORTED_HEADERS
     adapted.hpp
     corba_adapted.hpp
     core/export.hpp
-    core/archives.hpp
     core/caller_fwd.hpp
     core/caller.hpp
     core/callable.hpp
@@ -67,7 +66,6 @@ set(corbasim_LIBS
     ${Boost_REGEX_LIBRARY})
 
 set(corbasim_SRCS
-    core/archives.cpp
     core/core.cpp
     core/ns_register.cpp
     core/reference_repository.cpp
