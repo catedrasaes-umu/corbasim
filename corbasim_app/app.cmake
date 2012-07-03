@@ -17,7 +17,7 @@ add_custom_command(
 	COMMAND tao_idl ${TAO_IDL_OPTIONS} app.idl
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_library(${CORBASIM_PREFIX}app_idl SHARED ${app_GENERATED})
+add_library(${CORBASIM_PREFIX}app_idl SHARED ${app_GENERATED} app_adapted.cpp)
 
 	
 	
