@@ -4,7 +4,7 @@ project(corbasim C CXX)
 # Numero de version
 set(${PROJECT_NAME}_MAJOR_VERSION 0)
 set(${PROJECT_NAME}_MINOR_VERSION 2)
-set(${PROJECT_NAME}_PATCH_LEVEL 0)
+set(${PROJECT_NAME}_PATCH_LEVEL 1)
 set(${PROJECT_NAME}_VERSION
         "${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL}")
 
@@ -66,7 +66,7 @@ endif(NOT Boost_FOUND)
 find_package(Qt4)
 find_package(Qwt6)
 find_package(Boost 1.45.0 
-    COMPONENTS serialization regex system thread program_options)
+    COMPONENTS regex system thread program_options)
 
 message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 
@@ -94,7 +94,8 @@ endif()
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 add_subdirectory(test EXCLUDE_FROM_ALL)
 
-if (EXISTS private AND IS_DIRECTORY private)
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/private 
+        AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/private)
     add_subdirectory(private EXCLUDE_FROM_ALL)
 endif()
 

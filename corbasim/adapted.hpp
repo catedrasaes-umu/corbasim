@@ -21,7 +21,6 @@
 #define CORBASIM_ADAPTED_HPP
 
 #include <corbasim/mpl.hpp>
-#include <corbasim/serialization.hpp>
 
 namespace CORBA 
 {

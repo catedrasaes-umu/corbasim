@@ -16,54 +16,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 	( ::TAO::String_Manager, kind)
      )
 
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::NameComponent& t, const unsigned int /* unused */)
-{	
-	ar & boost::serialization::make_nvp("id", t.id);
-	ar & boost::serialization::make_nvp("kind", t.kind);
-}
-
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::NameComponent_var& t, const unsigned int /* unused */)
-{	
-	// TODO
-}
-
-
-} // serialization
-} // boost
-
 	
 
 
 
         
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::Name& t, const unsigned int version)
-{	
-	::corbasim::serialization::sequence::serialize(ar, t, version);
-}
-	
-template < class Archive >
-void serialize(Archive& ar, CosNaming::Name_var& t, const unsigned int version)
-{	
-	// TODO
-}
-	
-} // serialization
-} // boost
-
 namespace corbasim
 {
 namespace adapted
@@ -109,54 +66,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 	( CosNaming::BindingType, binding_type)
      )
 
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::Binding& t, const unsigned int /* unused */)
-{	
-	ar & boost::serialization::make_nvp("binding_name", t.binding_name);
-	ar & boost::serialization::make_nvp("binding_type", t.binding_type);
-}
-
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::Binding_var& t, const unsigned int /* unused */)
-{	
-	// TODO
-}
-
-
-} // serialization
-} // boost
-
 	
 
 
 
         
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::BindingList& t, const unsigned int version)
-{	
-	::corbasim::serialization::sequence::serialize(ar, t, version);
-}
-	
-template < class Archive >
-void serialize(Archive& ar, CosNaming::BindingList_var& t, const unsigned int version)
-{	
-	// TODO
-}
-	
-} // serialization
-} // boost
-
 namespace corbasim
 {
 namespace adapted
@@ -173,20 +87,6 @@ struct is_corbaseq< CosNaming::BindingList > : public cs_mpl::true_
 
 
 
-
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::NamingContext_var& t, const unsigned int version)
-{	
-	// TODO
-}
-
-} // serialization
-} // boost
 
 namespace corbasim
 {
@@ -256,20 +156,6 @@ struct enumeration< CosNaming::NamingContext::NotFoundReason >
 
 
 
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::BindingIterator_var& t, const unsigned int version)
-{	
-	// TODO
-}
-
-} // serialization
-} // boost
-
 namespace corbasim
 {
 namespace adapted
@@ -290,20 +176,6 @@ struct is_objrefvar< CosNaming::BindingIterator_var > : public cs_mpl::true_
 
 
 
-
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, CosNaming::NamingContextExt_var& t, const unsigned int version)
-{	
-	// TODO
-}
-
-} // serialization
-} // boost
 
 namespace corbasim
 {
@@ -396,13 +268,6 @@ struct __bind
 	
 	// Copy constructor
 	__bind(const __bind& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("obj", obj);
-	}
 };
 
 typedef __bind bind;
@@ -425,13 +290,6 @@ struct __rebind
 	
 	// Copy constructor
 	__rebind(const __rebind& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("obj", obj);
-	}
 };
 
 typedef __rebind rebind;
@@ -454,13 +312,6 @@ struct __bind_context
 	
 	// Copy constructor
 	__bind_context(const __bind_context& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("nc", nc);
-	}
 };
 
 typedef __bind_context bind_context;
@@ -483,13 +334,6 @@ struct __rebind_context
 	
 	// Copy constructor
 	__rebind_context(const __rebind_context& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("nc", nc);
-	}
 };
 
 typedef __rebind_context rebind_context;
@@ -511,13 +355,6 @@ struct __resolve
 	
 	// Copy constructor
 	__resolve(const __resolve& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __resolve resolve;
@@ -538,12 +375,6 @@ struct __unbind
 	
 	// Copy constructor
 	__unbind(const __unbind& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-	}
 };
 
 typedef __unbind unbind;
@@ -562,12 +393,6 @@ struct __new_context
 	
 	// Copy constructor
 	__new_context(const __new_context& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __new_context new_context;
@@ -589,13 +414,6 @@ struct __bind_new_context
 	
 	// Copy constructor
 	__bind_new_context(const __bind_new_context& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __bind_new_context bind_new_context;
@@ -613,11 +431,6 @@ struct __destroy
 	
 	// Copy constructor
 	__destroy(const __destroy& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-	}
 };
 
 typedef __destroy destroy;
@@ -642,14 +455,6 @@ struct __list
 	
 	// Copy constructor
 	__list(const __list& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("how_many", how_many);
-		ar & boost::serialization::make_nvp("bl", bl);
-		ar & boost::serialization::make_nvp("bi", bi);
-	}
 };
 
 typedef __list list;
@@ -675,13 +480,6 @@ struct __next_one
 	
 	// Copy constructor
 	__next_one(const __next_one& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("b", b);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __next_one next_one;
@@ -705,14 +503,6 @@ struct __next_n
 	
 	// Copy constructor
 	__next_n(const __next_n& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("how_many", how_many);
-		ar & boost::serialization::make_nvp("bl", bl);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __next_n next_n;
@@ -730,11 +520,6 @@ struct __destroy
 	
 	// Copy constructor
 	__destroy(const __destroy& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-	}
 };
 
 typedef __destroy destroy;
@@ -766,13 +551,6 @@ struct __to_string
 	
 	// Copy constructor
 	__to_string(const __to_string& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __to_string to_string;
@@ -794,13 +572,6 @@ struct __to_name
 	
 	// Copy constructor
 	__to_name(const __to_name& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("sn", sn);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __to_name to_name;
@@ -826,14 +597,6 @@ struct __to_url
 	
 	// Copy constructor
 	__to_url(const __to_url& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("addr", addr);
-		ar & boost::serialization::make_nvp("sn", sn);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __to_url to_url;
@@ -855,13 +618,6 @@ struct __resolve_str
 	
 	// Copy constructor
 	__resolve_str(const __resolve_str& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __resolve_str resolve_str;

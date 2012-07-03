@@ -75,7 +75,7 @@ struct servant< CosNaming::NamingContext >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		void unbind(const CosNaming::Name& n)
@@ -92,7 +92,7 @@ struct servant< CosNaming::NamingContext >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		CosNaming::NamingContext_ptr bind_new_context(const CosNaming::Name& n)
@@ -101,7 +101,7 @@ struct servant< CosNaming::NamingContext >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		void destroy()
@@ -219,7 +219,7 @@ struct servant< CosNaming::NamingContextExt >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		CosNaming::NamingContextExt::URLString to_url(const char* addr, const char* sn)
@@ -237,7 +237,7 @@ struct servant< CosNaming::NamingContextExt >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		void bind(const CosNaming::Name& n, ::CORBA::Object_ptr obj)
@@ -278,7 +278,7 @@ struct servant< CosNaming::NamingContextExt >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		void unbind(const CosNaming::Name& n)
@@ -295,7 +295,7 @@ struct servant< CosNaming::NamingContextExt >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		CosNaming::NamingContext_ptr bind_new_context(const CosNaming::Name& n)
@@ -304,7 +304,7 @@ struct servant< CosNaming::NamingContextExt >
 	
 			__f(_val);		
 			
-			return _val._return;
+			return _val._return._retn();
 		}
 		
 		void destroy()
