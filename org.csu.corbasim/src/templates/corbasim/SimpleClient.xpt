@@ -16,12 +16,12 @@
 «REM»Cliente para interfaces«ENDREM»
 «DEFINE client FOR InterfaceDef»
 «LET getFQN("_") AS fqn»
-«FILE fqn+"_client_main.cpp"»
+«FILE fqn+"_client.cpp"»
 #include <corbasim/impl.hpp>
 #include "«getTranslationUnit().getFileNameStubHpp()»"
-#include <corbasim/qt/client/SimpleClient.hpp>
+#include <corbasim/reflective_gui/SimpleClient.hpp>
 
-extern "C" const corbasim::gui::gui_factory_base * corbasim_lib_«fqn»();
+extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»();
 
 int main(int argc, char **argv)
 {
@@ -31,8 +31,8 @@ int main(int argc, char **argv)
 	CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
 	CORBA::Object_var obj;
 	
-	corbasim::qt::client::SimpleClient window;
-	window.initialize(corbasim_lib_«fqn»());
+	corbasim::reflective_gui::SimpleClient window;
+	window.initialize(corbasim_reflective_«fqn»());
 	
 	if(argc > 1)
 	{
