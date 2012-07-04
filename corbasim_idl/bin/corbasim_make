@@ -15,6 +15,8 @@ USAGE()
     echo "    -h  help"
     echo "    -D  preprocessor definition"
     echo "    -I  preprocessor include directory"
+    echo "    -Gserver  generates a server application for each interface"
+    echo "    -Gclient  generates a client application for each interface"
     echo ""
     exit $E_OPTERROR    # Exit and explain usage, if no argument(s) given.
 }
@@ -24,7 +26,7 @@ PROJECTNAME=corbasim_plugin
 PREPROCESSOROPTIONS=
 
 # Processing arguments
-while getopts ":n:h:D:I:" Option
+while getopts ":n:h:D:I:G:" Option
 do
     case $Option in
         n    ) PROJECTNAME=$OPTARG;;
@@ -32,6 +34,7 @@ do
                exit 0;;
         D    ) PREPROCESSOROPTIONS="$PREPROCESSOROPTIONS -D$OPTARG" ;;
         I    ) PREPROCESSOROPTIONS="$PREPROCESSOROPTIONS -I$OPTARG" ;;
+        G    ) PREPROCESSOROPTIONS="$PREPROCESSOROPTIONS -G$OPTARG" ;;
         *    ) echo ""
                echo "Invalid option."
                USAGE   # DEFAULT
