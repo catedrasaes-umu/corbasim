@@ -18,32 +18,17 @@ add_custom_command(
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${CORBASIM_PREFIX}union_idl SHARED ${union_GENERATED} union_adapted.cpp)
-
-	
-	
+install(TARGETS ${CORBASIM_PREFIX}union_idl DESTINATION lib)
 
 
 
-
-
-
-
-
-
-
-
-	
 # Corbasim reflective library	
 add_library(corbasim_reflective_MyModule_MyInterface SHARED MyModule_MyInterface_reflective.cpp)
 target_link_libraries(corbasim_reflective_MyModule_MyInterface
 	${CORBASIM_PREFIX}union_idl
 	# CORBASIM Library
 	corbasim)
-
-	
-	
-	
-
+install(TARGETS corbasim_reflective_MyModule_MyInterface DESTINATION lib)
 
 
 	
