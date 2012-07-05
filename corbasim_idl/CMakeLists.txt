@@ -1,3 +1,8 @@
+add_custom_target(corbasim_idl 
+    ant -f ${CMAKE_CURRENT_SOURCE_DIR}/../org.csu.corbasim/build.xml
+    COMMAND ant -f ${CMAKE_CURRENT_SOURCE_DIR}/export.xml
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 install(FILES bin/corbasim_idl 
     DESTINATION bin 
     PERMISSIONS OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE 
