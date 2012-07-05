@@ -24,6 +24,7 @@ USAGE()
 # Default options
 PROJECTNAME=corbasim_plugin
 PREPROCESSOROPTIONS=
+CORBASIMIDLOPTIONS=
 
 # Processing arguments
 while getopts ":n:h:D:I:G:" Option
@@ -34,7 +35,7 @@ do
                exit 0;;
         D    ) PREPROCESSOROPTIONS="$PREPROCESSOROPTIONS -D$OPTARG" ;;
         I    ) PREPROCESSOROPTIONS="$PREPROCESSOROPTIONS -I$OPTARG" ;;
-        G    ) PREPROCESSOROPTIONS="$PREPROCESSOROPTIONS -G$OPTARG" ;;
+        G    ) CORBASIMIDLOPTIONS="$CORBASIMIDLOPTIONS -G$OPTARG" ;;
         *    ) echo ""
                echo "Invalid option."
                USAGE   # DEFAULT
@@ -68,7 +69,7 @@ cat $INPUTFILES | cpp -E -P $PREPROCESSOROPTIONS -o $PROJECTNAME.idl || exit 1
 
 echo "Generated temporary file: $PROJECTNAME.idl"
 
-$BASEDIR/corbasim_idl $PROJECTNAME.idl
+$BASEDIR/corbasim_idl $CORBASIMIDLOPTIONS $PROJECTNAME.idl
 
 echo "Generating CMakeLists.txt file..."
 

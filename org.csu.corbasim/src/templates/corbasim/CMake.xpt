@@ -30,7 +30,7 @@ target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
 	${CORBASIM_PREFIX}«e.getFileName()»_idl
 		«ENDFOREACH-»)
 	«ENDIF-»
-install(TARGETS ${CORBASIM_PREFIX}«e.getFileName()»_idl DESTINATION lib)
+install(TARGETS ${CORBASIM_PREFIX}«filename»_idl DESTINATION lib)
 
 	«EXPAND cmake FOREACH contains-»
 	
@@ -62,7 +62,7 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_client
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	corbasim_reflective_«fqn»
 	# CORBASIM Libraries
-	corbasim corbasim_qt)
+	corbasim corbasim_qt corbasim_reflective_gui)
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_client DESTINATION bin)
 
 	«ENDIF-»
