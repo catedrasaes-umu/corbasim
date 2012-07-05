@@ -13,53 +13,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 	( ::TAO::String_Manager, a)
      )
 
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, AAAAAAAAA::ESS& t, const unsigned int /* unused */)
-{	
-	ar & boost::serialization::make_nvp("a", t.a);
-}
-
-
-template < class Archive >
-void serialize(Archive& ar, AAAAAAAAA::ESS_var& t, const unsigned int /* unused */)
-{	
-	// TODO
-}
-
-
-} // serialization
-} // boost
-
 	
 
 
 
         
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, AAAAAAAAA::EEESeq& t, const unsigned int version)
-{	
-	::corbasim::serialization::sequence::serialize(ar, t, version);
-}
-	
-template < class Archive >
-void serialize(Archive& ar, AAAAAAAAA::EEESeq_var& t, const unsigned int version)
-{	
-	// TODO
-}
-	
-} // serialization
-} // boost
-
 namespace corbasim
 {
 namespace adapted
@@ -76,20 +34,6 @@ struct is_corbaseq< AAAAAAAAA::EEESeq > : public cs_mpl::true_
 
 
 
-
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, AAAAAAAAA::IIIIIIIIII_var& t, const unsigned int version)
-{	
-	// TODO
-}
-
-} // serialization
-} // boost
 
 namespace corbasim
 {
@@ -139,12 +83,6 @@ struct __op1
 	
 	// Copy constructor
 	__op1(const __op1& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __op1 op1;
@@ -163,12 +101,6 @@ struct __op2
 	
 	// Copy constructor
 	__op2(const __op2& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("return", _return);
-	}
 };
 
 typedef __op2 op2;

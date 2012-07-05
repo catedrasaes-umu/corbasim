@@ -10,26 +10,6 @@
 
 
         
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, StringTest::NameSeq& t, const unsigned int version)
-{	
-	::corbasim::serialization::string_sequence::serialize(ar, t, version);
-}
-	
-template < class Archive >
-void serialize(Archive& ar, StringTest::NameSeq_var& t, const unsigned int version)
-{	
-	// TODO
-}
-	
-} // serialization
-} // boost
-
 namespace corbasim
 {
 namespace adapted
@@ -48,26 +28,6 @@ struct is_corbaseq< StringTest::NameSeq > : public cs_mpl::true_
 
 
         
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, StringTest::NameIDSeq& t, const unsigned int version)
-{	
-	::corbasim::serialization::string_sequence::serialize(ar, t, version);
-}
-	
-template < class Archive >
-void serialize(Archive& ar, StringTest::NameIDSeq_var& t, const unsigned int version)
-{	
-	// TODO
-}
-	
-} // serialization
-} // boost
-
 namespace corbasim
 {
 namespace adapted
@@ -91,47 +51,9 @@ BOOST_FUSION_ADAPT_STRUCT(
 	( ::TAO::String_Manager, id)
      )
 
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, StringTest::StructWithStrings& t, const unsigned int /* unused */)
-{	
-	ar & boost::serialization::make_nvp("str", t.str);
-	ar & boost::serialization::make_nvp("nam", t.nam);
-	ar & boost::serialization::make_nvp("id", t.id);
-}
-
-
-template < class Archive >
-void serialize(Archive& ar, StringTest::StructWithStrings_var& t, const unsigned int /* unused */)
-{	
-	// TODO
-}
-
-
-} // serialization
-} // boost
-
 	
 
 
-
-namespace boost
-{
-namespace serialization
-{
-
-template < class Archive >
-void serialize(Archive& ar, StringTest::InterfaceString_var& t, const unsigned int version)
-{	
-	// TODO
-}
-
-} // serialization
-} // boost
 
 namespace corbasim
 {
@@ -197,12 +119,6 @@ struct __operation1
 	
 	// Copy constructor
 	__operation1(const __operation1& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("s", s);
-	}
 };
 
 typedef __operation1 operation1;
@@ -223,12 +139,6 @@ struct __operation2
 	
 	// Copy constructor
 	__operation2(const __operation2& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-	}
 };
 
 typedef __operation2 operation2;
@@ -249,12 +159,6 @@ struct __operation3
 	
 	// Copy constructor
 	__operation3(const __operation3& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-	}
 };
 
 typedef __operation3 operation3;
@@ -275,12 +179,6 @@ struct __operation4
 	
 	// Copy constructor
 	__operation4(const __operation4& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-	}
 };
 
 typedef __operation4 operation4;
@@ -301,12 +199,6 @@ struct __operation5
 	
 	// Copy constructor
 	__operation5(const __operation5& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-	}
 };
 
 typedef __operation5 operation5;
@@ -327,12 +219,6 @@ struct __operation6
 	
 	// Copy constructor
 	__operation6(const __operation6& o);
-
-    template< typename Archive >
-    void serialize(Archive& ar, const unsigned int /* unused */)
-    {
-		ar & boost::serialization::make_nvp("n", n);
-	}
 };
 
 typedef __operation6 operation6;

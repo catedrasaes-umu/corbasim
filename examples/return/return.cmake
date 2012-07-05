@@ -18,28 +18,17 @@ add_custom_command(
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${CORBASIM_PREFIX}return_idl SHARED ${return_GENERATED} return_adapted.cpp)
-
-	
-	
+install(TARGETS ${CORBASIM_PREFIX}return_idl DESTINATION lib)
 
 
 
-
-
-
-
-	
 # Corbasim reflective library	
 add_library(corbasim_reflective_AAAAAAAAA_IIIIIIIIII SHARED AAAAAAAAA_IIIIIIIIII_reflective.cpp)
 target_link_libraries(corbasim_reflective_AAAAAAAAA_IIIIIIIIII
 	${CORBASIM_PREFIX}return_idl
 	# CORBASIM Library
 	corbasim)
-
-	
-	
-	
-
+install(TARGETS corbasim_reflective_AAAAAAAAA_IIIIIIIIII DESTINATION lib)
 
 
 	
