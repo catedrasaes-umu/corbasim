@@ -93,6 +93,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
 
     gbLayout = new QHBoxLayout;
     m_tree = new QTreeView();
+    m_tree->setModel(&m_log_model);
     gbLayout->addWidget(m_tree);
     gb->setLayout(gbLayout);
     m_mainSplitter->addWidget(gb);
@@ -175,11 +176,15 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
     if (m_caller && !m_caller->is_nil())
     {
         event::event_ptr ev(m_caller->do_call(req.get()));
+
+        m_log_model.outputRequest("Object", req, ev);
     }
 }
 
 void SimpleClient::initialize(core::interface_reflective_base const * factory)
 {
+    m_log_model.registerInstance("Object", factory);
+
     QGridLayout * grid = NULL;
     const unsigned int count = factory->operation_count();
 
