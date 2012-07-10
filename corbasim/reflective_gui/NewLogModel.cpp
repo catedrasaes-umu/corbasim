@@ -47,10 +47,13 @@ NewLogModel::~NewLogModel()
 
 int NewLogModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return 2;
+    return 3;
 }
 
-QString getNodeName(Node const * node)
+namespace 
+{
+
+QString getNodeName(MetaNode const * node)
 {
     if (node->parent && node->parent->reflective->is_repeated())
     {
@@ -70,6 +73,9 @@ QString getNodeName(Node const * node)
 
     return "Error!";
 }
+
+} // namespace 
+
 
 QVariant NewLogModel::data(const QModelIndex& index, int role) const
 {
@@ -93,7 +99,8 @@ QVariant NewLogModel::data(const QModelIndex& index, int role) const
     }
     else if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-        Node * node = static_cast< Node * >(index.internalPointer());
+        MetaNode * node = 
+            static_cast< MetaNode * >(index.internalPointer());
         node->check_for_initialized();
 
         // First level item
@@ -109,7 +116,14 @@ QVariant NewLogModel::data(const QModelIndex& index, int role) const
         {
             // Value
             if (index.column())
-                return toQVariant(node->reflective, node->holder);
+            {
+                int col = index.column() - 1;
+
+                if (col < node->brothers.size() && node->brothers[col])
+                    return toQVariant(node->reflective, node->brothers[col]->holder);
+
+                return QVariant();
+            }
 
             // Name
             return getNodeName(node);
@@ -128,13 +142,18 @@ QVariant NewLogModel::data(const QModelIndex& index, int role) const
 bool NewLogModel::setData(const QModelIndex & index, 
         const QVariant& value, int role)
 {
-    Node * node = static_cast< Node * >(index.internalPointer());
+    MetaNode * node = static_cast< MetaNode * >(index.internalPointer());
     
     if (!node) return false;
 
     node->check_for_initialized();
 
-    bool res = fromQVariant(node->reflective, node->holder, value);
+    const int col = index.column() - 1;
+
+    if (col < 0 || col >= node->brothers.size() || !node->brothers[col])
+        return false;
+
+    bool res = fromQVariant(node->reflective, node->brothers[col]->holder, value);
 
     if (res)
     {
@@ -152,14 +171,19 @@ bool NewLogModel::setData(const QModelIndex & index,
             }
 
             // No es una referencia
-            node->parent->reflective->set_child_value(node->parent->holder, 
-                    node->reflective->get_child_index(), node->holder);
+            node->parent->reflective->set_child_value(node->parent->brothers[col]->holder, 
+                    node->reflective->get_child_index(), node->brothers[col]->holder);
+
             if (_d)
             {
                 node->parent->reset();
                 endRemoveRows();
 
-                emit dataChanged(parent, parent);
+                node->parent->check_for_initialized();
+
+                beginInsertRows(parent, 0, node->parent->children.size());
+                endInsertRows();
+                // emit dataChanged(parent, parent);
             }
             else
             {
@@ -197,9 +221,11 @@ QVariant NewLogModel::headerData(int section,
         switch (section)
         {
         case 0:
-            return QString("Message");
+            return QString("Operation");
         case 1:
-            return QString("Value");
+            return QString("Input value");
+        case 2:
+            return QString("Output value");
         default:
             break;
         }
@@ -216,10 +242,12 @@ QModelIndex NewLogModel::index(int row, int column,
 
     if (!parent.isValid())
     {
-        return createIndex(row, column, (void *) m_nodes[row].get());
+        return createIndex(row, column, 
+                (void *) m_nodes[row].get());
     }
 
-    Node * node = static_cast< Node * >(parent.internalPointer());
+    MetaNode * node = static_cast< MetaNode * >(
+            parent.internalPointer());
     node->check_for_initialized();
 
     if (row < (int) node->children.size())
@@ -236,7 +264,8 @@ QModelIndex NewLogModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    Node * node = static_cast< Node * >(index.internalPointer());
+    MetaNode * node = static_cast< MetaNode * >(
+            index.internalPointer());
 
     if (!node || !node->parent)
         return QModelIndex();
@@ -268,7 +297,8 @@ int NewLogModel::rowCount(const QModelIndex &parent) const
     if (!parent.isValid())
         return m_entries.size();
 
-    Node * node = static_cast< Node * >(parent.internalPointer());
+    MetaNode * node = static_cast< MetaNode * >(
+            parent.internalPointer());
     node->check_for_initialized();
 
     return node->children.size();
@@ -362,9 +392,30 @@ void NewLogModel::append(const QString& id,
 
         beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
 
+        MetaNode_ptr metaNode(new MetaNode(op));
+        
+        // Request
         core::holder hold = op->get_holder(req);
         Node_ptr node(new Node(op, hold));
-        m_nodes.push_back(node);
+        metaNode->brothers.push_back(node);
+        
+        // Response
+        if (resp && (resp->get_type() == event::RESPONSE))
+        {
+            event::response_ptr response(
+                    boost::static_pointer_cast< event::response >(resp));
+
+            core::holder hold = op->get_holder(response);
+            Node_ptr node(new Node(op, hold));
+            metaNode->brothers.push_back(node);
+        }
+        else
+        {
+            // Null node
+            metaNode->brothers.push_back(Node_ptr());
+        }
+
+        m_nodes.push_back(metaNode);
 
         // List
         entry.is_in_entry = is_in;

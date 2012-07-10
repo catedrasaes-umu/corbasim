@@ -74,7 +74,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     addDockWidget(Qt::RightDockWidgetArea, m_dock_fqn);
 
     // Disables the header
-    m_log->header()->hide();
+    // m_log->header()->hide();
     m_app_log->header()->hide();
     m_fqn->header()->hide();
 

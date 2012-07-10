@@ -122,7 +122,7 @@ protected:
     const LogEntry& getLogEntry(int row) const { return m_entries.at(row); };
 
     QList< LogEntry > m_entries;
-    QList< Node_ptr > m_nodes;
+    QList< MetaNode_ptr > m_nodes;
 
     friend class FilteredLogModel;
 };

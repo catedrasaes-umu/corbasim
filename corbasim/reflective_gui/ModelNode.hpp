@@ -31,6 +31,10 @@ namespace reflective_gui
 struct Node;
 typedef boost::shared_ptr< Node > Node_ptr;
 
+struct MetaNode;
+typedef boost::shared_ptr< MetaNode > MetaNode_ptr;
+
+
 struct Node
 {
     core::reflective_base const * reflective;
@@ -52,6 +56,29 @@ struct Node
 
     void reset();
 };
+
+struct MetaNode
+{
+    core::reflective_base const * reflective;
+
+    MetaNode * parent;
+    unsigned int index;
+
+    bool initialized;
+    std::vector< MetaNode_ptr > children;
+    std::vector< Node_ptr > brothers;
+
+    MetaNode(core::reflective_base const * r,
+            MetaNode * p = 0, 
+            unsigned int idx = 0);
+
+    void initialize();
+
+    void check_for_initialized();
+
+    void reset();
+};
+
 
 } // namespace reflective_gui
 } // namespace corbasim
