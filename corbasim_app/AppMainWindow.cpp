@@ -350,7 +350,9 @@ void AppMainWindow::setController(AppController * controller)
 void AppMainWindow::setLogModel(QAbstractItemModel * model)
 {
     m_log->setModel(model);
-    m_log->setColumnWidth(0, 500);
+    m_log->setColumnWidth(0, 350);
+    m_log->setColumnWidth(1, 350);
+    m_log->setColumnWidth(2, 350);
 
     m_filtered_log->setLogModel(model);
 

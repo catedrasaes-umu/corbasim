@@ -33,6 +33,8 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
 
     QTreeView * filterView = new QTreeView();
     QTreeView * logView = new QTreeView();
+    filterView->setObjectName("filterView");
+    logView->setObjectName("logView");
 
     filterView->setModel(&m_filterModel);
     logView->setModel(&m_model);
@@ -49,6 +51,12 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     layout->addWidget(splitter);
     
     setLayout(layout);
+
+    // Size
+    setMinimumSize(800, 600);
+
+    splitter->setStretchFactor(0, 30);
+    splitter->setStretchFactor(1, 70);
 }
 
 FilteredLogView::~FilteredLogView()
@@ -70,6 +78,12 @@ void FilteredLogView::unregisterInstance(const QString& name)
 void FilteredLogView::setLogModel(QAbstractItemModel * model)
 {
     m_model.setSourceModel(model);
+
+    QTreeView * logView = findChild< QTreeView * >("logView");
+
+    logView->setColumnWidth(0, 150);
+    logView->setColumnWidth(1, 200);
+    logView->setColumnWidth(2, 200);
 }
 
 void FilteredLogView::save(QVariant& settings)

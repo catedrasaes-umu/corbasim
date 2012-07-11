@@ -411,10 +411,11 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
     QWidget(parent)
 {
     QHBoxLayout * layout = new QHBoxLayout();
+    QSplitter * splitter = new QSplitter(Qt::Horizontal);
 
     m_view = new OperationsView();
     m_view->setMaximumWidth(200);
-    layout->addWidget(m_view);
+    splitter->addWidget(m_view);
 
     m_view->setModel(&m_model);
 
@@ -426,7 +427,11 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
     btNewTab->setIcon(style()->standardIcon(QStyle::SP_FileIcon));
     m_tabs->setCornerWidget(btNewTab);
 
-    layout->addWidget(m_tabs);
+    splitter->addWidget(m_tabs);
+    layout->addWidget(splitter);
+
+    splitter->setStretchFactor(0, 30);
+    splitter->setStretchFactor(1, 70);
 
     setLayout(layout);
 
