@@ -29,7 +29,7 @@
 #include "NSWatcher.hpp"
 #include "IDLBuilder.hpp"
 // #include <corbasim/reflective_gui/LogModel.hpp>
-#include <corbasim/reflective_gui/NewLogModel.hpp>
+#include <corbasim/reflective_gui/LogModel.hpp>
 #include <corbasim/reflective_gui/InputRequestProcessor.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 #endif
     corbasim::app::AppMainWindow window;
     // corbasim::reflective_gui::LogModel logModel;
-    corbasim::reflective_gui::NewLogModel newLogModel;
+    corbasim::reflective_gui::LogModel newLogModel;
     corbasim::app::NSWatcher nsWatcher;
 
     // Signals between models

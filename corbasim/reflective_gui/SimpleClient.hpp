@@ -27,7 +27,7 @@
 #include <corbasim/core/reflective_fwd.hpp>
 
 #include <corbasim/qt/ObjrefWidget.hpp>
-#include <corbasim/reflective_gui/NewLogModel.hpp>
+#include <corbasim/reflective_gui/LogModel.hpp>
 
 namespace corbasim 
 {
@@ -59,7 +59,7 @@ public slots:
 
 protected:
 
-    NewLogModel m_log_model;
+    LogModel m_log_model;
 
     core::interface_caller_ptr m_caller;
     core::interface_reflective_base const * m_factory;

@@ -25,57 +25,297 @@
 #include <corbasim/core/reference_repository.hpp>
 #include <corbasim/reflective_gui/qvariant.hpp>
 
+#include <corbasim/qt/FilterModel.hpp>
+
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
+
+#include <iostream>
 
 using namespace corbasim::reflective_gui;
 
 LogModel::LogModel(QObject * parent) :
-    QStandardItemModel(parent), m_maxEntries(100)
+    QAbstractItemModel(parent), m_maxEntries(100)
 {
-    // setHeaderData(0, Qt::Horizontal, "ID");
-    // setHeaderData(1, Qt::Horizontal, "Value");
     m_inputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
     m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
-
-    setColumnCount(2);
 }
 
 LogModel::~LogModel()
 {
 }
 
+int LogModel::columnCount(const QModelIndex &/*parent*/) const
+{
+    return 3;
+}
+
+namespace 
+{
+
+QString getNodeName(MetaNode const * node)
+{
+    if (node->parent && node->parent->reflective->is_repeated())
+    {
+        return QString("[%1]").arg(node->index);
+    }
+    else if (node->parent && node->parent->reflective->get_type() ==
+            corbasim::core::TYPE_STRUCT)
+    {
+        return node->parent->reflective->get_child_name(node->index);
+    }
+    else if (node->parent && node->parent->reflective->get_type() ==
+            corbasim::core::TYPE_UNION)
+    {
+        return node->parent->reflective->get_child_name(
+                node->reflective->get_child_index());
+    }
+
+    return "Error!";
+}
+
+} // namespace 
+
+
 QVariant LogModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::BackgroundRole)
-        return QStandardItemModel::data(index, role);
-
-    QModelIndex parent = index;
-    while(parent.parent().isValid())
+    // Background
+    if (role == Qt::BackgroundRole)
     {
-        parent = parent.parent();
+        QModelIndex parent = index;
+        while(parent.parent().isValid())
+        {
+            parent = parent.parent();
+        }
+
+        // std::cout << parent.row() << std::endl;
+        const LogEntry& entry = m_entries.at(parent.row());
+
+        // return QVariant();
+        return entry.color;
+    }
+    else if (role == Qt::DisplayRole || role == Qt::EditRole)
+    {
+        MetaNode * node = 
+            static_cast< MetaNode * >(index.internalPointer());
+        node->check_for_initialized();
+
+        // First level item
+        if (!index.parent().isValid())
+        {
+            // Value
+            if (index.column())
+                return m_entries[index.row()].dateTime;
+
+            return m_entries[index.row()].text;
+        }
+        else
+        {
+            // Value
+            if (index.column())
+            {
+                int col = index.column() - 1;
+
+                if (col < node->brothers.size() && node->brothers[col])
+                    return toQVariant(node->reflective, node->brothers[col]->holder);
+
+                return QVariant();
+            }
+
+            // Name
+            return getNodeName(node);
+        }
+    }
+    else if (!index.parent().isValid() && index.column() == 0
+            && role == Qt::DecorationRole)
+    {
+        const LogEntry& entry = m_entries.at(index.row());
+        return *(entry.icon);
     }
 
-    const LogEntry& entry = m_entries.at(parent.row());
+    return QVariant();
+}
 
-    // Excepciones
-    if (entry.resp && (entry.resp->get_type() == event::EXCEPTION || 
-            entry.resp->get_type() == event::MESSAGE))
-        return QColor(Qt::red);
+bool LogModel::setData(const QModelIndex & index, 
+        const QVariant& value, int role)
+{
+    MetaNode * node = static_cast< MetaNode * >(index.internalPointer());
+    
+    if (!node) return false;
 
-    if (entry.is_in_entry)
-        return QColor(Qt::green);
+    node->check_for_initialized();
 
-    return QColor(Qt::yellow);
+    const int col = index.column() - 1;
+
+    if (col < 0 || col >= node->brothers.size() || !node->brothers[col])
+        return false;
+
+    bool res = fromQVariant(node->reflective, node->brothers[col]->holder, value);
+
+    if (res)
+    {
+        // Temporal
+        if (node->parent && 
+                node->parent->reflective->get_type() == core::TYPE_UNION)
+        {
+            bool _d = (node->reflective->get_child_index() == 0);
+            QModelIndex parent = createIndex(
+                    node->parent->index, 0, (void *) node->parent);
+
+            if (_d)
+            {
+                beginRemoveRows(parent, 0, node->parent->children.size());
+            }
+
+            // No es una referencia
+            node->parent->reflective->set_child_value(node->parent->brothers[col]->holder, 
+                    node->reflective->get_child_index(), node->brothers[col]->holder);
+
+            if (_d)
+            {
+                node->parent->reset();
+                endRemoveRows();
+
+                node->parent->check_for_initialized();
+
+                beginInsertRows(parent, 0, node->parent->children.size());
+                endInsertRows();
+                // emit dataChanged(parent, parent);
+            }
+            else
+            {
+                emit dataChanged(index, index);
+            }
+        }
+        else
+        {
+            emit dataChanged(index, index);
+        }
+    }
+
+    return res;
+}
+
+Qt::ItemFlags LogModel::flags(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return 0;
+
+    // Value is editable by default
+    if (index.column())
+        return Qt::ItemIsEnabled 
+            | Qt::ItemIsSelectable 
+            | Qt::ItemIsEditable;
+
+    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+}
+
+QVariant LogModel::headerData(int section, 
+        Qt::Orientation orientation, int role) const
+{
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    {
+        switch (section)
+        {
+        case 0:
+            return QString("Operation");
+        case 1:
+            return QString("Input value");
+        case 2:
+            return QString("Output value");
+        default:
+            break;
+        }
+    }
+
+    return QVariant();
+}
+
+QModelIndex LogModel::index(int row, int column, 
+        const QModelIndex &parent) const
+{
+    if (!hasIndex(row, column, parent))
+        return QModelIndex();
+
+    if (!parent.isValid())
+    {
+        return createIndex(row, column, 
+                (void *) m_nodes[row].get());
+    }
+
+    MetaNode * node = static_cast< MetaNode * >(
+            parent.internalPointer());
+    node->check_for_initialized();
+
+    if (row < (int) node->children.size())
+    {
+        return createIndex(row, column, 
+                (void *) node->children[row].get());
+    }
+
+    return QModelIndex();
+}
+
+QModelIndex LogModel::parent(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return QModelIndex();
+
+    MetaNode * node = static_cast< MetaNode * >(
+            index.internalPointer());
+
+    if (!node || !node->parent)
+        return QModelIndex();
+
+    // parent is first level item
+    if (!node->parent->parent)
+    {
+        // index could be changed
+        int row = 0;
+        bool found = false;
+        for (; row < m_nodes.size() && !found; row++) 
+            if (m_nodes.at(row).get() == node->parent)
+                return createIndex(row, 0, (void *) node->parent);
+
+        return QModelIndex();
+    }
+
+    return createIndex(node->index, 0, (void *) node->parent);
+}
+
+int LogModel::rowCount(const QModelIndex &parent) const
+{
+    /**
+     * Los hijos son de la columna cero.
+     */
+    if (parent.column() > 0)
+        return 0;
+
+    if (!parent.isValid())
+        return m_entries.size();
+
+    MetaNode * node = static_cast< MetaNode * >(
+            parent.internalPointer());
+    node->check_for_initialized();
+
+    return node->children.size();
 }
 
 void LogModel::clearLog()
 {
-    clear();
+    beginResetModel();
+    reset();
+    resetInternalData();
+    endResetModel();
+}
+
+void LogModel::resetInternalData()
+{
     m_entries.clear();
+    m_nodes.clear();
 }
 
 int LogModel::maxEntries() const
@@ -87,12 +327,7 @@ void LogModel::setMaxEntries(int max)
 {
     m_maxEntries = max;
 
-    while (rowCount() > m_maxEntries)
-    {
-        // Elimina la primera
-        removeRow(0);
-        m_entries.pop_front();
-    }
+    // TODO remove
 }
 
 void LogModel::registerInstance(const QString& id,
@@ -110,178 +345,17 @@ void LogModel::inputRequest(const QString& id,
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-    QStandardItem * item = append(id, req, resp, true);
-    if (item)
-    {
-        const QString text (item->text());
-        const QString prefix = QString("Incoming call ") + id + "." + text;
-        
-        if(resp && resp->get_type() == event::EXCEPTION)
-        {
-            item->setText(prefix + " (Exception!)");
-        }
-        else if(resp && resp->get_type() == event::MESSAGE)
-        {
-            event::message* msg = static_cast< event::message* >(resp.get());
-            item->setText(prefix + " (" + msg->get_message() + ")");
-        }
-        else
-        {
-            item->setText(prefix);
-        }
-
-        item->setIcon(m_inputIcon);
-    }
+    append(id, req, resp, true);
 }
 
 void LogModel::outputRequest(const QString& id, 
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp)
 {
-    QStandardItem * item = append(id, req, resp, false);
-    if (item)
-    {
-        const QString text (item->text());
-        const QString prefix = QString("Outgoing call ") + id + "." + text;
-        
-        if(resp && resp->get_type() == event::EXCEPTION)
-        {
-            item->setText(prefix + " (Exception!)");
-        }
-        else if(resp && resp->get_type() == event::MESSAGE)
-        {
-            event::message* msg = static_cast< event::message* >(resp.get());
-            item->setText(prefix + " (" + msg->get_message() + ")");
-        }
-        else
-        {
-            item->setText(prefix);
-        }
-
-        item->setIcon(m_outputIcon);
-    }
+    append(id, req, resp, false);
 }
 
-QStandardItem * createRecursive(
-        corbasim::core::reflective_base const * reflective,
-        corbasim::core::holder& hold)
-{
-    using namespace corbasim::core;
-
-    if (!reflective)
-        return new QStandardItem("Null reflective type!");
-
-    const reflective_type type = reflective->get_type();
-
-    switch(type)
-    {
-        case TYPE_BOOL:
-        case TYPE_OCTET:
-        case TYPE_CHAR:
-        case TYPE_SHORT:
-        case TYPE_USHORT:
-        case TYPE_LONG:
-        case TYPE_ULONG:
-        case TYPE_LONGLONG:
-        case TYPE_ULONGLONG:
-        case TYPE_STRING:
-        case TYPE_WSTRING:
-        case TYPE_OBJREF:
-        case TYPE_ENUM:
-        case TYPE_DOUBLE:
-        case TYPE_FLOAT:
-            {
-                QStandardItem * item =  new QStandardItem();
-                item->setData(toQVariant(reflective, hold), Qt::DisplayRole);
-                return item;
-            }
-
-        case TYPE_ARRAY:
-        case TYPE_SEQUENCE:
-            {
-                QStandardItem * parent = new QStandardItem();
-
-                const unsigned int count = reflective->get_length(hold);
-
-                reflective_base const * slice = reflective->get_slice();
-
-                for (unsigned int i = 0; i < count; i++) 
-                {
-                    const QString child_name = QString("[%1]").arg(i);
-
-                    holder child_value = 
-                        reflective->get_child_value(hold, i);
-
-                    QStandardItem * current = 
-                        createRecursive(slice, child_value);
-
-                    if (current->rowCount() > 0)
-                    {
-                        current->setText(child_name);
-                        parent->appendRow(current);
-                    }
-                    else
-                    {
-                        QStandardItem* name = new QStandardItem(child_name);
-                        QList< QStandardItem * > list;
-                        list << name;
-                        list << current;
-
-                        parent->appendRow(list);
-                    }
-                }
-
-                return parent;
-            }
-
-        case TYPE_STRUCT:
-            {
-                QStandardItem * parent = new QStandardItem();
-
-                const unsigned int count = reflective->get_children_count();
-
-                for (unsigned int i = 0; i < count; i++) 
-                {
-                    reflective_base const * child = 
-                        reflective->get_child(i);
-
-                    holder child_value = 
-                        reflective->get_child_value(hold, i);
-
-                    QStandardItem * current = 
-                        createRecursive(child, child_value);
-
-                    const char * child_name = reflective->get_child_name(i);
-
-                    if (current->rowCount() > 0)
-                    {
-                        current->setText(child_name);
-                        parent->appendRow(current);
-                    }
-                    else
-                    {
-                        QStandardItem* name = new QStandardItem(child_name);
-                        QList< QStandardItem * > list;
-                        list << name;
-                        list << current;
-
-                        parent->appendRow(list);
-                    }
-
-                }
-
-                return parent;
-            }
-        case TYPE_UNION:
-        default:
-
-            break;
-    }
-
-    return new QStandardItem("Unsupported item!");
-}
-
-QStandardItem* LogModel::append(const QString& id, 
+void LogModel::append(const QString& id, 
         corbasim::event::request_ptr req,
         corbasim::event::event_ptr resp,
         bool is_in)
@@ -290,54 +364,148 @@ QStandardItem* LogModel::append(const QString& id,
     
     if (it != m_instances.end())
     {
-        QDateTime dateTime = QDateTime::currentDateTime();
-        QList< QStandardItem * > list;
+        LogEntry entry;
+        entry.dateTime = QDateTime::currentDateTime();
 
         core::operation_reflective_base const * op =
             it->second->get_reflective_by_tag(req->get_tag());
 
-        if (!op)
-            return NULL;
+        if (!op) return;
+
+        entry.reflective = op;
 
         // Deja espacio
-        while (rowCount() > m_maxEntries - 1)
+        int nRowsToBeRemoved = m_entries.size() - m_maxEntries + 1;
+        if (nRowsToBeRemoved > 0)
         {
-            // Elimina la primera
-            removeRow(0);
-            m_entries.pop_front();
+            beginRemoveRows(QModelIndex(), 0, nRowsToBeRemoved - 1);
+
+            for (int i = 0; i < nRowsToBeRemoved; i++) 
+            {
+                // Elimina la primera
+                m_entries.pop_front();
+                m_nodes.pop_front();
+            }
+
+            endRemoveRows();
         }
 
-        core::holder hold = op->get_holder(req);
+        beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
 
-        QStandardItem * item = createRecursive(op, hold);
-        item->setText(op->get_name());
-
-        // process response
-        if (resp && resp->get_type() == event::RESPONSE)
-        {
-            event::response_ptr respi =
-                boost::static_pointer_cast< event::response >(resp);
-
-            core::holder respHolder = op->get_holder(respi);
-
-            QStandardItem * itemResp = createRecursive(op, hold);
-            itemResp->setText("Response");
-            item->appendRow(itemResp);
-        }
+        MetaNode_ptr metaNode(new MetaNode(op));
         
-        list << item << new QStandardItem(dateTime.toString());
+        // Request
+        core::holder hold = op->get_holder(req);
+        Node_ptr node(new Node(op, hold));
+        metaNode->brothers.push_back(node);
+        
+        // Response
+        if (resp && (resp->get_type() == event::RESPONSE))
+        {
+            event::response_ptr response(
+                    boost::static_pointer_cast< event::response >(resp));
+
+            core::holder hold = op->get_holder(response);
+            Node_ptr node(new Node(op, hold));
+            metaNode->brothers.push_back(node);
+        }
+        else
+        {
+            // Null node
+            metaNode->brothers.push_back(Node_ptr());
+        }
+
+        m_nodes.push_back(metaNode);
 
         // List
-        LogEntry entry;
         entry.is_in_entry = is_in;
         entry.id = id;
         entry.req = req;
         entry.resp = resp;
+
+        if (is_in)
+        {
+            entry.text = QString("Incoming call ") + id + "." 
+                + op->get_name();
+            entry.icon = &m_inputIcon;
+            
+            // Background color
+            if (resp && (resp->get_type() == event::EXCEPTION || 
+                    resp->get_type() == event::MESSAGE))
+            {
+                entry.text += " (Exception!)";
+                entry.color = QColor(Qt::red);
+            }
+            else
+                entry.color = QColor(Qt::green);
+        }
+        else
+        {
+            entry.text = QString("Outgoing call ") + id + "." 
+                + op->get_name();
+            entry.icon = &m_outputIcon;
+
+            // Background Color
+            if (resp && (resp->get_type() == event::EXCEPTION || 
+                    resp->get_type() == event::MESSAGE))
+            {
+                entry.text += " (Exception!)";
+                entry.color = QColor(Qt::red);
+            }
+            else
+                entry.color = QColor(Qt::yellow);
+        }
+
         m_entries.push_back(entry);
 
-        appendRow(list);
-        return item;
+        endInsertRows();
     }
-    return NULL;
+}
+
+FilteredLogModel::FilteredLogModel(QObject * parent) : 
+    QSortFilterProxyModel(parent), m_filter(NULL)
+{
+}
+
+FilteredLogModel::~FilteredLogModel()
+{
+}
+
+bool FilteredLogModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+    if (sourceParent.isValid()) return true;
+
+    if (!m_filter) return false;
+
+    LogModel const * model = dynamic_cast< LogModel const * >(sourceModel());
+
+    if (model)
+    {
+        const LogModel::LogEntry& entry(model->getLogEntry(sourceRow));
+
+        return m_filter->visibleOperation(entry.id, entry.reflective->get_tag());
+    }
+
+    return false;
+}
+
+void FilteredLogModel::setFilterModel(qt::FilterModel * filter)
+{
+    if (m_filter)
+    {
+        QObject::disconnect(m_filter, SIGNAL(filterChanged()), this, SLOT(resetModel()));
+    }
+
+    m_filter = filter;
+
+    if (m_filter)
+    {
+        QObject::connect(m_filter, SIGNAL(filterChanged()), this, SLOT(resetModel()));
+    }
+}
+
+void FilteredLogModel::resetModel()
+{
+    invalidateFilter();
 }
 

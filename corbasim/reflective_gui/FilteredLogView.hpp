@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <corbasim/qt/FilterModel.hpp>
-#include <corbasim/reflective_gui/NewLogModel.hpp>
+#include <corbasim/reflective_gui/LogModel.hpp>
 
 namespace corbasim 
 {
