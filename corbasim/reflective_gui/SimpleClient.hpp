@@ -48,6 +48,7 @@ public:
     void setReference(CORBA::Object_ptr ref);
 
 public slots:
+
     void sendRequest(corbasim::event::request_ptr);
     void clearAll();
     void stopAllTimers();
@@ -56,6 +57,12 @@ public slots:
     void showScriptEditor();
     void showDialog(int);
     void showDialog(QAction *);
+
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
+    void doLoad();
+    void doSave();
 
 protected:
 

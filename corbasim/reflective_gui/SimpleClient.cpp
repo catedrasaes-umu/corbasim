@@ -23,6 +23,8 @@
 #include <corbasim/reflective_gui/RequestDialog.hpp>
 #include <corbasim/reflective_gui/SimpleScriptEditor.hpp>
 #include <corbasim/qt/initialize.hpp>
+#include <corbasim/reflective_gui/json.hpp>
+#include <fstream>
 
 using namespace corbasim;
 using namespace corbasim::reflective_gui;
@@ -43,9 +45,6 @@ SimpleClient::SimpleClient(QWidget * parent) :
     // Menu File
     QMenu * menuFile = m_menu->addMenu("&File");
     QMenu * editMenu = m_menu->addMenu("&Edit");
-    menuFile->addAction("&Script editor", this, SLOT(showScriptEditor()));
-    menuFile->addSeparator();
-    menuFile->addAction("&Close", this, SLOT(close()));
 
     // Menu Operations
     m_operations_menu = m_menu->addMenu("&Operations");
@@ -97,6 +96,29 @@ SimpleClient::SimpleClient(QWidget * parent) :
     gbLayout->addWidget(m_tree);
     gb->setLayout(gbLayout);
     m_mainSplitter->addWidget(gb);
+
+    // Load
+    QAction * loadAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogOpenButton),
+            "&Load configuration", this);
+    loadAction->setShortcut(QKeySequence::Open);
+    QObject::connect(loadAction, SIGNAL(triggered()), 
+            this, SLOT(doLoad()));
+
+    // Save
+    QAction * saveAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogSaveButton),
+            "&Save configuration", this);
+    saveAction->setShortcut(QKeySequence::SaveAs);
+    QObject::connect(saveAction, SIGNAL(triggered()), 
+            this, SLOT(doSave()));
+
+    menuFile->addAction(loadAction);
+    menuFile->addAction(saveAction);
+    menuFile->addSeparator();
+    menuFile->addAction("&Script editor", this, SLOT(showScriptEditor()));
+    menuFile->addSeparator();
+    menuFile->addAction("&Close", this, SLOT(close()));
 
     // Actions
     QAction * pasteAction = new QAction("Paste &IOR from clipboard", 
@@ -285,5 +307,104 @@ void SimpleClient::showScriptEditor()
                 SLOT(sendRequest(corbasim::event::request_ptr)));
     }
     m_script_editor->show();
+}
+
+void SimpleClient::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    if (map.contains("dialogs"))
+    {
+        const QVariantList list = map.value("dialogs").toList();
+
+        for (QVariantList::const_iterator it = list.begin(); 
+                it != list.end(); ++it) 
+        {
+            const QVariantMap map = it->toMap();
+
+            if (map.contains("operation") && map.contains("value"))
+            {
+                // find the index
+                unsigned int i = 0;
+                bool found = false;
+                for (; !found && i < m_factory->operation_count(); 
+                        i++) 
+                {
+                    found = (m_factory->get_reflective_by_index(i)->get_name() 
+                            == map.value("operation").toString());
+                }
+
+                // load its saved value
+                if (found)
+                {
+                    getRequestDialog(i)->load(map.value("value"));
+                }
+            }
+        }
+    }
+}
+
+void SimpleClient::save(QVariant& settings)
+{
+    QVariantMap map;
+    QVariantList list;
+
+    for (unsigned int i = 0; i < m_dialogs.size(); i++) 
+    {
+        if (m_dialogs[i])
+        {
+            QVariantMap op;
+            op["operation"] = m_dialogs[i]->getReflective()->get_name();
+            m_dialogs[i]->save(op["value"]);
+            list << op;
+        }
+    }
+
+    map["dialogs"] = list;
+    settings = map;
+}
+
+// Settings
+void SimpleClient::doLoad() 
+{
+    const QString file = QFileDialog::getOpenFileName( 0, tr(
+                "Select some files"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    QVariant var;
+
+    // Try to Read a JSON file
+    bool res = 
+        reflective_gui::fromJsonFile(file.toStdString().c_str(), var);
+
+    if (res)
+    {
+        load(var);
+    }
+    else
+    {
+        // TODO display error
+    }
+}
+
+void SimpleClient::doSave() 
+{
+    QString file = QFileDialog::getSaveFileName( 0, tr(
+                "Select a file"), ".");
+
+    // User cancels
+    if (file.isEmpty())
+        return;
+
+    QVariant v;
+    save(v);
+
+    std::ofstream ofs(file.toStdString().c_str());
+    json::ostream_writer_t ow(ofs, true);
+
+    reflective_gui::toJson(ow, v);
 }
 

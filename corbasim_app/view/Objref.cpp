@@ -253,7 +253,21 @@ void Objref::load(const QVariant& settings)
 
             if (map.contains("operation") && map.contains("value"))
             {
-                // TODO
+                // find the index
+                unsigned int i = 0;
+                bool found = false;
+                for (; !found && i < m_factory->operation_count(); 
+                        i++) 
+                {
+                    found = (m_factory->get_reflective_by_index(i)->get_name() 
+                            == map.value("operation").toString());
+                }
+
+                // load its saved value
+                if (found)
+                {
+                    getRequestDialog(i)->load(map.value("value"));
+                }
             }
         }
     }
