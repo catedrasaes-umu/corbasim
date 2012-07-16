@@ -54,18 +54,18 @@ set(corbasim_app_MOC_HDRS
 qt4_wrap_cpp(corbasim_app_MOC_SRCS
     ${corbasim_app_MOC_HDRS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
 
-add_executable(corbasim_app
+add_executable(corbasim_app.real
     main.cpp
     ${corbasim_app_MOC_SRCS}
     ${corbasim_app_SRCS})
-target_link_libraries(corbasim_app
+target_link_libraries(corbasim_app.real
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     corbasim
     corbasim_qt
     corbasim_reflective_gui
     corbasim_app_idl)
 
-install(TARGETS corbasim_app DESTINATION bin)
+install(TARGETS corbasim_app.real DESTINATION bin)
 install(TARGETS corbasim_app_idl DESTINATION lib)
 
 add_executable(corbasim_app_test EXCLUDE_FROM_ALL
@@ -77,4 +77,12 @@ target_link_libraries(corbasim_app_test
     corbasim_reflective_gui
     corbasim_app_idl)
 
+# Launcher
+add_executable(corbasim_app
+    launcher.cpp
+)
+target_link_libraries(corbasim_app
+    ${QT_LIBRARIES}
+)
+install(TARGETS corbasim_app DESTINATION bin)
 

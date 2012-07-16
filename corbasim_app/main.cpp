@@ -28,7 +28,6 @@
 #include "NSBrowser.hpp"
 #include "NSWatcher.hpp"
 #include "IDLBuilder.hpp"
-// #include <corbasim/reflective_gui/LogModel.hpp>
 #include <corbasim/reflective_gui/LogModel.hpp>
 #include <corbasim/reflective_gui/InputRequestProcessor.hpp>
 #include <boost/thread.hpp>
@@ -85,48 +84,6 @@ int main(int argc, char **argv)
     corbasim::app::NSWatcher nsWatcher;
 
     // Signals between models
-#if 0
-    QObject::connect(&controller,
-            SIGNAL(objrefCreated(
-                    QString, const corbasim::core::interface_reflective_base *)),
-            &logModel,
-            SLOT(registerInstance(
-                    const QString&, const 
-                    corbasim::core::interface_reflective_base *)));
-    QObject::connect(&controller,
-            SIGNAL(objrefDeleted(QString)),
-            &logModel,
-            SLOT(unregisterInstance(const QString&)));
-
-    QObject::connect(&controller,
-            SIGNAL(servantCreated(
-                    QString, 
-                    const corbasim::core::interface_reflective_base *)),
-            &logModel,
-            SLOT(registerInstance(
-                    const QString&, 
-                    const corbasim::core::interface_reflective_base *)));
-
-    QObject::connect(&controller,
-            SIGNAL(servantDeleted(QString)),
-            &logModel, SLOT(unregisterInstance(const QString&)));
-
-    QObject::connect(&controller,
-        SIGNAL(requestSent(QString, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)),
-        &logModel,
-        SLOT(outputRequest(const QString&, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)));
-
-    QObject::connect(&controller,
-        SIGNAL(requestReceived(QString, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)),
-        &logModel,
-        SLOT(inputRequest(const QString&, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)));
-    // End signals
-#endif
-    // New Signals between models
     QObject::connect(&controller,
             SIGNAL(objrefCreated(
                     QString, const corbasim::core::interface_reflective_base *,
