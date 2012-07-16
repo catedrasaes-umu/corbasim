@@ -52,6 +52,10 @@ void ReferenceFinder::run()
         std::size_t end = 
             tk.find_first_not_of("0123456789abcdef", beg + 4);
 
+        // Size
+        if (end != std::string::npos)
+            end = end - beg;
+
         const std::string ior = tk.substr(beg, end);
 
         try 
