@@ -143,6 +143,11 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QObject::connect(clearAction, SIGNAL(triggered()), 
             this, SLOT(clearAll()));
 
+    QAction * clearLogAction = new QAction("&Clear log",
+            this);
+    QObject::connect(clearLogAction, SIGNAL(triggered()), 
+            &m_log_model, SLOT(clearLog()));
+
     QAction * stopAction = new QAction("&Stop all timers",
             this);
     // stopAction->setShortcut(QKeySequence::Cut);
@@ -151,6 +156,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
 
     editMenu->addAction(pasteAction);
     editMenu->addAction(clearAction);
+    editMenu->addAction(clearLogAction);
     editMenu->addAction(stopAction);
 
     central->setLayout(layout);
@@ -166,6 +172,8 @@ SimpleClient::SimpleClient(QWidget * parent) :
             SIGNAL(found(const CORBA::Object_var&)),
             this,
             SLOT(updateReference(const CORBA::Object_var&)));
+
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
 
 SimpleClient::~SimpleClient()
