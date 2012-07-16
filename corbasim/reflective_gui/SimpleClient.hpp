@@ -28,6 +28,7 @@
 
 #include <corbasim/qt/ObjrefWidget.hpp>
 #include <corbasim/reflective_gui/LogModel.hpp>
+#include <corbasim/reflective_gui/FilteredLogView.hpp>
 
 #include <corbasim/qt/ReferenceFinder.hpp>
 
@@ -94,6 +95,8 @@ protected:
 
     typedef std::vector< RequestDialog * > dialogs_t;
     dialogs_t m_dialogs;
+
+    FilteredLogView * m_filtered_log;
 
     static const int _max_btns_per_row = 4;
     static const int _max_btns_per_page = 16;

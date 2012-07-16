@@ -97,6 +97,15 @@ SimpleClient::SimpleClient(QWidget * parent) :
     gb->setLayout(gbLayout);
     m_mainSplitter->addWidget(gb);
 
+    // Filtered log
+    QDialog * filteredLogDlg = new QDialog(this);
+    QVBoxLayout * filteredLayout = new QVBoxLayout();
+    m_filtered_log = new FilteredLogView();
+    m_filtered_log->setLogModel(&m_log_model);
+    filteredLayout->addWidget(m_filtered_log);
+    filteredLogDlg->setLayout(filteredLayout);
+    filteredLogDlg->hide();
+
     // Load
     QAction * loadAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
@@ -117,6 +126,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     menuFile->addAction(saveAction);
     menuFile->addSeparator();
     menuFile->addAction("&Script editor", this, SLOT(showScriptEditor()));
+    menuFile->addAction("&Filtered log", filteredLogDlg, SLOT(show()));
     menuFile->addSeparator();
     menuFile->addAction("&Close", this, SLOT(close()));
 
@@ -195,6 +205,7 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
 void SimpleClient::initialize(core::interface_reflective_base const * factory)
 {
     m_log_model.registerInstance("Object", factory);
+    m_filtered_log->registerInstance("Referenced object", factory);
 
     QGridLayout * grid = NULL;
     const unsigned int count = factory->operation_count();
@@ -334,6 +345,11 @@ void SimpleClient::load(const QVariant& settings)
             }
         }
     }
+
+    if (map.contains("filtered_log"))
+    {
+        m_filtered_log->load(map["filtered_log"]);
+    }
 }
 
 void SimpleClient::save(QVariant& settings)
@@ -353,6 +369,12 @@ void SimpleClient::save(QVariant& settings)
     }
 
     map["dialogs"] = list;
+
+    // Filtered log
+    QVariant filtered;
+    m_filtered_log->save(filtered);
+    map["filtered_log"] = filtered;
+
     settings = map;
 }
 
