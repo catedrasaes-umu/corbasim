@@ -9,6 +9,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/SortableGroup.hpp
     qt/types.hpp
     qt/ReferenceModel.hpp
+    qt/ReferenceFinder.hpp
     qt/Status.hpp
     qt/RangedWidget.hpp
     qt/MultiFileSelectionWidget.hpp
@@ -32,6 +33,7 @@ set(corbasim_qt_MOC_HDRS
     qt/TabWidget.hpp
     qt/PlotModel.hpp
     qt/ParametersModel.hpp
+    qt/ReferenceFinder.hpp
     qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
@@ -57,6 +59,7 @@ set(corbasim_qt_SRCS
     qt/CustomLayouts.cpp
     qt/SortableGroup.cpp
     qt/ReferenceModel.cpp
+    qt/ReferenceFinder.cpp
     qt/initialize.cpp
     qt/ScriptWindow.cpp
     qt/ObjrefWidget.cpp

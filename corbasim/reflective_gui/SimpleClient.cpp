@@ -143,23 +143,6 @@ SimpleClient::SimpleClient(QWidget * parent) :
     editMenu->addAction(clearAction);
     editMenu->addAction(stopAction);
 
-#if 0
-    // Buttons
-    QHBoxLayout * btnsLayout = new QHBoxLayout;
-    QPushButton * btn = new QPushButton("&Clear");
-    QObject::connect(btn, SIGNAL(clicked()), this, SLOT(clearAll()));
-    btnsLayout->addWidget(btn);
-
-    btn = new QPushButton("Paste &IOR from clipboard");
-    QObject::connect(btn, SIGNAL(clicked()), this, SLOT(pasteIOR()));
-    btnsLayout->addWidget(btn);
-
-    btn = new QPushButton("&Stop all timers");
-    QObject::connect(btn, SIGNAL(clicked()), this, SLOT(stopAllTimers()));
-    btnsLayout->addWidget(btn);
-    layout->addLayout(btnsLayout);
-#endif
-
     central->setLayout(layout);
     setCentralWidget(central);
 
@@ -169,10 +152,16 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QObject::connect(&m_actions, SIGNAL(triggered(QAction *)), 
             this, SLOT(showDialog(QAction *)));
 
+    QObject::connect(&m_finder, 
+            SIGNAL(found(const CORBA::Object_var&)),
+            this,
+            SLOT(updateReference(const CORBA::Object_var&)));
 }
 
 SimpleClient::~SimpleClient()
 {
+    m_finder.terminate();
+    m_finder.wait();
 }
 
 void SimpleClient::pasteIOR()
@@ -252,11 +241,14 @@ void SimpleClient::initialize(core::interface_reflective_base const * factory)
     // Establece el llamador
     m_caller.reset(factory->create_caller());
     m_ref->setValidator(m_caller.get());
+
+    m_finder.start();
 }
 
 void SimpleClient::setReference(CORBA::Object_ptr ref)
 {
     m_caller->set_reference(ref);
+    m_ref->validatorHasChanged();
 }
 
 void SimpleClient::showDialog(int idx)
@@ -406,5 +398,33 @@ void SimpleClient::doSave()
     json::ostream_writer_t ow(ofs, true);
 
     reflective_gui::toJson(ow, v);
+}
+
+void SimpleClient::resizeEvent(QResizeEvent * event)
+{
+    if (!event->oldSize().isValid() || event->oldSize().isNull())
+        return;
+
+    QList< int > sizes = m_mainSplitter->sizes();
+
+    int available = event->size().height();
+
+    for (int i = 0; i < sizes.size() - 1; i++)
+        if (sizes.at(i))
+        {
+            int min = m_mainSplitter->widget(i)->sizeHint().height();
+            // int min = m_mainSplitter->widget(i)->minimumHeight();
+            available -= min; 
+            sizes.replace(i, min);
+        }
+
+    sizes.last() = available;
+
+    m_mainSplitter->setSizes(sizes);
+}
+
+void SimpleClient::updateReference(const CORBA::Object_var& ref)
+{
+    setReference(ref);
 }
 

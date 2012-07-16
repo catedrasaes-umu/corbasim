@@ -29,6 +29,8 @@
 #include <corbasim/qt/ObjrefWidget.hpp>
 #include <corbasim/reflective_gui/LogModel.hpp>
 
+#include <corbasim/qt/ReferenceFinder.hpp>
+
 namespace corbasim 
 {
 namespace reflective_gui
@@ -63,10 +65,14 @@ public slots:
 
     void doLoad();
     void doSave();
+    
+    void updateReference(const CORBA::Object_var& ref);
 
 protected:
 
     LogModel m_log_model;
+
+    qt::ReferenceFinder m_finder;
 
     core::interface_caller_ptr m_caller;
     core::interface_reflective_base const * m_factory;
@@ -93,6 +99,8 @@ protected:
     static const int _max_btns_per_page = 16;
 
     RequestDialog * getRequestDialog(int idx);
+
+    void resizeEvent(QResizeEvent * event);
 };
 
 } // namespace reflective_gui
