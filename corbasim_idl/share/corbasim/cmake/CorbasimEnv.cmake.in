@@ -1,4 +1,7 @@
 
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH ".")
+
 set(CORBASIM_INSTALL_PREFIX @CMAKE_INSTALL_PREFIX@)
 
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
@@ -14,4 +17,7 @@ include_directories(
     @TAO_INCLUDE_DIR@
     @TAO_INCLUDE_DIR@/orbsvcs)
 link_directories(@TAO_LIBRARY_DIR@)
+
+set(CORBASIM_ORB_LIBS
+    @CORBASIM_ORB_LIBS@)
 

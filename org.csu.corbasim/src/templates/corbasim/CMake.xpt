@@ -61,6 +61,7 @@ add_executable(${CORBASIM_PREFIX}«fqn»_client «fqn»_client.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_client 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	corbasim_reflective_«fqn»
+    ${CORBASIM_ORB_LIBS}
 	# CORBASIM Libraries
 	corbasim corbasim_qt corbasim_reflective_gui)
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_client DESTINATION bin)
@@ -71,6 +72,7 @@ install(TARGETS ${CORBASIM_PREFIX}«fqn»_client DESTINATION bin)
 add_executable(${CORBASIM_PREFIX}«fqn»_server «fqn»_server.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_server 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
+    ${CORBASIM_ORB_LIBS}
 	# CORBASIM Libraries
 	corbasim
 	# Boost
