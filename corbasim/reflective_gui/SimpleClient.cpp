@@ -274,6 +274,9 @@ void SimpleClient::initialize(core::interface_reflective_base const * factory)
     m_caller.reset(factory->create_caller());
     m_ref->setValidator(m_caller.get());
 
+    // Validator for reference updates
+    m_validator.reset(factory->create_caller());
+
     m_finder.start();
 }
 
@@ -478,6 +481,23 @@ void SimpleClient::resizeEvent(QResizeEvent * event)
 
 void SimpleClient::updateReference(const CORBA::Object_var& ref)
 {
+    if (!m_caller) return;
+
+    m_validator->set_reference(ref);
+
+    // does nothing if reference doesn't narrow
+    if (m_validator->is_nil())
+        return;
+
+    // does nothing if equivalent references
+    if (!m_caller->is_nil())
+    {
+        CORBA::Object_var old = m_caller->get_reference();
+
+        if (old->_is_equivalent(ref))
+            return;
+    }
+
     setReference(ref);
 }
 

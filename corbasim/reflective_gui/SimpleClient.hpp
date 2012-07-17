@@ -79,6 +79,7 @@ protected:
     qt::ReferenceFinder m_finder;
 
     core::interface_caller_ptr m_caller;
+    core::interface_caller_ptr m_validator;
     core::interface_reflective_base const * m_factory;
 
     QTabWidget * m_tab;
