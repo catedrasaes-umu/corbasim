@@ -28,7 +28,6 @@
 
 #include <corbasim/qt/ObjrefWidget.hpp>
 #include <corbasim/reflective_gui/LogModel.hpp>
-#include <corbasim/reflective_gui/FilteredLogView.hpp>
 
 #include <corbasim/qt/ReferenceFinder.hpp>
 
@@ -39,6 +38,8 @@ namespace reflective_gui
 
 class RequestDialog;
 class SimpleScriptEditor;
+class OperationSequenceTool;
+class FilteredLogView;
 
 class SimpleClient : public QMainWindow
 {
@@ -53,10 +54,12 @@ public:
 public slots:
 
     void sendRequest(corbasim::event::request_ptr);
+    void sendRequest(const QString& /*unused*/, corbasim::event::request_ptr);
     void clearAll();
     void stopAllTimers();
     void pasteIOR();
 
+    void showOperationSequenceTool();
     void showScriptEditor();
     void showDialog(int);
     void showDialog(QAction *);
@@ -97,6 +100,9 @@ protected:
     dialogs_t m_dialogs;
 
     FilteredLogView * m_filtered_log;
+
+    QDialog * m_dlg_seq_tool;
+    OperationSequenceTool * m_seq_tool;
 
     static const int _max_btns_per_row = 4;
     static const int _max_btns_per_page = 16;

@@ -21,7 +21,9 @@
 #include <iostream>
 #include <string>
 #include <corbasim/reflective_gui/RequestDialog.hpp>
+#include <corbasim/reflective_gui/FilteredLogView.hpp>
 #include <corbasim/reflective_gui/SimpleScriptEditor.hpp>
+#include <corbasim/reflective_gui/OperationSequence.hpp>
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/reflective_gui/json.hpp>
 #include <fstream>
@@ -31,7 +33,8 @@ using namespace corbasim::reflective_gui;
 
 SimpleClient::SimpleClient(QWidget * parent) :
     QMainWindow(parent), m_factory(NULL), m_actions(this),
-    m_script_editor(NULL)
+    m_script_editor(NULL), m_dlg_seq_tool(NULL),
+    m_seq_tool(NULL)
 {
     corbasim::qt::initialize();
 
@@ -126,6 +129,8 @@ SimpleClient::SimpleClient(QWidget * parent) :
     menuFile->addAction(saveAction);
     menuFile->addSeparator();
     menuFile->addAction("&Script editor", this, SLOT(showScriptEditor()));
+    menuFile->addAction("&Operation sequence", this, 
+            SLOT(showOperationSequenceTool()));
     menuFile->addAction("&Filtered log", filteredLogDlg, SLOT(show()));
     menuFile->addSeparator();
     menuFile->addAction("&Close", this, SLOT(close()));
@@ -210,10 +215,18 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
     }
 }
 
+void SimpleClient::sendRequest(const QString& /*unused*/, corbasim::event::request_ptr req)
+{
+    sendRequest(req);
+}
+
 void SimpleClient::initialize(core::interface_reflective_base const * factory)
 {
     m_log_model.registerInstance("Object", factory);
     m_filtered_log->registerInstance("Referenced object", factory);
+
+    if (m_seq_tool)
+        m_seq_tool->objrefCreated("Referenced object", factory);
 
     QGridLayout * grid = NULL;
     const unsigned int count = factory->operation_count();
@@ -358,6 +371,14 @@ void SimpleClient::load(const QVariant& settings)
     {
         m_filtered_log->load(map["filtered_log"]);
     }
+
+    if (map.contains("operations"))
+    {
+        // ensure created
+        showOperationSequenceTool();
+
+        m_seq_tool->load(map["operations"]);
+    }
 }
 
 void SimpleClient::save(QVariant& settings)
@@ -382,6 +403,8 @@ void SimpleClient::save(QVariant& settings)
     QVariant filtered;
     m_filtered_log->save(filtered);
     map["filtered_log"] = filtered;
+
+    if (m_seq_tool) m_seq_tool->save(map["operations"]);
 
     settings = map;
 }
@@ -456,5 +479,29 @@ void SimpleClient::resizeEvent(QResizeEvent * event)
 void SimpleClient::updateReference(const CORBA::Object_var& ref)
 {
     setReference(ref);
+}
+
+void SimpleClient::showOperationSequenceTool()
+{
+    if (!m_seq_tool)
+    {
+        QVBoxLayout * layout = new QVBoxLayout();
+        m_dlg_seq_tool = new QDialog(this);
+        m_seq_tool = new reflective_gui::OperationSequenceTool();
+        
+        layout->addWidget(m_seq_tool);
+        m_dlg_seq_tool->setLayout(layout);
+
+        QObject::connect(m_seq_tool,
+            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+            this, 
+            SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
+
+        // Initializes the tool
+        if (m_factory)
+            m_seq_tool->objrefCreated("Referenced object", m_factory);
+    }
+
+    m_dlg_seq_tool->show();
 }
 
