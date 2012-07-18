@@ -88,5 +88,9 @@ set_target_properties(corbasim_qt PROPERTIES
     VERSION ${${PROJECT_NAME}_VERSION}
     SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
-install(TARGETS corbasim_qt DESTINATION lib)
+add_library(corbasim_qt_s STATIC ${corbasim_qt_SRCS}
+    ${corbasim_qt_MOC_SRCS}
+    ${corbasim_qt_RCC})
+
+install(TARGETS corbasim_qt corbasim_qt_s DESTINATION lib)
 

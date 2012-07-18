@@ -64,5 +64,8 @@ set_target_properties(corbasim_reflective_gui PROPERTIES
     VERSION ${${PROJECT_NAME}_VERSION}
     SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
-install(TARGETS corbasim_reflective_gui DESTINATION lib)
+add_library(corbasim_reflective_gui_s STATIC ${corbasim_reflective_gui_SRCS}
+    ${corbasim_reflective_gui_MOC_SRCS})
+
+install(TARGETS corbasim_reflective_gui corbasim_reflective_gui_s DESTINATION lib)
 
