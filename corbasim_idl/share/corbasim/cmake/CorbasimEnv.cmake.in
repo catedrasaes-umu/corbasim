@@ -8,21 +8,27 @@ link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
 include_directories(@Boost_INCLUDE_DIRS@)
 link_directories(@Boost_LIBRARY_DIRS@)
 
-# ACE+TAO
-include_directories(
-    @ACE_INCLUDE_DIR@
-    @TAO_INCLUDE_DIR@
-    @TAO_INCLUDE_DIR@/orbsvcs)
-link_directories(@TAO_LIBRARY_DIR@)
+# ORB
+set(CORBASIM_ORBIMPL
+    @CORBASIM_ORBIMPL@)
 
 set(CORBASIM_ORB_LIBS
     @CORBASIM_ORB_LIBS@)
+
+include_directories(@CORBASIM_ORB_INCLUDE_DIRS@)
+link_directories(@CORBASIM_ORB_LIBRARY_DIRS@)
+
+set(CORBASIM_ORB_IDL_COMPILER
+    @CORBASIM_ORB_IDL_COMPILER@)
+
+set(CORBASIM_ORB_IDL_COMPILER_OPTIONS
+    @CORBASIM_ORB_IDL_COMPILER_OPTIONS@)
 
 # Libraries for clients
 set(CORBASIM_CLIENT_LIBS 
     corbasim corbasim_qt corbasim_reflective_gui)
 
-# Libraries for clients
+# Libraries for servers
 set(CORBASIM_SERVER_LIBS 
     corbasim)
 

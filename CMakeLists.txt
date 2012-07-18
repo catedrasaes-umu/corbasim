@@ -35,10 +35,18 @@ if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
         TAO_AnyTypeCode 
         TAO_CosNaming 
         TAO_ObjRefTemplate)
+    set(CORBASIM_ORB_INCLUDE_DIRS
+        ${ACE_INCLUDE_DIR}
+        ${TAO_INCLUDE_DIR}
+        ${TAO_INCLUDE_DIR}/orbsvcs)
+    set(CORBASIM_ORB_LIBRARY_DIRS
+        ${TAO_LIBRARY_DIR})
+    set(CORBASIM_ORB_IDL_COMPILER tao_idl)
 elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni
     set(CORBASIM_ORB_LIBS
         omniORB4)
+    set(CORBASIM_ORB_IDL_COMPILER omniidl)
 endif()
 
 #add_definitions(-Wall)
