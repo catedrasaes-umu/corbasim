@@ -1,9 +1,6 @@
 
 set(CORBASIM_INSTALL_PREFIX /tmp/corbasim)
 
-set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set(CMAKE_INSTALL_RPATH ${CORBASIM_INSTALL_PREFIX}/lib ${CMAKE_INSTALL_PREFIX}/lib .)
-
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
 
@@ -20,4 +17,12 @@ link_directories()
 
 set(CORBASIM_ORB_LIBS
     TAO;TAO_PortableServer;TAO_AnyTypeCode;TAO_CosNaming;TAO_ObjRefTemplate)
+
+# Libraries for clients
+set(CORBASIM_CLIENT_LIBS 
+    corbasim corbasim_qt corbasim_reflective_gui)
+
+# Libraries for clients
+set(CORBASIM_SERVER_LIBS 
+    corbasim)
 

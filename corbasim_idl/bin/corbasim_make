@@ -2,6 +2,7 @@
 
 BASEDIR=`dirname $0`
 BASEDIR=`cd $BASEDIR && pwd`
+BASENAME=`basename $0`
 INSTALLPREFIX=`cd $BASEDIR/.. && pwd`
 
 USAGE()
@@ -82,6 +83,13 @@ set(CMAKE_MODULE_PATH __INSTALLPREFIX__/share/corbasim/cmake)
 include(CorbasimEnv)
 
 include(__PROJECTNAME__.cmake)
+
+add_custom_command(
+  OUTPUT __PROJECTNAME__.idl
+  DEPENDS ${INPUTFILES}
+  WORKING_DIRECTORY \${CMAKE_CURRENT_SOURCE_DIR}
+  COMMAND ${BASEDIR}/${BASENAME} -n __PROJECTNAME__ ${PREPROCESSOROPTIONS} ${CORBASIMIDLOPTIONS} ${INPUTFILES}
+)
 
 """ | sed -e 's/__PROJECTNAME__/'"${PROJECTNAME}"'/g'       \
     | sed -e 's|__INSTALLPREFIX__|'${INSTALLPREFIX}'|g'   \
