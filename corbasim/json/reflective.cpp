@@ -26,13 +26,13 @@
 
 #include <corbasim/core/reference_repository.hpp>
 
-#ifdef _MSC_VER
+//#ifdef _MSC_VER
 #include <boost/cstdint.hpp>
 using boost::uint32_t;
 using boost::int32_t;
 using boost::uint64_t;
 using boost::int64_t;
-#endif
+//#endif
 
 using namespace corbasim::json;
 using namespace corbasim::core;

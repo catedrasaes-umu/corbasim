@@ -28,7 +28,11 @@ namespace core
 template CORBASIM_CORE_DECLSPEC CORBA::Boolean& holder::to_value< CORBA::Boolean >();
 template CORBASIM_CORE_DECLSPEC CORBA::Short& holder::to_value< CORBA::Short >();
 template CORBASIM_CORE_DECLSPEC CORBA::UShort& holder::to_value< CORBA::UShort >();
+
+#ifndef CORBASIM_CORBA_CHAR_IS_UNSIGNED_CHAR
 template CORBASIM_CORE_DECLSPEC CORBA::Char& holder::to_value< CORBA::Char >();
+#endif
+
 template CORBASIM_CORE_DECLSPEC CORBA::Octet& holder::to_value< CORBA::Octet >();
 template CORBASIM_CORE_DECLSPEC CORBA::Long& holder::to_value< CORBA::Long >();
 template CORBASIM_CORE_DECLSPEC CORBA::ULong& holder::to_value< CORBA::ULong >();
@@ -43,7 +47,11 @@ namespace detail
 template class CORBASIM_CORE_DECLSPEC bool_reflective< CORBA::Boolean >;
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Short >;
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::UShort >;
+
+#ifndef CORBASIM_CORBA_CHAR_IS_UNSIGNED_CHAR
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Char >;
+#endif
+
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Octet >;
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Long >;
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::ULong >;

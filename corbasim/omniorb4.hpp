@@ -22,6 +22,8 @@
 
 #include <omniORB4/CORBA.h>
 
+#define CORBASIM_CORBA_CHAR_IS_UNSIGNED_CHAR
+
 namespace corbasim 
 {
 

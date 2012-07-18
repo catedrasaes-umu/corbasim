@@ -37,6 +37,8 @@ if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
         TAO_ObjRefTemplate)
 elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni
+    set(CORBASIM_ORB_LIBS
+        omniORB4)
 endif()
 
 #add_definitions(-Wall)
