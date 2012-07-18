@@ -18,3 +18,11 @@ link_directories(@TAO_LIBRARY_DIR@)
 set(CORBASIM_ORB_LIBS
     @CORBASIM_ORB_LIBS@)
 
+# Libraries for clients
+set(CORBASIM_CLIENT_LIBS 
+    corbasim corbasim_qt corbasim_reflective_gui)
+
+# Libraries for clients
+set(CORBASIM_SERVER_LIBS 
+    corbasim)
+

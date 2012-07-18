@@ -6,8 +6,10 @@
 «LET getFileName() AS filename»
 «FILE filename+".cmake"»
 
+	«IF generateClient()-»
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
+	«ENDIF-»
 
 set(«filename»_GENERATED
 	${CMAKE_CURRENT_SOURCE_DIR}/«filename»C.h
@@ -62,8 +64,8 @@ target_link_libraries(${CORBASIM_PREFIX}«fqn»_client
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
 	corbasim_reflective_«fqn»
     ${CORBASIM_ORB_LIBS}
-	# CORBASIM Libraries
-	corbasim corbasim_qt corbasim_reflective_gui)
+    ${QT_LIBRARIES}
+    ${CORBASIM_CLIENT_LIBS})
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_client DESTINATION bin)
 
 	«ENDIF-»
@@ -73,8 +75,7 @@ add_executable(${CORBASIM_PREFIX}«fqn»_server «fqn»_server.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_server 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
     ${CORBASIM_ORB_LIBS}
-	# CORBASIM Libraries
-	corbasim
+    ${CORBASIM_SERVER_LIBS}
 	# Boost
 	boost_program_options)
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_server DESTINATION bin)
