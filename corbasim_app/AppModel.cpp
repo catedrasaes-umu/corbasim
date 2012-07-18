@@ -388,19 +388,37 @@ void AppModel::loadDirectory(const QString& path)
 {
     const QDir d(path);
     QStringList filters;
+    QStringList idlFilters;
 
 #ifdef _MSC_VER
     filters << "corbasim_reflective_*.dll";
+    idlFilters << "*_idl.dll";
 #else
     filters << "libcorbasim_reflective_*.so";
+    idlFilters << "lib*_idl.so";
 #endif
 
-    const QFileInfoList files = d.entryInfoList(filters, QDir::Files);
-    const int count = files.count();
-
-    for (int i = 0; i < count; i++) 
+    // Required idl libraries
     {
-        loadLibrary(files[i].absoluteFilePath());
+        const QFileInfoList files = d.entryInfoList(idlFilters, QDir::Files);
+        const int count = files.count();
+
+        for (int i = 0; i < count; i++) 
+        {
+            QLibrary lib(files[i].absoluteFilePath());
+            lib.load();
+        }
+    }
+
+    // Corbasim plug-ins
+    {
+        const QFileInfoList files = d.entryInfoList(filters, QDir::Files);
+        const int count = files.count();
+
+        for (int i = 0; i < count; i++) 
+        {
+            loadLibrary(files[i].absoluteFilePath());
+        }
     }
 }
 
