@@ -12,8 +12,8 @@
 // StructDef: CosNaming::NameComponent
 BOOST_FUSION_ADAPT_STRUCT(
 	CosNaming::NameComponent,
-	( ::TAO::String_Manager, id)
-	( ::TAO::String_Manager, kind)
+	( ::corbasim::orbimpl::String_Manager, id)
+	( ::corbasim::orbimpl::String_Manager, kind)
      )
 
 	
@@ -543,7 +543,7 @@ struct __to_string
 
 	CosNaming::Name n;
 	
-	::TAO::String_Manager _return;
+	::corbasim::orbimpl::String_Manager _return;
 	
 	__to_string();
 	
@@ -562,7 +562,7 @@ struct __to_name
 
 	typedef corbasim::adapted::member< __to_name, 0 > sn_corbasim_member;
 
-	::TAO::String_Manager sn;
+	::corbasim::orbimpl::String_Manager sn;
 	
 	CosNaming::Name_var _return;
 	
@@ -586,10 +586,10 @@ struct __to_url
 	typedef corbasim::adapted::member< __to_url, 0 > addr_corbasim_member;
 	typedef corbasim::adapted::member< __to_url, 1 > sn_corbasim_member;
 
-	::TAO::String_Manager addr;
-	::TAO::String_Manager sn;
+	::corbasim::orbimpl::String_Manager addr;
+	::corbasim::orbimpl::String_Manager sn;
 	
-	::TAO::String_Manager _return;
+	::corbasim::orbimpl::String_Manager _return;
 	
 	__to_url();
 	
@@ -608,7 +608,7 @@ struct __resolve_str
 
 	typedef corbasim::adapted::member< __resolve_str, 0 > n_corbasim_member;
 
-	::TAO::String_Manager n;
+	::corbasim::orbimpl::String_Manager n;
 	
 	::CORBA::Object_var _return;
 	
@@ -1073,7 +1073,7 @@ struct interface < CosNaming::NamingContextExt >
 BOOST_FUSION_ADAPT_STRUCT(
 	_corbasim_CosNaming::NamingContextExt::to_string,
 	( CosNaming::Name, n)
-	( ::TAO::String_Manager, _return)
+	( ::corbasim::orbimpl::String_Manager, _return)
      )
 
 namespace corbasim
@@ -1100,7 +1100,7 @@ value._return = ref->to_string(value.n);
 // OperationDef: CosNaming::NamingContextExt::to_name
 BOOST_FUSION_ADAPT_STRUCT(
 	_corbasim_CosNaming::NamingContextExt::to_name,
-	( ::TAO::String_Manager, sn)
+	( ::corbasim::orbimpl::String_Manager, sn)
 	( CosNaming::Name_var, _return)
      )
 
@@ -1130,9 +1130,9 @@ value._return = ref->to_name(value.sn);
 // OperationDef: CosNaming::NamingContextExt::to_url
 BOOST_FUSION_ADAPT_STRUCT(
 	_corbasim_CosNaming::NamingContextExt::to_url,
-	( ::TAO::String_Manager, addr)
-	( ::TAO::String_Manager, sn)
-	( ::TAO::String_Manager, _return)
+	( ::corbasim::orbimpl::String_Manager, addr)
+	( ::corbasim::orbimpl::String_Manager, sn)
+	( ::corbasim::orbimpl::String_Manager, _return)
      )
 
 namespace corbasim
@@ -1159,7 +1159,7 @@ value._return = ref->to_url(value.addr, value.sn);
 // OperationDef: CosNaming::NamingContextExt::resolve_str
 BOOST_FUSION_ADAPT_STRUCT(
 	_corbasim_CosNaming::NamingContextExt::resolve_str,
-	( ::TAO::String_Manager, n)
+	( ::corbasim::orbimpl::String_Manager, n)
 	( ::CORBA::Object_var, _return)
      )
 
