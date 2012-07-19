@@ -22,10 +22,9 @@
 
 #include "app_adapted.hpp" // for json serializer
 
-#include <corbasim/json/writer.hpp>
-#include <corbasim/json/parser.hpp>
-
+#include <corbasim/json/reflective.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/core/reflective.hpp>
 
 #include <corbasim/qt/ReferenceModel.hpp>
 
@@ -319,9 +318,14 @@ void AppModel::saveFile(const QString& file)
     const std::string file_ (file.toStdString());
     std::ofstream ofs (file_.c_str());
 
-    // convert to JSON and save
+
     try {
-        json::write(ofs, cfg, true);
+        
+        // convert to JSON and save
+        core::holder holder (core::create_holder(cfg));
+        json::write(ofs,
+                core::reflective< Configuration >::get_instance(),
+                holder, true);
 
         if (m_controller)
             m_controller->notifyMessage(
@@ -361,7 +365,9 @@ void AppModel::loadFile(const QString& file)
         ifs.close();
 
         // parse JSON
-        json::parse(cfg, &(*buffer.begin()), length);
+        core::holder holder (core::create_holder(cfg));
+        json::parse(core::reflective< Configuration >::get_instance(),
+                holder, &(*buffer.begin()), length);
 
         if (m_controller)
             m_controller->notifyMessage(
