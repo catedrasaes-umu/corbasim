@@ -30,6 +30,7 @@ endif()
 if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
     include(check_ace_tao)
     set(CORBASIM_ORB_LIBS
+        ACE
         TAO 
         TAO_PortableServer 
         TAO_AnyTypeCode 

@@ -1807,36 +1807,22 @@ void ComplexSequenceWidget::load(const QVariant& settings)
 
 void ObjrefvarWidget::save(QVariant& settings)
 {
-    // TODO properties
+    ObjrefWidget::save(settings);
 }
 
 void ObjrefvarWidget::load(const QVariant& settings)
 {
-    // TODO properties
+    ObjrefWidget::load(settings);
 }
 
 void FilesWidget::save(QVariant& settings)
 {
-    QVariantMap map;
-
-    map["files"] = selectedFiles();
-    map["index"] = currentIndex();
-    map["repeat"] = repeat();
-
-    settings = map;
+    MultiFileSelectionWidget::save(settings);
 }
 
 void FilesWidget::load(const QVariant& settings)
 {
-    const QVariantMap map = settings.toMap();
-
-    QVariant list = map["files"];
-    bool res = list.convert(QVariant::StringList);
-
-    if (res) setSelectedFiles(list.value< QStringList >());
-
-    setCurrentIndex(map["index"].toInt());
-    setRepeat(map["repeat"].toBool());
+    MultiFileSelectionWidget::load(settings);
 }
 
 void OperationInputForm::save(QVariant& settings)

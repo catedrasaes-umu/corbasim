@@ -176,3 +176,23 @@ void MultiFileSelectionWidget::currentIndexChanged(int val)
         m_leNextFile->setText(m_selectedFiles.at(val));
 }
 
+void MultiFileSelectionWidget::save(QVariant& settings)
+{
+    QVariantMap map;
+
+    map["files"] = selectedFiles();
+    map["repeat"] = repeat();
+    map["current_index"] = currentIndex();
+
+    settings = map;
+}
+
+void MultiFileSelectionWidget::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    setSelectedFiles(map["files"].toStringList());
+    setRepeat(map["repeat"].toBool());
+    setCurrentIndex(map["current_index"].toInt());
+}
+

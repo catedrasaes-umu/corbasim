@@ -257,3 +257,34 @@ void ObjrefWidget::validatorHasChanged()
     }
 }
 
+void ObjrefWidget::save(QVariant& settings)
+{
+    QVariantMap map;
+
+    map["index"] = m_selector->currentIndex();
+    map["ior"] = m_ior->toPlainText();
+    map["ns_entry_string"] = m_resolve_str->toPlainText();
+   
+    int idx = m_object_selector->currentIndex();
+
+    if (idx != -1)
+    {
+        map["known_object"] = m_object_selector->itemData(idx, Qt::DisplayRole);
+    }
+
+    settings = map;
+}
+
+void ObjrefWidget::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    m_selector->setCurrentIndex(map["index"].toInt());
+    m_ior->setPlainText(map["ior"].toString());
+    m_resolve_str->setPlainText(map["ns_entry_string"].toString());
+   
+    // TODO map["known_object"] = m_object_selector->itemData(idx, Qt::DisplayRole);
+
+    valueChanged();
+}
+

@@ -58,6 +58,9 @@ public:
     int currentIndex() const;
     void setCurrentIndex(int i);
 
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
 public slots:
     void showSelectionDialog();
     void restart();

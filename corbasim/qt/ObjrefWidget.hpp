@@ -46,6 +46,9 @@ public:
 
     const QString& getNSEntry() const;
 
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
 public slots:
     void setValidator(core::reference_validator_base * validator);
     void valueChanged();
