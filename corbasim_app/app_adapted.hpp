@@ -10,9 +10,9 @@
 // StructDef: corbasim::app::ObjrefConfig
 BOOST_FUSION_ADAPT_STRUCT(
 	corbasim::app::ObjrefConfig,
-	( ::TAO::String_Manager, id)
-	( ::TAO::String_Manager, fqn)
-	( ::TAO::String_Manager, entry)
+	( ::corbasim::orbimpl::String_Manager, id)
+	( ::corbasim::orbimpl::String_Manager, fqn)
+	( ::corbasim::orbimpl::String_Manager, entry)
 	( ::CORBA::Object_var, ref)
      )
 
@@ -39,10 +39,10 @@ struct is_corbaseq< corbasim::app::ObjrefConfigSeq > : public cs_mpl::true_
 // StructDef: corbasim::app::ServantConfig
 BOOST_FUSION_ADAPT_STRUCT(
 	corbasim::app::ServantConfig,
-	( ::TAO::String_Manager, id)
-	( ::TAO::String_Manager, fqn)
-	( ::TAO::String_Manager, entry)
-	( ::TAO::String_Manager, behaviour)
+	( ::corbasim::orbimpl::String_Manager, id)
+	( ::corbasim::orbimpl::String_Manager, fqn)
+	( ::corbasim::orbimpl::String_Manager, entry)
+	( ::corbasim::orbimpl::String_Manager, behaviour)
      )
 
 	

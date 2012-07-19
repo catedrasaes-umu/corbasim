@@ -24,7 +24,7 @@
 #include <corbasim/core/reflective_fwd.hpp>
 #include <QObject>
 
-#include "appC.h"
+#include "app_adapted.hpp"
 
 class QAbstractItemModel;
 

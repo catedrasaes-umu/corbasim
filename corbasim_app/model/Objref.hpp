@@ -24,7 +24,7 @@
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 
-#include "../appC.h"
+#include "../app_adapted.hpp"
 
 namespace corbasim 
 {

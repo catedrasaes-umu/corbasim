@@ -12,12 +12,10 @@ include(${QT_USE_FILE})
 	«ENDIF-»
 
 set(«filename»_GENERATED
-	${CMAKE_CURRENT_SOURCE_DIR}/«filename»C.h
-	${CMAKE_CURRENT_SOURCE_DIR}/«filename»C.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/«filename»C.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/«filename»S.h
-	${CMAKE_CURRENT_SOURCE_DIR}/«filename»S.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/«filename»S.inl)
+	${CMAKE_CURRENT_SOURCE_DIR}/«getFileNameStubHpp()»
+	${CMAKE_CURRENT_SOURCE_DIR}/«getFileNameStubCpp()»
+	${CMAKE_CURRENT_SOURCE_DIR}/«getFileNameSkelHpp()»
+	${CMAKE_CURRENT_SOURCE_DIR}/«getFileNameSkelCpp()»)
 
 add_custom_command(
 	OUTPUT ${«filename»_GENERATED}

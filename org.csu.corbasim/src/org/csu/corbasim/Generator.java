@@ -36,18 +36,24 @@ public class Generator {
 		preprocessor = loader.getPreprocessor();
 
 		// Default values
-		globalVarsMap.put("StubHppSuffix", new Variable("StubHppSuffix", stubHppSuffix));
-		globalVarsMap.put("StubCppSuffix", new Variable("StubCppSuffix", stubCppSuffix));
-		globalVarsMap.put("SkelHppSuffix", new Variable("SkelHppSuffix", skelHppSuffix));
-		globalVarsMap.put("SkelCppSuffix", new Variable("SkelCppSuffix", skelCppSuffix));
-		globalVarsMap.put("SkelImplHppSuffix", new Variable("SkelImplHppSuffix", skelImplHppSuffix));
-		globalVarsMap.put("SkelImplCppSuffix", new Variable("SkelImplCppSuffix", skelImplCppSuffix));
+		globalVarsMap.put("StubHppSuffix", new Variable("StubHppSuffix",
+				stubHppSuffix));
+		globalVarsMap.put("StubCppSuffix", new Variable("StubCppSuffix",
+				stubCppSuffix));
+		globalVarsMap.put("SkelHppSuffix", new Variable("SkelHppSuffix",
+				skelHppSuffix));
+		globalVarsMap.put("SkelCppSuffix", new Variable("SkelCppSuffix",
+				skelCppSuffix));
+		globalVarsMap.put("SkelImplHppSuffix", new Variable(
+				"SkelImplHppSuffix", skelImplHppSuffix));
+		globalVarsMap.put("SkelImplCppSuffix", new Variable(
+				"SkelImplCppSuffix", skelImplCppSuffix));
 	}
 
 	public void run(String[] args) {
 
 		proccessArgs(args);
-		
+
 		try {
 			loader.load(filePath);
 		} catch (Exception e) {
@@ -55,7 +61,7 @@ public class Generator {
 			System.exit(1);
 		}
 		TranslationUnit model = loader.getModel();
-		
+
 		// Xpand
 		generate(model);
 	}
@@ -78,7 +84,8 @@ public class Generator {
 		pr.setIgnoreList("*.swp");
 
 		// Execution context
-		XpandExecutionContextImpl execCtx = new XpandExecutionContextImpl(output, pr, globalVarsMap, null, null);
+		XpandExecutionContextImpl execCtx = new XpandExecutionContextImpl(
+				output, pr, globalVarsMap, null, null);
 		execCtx.registerMetaModel(new org.eclipse.xtend.type.impl.java.JavaBeansMetaModel());
 
 		// Generate
@@ -112,7 +119,8 @@ public class Generator {
 		if (cmd.hasOption("h")) {
 			System.out.println("Options:");
 			for (Option opt_ : (Collection<Option>) options.getOptions()) {
-				System.out.println("-" + opt_.getOpt() + "\t" + opt_.getDescription());
+				System.out.println("-" + opt_.getOpt() + "\t"
+						+ opt_.getDescription());
 			}
 			System.exit(0);
 		}
@@ -127,8 +135,8 @@ public class Generator {
 			if (opt.getOpt() == ("hs"))
 				globalVarsMap.get("SkelHppSuffix").setValue(opt.getValue());
 
-			if (opt.getOpt() == ("hT"))
-				globalVarsMap.get("SkelImplHppSuffix").setValue(opt.getValue());
+			// if (opt.getOpt() == ("hT"))
+			// globalVarsMap.get("SkelImplHppSuffix").setValue(opt.getValue());
 
 			if (opt.getOpt() == ("sc"))
 				globalVarsMap.get("StubCppSuffix").setValue(opt.getValue());
@@ -136,8 +144,8 @@ public class Generator {
 			if (opt.getOpt() == ("ss"))
 				globalVarsMap.get("SkelCppSuffix").setValue(opt.getValue());
 
-			if (opt.getOpt() == ("sT"))
-				globalVarsMap.get("SkelImplCppSuffix").setValue(opt.getValue());
+			// if (opt.getOpt() == ("sT"))
+			// globalVarsMap.get("SkelImplCppSuffix").setValue(opt.getValue());
 
 			if (opt.getOpt() == ("p"))
 				prSrcPaths += opt.getValue() + ",";
@@ -163,9 +171,11 @@ public class Generator {
 		// Verbose
 		if (!cmd.hasOption("v")) {
 			// Solo errores
-			System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+			System.setProperty("org.apache.commons.logging.Log",
+					"org.apache.commons.logging.impl.NoOpLog");
 			Logger.getRootLogger().setLevel(Level.ERROR);
-			Logger.getLogger(AbstractDeclarativeValueConverterService.class).setLevel(Level.ERROR);
+			Logger.getLogger(AbstractDeclarativeValueConverterService.class)
+					.setLevel(Level.ERROR);
 		}
 
 		// IDL file
@@ -175,21 +185,14 @@ public class Generator {
 			System.err.println("No IDL file specified or more than one.");
 			System.exit(1);
 		}
-		
+
 		// Generator options
 		genClient = cmd.hasOption("Gclient");
-		genInjector = cmd.hasOption("Ginjector");
 		genServer = cmd.hasOption("Gserver");
-		genPyStim = cmd.hasOption("Gpystim");
-		genInterpreter = cmd.hasOption("Ginterpreter");
-		
 		genCMake = !cmd.hasOption("Ncmake");
-		
+
 		globalVarsMap.put("genClient", new Variable("genClient", genClient));
-		globalVarsMap.put("genInjector", new Variable("genInjector", genInjector));
 		globalVarsMap.put("genServer", new Variable("genServer", genServer));
-		globalVarsMap.put("genPyStim", new Variable("genPyStim", genPyStim));
-		globalVarsMap.put("genInterpreter", new Variable("genInterpreter", genInterpreter));
 		globalVarsMap.put("genCMake", new Variable("genCMake", genCMake));
 	}
 
@@ -201,13 +204,10 @@ public class Generator {
 	private String targetDir = ".";
 	private String prSrcPaths = "";
 	private String filePath = null;
-	
+
 	// Generartor options
 	private boolean genClient = false;
 	private boolean genServer = false;
-	private boolean genInjector = false;
-	private boolean genPyStim = false;
-	private boolean genInterpreter = false;
 	private boolean genCMake = true;
 
 	// TAO defaults
@@ -227,26 +227,40 @@ public class Generator {
 		options.addOption("v", false, "Verbose.");
 
 		// ORB options
-		options.addOption("o", true, "Output directory for the generated files. Default is current directory.");
-		options.addOption("hc", true, "Client's header file name ending. Default is " + stubHppSuffix);
-		options.addOption("hs", true, "Server's header file name ending. Default is " + skelHppSuffix);
-		options.addOption("hT", true, "Server's template header file name ending. Default is " + skelImplHppSuffix);
-		options.addOption("cs", true, "Client's header file name ending. Default is " + stubCppSuffix);
-		options.addOption("ss", true, "Server's header file name ending. Default is " + skelCppSuffix);
-		options.addOption("sT", true, "Server's template header file name ending. Default is " + skelImplCppSuffix);
+		options.addOption("o", true,
+				"Output directory for the generated files. Default is current directory.");
+
+		// Header files
+		options.addOption("hc", true,
+				"Client's header file name ending. Default is " + stubHppSuffix);
+		options.addOption("hs", true,
+				"Server's header file name ending. Default is " + skelHppSuffix);
+
+		// Source files
+		options.addOption("sc", true,
+				"Client's header file name ending. Default is " + stubCppSuffix);
+		options.addOption("ss", true,
+				"Server's header file name ending. Default is " + skelCppSuffix);
+
+		// Implementation
+		// options.addOption("hT", true,
+		// "Server's template header file name ending. Default is "
+		// + skelImplHppSuffix);
+		// options.addOption("sT", true,
+		// "Server's template header file name ending. Default is "
+		// + skelImplCppSuffix);
 
 		options.addOption("E", false, "Only invoke the preprocessor.");
 		options.addOption("h", false, "Show this help text.");
 
+		// CORBASIM options
 		options.addOption("Gclient", false, "Generate GUI client.");
-		options.addOption("Ginjector", false, "Generate script injector.");
 		options.addOption("Gserver", false, "Generate dummy server.");
-		options.addOption("Gpystim", false, "Generate a PyStim.");
-		options.addOption("Ginterpreter", false, "Generate a script interpreter.");
-		
+
 		options.addOption("Ncmake", false, "Do not generate CMake files.");
 
-		options.addOption("p", true, "Protected regions source paths. Default is output directory.");
+		options.addOption("p", true,
+				"Protected regions source paths. Default is output directory.");
 
 		// Preproccessor options
 		options.addOption("D", true, "Passed to the preprocessor.");

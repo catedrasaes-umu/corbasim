@@ -116,7 +116,7 @@ void DataDumper::requestReceived(const QString& id,
     {
         // TODO dump directory
         std::ofstream ofs(id.toStdString().c_str(), 
-                fstream::out | fstream::app);
+                std::ios::out | std::ios::app);
 
         if (ofs.good())
         {

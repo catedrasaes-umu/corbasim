@@ -20,7 +20,7 @@
 #ifndef CORBASIM_APP_APPMODEL_HPP
 #define CORBASIM_APP_APPMODEL_HPP
 
-#include "appC.h"
+#include "app_adapted.hpp"
 #include "model/Objref.hpp"
 #include "model/Servant.hpp"
 

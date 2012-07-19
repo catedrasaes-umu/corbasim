@@ -27,7 +27,7 @@ set(corbasim_app_SRCS
     NSWatcher.cpp
 
     # TODO
-    NSBrowser.cpp
+    # NSBrowser.cpp
     IDLBuilder.cpp
     )
 
@@ -46,7 +46,7 @@ set(corbasim_app_MOC_HDRS
     NSWatcher.hpp
 
     # TODO
-    NSBrowser.hpp
+    # NSBrowser.hpp
     IDLBuilder.hpp
     )
 

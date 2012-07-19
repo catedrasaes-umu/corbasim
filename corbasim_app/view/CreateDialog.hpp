@@ -21,7 +21,6 @@
 #define CORBASIM_APP_VIEW_CREATEDIALOG_HPP
 
 #include <QtGui>
-#include "../appC.h"
 #include "../app_adapted.hpp"
 #include <corbasim/reflective_gui/ReflectiveGUI.hpp>
 

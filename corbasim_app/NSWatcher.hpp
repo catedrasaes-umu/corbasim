@@ -22,7 +22,7 @@
 
 #include <corbasim/impl.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-#include "appC.h"
+#include "app_adapted.hpp"
 #include <QtCore>
 
 namespace corbasim 

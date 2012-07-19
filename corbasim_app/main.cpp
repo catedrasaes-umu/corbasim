@@ -25,7 +25,7 @@
 #include "TriggerEngine.hpp"
 #include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
-#include "NSBrowser.hpp"
+//#include "NSBrowser.hpp"
 #include "NSWatcher.hpp"
 #include "IDLBuilder.hpp"
 #include <corbasim/reflective_gui/LogModel.hpp>
