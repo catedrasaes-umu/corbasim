@@ -27,6 +27,7 @@
 #include <QSpinBox>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QVariant>
 
 using namespace corbasim::qt;
 
