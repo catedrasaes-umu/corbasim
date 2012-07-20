@@ -30,6 +30,17 @@ class TypeCode;
 namespace corbasim 
 {
 
+namespace core 
+{
+
+struct reflective_base;
+
+template < typename T, typename Y >
+reflective_base * create_reflective(const T& t_, const Y& y_, 
+        reflective_base const * parent, unsigned int idx);
+
+} // namespace core
+
 /**
  * @brief Espacio de nombres con el código necesario para adaptar el código
  * generado para el uso de las distintas metafunciones.
@@ -154,6 +165,22 @@ inline typename servant< Interface >::template _type< F& >* create_servant(F& f)
 {
     return new typename servant< Interface >::template _type< F& >(f);
 }
+
+template< typename Struct, unsigned int member >
+struct member_helper
+{
+    static inline ::corbasim::core::reflective_base * create_reflective(
+        ::corbasim::core::reflective_base const * parent)
+    {
+        typedef boost::mpl::int_< member > N;
+        typedef typename cs_mpl::type_of_member< Struct, N >::type current_t;
+
+        Struct s_;
+        current_t t_;
+
+        return ::corbasim::core::create_reflective(t_, boost::fusion::at < N >(s_) , parent, member);
+    }
+};
 
 } // namespace adapted
 } // namespace corbasim

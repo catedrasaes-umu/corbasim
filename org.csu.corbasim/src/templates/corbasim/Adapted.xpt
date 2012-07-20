@@ -170,6 +170,24 @@ BOOST_FUSION_ADAPT_STRUCT(
 	
 	«EXPAND adapt FOREACH getNestedStructs()-»
 
+namespace corbasim
+{
+namespace adapted
+{ 
+	«FOREACH members AS member ITERATOR it-»
+    template< > struct member_helper < «getFQN()», «it.counter0» >
+    {
+        static inline ::corbasim::core::reflective_base * create_reflective(
+            ::corbasim::core::reflective_base const * parent)
+        {
+            «getFQN()» s_;
+            «member.getMemberTypeIdFQN(this)» t_;
+            return ::corbasim::core::create_reflective(t_, s_.«member.identifier», parent, «it.counter0»);
+        }
+    };
+	«ENDFOREACH-»
+} // adapted
+} // corbasim
 «ENDDEFINE»
 
 «DEFINE adapt FOR UnionDef-»

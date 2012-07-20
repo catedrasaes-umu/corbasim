@@ -335,6 +335,14 @@ struct calculate_reflective
 
 } // namespace detail
 
+
+template < typename T, typename Y >
+reflective_base * create_reflective(const T& t_, const Y& y_, 
+        reflective_base const * parent, unsigned int idx)
+{
+    return new typename detail::calculate_reflective< T, Y >::type (parent, idx);
+}
+
 template < typename T >
 struct reflective : public detail::calculate_reflective< T >::type
 {

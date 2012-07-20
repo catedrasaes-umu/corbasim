@@ -188,14 +188,6 @@ void string_reflective< T >::copy(holder const& src, holder& dst) const
     dst.to_value< T >() = const_cast< holder& >(src).to_value< T >();
 }
 
-template< typename T, typename Y >
-reflective_base const * create_slice_reflective(
-    T t, Y y, // dummy parameters
-    reflective_base const * parent, unsigned int idx)
-{
-    return new typename calculate_reflective< T, Y >::type(parent, idx);
-}
-
 // Sequence reflective
 template< typename T >
 sequence_reflective< T >::sequence_reflective(
@@ -210,7 +202,7 @@ sequence_reflective< T >::sequence_reflective(
     T y;
     y.length(1);
 
-    m_slice = create_slice_reflective(t, y[0], this, 0);
+    m_slice = ::corbasim::core::create_reflective(t, y[0], this, 0);
 }
 
 template< typename T >
@@ -329,15 +321,12 @@ struct create_iterator
     template < typename N >
     void operator()(N const& nn)
     {
-        // Tipo del campo actual
-        typedef typename cs_mpl::type_of_member< S, N >::type current_t;
+        typedef ::corbasim::adapted::member_helper< S, N::value > helper_t;
 
         // Tipo que contiene el nombre del campo actual
         typedef cs_mpl::name_of_member< S, N > name_t;
 
-        typedef reflective< current_t > reflective_t;
-
-        reflective_ptr ptr_(new reflective_t(m_this, N::value));
+        reflective_ptr ptr_(helper_t::create_reflective(m_this));
         accessor_ptr ac_(new accessor< S, N >());
 
         m_this->m_children.push_back(ptr_);

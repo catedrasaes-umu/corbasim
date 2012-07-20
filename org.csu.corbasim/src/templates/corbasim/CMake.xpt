@@ -32,6 +32,9 @@ target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
 	«ENDIF-»
 install(TARGETS ${CORBASIM_PREFIX}«filename»_idl DESTINATION lib)
 
+add_library(${CORBASIM_PREFIX}«filename»_idl_s STATIC ${«filename»_GENERATED} «getAdaptedFileCPP()»)
+install(TARGETS ${CORBASIM_PREFIX}«filename»_idl_s DESTINATION lib)
+
 	«EXPAND cmake FOREACH contains-»
 	
 «ENDFILE»
@@ -53,6 +56,9 @@ target_link_libraries(corbasim_reflective_«fqn»
 	# CORBASIM Library
 	corbasim)
 install(TARGETS corbasim_reflective_«fqn» DESTINATION lib)
+
+add_library(corbasim_static_reflective_«fqn» STATIC «fqn»_reflective.cpp)
+install(TARGETS corbasim_static_reflective_«fqn» DESTINATION lib)
 
 	«ENDIF-»
 	«IF generateClient()-»
