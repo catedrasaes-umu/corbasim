@@ -28,11 +28,12 @@
 
 namespace corbasim 
 {
-namespace reflective_gui 
+namespace gui 
 {
 class OperationSequenceTool;
+class DumpTool;
 class FilteredLogView;
-} // namespace reflective_gui
+} // namespace gui
 
 namespace qwt 
 {
@@ -65,6 +66,7 @@ public slots:
     void doSave();
 
     void showPlotTool();
+    void showDumpTool();
 
     void setLogModel(QAbstractItemModel * model);
 
@@ -152,9 +154,12 @@ protected:
     QWidget * m_create_objref;
     QWidget * m_create_servant;
     QWidget * m_script;
-    reflective_gui::OperationSequenceTool * m_seq_tool;
+    gui::OperationSequenceTool * m_seq_tool;
 
-    reflective_gui::FilteredLogView * m_filtered_log;
+    gui::FilteredLogView * m_filtered_log;
+
+    QDialog * m_dlg_dump_tool;
+    gui::DumpTool * m_dump_tool;
 
     qwt::ReflectivePlotTool * m_plot_tool;
 

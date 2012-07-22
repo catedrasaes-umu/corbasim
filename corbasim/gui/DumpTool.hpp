@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * ReflectivePlotTool.hpp
+ * DumpTool.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,16 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
-#define CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
+#ifndef CORBASIM_GUI_REFLECTIVEPLOTTOOL_HPP
+#define CORBASIM_GUI_REFLECTIVEPLOTTOOL_HPP
 
-#include <QWidget>
-#include <corbasim/qt/PlotModel.hpp>
-#include <corbasim/qwt/SimplePlot.hpp>
+#include <QtGui>
+#include <corbasim/gui/ParametersModel.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
 #include <map>
 
-#include <corbasim/qwt/export.hpp>
+#include <corbasim/gui/export.hpp>
 
 namespace corbasim 
 {
@@ -36,40 +35,55 @@ class SortableGroup;
 class SortableGroupItem;
 } // namespace qt
 
-namespace qwt 
+namespace gui 
 {
 
-class CORBASIM_QWT_DECLSPEC PlotProcessor : public QObject,
+class CORBASIM_GUI_DECLSPEC DumpProcessor : public QObject,
     public gui::RequestProcessor
 {
     Q_OBJECT
 public:
 
-    PlotProcessor(const QString& id,
-            const gui::ReflectivePath_t path);
-    ~PlotProcessor();
+    enum Format
+    {
+        FORMAT_BINARY,
+        FORMAT_TEXT,
+        FORMAT_JSON,
+        FORMAT_MAX
+    };
+
+    struct Config
+    {
+        bool multipleFiles;
+        QString filePrefix;
+        Format format;
+        unsigned int suffixLength;
+    };
+
+    DumpProcessor(const QString& id,
+            const gui::ReflectivePath_t path,
+            const Config& config);
+    ~DumpProcessor();
 
     void process(event::request_ptr req, 
             core::reflective_base const * ref,
             core::holder hold);
 
-signals:
+protected:
 
-    void append(corbasim::event::request_ptr, 
-            const corbasim::core::reflective_base *,
-            corbasim::core::holder);
+    const Config m_config;
 };
 
-class CORBASIM_QWT_DECLSPEC ReflectivePlot : public SimplePlot
+class CORBASIM_GUI_DECLSPEC Dumper : public QWidget
 {
     Q_OBJECT
 public:
 
-    ReflectivePlot(const QString& id,
+    Dumper(const QString& id,
             core::operation_reflective_base const * reflective,
             const QList< int >& path, 
             QWidget * parent = 0);
-    virtual ~ReflectivePlot();
+    virtual ~Dumper();
 
     core::operation_reflective_base const * getReflective() const;
 
@@ -85,9 +99,17 @@ public:
 
 public slots:
 
-    void appendValue(corbasim::event::request_ptr, 
-            const corbasim::core::reflective_base *,
-            corbasim::core::holder);
+    void doStart(bool);
+    void reset();
+
+protected slots:
+
+    void browse();
+
+signals:
+
+    void addProcessor(corbasim::gui::RequestProcessor_ptr);
+    void removeProcessor(corbasim::gui::RequestProcessor_ptr);
 
 protected:
 
@@ -97,16 +119,20 @@ protected:
     core::operation_reflective_base const * m_reflective;
     const QList< int > m_path;
 
-    SimplePlot * m_plot;
+    QLineEdit * m_filePrefix;
+    QComboBox * m_format;
+    QSpinBox * m_suffixLength;
+    QCheckBox * m_multipleFiles;
+    QPushButton * m_startStopButton;
 };
 
-class CORBASIM_QWT_DECLSPEC ReflectivePlotTool : public QWidget
+class CORBASIM_GUI_DECLSPEC DumpTool : public QWidget
 {
     Q_OBJECT
 public:
 
-    ReflectivePlotTool(QWidget * parent = 0);
-    virtual ~ReflectivePlotTool();
+    DumpTool(QWidget * parent = 0);
+    virtual ~DumpTool();
 
 public slots:
 
@@ -115,36 +141,31 @@ public slots:
 
     void unregisterInstance(const QString& name);
 
-    void createPlot(const QString& id, 
+    void createDumper(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
 
-    void deletePlot(const QString& id, 
+    void deleteDumper(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
-
-signals:
-
-    void addProcessor(corbasim::gui::RequestProcessor_ptr);
-    void removeProcessor(corbasim::gui::RequestProcessor_ptr);
 
 protected slots:
 
     void deleteRequested(corbasim::qt::SortableGroupItem *);
 
 protected:
-    qt::PlotModel m_model;
+    ParametersModel m_model;
     qt::SortableGroup * m_group;
 
     typedef std::pair< QString, tag_t > key_t;
-    typedef std::map< key_t, QList< ReflectivePlot * > > map_t;
-    typedef std::map< ReflectivePlot *, key_t > inverse_map_t;
+    typedef std::map< key_t, QList< Dumper * > > map_t;
+    typedef std::map< Dumper *, key_t > inverse_map_t;
 
     map_t m_map;
     inverse_map_t m_inverse_map;
 };
 
-} // namespace qwt
+} // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP */
+#endif /* CORBASIM_GUI_REFLECTIVEPLOTTOOL_HPP */

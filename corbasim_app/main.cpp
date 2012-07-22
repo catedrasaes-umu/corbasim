@@ -28,8 +28,8 @@
 //#include "NSBrowser.hpp"
 #include "NSWatcher.hpp"
 #include "IDLBuilder.hpp"
-#include <corbasim/reflective_gui/LogModel.hpp>
-#include <corbasim/reflective_gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/LogModel.hpp>
+#include <corbasim/gui/InputRequestProcessor.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 #endif
     QThread threadInputReqCntl;
 
-    corbasim::reflective_gui::InputRequestController& inputReqCntl = 
-        *corbasim::reflective_gui::getDefaultInputRequestController();
+    corbasim::gui::InputRequestController& inputReqCntl = 
+        *corbasim::gui::getDefaultInputRequestController();
 
     corbasim::app::AppModel model;
     corbasim::app::AppController controller;
@@ -79,8 +79,8 @@ int main(int argc, char **argv)
     corbasim::app::IDLBuilder builder;
 #endif
     corbasim::app::AppMainWindow window;
-    // corbasim::reflective_gui::LogModel logModel;
-    corbasim::reflective_gui::LogModel newLogModel;
+    // corbasim::gui::LogModel logModel;
+    corbasim::gui::LogModel newLogModel;
     corbasim::app::NSWatcher nsWatcher;
 
     // Signals between models

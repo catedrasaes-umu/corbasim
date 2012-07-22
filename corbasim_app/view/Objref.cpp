@@ -152,9 +152,9 @@ QMdiSubWindow * Objref::getWindow(int idx)
     return win;
 }
 
-corbasim::reflective_gui::RequestDialog * Objref::getRequestDialog(int idx)
+corbasim::gui::RequestDialog * Objref::getRequestDialog(int idx)
 {
-    reflective_gui::RequestDialog * dlg = m_dialogs[idx];
+    gui::RequestDialog * dlg = m_dialogs[idx];
 
     if (!dlg)
     {
@@ -163,7 +163,7 @@ corbasim::reflective_gui::RequestDialog * Objref::getRequestDialog(int idx)
 
         const char * name = op->get_name();
 
-        dlg = new reflective_gui::RequestDialog(op);
+        dlg = new gui::RequestDialog(op);
         dlg->setWindowTitle(name);
 
         QObject::connect(dlg,
@@ -181,7 +181,7 @@ void Objref::showScriptEditor()
 {
     if (!m_sub_script)
     {
-        m_script = new reflective_gui::SimpleScriptEditor();
+        m_script = new gui::SimpleScriptEditor();
         m_script->initialize(m_factory);
 
         m_sub_script = new QMdiSubWindow();

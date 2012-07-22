@@ -22,7 +22,7 @@
 
 #include <QtGui>
 #include "../app_adapted.hpp"
-#include <corbasim/reflective_gui/ReflectiveGUI.hpp>
+#include <corbasim/gui/ReflectiveGUI.hpp>
 
 namespace corbasim 
 {
@@ -48,7 +48,7 @@ signals:
 
 protected:
 
-    reflective_gui::StructWidget m_widget;
+    gui::StructWidget m_widget;
     
     void hideEvent(QHideEvent* event);
 };
@@ -70,7 +70,7 @@ signals:
 
 protected:
 
-    reflective_gui::StructWidget m_widget;
+    gui::StructWidget m_widget;
 
     void hideEvent(QHideEvent* event);
 };

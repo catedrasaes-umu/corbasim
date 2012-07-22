@@ -19,7 +19,7 @@
 
 #include "ReflectivePlotTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
-#include <corbasim/reflective_gui/utils.hpp>
+#include <corbasim/gui/utils.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
 
@@ -28,8 +28,8 @@
 using namespace corbasim::qwt;
 
 PlotProcessor::PlotProcessor(const QString& id,
-        const reflective_gui::ReflectivePath_t path) :
-    reflective_gui::RequestProcessor(id, path)
+        const gui::ReflectivePath_t path) :
+    gui::RequestProcessor(id, path)
 {
 
 }
@@ -154,16 +154,16 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
     // connect with the processor
     QObject::connect(this, 
             SIGNAL(addProcessor(
-                    corbasim::reflective_gui::RequestProcessor_ptr)),
-            reflective_gui::getDefaultInputRequestController(),
+                    corbasim::gui::RequestProcessor_ptr)),
+            gui::getDefaultInputRequestController(),
             SLOT(addProcessor(
-                    corbasim::reflective_gui::RequestProcessor_ptr)));
+                    corbasim::gui::RequestProcessor_ptr)));
     QObject::connect(this, 
             SIGNAL(removeProcessor(
-                    corbasim::reflective_gui::RequestProcessor_ptr)),
-            reflective_gui::getDefaultInputRequestController(),
+                    corbasim::gui::RequestProcessor_ptr)),
+            gui::getDefaultInputRequestController(),
             SLOT(removeProcessor(
-                    corbasim::reflective_gui::RequestProcessor_ptr)));
+                    corbasim::gui::RequestProcessor_ptr)));
 
     setMinimumSize(650, 400);
 }
@@ -217,7 +217,7 @@ void ReflectivePlotTool::createPlot(const QString& id,
     qt::SortableGroupItem * item = 
         new qt::SortableGroupItem(plot, m_group);
 
-    const QString title(reflective_gui::getFieldName(op, path));
+    const QString title(gui::getFieldName(op, path));
     item->setTitle(id + "." + title);
 
     m_group->appendItem(item);

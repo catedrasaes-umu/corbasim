@@ -23,7 +23,7 @@
 #include <QtGui>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/reflective_gui/SimpleScriptEditor.hpp>
+#include <corbasim/gui/SimpleScriptEditor.hpp>
 
 namespace corbasim 
 {
@@ -71,7 +71,7 @@ protected:
     const core::interface_reflective_base * m_factory;
 
     QMdiSubWindow * m_sub_script;
-    reflective_gui::SimpleScriptEditor * m_script;
+    gui::SimpleScriptEditor * m_script;
 
     QMenu * m_menu;
 };

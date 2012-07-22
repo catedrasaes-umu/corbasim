@@ -184,6 +184,18 @@ namespace adapted
             «member.getMemberTypeIdFQN(this)» t_;
             return ::corbasim::core::create_reflective(t_, s_.«member.identifier», parent, «it.counter0»);
         }
+
+        template< typename T >
+        static inline void set(«getFQN()»& s_, const T& t_)
+        {
+            s_.«member.identifier» = t_;
+        }
+
+        template< typename T >
+        static inline void get(const «getFQN()»& s_, T& t_)
+        {
+            t_ = s_.«member.identifier»;
+        }
     };
 	«ENDFOREACH-»
 } // adapted

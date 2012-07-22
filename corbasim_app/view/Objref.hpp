@@ -23,8 +23,8 @@
 #include <QtGui>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/reflective_gui/RequestDialog.hpp>
-#include <corbasim/reflective_gui/SimpleScriptEditor.hpp>
+#include <corbasim/gui/RequestDialog.hpp>
+#include <corbasim/gui/SimpleScriptEditor.hpp>
 #include "CreateDialog.hpp"
 
 namespace corbasim 
@@ -46,7 +46,7 @@ public:
 
     QMenu * getMenu() const;
 
-    reflective_gui::RequestDialog * getRequestDialog(int idx);
+    gui::RequestDialog * getRequestDialog(int idx);
     QMdiSubWindow * getWindow(int idx);
 
     const core::interface_reflective_base * getFactory() const;
@@ -89,7 +89,7 @@ protected:
     const core::interface_reflective_base * m_factory;
 
     // Operation dialogs
-    typedef std::vector< reflective_gui::RequestDialog * > dialogs_t;
+    typedef std::vector< gui::RequestDialog * > dialogs_t;
     dialogs_t m_dialogs;
     
     typedef std::vector< QMdiSubWindow * > subwindows_t;
@@ -98,7 +98,7 @@ protected:
     QMdiSubWindow * m_sub_script;
     QMdiSubWindow * m_sub_reference;
 
-    reflective_gui::SimpleScriptEditor * m_script;
+    gui::SimpleScriptEditor * m_script;
     ReferenceValidatedWidget * m_reference;
 
     QMenu * m_menu;

@@ -45,23 +45,22 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
     layout->addLayout(m_layout);
 
     // Buttons
-    QToolButton * btShowInput = new QToolButton();
-    btShowInput->setIcon(style()->standardIcon(
+    m_btShowInput = new QToolButton();
+    m_btShowInput->setIcon(style()->standardIcon(
                 QStyle::SP_FileDialogDetailedView));
-    btShowInput->setCheckable(true);
+    m_btShowInput->setCheckable(true);
     QToolButton * btUp = new QToolButton();
     btUp->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
     QToolButton * btDown = new QToolButton();
     btDown->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
     QToolButton * btDelete = new QToolButton();
     btDelete->setIcon(style()->standardIcon(QStyle::SP_TrashIcon));
-    tLayout->addWidget(btShowInput);
+    tLayout->addWidget(m_btShowInput);
     tLayout->addWidget(btUp);
     tLayout->addWidget(btDown);
     tLayout->addWidget(btDelete);
 
-    
-    QObject::connect(btShowInput, SIGNAL(toggled(bool)),
+    QObject::connect(m_btShowInput, SIGNAL(toggled(bool)),
             m_widget, SLOT(setVisible(bool)));
 
     QObject::connect(btDelete, SIGNAL(clicked()),
@@ -78,7 +77,7 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
     setFrameStyle(QFrame::Box);
 
     // Tooltips
-    btShowInput->setToolTip("Show/hide detailed input form");
+    m_btShowInput->setToolTip("Show/hide detailed input form");
     btDelete->setToolTip("Delete item");
     btUp->setToolTip("Move up");
     btDown->setToolTip("Move down");
@@ -86,6 +85,11 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
 
 SortableGroupItem::~SortableGroupItem()
 {
+}
+
+void SortableGroupItem::showDetails()
+{
+    m_btShowInput->setChecked(true);
 }
 
 QWidget * SortableGroupItem::getWidget()

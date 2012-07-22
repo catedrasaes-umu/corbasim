@@ -21,7 +21,7 @@
 #include "AppController.hpp"
 #include <iostream>
 #include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/reflective_gui/qvariant.hpp>
+#include <corbasim/gui/qvariant.hpp>
 
 using namespace corbasim::app;
 
@@ -69,7 +69,7 @@ QScriptValue ScriptEngine::_call(QScriptContext * ctx,
         corbasim::event::request_ptr request = op->create_request();
         core::holder holder = op->get_holder(request);
 
-        reflective_gui::fromQVariant(op, holder, var);
+        gui::fromQVariant(op, holder, var);
 
         // send request
         _this->doSendRequest(id, request);
@@ -328,7 +328,7 @@ void TriggerEngine::requestReceived(const QString& id,
             core::holder holder = op->get_holder(req);
 
             // Adds the object to the arguments
-            args << reflective_gui::toQScriptValue(&m_engine, op, holder);
+            args << gui::toQScriptValue(&m_engine, op, holder);
 
             // Call the trigger
             meth.call(obj, args);

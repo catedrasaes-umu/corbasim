@@ -5,7 +5,7 @@ include(corbasim.cmake)
 # CORBASIM QT library
 if(QT_FOUND)
     include(corbasim_qt.cmake)
-    include(corbasim_reflective_gui.cmake)
+    include(corbasim_gui.cmake)
 
     if (Qwt6_FOUND)
         include(corbasim_qwt.cmake)

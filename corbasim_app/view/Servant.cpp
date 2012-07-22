@@ -64,7 +64,7 @@ void Servant::showSelfStimulator()
 {
     if (!m_sub_script)
     {
-        m_script = new reflective_gui::SimpleScriptEditor();
+        m_script = new gui::SimpleScriptEditor();
         m_script->initialize(m_factory);
 
         m_sub_script = new QMdiSubWindow;

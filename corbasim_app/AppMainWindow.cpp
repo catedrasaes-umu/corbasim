@@ -22,10 +22,11 @@
 #include "TriggerEngine.hpp"
 #include "view/CreateDialog.hpp"
 #include <corbasim/qt/ScriptWindow.hpp>
-#include <corbasim/reflective_gui/OperationSequence.hpp>
-#include <corbasim/reflective_gui/FilteredLogView.hpp>
+#include <corbasim/gui/OperationSequence.hpp>
+#include <corbasim/gui/FilteredLogView.hpp>
 #include <corbasim/qwt/ReflectivePlotTool.hpp>
-#include <corbasim/reflective_gui/json.hpp>
+#include <corbasim/gui/DumpTool.hpp>
+#include <corbasim/gui/json.hpp>
 
 #include <QLibrary>
 #include <QtScript>
@@ -50,6 +51,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     m_filtered_log(NULL),
 
+    m_dlg_dump_tool(NULL),
+    m_dump_tool(NULL),
     m_plot_tool(NULL)
 {
     m_mdi_area = new QMdiArea;
@@ -83,7 +86,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     QMainWindow * filtered_log_dlg = new QMainWindow(this);
     // Filtered log
     {
-        m_filtered_log = new reflective_gui::FilteredLogView();
+        m_filtered_log = new gui::FilteredLogView();
 
         filtered_log_dlg->setCentralWidget(m_filtered_log);
 
@@ -202,6 +205,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     tools->addSeparator();
     tools->addAction("&Plot tool", 
             this, SLOT(showPlotTool()));
+    tools->addAction("&Dump tool", 
+            this, SLOT(showDumpTool()));
 
     QMenu * winMenu = menu->addMenu("&Window");
     winMenu->addAction("&Show log", m_dock_log, SLOT(show()));
@@ -425,6 +430,48 @@ void AppMainWindow::showPlotTool()
         m_plot_tool->show();
 }
 
+void AppMainWindow::showDumpTool()
+{
+    if (!m_dump_tool)
+    {
+        m_dlg_dump_tool = new QDialog(this);
+        QVBoxLayout * layout = new QVBoxLayout();
+        layout->setMargin(0);
+
+        m_dump_tool = new gui::DumpTool(m_dlg_dump_tool);
+
+        layout->addWidget(m_dump_tool);
+        m_dlg_dump_tool->setLayout(layout);
+
+        m_dlg_dump_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
+        m_dlg_dump_tool->setWindowTitle("Dump tool");
+
+        QObject::connect(
+                m_controller,
+                SIGNAL(servantCreated(
+                        QString, 
+                        const corbasim::core::interface_reflective_base *)),
+                m_dump_tool,
+                SLOT(registerInstance(
+                        const QString&, const 
+                        corbasim::core::interface_reflective_base *)));
+        QObject::connect(
+                m_controller,
+                SIGNAL(servantDeleted(QString)),
+                m_dump_tool,
+                SLOT(unregisterInstance(const QString&)));
+
+        // Initializes the tool
+        servants_t::const_iterator it = m_servants.begin();
+
+        for (; it != m_servants.end(); it++)
+            m_dump_tool->registerInstance(it->first,
+                    it->second->getFactory());
+    }
+
+    m_dlg_dump_tool->show();
+}
+
 void AppMainWindow::setEngine(TriggerEngine * engine)
 {
     m_engine = engine;
@@ -440,7 +487,7 @@ void AppMainWindow::showOpSequenceTool()
     if (!m_sub_seq_tool)
     {
         m_sub_seq_tool = new QMdiSubWindow();
-        m_seq_tool = new reflective_gui::OperationSequenceTool();
+        m_seq_tool = new gui::OperationSequenceTool();
 
         m_seq_tool->setWindowTitle("");
 
@@ -761,7 +808,7 @@ void AppMainWindow::doLoad()
 
     // Try to Read a JSON file
     bool res = 
-        reflective_gui::fromJsonFile(file.toStdString().c_str(), var);
+        gui::fromJsonFile(file.toStdString().c_str(), var);
 
     if (res)
     {
@@ -788,7 +835,7 @@ void AppMainWindow::doSave()
     std::ofstream ofs(file.toStdString().c_str());
     json::ostream_writer_t ow(ofs, true);
 
-    reflective_gui::toJson(ow, v);
+    gui::toJson(ow, v);
 }
 
 void AppMainWindow::save(QVariant& settings) 

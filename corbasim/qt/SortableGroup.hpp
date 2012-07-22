@@ -47,6 +47,8 @@ public slots:
     QString title() const;
     void setTitle(const QString& title);
 
+    void showDetails();
+
 signals:
 
     void doDelete();
@@ -64,6 +66,8 @@ protected:
     QWidget * m_widget;
     QLayout * m_layout;
     QLabel * m_title;
+
+    QToolButton * m_btShowInput;
 };
 
 class CORBASIM_QT_DECLSPEC SortableGroup : public QWidget

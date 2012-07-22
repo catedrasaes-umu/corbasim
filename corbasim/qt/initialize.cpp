@@ -25,7 +25,7 @@
 #include <corbasim/impl.hpp>
 #include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/reflective_gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/InputRequestProcessor.hpp>
 
 
 namespace  
@@ -50,10 +50,10 @@ public:
         qRegisterMetaType< corbasim::core::holder >
             ("corbasim::core::holder");
 
-        qRegisterMetaType< corbasim::reflective_gui::ReflectivePath_t >
-            ("corbasim::reflective_gui::ReflectivePath_t");
-        qRegisterMetaType< corbasim::reflective_gui::RequestProcessor_ptr >
-            ("corbasim::reflective_gui::RequestProcessor_ptr");
+        qRegisterMetaType< corbasim::gui::ReflectivePath_t >
+            ("corbasim::gui::ReflectivePath_t");
+        qRegisterMetaType< corbasim::gui::RequestProcessor_ptr >
+            ("corbasim::gui::RequestProcessor_ptr");
 
         qRegisterMetaType< CORBA::Object_var >
             ("CORBA::Object_var");

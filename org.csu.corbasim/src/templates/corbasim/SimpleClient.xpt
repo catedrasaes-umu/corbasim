@@ -19,7 +19,7 @@
 «FILE fqn+"_client.cpp"»
 #include <corbasim/impl.hpp>
 #include "«getTranslationUnit().getFileNameStubHpp()»"
-#include <corbasim/reflective_gui/SimpleClient.hpp>
+#include <corbasim/gui/SimpleClient.hpp>
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»();
 
@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 	CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
 	CORBA::Object_var obj;
 	
-	corbasim::reflective_gui::SimpleClient window;
+	corbasim::gui::SimpleClient window;
 	window.initialize(corbasim_reflective_«fqn»());
 	
 	if(argc > 1)
