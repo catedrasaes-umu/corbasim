@@ -14,7 +14,10 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/ScriptModel.hpp
     gui/SimpleClient.hpp
     gui/DumpTool.hpp
-    gui/ReflectiveGUI.hpp)
+    gui/ReflectiveGUI.hpp
+
+    gui/Server.hpp
+    gui/ServerApp.hpp)
 
 foreach(_header ${corbasim_gui_EXPORTED_HEADERS})
     get_filename_component(_header_path ${_header} PATH)
@@ -33,7 +36,9 @@ set(corbasim_gui_MOC_HDRS
     gui/ScriptModel.hpp
     gui/SimpleClient.hpp
     gui/DumpTool.hpp
-    gui/ReflectiveGUI.hpp)
+    gui/ReflectiveGUI.hpp
+    
+    gui/Server.hpp)
 
 set(corbasim_gui_SRCS
     gui/json.cpp
@@ -51,7 +56,10 @@ set(corbasim_gui_SRCS
     gui/ScriptModel.cpp
     gui/SimpleClient.cpp
     gui/DumpTool.cpp
-    gui/ReflectiveGUI.cpp)
+    gui/ReflectiveGUI.cpp
+
+    gui/Server.cpp
+    gui/ServerApp.cpp)
 
 set(corbasim_gui_LIBS
     ${QT_LIBRARIES}

@@ -41,7 +41,7 @@ class SimpleScriptEditor;
 class OperationSequenceTool;
 class FilteredLogView;
 
-class SimpleClient : public QMainWindow
+class CORBASIM_GUI_DECLSPEC SimpleClient : public QMainWindow
 {
     Q_OBJECT
 public:

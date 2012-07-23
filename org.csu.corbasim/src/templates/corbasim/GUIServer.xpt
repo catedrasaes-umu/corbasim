@@ -1,0 +1,69 @@
+«IMPORT org::csu::idl::idlmm»
+
+«EXTENSION templates::corbasim::corbasim»
+
+«DEFINE server FOR TranslationUnit»
+	«EXPAND server FOREACH contains»
+«ENDDEFINE»
+
+«DEFINE server FOR Contained»«ENDDEFINE»
+
+«DEFINE server FOR ModuleDef»
+	«EXPAND server FOREACH contains»
+«ENDDEFINE»
+
+«REM»Servidor para interfaces«ENDREM»
+«DEFINE server FOR InterfaceDef»
+«LET getFQN("_") AS fqn»
+
+«FILE fqn+"_server.cpp"»
+#include <corbasim/impl.hpp>
+#include "«getTranslationUnit().getFileNameSkelHpp()»"
+#include "«getTranslationUnit().getAdaptedFile()»"
+#include <corbasim/gui/ServerApp.hpp>
+
+class «fqn»_impl : virtual public «this.getPOAFQN()»
+{
+public:
+
+	«fqn»_impl()
+	{
+	}
+
+	«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op»
+	«op.getSignature()»
+	{
+		«IF !op.parameters.isEmpty || !op.returnVoid()-»
+		_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
+		«ENDIF-»
+		
+		«IF !op.returnVoid()-»
+		«IF op.returnString()-»
+		return CORBA::string_dup(_val._return);
+		«ELSEIF op.returnWString()-»
+		return CORBA::wstring_dup(_val._return);
+		«ELSE-»
+		return _val._return;
+		«ENDIF-»
+		«ENDIF-»
+	}
+	«ENDFOREACH»
+};
+
+extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»();
+
+int main(int argc, char **argv)
+{
+    corbasim::gui::ServerApp app(argc, argv);
+
+	// Servant
+    «fqn»_impl _impl;
+
+    app.setServant(corbasim_reflective_«fqn»(), _impl);
+   
+    return app.exec();
+}
+«ENDFILE»
+
+«ENDLET»
+«ENDDEFINE»
