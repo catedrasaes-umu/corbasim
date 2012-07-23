@@ -20,9 +20,13 @@
 #include "DumpTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
 #include <corbasim/gui/utils.hpp>
+#include <corbasim/json/reflective.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
 
+#include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <iostream>
 
 using namespace corbasim::gui;
@@ -30,20 +34,74 @@ using namespace corbasim::gui;
 DumpProcessor::DumpProcessor(const QString& id,
         const gui::ReflectivePath_t path, 
         const Config& config) :
-    gui::RequestProcessor(id, path), m_config(config)
+    gui::RequestProcessor(id, path), m_config(config),
+    m_currentIndex(0)
 {
-
+    nextFile();
 }
 
 DumpProcessor::~DumpProcessor()
 {
 }
 
+void DumpProcessor::nextFile()
+{
+    std::ostringstream oss;
+
+    oss << m_config.filePrefix 
+        << std::setfill('0')
+        << std::setw(m_config.suffixLength)
+        << m_currentIndex;
+
+    m_nextFile = oss.str();
+}
+
 void DumpProcessor::process(event::request_ptr req, 
         core::reflective_base const * ref,
         core::holder hold)
 {
-    // TODO save
+    std::ios_base::openmode flags = std::ios_base::out;
+
+    if (!m_config.multipleFiles)
+    {
+        flags = flags | std::ios_base::app;
+    }
+
+    try 
+    {
+        std::ofstream out(m_nextFile.c_str(), flags);
+
+        switch(m_config.format)
+        {
+        case FORMAT_JSON:
+            {
+                json::std_writer_t writer(out, true);
+                json::write(writer, ref, hold);
+                out << std::endl;
+            }
+            break;
+
+        case FORMAT_TEXT:
+            // TODO
+            break;
+
+        case FORMAT_BINARY:
+            // TODO
+            break;
+
+        default:
+            break;
+        }
+    } 
+    catch(...) 
+    {
+    }
+
+    if (m_config.multipleFiles)
+    {
+        m_currentIndex++;
+        nextFile();
+    }
 }
 
 // Reflective plot
@@ -103,7 +161,9 @@ Dumper::Dumper(const QString& id,
     QObject::connect(browse, SIGNAL(clicked()),
             this, SLOT(browse()));
 
-    QString defaultFile(getFieldName(reflective, path));
+    QString defaultFile(id);
+    defaultFile += ".";
+    defaultFile += getFieldName(reflective, path);
     defaultFile += "-";
     m_filePrefix->setText(defaultFile);
 }
@@ -142,7 +202,7 @@ void Dumper::doStart(bool start)
         {
             const DumpProcessor::Config config = {
                 m_multipleFiles->isChecked(),
-                file,
+                file.toStdString(),
                 static_cast< DumpProcessor::Format >(m_format->currentIndex()),
                 m_suffixLength->value()
             };
@@ -151,6 +211,8 @@ void Dumper::doStart(bool start)
                 new DumpProcessor(m_id, m_path, config);
 
             m_processor.reset(processor);
+
+            emit addProcessor(m_processor);
         }
     }
 }
@@ -246,42 +308,49 @@ void DumpTool::unregisterInstance(const QString& name)
     m_model.unregisterInstance(name);
 }
 
-void DumpTool::createDumper(const QString& id, 
+Dumper * DumpTool::createDumper(const QString& id, 
         core::interface_reflective_base const * reflective,
         const QList< int >& path)
 {
     core::operation_reflective_base const * op =
         reflective->get_reflective_by_index(path.front());
 
-    Dumper * plot = new Dumper(id, op, path);
+    Dumper * plot = NULL;
 
-    const key_t key(id, op->get_tag());
-    m_map[key].push_back(plot);
-    m_inverse_map[plot] = key;
+    if (op)
+    {
+        plot = new Dumper(id, op, path);
 
-    qt::SortableGroupItem * item = 
-        new qt::SortableGroupItem(plot, m_group);
+        const key_t key(id, op->get_tag());
+        m_map[key].push_back(plot);
+        m_inverse_map[plot] = key;
 
-    item->showDetails();
+        qt::SortableGroupItem * item = 
+            new qt::SortableGroupItem(plot, m_group);
 
-    const QString title(gui::getFieldName(op, path));
-    item->setTitle(id + "." + title);
+        item->showDetails();
 
-    m_group->appendItem(item);
+        const QString title(gui::getFieldName(op, path));
+        item->setTitle(id + "." + title);
 
-    // connect with the processor
-    QObject::connect(plot, 
-            SIGNAL(addProcessor(
-                    corbasim::gui::RequestProcessor_ptr)),
-            gui::getDefaultInputRequestController(),
-            SLOT(addProcessor(
-                    corbasim::gui::RequestProcessor_ptr)));
-    QObject::connect(plot, 
-            SIGNAL(removeProcessor(
-                    corbasim::gui::RequestProcessor_ptr)),
-            gui::getDefaultInputRequestController(),
-            SLOT(removeProcessor(
-                    corbasim::gui::RequestProcessor_ptr)));
+        m_group->appendItem(item);
+
+        // connect with the processor
+        QObject::connect(plot, 
+                SIGNAL(addProcessor(
+                        corbasim::gui::RequestProcessor_ptr)),
+                gui::getDefaultInputRequestController(),
+                SLOT(addProcessor(
+                        corbasim::gui::RequestProcessor_ptr)));
+        QObject::connect(plot, 
+                SIGNAL(removeProcessor(
+                        corbasim::gui::RequestProcessor_ptr)),
+                gui::getDefaultInputRequestController(),
+                SLOT(removeProcessor(
+                        corbasim::gui::RequestProcessor_ptr)));
+    }
+
+    return plot;
 }
 
 void DumpTool::deleteDumper(const QString& id, 
@@ -335,4 +404,102 @@ void DumpTool::deleteRequested(qt::SortableGroupItem* item)
     m_group->deleteItem(item);
 }
 
+void Dumper::save(QVariant& settings)
+{
+    QVariantMap map;
+
+    const QString& file (m_filePrefix->text());
+
+    map["file_prefix"] = file;
+    map["multiple_files"] = m_multipleFiles->isChecked();
+    map["format"] = m_format->currentText();
+    map["suffix_length"] = m_suffixLength->value();
+    map["running"] = m_startStopButton->isChecked();
+
+    settings = map;
+}
+
+void Dumper::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    m_filePrefix->setText(map["file_prefix"].toString());
+    m_multipleFiles->setChecked(map["multiple_files"].toBool());
+
+    m_suffixLength->setValue(map["suffix_length"].toInt());
+
+    int format = m_format->findText(map["format"].toString());
+
+    if (format != -1)
+    {
+        m_format->setCurrentIndex(format);
+    }
+
+    m_startStopButton->setChecked(map["running"].toBool());
+}
+
+void DumpTool::save(QVariant& settings)
+{
+    QVariantList list;
+
+    for (map_t::iterator it = m_map.begin(); 
+            it != m_map.end(); ++it) 
+    {
+        for (int i = 0; i < it->second.size(); i++) 
+        {
+            QVariantMap map;
+            QVariantList vpath;
+
+            const QList< int >& path = it->second.at(i)->getPath();
+
+            for (int j = 0; j < path.size(); j++) 
+            {
+                vpath << path.at(j);
+            }
+
+            map["instance"] = it->first.first;
+            map["path"] = vpath;
+
+            it->second.at(i)->save(map["config"]);
+
+            list << map;
+        }
+    }
+
+    settings = list;
+}
+
+void DumpTool::load(const QVariant& settings)
+{
+    const QVariantList list = settings.toList();
+
+    for (int i = 0; i < list.size(); i++) 
+    {
+        const QVariantMap map = list.at(i).toMap();
+
+        const QString id = map["instance"].toString();
+
+        const QVariantList vpath = map["path"].toList();
+        QList< int > path;
+        for (int j = 0; j < vpath.size(); j++) 
+        {
+            path << vpath.at(j).toInt();
+        }
+
+        core::interface_reflective_base const * ref =
+            m_model.getReflective(id);
+
+        if (ref)
+        {
+            Dumper * dumper = createDumper(id, ref, path);
+
+            if (dumper)
+            {
+                dumper->load(map["config"]);
+
+                m_model.check(id, path);
+            }
+        }
+    }
+}
 

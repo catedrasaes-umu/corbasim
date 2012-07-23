@@ -55,7 +55,7 @@ public:
     struct Config
     {
         bool multipleFiles;
-        QString filePrefix;
+        std::string filePrefix;
         Format format;
         unsigned int suffixLength;
     };
@@ -71,7 +71,11 @@ public:
 
 protected:
 
+    void nextFile();
+
     const Config m_config;
+    unsigned int m_currentIndex;
+    std::string m_nextFile;
 };
 
 class CORBASIM_GUI_DECLSPEC Dumper : public QWidget
@@ -96,6 +100,9 @@ public:
     {
         return m_processor;
     }
+
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 public slots:
 
@@ -134,6 +141,9 @@ public:
     DumpTool(QWidget * parent = 0);
     virtual ~DumpTool();
 
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
 public slots:
 
     void registerInstance(const QString& name,
@@ -141,7 +151,7 @@ public slots:
 
     void unregisterInstance(const QString& name);
 
-    void createDumper(const QString& id, 
+    Dumper * createDumper(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
 

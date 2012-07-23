@@ -869,6 +869,10 @@ void AppMainWindow::save(QVariant& settings)
         m_filtered_log->save(window["filtered_log"]);
     }
 
+    if (m_dump_tool)
+    {
+        m_dump_tool->save(window["dumpers"]);
+    }
 
     settings = window;
 }
@@ -922,6 +926,14 @@ void AppMainWindow::load(const QVariant& settings)
     if (window.contains("filtered_log"))
     {
         m_filtered_log->load(window["filtered_log"]);
+    }
+
+    if (window.contains("dumpers"))
+    {
+        // TODO do not show but ensure created
+        if (!m_dump_tool) showDumpTool();
+
+        m_dump_tool->load(window["dumpers"]);
     }
 }
 

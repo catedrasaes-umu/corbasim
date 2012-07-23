@@ -23,6 +23,9 @@ public:
             const QVariant& value, 
             int role = Qt::EditRole);
 
+    core::interface_reflective_base const * 
+    getReflective(const QString& id) const;
+
 public slots:
 
     void registerInstance(const QString& name,
@@ -30,6 +33,7 @@ public slots:
 
     void unregisterInstance(const QString& name);
 
+    void check(const QString& id, const QList< int >& path);
     void uncheck(const QString& id, const QList< int >& path);
 
 signals:

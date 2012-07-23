@@ -56,6 +56,20 @@ bool ParametersModel::setData(const QModelIndex & index,
     return res;
 }
 
+corbasim::core::interface_reflective_base const * 
+ParametersModel::getReflective(const QString& id) const
+{
+    for (FirstLevelItems_t::const_iterator it = m_items.begin(); 
+            it != m_items.end(); ++it) 
+    {
+        if (id == it->name)
+        {
+            return it->reflective;
+        }
+    }
+
+    return NULL;
+}
 
 void ParametersModel::insertRecursive(QStandardItem * parent, 
         corbasim::core::reflective_base const * reflective)
@@ -168,6 +182,35 @@ void ParametersModel::uncheck(const QString& id, const QList< int >& path)
             QStandardItem * item = itemFromIndex(idx);
 
             item->setCheckState(Qt::Unchecked);
+
+            break;
+        }
+    }
+}
+
+void ParametersModel::check(const QString& id, const QList< int >& path)
+{
+    // TODO optimize
+
+    unsigned int i = 0;
+    for (FirstLevelItems_t::const_iterator it = m_items.begin(); 
+            it != m_items.end(); ++it, ++i) 
+    {
+        if (id == it->name)
+        {
+            // navigate until last element
+
+            // Instance element
+            QModelIndex idx = index(i, 0);
+            
+            for (int i = 0; i < path.size(); i++) 
+            {
+                idx = index(path[i], 0, idx);
+            }
+
+            QStandardItem * item = itemFromIndex(idx);
+
+            item->setCheckState(Qt::Checked);
 
             break;
         }
