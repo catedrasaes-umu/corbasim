@@ -9,6 +9,7 @@ extension templates::corbasim::cpptypes reexport;
 Boolean generateClient() : GLOBALVAR genClient;
 Boolean generateInjector() : GLOBALVAR genInjector;
 Boolean generateServer() : GLOBALVAR genServer;
+Boolean generateServerUI() : GLOBALVAR genServerUI;
 Boolean generatePyStim() : GLOBALVAR genPyStim;
 Boolean generateInterpreter() : GLOBALVAR genInterpreter;
 Boolean generateCMake() : GLOBALVAR genCMake;

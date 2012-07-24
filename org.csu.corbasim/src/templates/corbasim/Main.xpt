@@ -22,6 +22,10 @@
 	«IF generateServer()»
 		«EXPAND templates::corbasim::Server::server FOR this»
 	«ENDIF»
+	
+	«IF generateServerUI()»
+		«EXPAND templates::corbasim::GUIServer::server FOR this»
+	«ENDIF»
 
 	«IF generateReflectiveLibrary()»
 		«EXPAND templates::corbasim::LibReflective::main FOR this»

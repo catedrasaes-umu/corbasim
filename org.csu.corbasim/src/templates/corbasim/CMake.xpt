@@ -6,7 +6,7 @@
 «LET getFileName() AS filename»
 «FILE filename+".cmake"»
 
-	«IF generateClient()-»
+	«IF generateClient() || generateServerUI()-»
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 	«ENDIF-»
@@ -83,6 +83,30 @@ else()
         ${CORBASIM_CLIENT_LIBS})
 endif()
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_client DESTINATION bin)
+
+	«ENDIF-»
+	«IF generateServerUI()-»
+# Client
+add_executable(${CORBASIM_PREFIX}«fqn»_server_ui «fqn»_server_ui.cpp)
+if(${CORBASIM_STATIC_LINK})
+    target_link_libraries(${CORBASIM_PREFIX}«fqn»_server_ui 
+        corbasim_static_reflective_«fqn»
+        ${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl_s
+    «FOREACH getTranslationUnit().includes AS e-»
+        ${CORBASIM_PREFIX}«e.getFileName()»_idl_s
+    «ENDFOREACH-»
+        ${CORBASIM_CLIENT_STATIC_LIBS}
+        ${CORBASIM_ORB_LIBS}
+        ${QT_LIBRARIES})
+else()
+    target_link_libraries(${CORBASIM_PREFIX}«fqn»_server_ui 
+        ${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
+        corbasim_reflective_«fqn»
+        ${CORBASIM_ORB_LIBS}
+        ${QT_LIBRARIES}
+        ${CORBASIM_CLIENT_LIBS})
+endif()
+install(TARGETS ${CORBASIM_PREFIX}«fqn»_server_ui DESTINATION bin)
 
 	«ENDIF-»
 	«IF generateServer()-»

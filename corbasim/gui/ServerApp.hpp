@@ -34,7 +34,7 @@ class CORBASIM_GUI_DECLSPEC ServerApp
 {
 public:
 
-    ServerApp(int argc, char ** argv);
+    ServerApp(int& argc, char ** argv);
     ~ServerApp();
 
     CORBA::Object_var setClient(

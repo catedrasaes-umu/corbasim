@@ -211,7 +211,7 @@ void SimpleClient::sendRequest(corbasim::event::request_ptr req)
     {
         event::event_ptr ev(m_caller->do_call(req.get()));
 
-        m_log_model.outputRequest("Object", req, ev);
+        m_log_model.outputRequest("Referenced object", req, ev);
     }
 }
 
@@ -222,7 +222,7 @@ void SimpleClient::sendRequest(const QString& /*unused*/, corbasim::event::reque
 
 void SimpleClient::initialize(core::interface_reflective_base const * factory)
 {
-    m_log_model.registerInstance("Object", factory);
+    m_log_model.registerInstance("Referenced object", factory);
     m_filtered_log->registerInstance("Referenced object", factory);
 
     if (m_seq_tool)

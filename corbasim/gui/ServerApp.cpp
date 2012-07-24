@@ -24,8 +24,64 @@
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/gui/Server.hpp>
 #include <iostream>
+#include <map>
+#include <string>
 
 using namespace corbasim::gui;
+
+namespace
+{
+    struct Client :
+        public ::corbasim::core::request_processor
+    {
+        ::corbasim::gui::Server * server;
+        const std::string clientName;
+        ::corbasim::core::interface_reflective_base const * reflective;
+        ::corbasim::core::interface_caller_ptr caller;
+        CORBA::Object_var fakeRef;
+        PortableServer::ServantBase * proxyServant;
+
+        Client( ::corbasim::gui::Server * server_,
+                const char * clientName_,
+                ::corbasim::core::interface_reflective_base const * reflective_
+                ) : 
+            server(server_),
+            clientName(clientName_),
+            reflective(reflective_),
+            caller(reflective->create_caller()),
+            proxyServant(NULL)
+        {
+        }
+
+        ~Client()
+        {
+            delete proxyServant;
+        }
+
+        ::corbasim::event::event_ptr operator()(
+                ::corbasim::event::request_ptr req,
+                ::corbasim::event::response_ptr)
+        {
+            ::corbasim::event::event_ptr ev;
+            
+            if (!caller->is_nil())
+            {
+                ev.reset(caller->do_call(req.get()));
+            }
+            else
+            {
+                ev.reset(new ::corbasim::event::message("Invalid reference!"));
+            }
+
+            server->notifyRequestSent(clientName.c_str(), req, ev);
+            
+            return ev;
+        }
+    };
+
+    typedef boost::shared_ptr< Client > Client_ptr;
+
+} // namespace
 
 struct ServerApp::ServerApp_i :
     public ::corbasim::core::request_processor
@@ -45,6 +101,9 @@ struct ServerApp::ServerApp_i :
     ::corbasim::core::interface_caller_ptr caller;
 
     ::corbasim::gui::Server * server;
+
+    typedef std::map< std::string, Client_ptr > clients_t;
+    clients_t clients;
 
     ServerApp_i(ServerApp * _this) : 
         this_(_this),
@@ -68,12 +127,12 @@ struct ServerApp::ServerApp_i :
     }
 };
 
-ServerApp::ServerApp(int argc, char ** argv) :
+ServerApp::ServerApp(int& argc, char ** argv) :
     m_impl(new ServerApp_i(this))
 {
-    m_impl->app = new QApplication(argc, argv);
-
     m_impl->orb = CORBA::ORB_init(argc, argv);
+
+    m_impl->app = new QApplication(argc, argv);
 
     CORBA::Object_var rootPOAObj = 
         m_impl->orb->resolve_initial_references ("RootPOA");
@@ -95,11 +154,79 @@ ServerApp::~ServerApp()
     delete m_impl;
 }
 
+namespace  
+{
+    ::corbasim::core::interface_reflective_base const * 
+    getReflectiveByFQN(const char * fqn)
+    {
+        QString symbol (fqn);
+        symbol.replace("::","_");
+        symbol.prepend("corbasim_reflective_");
+
+        typedef const corbasim::core::interface_reflective_base *
+            (*get_reflective_t)();
+        get_reflective_t get_reflective = NULL;
+
+        QLibrary lib(symbol);
+
+        if (lib.load() && 
+                (get_reflective = (get_reflective_t) 
+                     lib.resolve(symbol.toStdString().c_str())) != NULL)
+        {
+            return get_reflective();
+        }
+
+        return NULL;
+    }
+} // namespace 
+
 CORBA::Object_var ServerApp::setClient(
         const char * fqn, 
         const char * clientName,
         const CORBA::Object_var& ref)
 {
+    ServerApp_i::clients_t::iterator it =
+        m_impl->clients.find(clientName);
+
+    if (it == m_impl->clients.end())
+    {
+        ::corbasim::core::interface_reflective_base const * reflective = 
+            getReflectiveByFQN(fqn);
+       
+        if (reflective)
+        {
+            Client_ptr client(new Client(m_impl->server, clientName, reflective));
+
+            client->proxyServant = reflective->create_servant(client.get());
+
+            PortableServer::ObjectId_var myObjID = 
+                m_impl->rootPOA->activate_object (client->proxyServant);
+
+            client->fakeRef =  
+                m_impl->rootPOA->servant_to_reference(client->proxyServant);
+
+            client->caller->set_reference(ref);
+
+            m_impl->clients.insert(std::make_pair(clientName, client));
+
+            m_impl->server->notifyClientCreated(clientName, 
+                    reflective, 
+                    client->fakeRef);
+
+            return client->fakeRef;
+        }
+        else
+        {
+            std::cerr << "Library not found!" << std::endl;
+        }
+    }
+    else
+    {
+        it->second->caller->set_reference(ref);
+
+        return it->second->fakeRef;
+    }
+
     return CORBA::Object::_nil();
 }
 
@@ -115,6 +242,7 @@ CORBA::Object_var ServerApp::setServant(
 
     CORBA::Object_var objSrv = 
         m_impl->rootPOA->servant_to_reference(m_impl->servant);
+
 
     m_impl->caller.reset(m_impl->reflective->create_caller());
 
@@ -144,6 +272,7 @@ int ServerApp::exec()
     boost::thread orbThread(
             boost::bind(&CORBA::ORB::run, m_impl->orb.in()));
 
+    assert(m_impl->app);
     int res = m_impl->app->exec();
 
     m_impl->orb->shutdown(1);

@@ -189,11 +189,13 @@ public class Generator {
 		// Generator options
 		genClient = cmd.hasOption("Gclient");
 		genServer = cmd.hasOption("Gserver");
+		genServerUI = cmd.hasOption("Gserverui");
 		genCMake = !cmd.hasOption("Ncmake");
 
 		globalVarsMap.put("genClient", new Variable("genClient", genClient));
 		globalVarsMap.put("genServer", new Variable("genServer", genServer));
 		globalVarsMap.put("genCMake", new Variable("genCMake", genCMake));
+		globalVarsMap.put("genServerUI", new Variable("genServerUI", genServerUI));
 	}
 
 	private static Options options = null; // Command line options
@@ -208,7 +210,8 @@ public class Generator {
 	// Generartor options
 	private boolean genClient = false;
 	private boolean genServer = false;
-	private boolean genCMake = true;
+	private boolean genServerUI = false;
+	private boolean genCMake = true;	
 
 	// TAO defaults
 	private static String stubHppSuffix = "C.h";
@@ -256,6 +259,7 @@ public class Generator {
 		// CORBASIM options
 		options.addOption("Gclient", false, "Generate GUI client.");
 		options.addOption("Gserver", false, "Generate dummy server.");
+		options.addOption("Gserverui", false, "Generate GUI server.");
 
 		options.addOption("Ncmake", false, "Do not generate CMake files.");
 

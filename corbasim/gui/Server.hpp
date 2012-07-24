@@ -21,14 +21,20 @@
 #define CORBASIM_GUI_SERVER_HPP
 
 #include <corbasim/gui/export.hpp>
+#include <corbasim/core/caller_fwd.hpp>
+#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/LogModel.hpp>
 
 #include <QtGui>
+#include <map>
 
 namespace corbasim 
 {
 namespace gui 
 {
+
+class FilteredLogView;
+class OperationSequenceTool;
 
 class CORBASIM_GUI_DECLSPEC Server : public QMainWindow
 {
@@ -37,17 +43,46 @@ public:
     Server(QWidget * parent = 0);
     virtual ~Server();
 
-    void initialize( ::corbasim::core::interface_reflective_base const *);
+    void initialize( ::corbasim::core::interface_reflective_base const * reflective);
 
     void notifyRequestReceived(
             corbasim::event::request_ptr req,
             corbasim::event::event_ptr resp);
 
+    void notifyRequestSent(
+            const QString& id,
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr resp);
+
+    void notifyClientCreated(
+            const QString& clientName,
+            ::corbasim::core::interface_reflective_base const * reflective,
+            const CORBA::Object_var& ref);
+
+public slots:
+
+    void sendRequest(const QString& id, corbasim::event::request_ptr);
+
+    void setClient(
+            const QString& clientName,
+            corbasim::core::interface_reflective_base const * reflective,
+            const CORBA::Object_var& ref);
+
 signals:
 
     void requestReceived(
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
+            corbasim::event::request_ptr,
+            corbasim::event::event_ptr);
+
+    void requestSent(
+            const QString&,
+            corbasim::event::request_ptr,
+            corbasim::event::event_ptr);
+
+    void clientCreated(
+            const QString&,
+            corbasim::core::interface_reflective_base const *,
+            const CORBA::Object_var&);
 
 protected slots:
 
@@ -55,9 +90,27 @@ protected slots:
             corbasim::event::request_ptr req,
             corbasim::event::event_ptr resp);
 
+    void appendRequestSent(
+            const QString& id,
+            corbasim::event::request_ptr req,
+            corbasim::event::event_ptr resp);
+
 protected:
 
+    struct Client
+    {
+        ::corbasim::core::interface_reflective_base const * reflective;
+        ::corbasim::core::interface_caller_ptr caller;
+    };
+
     LogModel m_logModel;
+
+    FilteredLogView * m_view;
+    OperationSequenceTool * m_seqTool;
+
+    typedef std::map< QString, Client > clients_t;
+
+    clients_t m_clients;
 };
 
 } // namespace gui
