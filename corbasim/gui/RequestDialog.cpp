@@ -47,9 +47,9 @@ RequestDialog::RequestDialog(
     QVBoxLayout * layout = new QVBoxLayout();
 
     // Input scroll
-    QScrollArea * scroll = new QScrollArea();
-    scroll->setObjectName("scroll");
-    scroll->setWidgetResizable(true);
+    m_scroll = new QScrollArea();
+    m_scroll->setObjectName("scroll");
+    m_scroll->setWidgetResizable(true);
     m_dlg->setObjectName("form");
     
     QWidget * scrollWidget = new QWidget();
@@ -60,10 +60,16 @@ RequestDialog::RequestDialog(
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Expanding);
     scrollLayout->addItem(spacer);
-    scroll->setWidget(scrollWidget);
-    layout->addWidget(scroll); 
-    scroll->setLineWidth(0);
-    scroll->setFrameStyle(QFrame::NoFrame);
+    scrollWidget->setSizePolicy(QSizePolicy::Preferred, 
+            QSizePolicy::Preferred);
+    m_scroll->setWidget(scrollWidget);
+    layout->addWidget(m_scroll); 
+    m_scroll->setLineWidth(0);
+    m_scroll->setFrameStyle(QFrame::NoFrame);
+    m_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    setMinimumWidth(m_scroll->widget()->minimumSizeHint().width() + 
+            m_scroll->verticalScrollBar()->width());
     // End scroll
 
     QHBoxLayout * periodicLayout = new QHBoxLayout;
@@ -188,6 +194,13 @@ void RequestDialog::hideEvent(QHideEvent * event)
     if (parent && dynamic_cast< QMdiSubWindow* >(parent))
         parent->hide();
 
+    event->accept();
+}
+
+void RequestDialog::resizeEvent(QResizeEvent * event)
+{
+    setMinimumWidth(m_scroll->widget()->minimumSizeHint().width() + 
+            m_scroll->verticalScrollBar()->width());
     event->accept();
 }
 

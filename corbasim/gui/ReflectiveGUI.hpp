@@ -211,6 +211,10 @@ public:
 
 protected:
 
+    QGridLayout * m_layout;
+
+    // void resizeEvent(QResizeEvent * event);
+
     std::vector< ReflectiveWidgetBase * > m_widgets;
 };
 

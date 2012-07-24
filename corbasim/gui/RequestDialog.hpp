@@ -70,6 +70,8 @@ protected:
 
     OperationInputForm * m_dlg;
 
+    QScrollArea * m_scroll;
+
     QSpinBox * m_sbPeriod;
     QSpinBox * m_sbTimes;
     QCheckBox * m_cbUseStored;
@@ -83,6 +85,8 @@ protected:
     event::request_ptr m_storedRequest;
 
     void hideEvent(QHideEvent * event);
+
+    void resizeEvent(QResizeEvent * event);
 };
 
 } // namespace gui

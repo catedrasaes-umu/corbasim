@@ -149,6 +149,7 @@ AlternativesWidget::AlternativesWidget(
     m_btnLayout->addSpacerItem(spacer);
     layout->addLayout(m_btnLayout);
 
+    layout->setMargin(0);
     setLayout(layout);
 
     QObject::connect(&m_group, SIGNAL(buttonClicked(int)), 
@@ -519,11 +520,23 @@ StructWidget::StructWidget(
 {
     assert(reflective->get_type() == core::TYPE_STRUCT);
 
-    QGridLayout * layout = new QGridLayout(this);
+    m_layout = new QGridLayout(this);
 
     unsigned int count = reflective->get_children_count();
 
+    int level = 0;
+    corbasim::core::reflective_base const * p = reflective;
+    while ((p = p->get_parent())) 
+        if (p->get_type() == core::TYPE_STRUCT)
+            level++;
+
+    const int rowWidth = ((level > 2)?  2: 4);
+
+    int row = 0;
+
     m_widgets.resize(count, NULL);
+
+    int column = 0;
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -545,11 +558,20 @@ StructWidget::StructWidget(
 
             label->setObjectName(QString(child_name) + "_label");
 
-            layout->addWidget(label, i, 0);
-            layout->addWidget(child_widget, i, 1);
+            m_layout->addWidget(label, row, column++);
+            m_layout->addWidget(child_widget, row, column++);
+
+            if (column == rowWidth)
+            {
+                row++;
+                column = 0;
+            }
         }
         else
         {
+            if (column != 0) row++;
+            column = 0;
+
             QGroupBox * gb = new QGroupBox(child_name, this);
             gb->setObjectName(QString(child_name) + "_group");
 
@@ -558,18 +580,21 @@ StructWidget::StructWidget(
             cLayout->addWidget(child_widget);
 
             gb->setLayout(cLayout);
-            layout->addWidget(gb, i, 0, 1, 2);
+            m_layout->addWidget(gb, row++, 0, 1, rowWidth);
         }
     }
 
-    setLayout(layout);
+    setLayout(m_layout);
 }
 
 StructWidget::~StructWidget()
 {
 }
-
-
+/*
+void StructWidget::resizeEvent(QResizeEvent * event)
+{
+}
+*/
 void StructWidget::toHolder(corbasim::core::holder& holder) 
 {
     const unsigned int count = m_reflective->get_children_count();

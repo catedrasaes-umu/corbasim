@@ -125,6 +125,15 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     m_cbUseStored->setChecked(true);
     bLayout->addWidget(m_cbUseStored);
 
+    layout->addLayout(bLayout);
+
+    bLayout = new QHBoxLayout();
+
+    // Horizontal spacer
+    spacer = new QSpacerItem(40, 20, 
+            QSizePolicy::Expanding, QSizePolicy::Minimum);
+    bLayout->addItem(spacer);
+
     m_pbStartStop = new QPushButton("S&tart/Stop");
     m_pbStartStop->setCheckable(true);
     m_pbStartStop->setObjectName("start-stop");
