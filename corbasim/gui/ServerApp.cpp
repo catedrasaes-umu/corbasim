@@ -23,6 +23,7 @@
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/gui/Server.hpp>
+#include <iostream>
 
 using namespace corbasim::gui;
 
