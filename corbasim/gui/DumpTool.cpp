@@ -158,6 +158,10 @@ Dumper::Dumper(const QString& id,
             SIGNAL(clicked(bool)),
             this, SLOT(doStart(bool)));
 
+    QObject::connect(m_startStopButton,
+            SIGNAL(toggled(bool)),
+            this, SLOT(setEnabled(bool)));
+
     QObject::connect(browse, SIGNAL(clicked()),
             this, SLOT(browse()));
 
@@ -178,6 +182,14 @@ void Dumper::browse()
             "Select a file...", ".");
 
     m_filePrefix->setText(file);
+}
+
+void Dumper::setEnabled(bool enabled)
+{
+    m_filePrefix->setEnabled(!enabled);
+    m_format->setEnabled(!enabled);
+    m_suffixLength->setEnabled(!enabled);
+    m_multipleFiles->setEnabled(!enabled);
 }
 
 corbasim::core::operation_reflective_base const * 

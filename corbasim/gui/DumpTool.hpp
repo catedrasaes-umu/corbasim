@@ -112,6 +112,7 @@ public slots:
 protected slots:
 
     void browse();
+    void setEnabled(bool);
 
 signals:
 
