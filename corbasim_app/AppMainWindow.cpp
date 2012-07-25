@@ -874,6 +874,17 @@ void AppMainWindow::save(QVariant& settings)
         m_dump_tool->save(window["dumpers"]);
     }
 
+    if (m_plot_tool)
+    {
+        typedef void (*save_t)(QWidget * tool, QVariant& settings);
+        save_t savefn = (save_t) QLibrary::resolve("corbasim_qwt", "saveReflectivePlotTool");
+
+        if (savefn)
+        {
+            savefn(m_plot_tool, window["plots"]);
+        }
+    }
+
     settings = window;
 }
 
@@ -934,6 +945,23 @@ void AppMainWindow::load(const QVariant& settings)
         if (!m_dump_tool) showDumpTool();
 
         m_dump_tool->load(window["dumpers"]);
+    }
+
+    if (window.contains("plots"))
+    {
+        if (!m_plot_tool) showPlotTool();
+
+        if (m_plot_tool)
+        {
+            typedef void (*load_t)(QWidget * tool, const QVariant& settings);
+            load_t loadfn = (load_t) QLibrary::resolve("corbasim_qwt", 
+                    "loadReflectivePlotTool");
+
+            if (loadfn)
+            {
+                loadfn(m_plot_tool, window["plots"]);
+            }
+        }
     }
 }
 

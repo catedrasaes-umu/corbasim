@@ -200,7 +200,7 @@ void ReflectivePlotTool::unregisterInstance(const QString& name)
     m_model.unregisterInstance(name);
 }
 
-void ReflectivePlotTool::createPlot(const QString& id, 
+ReflectivePlot * ReflectivePlotTool::createPlot(const QString& id, 
         core::interface_reflective_base const * reflective,
         const QList< int >& path)
 {
@@ -223,6 +223,8 @@ void ReflectivePlotTool::createPlot(const QString& id,
     
     // Notify to the processor
     emit addProcessor(plot->getProcessor());
+
+    return plot;
 }
 
 void ReflectivePlotTool::deletePlot(const QString& id, 
@@ -293,5 +295,82 @@ extern "C"
             registerInstance(id, factory);
     }
 
+    void saveReflectivePlotTool(QWidget * tool, QVariant& settings)
+    {
+        static_cast< corbasim::qwt::ReflectivePlotTool * >(tool)->
+            save(settings);
+    }
+
+    void loadReflectivePlotTool(QWidget * tool, const QVariant& settings)
+    {
+        static_cast< corbasim::qwt::ReflectivePlotTool * >(tool)->
+            load(settings);
+    }
+
 } // extern C
+
+void ReflectivePlotTool::save(QVariant& settings)
+{
+    QVariantList list;
+
+    for (map_t::iterator it = m_map.begin(); 
+            it != m_map.end(); ++it) 
+    {
+        for (int i = 0; i < it->second.size(); i++) 
+        {
+            QVariantMap map;
+            QVariantList vpath;
+
+            const QList< int >& path = it->second.at(i)->getPath();
+
+            for (int j = 0; j < path.size(); j++) 
+            {
+                vpath << path.at(j);
+            }
+
+            map["instance"] = it->first.first;
+            map["path"] = vpath;
+
+            // TODO it->second.at(i)->save(map["config"]);
+
+            list << map;
+        }
+    }
+
+    settings = list;
+}
+
+void ReflectivePlotTool::load(const QVariant& settings)
+{
+    const QVariantList list = settings.toList();
+
+    for (int i = 0; i < list.size(); i++) 
+    {
+        const QVariantMap map = list.at(i).toMap();
+
+        const QString id = map["instance"].toString();
+
+        const QVariantList vpath = map["path"].toList();
+        QList< int > path;
+        for (int j = 0; j < vpath.size(); j++) 
+        {
+            path << vpath.at(j).toInt();
+        }
+
+        core::interface_reflective_base const * ref =
+            m_model.getReflective(id);
+
+        if (ref)
+        {
+            ReflectivePlot * plot = createPlot(id, ref, path);
+
+            if (plot)
+            {
+                // TODO plot->load(map["config"]);
+
+                m_model.check(id, path);
+            }
+        }
+    }
+}
 

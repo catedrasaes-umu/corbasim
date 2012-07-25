@@ -44,6 +44,10 @@ public slots:
     void append(const QVector< double >& v);
     void append(double v);
 
+protected slots:
+
+    void updateY();
+
 protected:
 
     struct Data;

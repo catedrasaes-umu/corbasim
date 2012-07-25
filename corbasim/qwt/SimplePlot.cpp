@@ -24,6 +24,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QSpinBox>
+#include <QDoubleSpinBox>
 #include <QGroupBox>
 #include <QPushButton>
 
@@ -34,6 +35,8 @@ using namespace corbasim::qwt;
 struct SimplePlot::Data
 {
     priv::Plot * plot;
+    QDoubleSpinBox * spYMin;
+    QDoubleSpinBox * spYMax;
 };
 
 SimplePlot::SimplePlot(QWidget * parent) :
@@ -67,6 +70,7 @@ SimplePlot::SimplePlot(QWidget * parent) :
     QSpinBox * spSamples = new QSpinBox();
     gridLayout->addWidget(spSamples, 0, 1);
 
+    // X
     QGroupBox * gbX = new QGroupBox("Display X");
     QGridLayout * lX = new QGridLayout();
     lX->addWidget(new QLabel("min"), 0, 0);
@@ -78,16 +82,27 @@ SimplePlot::SimplePlot(QWidget * parent) :
     gbX->setLayout(lX);
     gridLayout->addWidget(gbX, 1, 0, 1, 2);
 
+    // Y
     QGroupBox * gbY = new QGroupBox("Display Y");
     QGridLayout * lY = new QGridLayout();
     lY->addWidget(new QLabel("min"), 0, 0);
     lY->addWidget(new QLabel("max"), 1, 0);
-    QSpinBox * spYMin = new QSpinBox();
+    QDoubleSpinBox * spYMin = new QDoubleSpinBox();
     lY->addWidget(spYMin, 0, 1);
-    QSpinBox * spYMax = new QSpinBox();
+    QDoubleSpinBox * spYMax = new QDoubleSpinBox();
     lY->addWidget(spYMax, 1, 1);
     gbY->setLayout(lY);
     gridLayout->addWidget(gbY, 2, 0, 1, 2);
+    m_data->spYMin = spYMin;
+    m_data->spYMax = spYMax;
+
+    spYMin->setValue(-10.0);
+    spYMax->setValue(10.0);
+
+    QObject::connect(spYMin, SIGNAL(valueChanged(double)),
+            this, SLOT(updateY()));
+    QObject::connect(spYMax, SIGNAL(valueChanged(double)),
+            this, SLOT(updateY()));
 
     // Spacer
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
@@ -116,6 +131,8 @@ SimplePlot::SimplePlot(QWidget * parent) :
     gw->hide();
 
     setLayout(mainLayout);
+
+    updateY();
 }
 
 SimplePlot::~SimplePlot()
@@ -131,5 +148,17 @@ void SimplePlot::append(const QVector< double >& v)
 void SimplePlot::append(double v) 
 {
     m_data->plot->append(v);
+}
+
+void SimplePlot::updateY()
+{
+    m_data->spYMin->setMaximum(m_data->spYMax->value());
+    m_data->spYMax->setMinimum(m_data->spYMin->value());
+
+    m_data->plot->setAxisScale(QwtPlot::yLeft,
+        m_data->spYMin->value(), 
+        m_data->spYMax->value());
+
+    m_data->plot->replot();
 }
 

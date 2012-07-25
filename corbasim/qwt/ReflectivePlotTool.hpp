@@ -108,6 +108,9 @@ public:
     ReflectivePlotTool(QWidget * parent = 0);
     virtual ~ReflectivePlotTool();
 
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
 public slots:
 
     void registerInstance(const QString& name,
@@ -115,7 +118,7 @@ public slots:
 
     void unregisterInstance(const QString& name);
 
-    void createPlot(const QString& id, 
+    ReflectivePlot * createPlot(const QString& id, 
             core::interface_reflective_base const * reflective,
             const QList< int >& path);
 
