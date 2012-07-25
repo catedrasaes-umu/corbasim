@@ -74,6 +74,13 @@ ParametersModel::getReflective(const QString& id) const
 void ParametersModel::insertRecursive(QStandardItem * parent, 
         corbasim::core::reflective_base const * reflective)
 {
+    const corbasim::core::reflective_type type = reflective->get_type();
+
+    const bool process = (type == corbasim::core::TYPE_STRUCT ||
+            type == corbasim::core::TYPE_UNION);
+
+    if (!process) return;
+
     const unsigned int count = reflective->get_children_count();
 
     for (unsigned int i = 0; i < count; i++) 
