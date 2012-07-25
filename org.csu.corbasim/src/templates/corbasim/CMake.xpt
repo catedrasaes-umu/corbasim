@@ -115,9 +115,7 @@ add_executable(${CORBASIM_PREFIX}«fqn»_server «fqn»_server.cpp)
 target_link_libraries(${CORBASIM_PREFIX}«fqn»_server 
 	${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
     ${CORBASIM_ORB_LIBS}
-    ${CORBASIM_SERVER_LIBS}
-	# Boost
-	boost_program_options)
+    ${CORBASIM_SERVER_LIBS})
 install(TARGETS ${CORBASIM_PREFIX}«fqn»_server DESTINATION bin)
 
 	«ENDIF-»

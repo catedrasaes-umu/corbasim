@@ -22,6 +22,9 @@
 #include "«getTranslationUnit().getAdaptedFile()»"
 #include <corbasim/gui/ServerApp.hpp>
 
+«PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___prolog"»
+«ENDPROTECT»
+
 class «fqn»_impl : virtual public «this.getPOAFQN()»
 {
 public:
@@ -38,6 +41,9 @@ public:
 		_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
 		«ENDIF-»
 		
+		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::"+op.getFQN("_")»
+		«ENDPROTECT»
+
 		«IF !op.returnVoid()-»
 		«IF op.returnString()-»
 		return CORBA::string_dup(_val._return);
@@ -49,6 +55,9 @@ public:
 		«ENDIF-»
 	}
 	«ENDFOREACH»
+
+    «PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___body"»
+    «ENDPROTECT»
 
 protected:
 	
@@ -65,9 +74,16 @@ int main(int argc, char **argv)
     «fqn»_impl _impl(app);
 
     app.setServant(corbasim_reflective_«fqn»(), &_impl);
+
+    «PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___main"»
+    «ENDPROTECT»
    
     return app.exec();
 }
+
+«PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___epilog"»
+«ENDPROTECT»
+
 «ENDFILE»
 
 «ENDLET»

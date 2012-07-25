@@ -26,12 +26,12 @@ set(CORBASIM_ORB_IDL_COMPILER_OPTIONS
 
 # Libraries for clients
 set(CORBASIM_CLIENT_LIBS 
-    corbasim corbasim_qt corbasim_gui)
+    corbasim corbasim_qt corbasim_gui boost_program_options)
 
 set(CORBASIM_CLIENT_STATIC_LIBS 
-    corbasim_gui_s corbasim_qt_s corbasim_s)
+    corbasim_gui_s corbasim_qt_s corbasim_s boost_program_options)
 
 # Libraries for servers
 set(CORBASIM_SERVER_LIBS 
-    corbasim)
+    corbasim boost_program_options)
 

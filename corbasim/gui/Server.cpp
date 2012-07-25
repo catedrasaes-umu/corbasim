@@ -20,18 +20,39 @@
 #include "Server.hpp"
 #include <corbasim/gui/FilteredLogView.hpp>
 #include <corbasim/gui/OperationSequence.hpp>
+#include <corbasim/gui/DumpTool.hpp>
 
 using namespace corbasim::gui;
 
 Server::Server(QWidget * parent) : 
     QMainWindow(parent), m_logModel(this)
 {
-    // Temporal
+    QTabWidget * tabs = new QTabWidget();
+
+    // Log
+    QTreeView * logView = new QTreeView();
+    logView->setModel(&m_logModel);
+    tabs->addTab(logView, "Log");
+
+    // Filtered log
     m_view = new FilteredLogView();
-
     m_view->setLogModel(&m_logModel);
+    tabs->addTab(m_view, "Filtered log");
 
-    setCentralWidget(m_view);
+    // Clients
+    m_seqTool = new OperationSequenceTool();
+    tabs->addTab(m_seqTool, "Clients");
+
+    // Dump input
+    m_dumpInput = new DumpTool();
+    tabs->addTab(m_dumpInput, "Dump input");
+
+    // Dump output
+    m_dumpOutput = new DumpTool();
+    tabs->addTab(m_dumpOutput, "Dump output");
+
+    // Centra widget
+    setCentralWidget(tabs);
 
     QObject::connect(
             this,
@@ -67,14 +88,6 @@ Server::Server(QWidget * parent) :
                 corbasim::core::interface_reflective_base const *,
                 const CORBA::Object_var&)));
 
-    // Temporal
-    QDialog * m_seqToolDlg = new QDialog(this);
-    QVBoxLayout * layout = new QVBoxLayout();
-    m_seqTool = new OperationSequenceTool();
-    layout->addWidget(m_seqTool);
-    m_seqToolDlg->setLayout(layout);
-    m_seqToolDlg->show();
-
     QObject::connect(m_seqTool,
         SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
         this, 
@@ -90,6 +103,7 @@ void Server::initialize(
 {
     m_logModel.registerInstance("this", reflective);
     m_view->registerInstance("this", reflective);
+    m_dumpInput->registerInstance("this", reflective);
 }
 
 void Server::appendRequestReceived(
@@ -154,7 +168,7 @@ void Server::setClient(
         m_seqTool->objrefCreated(clientName, reflective);
         m_logModel.registerInstance(clientName, reflective);
         m_view->registerInstance(clientName, reflective);
-
+        m_dumpOutput->registerInstance(clientName, reflective);
     }
 }
 

@@ -23,7 +23,6 @@
 #include "AppController.hpp"
 #include "AppModel.hpp"
 #include "TriggerEngine.hpp"
-#include "DataDumper.hpp"
 #include "AppFileWatcher.hpp"
 //#include "NSBrowser.hpp"
 #include "NSWatcher.hpp"
@@ -61,7 +60,6 @@ int main(int argc, char **argv)
     QThread threadController;
     QThread threadEngine;
     QThread threadWatcher;
-    QThread threadDumper;
 #ifdef CORBASIM_FUTURE_FEATURES
     QThread threadBuilder;
 #endif
@@ -74,7 +72,6 @@ int main(int argc, char **argv)
     corbasim::app::AppController controller;
     corbasim::app::TriggerEngine engine;
     corbasim::app::AppFileWatcher watcher;
-    corbasim::app::DataDumper dumper;
 #ifdef CORBASIM_FUTURE_FEATURES
     corbasim::app::IDLBuilder builder;
 #endif
@@ -187,15 +184,6 @@ int main(int argc, char **argv)
         threadWatcher.start();
     }
 
-    if (config->enable_dump_data)
-    {
-        dumper.setDirectory(config->dump_directory.c_str());
-        dumper.setController(&controller);
-
-        dumper.moveToThread(&threadDumper);
-        threadDumper.start();
-    }
-    
 #ifdef CORBASIM_FUTURE_FEATURES
     builder.moveToThread(&threadBuilder);
     threadBuilder.start();
@@ -255,7 +243,6 @@ int main(int argc, char **argv)
     threadController.quit();
     threadEngine.quit();
     threadWatcher.quit();
-    threadDumper.quit();
 
 #ifdef CORBASIM_FUTURE_FEATURES
     threadBuilder.quit();
@@ -266,7 +253,6 @@ int main(int argc, char **argv)
     threadController.wait();
     threadEngine.wait();
     threadWatcher.wait();
-    threadDumper.wait();
 
 #ifdef CORBASIM_FUTURE_FEATURES
     threadBuilder.wait();

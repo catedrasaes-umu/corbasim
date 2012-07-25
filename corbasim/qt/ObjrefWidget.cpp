@@ -86,6 +86,8 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
     // Default model
     setModel(ReferenceModel::getDefaultModel());
+
+    setMaximumHeight(100);
 }
 
 ObjrefWidget::~ObjrefWidget()

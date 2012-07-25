@@ -21,13 +21,17 @@
 #include <QtGui>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
+#include <boost/program_options.hpp>
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/gui/Server.hpp>
+#include <corbasim/core/ns_register.hpp>
 #include <iostream>
 #include <map>
 #include <string>
 
 using namespace corbasim::gui;
+
+namespace po = boost::program_options;
 
 namespace
 {
@@ -105,6 +109,10 @@ struct ServerApp::ServerApp_i :
     typedef std::map< std::string, Client_ptr > clients_t;
     clients_t clients;
 
+    // Command line options
+    std::string nsKey;
+    std::auto_ptr< ::corbasim::core::ns_register > nsRegister;
+
     ServerApp_i(ServerApp * _this) : 
         this_(_this),
         app(NULL), 
@@ -144,6 +152,27 @@ ServerApp::ServerApp(int& argc, char ** argv) :
     m_impl->manager->activate();
 
     corbasim::qt::initialize();
+
+    // Program options
+    po::options_description desc_("corbasim generated server options");
+    
+    po::options_description generic_("Generic options");
+    generic_.add_options()
+        ("help,h", "produce help message")
+        ("ns-entry,n", 
+            po::value< std::string >(&m_impl->nsKey),
+            "register servant into naming service");
+
+    desc_.add(generic_);
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc_), vm);
+    po::notify(vm);
+
+    if (vm.count("help"))
+    {
+        std::cout << desc_ << std::endl;
+    }
 }
 
 ServerApp::~ServerApp()
@@ -195,8 +224,10 @@ CORBA::Object_var ServerApp::setClient(
        
         if (reflective)
         {
-            Client_ptr client(new Client(m_impl->server, clientName, reflective));
+            Client_ptr client(new Client(m_impl->server, clientName, 
+                        reflective));
 
+            // proxy servant
             client->proxyServant = reflective->create_servant(client.get());
 
             PortableServer::ObjectId_var myObjID = 
@@ -209,6 +240,7 @@ CORBA::Object_var ServerApp::setClient(
 
             m_impl->clients.insert(std::make_pair(clientName, client));
 
+            // create it in the GUI
             m_impl->server->notifyClientCreated(clientName, 
                     reflective, 
                     client->fakeRef);
@@ -217,7 +249,8 @@ CORBA::Object_var ServerApp::setClient(
         }
         else
         {
-            std::cerr << "Library not found!" << std::endl;
+            std::cerr << "Library not found for" <<
+                fqn << std::endl;
         }
     }
     else
@@ -237,25 +270,42 @@ CORBA::Object_var ServerApp::setServant(
     m_impl->reflective = reflective;
     m_impl->servant = servant;
 
+    // real servant
     PortableServer::ObjectId_var myObjID = 
         m_impl->rootPOA->activate_object (m_impl->servant);
 
     CORBA::Object_var objSrv = 
         m_impl->rootPOA->servant_to_reference(m_impl->servant);
 
-
     m_impl->caller.reset(m_impl->reflective->create_caller());
 
     m_impl->caller->set_reference(objSrv);
         
+    // proxy servant
     m_impl->proxyServant = m_impl->reflective->create_servant(m_impl);
 
     myObjID = m_impl->rootPOA->activate_object (m_impl->proxyServant);
 
     objSrv = m_impl->rootPOA->servant_to_reference(m_impl->proxyServant);
 
+    // display proxy servant reference
     CORBA::String_var strRef = m_impl->orb->object_to_string(objSrv.in());
     std::cout << strRef.in() << std::endl;
+
+    // registration into naming service
+    // real reference is never registered
+    if (!m_impl->nsKey.empty())
+    {
+        m_impl->nsRegister.reset(
+                new ::corbasim::core::ns_register(m_impl->orb.in(),
+                    m_impl->nsKey,
+                    objSrv));
+
+        if (m_impl->nsRegister->error())
+        {
+            // std::cerr << "Error during registration!" << std::endl;
+        }
+    }
 
     return objSrv;
 }
@@ -269,6 +319,7 @@ int ServerApp::exec()
     m_impl->server->initialize(m_impl->reflective);
     m_impl->server->show();
 
+    // Qt event loop must be in the main thread
     boost::thread orbThread(
             boost::bind(&CORBA::ORB::run, m_impl->orb.in()));
 

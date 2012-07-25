@@ -51,6 +51,8 @@ QWidget * ::corbasim::gui::createWidget(
 {
     using namespace corbasim::core;
 
+    WidgetFactory_t factory = createWidget;
+
     if (!reflective)
         return new QLabel("Null reflective type!", parent);
 
@@ -80,7 +82,7 @@ QWidget * ::corbasim::gui::createWidget(
             return new ObjrefvarWidget(reflective, parent);
 
         case TYPE_UNION:
-            return new UnionWidget(reflective, parent);
+            return new UnionWidget(reflective, factory, parent);
 
         case TYPE_ARRAY:
         case TYPE_SEQUENCE:
@@ -99,13 +101,13 @@ QWidget * ::corbasim::gui::createWidget(
                 return alt;
             }
 
-            return new ComplexSequenceWidget(reflective, parent);
+            return new ComplexSequenceWidget(reflective, factory, parent);
 
         case TYPE_DOUBLE:
         case TYPE_FLOAT:
             return new FloatWidget(reflective, parent);
         case TYPE_STRUCT:
-            return new StructWidget(reflective, parent);
+            return new StructWidget(reflective, factory, parent);
         case TYPE_ENUM:
             return new EnumWidget(reflective, parent);
         default:
@@ -515,6 +517,7 @@ void BoolWidget::fromHolder(corbasim::core::holder& holder)
 
 StructWidget::StructWidget(
         corbasim::core::reflective_base const * reflective,
+        WidgetFactory_t factory,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective)
 {
@@ -531,12 +534,10 @@ StructWidget::StructWidget(
             level++;
 
     const int rowWidth = ((level > 2)?  2: 4);
-
     int row = 0;
+    int column = 0;
 
     m_widgets.resize(count, NULL);
-
-    int column = 0;
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -545,7 +546,7 @@ StructWidget::StructWidget(
 
         const char * child_name = reflective->get_child_name(i);
 
-        QWidget * child_widget = createWidget(child, this);
+        QWidget * child_widget = factory(child, this);
 
         m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(
                 child_widget);
@@ -644,6 +645,7 @@ QVariant StructWidget::value()
 
 UnionWidget::UnionWidget(
         corbasim::core::reflective_base const * reflective,
+        WidgetFactory_t factory,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective)
 {
@@ -661,7 +663,7 @@ UnionWidget::UnionWidget(
 
         core::reflective_base const * child = reflective->get_child(0);
 
-        QWidget * child_widget = createWidget(child, this);
+        QWidget * child_widget = factory(child, this);
         
         child_widget->setObjectName(child_name);
 
@@ -701,7 +703,6 @@ UnionWidget::UnionWidget(
                     this,
                     SLOT(discriminatorChanged()));
         }
-
     }
 
     m_stack = new QStackedWidget();
@@ -716,7 +717,7 @@ UnionWidget::UnionWidget(
 
         const char * child_name = reflective->get_child_name(i);
 
-        QWidget * child_widget = createWidget(child, this);
+        QWidget * child_widget = factory(child, this);
 
         m_widgets[i] = dynamic_cast< ReflectiveWidgetBase* >(
                 child_widget);
@@ -976,8 +977,10 @@ void SequenceWidget::indexChanged(int idx)
 
 ComplexSequenceWidget::ComplexSequenceWidget(
         corbasim::core::reflective_base const * reflective,
+        WidgetFactory_t factory,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective), 
+    m_factory(factory),
     m_sbLength(NULL), m_sbCurrentIndex(NULL)
 {
     QVBoxLayout * layout = new QVBoxLayout;
@@ -1026,7 +1029,7 @@ ComplexSequenceWidget::ComplexSequenceWidget(
 
         for (unsigned int i = 0; i < length; i++) 
         {
-            m_stack->addWidget(createWidget(reflective->get_slice(), this));
+            m_stack->addWidget(factory(reflective->get_slice(), this));
         }
 
         m_sbCurrentIndex->setRange(0, length - 1);
@@ -1102,7 +1105,7 @@ void ComplexSequenceWidget::lengthChanged(int len)
 
     for (int i = 0; i < diff; i++) 
     {
-        m_stack->addWidget(createWidget(m_reflective->get_slice(), this));
+        m_stack->addWidget(m_factory(m_reflective->get_slice(), this));
     }
 
     m_sbCurrentIndex->setRange(0, len-1);
@@ -1263,6 +1266,10 @@ OperationInputForm::OperationInputForm(
 
     const unsigned int count = reflective->get_children_count();
 
+    const int rowWidth = 4;
+    int row = 0;
+    int column = 0;
+
     m_widgets.resize(count, NULL);
 
     for (unsigned int i = 0; i < count; i++) 
@@ -1290,11 +1297,20 @@ OperationInputForm::OperationInputForm(
 
                 label->setObjectName(QString(child_name) + "_label");
 
-                layout->addWidget(label, i, 0);
-                layout->addWidget(child_widget, i, 1);
+                layout->addWidget(label, row, column++);
+                layout->addWidget(child_widget, row, column++);
+
+                if (column == rowWidth)
+                {
+                    row++;
+                    column = 0;
+                }
             }
             else
             {
+                if (column != 0) row++;
+                column = 0;
+
                 QGroupBox * gb = new QGroupBox(child_name, this);
                 gb->setObjectName(QString(child_name) + "_group");
 
@@ -1303,8 +1319,8 @@ OperationInputForm::OperationInputForm(
                 cLayout->addWidget(child_widget);
 
                 gb->setLayout(cLayout);
-                layout->addWidget(gb, i, 0, 1, 2);
 
+                layout->addWidget(gb, row++, 0, 1, rowWidth);
             }
         }
     }

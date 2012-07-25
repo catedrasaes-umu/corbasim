@@ -35,6 +35,7 @@ namespace gui
 
 class FilteredLogView;
 class OperationSequenceTool;
+class DumpTool;
 
 class CORBASIM_GUI_DECLSPEC Server : public QMainWindow
 {
@@ -107,6 +108,8 @@ protected:
 
     FilteredLogView * m_view;
     OperationSequenceTool * m_seqTool;
+    DumpTool * m_dumpInput;
+    DumpTool * m_dumpOutput;
 
     typedef std::map< QString, Client > clients_t;
 

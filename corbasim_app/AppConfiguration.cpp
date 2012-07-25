@@ -28,9 +28,7 @@ namespace po = boost::program_options;
 AppConfiguration::AppConfiguration() : 
     exit(false), enable_scripting(false), 
     enable_watch_directory(false), 
-    enable_dump_data(false),
-    watch_directory("/tmp/corbasim_app"),
-    dump_directory("DUMP")
+    watch_directory("/tmp/corbasim_app")
 {
 }
 
@@ -68,17 +66,9 @@ void AppConfiguration::processCmdLine(int argc, char** argv)
             po::value< std::string >(&watch_directory),
             "directory to watch");
 
-    po::options_description dump_("Dump data");
-    dump_.add_options()
-        ("enable-dump,u", "enable dump received data")
-        ("dump-directory", 
-            po::value< std::string >(&dump_directory),
-            "directory for dumped files");
-
     desc_.add(generic_);
     desc_.add(scripting_);
     desc_.add(watch_);
-    desc_.add(dump_);
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc_), vm);
@@ -93,6 +83,5 @@ void AppConfiguration::processCmdLine(int argc, char** argv)
 
     enable_scripting = vm.count("enable-scripting");
     enable_watch_directory = vm.count("enable-watch");
-    enable_dump_data = vm.count("enable-dump");
 }
 

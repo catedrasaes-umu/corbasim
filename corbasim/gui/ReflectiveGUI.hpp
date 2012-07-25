@@ -28,6 +28,8 @@
 
 #include <corbasim/gui/export.hpp>
 
+#include <boost/function.hpp>
+
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <QtScript>
 #endif /* CORBASIM_USE_QTSCRIPT*/
@@ -37,9 +39,13 @@ namespace corbasim
 namespace gui 
 {
 
+typedef boost::function< QWidget * (
+    corbasim::core::reflective_base const *,
+    QWidget *) > WidgetFactory_t;
+
 QWidget * CORBASIM_GUI_DECLSPEC createWidget(
     corbasim::core::reflective_base const * reflective,
-    QWidget * parenti);
+    QWidget * parent);
 
 class CORBASIM_GUI_DECLSPEC ReflectiveWidgetBase
 {
@@ -197,6 +203,7 @@ class CORBASIM_GUI_DECLSPEC StructWidget :
     Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
     StructWidget(core::reflective_base const * reflective,
+            WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~StructWidget();
  
@@ -224,6 +231,7 @@ class CORBASIM_GUI_DECLSPEC UnionWidget :
     Q_OBJECT
 public:
     UnionWidget(core::reflective_base const * reflective,
+            WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~UnionWidget();
  
@@ -287,6 +295,7 @@ class CORBASIM_GUI_DECLSPEC ComplexSequenceWidget :
     Q_OBJECT
 public:
     ComplexSequenceWidget(core::reflective_base const * reflective,
+            WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~ComplexSequenceWidget();
 
@@ -303,6 +312,7 @@ protected slots:
 
 protected:
 
+    WidgetFactory_t m_factory;
     QStackedWidget * m_stack;
     QSpinBox * m_sbLength;
     QSpinBox * m_sbCurrentIndex;

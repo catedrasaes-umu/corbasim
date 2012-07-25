@@ -444,7 +444,7 @@ void AppMainWindow::showDumpTool()
         m_dlg_dump_tool->setLayout(layout);
 
         m_dlg_dump_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
-        m_dlg_dump_tool->setWindowTitle("Dump tool");
+        m_dlg_dump_tool->setWindowTitle("corbasim dump tool");
 
         QObject::connect(
                 m_controller,
