@@ -91,15 +91,32 @@ void ParametersModel::insertRecursive(QStandardItem * parent,
         childItem->setCheckable(bIsCheckable);
 
         // Recursive
-        if (type == corbasim::core::TYPE_STRUCT || 
-                child->is_repeated())
+        if (type == corbasim::core::TYPE_STRUCT ||
+                type == corbasim::core::TYPE_UNION)
         {
             insertRecursive(childItem, child);
         }
-        else if (child->is_repeated() && 
-                !child->get_slice()->is_primitive())
+        else if (child->is_repeated())
         {
-            insertRecursive(childItem, child->get_slice());
+            unsigned int length = 1;
+            
+            if (!child->is_variable_length())
+            {
+                length = child->get_length(core::holder());
+            }
+
+            bool bIsCheckable = isCheckable(child->get_slice());
+
+            for (int j = 0; j < length; j++) 
+            {
+                QStandardItem * item = new QStandardItem(QString("%1").arg(j));
+
+                item->setEditable(false);
+                item->setCheckable(bIsCheckable);
+
+                insertRecursive(item, child->get_slice());
+                childItem->appendRow(item);
+            }
         }
 
         // TODO union

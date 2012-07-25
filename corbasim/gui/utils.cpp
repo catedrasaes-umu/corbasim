@@ -35,7 +35,8 @@ QString getFieldName(core::operation_reflective_base const * operation,
 
     for (int i = 1; i < path.size(); i++) 
     {
-        if (reflective->get_type() == TYPE_STRUCT)
+        if (reflective->get_type() == TYPE_STRUCT || 
+                reflective->get_type() == TYPE_UNION)
         {
             res += QString(".") + reflective->get_child_name(path[i]);
 
@@ -43,7 +44,7 @@ QString getFieldName(core::operation_reflective_base const * operation,
         }
         else if (reflective->is_repeated())
         {
-            res += QString(".[%1]").arg(path[i]);
+            res += QString("[%1]").arg(path[i]);
             
             reflective = reflective->get_slice();
         }

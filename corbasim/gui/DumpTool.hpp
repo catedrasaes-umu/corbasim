@@ -76,6 +76,7 @@ protected:
     const Config m_config;
     unsigned int m_currentIndex;
     std::string m_nextFile;
+    std::string m_extension;
 };
 
 class CORBASIM_GUI_DECLSPEC Dumper : public QWidget

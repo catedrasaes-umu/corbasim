@@ -31,7 +31,6 @@ PlotProcessor::PlotProcessor(const QString& id,
         const gui::ReflectivePath_t path) :
     gui::RequestProcessor(id, path)
 {
-
 }
 
 PlotProcessor::~PlotProcessor()
@@ -135,7 +134,7 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
 
     // connect model signals 
     QObject::connect(&m_model, 
-            SIGNAL(createdPlot(const QString&,
+            SIGNAL(checked(const QString&,
                     core::interface_reflective_base const *,
                     const QList< int >&)),
             this,
@@ -143,7 +142,7 @@ ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
                     core::interface_reflective_base const *,
                     const QList< int >&)));
     QObject::connect(&m_model, 
-            SIGNAL(deletedPlot(const QString&,
+            SIGNAL(unchecked(const QString&,
                     core::interface_reflective_base const *,
                     const QList< int >&)),
             this,
@@ -191,7 +190,7 @@ void ReflectivePlotTool::unregisterInstance(const QString& name)
                 ReflectivePlot * plot = it->second[i];
 
                 m_inverse_map.erase(plot);
-                m_model.deletePlot(it->first.first, plot->getPath());
+                m_model.uncheck(it->first.first, plot->getPath());
             }
 
             m_map.erase(it);
@@ -269,7 +268,7 @@ void ReflectivePlotTool::deleteRequested(qt::SortableGroupItem* item)
             m_map[key].removeAll(plot);
 
             // notify to model
-            m_model.deletePlot(key.first, plot->getPath());
+            m_model.uncheck(key.first, plot->getPath());
 
             m_inverse_map.erase(it);
         }

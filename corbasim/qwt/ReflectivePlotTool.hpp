@@ -21,7 +21,7 @@
 #define CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
 
 #include <QWidget>
-#include <corbasim/qt/PlotModel.hpp>
+#include <corbasim/qwt/PlotModel.hpp>
 #include <corbasim/qwt/SimplePlot.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
 #include <map>
@@ -133,7 +133,7 @@ protected slots:
     void deleteRequested(corbasim::qt::SortableGroupItem *);
 
 protected:
-    qt::PlotModel m_model;
+    PlotModel m_model;
     qt::SortableGroup * m_group;
 
     typedef std::pair< QString, tag_t > key_t;

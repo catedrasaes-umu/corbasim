@@ -31,12 +31,144 @@
 
 using namespace corbasim::gui;
 
+namespace  
+{
+
+    void dumpBinaryPrimitive(std::ostream& out,
+        ::corbasim::core::reflective_base const * ref,
+        ::corbasim::core::holder hold)
+    {
+        using namespace ::corbasim::core;
+
+        switch(ref->get_type())
+        {
+#define DUMP_TYPE(__TYPE__, cpptype)                                        \
+            case TYPE_##__TYPE__:                                           \
+                out.write((const char *)&hold.to_value< cpptype >(),        \
+                        sizeof(cpptype));                                   \
+                break;                                                      \
+            /***/
+
+            DUMP_TYPE(BOOL, bool);
+            DUMP_TYPE(OCTET, unsigned char);
+            DUMP_TYPE(CHAR, char);
+            DUMP_TYPE(SHORT, short);
+            DUMP_TYPE(USHORT, unsigned short);
+            DUMP_TYPE(LONG, int32_t);
+            DUMP_TYPE(ULONG, uint32_t);
+            DUMP_TYPE(LONGLONG, int64_t);
+            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(FLOAT, float);
+            DUMP_TYPE(DOUBLE, double);
+
+#undef DUMP_TYPE
+
+            default:
+                break;
+        }
+    }
+
+    void dumpBinary(std::ostream& out,
+        ::corbasim::core::reflective_base const * ref,
+        ::corbasim::core::holder hold)
+    {
+        if (ref->is_primitive())
+        {
+            dumpBinaryPrimitive(out, ref, hold);
+        }
+        else if (ref->is_repeated())
+        {
+            for (unsigned int i = 0; i < ref->get_length(hold); i++) 
+            {
+                ::corbasim::core::holder chold =
+                    ref->get_child_value(hold, i);
+
+                dumpBinary(out, ref->get_slice(), chold);
+            }
+        }
+    }
+
+    void dumpTextPrimitive(std::ostream& out,
+        ::corbasim::core::reflective_base const * ref,
+        ::corbasim::core::holder hold)
+    {
+        using namespace ::corbasim::core;
+
+        switch(ref->get_type())
+        {
+#define DUMP_TYPE(__TYPE__, cpptype)                                        \
+            case TYPE_##__TYPE__:                                           \
+                out << hold.to_value< cpptype >();                          \
+                break;                                                      \
+            /***/
+
+            DUMP_TYPE(BOOL, bool);
+            DUMP_TYPE(OCTET, unsigned char);
+            DUMP_TYPE(CHAR, char);
+            DUMP_TYPE(SHORT, short);
+            DUMP_TYPE(USHORT, unsigned short);
+            DUMP_TYPE(LONG, int32_t);
+            DUMP_TYPE(ULONG, uint32_t);
+            DUMP_TYPE(LONGLONG, int64_t);
+            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(FLOAT, float);
+            DUMP_TYPE(DOUBLE, double);
+
+#undef DUMP_TYPE
+
+            default:
+                break;
+        }
+    }
+
+    void dumpText(std::ostream& out,
+        ::corbasim::core::reflective_base const * ref,
+        ::corbasim::core::holder hold)
+    {
+        if (ref->is_primitive())
+        {
+            dumpTextPrimitive(out, ref, hold);
+        }
+        else if (ref->is_repeated())
+        {
+            for (unsigned int i = 0; i < ref->get_length(hold); i++) 
+            {
+                ::corbasim::core::holder chold =
+                    ref->get_child_value(hold, i);
+
+                dumpText(out, ref->get_slice(), chold);
+
+                out << ' ';
+            }
+        }
+    }
+
+} // namespace 
+
 DumpProcessor::DumpProcessor(const QString& id,
         const gui::ReflectivePath_t path, 
         const Config& config) :
     gui::RequestProcessor(id, path), m_config(config),
     m_currentIndex(0)
 {
+    switch(m_config.format)
+    {
+    case FORMAT_JSON:
+        m_extension = ".json";
+        break;
+
+    case FORMAT_TEXT:
+        m_extension = ".txt";
+        break;
+
+    case FORMAT_BINARY:
+        m_extension = ".bin";
+        break;
+
+    default:
+        break;
+    }
+    
     nextFile();
 }
 
@@ -51,7 +183,8 @@ void DumpProcessor::nextFile()
     oss << m_config.filePrefix 
         << std::setfill('0')
         << std::setw(m_config.suffixLength)
-        << m_currentIndex;
+        << m_currentIndex
+        << m_extension;
 
     m_nextFile = oss.str();
 }
@@ -69,24 +202,40 @@ void DumpProcessor::process(event::request_ptr req,
 
     try 
     {
-        std::ofstream out(m_nextFile.c_str(), flags);
-
         switch(m_config.format)
         {
         case FORMAT_JSON:
             {
+                std::ofstream out(m_nextFile.c_str(), flags);
+
                 json::std_writer_t writer(out, true);
                 json::write(writer, ref, hold);
                 out << std::endl;
+                
+                out.close();
             }
             break;
 
         case FORMAT_TEXT:
-            // TODO
+            {
+                std::ofstream out(m_nextFile.c_str(), flags);
+
+                dumpText(out, ref, hold);
+
+                out.close();
+            }
             break;
 
         case FORMAT_BINARY:
-            // TODO
+            {
+                flags = flags | std::ios::binary;
+
+                std::ofstream out(m_nextFile.c_str(), flags);
+
+                dumpBinary(out, ref, hold);
+
+                out.close();
+            }
             break;
 
         default:
