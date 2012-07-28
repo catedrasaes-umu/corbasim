@@ -10,11 +10,13 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/RequestDialog.hpp
     gui/LogModel.hpp
     gui/ParametersModel.hpp
+    gui/OperationParametersModel.hpp
     gui/FilteredLogView.hpp
     gui/ScriptModel.hpp
     gui/SimpleClient.hpp
     gui/DumpTool.hpp
     gui/ReflectiveGUI.hpp
+    gui/RecorderTool.hpp
 
     gui/Server.hpp
     gui/ServerApp.hpp)
@@ -32,11 +34,13 @@ set(corbasim_gui_MOC_HDRS
     gui/RequestDialog.hpp
     gui/LogModel.hpp
     gui/ParametersModel.hpp
+    gui/OperationParametersModel.hpp
     gui/FilteredLogView.hpp
     gui/ScriptModel.hpp
     gui/SimpleClient.hpp
     gui/DumpTool.hpp
     gui/ReflectiveGUI.hpp
+    gui/RecorderTool.hpp
     
     gui/Server.hpp)
 
@@ -51,12 +55,14 @@ set(corbasim_gui_SRCS
     gui/SimpleScriptEditor.cpp
     gui/RequestDialog.cpp
     gui/ParametersModel.cpp
+    gui/OperationParametersModel.cpp
     gui/LogModel.cpp
     gui/FilteredLogView.cpp
     gui/ScriptModel.cpp
     gui/SimpleClient.cpp
     gui/DumpTool.cpp
     gui/ReflectiveGUI.cpp
+    gui/RecorderTool.cpp
 
     gui/Server.cpp
     gui/ServerApp.cpp)

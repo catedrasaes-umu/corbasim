@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_GUI_REFLECTIVEPLOTTOOL_HPP
-#define CORBASIM_GUI_REFLECTIVEPLOTTOOL_HPP
+#ifndef CORBASIM_GUI_DUMPTOOL_HPP
+#define CORBASIM_GUI_DUMPTOOL_HPP
 
 #include <QtGui>
 #include <corbasim/gui/ParametersModel.hpp>
@@ -180,4 +180,4 @@ protected:
 } // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_GUI_REFLECTIVEPLOTTOOL_HPP */
+#endif /* CORBASIM_GUI_DUMPTOOL_HPP */
