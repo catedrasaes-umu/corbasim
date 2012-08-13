@@ -77,6 +77,8 @@ public:
     SortableGroup(QWidget * parent = 0);
     virtual ~SortableGroup();
 
+    const QList< SortableGroupItem * >& getItems();
+
 public slots:
 
     void setDelete(bool del);

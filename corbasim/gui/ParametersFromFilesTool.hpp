@@ -40,7 +40,10 @@ namespace gui
 class CORBASIM_GUI_DECLSPEC FilesItem : public QWidget
 {
     Q_OBJECT
-    // TODO Q_PROPERTY files format repeat
+    Q_PROPERTY(QStringList files READ files)
+    Q_PROPERTY(int currentFile READ currentFile)
+    Q_PROPERTY(int format READ format)
+    Q_PROPERTY(bool repeat READ repeat)
 public:
 
     FilesItem(
@@ -59,6 +62,12 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    // Properties
+    const QStringList& files() const;
+    int currentFile() const;
+    int format() const;
+    bool repeat() const;
+
 protected slots:
 
     void browse();
@@ -70,6 +79,7 @@ protected:
 
     QStringList m_files;
     QLineEdit * m_filesWidget;
+    QComboBox * m_currentFile;
     QComboBox * m_format;
     QCheckBox * m_repeat;
 };

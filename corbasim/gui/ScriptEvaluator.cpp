@@ -20,7 +20,7 @@
 #include "ScriptEvaluator.hpp"
 #include <corbasim/qt/private/ScriptEditor.hpp>
 #include <corbasim/gui/ModelNode.hpp>
-
+#include <corbasim/gui/json.hpp>
 #include <corbasim/gui/ParametersFromFilesTool.hpp>
 
 // Debug
@@ -40,6 +40,8 @@ OperationEvaluator::OperationEvaluator(QWidget * parent) :
     btnLy->addWidget(btnEv);
     QPushButton * btnEx = new QPushButton("E&xecute");
     btnLy->addWidget(btnEx);
+    QPushButton * btnSave = new QPushButton("&Save");
+    btnLy->addWidget(btnSave);
 
     // Main layout
     ly->addLayout(btnLy);
@@ -50,6 +52,8 @@ OperationEvaluator::OperationEvaluator(QWidget * parent) :
             this, SLOT(evaluate()));
     QObject::connect(btnEx, SIGNAL(clicked()), 
             this, SLOT(execute()));
+    QObject::connect(btnSave, SIGNAL(clicked()), 
+            this, SLOT(save()));
 
     setLayout(ly);
 }
@@ -107,6 +111,17 @@ void OperationEvaluator::evaluate()
 void OperationEvaluator::execute()
 {
     // TODO
+}
+
+void OperationEvaluator::save()
+{
+    QVariant var;
+    m_widget->save(var);
+
+    json::ostream_writer_t ow(std::cout, true);
+    gui::toJson(ow, var);
+
+    std::cout << std::endl;
 }
 
 //

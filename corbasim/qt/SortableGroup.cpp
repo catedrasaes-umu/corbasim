@@ -155,6 +155,12 @@ SortableGroup::~SortableGroup()
 {
 }
 
+const QList< SortableGroupItem * >&
+SortableGroup::getItems()
+{
+    return m_items;
+}
+
 void SortableGroup::appendWidget(QWidget * item)
 {
     appendItem(new SortableGroupItem(item, this));

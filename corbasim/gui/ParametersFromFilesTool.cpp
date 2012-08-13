@@ -27,8 +27,6 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
 {
     QHBoxLayout * layout = new QHBoxLayout(this);
 
-    // TODO splitter
-
     // Model view
     QTreeView * view = new QTreeView(this);
     view->setModel(&m_model);
@@ -161,7 +159,23 @@ void ParametersFromFilesTool::deleteRequested(qt::SortableGroupItem* item)
 
 void ParametersFromFilesTool::save(QVariant& settings)
 {
-    // TODO
+    const QList< qt::SortableGroupItem * >& items = 
+        m_group->getItems();
+
+    QVariantList list;
+
+    for (int i = 0; i < items.size(); i++) 
+    {
+        QVariant var;
+
+        FilesItem * item = 
+            qobject_cast< FilesItem * >(items.at(i)->getWidget());
+        item->save(var);
+
+        list << var;
+    }
+
+    settings = list;
 }
 
 void ParametersFromFilesTool::load(const QVariant& settings)
@@ -194,6 +208,10 @@ FilesItem::FilesItem(
     layout->addWidget(new QLabel("Files"), row, 0);
     layout->addLayout(prefixLayout, row++, 1);
 
+    m_currentFile = new QComboBox();
+    layout->addWidget(new QLabel("Next file to send"), row, 0);
+    layout->addWidget(m_currentFile, row++, 1);
+
     m_repeat = new QCheckBox();
     m_repeat->setChecked(true);
     layout->addWidget(new QLabel("Repeat"), row, 0);
@@ -222,6 +240,8 @@ void FilesItem::browse()
             "Select some files...", ".");
 
     m_filesWidget->setText(m_files.join(", "));
+    m_currentFile->clear();
+    m_currentFile->addItems(m_files);
 }
 
 corbasim::core::operation_reflective_base const * 
@@ -232,13 +252,56 @@ FilesItem::getReflective() const
 
 //
 //
+// Properties
+// 
+//
+
+const QStringList& FilesItem::files() const 
+{
+    return m_files;
+}
+
+int FilesItem::currentFile() const 
+{
+    return m_currentFile->currentIndex();
+}
+
+int FilesItem::format() const 
+{
+    return m_format->currentIndex();
+}
+
+bool FilesItem::repeat() const 
+{
+    return m_repeat->isChecked();
+}
+
+//
+//
 // Save and load
 //
 //
 
 void FilesItem::save(QVariant& settings)
 {
-    // TODO
+    QVariantMap map;
+
+    map["operation"] = m_reflective->get_name();
+    map["title"] = gui::getFieldName(m_reflective, m_path);
+
+    QVariantList list;
+    for (int i = 0; i < m_path.size(); i++) 
+    {
+        list << m_path.at(i);
+    }
+    map["path"] = list;
+
+    map["files"] = files();
+    map["current_file"] = currentFile();
+    map["repeat"] = repeat();
+    map["format"] = m_format->currentText();
+
+    settings = map;
 }
 
 void FilesItem::load(const QVariant& settings)
