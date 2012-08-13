@@ -47,6 +47,10 @@ QWidget * CORBASIM_GUI_DECLSPEC createWidget(
     corbasim::core::reflective_base const * reflective,
     QWidget * parent);
 
+QWidget * CORBASIM_GUI_DECLSPEC createSimpleWidget(
+    corbasim::core::reflective_base const * reflective,
+    QWidget * parent);
+
 class CORBASIM_GUI_DECLSPEC ReflectiveWidgetBase
 {
 protected:

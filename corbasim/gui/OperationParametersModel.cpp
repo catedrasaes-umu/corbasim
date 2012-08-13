@@ -35,18 +35,15 @@ bool OperationParametersModel::setData(const QModelIndex & index,
             parent = parent.parent();
         } while(parent.isValid());
         
-        if (path.size() > 1)
-        {
-            // Remove instance index
-            path.pop_front();
+        // Operation item
+        // path.pop_front();
+        
+        QStandardItem * mitem = itemFromIndex(index);
 
-            QStandardItem * mitem = itemFromIndex(index);
-
-            if (mitem->checkState() == Qt::Checked)
-                emit checked(m_reflective, path);
-            else
-                emit unchecked(m_reflective, path);
-        }
+        if (mitem->checkState() == Qt::Checked)
+            emit checked(m_reflective, path);
+        else
+            emit unchecked(m_reflective, path);
     }
 
     return res;
@@ -142,7 +139,8 @@ void OperationParametersModel::uncheck(const QList< int >& path)
     // Instance element
     QModelIndex idx = index(0, 0);
     
-    for (int i = 0; i < path.size(); i++) 
+    // 0 index is the operation
+    for (int i = 1; i < path.size(); i++) 
     {
         idx = index(path[i], 0, idx);
     }
@@ -157,7 +155,8 @@ void OperationParametersModel::check(const QList< int >& path)
     // Instance element
     QModelIndex idx = index(0, 0);
     
-    for (int i = 0; i < path.size(); i++) 
+    // 0 index is the operation
+    for (int i = 1; i < path.size(); i++) 
     {
         idx = index(path[i], 0, idx);
     }

@@ -17,6 +17,11 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/DumpTool.hpp
     gui/ReflectiveGUI.hpp
     gui/RecorderTool.hpp
+    
+    gui/ParametersFromFilesTool.hpp
+    gui/ReflectiveScriptClass.hpp
+    gui/ScriptEvaluator.hpp
+    gui/OperationForm.hpp
 
     gui/Server.hpp
     gui/ServerApp.hpp)
@@ -42,6 +47,10 @@ set(corbasim_gui_MOC_HDRS
     gui/ReflectiveGUI.hpp
     gui/RecorderTool.hpp
     
+    gui/ParametersFromFilesTool.hpp
+    gui/ScriptEvaluator.hpp
+    gui/OperationForm.hpp
+    
     gui/Server.hpp)
 
 set(corbasim_gui_SRCS
@@ -63,6 +72,11 @@ set(corbasim_gui_SRCS
     gui/DumpTool.cpp
     gui/ReflectiveGUI.cpp
     gui/RecorderTool.cpp
+    
+    gui/ParametersFromFilesTool.cpp
+    gui/ScriptEvaluator.cpp
+    gui/ReflectiveScriptClass.cpp
+    gui/OperationForm.cpp
 
     gui/Server.cpp
     gui/ServerApp.cpp)
@@ -88,4 +102,11 @@ add_library(corbasim_gui_s STATIC ${corbasim_gui_SRCS}
     ${corbasim_gui_MOC_SRCS})
 
 install(TARGETS corbasim_gui corbasim_gui_s DESTINATION lib)
+
+add_executable(corbasim_script_evaluator_test 
+    gui/ScriptEvaluatorTest.cpp)
+target_link_libraries(corbasim_script_evaluator_test
+    corbasim_gui
+    boost_program_options)
+
 

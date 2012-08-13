@@ -10,7 +10,8 @@ namespace corbasim
 namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC OperationParametersModel : public QStandardItemModel
+class CORBASIM_GUI_DECLSPEC OperationParametersModel : 
+    public QStandardItemModel
 {
     Q_OBJECT
 

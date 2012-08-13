@@ -117,6 +117,69 @@ QWidget * ::corbasim::gui::createWidget(
     return new QLabel("Unsupported item!", parent);
 }
 
+QWidget * ::corbasim::gui::createSimpleWidget(
+        corbasim::core::reflective_base const * reflective,
+        QWidget * parent)
+{
+    using namespace corbasim::core;
+
+    WidgetFactory_t factory = createSimpleWidget;
+
+    if (!reflective)
+        return new QLabel("Null reflective type!", parent);
+
+    const reflective_type type = reflective->get_type();
+
+    switch(type)
+    {
+        case TYPE_BOOL:
+            return new BoolWidget(reflective, parent);
+
+            // Integer types
+        case TYPE_OCTET:
+        case TYPE_CHAR:
+        case TYPE_SHORT:
+        case TYPE_USHORT:
+        case TYPE_LONG:
+        case TYPE_ULONG:
+        case TYPE_LONGLONG:
+        case TYPE_ULONGLONG:
+            return new IntegerWidget(reflective, parent);
+        
+        case TYPE_STRING:
+        case TYPE_WSTRING:
+            return new StringWidget(reflective, parent);
+
+        case TYPE_OBJREF:
+            return new ObjrefvarWidget(reflective, parent);
+
+        case TYPE_UNION:
+            return new UnionWidget(reflective, factory, parent);
+
+        case TYPE_ARRAY:
+        case TYPE_SEQUENCE:
+
+            if (reflective->get_slice()->is_primitive())
+            {
+                return new SequenceWidget(reflective, parent);
+            }
+
+            return new ComplexSequenceWidget(reflective, factory, parent);
+
+        case TYPE_DOUBLE:
+        case TYPE_FLOAT:
+            return new FloatWidget(reflective, parent);
+        case TYPE_STRUCT:
+            return new StructWidget(reflective, factory, parent);
+        case TYPE_ENUM:
+            return new EnumWidget(reflective, parent);
+        default:
+            break;
+    }
+
+    return new QLabel("Unsupported item!", parent);
+}
+
 ReflectiveWidgetBase::ReflectiveWidgetBase(
 	corbasim::core::reflective_base const * reflective) :
     m_reflective(reflective)
@@ -830,13 +893,10 @@ SequenceWidget::SequenceWidget(
  
     QHBoxLayout * headerLayout = new QHBoxLayout;
 
-    if (reflective->is_variable_length())
-    {
-        m_sbLength = new QSpinBox();
-        headerLayout->addWidget(new QLabel("Length"));
-        headerLayout->addWidget(m_sbLength);
-        m_sbLength->setObjectName("length");
-    }
+    m_sbLength = new QSpinBox();
+    headerLayout->addWidget(new QLabel("Length"));
+    headerLayout->addWidget(m_sbLength);
+    m_sbLength->setObjectName("length");
 
     m_sbCurrentIndex = new QSpinBox();
     headerLayout->addWidget(new QLabel("Index"));
@@ -873,6 +933,14 @@ SequenceWidget::SequenceWidget(
     }
     else
     {
+        core::holder holder = m_reflective->create_holder();
+        unsigned int length = m_reflective->get_length(holder);
+
+        // Fixed length
+        m_sbLength->setRange(0, length);
+        m_sbLength->setValue(length);
+        m_sbLength->setReadOnly(true);
+
         m_sbCurrentIndex->setRange(0, m_reflective->get_length(m_holder) - 1);
         indexChanged(0);
     }
@@ -987,13 +1055,11 @@ ComplexSequenceWidget::ComplexSequenceWidget(
  
     QHBoxLayout * headerLayout = new QHBoxLayout;
 
-    if (reflective->is_variable_length())
-    {
-        m_sbLength = new QSpinBox();
-        headerLayout->addWidget(new QLabel("Length"));
-        headerLayout->addWidget(m_sbLength);
-        m_sbLength->setObjectName("length");
-    }
+    // Read only for fixed length types
+    m_sbLength = new QSpinBox();
+    headerLayout->addWidget(new QLabel("Length"));
+    headerLayout->addWidget(m_sbLength);
+    m_sbLength->setObjectName("length");
 
     m_sbCurrentIndex = new QSpinBox();
     headerLayout->addWidget(new QLabel("Index"));
@@ -1024,8 +1090,12 @@ ComplexSequenceWidget::ComplexSequenceWidget(
     else
     {
         core::holder holder = m_reflective->create_holder();
-
         unsigned int length = m_reflective->get_length(holder);
+
+        // Fixed length
+        m_sbLength->setRange(0, length);
+        m_sbLength->setValue(length);
+        m_sbLength->setReadOnly(true);
 
         for (unsigned int i = 0; i < length; i++) 
         {
