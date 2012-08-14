@@ -15,6 +15,7 @@ set(corbasim_EXPORTED_HEADERS
     core/callable.hpp
     core/config.hpp
     core/copy.hpp
+    core/file_format_helper.hpp
     core/inserter.hpp
     core/ns_register.hpp
     core/range.hpp
@@ -65,6 +66,7 @@ set(corbasim_LIBS
 
 set(corbasim_SRCS
     core/core.cpp
+    core/file_format_helper.cpp
     core/ns_register.cpp
     core/reference_repository.cpp
     core/reference_validator.cpp
