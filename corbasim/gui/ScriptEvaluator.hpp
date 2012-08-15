@@ -48,6 +48,9 @@ public slots:
     void evaluate();
     void execute();
     void save();
+    void load();
+    void saveForm();
+    void loadForm();
 
 protected:
 

@@ -77,6 +77,11 @@ corbasim::event::request_ptr OperationForm::createRequest()
     return m_widget->createRequest();
 }
 
+OperationFormWidget * OperationForm::getWidget()
+{
+    return m_widget;
+}
+
 //
 //
 // Property code

@@ -67,6 +67,9 @@ CORBASIM_CORE_DECLSPEC void write(std_writer_t& w,
 CORBASIM_CORE_DECLSPEC bool parse(core::reflective_base const * reflective, 
         core::holder& holder, const char * str, size_t size);
 
+CORBASIM_CORE_DECLSPEC bool parse(core::reflective_base const * reflective, 
+        core::holder& holder, std::istream& in);
+
 CORBASIM_CORE_DECLSPEC void write(std::ostream& os, 
         core::reflective_base const * reflective, 
         core::holder& holder, bool indent = false);

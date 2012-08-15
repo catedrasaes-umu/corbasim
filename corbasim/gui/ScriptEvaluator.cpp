@@ -22,9 +22,11 @@
 #include <corbasim/gui/ModelNode.hpp>
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/ParametersFromFilesTool.hpp>
+#include <corbasim/json/reflective.hpp>
 
 // Debug
 #include <iostream>
+#include <fstream>
 
 using namespace corbasim::gui;
 
@@ -33,15 +35,21 @@ OperationEvaluator::OperationEvaluator(QWidget * parent) :
     m_clazz(&m_engine), m_widget(new OperationForm())
 {
     QVBoxLayout * ly = new QVBoxLayout();
-    QHBoxLayout * btnLy = new QHBoxLayout();
+    QGridLayout * btnLy = new QGridLayout();
 
     // Buttons
     QPushButton * btnEv = new QPushButton("E&valuate");
-    btnLy->addWidget(btnEv);
+    btnLy->addWidget(btnEv, 0, 0);
     QPushButton * btnEx = new QPushButton("E&xecute");
-    btnLy->addWidget(btnEx);
+    btnLy->addWidget(btnEx, 0, 1);
     QPushButton * btnSave = new QPushButton("&Save");
-    btnLy->addWidget(btnSave);
+    btnLy->addWidget(btnSave, 0, 2);
+    QPushButton * btnLoad = new QPushButton("&Load");
+    btnLy->addWidget(btnLoad, 0, 3);
+    QPushButton * btnSaveForm = new QPushButton("S&ave form");
+    btnLy->addWidget(btnSaveForm, 1, 0);
+    QPushButton * btnLoadForm = new QPushButton("L&oad form");
+    btnLy->addWidget(btnLoadForm, 1, 1);
 
     // Main layout
     ly->addLayout(btnLy);
@@ -54,6 +62,12 @@ OperationEvaluator::OperationEvaluator(QWidget * parent) :
             this, SLOT(execute()));
     QObject::connect(btnSave, SIGNAL(clicked()), 
             this, SLOT(save()));
+    QObject::connect(btnLoad, SIGNAL(clicked()), 
+            this, SLOT(load()));
+    QObject::connect(btnSaveForm, SIGNAL(clicked()), 
+            this, SLOT(saveForm()));
+    QObject::connect(btnLoadForm, SIGNAL(clicked()), 
+            this, SLOT(loadForm()));
 
     setLayout(ly);
 }
@@ -115,13 +129,78 @@ void OperationEvaluator::execute()
 
 void OperationEvaluator::save()
 {
+    QString file = QFileDialog::getSaveFileName( 0, tr(
+                "Select a file"), ".");
+
+    if (file.isEmpty())
+        return;
+
     QVariant var;
     m_widget->save(var);
 
-    json::ostream_writer_t ow(std::cout, true);
+    std::ofstream ofs(file.toStdString().c_str());
+    json::ostream_writer_t ow(ofs, true);
     gui::toJson(ow, var);
 
-    std::cout << std::endl;
+    ofs << std::endl;
+}
+
+void OperationEvaluator::load()
+{
+    QString file = QFileDialog::getOpenFileName( 0, tr(
+                "Select a file"), ".");
+
+    if (file.isEmpty())
+        return;
+
+    QVariant var;
+
+    // Try to Read a JSON file
+    bool res = 
+        gui::fromJsonFile(file.toStdString().c_str(), var);
+
+    if (res)
+    {
+        m_widget->load(var);
+    }
+    else
+    {
+        // TODO display error
+    }
+}
+
+void OperationEvaluator::saveForm()
+{
+    QString file = QFileDialog::getSaveFileName( 0, tr(
+                "Select a file"), ".");
+
+    if (file.isEmpty())
+        return;
+
+    event::request_ptr request = m_widget->createRequest();
+    core::holder holder(m_reflective->get_holder(request));
+
+    std::ofstream out(file.toStdString().c_str());
+
+    json::write(out, m_reflective, holder, true);
+}
+
+void OperationEvaluator::loadForm()
+{
+    QString file = QFileDialog::getOpenFileName( 0, tr(
+                "Select a file"), ".");
+
+    if (file.isEmpty())
+        return;
+
+    event::request_ptr request = m_reflective->create_request();
+    core::holder holder(m_reflective->get_holder(request));
+
+    std::ifstream in(file.toStdString().c_str());
+
+    json::parse(m_reflective, holder, in);
+
+    m_widget->getWidget()->setValue(request);
 }
 
 //

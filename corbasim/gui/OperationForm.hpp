@@ -94,6 +94,8 @@ public:
     
     event::request_ptr createRequest();
 
+    OperationFormWidget * getWidget();
+
     void save(QVariant& settings);
     void load(const QVariant& settings);
 

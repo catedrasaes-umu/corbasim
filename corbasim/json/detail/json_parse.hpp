@@ -35,13 +35,10 @@ namespace json
 namespace parser
 {
 
-
 inline double
-parse_double (match_pair const& pp)
+parse_double (const char * p, int left)
 {
     double val = 0;
-    const char* p = pp.first;
-    int left = pp.second;
     char c;
     bool g_sign_plus = true;
 
@@ -448,6 +445,12 @@ parse_double (match_pair const& pp)
     return g_sign_plus ? val : -val;
 }
 
+inline double
+parse_double (match_pair const& pp)
+{
+    return parse_double(pp.first, pp.second);
+}
+
 inline void decode(std::string& data)
 {
     // Fast check for the most common case. No copy.
@@ -479,6 +482,9 @@ struct State
 {
     // For reference, the SemanticState itself.
     typedef SemanticState SemType;
+
+    // Position type
+    typedef const char * PositionType;
 
     // buffer
     const char* buf_;
@@ -575,6 +581,139 @@ struct State
     commit()
     {
         pos_stack_.pop_front();
+    }
+
+    inline std::string
+    to_string(const char * p, std::size_t size) const
+    {
+        return std::string(p, size);
+    }
+};
+
+////////////////////////////////////////////////////////////////////////
+// parser state
+template <typename SemanticState>
+struct IStreamState
+{
+    // For reference, the SemanticState itself.
+    typedef SemanticState SemType;
+
+    // Position type
+    typedef std::streamoff PositionType;
+
+    // stream
+    std::istream& in_;
+
+    // The inner semantic state.
+    SemanticState& ss_;
+
+    // State stack, for backtracking
+    std::deque< std::streamoff > pos_stack_;
+
+    // ctor
+    IStreamState (SemanticState& ss, std::istream& in)
+        : in_ (in), ss_ (ss)
+    {
+    }
+
+    SemanticState&
+    semantic_state()
+    {
+        return ss_;
+    }
+
+    inline bool
+    at_end() const
+    {
+        return in_.eof();
+    }
+
+    inline bool
+    match_at_pos_advance (char c)
+    {
+        if (!at_end())
+        {
+            if (in_.get() == c)
+            {
+                return true;
+            }
+            else
+            {
+                in_.unget();
+            }
+        }
+        return false;
+    }
+
+    inline bool
+    match_at_pos (char c) const
+    {
+        if (at_end())
+            return false;
+
+        char r = in_.peek();
+        return (r == c);
+    }
+
+    inline char
+    char_at_pos() const
+    {
+        return in_.peek();
+    }
+
+    inline PositionType pos() const
+    {
+        return in_.tellg();
+    }
+
+    inline void
+    advance()
+    {
+        if (!at_end())
+            in_.get();
+
+        // TODO: throw at_end
+    }
+
+    inline void
+    skip(size_t how_many)
+    {
+        in_.ignore(how_many);
+
+        // TODO: throw at_end
+    }
+
+    // Common interface
+    inline void
+    push_state()
+    {
+        pos_stack_.push_front (in_.tellg());
+    }
+
+    inline void
+    rollback()
+    {
+        in_.seekg(pos_stack_.front());
+        pos_stack_.pop_front();
+    }
+
+    inline void
+    commit()
+    {
+        pos_stack_.pop_front();
+    }
+
+    inline std::string
+    to_string(std::streamoff p, std::size_t size)
+    {
+        std::streamoff old = in_.tellg();
+
+        char buffer[size];
+        in_.seekg(p);
+        in_.read(buffer, size);
+        in_.seekg(old);
+
+        return std::string(buffer, size);
     }
 };
 
@@ -701,7 +840,7 @@ struct semantic_rule
     template <typename S>
     static inline bool match (S& state)
     {
-        const char* p = state.pos();
+        typename S::PositionType p = state.pos();
 
         // Try the rule itself
         bool result;
@@ -859,10 +998,10 @@ struct string_ :
                          char_<'"'> > >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const& mp)
     {
-        std::string s (mp.first + 1, mp.second - 2);
+        std::string s (state.to_string(mp.first + 1, mp.second - 2));
         state.semantic_state().new_string (s);
     }
 };
@@ -872,7 +1011,7 @@ struct true_p : semantic_rule <true_p,
                                seq_ < char_<'t'>, char_<'r'>, char_< 'u' >, char_<'e'> > >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const& mp)
     {
         state.semantic_state().new_bool (true);
@@ -885,7 +1024,7 @@ struct false_p :
                    seq_ < char_<'f'>,  char_<'a'>, char_< 'l' >, char_<'s'>, char_<'e' > > >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const&)
     {
         state.semantic_state().new_bool (false);
@@ -904,7 +1043,7 @@ struct null_ :
                                char_< 'l' >, char_<'l'> > >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const& mp)
     {
         state.semantic_state().new_null ();
@@ -925,10 +1064,12 @@ struct double_ :
                                opt_ < seq_< e_, plus_<cirange_<'0', '9'>  > > > > >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const& mp)
     {
-        double d = parse_double (mp);
+        // TODO avoid conversion to string
+        const std::string str(state.to_string(mp.first, mp.second));
+        double d = parse_double (str.c_str(), str.size());
         state.semantic_state().new_double (d);
     }
 };
@@ -941,7 +1082,7 @@ struct array_start :
                       >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const&)
     {
         state.semantic_state().array_start();
@@ -955,7 +1096,7 @@ struct array_end :
                       >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const&)
     {
         state.semantic_state().array_end();
@@ -970,7 +1111,7 @@ struct object_start :
                       >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const&)
     {
         state.semantic_state().object_start();
@@ -984,7 +1125,7 @@ struct object_end :
                       >
 {
     // Semantic rule
-    template <typename S>
+    template <typename S, typename match_pair>
     static inline void process_match (S& state, match_pair const&)
     {
         state.semantic_state().object_end();

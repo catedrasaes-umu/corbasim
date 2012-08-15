@@ -80,8 +80,15 @@ bool json_file_format_helper::load(
         reflective_base const * reflective, 
         holder h) const
 {
-    // TODO
-    return true;
+    try
+    {
+        return json::parse(reflective, h, is);
+    } 
+    catch(...)
+    {
+    }
+
+    return false;
 }
 
 bool json_file_format_helper::save(
@@ -170,8 +177,10 @@ bool text_file_format_helper::save(
 
                     for (unsigned int i = 0; i < count; i++) 
                     {
-                        holder child_value = reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), child_value);
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        save(os, reflective->get_child(i), 
+                                child_value);
                         
                         os << ' ';
                     }
@@ -185,8 +194,10 @@ bool text_file_format_helper::save(
 
                     for (unsigned int i = 0; i < count; i++) 
                     {
-                        holder child_value = reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), child_value);
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        save(os, reflective->get_child(i), 
+                                child_value);
 
                         os << ' ';
                     }
@@ -273,8 +284,10 @@ bool binary_file_format_helper::save(
 
                     for (unsigned int i = 0; i < count; i++) 
                     {
-                        holder child_value = reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), child_value);
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        save(os, reflective->get_child(i), 
+                                child_value);
                     }
                 }
                 break;
@@ -286,8 +299,10 @@ bool binary_file_format_helper::save(
 
                     for (unsigned int i = 0; i < count; i++) 
                     {
-                        holder child_value = reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), child_value);
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        save(os, reflective->get_child(i), 
+                                child_value);
                     }
                 }
                 break;
@@ -310,5 +325,4 @@ binary_file_format_helper::get_instance()
     static binary_file_format_helper instance;
     return &instance;
 }
-
 

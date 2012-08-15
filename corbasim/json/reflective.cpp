@@ -233,6 +233,19 @@ bool corbasim::json::parse(core::reflective_base const * reflective,
     return csu::corbasim::json::parser::grammar::gram::match(_st);
 }
 
+bool corbasim::json::parse(core::reflective_base const * reflective, 
+        core::holder& holder, std::istream& in)
+{
+    helper::helper_base * initial_helper = 
+        new reflective_helper(reflective, holder);
+
+    semantic_state _ss(initial_helper);
+    istream_state _st(_ss, in);
+
+    return csu::corbasim::json::parser::grammar::gram::match(_st);
+}
+
+
 void corbasim::json::write(std_writer_t& w, 
         corbasim::core::reflective_base const * reflective, 
         corbasim::core::holder holder)
