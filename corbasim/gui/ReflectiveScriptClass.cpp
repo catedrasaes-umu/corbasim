@@ -85,7 +85,7 @@ QScriptValue ReflectiveScriptClass::property(
             else if (QString(name) == "length")
             {
                 // length property
-                return QScriptValue(node->children.size());
+                return QScriptValue((uint) node->children.size());
             }
         }
     }
