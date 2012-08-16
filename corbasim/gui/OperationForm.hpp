@@ -68,6 +68,12 @@ public:
 
 protected:
 
+    bool eventFilter(QObject * obj, QEvent * event);
+
+    void childEvent(QChildEvent * event);
+
+protected:
+
     core::operation_reflective_base const * m_reflective;
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
@@ -82,15 +88,19 @@ class CORBASIM_GUI_DECLSPEC OperationForm :
 {
     Q_OBJECT
     Q_PROPERTY(QString code READ code WRITE setCode)
+    Q_PROPERTY(QString objectId READ objectId)
 public:
-    OperationForm(QWidget * parent = 0);
+    OperationForm(const QString& objectId = "this",
+            QWidget * parent = 0);
     virtual ~OperationForm();
     
     void initialize(core::operation_reflective_base const *);
 
     // Property code
     void setCode(const QString& code);
-    QString code();
+    QString code() const;
+    
+    const QString& objectId() const;
     
     event::request_ptr createRequest();
 
@@ -101,6 +111,7 @@ public:
 
 protected:
 
+    const QString m_objectId;
     core::operation_reflective_base const * m_reflective;
 
     QPlainTextEdit * m_code;

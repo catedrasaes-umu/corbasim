@@ -109,4 +109,11 @@ target_link_libraries(corbasim_script_evaluator_test
     corbasim_gui
     boost_program_options)
 
+add_executable(corbasim_client
+    gui/ClientMain.cpp)
+target_link_libraries(corbasim_client
+    corbasim_gui
+    boost_program_options)
+install(TARGETS corbasim_client DESTINATION bind)
+
 

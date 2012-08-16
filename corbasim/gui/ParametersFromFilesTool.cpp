@@ -19,6 +19,7 @@
 
 #include "ParametersFromFilesTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
+#include <corbasim/core/file_format_helper.hpp>
 
 using namespace corbasim::gui;
 
@@ -180,7 +181,43 @@ void ParametersFromFilesTool::save(QVariant& settings)
 
 void ParametersFromFilesTool::load(const QVariant& settings)
 {
-    // TODO
+    clear();
+
+    const QVariantList list = settings.toList();
+
+    for (int i = 0; i < list.size(); i++) 
+    {
+        const QVariant& var = list.at(i);
+        const QVariantMap& map = var.toMap();
+        const QVariantList rPath = map["path"].toList();
+        QList< int > path;
+
+        for (int i = 0; i < rPath.size(); i++) 
+        {
+            path.push_back(rPath.at(i).toInt());
+        }
+
+        FilesItem * item = createFilesItem(
+                m_model.getReflective(), path);
+
+        if (item)
+        {
+            item->load(var);
+        }
+    }
+}
+
+void ParametersFromFilesTool::clear()
+{
+    for (inverse_map_t::const_iterator it = m_inverse_map.begin(); 
+            it != m_inverse_map.end(); ++it) 
+    {
+        // notify to model
+        m_model.uncheck(it->first->getPath());
+    }
+
+    m_map.clear();
+    m_inverse_map.clear();
 }
 
 //
@@ -228,6 +265,9 @@ FilesItem::FilesItem(
 
     QObject::connect(browse, SIGNAL(clicked()),
             this, SLOT(browse()));
+
+    QObject::connect(this, SIGNAL(nextFile(int)),
+            m_currentFile, SLOT(setCurrentIndex(int)));
 }
 
 FilesItem::~FilesItem()
@@ -307,5 +347,61 @@ void FilesItem::save(QVariant& settings)
 void FilesItem::load(const QVariant& settings)
 {
     // TODO
+}
+
+// 
+//
+// FilesItemProcessor
+//
+//
+
+FilesItemProcessor::FilesItemProcessor(
+        ::corbasim::core::operation_reflective_base const * reflective,
+        const QList< int > path,
+        const QStringList files,
+        int currentFile,
+        const int format,
+        const bool repeat) :
+    m_reflective(reflective), m_path(path), m_files(files), 
+    m_currentFile(currentFile), m_format(format), m_repeat(repeat)
+{
+}
+
+FilesItemProcessor::~FilesItemProcessor()
+{
+}
+
+const QList< int >& FilesItemProcessor::getPath() const
+{
+    return m_path;
+}
+
+void FilesItemProcessor::process( ::corbasim::core::holder holder)
+{
+    using namespace ::corbasim::core;
+
+    file_format_factory const * factory = 
+        file_format_factory::get_instance();
+
+    file_format_helper const * helper = 
+        factory->get_helper(static_cast< file_format >(m_format));
+
+    if (helper)
+    {
+        // TODO not completed
+
+        if (!m_currentIStream && m_currentFile < m_files.size())
+        {
+            // open a new file
+            emit nextFile(m_currentFile);
+
+            m_currentFile++;
+        }
+
+        if (m_currentIStream)
+        {
+            bool res = helper->load(*m_currentIStream, m_reflective, holder);
+        }
+    }
 }
 

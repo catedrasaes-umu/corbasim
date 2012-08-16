@@ -78,10 +78,14 @@ QScriptValue ReflectiveScriptClass::property(
         }
         else if (node->reflective->is_repeated())
         {
-            // TODO length property
             if (id < node->children.size())
             {
                 return toScriptValue(node->children[id]);
+            }
+            else if (QString(name) == "length")
+            {
+                // length property
+                return QScriptValue(node->children.size());
             }
         }
     }
@@ -214,7 +218,8 @@ void ReflectiveScriptClass::fromScriptValue(
             {
                 if (value.isObject())
                 {
-                    unsigned int count = node->reflective->get_children_count();
+                    unsigned int count = 
+                        node->reflective->get_children_count();
 
                     // Search by name
                     for (unsigned int i = 0; i < count; i++) 
@@ -234,13 +239,33 @@ void ReflectiveScriptClass::fromScriptValue(
             break;
 
         /*
-        case TYPE_UNION:
+        TODO case TYPE_UNION:
+        */
         case TYPE_ARRAY:
         case TYPE_SEQUENCE:
-            return engine()->newObject(this,
-                    engine()->newVariant(qVariantFromValue(node)));
+            {
+                unsigned int length = reflective->get_length(hold);
+                unsigned int newLength = value.property("length").toUInt32();
 
-         */
+                if (reflective->is_variable_length() &&
+                        length != newLength)
+                {
+                    unsigned int length = value.property("length").toUInt32();
+
+                    reflective->set_length(hold, newLength);
+
+                    node->reset();
+                    node->check_for_initialized();
+                }
+
+                for (unsigned int i = 0; i < newLength && i < length; i++) 
+                {
+                    fromScriptValue(value.property(i),
+                            node->children[i]);
+                }
+            }
+            break;
+
         case TYPE_BOOL:
             hold.to_value< bool >() = value.toBool();
             break;
@@ -268,14 +293,17 @@ void ReflectiveScriptClass::fromScriptValue(
         case TYPE_ULONGLONG:
             hold.to_value< uint64_t >() = value.toInteger();
             break;
-        /*
 
         case TYPE_STRING:
         case TYPE_WSTRING:
             {
-                std::string str(reflective->to_string(hold));
-                return QScriptValue(str.c_str());
+                const std::string str(value.toString().toStdString());
+                reflective->from_string(hold, str);
             }
+            break;
+
+        /*
+        TODO
         case TYPE_OBJREF:
             {
                 objrefvar_reflective_base const * objref = 
@@ -302,25 +330,24 @@ void ReflectiveScriptClass::fromScriptValue(
 
             }
             break;
+        */
 
         case TYPE_ENUM:
             {
-                // Maybe it works...
-                int32_t value = hold.to_value< int32_t >();
+                const unsigned int count = reflective->get_children_count();
 
-                const char * str = "Unknown value"; 
+                const QString str (value.toString());
 
-                if (value >= 0 && 
-                        value < reflective->get_children_count())
+                for (unsigned int i = 0; i < count; i++) 
                 {
-                    str = reflective->get_child_name(
-                            (unsigned int) value);
+                    if (str == reflective->get_child_name(i))
+                    {
+                        hold.to_value< int32_t >() = (int32_t) i;
+                        break;
+                    }
                 }
-
-                return QScriptValue(str);
             }
-
-        */
+            break;
 
         case TYPE_DOUBLE:
             hold.to_value< double >() = value.toNumber();
@@ -390,7 +417,13 @@ QScriptClass::QueryFlags ReflectiveScriptClass::queryProperty(
             }
             else if (!ok && sName == "length")
             {
-                // TODO length property
+                *id = std::numeric_limits< uint >::max();
+
+                if (node->reflective->is_variable_length())
+                    return QScriptClass::HandlesReadAccess |
+                        QScriptClass::HandlesWriteAccess;
+
+                return QScriptClass::HandlesReadAccess;
             }
         }
     }
@@ -427,6 +460,24 @@ void ReflectiveScriptClass::setProperty(
             if (id < node->children.size())
             {
                 fromScriptValue(value, node->children[id]);
+            }
+        }
+        else if (node->reflective->is_repeated())
+        {
+            if (id < node->children.size())
+            {
+                fromScriptValue(value, node->children[id]);
+            }
+            else if (node->reflective->is_variable_length() &&
+                    QString(name) == "length")
+            {
+                // length property
+                unsigned int length = value.toUInt32();
+
+                node->reflective->set_length(node->holder, length);
+
+                // re-initialized in next access
+                node->reset();
             }
         }
     }

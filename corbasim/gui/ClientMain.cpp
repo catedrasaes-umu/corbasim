@@ -1,5 +1,6 @@
-#include <corbasim/gui/ScriptEvaluator.hpp>
+#include <corbasim/impl.hpp>
 #include <corbasim/gui/utils.hpp>
+#include <corbasim/gui/SimpleClient.hpp>
 #include <iostream>
 
 int main(int argc, char **argv)
@@ -11,7 +12,8 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    QApplication app(argc, argv);
+	QTextCodec::setCodecForCStrings (QTextCodec::codecForLocale());
+	QApplication app(argc, argv);
 
     ::corbasim::core::interface_reflective_base const * reflective = 
         ::corbasim::gui::getReflectiveByFQN(argv[1]);
@@ -22,11 +24,19 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    corbasim::gui::ScriptEvaluator ev;
-    ev.initialize(reflective);
-
-    ev.show();
-
-    return app.exec();
+	CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
+	CORBA::Object_var obj;
+	
+	corbasim::gui::SimpleClient window;
+	window.initialize(reflective);
+	
+	if(argc > 2)
+	{
+		obj = orb->string_to_object(argv[2]);
+		
+		window.setReference(obj);
+	}
+	
+	window.show();
+	return app.exec();
 }
-

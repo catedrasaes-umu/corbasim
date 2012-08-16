@@ -24,7 +24,7 @@ public:
             int role = Qt::EditRole);
 
     core::operation_reflective_base const * 
-    getReflective(const QString& id) const;
+    getReflective() const;
 
 public slots:
 

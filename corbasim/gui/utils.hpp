@@ -22,6 +22,7 @@
 
 #include <QList>
 #include <QString>
+#include <corbasim/gui/export.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 
 namespace corbasim 
@@ -33,6 +34,9 @@ typedef QList< int > ReflectivePath_t;
 
 QString getFieldName(core::operation_reflective_base const * operation,
         const ReflectivePath_t& path);
+
+::corbasim::core::interface_reflective_base const * 
+    getReflectiveByFQN(const char * fqn);
 
 } // namespace gui
 } // namespace corbasim

@@ -21,10 +21,11 @@
 #define CORBASIM_GUI_PARAMETERSFROMFILESTOOL_HPP
 
 #include <QtGui>
+#include <map>
+#include <fstream>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/OperationParametersModel.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
-#include <map>
 
 namespace corbasim 
 {
@@ -36,6 +37,46 @@ class SortableGroupItem;
 
 namespace gui 
 {
+
+class FilesItemProcessor;
+
+typedef boost::shared_ptr< FilesItemProcessor > FilesItemProcessor_ptr;
+
+class CORBASIM_GUI_DECLSPEC FilesItemProcessor : public QObject
+{
+    Q_OBJECT
+public:
+
+    FilesItemProcessor(
+        ::corbasim::core::operation_reflective_base const * reflective,
+        const QList< int > path,
+        const QStringList files,
+        int currentFile,
+        const int format,
+        const bool repeat);
+
+    virtual ~FilesItemProcessor();
+    
+    const QList< int >& getPath() const;
+
+    void process( ::corbasim::core::holder holder);
+
+signals:
+
+    void nextFile(int index);
+
+protected:
+
+    ::corbasim::core::operation_reflective_base const * m_reflective;
+    const QList< int > m_path;
+    const QStringList m_files;
+    int m_currentFile;
+    const int m_format;
+    const bool m_repeat;
+
+    typedef boost::shared_ptr< std::ifstream > ifstream_ptr;
+    ifstream_ptr m_currentIStream;
+};
 
 class CORBASIM_GUI_DECLSPEC FilesItem : public QWidget
 {
@@ -67,6 +108,10 @@ public:
     int currentFile() const;
     int format() const;
     bool repeat() const;
+
+signals:
+
+    void nextFile(int index);
 
 protected slots:
 
@@ -107,6 +152,8 @@ public slots:
     void deleteFilesItem(
             core::operation_reflective_base const * reflective,
             const QList< int >& path);
+
+    void clear();
 
 protected slots:
 

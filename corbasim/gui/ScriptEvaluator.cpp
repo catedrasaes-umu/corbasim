@@ -47,9 +47,9 @@ OperationEvaluator::OperationEvaluator(QWidget * parent) :
     QPushButton * btnLoad = new QPushButton("&Load");
     btnLy->addWidget(btnLoad, 0, 3);
     QPushButton * btnSaveForm = new QPushButton("S&ave form");
-    btnLy->addWidget(btnSaveForm, 1, 0);
+    btnLy->addWidget(btnSaveForm, 0, 4);
     QPushButton * btnLoadForm = new QPushButton("L&oad form");
-    btnLy->addWidget(btnLoadForm, 1, 1);
+    btnLy->addWidget(btnLoadForm, 0, 5);
 
     // Main layout
     ly->addLayout(btnLy);
@@ -165,7 +165,8 @@ void OperationEvaluator::load()
     }
     else
     {
-        // TODO display error
+        QMessageBox::critical(this, "Error", 
+                QString("Error parsing file: %1").arg(file));
     }
 }
 
@@ -198,9 +199,15 @@ void OperationEvaluator::loadForm()
 
     std::ifstream in(file.toStdString().c_str());
 
-    json::parse(m_reflective, holder, in);
-
-    m_widget->getWidget()->setValue(request);
+    if (json::parse(m_reflective, holder, in))
+    {
+        m_widget->getWidget()->setValue(request);
+    }
+    else
+    {
+         QMessageBox::critical(this, "Error", 
+                QString("Error parsing file: %1").arg(file));
+    }
 }
 
 //

@@ -28,8 +28,12 @@
 
 using namespace corbasim::gui;
 
-OperationForm::OperationForm(QWidget * parent) :
-    QWidget(parent), m_reflective(NULL), 
+OperationForm::OperationForm(
+        const QString& objectId,
+        QWidget * parent) :
+    QWidget(parent), 
+    m_objectId(objectId),
+    m_reflective(NULL), 
     m_widget(NULL),
     m_files(NULL)
 {
@@ -93,9 +97,14 @@ void OperationForm::setCode(const QString& code)
     m_code->setPlainText(code);
 }
 
-QString OperationForm::code()
+QString OperationForm::code() const
 {
     return m_code->toPlainText();
+}
+
+const QString& OperationForm::objectId() const
+{
+    return m_objectId;
 }
 
 //
@@ -276,6 +285,73 @@ void OperationFormWidget::setValue(corbasim::event::request_ptr req)
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->fromHolder(child_holder);
         }
+    }
+}
+
+// 
+//
+// Events
+//
+//
+bool OperationFormWidget::eventFilter(QObject * obj, QEvent * event)
+{
+    if (event->type() == QEvent::ChildAdded)
+    {
+        QChildEvent *cEvent = static_cast< QChildEvent * >(event);
+        
+        childEvent(cEvent);
+    }
+    else if (event->type() == QEvent::DragEnter)
+    {
+        QDragEnterEvent *dragEvent = static_cast< QDragEnterEvent * >(event);
+
+        dragEnterEvent(dragEvent);
+
+        return true;
+    }
+    else if (event->type() == QEvent::DragLeave)
+    {
+        QDragLeaveEvent *dragEvent = static_cast< QDragLeaveEvent * >(event);
+
+        dragLeaveEvent(dragEvent);
+
+        return true;
+    }
+    else if (event->type() == QEvent::Drop)
+    {
+        QDropEvent *cEvent = static_cast< QDropEvent * >(event);
+
+        dropEvent(cEvent);
+
+        return true;
+    }
+    else if (event->type() == QEvent::MouseMove)
+    {
+        QMouseEvent *cEvent = static_cast< QMouseEvent * >(event);
+
+        mouseMoveEvent(cEvent);
+    }
+    else if (event->type() == QEvent::MouseButtonPress)
+    {
+        QMouseEvent *cEvent = static_cast< QMouseEvent * >(event);
+
+        mousePressEvent(cEvent);
+    }
+
+    return false;
+}
+
+void OperationFormWidget::childEvent(QChildEvent * event)
+{
+    if (event->added())
+    {
+        /*
+        if (!dynamic_cast< QAbstractSpinBox * >(event->child())
+                && !dynamic_cast< QLineEdit * >(event->child())
+                && !dynamic_cast< QComboBox * >(event->child())
+                && !dynamic_cast< QCheckBox * >(event->child()))
+        */
+            event->child()->installEventFilter(this);
     }
 }
 

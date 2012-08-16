@@ -18,6 +18,7 @@
  */
 
 #include "utils.hpp"
+#include <QLibrary>
 
 namespace corbasim 
 {
@@ -53,6 +54,30 @@ QString getFieldName(core::operation_reflective_base const * operation,
 
     return res;
 }
+
+::corbasim::core::interface_reflective_base const * 
+getReflectiveByFQN(const char * fqn)
+{
+    QString symbol (fqn);
+    symbol.replace("::","_");
+    symbol.prepend("corbasim_reflective_");
+
+    typedef const corbasim::core::interface_reflective_base *
+        (*get_reflective_t)();
+    get_reflective_t get_reflective = NULL;
+
+    QLibrary lib(symbol);
+
+    if (lib.load() && 
+            (get_reflective = (get_reflective_t) 
+                 lib.resolve(symbol.toStdString().c_str())) != NULL)
+    {
+        return get_reflective();
+    }
+
+    return NULL;
+}
+
 
 } // namespace gui
 } // namespace corbasim

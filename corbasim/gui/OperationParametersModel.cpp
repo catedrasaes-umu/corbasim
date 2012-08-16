@@ -50,7 +50,7 @@ bool OperationParametersModel::setData(const QModelIndex & index,
 }
 
 corbasim::core::operation_reflective_base const * 
-OperationParametersModel::getReflective(const QString& id) const
+OperationParametersModel::getReflective() const
 {
     return m_reflective;
 }
