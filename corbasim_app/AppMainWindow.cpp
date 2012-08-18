@@ -23,6 +23,7 @@
 #include "view/CreateDialog.hpp"
 #include <corbasim/qt/ScriptWindow.hpp>
 #include <corbasim/gui/OperationSequence.hpp>
+#include <corbasim/gui/SenderSequence.hpp>
 #include <corbasim/gui/FilteredLogView.hpp>
 #include <corbasim/qwt/ReflectivePlotTool.hpp>
 #include <corbasim/gui/DumpTool.hpp>
@@ -42,12 +43,14 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_sub_create_servant(NULL),
     m_sub_script(NULL),
     m_sub_seq_tool(NULL),
+    m_sub_sender_seq_tool(NULL),
 
     // Widgets
     m_create_objref(NULL),
     m_create_servant(NULL),
     m_script(NULL),
     m_seq_tool(NULL),
+    m_sender_seq_tool(NULL),
 
     m_filtered_log(NULL),
 
@@ -200,6 +203,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     tools->addSeparator();
     tools->addAction("&Operation sequences", 
             this, SLOT(showOpSequenceTool()));
+    tools->addAction("&Sender sequences", 
+            this, SLOT(showSenderSequenceTool()));
     tools->addAction("&Filtered log", 
             filtered_log_dlg, SLOT(show()));
     tools->addSeparator();
@@ -525,6 +530,46 @@ void AppMainWindow::showOpSequenceTool()
     m_seq_tool->show();
     m_mdi_area->setActiveSubWindow(m_sub_seq_tool);
 }
+
+void AppMainWindow::showSenderSequenceTool()
+{
+    if (!m_sub_sender_seq_tool)
+    {
+        m_sub_sender_seq_tool = new QMdiSubWindow();
+        m_sender_seq_tool = new gui::SenderSequenceTool();
+
+        m_sender_seq_tool->setWindowTitle("");
+
+        m_sub_sender_seq_tool->setWidget(m_sender_seq_tool);
+        m_mdi_area->addSubWindow(m_sub_sender_seq_tool);
+
+        QObject::connect(
+                m_controller,
+                SIGNAL(objrefCreated(
+                        QString, 
+                        const corbasim::core::interface_reflective_base *)),
+                m_sender_seq_tool,
+                SLOT(objrefCreated(
+                        const QString&, const 
+                        corbasim::core::interface_reflective_base *)));
+        QObject::connect(
+                m_controller,
+                SIGNAL(objrefDeleted(QString)),
+                m_sender_seq_tool,
+                SLOT(objrefDeleted(const QString&)));
+
+        // Initializes the tool
+        objrefs_t::const_iterator it = m_objrefs.begin();
+
+        for (; it != m_objrefs.end(); it++)
+            m_sender_seq_tool->objrefCreated(it->first,
+                    it->second->getFactory());
+    }
+    m_sub_sender_seq_tool->showNormal();
+    m_sender_seq_tool->show();
+    m_mdi_area->setActiveSubWindow(m_sub_sender_seq_tool);
+}
+
 
 void AppMainWindow::showFilteredLog()
 {
@@ -864,6 +909,11 @@ void AppMainWindow::save(QVariant& settings)
         m_seq_tool->save(window["sequences"]);
     }
 
+    if (m_sender_seq_tool)
+    {
+        m_sender_seq_tool->save(window["sender_sequences"]);
+    }
+
     if (m_filtered_log)
     {
         m_filtered_log->save(window["filtered_log"]);
@@ -900,6 +950,16 @@ void AppMainWindow::load(const QVariant& settings)
         if (!m_seq_tool) showOpSequenceTool();
 
         m_seq_tool->load(seq);
+    }
+
+    if (window.contains("sender_sequences"))
+    {
+        const QVariant seq = window.value("sender_sequences");
+
+        // TODO do not show but ensure created
+        if (!m_sender_seq_tool) showOpSequenceTool();
+
+        m_sender_seq_tool->load(seq);
     }
 
     if (window.contains("objrefs"))

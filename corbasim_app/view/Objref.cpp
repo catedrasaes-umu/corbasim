@@ -38,12 +38,15 @@ Objref::Objref(QMdiArea * area,
     m_menu = new QMenu(menu_entry);
     // Takes the ownership
     QMenu * operation = m_menu->addMenu("Operations");
+    QMenu * sender = m_menu->addMenu("Senders");
 
     unsigned int count = factory->operation_count();
 
     // Inicializa los dialogos a nulo
     m_dialogs.resize(count, NULL);
+    m_senders.resize(count, NULL);
     m_subwindows.resize(count, NULL);
+    m_subwindows_senders.resize(count, NULL);
 
     for (unsigned int i = 0; i < count; i++) 
     {
@@ -53,12 +56,18 @@ Objref::Objref(QMdiArea * area,
         const char * name = op->get_name();
 
         operation->addAction(name)->setData(i);
+        sender->addAction(name)->setData(i);
     }
 
     QObject::connect(operation,
             SIGNAL(triggered(QAction*)),
             this,
             SLOT(showRequestDialog(QAction*)));
+
+    QObject::connect(sender,
+            SIGNAL(triggered(QAction*)),
+            this,
+            SLOT(showSenderDialog(QAction*)));
 
     m_menu->addAction("&Script editor", this, SLOT(showScriptEditor()));
     m_menu->addAction("Set &reference", this, SLOT(showSetReference()));
@@ -130,6 +139,19 @@ void Objref::showRequestDialog(QAction * act)
     showRequestDialog(act->data().toInt());
 }
 
+void Objref::showSenderDialog(int idx)
+{
+    QMdiSubWindow * w = getSenderWindow(idx);
+    w->showNormal();
+    getSenderDialog(idx)->show();
+    m_mdi_area->setActiveSubWindow(w);
+}
+
+void Objref::showSenderDialog(QAction * act)
+{
+    showSenderDialog(act->data().toInt());
+}
+
 QMdiSubWindow * Objref::getWindow(int idx)
 {
     QMdiSubWindow * win = m_subwindows[idx];
@@ -177,6 +199,50 @@ corbasim::gui::RequestDialog * Objref::getRequestDialog(int idx)
     return dlg;
 }
 
+QMdiSubWindow * Objref::getSenderWindow(int idx)
+{
+    QMdiSubWindow * win = m_subwindows_senders[idx];
+
+    if (!win)
+    {
+        m_subwindows_senders[idx] = new QMdiSubWindow();
+
+        m_subwindows_senders[idx]->setWidget(getSenderDialog(idx));
+        m_mdi_area->addSubWindow(m_subwindows_senders[idx], Qt::SubWindow);
+        
+        // Window title
+        QString title = QString("%1: %2").arg(m_id).arg(
+            m_factory->get_reflective_by_index(idx)->get_name());
+
+        m_subwindows_senders[idx]->setWindowTitle(title);
+        win = m_subwindows_senders[idx];
+    }
+
+    return win;
+}
+
+corbasim::gui::OperationSender * Objref::getSenderDialog(int idx)
+{
+    gui::OperationSender * dlg = m_senders[idx];
+
+    if (!dlg)
+    {
+        core::operation_reflective_base const * op = 
+            m_factory->get_reflective_by_index(idx);
+
+        const char * name = op->get_name();
+
+        dlg = new gui::OperationSender(m_id);
+        dlg->initialize(op);
+        dlg->setWindowTitle(name);
+
+        m_senders[idx] = dlg;
+    }
+
+    return dlg;
+}
+
+
 void Objref::showScriptEditor()
 {
     if (!m_sub_script)
@@ -221,20 +287,39 @@ void Objref::updateReference(const CORBA::Object_var& ref)
 void Objref::save(QVariant& settings) 
 {
     QVariantMap map;
-    QVariantList list;
-
-    for (unsigned int i = 0; i < m_dialogs.size(); i++) 
     {
-        if (m_dialogs[i])
+        QVariantList list;
+
+        for (unsigned int i = 0; i < m_dialogs.size(); i++) 
         {
-            QVariantMap op;
-            op["operation"] = m_dialogs[i]->getReflective()->get_name();
-            m_dialogs[i]->save(op["value"]);
-            list << op;
+            if (m_dialogs[i])
+            {
+                QVariantMap op;
+                op["operation"] = m_dialogs[i]->getReflective()->get_name();
+                m_dialogs[i]->save(op["value"]);
+                list << op;
+            }
         }
+
+        map["dialogs"] = list;
+    }
+    {
+        QVariantList list;
+
+        for (unsigned int i = 0; i < m_senders.size(); i++) 
+        {
+            if (m_senders[i])
+            {
+                QVariantMap op;
+                op["operation"] = m_senders[i]->getReflective()->get_name();
+                m_senders[i]->save(op["value"]);
+                list << op;
+            }
+        }
+
+        map["senders"] = list;
     }
 
-    map["dialogs"] = list;
     settings = map;
 }
 
@@ -245,6 +330,35 @@ void Objref::load(const QVariant& settings)
     if (map.contains("dialogs"))
     {
         const QVariantList list = map.value("dialogs").toList();
+
+        for (QVariantList::const_iterator it = list.begin(); 
+                it != list.end(); ++it) 
+        {
+            const QVariantMap map = it->toMap();
+
+            if (map.contains("operation") && map.contains("value"))
+            {
+                // find the index
+                unsigned int i = 0;
+                bool found = false;
+                for (; !found && i < m_factory->operation_count(); 
+                        i++) 
+                {
+                    found = (m_factory->get_reflective_by_index(i)->get_name() 
+                            == map.value("operation").toString());
+                }
+
+                // load its saved value
+                if (found)
+                {
+                    getRequestDialog(i)->load(map.value("value"));
+                }
+            }
+        }
+    }
+    if (map.contains("senders"))
+    {
+        const QVariantList list = map.value("senders").toList();
 
         for (QVariantList::const_iterator it = list.begin(); 
                 it != list.end(); ++it) 

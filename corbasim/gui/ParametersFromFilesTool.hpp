@@ -25,7 +25,7 @@
 #include <fstream>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/OperationParametersModel.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/Sender.hpp>
 
 namespace corbasim 
 {
@@ -42,7 +42,7 @@ class FilesItemProcessor;
 
 typedef boost::shared_ptr< FilesItemProcessor > FilesItemProcessor_ptr;
 
-class CORBASIM_GUI_DECLSPEC FilesItemProcessor : public QObject
+class CORBASIM_GUI_DECLSPEC FilesItemProcessor : public SenderItemProcessor
 {
     Q_OBJECT
 public:
@@ -57,8 +57,6 @@ public:
 
     virtual ~FilesItemProcessor();
     
-    const QList< int >& getPath() const;
-
     void process( ::corbasim::core::holder holder);
 
 signals:
@@ -68,7 +66,6 @@ signals:
 protected:
 
     ::corbasim::core::operation_reflective_base const * m_reflective;
-    const QList< int > m_path;
     const QStringList m_files;
     int m_currentFile;
     const int m_format;

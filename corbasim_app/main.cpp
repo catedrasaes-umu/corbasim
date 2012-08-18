@@ -29,6 +29,7 @@
 #include "IDLBuilder.hpp"
 #include <corbasim/gui/LogModel.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/Sender.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <corbasim/qt/initialize.hpp>
@@ -64,6 +65,17 @@ int main(int argc, char **argv)
     QThread threadBuilder;
 #endif
     QThread threadInputReqCntl;
+
+    // Sender
+    corbasim::gui::SenderController * senderController =
+        corbasim::gui::SenderController::getInstance();
+
+    QThread senderThread;
+    senderController->moveToThread(&senderThread);
+
+    senderController->start();
+    senderThread.start();
+    // End sender
 
     corbasim::gui::InputRequestController& inputReqCntl = 
         *corbasim::gui::getDefaultInputRequestController();
@@ -161,6 +173,13 @@ int main(int argc, char **argv)
         SLOT(processRequest(const QString&, corbasim::event::request_ptr,
                 corbasim::event::event_ptr)));
     // End input request controller
+    
+    // Sender
+    QObject::connect(senderController,
+            SIGNAL(sendRequest(const QString&, corbasim::event::request_ptr)),
+            &controller,
+            SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
+    // End sender
 
     // Executed in dedicated threads
     controller.moveToThread(&threadController);
@@ -249,6 +268,13 @@ int main(int argc, char **argv)
 #endif
 
     threadInputReqCntl.quit();
+
+    // Sender
+    senderController->stop();
+    senderThread.quit();
+    senderController->join();
+    senderThread.wait();
+    // End sender
 
     threadController.wait();
     threadEngine.wait();

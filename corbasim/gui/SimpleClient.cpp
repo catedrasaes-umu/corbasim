@@ -506,6 +506,7 @@ void SimpleClient::showOperationSequenceTool()
     if (!m_seq_tool)
     {
         QVBoxLayout * layout = new QVBoxLayout();
+        layout->setMargin(0);
         m_dlg_seq_tool = new QDialog(this);
         m_seq_tool = new gui::OperationSequenceTool();
         

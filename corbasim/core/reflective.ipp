@@ -758,6 +758,12 @@ holder operation_reflective< Value >::get_child_value(holder& value,
     return base_t::get_child_value(value, idx);
 }
 
+template< typename Value >
+void operation_reflective< Value >::copy(holder const& src, holder& dst) const
+{
+    base_t::copy(src, dst);
+}
+
 template < typename Value >
 const char * operation_reflective< Value >::get_name() const
 {

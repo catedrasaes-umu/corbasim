@@ -21,6 +21,7 @@
 #include <corbasim/qt/private/ScriptEditor.hpp>
 #include <corbasim/gui/ParametersFromFilesTool.hpp>
 #include <corbasim/gui/qvariant.hpp>
+#include <limits>
 
 // JSON
 #include <sstream>
@@ -443,5 +444,210 @@ void OperationFormWidget::save(QVariant& settings)
 void OperationFormWidget::load(const QVariant& settings)
 {
     setValue(settings);
+}
+
+// 
+//
+// Operation Sender
+//
+//
+
+OperationSender::OperationSender(
+        const QString& objectId,
+        QWidget * parent) :
+    QWidget(parent), 
+    m_objectId(objectId), m_reflective(NULL)
+{
+    QVBoxLayout * mainLayout = new QVBoxLayout();
+
+    // Form
+    m_form = new OperationForm(m_objectId);
+    mainLayout->addWidget(m_form);
+
+    // Configuration
+    QHBoxLayout * cfgLayout = new QHBoxLayout();
+    m_times = new QSpinBox();
+    m_times->setRange(0, std::numeric_limits< int >::max());
+    m_times->setValue(1);
+    m_period = new QSpinBox();
+    m_period->setRange(0, std::numeric_limits< int >::max());
+    m_period->setValue(100);
+    m_updateForm = new QCheckBox();
+
+    m_playButton = new QPushButton("&Start/stop");
+    m_playButton->setObjectName("start-stop");
+    m_playButton->setCheckable(true);
+
+    cfgLayout->addWidget(new QLabel("Times"));
+    cfgLayout->addWidget(m_times);
+    cfgLayout->addWidget(new QLabel("Period (ms)"));
+    cfgLayout->addWidget(m_period);
+    cfgLayout->addWidget(new QLabel("Update form"));
+    cfgLayout->addWidget(m_updateForm);
+    cfgLayout->addWidget(m_playButton);
+
+    mainLayout->addLayout(cfgLayout);
+
+    setLayout(mainLayout);
+
+    // signals
+    QObject::connect(m_playButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(playClicked(bool)));
+
+    QObject::connect(
+            this,
+            SIGNAL(addSender(SenderConfig_ptr)),
+            SenderController::getInstance(),
+            SLOT(addSender(SenderConfig_ptr)));
+    QObject::connect(
+            this,
+            SIGNAL(deleteSender(SenderConfig_ptr)),
+            SenderController::getInstance(),
+            SLOT(deleteSender(SenderConfig_ptr)));
+
+    QObject::connect(m_updateForm,
+            SIGNAL(toggled(bool)),
+            this,
+            SLOT(activeUpdateForm(bool)));
+}
+
+OperationSender::~OperationSender()
+{
+    reset();
+}
+
+void OperationSender::initialize(
+        ::corbasim::core::operation_reflective_base const * op)
+{
+    m_reflective = op;
+
+    m_form->initialize(op);
+
+    // signals
+    QObject::connect(this, 
+            SIGNAL(updateForm(corbasim::event::request_ptr)),
+            m_form->getWidget(),
+            SLOT(setValue(corbasim::event::request_ptr)));
+}
+
+const QString& OperationSender::objectId() const
+{
+    return m_objectId;
+}
+
+void OperationSender::save(QVariant& settings)
+{
+    QVariantMap map;
+
+    m_form->save(map["form"]);
+
+    map["times"] = m_times->value();
+    map["period"] = m_period->value();
+    map["update_form"] = m_updateForm->isChecked();
+
+    settings = map;
+}
+
+void OperationSender::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    m_form->load(map["form"]);
+
+    m_times->setValue(map["times"].toInt());
+    m_period->setValue(map["period"].toInt());
+    m_updateForm->setChecked(map["update_form"].toBool());
+}
+
+OperationForm * OperationSender::getForm() const
+{
+    return m_form;
+}
+
+void OperationSender::reset()
+{
+    if (m_config)
+    {
+        // disconnect
+        QObject::disconnect(m_config.get(),
+                SIGNAL(requestSent(corbasim::event::request_ptr)),
+                this,
+                SIGNAL(updateForm(corbasim::event::request_ptr)));
+
+        QObject::disconnect(m_config.get(),
+                SIGNAL(finished()), 
+                this,
+                SLOT(finished()));
+        emit deleteSender(m_config);
+
+        m_config.reset();
+    }
+}
+
+void OperationSender::playClicked(bool play)
+{
+    reset();
+
+    if (play)
+    {
+        m_form->setEnabled(false);
+
+        // TODO
+        const QList< SenderItemProcessor_ptr > processors;
+
+        m_config.reset(new SenderConfig(
+                    objectId(),
+                    m_reflective,
+                    m_form->createRequest(),
+                    m_form->code(),
+                    processors,
+                    m_times->value(),
+                    m_period->value()));
+
+        // connect signals
+        activeUpdateForm(m_updateForm->isChecked());
+
+        QObject::connect(m_config.get(),
+                SIGNAL(finished()), 
+                this,
+                SLOT(finished()));
+
+        emit addSender(m_config);
+    }
+    else
+    {
+        m_form->setEnabled(true);
+    }
+}
+
+void OperationSender::finished()
+{
+    m_playButton->setChecked(false);
+    m_form->setEnabled(true);
+}
+
+void OperationSender::activeUpdateForm(bool update)
+{
+    if (m_config)
+    {
+        if (update)
+        {
+            QObject::connect(m_config.get(),
+                    SIGNAL(requestSent(corbasim::event::request_ptr)),
+                    this,
+                    SIGNAL(updateForm(corbasim::event::request_ptr)));
+        }
+        else
+        {
+            QObject::disconnect(m_config.get(),
+                    SIGNAL(requestSent(corbasim::event::request_ptr)),
+                    this,
+                    SIGNAL(updateForm(corbasim::event::request_ptr)));
+
+        }
+    }
+
 }
 

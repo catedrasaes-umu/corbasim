@@ -151,7 +151,7 @@ void EntryViewer::show(
     else
     {
         w = new QScrollArea();
-        w->setWidget(createWidget(op, w));
+        w->setWidget(createSimpleWidget(op, w));
         w->setWidgetResizable(true);
         m_stack->addWidget(w);
     }

@@ -1,5 +1,6 @@
 #include <corbasim/gui/ScriptEvaluator.hpp>
 #include <corbasim/gui/utils.hpp>
+#include <corbasim/gui/Sender.hpp>
 #include <iostream>
 
 int main(int argc, char **argv)
@@ -22,11 +23,27 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    corbasim::gui::SenderController * senderController =
+        corbasim::gui::SenderController::getInstance();
+
+    QThread senderThread;
+    senderController->moveToThread(&senderThread);
+
+    senderController->start();
+    senderThread.start();
+
     corbasim::gui::ScriptEvaluator ev;
     ev.initialize(reflective);
 
     ev.show();
 
-    return app.exec();
+    int res = app.exec();
+
+    senderController->stop();
+    senderThread.quit();
+    senderController->join();
+    senderThread.wait();
+
+    return res;
 }
 

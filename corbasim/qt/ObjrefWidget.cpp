@@ -22,7 +22,9 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
     QHBoxLayout * layout = new QHBoxLayout;
 
     m_selector = new QComboBox;
-    mainLayout->addWidget(new QLabel("Select source"), 0, 0);
+    QLabel * label = new QLabel("Select source");
+    mainLayout->addWidget(label, 0, 0);
+    label->setMaximumWidth(150);
     mainLayout->addWidget(m_selector, 0, 1);
 
     m_stack = new QStackedWidget;
@@ -30,6 +32,8 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
     QPushButton * updateBtn = new QPushButton("Update");
     mainLayout->addWidget(updateBtn, 0, 2);
+
+    updateBtn->setMaximumWidth(90);
 
     m_status = new Status;
     mainLayout->addWidget(m_status, 0, 3);

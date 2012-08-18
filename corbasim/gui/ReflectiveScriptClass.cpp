@@ -58,7 +58,7 @@ QScriptValue ReflectiveScriptClass::property(
         const QScriptString& name, 
         uint id)
 {
-    std::cout << __FUNCTION__ << std::endl;
+    // std::cout << __FUNCTION__ << std::endl;
 
     Node_ptr node = qscriptvalue_cast< Node_ptr >(object.data());
 
@@ -96,7 +96,7 @@ QScriptValue ReflectiveScriptClass::property(
 
 QScriptValue ReflectiveScriptClass::toScriptValue(Node_ptr node)
 {
-    std::cout << __FUNCTION__ << std::endl;
+    // std::cout << __FUNCTION__ << std::endl;
 
     using namespace corbasim::core;
 
@@ -199,7 +199,7 @@ QScriptValue ReflectiveScriptClass::toScriptValue(Node_ptr node)
 void ReflectiveScriptClass::fromScriptValue(
         const QScriptValue& value, Node_ptr node)
 {
-    std::cout << __FUNCTION__ << std::endl;
+    // std::cout << __FUNCTION__ << std::endl;
 
     using namespace corbasim::core;
 
@@ -365,8 +365,8 @@ QScriptClass::QueryFlags ReflectiveScriptClass::queryProperty(
         QScriptClass::QueryFlags flags, 
         uint * id)
 {
-    std::cout << __FUNCTION__ << " " << 
-        name.toString().toStdString() << std::endl;
+    // std::cout << __FUNCTION__ << " " << 
+    //     name.toString().toStdString() << std::endl;
 
     // Invalid property identifier
     *id = std::numeric_limits< uint >::max();
@@ -441,8 +441,8 @@ void ReflectiveScriptClass::setProperty(
         uint id, 
         const QScriptValue& value)
 {
-    std::cout << __FUNCTION__ << " " << 
-        name.toString().toStdString() << std::endl;
+    // std::cout << __FUNCTION__ << " " << 
+    //     name.toString().toStdString() << std::endl;
 
     Node_ptr node = qscriptvalue_cast< Node_ptr >(object.data());
 

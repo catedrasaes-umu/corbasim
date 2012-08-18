@@ -31,6 +31,7 @@ namespace corbasim
 namespace gui 
 {
 class OperationSequenceTool;
+class SenderSequenceTool;
 class DumpTool;
 class FilteredLogView;
 } // namespace gui
@@ -71,6 +72,7 @@ public slots:
     void setLogModel(QAbstractItemModel * model);
 
     void showOpSequenceTool();
+    void showSenderSequenceTool();
     void showFilteredLog();
 
     void showCreateObjref();
@@ -149,12 +151,14 @@ protected:
     QMdiSubWindow * m_sub_create_servant;
     QMdiSubWindow * m_sub_script;
     QMdiSubWindow * m_sub_seq_tool;
+    QMdiSubWindow * m_sub_sender_seq_tool;
     
     // Subwindows widgets
     QWidget * m_create_objref;
     QWidget * m_create_servant;
     QWidget * m_script;
     gui::OperationSequenceTool * m_seq_tool;
+    gui::SenderSequenceTool * m_sender_seq_tool;
 
     gui::FilteredLogView * m_filtered_log;
 

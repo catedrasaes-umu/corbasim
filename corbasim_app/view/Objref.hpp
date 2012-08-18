@@ -24,6 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/RequestDialog.hpp>
+#include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/SimpleScriptEditor.hpp>
 #include "CreateDialog.hpp"
 
@@ -49,6 +50,9 @@ public:
     gui::RequestDialog * getRequestDialog(int idx);
     QMdiSubWindow * getWindow(int idx);
 
+    gui::OperationSender * getSenderDialog(int idx);
+    QMdiSubWindow * getSenderWindow(int idx);
+
     const core::interface_reflective_base * getFactory() const;
 
     void save(QVariant& settings);
@@ -62,6 +66,8 @@ public slots:
 
     void showRequestDialog(int idx);
     void showRequestDialog(QAction * act);
+    void showSenderDialog(int idx);
+    void showSenderDialog(QAction * act);
     void showScriptEditor();
 
     void showSetReference();
@@ -94,6 +100,12 @@ protected:
     
     typedef std::vector< QMdiSubWindow * > subwindows_t;
     subwindows_t m_subwindows;
+
+    // Senders
+    typedef std::vector< gui::OperationSender * > senders_t;
+    senders_t m_senders;
+
+    subwindows_t m_subwindows_senders;
 
     QMdiSubWindow * m_sub_script;
     QMdiSubWindow * m_sub_reference;

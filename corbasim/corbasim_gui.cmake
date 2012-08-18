@@ -18,10 +18,12 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/ReflectiveGUI.hpp
     gui/RecorderTool.hpp
     
+    gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
     gui/ReflectiveScriptClass.hpp
     gui/ScriptEvaluator.hpp
     gui/OperationForm.hpp
+    gui/Sender.hpp
 
     gui/Server.hpp
     gui/ServerApp.hpp)
@@ -47,9 +49,11 @@ set(corbasim_gui_MOC_HDRS
     gui/ReflectiveGUI.hpp
     gui/RecorderTool.hpp
     
+    gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
     gui/ScriptEvaluator.hpp
     gui/OperationForm.hpp
+    gui/Sender.hpp
     
     gui/Server.hpp)
 
@@ -73,10 +77,12 @@ set(corbasim_gui_SRCS
     gui/ReflectiveGUI.cpp
     gui/RecorderTool.cpp
     
+    gui/SenderSequence.cpp
     gui/ParametersFromFilesTool.cpp
     gui/ScriptEvaluator.cpp
     gui/ReflectiveScriptClass.cpp
     gui/OperationForm.cpp
+    gui/Sender.cpp
 
     gui/Server.cpp
     gui/ServerApp.cpp)

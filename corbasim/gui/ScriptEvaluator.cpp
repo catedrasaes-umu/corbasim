@@ -23,6 +23,7 @@
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/ParametersFromFilesTool.hpp>
 #include <corbasim/json/reflective.hpp>
+#include <corbasim/qt/initialize.hpp>
 
 // Debug
 #include <iostream>
@@ -32,7 +33,7 @@ using namespace corbasim::gui;
 
 OperationEvaluator::OperationEvaluator(QWidget * parent) :
     QWidget(parent), m_reflective(NULL), 
-    m_clazz(&m_engine), m_widget(new OperationForm())
+    m_clazz(&m_engine), m_widget(new OperationSender())
 {
     QVBoxLayout * ly = new QVBoxLayout();
     QGridLayout * btnLy = new QGridLayout();
@@ -86,7 +87,7 @@ void OperationEvaluator::initialize(
 
 void OperationEvaluator::evaluate()
 {
-    const QString strProgram (m_widget->code());
+    const QString strProgram (m_widget->getForm()->code());
     if (!m_engine.canEvaluate(strProgram))
     {
         std::cerr << "Could not evaluate program!" << std::endl;
@@ -112,7 +113,7 @@ void OperationEvaluator::evaluate()
     m_postFunc = m_engine.evaluate("post");
  
     // This object
-    m_request = m_widget->createRequest();
+    m_request = m_widget->getForm()->createRequest();
     core::holder holder(m_reflective->get_holder(m_request));
     Node_ptr node(new Node(m_reflective, holder));
     m_thisObject = m_engine.newObject(&m_clazz,
@@ -178,7 +179,8 @@ void OperationEvaluator::saveForm()
     if (file.isEmpty())
         return;
 
-    event::request_ptr request = m_widget->createRequest();
+    event::request_ptr request = 
+        m_widget->getForm()->createRequest();
     core::holder holder(m_reflective->get_holder(request));
 
     std::ofstream out(file.toStdString().c_str());
@@ -194,14 +196,15 @@ void OperationEvaluator::loadForm()
     if (file.isEmpty())
         return;
 
-    event::request_ptr request = m_reflective->create_request();
+    event::request_ptr request = 
+        m_reflective->create_request();
     core::holder holder(m_reflective->get_holder(request));
 
     std::ifstream in(file.toStdString().c_str());
 
     if (json::parse(m_reflective, holder, in))
     {
-        m_widget->getWidget()->setValue(request);
+        m_widget->getForm()->getWidget()->setValue(request);
     }
     else
     {
@@ -219,6 +222,7 @@ void OperationEvaluator::loadForm()
 ScriptEvaluator::ScriptEvaluator(QWidget * parent) :
     QWidget(parent)
 {
+    corbasim::qt::initialize();
 }
 
 ScriptEvaluator::~ScriptEvaluator()

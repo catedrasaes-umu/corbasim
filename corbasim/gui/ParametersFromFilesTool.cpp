@@ -20,6 +20,7 @@
 #include "ParametersFromFilesTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
 #include <corbasim/core/file_format_helper.hpp>
+#include <corbasim/gui/utils.hpp>
 
 using namespace corbasim::gui;
 
@@ -362,18 +363,17 @@ FilesItemProcessor::FilesItemProcessor(
         int currentFile,
         const int format,
         const bool repeat) :
-    m_reflective(reflective), m_path(path), m_files(files), 
-    m_currentFile(currentFile), m_format(format), m_repeat(repeat)
+    SenderItemProcessor(path),
+    m_reflective(reflective), 
+    m_files(files), 
+    m_currentFile(currentFile), 
+    m_format(format), 
+    m_repeat(repeat)
 {
 }
 
 FilesItemProcessor::~FilesItemProcessor()
 {
-}
-
-const QList< int >& FilesItemProcessor::getPath() const
-{
-    return m_path;
 }
 
 void FilesItemProcessor::process( ::corbasim::core::holder holder)

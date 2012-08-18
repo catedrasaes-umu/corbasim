@@ -378,6 +378,8 @@ struct operation_reflective :
     holder get_child_value(holder& value, 
         unsigned int idx) const;
 
+    void copy(holder const& src, holder& dst) const;
+
     const char * get_name() const;
 
     tag_t get_tag() const;

@@ -64,7 +64,7 @@ protected:
     QScriptValue m_postFunc;
     ::corbasim::event::request_ptr m_request;
 
-    OperationForm * m_widget;
+    OperationSender * m_widget;
 };
 
 class ScriptEvaluator : public QWidget

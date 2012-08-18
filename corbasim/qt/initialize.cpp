@@ -26,6 +26,7 @@
 #include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/Sender.hpp>
 
 
 namespace  
@@ -54,6 +55,9 @@ public:
             ("corbasim::gui::ReflectivePath_t");
         qRegisterMetaType< corbasim::gui::RequestProcessor_ptr >
             ("corbasim::gui::RequestProcessor_ptr");
+
+        qRegisterMetaType< corbasim::gui::SenderConfig_ptr >
+            ("SenderConfig_ptr");
 
         qRegisterMetaType< CORBA::Object_var >
             ("CORBA::Object_var");

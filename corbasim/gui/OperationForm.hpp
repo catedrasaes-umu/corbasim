@@ -21,9 +21,10 @@
 #define CORBASIM_GUI_OPERATIONFORM_HPP
 
 #include <QtGui>
+#include <corbasim/gui/export.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
-#include <corbasim/gui/export.hpp>
+#include <corbasim/gui/Sender.hpp>
 
 namespace corbasim 
 {
@@ -51,8 +52,6 @@ public:
 
     event::request_ptr createRequest();
 
-    void setValue(event::request_ptr req);
-
     void dragEnterEvent(QDragEnterEvent *event);
     
     void dragLeaveEvent(QDragLeaveEvent *event);
@@ -65,6 +64,10 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+
+public slots:
+
+    void setValue(corbasim::event::request_ptr req);
 
 protected:
 
@@ -117,6 +120,59 @@ protected:
     QPlainTextEdit * m_code;
     OperationFormWidget * m_widget;
     ParametersFromFilesTool * m_files;
+};
+
+class CORBASIM_GUI_DECLSPEC OperationSender : 
+    public QWidget
+{
+    Q_OBJECT
+    Q_PROPERTY(QString objectId READ objectId)
+public:
+    OperationSender(const QString& objectId = "this",
+            QWidget * parent = 0);
+    virtual ~OperationSender();
+
+    void initialize(core::operation_reflective_base const *);
+
+    const QString& objectId() const;
+
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
+    OperationForm * getForm() const;
+
+
+    core::operation_reflective_base const * getReflective() const
+    {
+        return m_reflective;
+    }
+
+signals:
+
+    void updateForm(corbasim::event::request_ptr req);
+    void addSender(SenderConfig_ptr cfg);
+    void deleteSender(SenderConfig_ptr cfg);
+
+protected slots:
+
+    void reset();
+
+    void playClicked(bool play);
+    void finished();
+    void activeUpdateForm(bool update);
+
+protected:
+
+    const QString m_objectId;
+    core::operation_reflective_base const * m_reflective;
+
+    OperationForm * m_form;
+    QSpinBox * m_times;
+    QSpinBox * m_period;
+    QCheckBox * m_updateForm;
+    QPushButton * m_playButton;
+
+    SenderConfig_ptr m_config;
 };
 
 } // namespace gui
