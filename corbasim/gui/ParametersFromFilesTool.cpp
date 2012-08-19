@@ -80,6 +80,21 @@ void ParametersFromFilesTool::initialize(
     m_model.initialize(reflective);
 }
 
+void ParametersFromFilesTool::createProcessors(
+        QList< SenderItemProcessor_ptr >& processors)
+{
+    const QList< qt::SortableGroupItem * >& items = 
+        m_group->getItems();
+
+    for (int i = 0; i < items.size(); i++) 
+    {
+        FilesItem * item = 
+            qobject_cast< FilesItem * >(items.at(i)->getWidget());
+
+        processors.push_back(item->createProcessor());
+    }
+}
+
 FilesItem * ParametersFromFilesTool::createFilesItem( 
         core::operation_reflective_base const * op,
         const QList< int >& path)
@@ -204,6 +219,8 @@ void ParametersFromFilesTool::load(const QVariant& settings)
         if (item)
         {
             item->load(var);
+
+            m_model.check(path);
         }
     }
 }
@@ -317,6 +334,20 @@ bool FilesItem::repeat() const
     return m_repeat->isChecked();
 }
 
+FilesItemProcessor_ptr FilesItem::createProcessor()
+{
+    FilesItemProcessor_ptr processor(
+        new FilesItemProcessor(
+                m_reflective,
+                m_path,
+                files(),
+                currentFile(),
+                format(),
+                repeat()));
+
+    return processor;
+}
+
 //
 //
 // Save and load
@@ -347,7 +378,16 @@ void FilesItem::save(QVariant& settings)
 
 void FilesItem::load(const QVariant& settings)
 {
-    // TODO
+    const QVariantMap map = settings.toMap();
+
+    m_files = map["files"].toStringList();
+    m_filesWidget->setText(m_files.join(", "));
+    m_currentFile->clear();
+    m_currentFile->addItems(m_files);
+
+    m_currentFile->setCurrentIndex(map["current_file"].toInt());
+    m_repeat->setChecked(map["repeat"].toBool());
+    m_format->setCurrentIndex(m_format->findText(map["format"].toString()));
 }
 
 // 
@@ -376,9 +416,13 @@ FilesItemProcessor::~FilesItemProcessor()
 {
 }
 
-void FilesItemProcessor::process( ::corbasim::core::holder holder)
+void FilesItemProcessor::process( 
+            ::corbasim::core::reflective_base const * reflective,
+            ::corbasim::core::holder holder)
 {
     using namespace ::corbasim::core;
+
+    std::cout << __FUNCTION__  << std::endl;
 
     file_format_factory const * factory = 
         file_format_factory::get_instance();
@@ -388,19 +432,52 @@ void FilesItemProcessor::process( ::corbasim::core::holder holder)
 
     if (helper)
     {
-        // TODO not completed
-
-        if (!m_currentIStream && m_currentFile < m_files.size())
+        if (!m_currentIStream || !m_currentIStream->good())
         {
+            openFile();
+        }
+
+        bool end = false;
+        while (m_currentIStream && !end)
+        {
+            end = helper->load(*m_currentIStream, 
+                    reflective, holder);
+
+            if (!end)
+            {
+                openFile();
+            }
+        }
+    }
+    else
+    {
+        std::cerr << "Invalid file helper!" << std::endl;
+    }
+}
+
+void FilesItemProcessor::openFile()
+{
+    m_currentIStream.reset();
+
+    if (m_currentFile < m_files.size() || m_repeat)
+    {
+        if (m_repeat && m_currentFile == m_files.size())
+        {
+            m_currentFile = 0;
+        }
+    
+        if (m_currentFile < m_files.size())
+        {
+            std::cout << __FUNCTION__ << " " << 
+                m_files.at(m_currentFile).toStdString() << std::endl;
+
+            m_currentIStream.reset(new std::ifstream(
+                        m_files.at(m_currentFile).toStdString().c_str()));
+
             // open a new file
             emit nextFile(m_currentFile);
 
             m_currentFile++;
-        }
-
-        if (m_currentIStream)
-        {
-            bool res = helper->load(*m_currentIStream, m_reflective, holder);
         }
     }
 }

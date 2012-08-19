@@ -87,6 +87,11 @@ OperationFormWidget * OperationForm::getWidget()
     return m_widget;
 }
 
+ParametersFromFilesTool * OperationForm::getFiles()
+{
+    return m_files;
+}
+
 //
 //
 // Property code
@@ -594,8 +599,9 @@ void OperationSender::playClicked(bool play)
     {
         m_form->setEnabled(false);
 
-        // TODO
-        const QList< SenderItemProcessor_ptr > processors;
+        // Create processors
+        QList< SenderItemProcessor_ptr > processors;
+        m_form->getFiles()->createProcessors(processors);
 
         m_config.reset(new SenderConfig(
                     objectId(),

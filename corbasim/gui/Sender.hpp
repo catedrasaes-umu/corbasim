@@ -103,7 +103,9 @@ public:
 
     virtual ~SenderItemProcessor();
 
-    virtual void process( ::corbasim::core::holder holder) = 0;
+    virtual void process(
+            ::corbasim::core::reflective_base const * reflective,
+            ::corbasim::core::holder holder) = 0;
     
     const QList< int >& getPath() const;
 
@@ -111,7 +113,7 @@ protected:
 
     SenderItemProcessor(const QList< int >& path);
 
-    const QList< int >& m_path;
+    const QList< int > m_path;
 };
 
 class CORBASIM_GUI_DECLSPEC Sender : public QObject
@@ -142,6 +144,10 @@ protected:
     void handleTimeout(
             Sender_weak weak,
             const boost::system::error_code& error);
+
+    void applyProcessor(
+            SenderItemProcessor_ptr processor,
+            core::holder holder);
 
     boost::asio::deadline_timer m_timer;
     SenderConfig_ptr m_config;

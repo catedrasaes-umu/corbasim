@@ -105,6 +105,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QVBoxLayout * filteredLayout = new QVBoxLayout();
     m_filtered_log = new FilteredLogView();
     m_filtered_log->setLogModel(&m_log_model);
+    filteredLayout->setMargin(0);
     filteredLayout->addWidget(m_filtered_log);
     filteredLogDlg->setLayout(filteredLayout);
     filteredLogDlg->hide();

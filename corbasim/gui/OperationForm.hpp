@@ -108,6 +108,7 @@ public:
     event::request_ptr createRequest();
 
     OperationFormWidget * getWidget();
+    ParametersFromFilesTool * getFiles();
 
     void save(QVariant& settings);
     void load(const QVariant& settings);

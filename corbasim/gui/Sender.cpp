@@ -170,6 +170,9 @@ void Sender::cancel()
 
 void Sender::process()
 {
+    ::corbasim::core::holder srcHolder =
+        m_config->operation()->get_holder(m_request);
+
     // preFunc
     if (m_preFunc.isFunction())
     {
@@ -182,7 +185,7 @@ void Sender::process()
 
     for (int i = 0; i < processors.size(); i++) 
     {
-        // TODO
+        applyProcessor(processors.at(i), srcHolder);
     }
     
     // postFunc
@@ -196,8 +199,6 @@ void Sender::process()
 
     ::corbasim::event::request_ptr request =
         m_config->operation()->create_request();
-    ::corbasim::core::holder srcHolder =
-        m_config->operation()->get_holder(m_request);
     ::corbasim::core::holder dstHolder =
         m_config->operation()->get_holder(request);
     
@@ -206,6 +207,41 @@ void Sender::process()
     // emit request
     emit sendRequest(m_config->objectId(), request);
     m_config->notifyRequestSent(request);
+}
+
+void Sender::applyProcessor(
+            SenderItemProcessor_ptr processor,
+            corbasim::core::holder holder)
+{
+    const QList< int >& path = processor->getPath();
+
+    int size = path.size();
+
+    core::holder tmp = holder;
+
+    core::reflective_base const * reflec = 
+        m_config->operation();
+
+    for (int i = 1; i < size; i++) 
+    {
+        // Unsupported case!
+        if (reflec->is_variable_length()) return;
+
+        tmp = reflec->get_child_value(tmp, path[i]);
+
+        if (reflec->get_type() == core::TYPE_STRUCT)
+        {
+            reflec = reflec->get_child(path[i]);
+        }
+        else if(reflec->is_repeated())
+        {
+            reflec = reflec->get_slice();
+        } 
+        else
+            return; // Unsupported case!
+    }
+
+    processor->process(reflec, tmp);
 }
 
 void Sender::scheduleTimer(Sender_weak weak)

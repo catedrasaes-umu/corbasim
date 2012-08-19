@@ -57,13 +57,17 @@ public:
 
     virtual ~FilesItemProcessor();
     
-    void process( ::corbasim::core::holder holder);
+    void process( 
+            ::corbasim::core::reflective_base const * reflective,
+            ::corbasim::core::holder holder);
 
 signals:
 
     void nextFile(int index);
 
 protected:
+
+    void openFile();
 
     ::corbasim::core::operation_reflective_base const * m_reflective;
     const QStringList m_files;
@@ -106,6 +110,8 @@ public:
     int format() const;
     bool repeat() const;
 
+    FilesItemProcessor_ptr createProcessor();
+
 signals:
 
     void nextFile(int index);
@@ -139,6 +145,8 @@ public:
 
     void initialize(
             ::corbasim::core::operation_reflective_base const * reflective);
+
+    void createProcessors(QList< SenderItemProcessor_ptr >& processors);
 
 public slots:
 
