@@ -29,6 +29,8 @@
 #include <corbasim/gui/DumpTool.hpp>
 #include <corbasim/gui/json.hpp>
 
+#include <corbasim/version.hpp>
+
 #include <QLibrary>
 #include <QtScript>
 #include <fstream>
@@ -889,6 +891,22 @@ void AppMainWindow::save(QVariant& settings)
     QVariantMap objrefs;
     QVariantMap servants;
 
+    // corbasim header
+    {
+        QVariantMap header;
+        header["version"] = CORBASIM_VERSION; 
+        header["built"] = __DATE__; 
+
+        window["corbasim"] = header;
+    }
+
+    // configuration metadat
+    {
+        QVariantMap header;
+        header["saved"] = QDateTime::currentDateTime().toString(); 
+        window["metadata"] = header;
+    }
+
     for (objrefs_t::iterator it = m_objrefs.begin(); 
 	    it != m_objrefs.end(); ++it) 
     {
@@ -927,7 +945,8 @@ void AppMainWindow::save(QVariant& settings)
     if (m_plot_tool)
     {
         typedef void (*save_t)(QWidget * tool, QVariant& settings);
-        save_t savefn = (save_t) QLibrary::resolve("corbasim_qwt", "saveReflectivePlotTool");
+        save_t savefn = (save_t) QLibrary::resolve("corbasim_qwt", 
+                "saveReflectivePlotTool");
 
         if (savefn)
         {
