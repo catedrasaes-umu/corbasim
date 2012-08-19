@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * ScriptEvaluator.hpp
+ * ScriptEvaluatorWidget.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -22,24 +22,66 @@
 
 #include <QtGui>
 #include <QtScript>
+#include <boost/shared_ptr.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/export.hpp>
 #include <corbasim/gui/ReflectiveScriptClass.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
-#include <corbasim/gui/export.hpp>
-#include <corbasim/gui/OperationForm.hpp>
 
 namespace corbasim 
 {
 namespace gui 
 {
 
+class OperationSender;
+
+class OperationEvaluator;
+
+typedef boost::shared_ptr< OperationEvaluator > OperationEvaluator_ptr;
+
 class CORBASIM_GUI_DECLSPEC OperationEvaluator : 
+    public QObject
+{
+    Q_OBJECT
+public:
+    OperationEvaluator(
+            core::operation_reflective_base const *,
+            QObject * parent = 0);
+    virtual ~OperationEvaluator();
+
+public slots:
+
+    void evaluate(const QString& code);
+    void init(corbasim::event::request_ptr);
+    void pre(corbasim::event::request_ptr);
+    void post(corbasim::event::request_ptr);
+
+protected:
+
+    void call(QScriptValue& func, corbasim::event::request_ptr req);
+
+    core::operation_reflective_base const * m_reflective;
+
+    QScriptEngine m_engine;
+    ReflectiveScriptClass m_clazz;
+    QScriptValue m_initFunc;
+    QScriptValue m_preFunc;
+    QScriptValue m_postFunc;
+};
+
+//
+//
+// Deprecated
+//
+//
+
+class CORBASIM_GUI_DECLSPEC OperationEvaluatorWidget : 
     public QWidget
 {
     Q_OBJECT
 public:
-    OperationEvaluator(QWidget * parent = 0);
-    virtual ~OperationEvaluator();
+    OperationEvaluatorWidget(QWidget * parent = 0);
+    virtual ~OperationEvaluatorWidget();
     
     void initialize(core::operation_reflective_base const *);
 
@@ -56,23 +98,18 @@ protected:
 
     core::operation_reflective_base const * m_reflective;
 
-    QScriptEngine m_engine;
-    ReflectiveScriptClass m_clazz;
-    QScriptValue m_thisObject;
-    QScriptValue m_initFunc;
-    QScriptValue m_preFunc;
-    QScriptValue m_postFunc;
+    OperationEvaluator_ptr m_evaluator;
     ::corbasim::event::request_ptr m_request;
 
     OperationSender * m_widget;
 };
 
-class ScriptEvaluator : public QWidget
+class ScriptEvaluatorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ScriptEvaluator(QWidget * parent = 0);
-    virtual ~ScriptEvaluator();
+    ScriptEvaluatorWidget(QWidget * parent = 0);
+    virtual ~ScriptEvaluatorWidget();
     
     void initialize(core::interface_reflective_base const *);
 };

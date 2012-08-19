@@ -117,7 +117,7 @@ void SenderController::deleteSender(SenderConfig_ptr cfg)
 Sender::Sender(boost::asio::io_service& ioService,
     SenderConfig_ptr config) :
     m_timer(ioService), m_config(config),
-    m_currentTime(0), m_clazz(&m_engine)
+    m_currentTime(0), m_evaluator(config->operation(), this)
 {
 }
 
@@ -131,12 +131,8 @@ void Sender::start(Sender_weak weak)
 
     if (ptr)
     {
-        m_engine.evaluate(m_config->code());
+        m_evaluator.evaluate(m_config->code());
         
-        m_initFunc = m_engine.evaluate("init");
-        m_preFunc = m_engine.evaluate("pre");
-        m_postFunc = m_engine.evaluate("post");
-
         // Clone the original request
         ::corbasim::core::holder srcHolder =
             m_config->operation()->get_holder(m_config->request());
@@ -148,12 +144,7 @@ void Sender::start(Sender_weak weak)
         m_config->operation()->copy(srcHolder, dstHolder);
 
         // m_request is the working request
-        Node_ptr node(new Node(m_config->operation(), dstHolder));
-        m_thisObject = m_engine.newObject(&m_clazz,
-                m_engine.newVariant(qVariantFromValue(node)));
-
-        if (m_initFunc.isFunction())
-            m_initFunc.call(m_thisObject);
+        m_evaluator.init(m_request);
 
         m_timer.expires_from_now(
                 boost::posix_time::milliseconds(0));
@@ -174,10 +165,7 @@ void Sender::process()
         m_config->operation()->get_holder(m_request);
 
     // preFunc
-    if (m_preFunc.isFunction())
-    {
-        m_preFunc.call(m_thisObject);
-    }
+    m_evaluator.pre(m_request);
 
     // processors
     const QList< SenderItemProcessor_ptr >& processors =
@@ -189,10 +177,7 @@ void Sender::process()
     }
     
     // postFunc
-    if (m_postFunc.isFunction())
-    {
-        m_postFunc.call(m_thisObject);
-    }
+    m_evaluator.post(m_request);
 
     // clone request
     // we can't emit a request we're going to modify

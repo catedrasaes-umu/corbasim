@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     senderController->start();
     senderThread.start();
 
-    corbasim::gui::ScriptEvaluator ev;
+    corbasim::gui::ScriptEvaluatorWidget ev;
     ev.initialize(reflective);
 
     ev.show();

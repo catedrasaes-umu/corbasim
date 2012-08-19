@@ -26,9 +26,9 @@
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <corbasim/gui/export.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/gui/ReflectiveScriptClass.hpp>
+#include <corbasim/gui/export.hpp>
+#include <corbasim/gui/ScriptEvaluator.hpp>
 
 namespace corbasim 
 {
@@ -153,12 +153,7 @@ protected:
     SenderConfig_ptr m_config;
     int m_currentTime;
 
-    QScriptEngine m_engine;
-    ReflectiveScriptClass m_clazz;
-    QScriptValue m_initFunc;
-    QScriptValue m_preFunc;
-    QScriptValue m_postFunc;
-    QScriptValue m_thisObject;
+    OperationEvaluator m_evaluator;
     ::corbasim::event::request_ptr m_request;
 };
 

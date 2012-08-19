@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * ScriptEvaluator.cpp
+ * ScriptEvaluatorWidget.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -18,12 +18,14 @@
  */
 
 #include "ScriptEvaluator.hpp"
+
+#include <corbasim/json/reflective.hpp>
+#include <corbasim/qt/initialize.hpp>
 #include <corbasim/qt/private/ScriptEditor.hpp>
 #include <corbasim/gui/ModelNode.hpp>
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/ParametersFromFilesTool.hpp>
-#include <corbasim/json/reflective.hpp>
-#include <corbasim/qt/initialize.hpp>
+#include <corbasim/gui/OperationForm.hpp>
 
 // Debug
 #include <iostream>
@@ -31,9 +33,75 @@
 
 using namespace corbasim::gui;
 
-OperationEvaluator::OperationEvaluator(QWidget * parent) :
+OperationEvaluator::OperationEvaluator(
+        ::corbasim::core::operation_reflective_base const * reflective,
+        QObject * parent) :
+    QObject(parent), m_reflective(reflective), 
+    m_clazz(&m_engine)
+{
+}
+
+OperationEvaluator::~OperationEvaluator()
+{
+}
+
+void OperationEvaluator::evaluate(const QString& code)
+{
+    m_engine.evaluate(code, QString(m_reflective->get_name())+ ".js");
+
+    if (m_engine.hasUncaughtException())
+    {
+        // TODO
+    }
+    else
+    {
+        // Look for this functions
+        m_initFunc = m_engine.evaluate("init");
+        m_preFunc = m_engine.evaluate("pre");
+        m_postFunc = m_engine.evaluate("post");
+    }
+}
+
+void OperationEvaluator::init(corbasim::event::request_ptr req)
+{   
+    call(m_initFunc, req);
+}
+
+void OperationEvaluator::pre(corbasim::event::request_ptr req)
+{
+    call(m_preFunc, req);
+}
+
+void OperationEvaluator::post(corbasim::event::request_ptr req)
+{
+    call(m_postFunc, req);
+}
+
+void OperationEvaluator::call(QScriptValue& func, 
+        corbasim::event::request_ptr req)
+{
+    if (func.isFunction())
+    {
+        core::holder holder(m_reflective->get_holder(req));
+
+        Node_ptr node(new Node(m_reflective, holder));
+
+        QScriptValue thisObject = m_engine.newObject(&m_clazz,
+                m_engine.newVariant(qVariantFromValue(node)));
+
+        func.call(thisObject);
+    }
+}
+
+//
+//
+// Deprecated.
+//
+//
+
+OperationEvaluatorWidget::OperationEvaluatorWidget(QWidget * parent) :
     QWidget(parent), m_reflective(NULL), 
-    m_clazz(&m_engine), m_widget(new OperationSender())
+    m_widget(new OperationSender())
 {
     QVBoxLayout * ly = new QVBoxLayout();
     QGridLayout * btnLy = new QGridLayout();
@@ -73,62 +141,45 @@ OperationEvaluator::OperationEvaluator(QWidget * parent) :
     setLayout(ly);
 }
 
-OperationEvaluator::~OperationEvaluator()
+OperationEvaluatorWidget::~OperationEvaluatorWidget()
 {
 }
 
-void OperationEvaluator::initialize(
+void OperationEvaluatorWidget::initialize(
     ::corbasim::core::operation_reflective_base const * factory)
 {
     m_reflective = factory;
 
     m_widget->initialize(m_reflective);
+
+    m_evaluator.reset(new OperationEvaluator(factory, this));
 }
 
-void OperationEvaluator::evaluate()
+void OperationEvaluatorWidget::evaluate()
 {
+    if (!m_evaluator)
+        return;
+
     const QString strProgram (m_widget->getForm()->code());
-    if (!m_engine.canEvaluate(strProgram))
-    {
-        std::cerr << "Could not evaluate program!" << std::endl;
-        return;
-    }
 
-    m_engine.evaluate(strProgram, QString(
-                m_reflective->get_name())+ ".js");
-
-    if (m_engine.hasUncaughtException())
-    {
-        QString error = QString("%1\n\n%2")
-            .arg(m_engine.uncaughtException().toString())
-            .arg(m_engine.uncaughtExceptionBacktrace().join("\n"));
-
-        QMessageBox::critical(this, "Error", error);
-        return;
-    }
-
-    // Look for this functions
-    m_initFunc = m_engine.evaluate("init");
-    m_preFunc = m_engine.evaluate("pre");
-    m_postFunc = m_engine.evaluate("post");
+    m_evaluator->evaluate(strProgram);
  
     // This object
     m_request = m_widget->getForm()->createRequest();
-    core::holder holder(m_reflective->get_holder(m_request));
-    Node_ptr node(new Node(m_reflective, holder));
-    m_thisObject = m_engine.newObject(&m_clazz,
-            m_engine.newVariant(qVariantFromValue(node)));
    
-    if (m_initFunc.isFunction())
-        m_initFunc.call(m_thisObject);
+    m_evaluator->init(m_request);
 }
 
-void OperationEvaluator::execute()
+void OperationEvaluatorWidget::execute()
 {
+    m_evaluator->pre(m_request);
+
     // TODO
+
+    m_evaluator->post(m_request);
 }
 
-void OperationEvaluator::save()
+void OperationEvaluatorWidget::save()
 {
     QString file = QFileDialog::getSaveFileName( 0, tr(
                 "Select a file"), ".");
@@ -146,7 +197,7 @@ void OperationEvaluator::save()
     ofs << std::endl;
 }
 
-void OperationEvaluator::load()
+void OperationEvaluatorWidget::load()
 {
     QString file = QFileDialog::getOpenFileName( 0, tr(
                 "Select a file"), ".");
@@ -171,7 +222,7 @@ void OperationEvaluator::load()
     }
 }
 
-void OperationEvaluator::saveForm()
+void OperationEvaluatorWidget::saveForm()
 {
     QString file = QFileDialog::getSaveFileName( 0, tr(
                 "Select a file"), ".");
@@ -188,7 +239,7 @@ void OperationEvaluator::saveForm()
     json::write(out, m_reflective, holder, true);
 }
 
-void OperationEvaluator::loadForm()
+void OperationEvaluatorWidget::loadForm()
 {
     QString file = QFileDialog::getOpenFileName( 0, tr(
                 "Select a file"), ".");
@@ -219,17 +270,17 @@ void OperationEvaluator::loadForm()
 //
 //
 
-ScriptEvaluator::ScriptEvaluator(QWidget * parent) :
+ScriptEvaluatorWidget::ScriptEvaluatorWidget(QWidget * parent) :
     QWidget(parent)
 {
     corbasim::qt::initialize();
 }
 
-ScriptEvaluator::~ScriptEvaluator()
+ScriptEvaluatorWidget::~ScriptEvaluatorWidget()
 {
 }
 
-void ScriptEvaluator::initialize(
+void ScriptEvaluatorWidget::initialize(
     ::corbasim::core::interface_reflective_base const * factory)
 {
     // Each operation evaluator in a tab
@@ -244,7 +295,7 @@ void ScriptEvaluator::initialize(
             factory->get_reflective_by_index(i);
         const char * name = op->get_name();
 
-        OperationEvaluator * ev = new OperationEvaluator();
+        OperationEvaluatorWidget * ev = new OperationEvaluatorWidget();
         ev->initialize(op);
 
         tabs->addTab(ev, name);
