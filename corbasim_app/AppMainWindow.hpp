@@ -74,6 +74,8 @@ public slots:
     void showOpSequenceTool();
     void showSenderSequenceTool();
     void showFilteredLog();
+    
+    void showAboutDlg();
 
     void showCreateObjref();
     void showCreateServant();
@@ -145,6 +147,8 @@ protected:
     QMenu * m_menuServants;
 
     QStatusBar * m_statusBar;
+
+    QDialog * m_aboutDlg;
 
     // Subwindows
     QMdiSubWindow * m_sub_create_objref;

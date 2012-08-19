@@ -21,6 +21,7 @@
 #include "AppController.hpp"
 #include "TriggerEngine.hpp"
 #include "view/CreateDialog.hpp"
+#include "AboutDialog.hpp"
 #include <corbasim/qt/ScriptWindow.hpp>
 #include <corbasim/gui/OperationSequence.hpp>
 #include <corbasim/gui/SenderSequence.hpp>
@@ -39,6 +40,8 @@ using namespace corbasim::app;
 
 AppMainWindow::AppMainWindow(QWidget * parent) :
     QMainWindow(parent), m_controller(NULL), m_engine(NULL),
+
+    m_aboutDlg(NULL),
 
     // Subwindows
     m_sub_create_objref(NULL),
@@ -226,7 +229,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     winMenu->addSeparator();
     winMenu->addAction("Show available &interfaces", 
             m_dock_fqn, SLOT(show()));
-    menu->addMenu("&About");
+    QMenu * aboutMenu = menu->addMenu("&About");
+    aboutMenu->addAction("&About corbasim generic application", 
+            this, SLOT(showAboutDlg()));
 
     // Status bar
     m_statusBar = new QStatusBar;
@@ -250,6 +255,17 @@ AppMainWindow::~AppMainWindow()
     delete m_sub_create_objref;
     delete m_sub_create_servant;
     delete m_sub_script;
+}
+
+
+void AppMainWindow::showAboutDlg()
+{
+    if (!m_aboutDlg)
+    {
+        m_aboutDlg = new AboutDialog(this);
+    }
+
+    m_aboutDlg->show();
 }
 
 void AppMainWindow::clearLog()

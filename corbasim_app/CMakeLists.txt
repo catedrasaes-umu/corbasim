@@ -10,6 +10,8 @@ set(corbasim_app_SRCS
     AppModel.cpp
     AppController.cpp
     AppMainWindow.cpp
+
+    AboutDialog.cpp
     
     AppConfiguration.cpp
     AppFileWatcher.cpp
@@ -34,6 +36,8 @@ set(corbasim_app_MOC_HDRS
     AppController.hpp
     AppMainWindow.hpp
     AppFileWatcher.hpp
+
+    AboutDialog.hpp
 
     TriggerEngine.hpp
 
