@@ -287,6 +287,9 @@ void Objref::updateReference(const CORBA::Object_var& ref)
 void Objref::save(QVariant& settings) 
 {
     QVariantMap map;
+    
+    map["fqn"] = m_factory->get_fqn();
+
     {
         QVariantList list;
 

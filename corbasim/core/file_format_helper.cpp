@@ -132,6 +132,78 @@ bool text_file_format_helper::load(
         reflective_base const * reflective, 
         holder h) const
 {
+    try
+    {
+        switch(reflective->get_type())
+        {
+#define DUMP_TYPE(__TYPE__, cpptype)                                        \
+            case TYPE_##__TYPE__:                                           \
+                is >> h.to_value< cpptype >();                              \
+                break;                                                      \
+            /***/
+
+            DUMP_TYPE(BOOL, bool);
+            DUMP_TYPE(OCTET, unsigned char);
+            DUMP_TYPE(CHAR, char);
+            DUMP_TYPE(SHORT, short);
+            DUMP_TYPE(USHORT, unsigned short);
+            DUMP_TYPE(LONG, int32_t);
+            DUMP_TYPE(ULONG, uint32_t);
+            DUMP_TYPE(LONGLONG, int64_t);
+            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(FLOAT, float);
+            DUMP_TYPE(DOUBLE, double);
+
+#undef DUMP_TYPE
+
+            case TYPE_ARRAY:
+            case TYPE_SEQUENCE:
+                {
+                    unsigned int count = 
+                        reflective->get_length(h);
+
+                    if (reflective->is_variable_length())
+                    {
+                        // save length
+                        is >> count;
+                        
+                        reflective->set_length(h, count);
+                    }
+
+                    for (unsigned int i = 0; i < count; i++) 
+                    {
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        load(is, reflective->get_child(i), 
+                                child_value);
+                    }
+                }
+                break;
+
+            case TYPE_STRUCT:
+                {
+                    const unsigned int count = 
+                        reflective->get_children_count();
+
+                    for (unsigned int i = 0; i < count; i++) 
+                    {
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        load(is, reflective->get_child(i), 
+                                child_value);
+                    }
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+    catch(...)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -172,7 +244,8 @@ bool text_file_format_helper::save(
 
                     if (reflective->is_variable_length())
                     {
-                        // TODO save length
+                        // save length
+                        os << count << ' ';
                     }
 
                     for (unsigned int i = 0; i < count; i++) 
@@ -238,6 +311,79 @@ bool binary_file_format_helper::load(
         reflective_base const * reflective, 
         holder h) const
 {
+    try
+    {
+        switch(reflective->get_type())
+        {
+#define DUMP_TYPE(__TYPE__, cpptype)                                        \
+            case TYPE_##__TYPE__:                                           \
+                is.read((char *)&h.to_value< cpptype >(),                   \
+                        sizeof(cpptype));                                   \
+                break;                                                      \
+            /***/
+
+            DUMP_TYPE(BOOL, bool);
+            DUMP_TYPE(OCTET, unsigned char);
+            DUMP_TYPE(CHAR, char);
+            DUMP_TYPE(SHORT, short);
+            DUMP_TYPE(USHORT, unsigned short);
+            DUMP_TYPE(LONG, int32_t);
+            DUMP_TYPE(ULONG, uint32_t);
+            DUMP_TYPE(LONGLONG, int64_t);
+            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(FLOAT, float);
+            DUMP_TYPE(DOUBLE, double);
+
+#undef DUMP_TYPE
+
+            case TYPE_ARRAY:
+            case TYPE_SEQUENCE:
+                {
+                    unsigned int count = 
+                        reflective->get_length(h);
+
+                    if (reflective->is_variable_length())
+                    {
+                        // save length
+                        is.read((char *)&count, sizeof(unsigned int));
+                        
+                        reflective->set_length(h, count);
+                    }
+
+                    for (unsigned int i = 0; i < count; i++) 
+                    {
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        load(is, reflective->get_child(i), 
+                                child_value);
+                    }
+                }
+                break;
+
+            case TYPE_STRUCT:
+                {
+                    const unsigned int count = 
+                        reflective->get_children_count();
+
+                    for (unsigned int i = 0; i < count; i++) 
+                    {
+                        holder child_value = 
+                            reflective->get_child_value(h, i);
+                        load(is, reflective->get_child(i), 
+                                child_value);
+                    }
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+    catch(...)
+    {
+        return false;
+    }
+
     return true;
 }
 
@@ -279,7 +425,8 @@ bool binary_file_format_helper::save(
 
                     if (reflective->is_variable_length())
                     {
-                        // TODO save length
+                        // save length
+                        os.write((const char *)&count, sizeof(unsigned int));
                     }
 
                     for (unsigned int i = 0; i < count; i++) 

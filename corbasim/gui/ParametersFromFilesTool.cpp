@@ -424,6 +424,9 @@ void FilesItemProcessor::process(
 
     std::cout << __FUNCTION__  << std::endl;
 
+    if (m_files.size() == 0)
+        return;
+
     file_format_factory const * factory = 
         file_format_factory::get_instance();
 
@@ -438,15 +441,16 @@ void FilesItemProcessor::process(
         }
 
         bool end = false;
-        while (m_currentIStream && !end)
+        int i = 0;
+        while (m_currentIStream && !end 
+                && i++ < m_files.size())
         {
-            end = helper->load(*m_currentIStream, 
-                    reflective, holder);
+            end = helper->load(
+                    *m_currentIStream, 
+                    reflective, 
+                    holder);
 
-            if (!end)
-            {
-                openFile();
-            }
+            if (!end) openFile();
         }
     }
     else
@@ -459,7 +463,8 @@ void FilesItemProcessor::openFile()
 {
     m_currentIStream.reset();
 
-    if (m_currentFile < m_files.size() || m_repeat)
+    if (m_files.size() > 0 && 
+            (m_currentFile < m_files.size() || m_repeat))
     {
         if (m_repeat && m_currentFile == m_files.size())
         {

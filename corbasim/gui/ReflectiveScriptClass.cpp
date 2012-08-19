@@ -88,6 +88,8 @@ QScriptValue ReflectiveScriptClass::property(
                 return QScriptValue((uint) node->children.size());
             }
         }
+
+        // TODO union
     }
 
     // Invalid value
@@ -426,6 +428,8 @@ QScriptClass::QueryFlags ReflectiveScriptClass::queryProperty(
                 return QScriptClass::HandlesReadAccess;
             }
         }
+
+        // TODO union
     }
     else
     {
@@ -480,6 +484,8 @@ void ReflectiveScriptClass::setProperty(
                 node->reset();
             }
         }
+
+        // TODO union
     }
 }
 
@@ -523,6 +529,8 @@ bool ReflectivePropertyIterator::hasNext() const
         case TYPE_SEQUENCE:
             return (m_idx + 1 < reflective->get_length(m_node->holder));
 
+        // TODO case TYPE_UNION:
+
         default:
             break;
     }
@@ -545,6 +553,8 @@ bool ReflectivePropertyIterator::hasPrevious() const
         case TYPE_SEQUENCE:
             return (reflective->get_length(m_node->holder) > 0 && 
                     m_idx - 1 >= 0);
+
+        // TODO case TYPE_UNION:
 
         default:
             break;
@@ -574,6 +584,8 @@ QScriptString ReflectivePropertyIterator::name() const
         case TYPE_SEQUENCE:
             return object().engine()->toStringHandle(QString("%1").arg(m_idx));
 
+        // TODO case TYPE_UNION:
+
         default:
             break;
     }
@@ -595,6 +607,8 @@ void ReflectivePropertyIterator::next()
             ++m_idx;
             break;
 
+        // TODO case TYPE_UNION:
+        
         default:
             break;
     }
@@ -614,6 +628,8 @@ void ReflectivePropertyIterator::previous()
             --m_idx;
             break;
 
+        // TODO case TYPE_UNION:
+        
         default:
             break;
     }
@@ -638,6 +654,8 @@ void ReflectivePropertyIterator::toBack()
             m_idx = (m_idx)? m_idx - 1: 0;
             break;
 
+        // TODO case TYPE_UNION:
+        
         default:
             break;
     }
@@ -657,6 +675,8 @@ void ReflectivePropertyIterator::toFront()
             m_idx = -1;
             break;
 
+        // TODO case TYPE_UNION:
+        
         default:
             break;
     }

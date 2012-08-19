@@ -916,7 +916,7 @@ void AppMainWindow::save(QVariant& settings)
     for (servants_t::iterator it = m_servants.begin(); 
 	    it != m_servants.end(); ++it) 
     {
-        // TODO it->second->save(servants[it->first]);
+        it->second->save(servants[it->first]);
     }
 
     window["objrefs"] = objrefs;
@@ -1008,7 +1008,7 @@ void AppMainWindow::load(const QVariant& settings)
 
             if (found != m_servants.end())
             {
-                // TODO found->second->load(it.value());
+                found->second->load(it.value());
             }
         }
     }

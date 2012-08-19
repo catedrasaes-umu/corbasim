@@ -88,7 +88,17 @@ void Servant::sendRequest(corbasim::event::request_ptr req)
 }
 
 // Settings
-void Servant::save(QSettings& settings) {}
-void Servant::load(QSettings& settings) {}
+void Servant::save(QVariant& settings) 
+{
+    QVariantMap map;
+
+    map["fqn"] = m_factory->get_fqn();
+
+    settings = map;
+}
+
+void Servant::load(const QVariant& settings) 
+{
+}
 
 

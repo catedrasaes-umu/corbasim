@@ -33,7 +33,8 @@ enum file_format
 {
     FILE_FORMAT_BINARY,
     FILE_FORMAT_TEXT,
-    FILE_FORMAT_JSON
+    FILE_FORMAT_JSON,
+    FILE_FORMAT_MAX
 };
 
 class file_format_helper;

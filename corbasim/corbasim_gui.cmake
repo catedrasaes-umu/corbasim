@@ -115,11 +115,14 @@ target_link_libraries(corbasim_script_evaluator_test
     corbasim_gui
     boost_program_options)
 
-add_executable(corbasim_client
+add_executable(corbasim_client.real
     gui/ClientMain.cpp)
-target_link_libraries(corbasim_client
+target_link_libraries(corbasim_client.real
     corbasim_gui
     boost_program_options)
-install(TARGETS corbasim_client DESTINATION bind)
-
+add_executable(corbasim_client
+    ${CMAKE_CURRENT_SOURCE_DIR}/../corbasim_app/launcher.cpp)
+target_link_libraries(corbasim_client
+    ${QT_LIBRARIES})
+install(TARGETS corbasim_client corbasim_client.real DESTINATION bin)
 
