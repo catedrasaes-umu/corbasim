@@ -21,6 +21,7 @@
 #include <corbasim/qt/SortableGroup.hpp>
 #include <corbasim/core/file_format_helper.hpp>
 #include <corbasim/gui/utils.hpp>
+#include <iostream>
 
 using namespace corbasim::gui;
 
