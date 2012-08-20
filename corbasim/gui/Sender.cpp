@@ -132,16 +132,17 @@ void Sender::start(Sender_weak weak)
     if (ptr)
     {
         m_evaluator.evaluate(m_config->code());
-        
-        // Clone the original request
-        ::corbasim::core::holder srcHolder =
-            m_config->operation()->get_holder(m_config->request());
-        m_request =
-            m_config->operation()->create_request();
-        ::corbasim::core::holder dstHolder =
-            m_config->operation()->get_holder(m_request);
 
-        m_config->operation()->copy(srcHolder, dstHolder);
+        ::corbasim::core::operation_reflective_base const * op =
+            m_config->operation();       
+
+        // Clone the original request
+        // We can't modify an emited request
+        ::corbasim::core::holder srcHolder = op->get_holder(m_config->request());
+        m_request = op->create_request();
+        ::corbasim::core::holder dstHolder = op->get_holder(m_request);
+
+        op->copy(srcHolder, dstHolder);
 
         // m_request is the working request
         m_evaluator.init(m_request);
@@ -161,19 +162,23 @@ void Sender::cancel()
 
 void Sender::process()
 {
+    ::corbasim::core::operation_reflective_base const * op =
+        m_config->operation();
+
     ::corbasim::core::holder srcHolder =
-        m_config->operation()->get_holder(m_request);
+        op->get_holder(m_request);
 
     // preFunc
     m_evaluator.pre(m_request);
 
     // processors
-    const QList< SenderItemProcessor_ptr >& processors =
-        m_config->processors();
+    typedef QList< SenderItemProcessor_ptr > processors_t;
+    const processors_t& processors = m_config->processors();
 
-    for (int i = 0; i < processors.size(); i++) 
+    for (processors_t::const_iterator it = processors.begin(); 
+            it != processors.end(); ++it) 
     {
-        applyProcessor(processors.at(i), srcHolder);
+        applyProcessor(*it, srcHolder);
     }
     
     // postFunc
@@ -183,11 +188,11 @@ void Sender::process()
     // we can't emit a request we're going to modify
 
     ::corbasim::event::request_ptr request =
-        m_config->operation()->create_request();
+        op->create_request();
     ::corbasim::core::holder dstHolder =
-        m_config->operation()->get_holder(request);
+        op->get_holder(request);
     
-    m_config->operation()->copy(srcHolder, dstHolder);
+    op->copy(srcHolder, dstHolder);
 
     // emit request
     emit sendRequest(m_config->objectId(), request);
