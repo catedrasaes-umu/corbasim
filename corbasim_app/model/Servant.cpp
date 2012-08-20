@@ -25,9 +25,11 @@
 using namespace corbasim::app::model;
 
 Servant::Servant(const corbasim::app::ServantConfig& cfg, 
-				 const corbasim::core::interface_reflective_base * factory) :
+				 const corbasim::core::interface_reflective_base * factory,
+                 corbasim::gui::ObjectId objectId) :
     m_controller(NULL),
-    m_cfg(cfg), m_factory(factory), m_servant(NULL)
+    m_cfg(cfg), m_factory(factory), m_objectId(objectId),
+    m_servant(NULL)
 {
     m_servant = m_factory->create_servant(this);
 }

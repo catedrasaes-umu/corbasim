@@ -23,8 +23,9 @@
 using namespace corbasim::app::model;
 
 Objref::Objref(const corbasim::app::ObjrefConfig& cfg, 
-			   const corbasim::core::interface_reflective_base * factory) :
-    m_cfg(cfg), m_factory(factory)
+			   const corbasim::core::interface_reflective_base * factory,
+               corbasim::gui::ObjectId objectId) :
+    m_cfg(cfg), m_factory(factory), m_objectId(objectId)
 {
     // Create a caller
     m_caller.reset(m_factory->create_caller());

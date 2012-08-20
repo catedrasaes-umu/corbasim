@@ -23,7 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-
+#include <corbasim/qt/types.hpp>
 #include "../app_adapted.hpp"
 
 namespace corbasim 
@@ -37,7 +37,8 @@ class Objref
 {
 public:
     Objref(const ObjrefConfig& cfg, 
-            const core::interface_reflective_base * factory);
+            const core::interface_reflective_base * factory,
+            gui::ObjectId objectId);
     virtual ~Objref();
 
     const ObjrefConfig& getConfig() const;
@@ -49,6 +50,7 @@ public:
 protected:
     ObjrefConfig m_cfg;
     const core::interface_reflective_base * m_factory;
+    gui::ObjectId m_objectId;
     core::interface_caller_ptr m_caller;
 };
 

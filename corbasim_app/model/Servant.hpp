@@ -25,6 +25,7 @@
 #include <corbasim/core/callable.hpp>
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/ns_register.hpp>
+#include <corbasim/qt/types.hpp>
 
 #include "../app_adapted.hpp"
 
@@ -42,7 +43,8 @@ class Servant : public core::request_processor
 {
 public:
     Servant(const ServantConfig& cfg, 
-            const core::interface_reflective_base * factory);
+            const core::interface_reflective_base * factory,
+            gui::ObjectId objectId);
     virtual ~Servant();
 
     void setController(AppController * controller);
@@ -65,6 +67,7 @@ protected:
 
     ServantConfig m_cfg;
     const core::interface_reflective_base * m_factory;
+    gui::ObjectId m_objectId;
     PortableServer::ServantBase * m_servant;
     
     core::interface_caller_ptr m_caller;

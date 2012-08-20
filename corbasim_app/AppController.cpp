@@ -96,7 +96,8 @@ void AppController::updateReference(const QString& id,
 
 void AppController::notifyObjrefCreated(const QString& id, 
         const corbasim::core::interface_reflective_base * factory,
-        const corbasim::app::ObjrefConfig& cfg)
+        const corbasim::app::ObjrefConfig& cfg,
+        corbasim::gui::ObjectId oid)
 {
     emit objrefCreated(id, factory);
     emit objrefCreated(id, factory, cfg);
@@ -108,7 +109,8 @@ void AppController::notifyObjrefDeleted(const QString& id)
 }
 
 void AppController::notifyServantCreated(const QString& id, 
-        const corbasim::core::interface_reflective_base * factory)
+        const corbasim::core::interface_reflective_base * factory,
+        corbasim::gui::ObjectId oid)
 {
     emit servantCreated(id, factory);
 }
