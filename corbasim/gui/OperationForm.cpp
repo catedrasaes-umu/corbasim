@@ -21,6 +21,7 @@
 #include <corbasim/qt/private/ScriptEditor.hpp>
 #include <corbasim/gui/ParametersFromFilesTool.hpp>
 #include <corbasim/gui/qvariant.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <limits>
 
 // JSON
@@ -77,7 +78,7 @@ void OperationForm::initialize(
     setLayout(ly);
 }
 
-corbasim::event::request_ptr OperationForm::createRequest()
+Request_ptr OperationForm::createRequest()
 {
     return m_widget->createRequest();
 }
@@ -257,7 +258,7 @@ OperationFormWidget::getReflective() const
     return m_reflective;
 }
 
-corbasim::event::request_ptr OperationFormWidget::createRequest()
+Request_ptr OperationFormWidget::createRequest()
 {
     event::request_ptr req (m_reflective->create_request());
     core::holder holder(m_reflective->get_holder(req));
@@ -277,7 +278,7 @@ corbasim::event::request_ptr OperationFormWidget::createRequest()
     return req;
 }
 
-void OperationFormWidget::setValue(corbasim::event::request_ptr req)
+void OperationFormWidget::setValue(Request_ptr req)
 {
     core::holder holder(m_reflective->get_holder(req));
 
@@ -458,15 +459,15 @@ void OperationFormWidget::load(const QVariant& settings)
 //
 
 OperationSender::OperationSender(
-        const QString& objectId,
+        Objref_ptr object,
         QWidget * parent) :
     QWidget(parent), 
-    m_objectId(objectId), m_reflective(NULL)
+    m_object(object), m_reflective(NULL)
 {
     QVBoxLayout * mainLayout = new QVBoxLayout();
 
     // Form
-    m_form = new OperationForm(m_objectId);
+    m_form = new OperationForm(m_object->name());
     mainLayout->addWidget(m_form);
 
     // Configuration
@@ -532,14 +533,14 @@ void OperationSender::initialize(
 
     // signals
     QObject::connect(this, 
-            SIGNAL(updateForm(corbasim::event::request_ptr)),
+            SIGNAL(updateForm(Request_ptr)),
             m_form->getWidget(),
-            SLOT(setValue(corbasim::event::request_ptr)));
+            SLOT(setValue(Request_ptr)));
 }
 
-const QString& OperationSender::objectId() const
+Objref_ptr OperationSender::object() const
 {
-    return m_objectId;
+    return m_object;
 }
 
 void OperationSender::save(QVariant& settings)
@@ -577,9 +578,9 @@ void OperationSender::reset()
     {
         // disconnect
         QObject::disconnect(m_config.get(),
-                SIGNAL(requestSent(corbasim::event::request_ptr)),
+                SIGNAL(requestSent(Request_ptr)),
                 this,
-                SIGNAL(updateForm(corbasim::event::request_ptr)));
+                SIGNAL(updateForm(Request_ptr)));
 
         QObject::disconnect(m_config.get(),
                 SIGNAL(finished()), 
@@ -604,7 +605,7 @@ void OperationSender::playClicked(bool play)
         m_form->getFiles()->createProcessors(processors);
 
         m_config.reset(new SenderConfig(
-                    objectId(),
+                    object(),
                     m_reflective,
                     m_form->createRequest(),
                     m_form->code(),
@@ -641,16 +642,16 @@ void OperationSender::activeUpdateForm(bool update)
         if (update)
         {
             QObject::connect(m_config.get(),
-                    SIGNAL(requestSent(corbasim::event::request_ptr)),
+                    SIGNAL(requestSent(Request_ptr)),
                     this,
-                    SIGNAL(updateForm(corbasim::event::request_ptr)));
+                    SIGNAL(updateForm(Request_ptr)));
         }
         else
         {
             QObject::disconnect(m_config.get(),
-                    SIGNAL(requestSent(corbasim::event::request_ptr)),
+                    SIGNAL(requestSent(Request_ptr)),
                     this,
-                    SIGNAL(updateForm(corbasim::event::request_ptr)));
+                    SIGNAL(updateForm(Request_ptr)));
 
         }
     }

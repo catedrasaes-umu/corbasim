@@ -31,6 +31,9 @@
 
 #include <corbasim/qt/ReferenceFinder.hpp>
 
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Model.hpp>
+
 namespace corbasim 
 {
 namespace gui
@@ -48,13 +51,12 @@ public:
     SimpleClient(QWidget * parent = 0);
     virtual ~SimpleClient();
 
-    void initialize(core::interface_reflective_base const *);
+    void initialize(InterfaceDescriptor_ptr);
     void setReference(CORBA::Object_ptr ref);
 
 public slots:
 
-    void sendRequest(corbasim::event::request_ptr);
-    void sendRequest(const QString& /*unused*/, corbasim::event::request_ptr);
+
     void clearAll();
     void stopAllTimers();
     void pasteIOR();
@@ -72,15 +74,19 @@ public slots:
     
     void updateReference(const CORBA::Object_var& ref);
 
+signals:
+
+    void applyUpdateReference(const CORBA::Object_var& ref);
+    void sendRequest(Request_ptr);
+
 protected:
 
     LogModel m_log_model;
 
     qt::ReferenceFinder m_finder;
 
-    core::interface_caller_ptr m_caller;
-    core::interface_caller_ptr m_validator;
-    core::interface_reflective_base const * m_factory;
+    Objref_ptr m_objref;
+    Caller_ptr m_validator;
 
     QTabWidget * m_tab;
     QTreeView * m_tree;

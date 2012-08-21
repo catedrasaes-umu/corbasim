@@ -23,8 +23,8 @@
 #include <QtGui>
 #include <QtScript>
 #include <boost/shared_ptr.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ReflectiveScriptClass.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 
@@ -45,22 +45,22 @@ class CORBASIM_GUI_DECLSPEC OperationEvaluator :
     Q_OBJECT
 public:
     OperationEvaluator(
-            core::operation_reflective_base const *,
+            OperationDescriptor_ptr,
             QObject * parent = 0);
     virtual ~OperationEvaluator();
 
 public slots:
 
     void evaluate(const QString& code);
-    void init(corbasim::event::request_ptr);
-    void pre(corbasim::event::request_ptr);
-    void post(corbasim::event::request_ptr);
+    void init(Request_ptr);
+    void pre(Request_ptr);
+    void post(Request_ptr);
 
 protected:
 
-    void call(QScriptValue& func, corbasim::event::request_ptr req);
+    void call(QScriptValue& func, Request_ptr req);
 
-    core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
 
     QScriptEngine m_engine;
     ReflectiveScriptClass m_clazz;
@@ -80,10 +80,10 @@ class CORBASIM_GUI_DECLSPEC OperationEvaluatorWidget :
 {
     Q_OBJECT
 public:
-    OperationEvaluatorWidget(QWidget * parent = 0);
+    OperationEvaluatorWidget(Objref_ptr object, QWidget * parent = 0);
     virtual ~OperationEvaluatorWidget();
     
-    void initialize(core::operation_reflective_base const *);
+    void initialize(OperationDescriptor_ptr);
 
 public slots:
 
@@ -96,10 +96,10 @@ public slots:
 
 protected:
 
-    core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
 
     OperationEvaluator_ptr m_evaluator;
-    ::corbasim::event::request_ptr m_request;
+    Request_ptr m_request;
 
     OperationSender * m_widget;
 };
@@ -111,7 +111,7 @@ public:
     ScriptEvaluatorWidget(QWidget * parent = 0);
     virtual ~ScriptEvaluatorWidget();
     
-    void initialize(core::interface_reflective_base const *);
+    void initialize(InterfaceDescriptor_ptr);
 };
 
 } // namespace gui

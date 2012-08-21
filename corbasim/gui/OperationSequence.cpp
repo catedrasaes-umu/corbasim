@@ -32,7 +32,7 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
         QWidget * parent) : 
     QFrame(parent), m_id(id), m_dlg(dlg)
 {
-    core::operation_reflective_base const * reflective =
+    OperationDescriptor_ptr reflective =
         dlg->getReflective();
 
     QVBoxLayout * layout = new QVBoxLayout();
@@ -183,7 +183,7 @@ const char * OperationSequenceItem::getOperationName() const
 
 void OperationSequenceItem::sendClicked()
 {
-     emit sendRequest(m_id, m_dlg->createRequest());
+     emit sendRequest(m_dlg->createRequest());
 }
 
 void OperationSequenceItem::startStopChecked(bool chk)
@@ -208,7 +208,7 @@ void OperationSequenceItem::storeRequest()
 void OperationSequenceItem::sendStored()
 {
     if (m_cbUseStored->isChecked())
-        emit sendRequest(m_id, m_storedRequest);
+        emit sendRequest(m_storedRequest);
     else
         sendClicked();
 
@@ -417,7 +417,7 @@ OperationsView::~OperationsView()
 
 // Tool
 OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
-    QWidget(parent)
+    QWidget(parent), m_instances(this)
 {
     QHBoxLayout * layout = new QHBoxLayout();
     QSplitter * splitter = new QSplitter(Qt::Horizontal);
@@ -452,10 +452,10 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
 
     QObject::connect(&m_model, 
             SIGNAL(selectedOperation(QString, 
-                    const corbasim::core::operation_reflective_base *)),
+                    OperationDescriptor_ptr)),
             this,
             SLOT(appendOperation(const QString&, 
-                    const corbasim::core::operation_reflective_base *)));
+                    OperationDescriptor_ptr)));
 
     QObject::connect(btNewTab, SIGNAL(clicked()),
             this, SLOT(createSequence()));
@@ -485,21 +485,33 @@ OperationSequenceTool::~OperationSequenceTool()
 {
 }
 
-void OperationSequenceTool::objrefCreated(const QString& id,
-    const corbasim::core::interface_reflective_base * factory)
+void OperationSequenceTool::objrefCreated(Objref_ptr object)
 {
-    m_model.registerInstance(id, factory);
+    m_model.registerInstance(object->name(), object->interface());
+
+    m_instances.add(object);
 }
 
-void OperationSequenceTool::objrefDeleted(const QString& id)
+void OperationSequenceTool::objrefDeleted(ObjectId id)
 {
-    m_model.unregisterInstance(id);
+    Objref_ptr object = m_instances.find(id);
+
+    if (object)
+    {
+        m_model.unregisterInstance(object->name());
+        m_instances.del(id);
+    }
 }
 
 OperationSequenceItem * 
 OperationSequenceTool::appendOperation(const QString& id, 
-		corbasim::core::operation_reflective_base const * op)
+		OperationDescriptor_ptr op)
 {
+    Objref_ptr object = m_instances.find(id);
+
+    if (!object)
+        return NULL;
+
     OperationSequence * seq = NULL;
     if (m_sequences.isEmpty())
         seq = createSequence();
@@ -511,10 +523,8 @@ OperationSequenceTool::appendOperation(const QString& id,
 
     seq->appendItem(item);
 
-    QObject::connect(item, SIGNAL(sendRequest(QString,
-                        corbasim::event::request_ptr)),
-                this, SLOT(slotSendRequest(const QString&, 
-                        corbasim::event::request_ptr)));
+    QObject::connect(item, SIGNAL(sendRequest(Request_ptr)),
+                object.get(), SLOT(sendRequest(Request_ptr)));
 
     return item;
 }
@@ -592,12 +602,6 @@ void OperationSequenceTool::closeSequence(int idx)
     delete m_sequences.takeAt(idx);
 }
 
-void OperationSequenceTool::slotSendRequest(const QString& id, 
-        corbasim::event::request_ptr req)
-{
-    emit sendRequest(id, req);
-}
-
 void OperationSequenceTool::sequenceModified()
 {
     OperationSequence * sndObj = 
@@ -639,7 +643,7 @@ void OperationModel::registerInstance(const QString& name,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        core::operation_reflective_base const * op =
+        OperationDescriptor_ptr op =
             factory->get_reflective_by_index(i);
 
         QStandardItem * opItem = new QStandardItem(op->get_name());
@@ -678,7 +682,7 @@ void OperationModel::doubleClicked(const QModelIndex& index)
         FirstLevelItem& item = *boost::next(m_items.begin(), 
                 parent.row());
 
-        core::operation_reflective_base const * op =
+        OperationDescriptor_ptr op =
             item.factory->get_reflective_by_name(
                     index.data().toString().toStdString());
 
@@ -686,7 +690,7 @@ void OperationModel::doubleClicked(const QModelIndex& index)
     }
 }
 
-corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 OperationModel::getOperation(
         const QString& obj, const QString& operation) const
 {
@@ -827,7 +831,7 @@ void OperationSequenceTool::load(const QVariant& settings)
                 const QString operation = 
                     map.value("operation").toString();
 
-                core::operation_reflective_base const * op =
+                OperationDescriptor_ptr op =
                     m_model.getOperation(obj, operation);
 
                 // Create and load

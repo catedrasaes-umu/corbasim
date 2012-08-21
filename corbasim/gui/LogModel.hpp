@@ -28,8 +28,8 @@
 #include <QIcon>
 
 #include <corbasim/gui/export.hpp>
-#include <corbasim/qt/types.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/ModelNode.hpp>
 
 namespace corbasim 
@@ -70,11 +70,11 @@ public:
     struct LogEntry
     {
         bool is_in_entry;
-        QString id;
         QString text;
-        core::operation_reflective_base const * reflective;
-        corbasim::event::request_ptr req;
-        corbasim::event::event_ptr resp;
+        Objref_ptr object;
+        OperationDescriptor_ptr reflective;
+        Request_ptr req;
+        Event_ptr resp;
         QDateTime dateTime;
         QIcon * icon;
         QColor color;
@@ -90,16 +90,15 @@ public slots:
     int maxEntries() const;
     void setMaxEntries(int max);
 
-    void registerInstance(const QString& id,
-        const corbasim::core::interface_reflective_base * factory);
-    void unregisterInstance(const QString& id);
+    void registerInstance(Objref_ptr objref);
+    void unregisterInstance(ObjectId id);
 
-    void inputRequest(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
-    void outputRequest(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
+    void inputRequest(ObjectId id, 
+            Request_ptr req,
+            Event_ptr resp);
+    void outputRequest(ObjectId id, 
+            Request_ptr req,
+            Event_ptr resp);
 
 private slots:
 
@@ -107,16 +106,14 @@ private slots:
 
 protected:
 
-    void append(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp,
+    void append(ObjectId id, 
+            Request_ptr req,
+            Event_ptr resp,
             bool is_in);
 
-    int m_maxEntries;
+    ObjrefRepository m_instances;
 
-    typedef std::map< QString, 
-            core::interface_reflective_base const * > instances_t;
-    instances_t m_instances;
+    int m_maxEntries;
 
     QIcon m_inputIcon;
     QIcon m_outputIcon;

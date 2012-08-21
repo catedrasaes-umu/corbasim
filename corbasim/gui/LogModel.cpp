@@ -35,7 +35,7 @@
 using namespace corbasim::gui;
 
 LogModel::LogModel(QObject * parent) :
-    QAbstractItemModel(parent), m_maxEntries(100)
+    QAbstractItemModel(parent), m_instances(this), m_maxEntries(100)
 {
     m_inputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
     m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
@@ -344,48 +344,48 @@ void LogModel::setMaxEntries(int max)
     // TODO remove
 }
 
-void LogModel::registerInstance(const QString& id,
-    const corbasim::core::interface_reflective_base * factory)
+void LogModel::registerInstance(Objref_ptr objref)
 {
-    m_instances.insert(std::make_pair(id, factory));
+    m_instances.add(objref);
 }
 
-void LogModel::unregisterInstance(const QString& id)
+void LogModel::unregisterInstance(ObjectId id)
 {
-    m_instances.erase(id);
+    m_instances.del(id);
 }
 
-void LogModel::inputRequest(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp)
+void LogModel::inputRequest(ObjectId id, 
+        Request_ptr req,
+        Event_ptr resp)
 {
     append(id, req, resp, true);
 }
 
-void LogModel::outputRequest(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp)
+void LogModel::outputRequest(ObjectId id, 
+        Request_ptr req,
+        Event_ptr resp)
 {
     append(id, req, resp, false);
 }
 
-void LogModel::append(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp,
+void LogModel::append(ObjectId id, 
+        Request_ptr req,
+        Event_ptr resp,
         bool is_in)
 {
-    instances_t::const_iterator it = m_instances.find(id);
+    Objref_ptr obj = m_instances.find(id);
     
-    if (it != m_instances.end())
+    if (obj)
     {
         LogEntry entry;
         entry.dateTime = QDateTime::currentDateTime();
 
-        core::operation_reflective_base const * op =
-            it->second->get_reflective_by_tag(req->get_tag());
+        OperationDescriptor_ptr op =
+            obj->interface()->get_reflective_by_tag(req->get_tag());
 
         if (!op) return;
 
+        entry.object = obj;
         entry.reflective = op;
 
         // Deja espacio
@@ -433,13 +433,12 @@ void LogModel::append(const QString& id,
 
         // List
         entry.is_in_entry = is_in;
-        entry.id = id;
         entry.req = req;
         entry.resp = resp;
 
         if (is_in)
         {
-            entry.text = QString("Incoming call ") + id + "." 
+            entry.text = QString("Incoming call ") + obj->name() + "." 
                 + op->get_name();
             entry.icon = &m_inputIcon;
             
@@ -455,7 +454,7 @@ void LogModel::append(const QString& id,
         }
         else
         {
-            entry.text = QString("Outgoing call ") + id + "." 
+            entry.text = QString("Outgoing call ") + obj->name() + "." 
                 + op->get_name();
             entry.icon = &m_outputIcon;
 
@@ -497,7 +496,7 @@ bool FilteredLogModel::filterAcceptsRow(int sourceRow, const QModelIndex& source
     {
         const LogModel::LogEntry& entry(model->getLogEntry(sourceRow));
 
-        return m_filter->visibleOperation(entry.id, entry.reflective->get_tag());
+        return m_filter->visibleOperation(entry.object->name(), entry.reflective->get_tag());
     }
 
     return false;

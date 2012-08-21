@@ -416,8 +416,8 @@ void SimpleScriptEditor::doSave()
     std::ofstream ofs(log_file.toStdString().c_str());
     json::std_writer_t writer(ofs, true);
 
-    typedef ::corbasim::event::request_ptr request_ptr;
-    typedef ::corbasim::core::operation_reflective_base const * op_ptr;
+    typedef ::Request_ptr request_ptr;
+    typedef OperationDescriptor_ptr op_ptr;
 
     writer.array_start();
 
@@ -449,10 +449,10 @@ namespace
 {
 
 typedef corbasim::gui::ScriptModel ScriptModel;
-typedef ::corbasim::core::operation_reflective_base const * op_ptr;
-typedef ::corbasim::core::interface_reflective_base const * interface_ptr;
+typedef OperationDescriptor_ptr op_ptr;
+typedef InterfaceDescriptor_ptr interface_ptr;
 
-using ::corbasim::event::request_ptr;
+using ::corbasim::gui::Request_ptr;
 using ::corbasim::core::holder;
 
 struct operation_helper : public corbasim::json::helper::helper_base
@@ -460,7 +460,7 @@ struct operation_helper : public corbasim::json::helper::helper_base
 
     ScriptModel& m_model;
     corbasim::json::helper::helper_base *  m_helper;
-    request_ptr m_request;
+    Request_ptr m_request;
 
     operation_helper(ScriptModel& model, op_ptr op) : 
         m_model(model)
@@ -524,8 +524,8 @@ void SimpleScriptEditor::doLoad()
     if (script_files.isEmpty())
         return;
 
-    typedef ::corbasim::event::request_ptr request_ptr;
-    typedef ::corbasim::core::operation_reflective_base const * op_ptr;
+    typedef Request_ptr request_ptr;
+    typedef OperationDescriptor_ptr op_ptr;
 
     std::vector< char > buf;
 

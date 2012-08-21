@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * Objref.hpp
+ * types.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,46 +17,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_MODEL_OBJREF_HPP
-#define CORBASIM_APP_MODEL_OBJREF_HPP
+#ifndef CORBASIM_GUI_TYPES_HPP
+#define CORBASIM_GUI_TYPES_HPP
 
+#include <QtCore>
 #include <boost/shared_ptr.hpp>
-#include <corbasim/core/caller.hpp>
+#include <corbasim/impl.hpp>
+#include <corbasim/event_fwd.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
-
-#include "../app_adapted.hpp"
+#include <corbasim/core/caller_fwd.hpp>
+#include <corbasim/qt/types.hpp>
+#include <corbasim/gui/export.hpp>
 
 namespace corbasim 
 {
-namespace app 
-{
-namespace model 
+namespace gui
 {
 
-class Objref
-{
-public:
-    Objref(const ObjrefConfig& cfg, 
-            const core::interface_reflective_base * factory);
-    virtual ~Objref();
+CORBASIM_GUI_DECLSPEC void initialize();
 
-    const ObjrefConfig& getConfig() const;
+typedef ::corbasim::core::interface_reflective_base const * 
+    InterfaceDescriptor_ptr;
+typedef ::corbasim::core::operation_reflective_base const * 
+    OperationDescriptor_ptr;
+typedef ::corbasim::core::reflective_base const * 
+    TypeDescriptor_ptr;
 
-    corbasim::event::event* sendRequest(corbasim::event::request_ptr req);
+typedef const void * ObjectId;
 
-    CORBA::Object_ptr updateReference(CORBA::Object_ptr ref); 
+typedef ::corbasim::event::event_ptr Event_ptr;
+typedef ::corbasim::event::request_ptr Request_ptr;
+typedef ::corbasim::core::holder Holder;
 
-protected:
-    ObjrefConfig m_cfg;
-    const core::interface_reflective_base * m_factory;
-    core::interface_caller_ptr m_caller;
-};
+typedef ::corbasim::core::interface_caller_ptr Caller_ptr;
 
+class Objref;
 typedef boost::shared_ptr< Objref > Objref_ptr;
 
-} // namespace model
-} // namespace app
+class Servant;
+typedef boost::shared_ptr< Servant > Servant_ptr;
+
+class ObjrefRepository;
+
+} // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_MODEL_OBJREF_HPP */
+#endif /* CORBASIM_GUI_TYPES_HPP */
 

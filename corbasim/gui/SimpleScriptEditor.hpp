@@ -25,8 +25,7 @@
 #include <vector>
 
 #include <corbasim/gui/export.hpp>
-#include <corbasim/qt/types.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ScriptModel.hpp>
 
 namespace corbasim 
@@ -45,7 +44,7 @@ public:
     SimpleScriptEditor(QWidget * parent = 0);
     virtual ~SimpleScriptEditor();
 
-    void initialize(core::interface_reflective_base const * factory);
+    void initialize(InterfaceDescriptor_ptr factory);
 
 public slots:
 
@@ -69,13 +68,13 @@ public slots:
 
 signals:
 
-    void sendRequest(corbasim::event::request_ptr);
+    void sendRequest(Request_ptr);
 
 protected:
 
     typedef std::vector< OperationInputForm * > forms_t;
 
-    void doAppendRequest(corbasim::event::request_ptr, 
+    void doAppendRequest(Request_ptr, 
             bool beforeSelected = false);
     int getSelected();
 
@@ -92,7 +91,7 @@ protected:
     
     forms_t m_forms;
 
-    core::interface_reflective_base const * m_factory;
+    InterfaceDescriptor_ptr m_factory;
 
     void hideEvent(QHideEvent * event);
 };

@@ -46,7 +46,7 @@ using boost::int64_t;
 
 // should be a singleton instance of a factory
 QWidget * ::corbasim::gui::createWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         QWidget * parent)
 {
     using namespace corbasim::core;
@@ -118,7 +118,7 @@ QWidget * ::corbasim::gui::createWidget(
 }
 
 QWidget * ::corbasim::gui::createSimpleWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         QWidget * parent)
 {
     using namespace corbasim::core;
@@ -181,7 +181,7 @@ QWidget * ::corbasim::gui::createSimpleWidget(
 }
 
 ReflectiveWidgetBase::ReflectiveWidgetBase(
-	corbasim::core::reflective_base const * reflective) :
+	TypeDescriptor_ptr reflective) :
     m_reflective(reflective)
 {
 }
@@ -190,14 +190,14 @@ ReflectiveWidgetBase::~ReflectiveWidgetBase()
 {
 }
 
-corbasim::core::reflective_base const * 
+TypeDescriptor_ptr 
 ReflectiveWidgetBase::getReflective() const
 {
     return m_reflective;
 }
 
 AlternativesWidget::AlternativesWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective), m_group(this)
 {
@@ -235,13 +235,13 @@ int AlternativesWidget::selectionIndex() const
     return m_stack->currentIndex();
 }
 
-void AlternativesWidget::toHolder(corbasim::core::holder& holder) 
+void AlternativesWidget::toHolder(Holder& holder) 
 {
     if (!m_widgets.empty())
         m_widgets[m_stack->currentIndex()]->toHolder(holder);
 }
 
-void AlternativesWidget::fromHolder(corbasim::core::holder& holder)
+void AlternativesWidget::fromHolder(Holder& holder)
 {
     for (unsigned int i = 0; i < m_widgets.size(); i++) 
     {
@@ -275,7 +275,7 @@ void AlternativesWidget::changeWidget(int idx)
     m_stack->setCurrentIndex(idx);
 }
 
-FloatWidget::FloatWidget(corbasim::core::reflective_base const * reflective,
+FloatWidget::FloatWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QDoubleSpinBox(parent), ReflectiveWidgetBase(reflective)
 {
@@ -304,7 +304,7 @@ FloatWidget::~FloatWidget()
 {
 }
 
-void FloatWidget::toHolder(corbasim::core::holder& holder) 
+void FloatWidget::toHolder(Holder& holder) 
 {
     using namespace corbasim::core;
 
@@ -325,7 +325,7 @@ void FloatWidget::toHolder(corbasim::core::holder& holder)
     }
 }
 
-void FloatWidget::fromHolder(corbasim::core::holder& holder)
+void FloatWidget::fromHolder(Holder& holder)
 {
     using namespace corbasim::core;
 
@@ -344,7 +344,7 @@ void FloatWidget::fromHolder(corbasim::core::holder& holder)
     }
 }
 
-IntegerWidget::IntegerWidget(corbasim::core::reflective_base const * reflective,
+IntegerWidget::IntegerWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QSpinBox(parent), ReflectiveWidgetBase(reflective)
 {
@@ -396,7 +396,7 @@ IntegerWidget::~IntegerWidget()
 {
 }
 
-void IntegerWidget::toHolder(corbasim::core::holder& holder) 
+void IntegerWidget::toHolder(Holder& holder) 
 {
     using namespace corbasim::core;
 
@@ -435,7 +435,7 @@ void IntegerWidget::toHolder(corbasim::core::holder& holder)
     }
 }
 
-void IntegerWidget::fromHolder(corbasim::core::holder& holder)
+void IntegerWidget::fromHolder(Holder& holder)
 {
     using namespace corbasim::core;
 
@@ -472,7 +472,7 @@ void IntegerWidget::fromHolder(corbasim::core::holder& holder)
     }
 }
 
-StringWidget::StringWidget(corbasim::core::reflective_base const * reflective,
+StringWidget::StringWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QLineEdit(parent), ReflectiveWidgetBase(reflective)
 {
@@ -482,12 +482,12 @@ StringWidget::~StringWidget()
 {
 }
 
-void StringWidget::toHolder(corbasim::core::holder& holder)
+void StringWidget::toHolder(Holder& holder)
 {
     m_reflective->from_string(holder, text().toStdString());
 }
 
-void StringWidget::fromHolder(corbasim::core::holder& holder)
+void StringWidget::fromHolder(Holder& holder)
 {
     const std::string str(m_reflective->to_string(holder));
     setText(str.c_str());
@@ -503,7 +503,7 @@ void StringWidget::setValue(const QString& value)
     setText(value);
 }
 
-EnumWidget::EnumWidget(corbasim::core::reflective_base const * reflective,
+EnumWidget::EnumWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QComboBox(parent), ReflectiveWidgetBase(reflective)
 {
@@ -521,12 +521,12 @@ EnumWidget::~EnumWidget()
 {
 }
 
-void EnumWidget::toHolder(corbasim::core::holder& holder) 
+void EnumWidget::toHolder(Holder& holder) 
 {
     holder.to_value< int32_t >() = currentIndex();
 }
 
-void EnumWidget::fromHolder(corbasim::core::holder& holder)
+void EnumWidget::fromHolder(Holder& holder)
 {
     int idx = holder.to_value< int32_t >();
 
@@ -536,7 +536,7 @@ void EnumWidget::fromHolder(corbasim::core::holder& holder)
     }
 }
 
-BoolWidget::BoolWidget(corbasim::core::reflective_base const * reflective,
+BoolWidget::BoolWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QCheckBox(parent), ReflectiveWidgetBase(reflective)
 {
@@ -546,7 +546,7 @@ BoolWidget::~BoolWidget()
 {
 }
 
-void BoolWidget::toHolder(corbasim::core::holder& holder) 
+void BoolWidget::toHolder(Holder& holder) 
 {
     using namespace corbasim::core;
 
@@ -562,7 +562,7 @@ void BoolWidget::toHolder(corbasim::core::holder& holder)
     }
 }
 
-void BoolWidget::fromHolder(corbasim::core::holder& holder)
+void BoolWidget::fromHolder(Holder& holder)
 {
     using namespace corbasim::core;
 
@@ -579,7 +579,7 @@ void BoolWidget::fromHolder(corbasim::core::holder& holder)
 }
 
 StructWidget::StructWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         WidgetFactory_t factory,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective)
@@ -591,7 +591,7 @@ StructWidget::StructWidget(
     unsigned int count = reflective->get_children_count();
 
     int level = 0;
-    corbasim::core::reflective_base const * p = reflective;
+    TypeDescriptor_ptr p = reflective;
     while ((p = p->get_parent())) 
         if (p->get_type() == core::TYPE_STRUCT)
             level++;
@@ -659,7 +659,7 @@ void StructWidget::resizeEvent(QResizeEvent * event)
 {
 }
 */
-void StructWidget::toHolder(corbasim::core::holder& holder) 
+void StructWidget::toHolder(Holder& holder) 
 {
     const unsigned int count = m_reflective->get_children_count();
 
@@ -667,14 +667,14 @@ void StructWidget::toHolder(corbasim::core::holder& holder)
     {
         if (m_widgets[i])
         {
-            core::holder child_holder(
+            Holder child_holder(
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->toHolder(child_holder);
         }
     }
 }
 
-void StructWidget::fromHolder(corbasim::core::holder& holder)
+void StructWidget::fromHolder(Holder& holder)
 {
     const unsigned int count = m_reflective->get_children_count();
 
@@ -682,7 +682,7 @@ void StructWidget::fromHolder(corbasim::core::holder& holder)
     {
         if (m_widgets[i])
         {
-            core::holder child_holder(
+            Holder child_holder(
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->fromHolder(child_holder);
         }
@@ -691,7 +691,7 @@ void StructWidget::fromHolder(corbasim::core::holder& holder)
 
 void StructWidget::setValue(const QVariant& var)
 {
-    core::holder h = m_reflective->create_holder();
+    Holder h = m_reflective->create_holder();
 
     if (fromQVariant(m_reflective, h, var))
     {
@@ -701,13 +701,13 @@ void StructWidget::setValue(const QVariant& var)
 
 QVariant StructWidget::value() 
 {
-    core::holder h = m_reflective->create_holder();
+    Holder h = m_reflective->create_holder();
     toHolder(h);
     return toQVariant(m_reflective, h);
 }
 
 UnionWidget::UnionWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         WidgetFactory_t factory,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective)
@@ -828,8 +828,8 @@ void UnionWidget::discriminatorChanged()
 {
     core::reflective_base const * _dr = m_widgets[0]->getReflective();
 
-    core::holder _d = _dr->create_holder();
-    core::holder _this = m_reflective->create_holder();
+    Holder _d = _dr->create_holder();
+    Holder _this = m_reflective->create_holder();
 
     m_widgets[0]->toHolder(_d);
 
@@ -840,11 +840,11 @@ void UnionWidget::discriminatorChanged()
     m_stack->setCurrentIndex(page);
 }
 
-void UnionWidget::toHolder(corbasim::core::holder& holder) 
+void UnionWidget::toHolder(Holder& holder) 
 {
     core::reflective_base const * _dr = m_widgets[0]->getReflective();
 
-    core::holder _d = _dr->create_holder();
+    Holder _d = _dr->create_holder();
     m_widgets[0]->toHolder(_d);
 
     m_reflective->set_child_value(holder, 0, _d);
@@ -857,7 +857,7 @@ void UnionWidget::toHolder(corbasim::core::holder& holder)
     {
         core::reflective_base const * _chr = m_widgets[idx]->getReflective();
 
-        core::holder _ch = _chr->create_holder();
+        Holder _ch = _chr->create_holder();
         m_widgets[idx]->toHolder(_ch);
        
         m_reflective->set_child_value(holder, idx, _ch);
@@ -866,9 +866,9 @@ void UnionWidget::toHolder(corbasim::core::holder& holder)
     m_reflective->set_child_value(holder, 0, _d);
 }
 
-void UnionWidget::fromHolder(corbasim::core::holder& holder)
+void UnionWidget::fromHolder(Holder& holder)
 {
-    core::holder _d = m_reflective->get_child_value(holder, 0);
+    Holder _d = m_reflective->get_child_value(holder, 0);
 
     m_widgets[0]->fromHolder(_d);
 
@@ -877,14 +877,14 @@ void UnionWidget::fromHolder(corbasim::core::holder& holder)
 
     if (idx > 0)
     {
-        core::holder ch = m_reflective->get_child_value(holder, idx);
+        Holder ch = m_reflective->get_child_value(holder, idx);
 
         m_widgets[idx]->fromHolder(ch);
     }
 }
 
 SequenceWidget::SequenceWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective), m_old_idx(-1),
     m_sbLength(NULL), m_sbCurrentIndex(NULL)
@@ -933,7 +933,7 @@ SequenceWidget::SequenceWidget(
     }
     else
     {
-        core::holder holder = m_reflective->create_holder();
+        Holder holder = m_reflective->create_holder();
         unsigned int length = m_reflective->get_length(holder);
 
         // Fixed length
@@ -955,7 +955,7 @@ SequenceWidget::~SequenceWidget()
 
 void SequenceWidget::setValue(const QVariant& var)
 {
-    core::holder h = m_reflective->create_holder();
+    Holder h = m_reflective->create_holder();
 
     if (fromQVariant(m_reflective, h, var))
     {
@@ -965,17 +965,17 @@ void SequenceWidget::setValue(const QVariant& var)
 
 QVariant SequenceWidget::value() const
 {
-    core::holder h = m_reflective->create_holder();
+    Holder h = m_reflective->create_holder();
     m_reflective->copy(m_holder, h);
     return toQVariant(m_reflective, h);
 }
 
-void SequenceWidget::toHolder(corbasim::core::holder& holder)
+void SequenceWidget::toHolder(Holder& holder)
 {
     // store current value
     if (m_reflective->get_length(m_holder) > 0)
     {
-        core::holder child_value = m_reflective->get_child_value(
+        Holder child_value = m_reflective->get_child_value(
                 m_holder, m_sbCurrentIndex->value());
         m_slice->toHolder(child_value);
     }
@@ -983,7 +983,7 @@ void SequenceWidget::toHolder(corbasim::core::holder& holder)
     m_reflective->copy(m_holder, holder);
 }
 
-void SequenceWidget::fromHolder(corbasim::core::holder& holder)
+void SequenceWidget::fromHolder(Holder& holder)
 {
     m_reflective->copy(holder, m_holder);
 
@@ -997,7 +997,7 @@ void SequenceWidget::fromHolder(corbasim::core::holder& holder)
     }
     else if (m_old_idx > -1)
     {
-        core::holder child_value = 
+        Holder child_value = 
             m_reflective->get_child_value(m_holder, m_old_idx);
 
         m_slice->fromHolder(child_value);
@@ -1030,21 +1030,21 @@ void SequenceWidget::indexChanged(int idx)
     // store current value
     if (m_old_idx > -1 && m_old_idx < (int) length)
     {
-        core::holder child_value = m_reflective->get_child_value(
+        Holder child_value = m_reflective->get_child_value(
                 m_holder, m_old_idx);
         m_slice->toHolder(child_value);
     }
 
     m_old_idx = idx;
 
-    core::holder child_value = m_reflective->get_child_value(m_holder, idx);
+    Holder child_value = m_reflective->get_child_value(m_holder, idx);
     m_slice->fromHolder(child_value);
 }
 
 // Complex Sequence Widget
 
 ComplexSequenceWidget::ComplexSequenceWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         WidgetFactory_t factory,
         QWidget * parent) :
     QWidget(parent), ReflectiveWidgetBase(reflective), 
@@ -1089,7 +1089,7 @@ ComplexSequenceWidget::ComplexSequenceWidget(
     }
     else
     {
-        core::holder holder = m_reflective->create_holder();
+        Holder holder = m_reflective->create_holder();
         unsigned int length = m_reflective->get_length(holder);
 
         // Fixed length
@@ -1115,7 +1115,7 @@ ComplexSequenceWidget::~ComplexSequenceWidget()
 {
 }
 
-void ComplexSequenceWidget::toHolder(corbasim::core::holder& holder)
+void ComplexSequenceWidget::toHolder(Holder& holder)
 {
     unsigned int len = 0;
 
@@ -1132,7 +1132,7 @@ void ComplexSequenceWidget::toHolder(corbasim::core::holder& holder)
 
     for (unsigned int i = 0; i < len; i++) 
     {
-        core::holder child_value = m_reflective->get_child_value(holder, i);
+        Holder child_value = m_reflective->get_child_value(holder, i);
 
         ReflectiveWidgetBase * w = 
             dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));
@@ -1141,7 +1141,7 @@ void ComplexSequenceWidget::toHolder(corbasim::core::holder& holder)
     }
 }
 
-void ComplexSequenceWidget::fromHolder(corbasim::core::holder& holder)
+void ComplexSequenceWidget::fromHolder(Holder& holder)
 {
     unsigned int len = m_reflective->get_length(holder);
 
@@ -1152,7 +1152,7 @@ void ComplexSequenceWidget::fromHolder(corbasim::core::holder& holder)
 
     for (unsigned int i = 0; i < len; i++) 
     {
-        core::holder child_value = m_reflective->get_child_value(holder, i);
+        Holder child_value = m_reflective->get_child_value(holder, i);
 
         ReflectiveWidgetBase * w = 
             dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));
@@ -1187,7 +1187,7 @@ void ComplexSequenceWidget::indexChanged(int idx)
 }
 
 ObjrefvarWidget::ObjrefvarWidget(
-        corbasim::core::reflective_base const * reflective,
+        TypeDescriptor_ptr reflective,
         QWidget * parent) :
     qt::ObjrefWidget(0, parent), ReflectiveWidgetBase(reflective)
 {
@@ -1203,7 +1203,7 @@ ObjrefvarWidget::~ObjrefvarWidget()
     delete m_validator;
 }
 
-void ObjrefvarWidget::toHolder(corbasim::core::holder& holder) 
+void ObjrefvarWidget::toHolder(Holder& holder) 
 {
     core::objrefvar_reflective_base const * ref = 
         static_cast< core::objrefvar_reflective_base const * >(m_reflective);
@@ -1211,7 +1211,7 @@ void ObjrefvarWidget::toHolder(corbasim::core::holder& holder)
     ref->from_object(holder, m_validator->get_reference());
 }
 
-void ObjrefvarWidget::fromHolder(corbasim::core::holder& holder)
+void ObjrefvarWidget::fromHolder(Holder& holder)
 {
     core::objrefvar_reflective_base const * ref = 
         static_cast< core::objrefvar_reflective_base const * >(m_reflective);
@@ -1225,7 +1225,7 @@ void ObjrefvarWidget::fromHolder(corbasim::core::holder& holder)
 
 // Files
 
-FilesWidget::FilesWidget(corbasim::core::reflective_base const * reflective,
+FilesWidget::FilesWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     corbasim::qt::MultiFileSelectionWidget(parent), 
     ReflectiveWidgetBase(reflective)
@@ -1241,8 +1241,8 @@ namespace
 
 template< typename T >
 void fromFile(const std::string& file, 
-        corbasim::core::reflective_base const * seq,
-        corbasim::core::holder& h)
+        TypeDescriptor_ptr seq,
+        Holder& h)
 {
     size_t size = 0;
 
@@ -1269,7 +1269,7 @@ void fromFile(const std::string& file,
 
 } // namespace 
 
-void FilesWidget::toHolder(corbasim::core::holder& holder) 
+void FilesWidget::toHolder(Holder& holder) 
 {
     const QString * nextFile = getNext();
 
@@ -1321,13 +1321,13 @@ void FilesWidget::toHolder(corbasim::core::holder& holder)
     }
 }
 
-void FilesWidget::fromHolder(corbasim::core::holder& holder)
+void FilesWidget::fromHolder(Holder& holder)
 {
     // does nothing...
 }
 
 OperationInputForm::OperationInputForm(
-        corbasim::core::operation_reflective_base const * reflective,
+        OperationDescriptor_ptr reflective,
         QWidget * parent) :
     QWidget(parent), m_reflective(reflective)
 {
@@ -1437,8 +1437,8 @@ OperationInputForm::~OperationInputForm()
 
 void OperationInputForm::setValue(const QVariant& var)
 {
-    event::request_ptr req = m_reflective->create_request();
-    core::holder h = m_reflective->get_holder(req);
+    Request_ptr req = m_reflective->create_request();
+    Holder h = m_reflective->get_holder(req);
 
     if (fromQVariant(m_reflective, h, var))
     {
@@ -1448,8 +1448,8 @@ void OperationInputForm::setValue(const QVariant& var)
 
 QVariant OperationInputForm::value()
 {
-    event::request_ptr req (m_reflective->create_request());
-    core::holder holder(m_reflective->get_holder(req));
+    Request_ptr req (m_reflective->create_request());
+    Holder holder(m_reflective->get_holder(req));
 
     const unsigned int count = m_reflective->get_children_count();
 
@@ -1457,7 +1457,7 @@ QVariant OperationInputForm::value()
     {
         if (m_widgets[i])
         {
-            core::holder child_holder(
+            Holder child_holder(
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->toHolder(child_holder);
         }
@@ -1466,13 +1466,13 @@ QVariant OperationInputForm::value()
     return toQVariant(m_reflective, holder);
 }
 
-corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 OperationInputForm::getReflective() const
 {
     return m_reflective;
 }
 
-corbasim::event::request_ptr OperationInputForm::createRequest()
+Request_ptr OperationInputForm::createRequest()
 {
 #ifdef CORBASIM_USE_QTSCRIPT
     if (m_preFunc.isFunction())
@@ -1481,8 +1481,8 @@ corbasim::event::request_ptr OperationInputForm::createRequest()
     }
 #endif /* CORBASIM_USE_QTSCRIPT*/
 
-    event::request_ptr req (m_reflective->create_request());
-    core::holder holder(m_reflective->get_holder(req));
+    Request_ptr req (m_reflective->create_request());
+    Holder holder(m_reflective->get_holder(req));
 
     const unsigned int count = m_reflective->get_children_count();
 
@@ -1490,7 +1490,7 @@ corbasim::event::request_ptr OperationInputForm::createRequest()
     {
         if (m_widgets[i])
         {
-            core::holder child_holder(
+            Holder child_holder(
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->toHolder(child_holder);
         }
@@ -1506,9 +1506,9 @@ corbasim::event::request_ptr OperationInputForm::createRequest()
     return req;
 }
 
-void OperationInputForm::setValue(corbasim::event::request_ptr req)
+void OperationInputForm::setValue(Request_ptr req)
 {
-    core::holder holder(m_reflective->get_holder(req));
+    Holder holder(m_reflective->get_holder(req));
 
     const unsigned int count = m_reflective->get_children_count();
 
@@ -1516,7 +1516,7 @@ void OperationInputForm::setValue(corbasim::event::request_ptr req)
     {
         if (m_widgets[i])
         {
-            core::holder child_holder(
+            Holder child_holder(
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->fromHolder(child_holder);
         }
@@ -1573,8 +1573,8 @@ void OperationInputForm::dropEvent(QDropEvent *event)
 
     try 
     {
-        event::request_ptr req = m_reflective->create_request();
-        core::holder holder = m_reflective->get_holder(req);
+        Request_ptr req = m_reflective->create_request();
+        Holder holder = m_reflective->get_holder(req);
 
         bool res = json::parse(m_reflective, holder, 
                 str.c_str(), str.size());
@@ -1609,9 +1609,9 @@ void OperationInputForm::mouseMoveEvent(QMouseEvent *event)
     QMimeData *mimeData = new QMimeData;
 
     std::ostringstream oss;
-    event::request_ptr req = createRequest();
+    Request_ptr req = createRequest();
     
-    core::holder holder = m_reflective->get_holder(req);
+    Holder holder = m_reflective->get_holder(req);
 
     json::write(oss, m_reflective, holder);
 
@@ -1861,7 +1861,7 @@ void ComplexSequenceWidget::save(QVariant& settings)
     }
     else
     {
-        core::holder h;
+        Holder h;
         length = (int) m_reflective->get_length(h);
     }
 
@@ -1900,7 +1900,7 @@ void ComplexSequenceWidget::load(const QVariant& settings)
     }
     else
     {
-        core::holder h;
+        Holder h;
         length = (int) m_reflective->get_length(h);
     }
 

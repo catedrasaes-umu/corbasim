@@ -21,10 +21,10 @@
 #define CORBASIM_GUI_OPERATIONSEQUENCE_HPP
 
 #include <QtGui>
-#include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/qt/types.hpp>
 #include <corbasim/qt/CustomLayouts.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/Model.hpp>
 
 #include <ostream>
 
@@ -53,7 +53,7 @@ public:
 
 signals:
 
-    void sendRequest(QString id, corbasim::event::request_ptr);
+    void sendRequest(Request_ptr);
 
     void doDelete();
     void up();
@@ -151,13 +151,13 @@ public:
     OperationModel(QObject *parent = 0);
     virtual ~OperationModel();
 
-    core::operation_reflective_base const * 
+    OperationDescriptor_ptr 
     getOperation(const QString& obj, const QString& op) const;
 
 public slots:
 
     void registerInstance(const QString& name,
-            core::interface_reflective_base const * factory);
+            InterfaceDescriptor_ptr factory);
 
     void unregisterInstance(const QString& name);
 
@@ -168,14 +168,14 @@ private slots:
 signals:
     
     void selectedOperation(QString id, 
-            const corbasim::core::operation_reflective_base * op);
+            OperationDescriptor_ptr op);
 
 protected:
 
     struct FirstLevelItem
     {
         QString name;
-        core::interface_reflective_base const * factory;
+        InterfaceDescriptor_ptr factory;
     };
 
     typedef std::list< FirstLevelItem > FirstLevelItems_t;
@@ -196,12 +196,12 @@ public:
 
 public slots:
 
-    void objrefCreated(const QString& id,
-        const corbasim::core::interface_reflective_base * factory);
-    void objrefDeleted(const QString& id);
+    void objrefCreated(Objref_ptr object);
+    void objrefDeleted(ObjectId id);
 
-    OperationSequenceItem * appendOperation(const QString& id, 
-            const corbasim::core::operation_reflective_base * op);
+    OperationSequenceItem * appendOperation(
+            const QString& id, 
+            OperationDescriptor_ptr op);
 
     OperationSequence* createSequence();
 
@@ -212,18 +212,13 @@ public slots:
     void saveCurrentSequence();
     void loadSequence();
 
-signals:
-
-    void sendRequest(QString id, corbasim::event::request_ptr);
-
 private slots:
-    
-    void slotSendRequest(const QString& id, 
-            corbasim::event::request_ptr);
 
     void sequenceModified();
 
 protected:
+
+    ObjrefRepository m_instances;
 
     OperationModel m_model;
 

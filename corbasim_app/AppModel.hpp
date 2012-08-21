@@ -89,14 +89,6 @@ protected:
     typedef std::map< QString, model::Servant_ptr > servants_t;
     servants_t m_servants;
 
-    typedef std::map< gui::ObjectId, model::Objref_ptr > objrefsById_t;
-    objrefsById_t m_objrefsById;
-
-    typedef std::map< gui::ObjectId, model::Servant_ptr > servantsById_t;
-    servantsById_t m_servantsById;
-
-    gui::ObjectId m_currentId;
-
 #if 0
     typedef std::map< QString, void * > libraries_t;
     libraries_t m_libraries;

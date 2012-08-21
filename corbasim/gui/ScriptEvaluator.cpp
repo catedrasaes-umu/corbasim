@@ -22,6 +22,7 @@
 #include <corbasim/json/reflective.hpp>
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/qt/private/ScriptEditor.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/ModelNode.hpp>
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/ParametersFromFilesTool.hpp>
@@ -62,23 +63,23 @@ void OperationEvaluator::evaluate(const QString& code)
     }
 }
 
-void OperationEvaluator::init(corbasim::event::request_ptr req)
+void OperationEvaluator::init(Request_ptr req)
 {   
     call(m_initFunc, req);
 }
 
-void OperationEvaluator::pre(corbasim::event::request_ptr req)
+void OperationEvaluator::pre(Request_ptr req)
 {
     call(m_preFunc, req);
 }
 
-void OperationEvaluator::post(corbasim::event::request_ptr req)
+void OperationEvaluator::post(Request_ptr req)
 {
     call(m_postFunc, req);
 }
 
 void OperationEvaluator::call(QScriptValue& func, 
-        corbasim::event::request_ptr req)
+        Request_ptr req)
 {
     if (func.isFunction())
     {
@@ -99,9 +100,9 @@ void OperationEvaluator::call(QScriptValue& func,
 //
 //
 
-OperationEvaluatorWidget::OperationEvaluatorWidget(QWidget * parent) :
+OperationEvaluatorWidget::OperationEvaluatorWidget(Objref_ptr object, QWidget * parent) :
     QWidget(parent), m_reflective(NULL), 
-    m_widget(new OperationSender())
+    m_widget(new OperationSender(object))
 {
     QVBoxLayout * ly = new QVBoxLayout();
     QGridLayout * btnLy = new QGridLayout();
@@ -273,7 +274,7 @@ void OperationEvaluatorWidget::loadForm()
 ScriptEvaluatorWidget::ScriptEvaluatorWidget(QWidget * parent) :
     QWidget(parent)
 {
-    corbasim::qt::initialize();
+    corbasim::gui::initialize();
 }
 
 ScriptEvaluatorWidget::~ScriptEvaluatorWidget()
@@ -281,8 +282,11 @@ ScriptEvaluatorWidget::~ScriptEvaluatorWidget()
 }
 
 void ScriptEvaluatorWidget::initialize(
-    ::corbasim::core::interface_reflective_base const * factory)
+    InterfaceDescriptor_ptr factory)
 {
+    // Dummy object
+    Objref_ptr object(new Objref("this", factory));
+
     // Each operation evaluator in a tab
     QVBoxLayout * ly = new QVBoxLayout();
     QTabWidget * tabs = new QTabWidget();
@@ -295,7 +299,8 @@ void ScriptEvaluatorWidget::initialize(
             factory->get_reflective_by_index(i);
         const char * name = op->get_name();
 
-        OperationEvaluatorWidget * ev = new OperationEvaluatorWidget();
+        OperationEvaluatorWidget * ev = 
+            new OperationEvaluatorWidget(object);
         ev->initialize(op);
 
         tabs->addTab(ev, name);

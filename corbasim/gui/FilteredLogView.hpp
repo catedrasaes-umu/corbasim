@@ -25,6 +25,7 @@
 #include <QStackedWidget>
 #include <QScrollArea>
 #include <corbasim/qt/FilterModel.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/LogModel.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 

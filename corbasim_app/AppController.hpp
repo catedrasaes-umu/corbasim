@@ -72,13 +72,11 @@ public slots:
 
     void notifyObjrefCreated(const QString& id, 
             const corbasim::core::interface_reflective_base * factory,
-            const corbasim::app::ObjrefConfig& cfg,
-            gui::ObjectId oid);
+            const corbasim::app::ObjrefConfig& cfg);
     void notifyObjrefDeleted(const QString& id);
 
     void notifyServantCreated(const QString& id, 
-            const corbasim::core::interface_reflective_base * factory, 
-            gui::ObjectId oid);
+            const corbasim::core::interface_reflective_base * factory);
     void notifyServantDeleted(const QString& id);
 
     void notifyError(const QString& msg);

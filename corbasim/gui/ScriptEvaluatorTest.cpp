@@ -14,6 +14,8 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv);
 
+    ::corbasim::gui::initialize();
+
     ::corbasim::core::interface_reflective_base const * reflective = 
         ::corbasim::gui::getReflectiveByFQN(argv[1]);
 

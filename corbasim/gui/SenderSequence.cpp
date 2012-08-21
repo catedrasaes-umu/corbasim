@@ -293,7 +293,7 @@ void SenderSequence::moveDownItem()
 
 // Tool
 SenderSequenceTool::SenderSequenceTool(QWidget * parent) :
-    QWidget(parent)
+    QWidget(parent), m_instances(this)
 {
     QHBoxLayout * layout = new QHBoxLayout();
     QSplitter * splitter = new QSplitter(Qt::Horizontal);
@@ -361,31 +361,43 @@ SenderSequenceTool::~SenderSequenceTool()
 {
 }
 
-void SenderSequenceTool::objrefCreated(const QString& id,
-    const corbasim::core::interface_reflective_base * factory)
+void SenderSequenceTool::objrefCreated(Objref_ptr object)
 {
-    m_model.registerInstance(id, factory);
+    m_model.registerInstance(object->name(), object->interface());
+
+    m_instances.add(object);
 }
 
-void SenderSequenceTool::objrefDeleted(const QString& id)
+void SenderSequenceTool::objrefDeleted(ObjectId id)
 {
-    m_model.unregisterInstance(id);
+    Objref_ptr object = m_instances.find(id);
+
+    if (object)
+    {
+        m_model.unregisterInstance(object->name());
+        m_instances.del(id);
+    }
 }
 
 SenderSequenceItem * 
 SenderSequenceTool::appendOperation(const QString& id, 
-		corbasim::core::operation_reflective_base const * op)
+		OperationDescriptor_ptr op)
 {
+    Objref_ptr object = m_instances.find(id);
+
+    if (!object)
+        return NULL;
+
     SenderSequence * seq = NULL;
     if (m_sequences.isEmpty())
         seq = createSequence();
     else
         seq = m_sequences[m_tabs->currentIndex()];
 
-    OperationSender * sender = new OperationSender(id);
+    OperationSender * sender = new OperationSender(object);
     sender->initialize(op);
     SenderSequenceItem * item = 
-        new SenderSequenceItem(id, sender);
+        new SenderSequenceItem(object->name(), sender);
 
     seq->appendItem(item);
 

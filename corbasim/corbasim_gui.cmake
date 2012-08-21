@@ -25,8 +25,12 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/OperationForm.hpp
     gui/Sender.hpp
 
-    gui/Server.hpp
-    gui/ServerApp.hpp)
+    gui/types.hpp
+    gui/Model.hpp
+
+    # gui/Server.hpp
+    # gui/ServerApp.hpp
+)
 
 foreach(_header ${corbasim_gui_EXPORTED_HEADERS})
     get_filename_component(_header_path ${_header} PATH)
@@ -55,7 +59,10 @@ set(corbasim_gui_MOC_HDRS
     gui/OperationForm.hpp
     gui/Sender.hpp
     
-    gui/Server.hpp)
+    gui/Model.hpp
+
+    # gui/Server.hpp
+)
 
 set(corbasim_gui_SRCS
     gui/json.cpp
@@ -84,8 +91,12 @@ set(corbasim_gui_SRCS
     gui/OperationForm.cpp
     gui/Sender.cpp
 
-    gui/Server.cpp
-    gui/ServerApp.cpp)
+    gui/Model.cpp
+    gui/initialize.cpp
+
+    # gui/Server.cpp
+    # gui/ServerApp.cpp
+)
 
 set(corbasim_gui_LIBS
     ${QT_LIBRARIES}

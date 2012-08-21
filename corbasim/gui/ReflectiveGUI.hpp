@@ -21,12 +21,13 @@
 #define CORBASIM_GUI_REFLECTIVEGUI_HPP
 
 #include <QtGui>
-#include <corbasim/core/reflective_fwd.hpp>
+
 #include <corbasim/qt/ObjrefWidget.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 #include <corbasim/qt/TabWidget.hpp>
 
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/types.hpp>
 
 #include <boost/function.hpp>
 
@@ -40,38 +41,38 @@ namespace gui
 {
 
 typedef boost::function< QWidget * (
-    corbasim::core::reflective_base const *,
+    TypeDescriptor_ptr,
     QWidget *) > WidgetFactory_t;
 
 QWidget * CORBASIM_GUI_DECLSPEC createWidget(
-    corbasim::core::reflective_base const * reflective,
+    TypeDescriptor_ptr reflective,
     QWidget * parent);
 
 QWidget * CORBASIM_GUI_DECLSPEC createSimpleWidget(
-    corbasim::core::reflective_base const * reflective,
+    TypeDescriptor_ptr reflective,
     QWidget * parent);
 
 class CORBASIM_GUI_DECLSPEC ReflectiveWidgetBase
 {
 protected:
 
-    ReflectiveWidgetBase(core::reflective_base const * reflective);
+    ReflectiveWidgetBase(TypeDescriptor_ptr reflective);
 
 public:
 
     virtual ~ReflectiveWidgetBase();
 
-    core::reflective_base const * getReflective() const;
+    TypeDescriptor_ptr getReflective() const;
 
-    virtual void toHolder(core::holder& holder) = 0;
-    virtual void fromHolder(core::holder& holder) = 0;
+    virtual void toHolder(Holder& holder) = 0;
+    virtual void fromHolder(Holder& holder) = 0;
 
     virtual void save(QVariant& settings) = 0;
     virtual void load(const QVariant& settings) = 0;
 
 protected:
 
-    core::reflective_base const * m_reflective;
+    TypeDescriptor_ptr m_reflective;
 };
 
 class CORBASIM_GUI_DECLSPEC AlternativesWidget : 
@@ -82,12 +83,12 @@ class CORBASIM_GUI_DECLSPEC AlternativesWidget :
             READ selectionIndex 
             WRITE setSelectionIndex)
 public:
-    AlternativesWidget(core::reflective_base const * reflective,
+    AlternativesWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~AlternativesWidget();
  
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void addAlternative(const QString& id,
             const QString& toolTip,
@@ -117,12 +118,12 @@ class CORBASIM_GUI_DECLSPEC FloatWidget :
 {
     Q_OBJECT
 public:
-    FloatWidget(core::reflective_base const * reflective,
+    FloatWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~FloatWidget();
  
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
    
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -134,12 +135,12 @@ class CORBASIM_GUI_DECLSPEC IntegerWidget :
 {
     Q_OBJECT
 public:
-    IntegerWidget(core::reflective_base const * reflective,
+    IntegerWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~IntegerWidget();
 
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
     
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -152,12 +153,12 @@ class CORBASIM_GUI_DECLSPEC StringWidget :
     Q_OBJECT
     Q_PROPERTY(QString value READ value WRITE setValue)
 public:
-    StringWidget(core::reflective_base const * reflective,
+    StringWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~StringWidget();
 
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -171,12 +172,12 @@ class CORBASIM_GUI_DECLSPEC EnumWidget :
 {
     Q_OBJECT
 public:
-    EnumWidget(core::reflective_base const * reflective,
+    EnumWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~EnumWidget();
 
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -188,12 +189,12 @@ class CORBASIM_GUI_DECLSPEC BoolWidget :
 {
     Q_OBJECT
 public:
-    BoolWidget(core::reflective_base const * reflective,
+    BoolWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~BoolWidget();
  
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
    
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -206,13 +207,13 @@ class CORBASIM_GUI_DECLSPEC StructWidget :
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
-    StructWidget(core::reflective_base const * reflective,
+    StructWidget(TypeDescriptor_ptr reflective,
             WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~StructWidget();
  
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -234,13 +235,13 @@ class CORBASIM_GUI_DECLSPEC UnionWidget :
 {
     Q_OBJECT
 public:
-    UnionWidget(core::reflective_base const * reflective,
+    UnionWidget(TypeDescriptor_ptr reflective,
             WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~UnionWidget();
  
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -262,12 +263,12 @@ class CORBASIM_GUI_DECLSPEC SequenceWidget :
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
-    SequenceWidget(core::reflective_base const * reflective,
+    SequenceWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~SequenceWidget();
 
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -290,7 +291,7 @@ protected:
     ReflectiveWidgetBase * m_slice;
     QWidget * m_slice_widget;
 
-    core::holder m_holder;
+    Holder m_holder;
 };
 
 class CORBASIM_GUI_DECLSPEC ComplexSequenceWidget : 
@@ -298,13 +299,13 @@ class CORBASIM_GUI_DECLSPEC ComplexSequenceWidget :
 {
     Q_OBJECT
 public:
-    ComplexSequenceWidget(core::reflective_base const * reflective,
+    ComplexSequenceWidget(TypeDescriptor_ptr reflective,
             WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~ComplexSequenceWidget();
 
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -327,12 +328,12 @@ class CORBASIM_GUI_DECLSPEC ObjrefvarWidget :
 {
     Q_OBJECT
 public:
-    ObjrefvarWidget(core::reflective_base const * reflective,
+    ObjrefvarWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~ObjrefvarWidget();
  
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -345,12 +346,12 @@ class CORBASIM_GUI_DECLSPEC FilesWidget :
 {
     Q_OBJECT
 public:
-    FilesWidget(core::reflective_base const * reflective,
+    FilesWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~FilesWidget();
  
-    virtual void toHolder(core::holder& holder);
-    virtual void fromHolder(core::holder& holder);
+    virtual void toHolder(Holder& holder);
+    virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -364,18 +365,18 @@ class CORBASIM_GUI_DECLSPEC OperationInputForm :
     Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
     OperationInputForm(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~OperationInputForm();
 
-    core::operation_reflective_base const * getReflective() const;
+    OperationDescriptor_ptr getReflective() const;
 
     void setValue(const QVariant& var);
     QVariant value();
 
-    event::request_ptr createRequest();
+    Request_ptr createRequest();
 
-    void setValue(event::request_ptr req);
+    void setValue(Request_ptr req);
 
     void dragEnterEvent(QDragEnterEvent *event);
     
@@ -400,7 +401,7 @@ public slots:
 
 protected:
 
-    core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
 

@@ -25,17 +25,8 @@
 #include <corbasim/event_fwd.hpp>
 
 Q_DECLARE_METATYPE(CORBA::Object_var);
+Q_DECLARE_METATYPE(corbasim::event::event_ptr)
 Q_DECLARE_METATYPE(corbasim::event::request_ptr)
-
-namespace corbasim 
-{
-namespace gui
-{
-
-typedef unsigned int ObjectId; 
-
-} // namespace gui
-} // namespace corbasim
 
 #endif /* CORBASIM_QT_TYPES_HPP */
 

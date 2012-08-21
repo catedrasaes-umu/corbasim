@@ -26,7 +26,7 @@
 #include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/ScriptEvaluator.hpp>
 
@@ -57,9 +57,9 @@ class CORBASIM_GUI_DECLSPEC SenderConfig : public QObject
 public:
 
     SenderConfig(
-        const QString& objectId,
-        ::corbasim::core::operation_reflective_base const * operation,
-        ::corbasim::event::request_ptr request,
+        Objref_ptr object,
+        OperationDescriptor_ptr operation,
+        Request_ptr request,
         const QString& code,
         const QList< SenderItemProcessor_ptr >& processors,
         int times,
@@ -67,9 +67,9 @@ public:
     ~SenderConfig();
 
     // Accessors
-    const QString& objectId() const;
-    ::corbasim::core::operation_reflective_base const * operation() const;
-    ::corbasim::event::request_ptr request() const;
+    Objref_ptr object() const;
+    OperationDescriptor_ptr operation() const;
+    Request_ptr request() const;
     const QString& code() const;
     const QList< SenderItemProcessor_ptr >& processors() const;
     int times();
@@ -77,19 +77,19 @@ public:
 
 public slots:
 
-    void notifyRequestSent(corbasim::event::request_ptr);
+    void notifyRequestSent(Request_ptr);
     void notifyFinished();
 
 signals:
 
-    void requestSent(corbasim::event::request_ptr);
+    void requestSent(Request_ptr);
     void finished();
 
 protected:
 
-    const QString m_objectId;
-    ::corbasim::core::operation_reflective_base const * m_operation;
-    ::corbasim::event::request_ptr m_request;
+    Objref_ptr m_object;
+    OperationDescriptor_ptr m_operation;
+    Request_ptr m_request;
     const QString m_code;
     const QList< SenderItemProcessor_ptr > m_processors;
     const int m_times;
@@ -104,8 +104,8 @@ public:
     virtual ~SenderItemProcessor();
 
     virtual void process(
-            ::corbasim::core::reflective_base const * reflective,
-            ::corbasim::core::holder holder) = 0;
+            TypeDescriptor_ptr reflective,
+            Holder holder) = 0;
     
     const QList< int >& getPath() const;
 
@@ -134,7 +134,7 @@ public:
 signals:
 
     void finished(SenderConfig_ptr);
-    void sendRequest(const QString&, corbasim::event::request_ptr);
+    void sendRequest(Request_ptr);
 
 protected:
 
@@ -147,14 +147,14 @@ protected:
 
     void applyProcessor(
             SenderItemProcessor_ptr processor,
-            core::holder holder);
+            Holder holder);
 
     boost::asio::deadline_timer m_timer;
     SenderConfig_ptr m_config;
     int m_currentTime;
 
     OperationEvaluator m_evaluator;
-    ::corbasim::event::request_ptr m_request;
+    Request_ptr m_request;
 };
 
 class CORBASIM_GUI_DECLSPEC SenderController : public QObject
@@ -175,11 +175,6 @@ public slots:
 
     void addSender(SenderConfig_ptr cfg);
     void deleteSender(SenderConfig_ptr cfg);
-
-signals:
-
-    void sendRequest(const QString&, 
-            corbasim::event::request_ptr);
 
 protected:
 

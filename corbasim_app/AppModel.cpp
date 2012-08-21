@@ -75,8 +75,7 @@ public:
 
 AppModel::AppModel() : 
     m_ref_model(*qt::ReferenceModel::getDefaultModel()),
-    m_data(new AppModelData), m_controller(NULL),
-    m_currentId(0)
+    m_data(new AppModelData), m_controller(NULL)
 {
 }
 
@@ -142,17 +141,14 @@ void AppModel::createObjref(const corbasim::app::ObjrefConfig& cfg)
 
     if (factory)
     {
-        gui::ObjectId oid = m_currentId++;
-
-        model::Objref_ptr obj(new model::Objref(cfg, factory, oid));
+        model::Objref_ptr obj(new model::Objref(cfg, factory));
         m_objrefs.insert(std::make_pair(id, obj));
-        m_objrefsById.insert(std::make_pair(oid, obj));
 
         m_ref_model.appendItem(id, cfg.ref, factory);
 
         if (m_controller)
         {
-            m_controller->notifyObjrefCreated(id, factory, cfg, oid);
+            m_controller->notifyObjrefCreated(id, factory, cfg);
 
             // Also notifies its reference
             m_controller->notifyUpdatedReference(id, cfg.ref);
@@ -178,12 +174,9 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
 
     if (factory)
     {
-        gui::ObjectId oid = m_currentId++;
-
-        model::Servant_ptr obj(new model::Servant(cfg, factory, oid));
+        model::Servant_ptr obj(new model::Servant(cfg, factory));
         obj->setController(m_controller);
         m_servants.insert(std::make_pair(id, obj));
-        m_servantsById.insert(std::make_pair(oid, obj));
 
         // Temporal - Proof of concept
 
@@ -202,7 +195,7 @@ void AppModel::createServant(const corbasim::app::ServantConfig& cfg)
         m_ref_model.appendItem(id, objSrv, factory);
 
         if (m_controller)
-            m_controller->notifyServantCreated(id, factory, oid);
+            m_controller->notifyServantCreated(id, factory);
 
         // Naming service registration
         if (std::strlen(cfg.entry.in()) > 0)

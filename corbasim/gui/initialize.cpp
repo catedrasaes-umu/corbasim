@@ -17,14 +17,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "initialize.hpp"
+#include "types.hpp"
 
 #include <QMetaType>
 #include <boost/shared_ptr.hpp>
+#include <corbasim/event_fwd.hpp>
 #include <corbasim/impl.hpp>
-#include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/Sender.hpp>
 #include <corbasim/core/file_format_helper.hpp>
+
+#include <corbasim/qt/initialize.hpp>
 
 namespace  
 {
@@ -34,13 +38,25 @@ class Initializer
 public:
     Initializer()
     {
-        // Q_INIT_RESOURCE(corbasim_qt);
+        corbasim::qt::initialize();
 
-        qRegisterMetaType< CORBA::Object_var >
-            ("CORBA::Object_var");
+        using namespace corbasim::gui;
 
-        // Singleton instances
-        corbasim::qt::ReferenceModel::getDefaultModel();
+        qRegisterMetaType< Request_ptr >
+            ("Request_ptr");
+        qRegisterMetaType< Event_ptr >
+            ("Event_ptr");
+
+        qRegisterMetaType< Holder >
+            ("Holder");
+
+        qRegisterMetaType< ReflectivePath_t >
+            ("ReflectivePath_t");
+        qRegisterMetaType< RequestProcessor_ptr >
+            ("RequestProcessor_ptr");
+
+        qRegisterMetaType< SenderConfig_ptr >
+            ("SenderConfig_ptr");
 
         // Ensure created all file format helpers
         {
@@ -59,7 +75,7 @@ public:
 
 } // namespace
 
-CORBASIM_QT_DECLSPEC void corbasim::qt::initialize()
+CORBASIM_GUI_DECLSPEC void corbasim::gui::initialize()
 {
     static boost::shared_ptr< Initializer > instance(new Initializer);
 }

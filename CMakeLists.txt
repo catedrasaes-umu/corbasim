@@ -99,7 +99,7 @@ add_subdirectory(corbasim)
 add_subdirectory(corbasim_idl)
 
 if(QT_FOUND)
-    add_subdirectory(corbasim_app)
+    #    add_subdirectory(corbasim_app)
 endif()
 
 add_subdirectory(examples EXCLUDE_FROM_ALL)

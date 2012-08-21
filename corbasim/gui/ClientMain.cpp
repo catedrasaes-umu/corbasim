@@ -12,6 +12,11 @@ int main(int argc, char **argv)
         return -1;
     }
 
+    for (int i = 0; i < argc; i++) 
+    {
+        std::cout << "[" << i << "] " << argv[i] << std::endl;
+    }
+
 	QTextCodec::setCodecForCStrings (QTextCodec::codecForLocale());
 	QApplication app(argc, argv);
 

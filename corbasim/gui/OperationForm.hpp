@@ -22,7 +22,7 @@
 
 #include <QtGui>
 #include <corbasim/gui/export.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 #include <corbasim/gui/Sender.hpp>
 
@@ -40,17 +40,17 @@ class CORBASIM_GUI_DECLSPEC OperationFormWidget :
     Q_PROPERTY(QVariant value READ value WRITE setValue)
 public:
     OperationFormWidget(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~OperationFormWidget();
 
-    core::operation_reflective_base const * getReflective() const;
+    OperationDescriptor_ptr getReflective() const;
 
     // Property value
     void setValue(const QVariant& var);
     QVariant value();
 
-    event::request_ptr createRequest();
+    Request_ptr createRequest();
 
     void dragEnterEvent(QDragEnterEvent *event);
     
@@ -67,7 +67,7 @@ public:
 
 public slots:
 
-    void setValue(corbasim::event::request_ptr req);
+    void setValue(Request_ptr req);
 
 protected:
 
@@ -77,7 +77,7 @@ protected:
 
 protected:
 
-    core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
 
@@ -97,7 +97,7 @@ public:
             QWidget * parent = 0);
     virtual ~OperationForm();
     
-    void initialize(core::operation_reflective_base const *);
+    void initialize(OperationDescriptor_ptr);
 
     // Property code
     void setCode(const QString& code);
@@ -105,7 +105,7 @@ public:
     
     const QString& objectId() const;
     
-    event::request_ptr createRequest();
+    Request_ptr createRequest();
 
     OperationFormWidget * getWidget();
     ParametersFromFilesTool * getFiles();
@@ -116,7 +116,7 @@ public:
 protected:
 
     const QString m_objectId;
-    core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
 
     QPlainTextEdit * m_code;
     OperationFormWidget * m_widget;
@@ -127,15 +127,15 @@ class CORBASIM_GUI_DECLSPEC OperationSender :
     public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QString objectId READ objectId)
+    Q_PROPERTY(Objref_ptr object READ object)
 public:
-    OperationSender(const QString& objectId = "this",
+    OperationSender(Objref_ptr object,
             QWidget * parent = 0);
     virtual ~OperationSender();
 
-    void initialize(core::operation_reflective_base const *);
+    void initialize(OperationDescriptor_ptr);
 
-    const QString& objectId() const;
+    Objref_ptr object() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -143,14 +143,14 @@ public:
     OperationForm * getForm() const;
 
 
-    core::operation_reflective_base const * getReflective() const
+    OperationDescriptor_ptr getReflective() const
     {
         return m_reflective;
     }
 
 signals:
 
-    void updateForm(corbasim::event::request_ptr req);
+    void updateForm(Request_ptr req);
     void addSender(SenderConfig_ptr cfg);
     void deleteSender(SenderConfig_ptr cfg);
 
@@ -164,8 +164,8 @@ protected slots:
 
 protected:
 
-    const QString m_objectId;
-    core::operation_reflective_base const * m_reflective;
+    Objref_ptr m_object;
+    OperationDescriptor_ptr m_reflective;
 
     OperationForm * m_form;
     QSpinBox * m_times;

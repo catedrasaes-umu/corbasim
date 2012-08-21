@@ -19,6 +19,7 @@
 
 #include "Sender.hpp"
 #include <boost/bind.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/ModelNode.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <memory>
@@ -82,13 +83,6 @@ void SenderController::addSender(SenderConfig_ptr cfg)
             this,
             SLOT(deleteSender(SenderConfig_ptr)));
 
-    QObject::connect(sender.get(), 
-            SIGNAL(sendRequest(const QString&, 
-                    corbasim::event::request_ptr)),
-            this,
-            SIGNAL(sendRequest(const QString&, 
-                    corbasim::event::request_ptr)));
-
     m_ioService.post(
             boost::bind(&Sender::start, sender, sender));
 
@@ -119,6 +113,9 @@ Sender::Sender(boost::asio::io_service& ioService,
     m_timer(ioService), m_config(config),
     m_currentTime(0), m_evaluator(config->operation(), this)
 {
+    QObject::connect(
+            this, SIGNAL(sendRequest(Request_ptr)),
+            config->object().get(), SLOT(sendRequest(Request_ptr)));
 }
 
 Sender::~Sender() 
@@ -133,7 +130,7 @@ void Sender::start(Sender_weak weak)
     {
         m_evaluator.evaluate(m_config->code());
 
-        ::corbasim::core::operation_reflective_base const * op =
+        OperationDescriptor_ptr op =
             m_config->operation();       
 
         // Clone the original request
@@ -162,7 +159,7 @@ void Sender::cancel()
 
 void Sender::process()
 {
-    ::corbasim::core::operation_reflective_base const * op =
+    OperationDescriptor_ptr op =
         m_config->operation();
 
     ::corbasim::core::holder srcHolder =
@@ -187,7 +184,7 @@ void Sender::process()
     // clone request
     // we can't emit a request we're going to modify
 
-    ::corbasim::event::request_ptr request =
+    Request_ptr request =
         op->create_request();
     ::corbasim::core::holder dstHolder =
         op->get_holder(request);
@@ -195,7 +192,7 @@ void Sender::process()
     op->copy(srcHolder, dstHolder);
 
     // emit request
-    emit sendRequest(m_config->objectId(), request);
+    emit sendRequest(request);
     m_config->notifyRequestSent(request);
 }
 
@@ -280,14 +277,14 @@ void Sender::handleTimeout(
 //
 
 SenderConfig::SenderConfig(
-        const QString& objectId,
-        ::corbasim::core::operation_reflective_base const * operation,
-        ::corbasim::event::request_ptr request,
+        Objref_ptr object,
+        OperationDescriptor_ptr operation,
+        Request_ptr request,
         const QString& code,
         const QList< SenderItemProcessor_ptr >& processors,
         int times,
         unsigned int period) :
-    m_objectId(objectId), m_operation(operation),
+    m_object(object), m_operation(operation),
     m_request(request),
     m_code(code), m_processors(processors),
     m_times(times), m_period(period)
@@ -298,18 +295,18 @@ SenderConfig::~SenderConfig()
 }
 
 // Accessors
-const QString& SenderConfig::objectId() const
+Objref_ptr SenderConfig::object() const
 {
-    return m_objectId;
+    return m_object;
 }
 
-::corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 SenderConfig::operation() const
 {
     return m_operation;
 }
 
-::corbasim::event::request_ptr SenderConfig::request() const
+Request_ptr SenderConfig::request() const
 {
     return m_request;
 }

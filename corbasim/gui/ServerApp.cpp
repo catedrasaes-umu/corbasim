@@ -151,7 +151,7 @@ ServerApp::ServerApp(int& argc, char ** argv) :
 
     m_impl->manager->activate();
 
-    corbasim::qt::initialize();
+    corbasim::gui::initialize();
 
     // Program options
     po::options_description desc_("corbasim generated server options");

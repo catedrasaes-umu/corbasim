@@ -21,11 +21,11 @@
 #define CORBASIM_GUI_SENDERSEQUENCE_HPP
 
 #include <QtGui>
-#include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/qt/types.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/OperationSequence.hpp>
+#include <corbasim/gui/Model.hpp>
 
 #include <ostream>
 
@@ -127,12 +127,11 @@ public:
 
 public slots:
 
-    void objrefCreated(const QString& id,
-        const corbasim::core::interface_reflective_base * factory);
-    void objrefDeleted(const QString& id);
+    void objrefCreated(Objref_ptr object);
+    void objrefDeleted(ObjectId id);
 
     SenderSequenceItem * appendOperation(const QString& id, 
-            const corbasim::core::operation_reflective_base * op);
+            OperationDescriptor_ptr op);
 
     SenderSequence* createSequence();
 
@@ -148,6 +147,8 @@ private slots:
     void sequenceModified();
 
 protected:
+
+    ObjrefRepository m_instances;
 
     OperationModel m_model;
 

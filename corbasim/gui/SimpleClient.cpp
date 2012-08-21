@@ -32,11 +32,11 @@ using namespace corbasim;
 using namespace corbasim::gui;
 
 SimpleClient::SimpleClient(QWidget * parent) :
-    QMainWindow(parent), m_factory(NULL), m_actions(this),
+    QMainWindow(parent), m_actions(this),
     m_script_editor(NULL), m_dlg_seq_tool(NULL),
     m_seq_tool(NULL)
 {
-    corbasim::qt::initialize();
+    corbasim::gui::initialize();
 
     QWidget * central = new QWidget;
     QVBoxLayout * layout = new QVBoxLayout;
@@ -202,32 +202,31 @@ void SimpleClient::stopAllTimers()
 
 void SimpleClient::clearAll()
 {
-    m_caller->set_reference(CORBA::Object::_nil());
-    m_ref->validatorHasChanged();
+    setReference(CORBA::Object::_nil());
 }
 
-void SimpleClient::sendRequest(corbasim::event::request_ptr req)
+void SimpleClient::initialize(InterfaceDescriptor_ptr factory)
 {
-    if (m_caller && !m_caller->is_nil())
-    {
-        event::event_ptr ev(m_caller->do_call(req.get()));
+    const QString& objectName ("Referenced object");
+    m_objref.reset(new Objref(objectName, factory, this));
 
-        m_log_model.outputRequest("Referenced object", req, ev);
-    }
-}
+    // Signals
+    QObject::connect(this, SIGNAL(sendRequest(Request_ptr)),
+            m_objref.get(), SLOT(sendRequest(Request_ptr)));
+    QObject::connect(this, SIGNAL(applyUpdateReference(CORBA::Object_var)),
+            m_objref.get(), SLOT(setReference(const CORBA::Object_var&)));
 
-void SimpleClient::sendRequest(const QString& /*unused*/, corbasim::event::request_ptr req)
-{
-    sendRequest(req);
-}
+    m_log_model.registerInstance(m_objref);
 
-void SimpleClient::initialize(core::interface_reflective_base const * factory)
-{
-    m_log_model.registerInstance("Referenced object", factory);
-    m_filtered_log->registerInstance("Referenced object", factory);
+    QObject::connect(m_objref.get(), SIGNAL(requestSent(ObjectId, const Request_ptr&, const Event_ptr&)),
+            &m_log_model, SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
+
+#if 0
+    m_filtered_log->registerInstance(m_objref);
+#endif
 
     if (m_seq_tool)
-        m_seq_tool->objrefCreated("Referenced object", factory);
+        m_seq_tool->objrefCreated(m_objref);
 
     QGridLayout * grid = NULL;
     const unsigned int count = factory->operation_count();
@@ -239,7 +238,7 @@ void SimpleClient::initialize(core::interface_reflective_base const * factory)
     {
         const unsigned int idx = i % _max_btns_per_page;
 
-        const core::operation_reflective_base * op = 
+        OperationDescriptor_ptr op = 
             factory->get_reflective_by_index(i);
 
         const char * name = op->get_name();
@@ -269,22 +268,19 @@ void SimpleClient::initialize(core::interface_reflective_base const * factory)
         act->setData(i);
     }
 
-    m_factory = factory;
-
-    // Establece el llamador
-    m_caller.reset(factory->create_caller());
-    m_ref->setValidator(m_caller.get());
-
     // Validator for reference updates
     m_validator.reset(factory->create_caller());
+    m_ref->setValidator(m_validator.get());
 
     m_finder.start();
 }
 
 void SimpleClient::setReference(CORBA::Object_ptr ref)
 {
-    m_caller->set_reference(ref);
+    m_validator->set_reference(ref);
     m_ref->validatorHasChanged();
+
+    emit applyUpdateReference(m_validator->get_reference());
 }
 
 void SimpleClient::showDialog(int idx)
@@ -303,17 +299,17 @@ corbasim::gui::RequestDialog * SimpleClient::getRequestDialog(int idx)
 
     if (!dlg)
     {
-        const core::operation_reflective_base * op = 
-            m_factory->get_reflective_by_index(idx);
+        OperationDescriptor_ptr op = 
+            m_objref->interface()->get_reflective_by_index(idx);
         const char * name = op->get_name();
 
         dlg = new RequestDialog(op, this);
         dlg->setWindowTitle(name);
 
         QObject::connect(dlg,
-            SIGNAL(sendRequest(corbasim::event::request_ptr)),
+            SIGNAL(sendRequest(Request_ptr)),
             this, 
-            SLOT(sendRequest(corbasim::event::request_ptr)));
+            SIGNAL(sendRequest(Request_ptr)));
 
         m_dialogs[idx] = dlg;
     }
@@ -326,13 +322,13 @@ void SimpleClient::showScriptEditor()
     if (!m_script_editor)
     {
         m_script_editor = new SimpleScriptEditor(this);
-        m_script_editor->initialize(m_factory);
+        m_script_editor->initialize(m_objref->interface());
 
         // Send Request
         QObject::connect(m_script_editor,
-                SIGNAL(sendRequest(corbasim::event::request_ptr)),
+                SIGNAL(sendRequest(Request_ptr)),
                 this, 
-                SLOT(sendRequest(corbasim::event::request_ptr)));
+                SIGNAL(sendRequest(Request_ptr)));
     }
     m_script_editor->show();
 }
@@ -355,10 +351,10 @@ void SimpleClient::load(const QVariant& settings)
                 // find the index
                 unsigned int i = 0;
                 bool found = false;
-                for (; !found && i < m_factory->operation_count(); 
+                for (; !found && i < m_objref->interface()->operation_count(); 
                         i++) 
                 {
-                    found = (m_factory->get_reflective_by_index(i)->get_name() 
+                    found = (m_objref->interface()->get_reflective_by_index(i)->get_name() 
                             == map.value("operation").toString());
                 }
 
@@ -482,7 +478,7 @@ void SimpleClient::resizeEvent(QResizeEvent * event)
 
 void SimpleClient::updateReference(const CORBA::Object_var& ref)
 {
-    if (!m_caller) return;
+    if (!m_validator) return;
 
     m_validator->set_reference(ref);
 
@@ -491,9 +487,9 @@ void SimpleClient::updateReference(const CORBA::Object_var& ref)
         return;
 
     // does nothing if equivalent references
-    if (!m_caller->is_nil())
+    if (!m_validator->is_nil())
     {
-        CORBA::Object_var old = m_caller->get_reference();
+        CORBA::Object_var old = m_validator->get_reference();
 
         if (old->_is_equivalent(ref))
             return;
@@ -514,14 +510,9 @@ void SimpleClient::showOperationSequenceTool()
         layout->addWidget(m_seq_tool);
         m_dlg_seq_tool->setLayout(layout);
 
-        QObject::connect(m_seq_tool,
-            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
-            this, 
-            SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-
         // Initializes the tool
-        if (m_factory)
-            m_seq_tool->objrefCreated("Referenced object", m_factory);
+        if (m_objref->interface())
+            m_seq_tool->objrefCreated(m_objref);
     }
 
     m_dlg_seq_tool->show();
