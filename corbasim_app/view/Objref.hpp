@@ -21,8 +21,8 @@
 #define CORBASIM_APP_VIEW_OBJREF_HPP
 
 #include <QtGui>
-#include <boost/shared_ptr.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/RequestDialog.hpp>
 #include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/SimpleScriptEditor.hpp>
@@ -35,33 +35,32 @@ namespace app
 namespace view 
 {
 
-class Objref : public QObject
+using namespace corbasim::gui;
+
+class ObjrefView : public QObject
 {
     Q_OBJECT
 public:
-    Objref(QMdiArea * area,
-            const QString& id,
-            const core::interface_reflective_base * factory,
+    ObjrefView(QMdiArea * area,
+            Objref_ptr objref,
             QObject * parent = 0);
-    virtual ~Objref();
+    virtual ~ObjrefView();
 
     QMenu * getMenu() const;
 
-    gui::RequestDialog * getRequestDialog(int idx);
+    RequestDialog * getRequestDialog(int idx);
     QMdiSubWindow * getWindow(int idx);
 
-    gui::OperationSender * getSenderDialog(int idx);
+    OperationSender * getSenderDialog(int idx);
     QMdiSubWindow * getSenderWindow(int idx);
 
-    const core::interface_reflective_base * getFactory() const;
+    InterfaceDescriptor_ptr getFactory() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
 public slots:
 
-    void sendRequest(corbasim::event::request_ptr req);
-    
     void deleteObjref();
 
     void showRequestDialog(int idx);
@@ -72,37 +71,25 @@ public slots:
 
     void showSetReference();
 
-    void updateReference(const CORBA::Object_var& ref);
-
-protected slots:
-
-    void slotUpdateReference(const CORBA::Object_var& ref);
-
 signals:
 
-    void sendRequest(QString,
-        corbasim::event::request_ptr);
-
-    void deleteObjref(QString);
-    
-    void updatedReference(QString, CORBA::Object_var);
+    void deleteObjref(ObjectId);
 
 protected:
 
     QMdiArea * m_mdi_area;
 
-    QString m_id;
-    const core::interface_reflective_base * m_factory;
+    Objref_ptr m_objref;
 
     // Operation dialogs
-    typedef std::vector< gui::RequestDialog * > dialogs_t;
+    typedef std::vector< RequestDialog * > dialogs_t;
     dialogs_t m_dialogs;
     
     typedef std::vector< QMdiSubWindow * > subwindows_t;
     subwindows_t m_subwindows;
 
     // Senders
-    typedef std::vector< gui::OperationSender * > senders_t;
+    typedef std::vector< OperationSender * > senders_t;
     senders_t m_senders;
 
     subwindows_t m_subwindows_senders;
@@ -110,13 +97,13 @@ protected:
     QMdiSubWindow * m_sub_script;
     QMdiSubWindow * m_sub_reference;
 
-    gui::SimpleScriptEditor * m_script;
+    SimpleScriptEditor * m_script;
     ReferenceValidatedWidget * m_reference;
 
     QMenu * m_menu;
 };
 
-typedef boost::shared_ptr< Objref > Objref_ptr;
+typedef boost::shared_ptr< ObjrefView > ObjrefView_ptr;
 
 } // namespace view
 } // namespace app

@@ -282,32 +282,25 @@ void AppMainWindow::setController(AppController * controller)
     // Signals
     QObject::connect(
             m_controller,
-            SIGNAL(objrefCreated(
-                    QString, const corbasim::core::interface_reflective_base *)),
+            SIGNAL(objrefCreated(Objref_ptr)),
             this,
-            SLOT(objrefCreated(
-                    const QString&, const 
-                    corbasim::core::interface_reflective_base *)));
+            SLOT(objrefCreated(Objref_ptr)));
     QObject::connect(
             m_controller,
-            SIGNAL(objrefDeleted(QString)),
+            SIGNAL(objrefDeleted(ObjectId)),
             this,
-            SLOT(objrefDeleted(const QString&)));
+            SLOT(objrefDeleted(ObjectId)));
 
     QObject::connect(
             m_controller,
-            SIGNAL(servantCreated(
-                    QString, 
-                    const corbasim::core::interface_reflective_base *)),
+            SIGNAL(servantCreated(Objref_ptr)),
             this,
-            SLOT(servantCreated(
-                    const QString&, 
-                    const corbasim::core::interface_reflective_base *)));
+            SLOT(servantCreated(Objref_ptr)));
     QObject::connect(
             m_controller,
-            SIGNAL(servantDeleted(QString)),
+            SIGNAL(servantDeleted(ObjectId)),
             this,
-            SLOT(servantDeleted(const QString&)));
+            SLOT(servantDeleted(ObjectId)));
 
     QObject::connect(m_controller, SIGNAL(error(QString)),
             this, SLOT(displayError(const QString&)));
@@ -324,11 +317,11 @@ void AppMainWindow::setController(AppController * controller)
 
 #define CORBASIM_APP_CON(ev)                                         \
     QObject::connect(m_controller,                                   \
-    SIGNAL(ev(QString, corbasim::event::request_ptr,                 \
-            corbasim::event::event_ptr)),                            \
+    SIGNAL(ev(QString, Request_ptr,                 \
+            Event_ptr)),                            \
     this,                                                            \
-    SLOT(ev(const QString&, corbasim::event::request_ptr,            \
-            corbasim::event::event_ptr)));                           \
+    SLOT(ev(const QString&, Request_ptr,            \
+            Event_ptr)));                           \
     /***/
 
     CORBASIM_APP_CON(requestSent);
@@ -347,11 +340,11 @@ void AppMainWindow::setController(AppController * controller)
                 m_controller,
                 SIGNAL(objrefCreated(
                         QString, 
-                        const corbasim::core::interface_reflective_base *)),
+                        InterfaceDescriptor_ptr)),
                 m_filtered_log,
                 SLOT(registerInstance(
                         const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
+                        InterfaceDescriptor_ptr)));
         QObject::connect(
                 m_controller,
                 SIGNAL(objrefDeleted(QString)),
@@ -362,11 +355,11 @@ void AppMainWindow::setController(AppController * controller)
                 m_controller,
                 SIGNAL(servantCreated(
                         QString, 
-                        const corbasim::core::interface_reflective_base *)),
+                        InterfaceDescriptor_ptr)),
                 m_filtered_log,
                 SLOT(registerInstance(
                         const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
+                        InterfaceDescriptor_ptr)));
         QObject::connect(
                 m_controller,
                 SIGNAL(servantDeleted(QString)),
@@ -399,6 +392,7 @@ void AppMainWindow::scrollToItem(const QModelIndex & parent, int start, int end)
 
 void AppMainWindow::showPlotTool()
 {
+#if 0
     typedef qwt::ReflectivePlotTool* (*create_t)(QWidget*);
     typedef void (*init_t)(QWidget*, const QString&,
             corbasim::core::interface_reflective_base const *);
@@ -436,11 +430,11 @@ void AppMainWindow::showPlotTool()
                 m_controller,
                 SIGNAL(servantCreated(
                         QString, 
-                        const corbasim::core::interface_reflective_base *)),
+                        InterfaceDescriptor_ptr)),
                 m_plot_tool,
                 SLOT(registerInstance(
                         const QString&, 
-                        const corbasim::core::interface_reflective_base *)));
+                        InterfaceDescriptor_ptr)));
         QObject::connect(
                 m_controller,
                 SIGNAL(servantDeleted(QString)),
@@ -451,6 +445,7 @@ void AppMainWindow::showPlotTool()
 
     if (m_plot_tool)
         m_plot_tool->show();
+#endif
 }
 
 void AppMainWindow::showDumpTool()
@@ -473,23 +468,24 @@ void AppMainWindow::showDumpTool()
                 m_controller,
                 SIGNAL(servantCreated(
                         QString, 
-                        const corbasim::core::interface_reflective_base *)),
+                        InterfaceDescriptor_ptr)),
                 m_dump_tool,
                 SLOT(registerInstance(
                         const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
+                        InterfaceDescriptor_ptr)));
         QObject::connect(
                 m_controller,
                 SIGNAL(servantDeleted(QString)),
                 m_dump_tool,
                 SLOT(unregisterInstance(const QString&)));
-
+#if 0
         // Initializes the tool
         servants_t::const_iterator it = m_servants.begin();
 
         for (; it != m_servants.end(); it++)
             m_dump_tool->registerInstance(it->first,
                     it->second->getFactory());
+#endif
     }
 
     m_dlg_dump_tool->show();
@@ -517,25 +513,21 @@ void AppMainWindow::showOpSequenceTool()
         m_sub_seq_tool->setWidget(m_seq_tool);
         m_mdi_area->addSubWindow(m_sub_seq_tool);
 
+#if 0
         QObject::connect(
                 m_controller,
                 SIGNAL(objrefCreated(
                         QString, 
-                        const corbasim::core::interface_reflective_base *)),
+                        InterfaceDescriptor_ptr)),
                 m_seq_tool,
                 SLOT(objrefCreated(
                         const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
+                        InterfaceDescriptor_ptr)));
         QObject::connect(
                 m_controller,
                 SIGNAL(objrefDeleted(QString)),
                 m_seq_tool,
                 SLOT(objrefDeleted(const QString&)));
-
-        QObject::connect(m_seq_tool,
-            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
-            m_controller, 
-            SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
 
         // Initializes the tool
         objrefs_t::const_iterator it = m_objrefs.begin();
@@ -543,6 +535,7 @@ void AppMainWindow::showOpSequenceTool()
         for (; it != m_objrefs.end(); it++)
             m_seq_tool->objrefCreated(it->first,
                     it->second->getFactory());
+#endif
     }
     m_sub_seq_tool->showNormal();
     m_seq_tool->show();
@@ -561,27 +554,14 @@ void AppMainWindow::showSenderSequenceTool()
         m_sub_sender_seq_tool->setWidget(m_sender_seq_tool);
         m_mdi_area->addSubWindow(m_sub_sender_seq_tool);
 
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefCreated(
-                        QString, 
-                        const corbasim::core::interface_reflective_base *)),
-                m_sender_seq_tool,
-                SLOT(objrefCreated(
-                        const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefDeleted(QString)),
-                m_sender_seq_tool,
-                SLOT(objrefDeleted(const QString&)));
-
+#if 0
         // Initializes the tool
         objrefs_t::const_iterator it = m_objrefs.begin();
 
         for (; it != m_objrefs.end(); it++)
             m_sender_seq_tool->objrefCreated(it->first,
                     it->second->getFactory());
+#endif
     }
     m_sub_sender_seq_tool->showNormal();
     m_sender_seq_tool->show();
@@ -666,17 +646,19 @@ void AppMainWindow::clearConfig()
 
 // Notificaciones del controlador
 
-void AppMainWindow::objrefCreated(const QString& id,
-    const corbasim::core::interface_reflective_base * factory)
+void AppMainWindow::objrefCreated(Objref_ptr objref)
 {
+#if 0
     view::Objref_ptr objref(
             new view::Objref(m_mdi_area, id, factory, this));
     m_menuObjects->addMenu(objref->getMenu());
 
+#if 0
     QObject::connect(objref.get(),
-        SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+        SIGNAL(sendRequest(QString, Request_ptr)),
         m_controller, 
-        SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
+        SLOT(sendRequest(const QString&, Request_ptr)));
+#endif
 
     QObject::connect(objref.get(),
                 SIGNAL(deleteObjref(QString)),
@@ -692,10 +674,12 @@ void AppMainWindow::objrefCreated(const QString& id,
     m_objrefs.insert(std::make_pair(id, objref));
 
     displayMessage(QString("Object '%1' created").arg(id));
+#endif
 }
 
-void AppMainWindow::objrefDeleted(const QString& id)
+void AppMainWindow::objrefDeleted(ObjectId id)
 {
+#if 0
     objrefs_t::iterator it = m_objrefs.find(id);
 
     if (it != m_objrefs.end())
@@ -706,20 +690,21 @@ void AppMainWindow::objrefDeleted(const QString& id)
 
         displayMessage(QString("Object '%1' deleted").arg(id));
     }
+#endif
 }
 
-void AppMainWindow::servantCreated(const QString& id,
-    const corbasim::core::interface_reflective_base * factory)
+void AppMainWindow::servantCreated(Objref_ptr servant)
 {
+#if 0
     view::Servant_ptr servant(
             new view::Servant(m_mdi_area, id, factory, this));
     m_menuServants->addMenu(servant->getMenu());
-
+#if 0
     QObject::connect(servant.get(),
-        SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
+        SIGNAL(sendRequest(QString, Request_ptr)),
         m_controller, 
-        SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-
+        SLOT(sendRequest(const QString&, Request_ptr)));
+#endif
     QObject::connect(servant.get(),
                 SIGNAL(deleteServant(QString)),
                 m_controller, 
@@ -728,10 +713,12 @@ void AppMainWindow::servantCreated(const QString& id,
     m_servants.insert(std::make_pair(id, servant));
     
     displayMessage(QString("Servant '%1' created").arg(id));
+#endif
 }
 
-void AppMainWindow::servantDeleted(const QString& id)
+void AppMainWindow::servantDeleted(ObjectId id)
 {
+#if 0
     servants_t::iterator it = m_servants.find(id);
 
     if (it != m_servants.end())
@@ -742,19 +729,7 @@ void AppMainWindow::servantDeleted(const QString& id)
 
         displayMessage(QString("Servant '%1' deleted").arg(id));
     }
-}
-
-void AppMainWindow::requestSent(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp)
-{
-}
-
-void AppMainWindow::requestReceived(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp)
-{
-    emit doProcessIncomingRequest(id, req);
+#endif
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -926,13 +901,13 @@ void AppMainWindow::save(QVariant& settings)
     for (objrefs_t::iterator it = m_objrefs.begin(); 
 	    it != m_objrefs.end(); ++it) 
     {
-        it->second->save(objrefs[it->first]);
+        // TODO it->second->save(objrefs[it->first]);
     }
 
     for (servants_t::iterator it = m_servants.begin(); 
 	    it != m_servants.end(); ++it) 
     {
-        it->second->save(servants[it->first]);
+        // TODO it->second->save(servants[it->first]);
     }
 
     window["objrefs"] = objrefs;
@@ -996,7 +971,7 @@ void AppMainWindow::load(const QVariant& settings)
 
         m_sender_seq_tool->load(seq);
     }
-
+#if 0
     if (window.contains("objrefs"))
     {
         const QVariantMap map = window.value("objrefs").toMap();
@@ -1028,7 +1003,7 @@ void AppMainWindow::load(const QVariant& settings)
             }
         }
     }
-
+#endif
     if (window.contains("filtered_log"))
     {
         m_filtered_log->load(window["filtered_log"]);

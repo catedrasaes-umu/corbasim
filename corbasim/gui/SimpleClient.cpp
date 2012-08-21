@@ -221,9 +221,7 @@ void SimpleClient::initialize(InterfaceDescriptor_ptr factory)
     QObject::connect(m_objref.get(), SIGNAL(requestSent(ObjectId, const Request_ptr&, const Event_ptr&)),
             &m_log_model, SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 
-#if 0
     m_filtered_log->registerInstance(m_objref);
-#endif
 
     if (m_seq_tool)
         m_seq_tool->objrefCreated(m_objref);

@@ -22,7 +22,8 @@
 
 #include <map>
 #include <QtGui>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Model.hpp>
 #include "view/Objref.hpp"
 #include "view/Servant.hpp"
 
@@ -43,6 +44,8 @@ class ReflectivePlotTool;
 
 namespace app 
 {
+
+using namespace corbasim::gui;
 
 class AppController;
 
@@ -93,20 +96,11 @@ public slots:
 
     // Notificaciones del controlador
 
-    void objrefCreated(const QString& id,
-        const corbasim::core::interface_reflective_base * factory);
-    void objrefDeleted(const QString& id);
+    void objrefCreated(Objref_ptr objref);
+    void objrefDeleted(ObjectId id);
 
-    void servantCreated(const QString& id,
-        const corbasim::core::interface_reflective_base * factory);
-    void servantDeleted(const QString& id);
-
-    void requestSent(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
-    void requestReceived(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
+    void servantCreated(Objref_ptr servant);
+    void servantDeleted(ObjectId id);
 
     void displayError(const QString& err);
     void displayMessage(const QString& msg);
@@ -127,9 +121,6 @@ signals:
 
     void doClearLog();
 
-    void doProcessIncomingRequest(QString,
-            corbasim::event::request_ptr);
-
     void buildIDL(const QString&, const QStringList&);
 
 protected:
@@ -137,11 +128,13 @@ protected:
     TriggerEngine * m_engine;
     QMdiArea * m_mdi_area;
 
-    typedef std::map< QString, view::Objref_ptr > objrefs_t;
+    typedef std::map< ObjectId, view::Objref_ptr > objrefs_t;
     objrefs_t m_objrefs;
+    ObjrefRepository m_objrefsRep;
 
-    typedef std::map< QString, view::Servant_ptr > servants_t;
+    typedef std::map< ObjectId, view::Servant_ptr > servants_t;
     servants_t m_servants;
+    ObjrefRepository m_servantsRep;
 
     QMenu * m_menuObjects;
     QMenu * m_menuServants;
@@ -161,13 +154,13 @@ protected:
     QWidget * m_create_objref;
     QWidget * m_create_servant;
     QWidget * m_script;
-    gui::OperationSequenceTool * m_seq_tool;
-    gui::SenderSequenceTool * m_sender_seq_tool;
+    OperationSequenceTool * m_seq_tool;
+    SenderSequenceTool * m_sender_seq_tool;
 
-    gui::FilteredLogView * m_filtered_log;
+    FilteredLogView * m_filtered_log;
 
     QDialog * m_dlg_dump_tool;
-    gui::DumpTool * m_dump_tool;
+    DumpTool * m_dump_tool;
 
     qwt::ReflectivePlotTool * m_plot_tool;
 

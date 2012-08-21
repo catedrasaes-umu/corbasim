@@ -25,7 +25,9 @@
 using namespace corbasim::gui;
 
 FilteredLogView::FilteredLogView(QWidget * parent) :
-    QWidget(parent), m_filterModel(this), m_model(this),
+    QWidget(parent), 
+    m_instances(this),
+    m_filterModel(this), m_model(this),
     m_sourceModel(NULL)
 {
     QHBoxLayout * layout = new QHBoxLayout();
@@ -63,7 +65,7 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     splitter->setStretchFactor(1, 50);
     splitter->setStretchFactor(1, 30);
 
-    QObject::connect(logView, SIGNAL(clicked(const QModelIndex&)),
+    QObject::connect(logView, SIGNAL(entered(const QModelIndex&)),
             this, SLOT(selected(const QModelIndex&)));
 }
 
@@ -71,15 +73,23 @@ FilteredLogView::~FilteredLogView()
 {
 }
 
-void FilteredLogView::registerInstance(const QString& name,
-        core::interface_reflective_base const * reflective)
+void FilteredLogView::registerInstance(Objref_ptr object)
 {
-    m_filterModel.registerInstance(name, reflective);
+    m_instances.add(object);
+
+    m_filterModel.registerInstance(object->name(), object->interface());
 }
 
-void FilteredLogView::unregisterInstance(const QString& name)
+void FilteredLogView::unregisterInstance(ObjectId id)
 {
-    m_filterModel.unregisterInstance(name);
+    Objref_ptr object = m_instances.find(id);
+
+    if (object)
+    {
+        m_filterModel.unregisterInstance(object->name());
+
+        m_instances.del(id);
+    }
 }
 
 

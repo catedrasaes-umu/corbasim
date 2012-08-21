@@ -27,12 +27,12 @@
 //#include "NSBrowser.hpp"
 #include "NSWatcher.hpp"
 #include "IDLBuilder.hpp"
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/LogModel.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
 #include <corbasim/gui/Sender.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
-#include <corbasim/qt/initialize.hpp>
 #include <sstream>
 #include <cstdlib>
 #include <iterator>
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         return 0;
 
     // Force initialization
-    corbasim::qt::initialize();
+    corbasim::gui::initialize();
 
     QThread threadController;
     QThread threadEngine;

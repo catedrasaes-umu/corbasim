@@ -26,6 +26,7 @@
 #include <QScrollArea>
 #include <corbasim/qt/FilterModel.hpp>
 #include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/LogModel.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 
@@ -45,13 +46,13 @@ public:
 public slots:
 
     void show(
-            corbasim::core::operation_reflective_base const * op,
-            corbasim::event::request_ptr req);
+            OperationDescriptor_ptr op,
+            Request_ptr req);
 
 protected:
 
     typedef std::map< 
-        ::corbasim::core::operation_reflective_base const *,
+        OperationDescriptor_ptr,
         QScrollArea * > viewers_t;
 
     viewers_t m_viewers;
@@ -71,10 +72,9 @@ public:
 
 public slots:
 
-    void registerInstance(const QString& name,
-            const corbasim::core::interface_reflective_base * reflective);
+    void registerInstance(Objref_ptr object);
 
-    void unregisterInstance(const QString& name);
+    void unregisterInstance(ObjectId id);
   
     void setLogModel(QAbstractItemModel * model);
 
@@ -83,6 +83,8 @@ protected slots:
     void selected(const QModelIndex& index);
 
 protected:
+    ObjrefRepository m_instances;
+
     qt::FilterModel m_filterModel;
     FilteredLogModel m_model;
 

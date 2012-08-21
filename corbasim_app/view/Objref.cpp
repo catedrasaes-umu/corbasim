@@ -22,18 +22,20 @@
 
 using namespace corbasim::app::view;
 
-Objref::Objref(QMdiArea * area,
-        const QString& id, 
-        const corbasim::core::interface_reflective_base* factory,
+ObjrefView::ObjrefView(QMdiArea * area,
+        Objref_ptr objref,
         QObject * parent) :
-    QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
+    QObject(parent), m_mdi_area(area), m_objref(objref),
     m_sub_script(NULL), 
     m_sub_reference(NULL),
     m_script(NULL),
     m_reference(NULL)
 {
+    InterfaceDescriptor_ptr factory = objref->interface();
+    const QString& name = objref->name();
+
     QString menu_entry = QString("%1 (%2)")
-        .arg(m_id).arg(factory->get_fqn());
+        .arg(name).arg(factory->get_fqn());
 
     m_menu = new QMenu(menu_entry);
     // Takes the ownership
@@ -50,7 +52,7 @@ Objref::Objref(QMdiArea * area,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        const core::operation_reflective_base * op = 
+        OperationDescriptor_ptr op = 
             factory->get_reflective_by_index(i);
 
         const char * name = op->get_name();
@@ -83,13 +85,15 @@ Objref::Objref(QMdiArea * area,
     m_sub_reference->setWidget(m_reference);
     m_mdi_area->addSubWindow(m_sub_reference);
     m_sub_reference->hide();
-    m_sub_reference->setWindowTitle(QString("%1: reference").arg(id));
+    m_sub_reference->setWindowTitle(QString("%1: reference").arg(name));
 
+#if 0
     QObject::connect(w, SIGNAL(updatedReference(CORBA::Object_var)),
             this, SLOT(slotUpdateReference(const CORBA::Object_var&)));
+#endif
 }
 
-Objref::~Objref()
+ObjrefView::~ObjrefView()
 {
     m_menu->deleteLater();
 
@@ -106,27 +110,22 @@ Objref::~Objref()
     delete m_sub_reference;
 }
 
-QMenu * Objref::getMenu() const
+QMenu * ObjrefView::getMenu() const
 {
     return m_menu;
 }
 
-const corbasim::core::interface_reflective_base * Objref::getFactory() const
+InterfaceDescriptor_ptr ObjrefView::getFactory() const
 {
-    return m_factory;
+    return m_objref->interface();
 }
 
-void Objref::sendRequest(corbasim::event::request_ptr req)
+void ObjrefView::deleteObjref()
 {
-    emit sendRequest(m_id, req);
+    emit deleteObjref(m_objref->id());
 }
 
-void Objref::deleteObjref()
-{
-    emit deleteObjref(m_id);
-}
-
-void Objref::showRequestDialog(int idx)
+void ObjrefView::showRequestDialog(int idx)
 {
     QMdiSubWindow * w = getWindow(idx);
     w->showNormal();
@@ -134,12 +133,12 @@ void Objref::showRequestDialog(int idx)
     m_mdi_area->setActiveSubWindow(w);
 }
 
-void Objref::showRequestDialog(QAction * act)
+void ObjrefView::showRequestDialog(QAction * act)
 {
     showRequestDialog(act->data().toInt());
 }
 
-void Objref::showSenderDialog(int idx)
+void ObjrefView::showSenderDialog(int idx)
 {
     QMdiSubWindow * w = getSenderWindow(idx);
     w->showNormal();
@@ -147,12 +146,12 @@ void Objref::showSenderDialog(int idx)
     m_mdi_area->setActiveSubWindow(w);
 }
 
-void Objref::showSenderDialog(QAction * act)
+void ObjrefView::showSenderDialog(QAction * act)
 {
     showSenderDialog(act->data().toInt());
 }
 
-QMdiSubWindow * Objref::getWindow(int idx)
+QMdiSubWindow * ObjrefView::getWindow(int idx)
 {
     QMdiSubWindow * win = m_subwindows[idx];
 
@@ -164,8 +163,8 @@ QMdiSubWindow * Objref::getWindow(int idx)
         m_mdi_area->addSubWindow(m_subwindows[idx], Qt::SubWindow);
         
         // Window title
-        QString title = QString("%1: %2").arg(m_id).arg(
-            m_factory->get_reflective_by_index(idx)->get_name());
+        QString title = QString("%1: %2").arg(m_objref->name()).arg(
+            m_objref->interface()->get_reflective_by_index(idx)->get_name());
 
         m_subwindows[idx]->setWindowTitle(title);
         win = m_subwindows[idx];
@@ -174,14 +173,14 @@ QMdiSubWindow * Objref::getWindow(int idx)
     return win;
 }
 
-corbasim::gui::RequestDialog * Objref::getRequestDialog(int idx)
+corbasim::gui::RequestDialog * ObjrefView::getRequestDialog(int idx)
 {
     gui::RequestDialog * dlg = m_dialogs[idx];
 
     if (!dlg)
     {
         core::operation_reflective_base const * op = 
-            m_factory->get_reflective_by_index(idx);
+            m_objref->interface()->get_reflective_by_index(idx);
 
         const char * name = op->get_name();
 
@@ -189,9 +188,9 @@ corbasim::gui::RequestDialog * Objref::getRequestDialog(int idx)
         dlg->setWindowTitle(name);
 
         QObject::connect(dlg,
-            SIGNAL(sendRequest(corbasim::event::request_ptr)),
+            SIGNAL(sendRequest(Request_ptr)),
             this, 
-            SLOT(sendRequest(corbasim::event::request_ptr)));
+            SLOT(sendRequest(Request_ptr)));
 
         m_dialogs[idx] = dlg;
     }
@@ -199,7 +198,7 @@ corbasim::gui::RequestDialog * Objref::getRequestDialog(int idx)
     return dlg;
 }
 
-QMdiSubWindow * Objref::getSenderWindow(int idx)
+QMdiSubWindow * ObjrefView::getSenderWindow(int idx)
 {
     QMdiSubWindow * win = m_subwindows_senders[idx];
 
@@ -211,8 +210,8 @@ QMdiSubWindow * Objref::getSenderWindow(int idx)
         m_mdi_area->addSubWindow(m_subwindows_senders[idx], Qt::SubWindow);
         
         // Window title
-        QString title = QString("%1: %2").arg(m_id).arg(
-            m_factory->get_reflective_by_index(idx)->get_name());
+        QString title = QString("%1: %2").arg(m_objref->name()).arg(
+            m_objref->interface()->get_reflective_by_index(idx)->get_name());
 
         m_subwindows_senders[idx]->setWindowTitle(title);
         win = m_subwindows_senders[idx];
@@ -221,18 +220,18 @@ QMdiSubWindow * Objref::getSenderWindow(int idx)
     return win;
 }
 
-corbasim::gui::OperationSender * Objref::getSenderDialog(int idx)
+corbasim::gui::OperationSender * ObjrefView::getSenderDialog(int idx)
 {
     gui::OperationSender * dlg = m_senders[idx];
 
     if (!dlg)
     {
         core::operation_reflective_base const * op = 
-            m_factory->get_reflective_by_index(idx);
+            m_objref->interface()->get_reflective_by_index(idx);
 
         const char * name = op->get_name();
 
-        dlg = new gui::OperationSender(m_id);
+        dlg = new gui::OperationSender(m_objref);
         dlg->initialize(op);
         dlg->setWindowTitle(name);
 
@@ -243,52 +242,42 @@ corbasim::gui::OperationSender * Objref::getSenderDialog(int idx)
 }
 
 
-void Objref::showScriptEditor()
+void ObjrefView::showScriptEditor()
 {
     if (!m_sub_script)
     {
         m_script = new gui::SimpleScriptEditor();
-        m_script->initialize(m_factory);
+        m_script->initialize(m_objref->interface());
 
         m_sub_script = new QMdiSubWindow();
         m_sub_script->setWidget(m_script);
         m_sub_script->setWindowTitle(
-                QString("%1: Script editor").arg(m_id));
+                QString("%1: Script editor").arg(m_objref->name()));
         m_mdi_area->addSubWindow(m_sub_script, Qt::SubWindow);
 
         QObject::connect(m_script,
-            SIGNAL(sendRequest(corbasim::event::request_ptr)),
+            SIGNAL(sendRequest(Request_ptr)),
             this, 
-            SLOT(sendRequest(corbasim::event::request_ptr)));
+            SLOT(sendRequest(Request_ptr)));
     }
     m_sub_script->showNormal();
     m_script->show();
     m_mdi_area->setActiveSubWindow(m_sub_script);
 }
 
-void Objref::showSetReference()
+void ObjrefView::showSetReference()
 {
     m_sub_reference->showNormal();
     m_reference->show();
     m_mdi_area->setActiveSubWindow(m_sub_reference);
 }
 
-void Objref::slotUpdateReference(const CORBA::Object_var& ref)
-{
-    emit updatedReference(m_id, ref);
-}
-
-void Objref::updateReference(const CORBA::Object_var& ref)
-{
-    // TODO
-}
-
 // Settings
-void Objref::save(QVariant& settings) 
+void ObjrefView::save(QVariant& settings) 
 {
     QVariantMap map;
     
-    map["fqn"] = m_factory->get_fqn();
+    map["fqn"] = m_objref->interface()->get_fqn();
 
     {
         QVariantList list;
@@ -326,7 +315,7 @@ void Objref::save(QVariant& settings)
     settings = map;
 }
 
-void Objref::load(const QVariant& settings) 
+void ObjrefView::load(const QVariant& settings) 
 {
     const QVariantMap map = settings.toMap();
 
@@ -344,10 +333,10 @@ void Objref::load(const QVariant& settings)
                 // find the index
                 unsigned int i = 0;
                 bool found = false;
-                for (; !found && i < m_factory->operation_count(); 
+                for (; !found && i < m_objref->interface()->operation_count(); 
                         i++) 
                 {
-                    found = (m_factory->get_reflective_by_index(i)->get_name() 
+                    found = (m_objref->interface()->get_reflective_by_index(i)->get_name() 
                             == map.value("operation").toString());
                 }
 
@@ -373,10 +362,10 @@ void Objref::load(const QVariant& settings)
                 // find the index
                 unsigned int i = 0;
                 bool found = false;
-                for (; !found && i < m_factory->operation_count(); 
+                for (; !found && i < m_objref->interface()->operation_count(); 
                         i++) 
                 {
-                    found = (m_factory->get_reflective_by_index(i)->get_name() 
+                    found = (m_objref->interface()->get_reflective_by_index(i)->get_name() 
                             == map.value("operation").toString());
                 }
 
