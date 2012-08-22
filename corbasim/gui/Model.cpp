@@ -20,6 +20,7 @@
 #include "Model.hpp"
 #include <cassert>
 #include <corbasim/event.hpp>
+#include <QLibrary>
 
 using namespace corbasim::gui;
 
@@ -247,12 +248,104 @@ InterfaceRepository::~InterfaceRepository()
 {
 }
 
-InterfaceDescriptor_ptr InterfaceRepository::getInterface(const QString& fqn) const
+InterfaceDescriptor_ptr InterfaceRepository::loadLibrary(const QString& file)
 {
-    return InterfaceDescriptor_ptr();
+    QFileInfo info(file);
+    QString symbol(info.baseName());
+
+    symbol.remove(".so");
+    symbol.remove(".dll");
+    symbol.replace("libcorbasim_", "corbasim_");
+
+    const std::string str(symbol.toStdString());
+
+    typedef InterfaceDescriptor_ptr (*get_reflective_t)();
+
+    QLibrary lib(file);
+
+    if (!lib.load())
+    {
+        return NULL;
+    }
+
+    get_reflective_t get_reflective = 
+        (get_reflective_t) lib.resolve(str.c_str());
+
+    if (!get_reflective)
+    {
+        lib.unload();
+        return NULL;
+    }
+
+    InterfaceDescriptor_ptr factory = get_reflective();
+    
+    if (!factory)
+    {
+        lib.unload();
+        return NULL;
+    }
+
+    if (m_interfaces.find(factory->get_fqn()) == m_interfaces.end())
+    {
+        m_interfaces.insert(factory->get_fqn(), factory);
+
+        emit loadedInterface(factory);
+    }
+
+    return factory;
+}
+
+InterfaceDescriptor_ptr InterfaceRepository::getInterface(const QString& fqn)
+{
+    interfaces_t::const_iterator it = m_interfaces.find(fqn); 
+
+    if (it != m_interfaces.end())
+    {
+        return it.value();
+    }
+
+    QString lib (fqn);
+    lib.replace("::","_");
+    lib.prepend("corbasim_reflective_");
+
+    return loadLibrary(lib);
 }
 
 void InterfaceRepository::loadDirectory(const QString& path)
 {
+    const QDir d(path);
+    QStringList filters;
+    QStringList idlFilters;
+
+#ifdef _MSC_VER
+    filters << "corbasim_reflective_*.dll";
+    idlFilters << "*_idl.dll";
+#else
+    filters << "libcorbasim_reflective_*.so";
+    idlFilters << "lib*_idl.so";
+#endif
+
+    // Required idl libraries
+    {
+        const QFileInfoList files = d.entryInfoList(idlFilters, QDir::Files);
+        const int count = files.count();
+
+        for (int i = 0; i < count; i++) 
+        {
+            QLibrary lib(files[i].absoluteFilePath());
+            lib.load();
+        }
+    }
+
+    // Corbasim plug-ins
+    {
+        const QFileInfoList files = d.entryInfoList(filters, QDir::Files);
+        const int count = files.count();
+
+        for (int i = 0; i < count; i++) 
+        {
+            loadLibrary(files[i].absoluteFilePath());
+        }
+    }
 }
 

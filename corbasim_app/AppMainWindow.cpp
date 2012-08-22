@@ -54,6 +54,13 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
 {
     setupUi(this);
+    
+    // TODO
+    centralWidget()->layout()->setMargin(0);
+
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
+
+    // No more window
 
     menuTool->addAction("&Operation sequences", 
             this, SLOT(showOperationSequenceTool()));
@@ -73,6 +80,9 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
     m_objrefs.add(objref);
     m_logModel.registerInstance(objref);
 
+    ObjrefView_ptr view(new ObjrefView(mdiArea, objref, this));
+    m_objrefViews.insert(objref->id(), view);
+
     // connect signals
     connect(objref.get(), SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
         &m_logModel, SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
@@ -88,6 +98,8 @@ void AppMainWindow::objrefDeleted(ObjectId id)
 {
     m_objrefs.del(id);
     m_logModel.unregisterInstance(id);
+
+    m_objrefViews.remove(id);
 
     if (m_operationSequenceTool)
         m_operationSequenceTool->objrefDeleted(id);
@@ -126,7 +138,7 @@ void AppMainWindow::displayMessage(const QString& msg)
 // Tools
 //
 //
-void AppMainWindow::showOperationSequenceTool()
+void AppMainWindow::createOperationSequenceTool()
 {
     if (!m_operationSequenceTool)
     {
@@ -144,11 +156,16 @@ void AppMainWindow::showOperationSequenceTool()
         for(; it != end; it++)
             m_operationSequenceTool->objrefCreated(it.value());
     }
+}
+
+void AppMainWindow::showOperationSequenceTool()
+{
+    createOperationSequenceTool();
 
     m_subWindows[kOperationSequenceTool]->show();
 }
 
-void AppMainWindow::showSenderSequenceTool()
+void AppMainWindow::createSenderSequenceTool()
 {
     if (!m_senderSequenceTool)
     {
@@ -166,6 +183,12 @@ void AppMainWindow::showSenderSequenceTool()
         for(; it != end; it++)
             m_senderSequenceTool->objrefCreated(it.value());
     }
+}
+
+void AppMainWindow::showSenderSequenceTool()
+{
+    createSenderSequenceTool();
+
     m_subWindows[kSenderSequenceTool]->show();
 }
 

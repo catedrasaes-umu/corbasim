@@ -33,17 +33,17 @@ Application::Application(QObject * parent) :
     m_objrefs(this),
     m_servants(this)
 {
-    QObject::connect(&m_interfaces, 
+    connect(&m_interfaces, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
             this, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)));
 
-    QObject::connect(&m_objrefs, 
+    connect(&m_objrefs, 
             SIGNAL(deleted(ObjectId)),
             this, 
             SIGNAL(objrefDeleted(ObjectId)));
 
-    QObject::connect(&m_servants, 
+    connect(&m_servants, 
             SIGNAL(deleted(ObjectId)),
             this, 
             SIGNAL(servantDeleted(ObjectId)));

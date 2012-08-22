@@ -328,10 +328,10 @@ SenderSequenceTool::SenderSequenceTool(QWidget * parent) :
 
     QObject::connect(&m_model, 
             SIGNAL(selectedOperation(QString, 
-                    const corbasim::core::operation_reflective_base *)),
+                    OperationDescriptor_ptr)),
             this,
             SLOT(appendOperation(const QString&, 
-                    const corbasim::core::operation_reflective_base *)));
+                    OperationDescriptor_ptr)));
 
     QObject::connect(btNewTab, SIGNAL(clicked()),
             this, SLOT(createSequence()));

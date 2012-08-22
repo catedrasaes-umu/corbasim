@@ -26,6 +26,7 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
 
+#include "ObjrefView.hpp"
 #include "ui_AppMainWindow.h"
 
 namespace corbasim 
@@ -65,7 +66,9 @@ public slots:
     void displayMessage(const QString& msg);
 
     // Tools
+    void createOperationSequenceTool();
     void showOperationSequenceTool();
+    void createSenderSequenceTool();
     void showSenderSequenceTool();
 
 signals:
@@ -85,9 +88,13 @@ protected:
     QActionGroup m_actions;
 
     std::vector< QMdiSubWindow * > m_subWindows;
+
     // Tools
     OperationSequenceTool * m_operationSequenceTool;
     SenderSequenceTool * m_senderSequenceTool;
+
+    typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
+    ObjrefViews_t m_objrefViews;
 };
 
 } // namespace app

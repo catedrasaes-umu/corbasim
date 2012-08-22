@@ -157,7 +157,9 @@ public:
     InterfaceRepository(QObject * parent = 0);
     ~InterfaceRepository();
 
-    InterfaceDescriptor_ptr getInterface(const QString& fqn) const;
+    InterfaceDescriptor_ptr getInterface(const QString& fqn);
+    
+    InterfaceDescriptor_ptr loadLibrary(const QString& file);
 
 public slots:
 
