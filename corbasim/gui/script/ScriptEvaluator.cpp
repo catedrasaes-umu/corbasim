@@ -20,12 +20,10 @@
 #include "ScriptEvaluator.hpp"
 
 #include <corbasim/json/reflective.hpp>
-#include <corbasim/qt/initialize.hpp>
 #include <corbasim/qt/private/ScriptEditor.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/ModelNode.hpp>
+#include <corbasim/gui/item/ModelNode.hpp>
 #include <corbasim/gui/json.hpp>
-#include <corbasim/gui/ParametersFromFilesTool.hpp>
 #include <corbasim/gui/OperationForm.hpp>
 
 // Debug

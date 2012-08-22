@@ -20,79 +20,38 @@
 #ifndef CORBASIM_APP_APPMAINWINDOW_HPP
 #define CORBASIM_APP_APPMAINWINDOW_HPP
 
-#include <map>
 #include <QtGui>
+#include <vector>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
-#include "view/Objref.hpp"
-#include "view/Servant.hpp"
+#include <corbasim/gui/item/LogModel.hpp>
+
+#include "ui_AppMainWindow.h"
 
 namespace corbasim 
 {
 namespace gui 
 {
-class OperationSequenceTool;
-class SenderSequenceTool;
-class DumpTool;
-class FilteredLogView;
+    class OperationSequenceTool;
+    class SenderSequenceTool;
 } // namespace gui
-
-namespace qwt 
-{
-class ReflectivePlotTool;
-} // namespace qwt
 
 namespace app 
 {
 
 using namespace corbasim::gui;
 
-class AppController;
-
-class TriggerEngine;
-
-class AppMainWindow : public QMainWindow
+class AppMainWindow : public QMainWindow, private Ui_AppMainWindow
 {
     Q_OBJECT
 public:
     AppMainWindow(QWidget * parent = 0);
     virtual ~AppMainWindow();
 
-    void setController(AppController * controller);
-    void setEngine(TriggerEngine * engine);
-
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
+    // void save(QVariant& settings);
+    // void load(const QVariant& settings);
 
 public slots:
-
-    void doLoad();
-    void doSave();
-
-    void showPlotTool();
-    void showDumpTool();
-
-    void setLogModel(QAbstractItemModel * model);
-
-    void showOpSequenceTool();
-    void showSenderSequenceTool();
-    void showFilteredLog();
-    
-    void showAboutDlg();
-
-    void showCreateObjref();
-    void showCreateServant();
-
-    void showLoad();
-    void showSave();
-    
-    void showLoadDirectory();
-    
-    void showLoadScript();
-    void showScript();
-
-    void clearConfig();
-    void clearLog();
 
     // Notificaciones del controlador
 
@@ -105,78 +64,30 @@ public slots:
     void displayError(const QString& err);
     void displayMessage(const QString& msg);
 
-    void updatedReference(const QString& id,
-            const CORBA::Object_var& ref);
-
-    void scrollToItem(const QModelIndex& parent, int start, int end);
+    // Tools
+    void showOperationSequenceTool();
+    void showSenderSequenceTool();
 
 signals:
 
-    void saveFile(QString);
-    void loadFile(QString);
+    void createObjref(const ObjrefConfig&);
+    void deleteObjref(ObjectId);
     
-    void loadDirectory(QString);
-    
-    void loadScriptFile(QString);
-
-    void doClearLog();
-
-    void buildIDL(const QString&, const QStringList&);
+    void createServant(const ServantConfig&);
+    void deleteServant(ObjectId);
 
 protected:
-    AppController * m_controller;
-    TriggerEngine * m_engine;
-    QMdiArea * m_mdi_area;
 
-    typedef std::map< ObjectId, view::Objref_ptr > objrefs_t;
-    objrefs_t m_objrefs;
-    ObjrefRepository m_objrefsRep;
+    ObjrefRepository m_objrefs;
+    ObjrefRepository m_servants;
+    LogModel m_logModel;
 
-    typedef std::map< ObjectId, view::Servant_ptr > servants_t;
-    servants_t m_servants;
-    ObjrefRepository m_servantsRep;
+    QActionGroup m_actions;
 
-    QMenu * m_menuObjects;
-    QMenu * m_menuServants;
-
-    QStatusBar * m_statusBar;
-
-    QDialog * m_aboutDlg;
-
-    // Subwindows
-    QMdiSubWindow * m_sub_create_objref;
-    QMdiSubWindow * m_sub_create_servant;
-    QMdiSubWindow * m_sub_script;
-    QMdiSubWindow * m_sub_seq_tool;
-    QMdiSubWindow * m_sub_sender_seq_tool;
-    
-    // Subwindows widgets
-    QWidget * m_create_objref;
-    QWidget * m_create_servant;
-    QWidget * m_script;
-    OperationSequenceTool * m_seq_tool;
-    SenderSequenceTool * m_sender_seq_tool;
-
-    FilteredLogView * m_filtered_log;
-
-    QDialog * m_dlg_dump_tool;
-    DumpTool * m_dump_tool;
-
-    qwt::ReflectivePlotTool * m_plot_tool;
-
-    // Dock widgets
-    QDockWidget * m_dock_app_log;
-    QTreeWidget * m_app_log;
-
-    QDockWidget * m_dock_log;
-    QTreeView * m_log;
-    
-    QDockWidget * m_dock_fqn;
-    QTreeView * m_fqn;
-
-    QCompleter * m_completer;
-    QStringList m_op_list;
-    void appendToAppLog(QTreeWidgetItem * item);
+    std::vector< QMdiSubWindow * > m_subWindows;
+    // Tools
+    OperationSequenceTool * m_operationSequenceTool;
+    SenderSequenceTool * m_senderSequenceTool;
 };
 
 } // namespace app

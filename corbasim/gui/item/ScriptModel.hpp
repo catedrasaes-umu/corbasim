@@ -24,9 +24,8 @@
 #include <QDateTime>
 #include <QIcon>
 
-#include <corbasim/qt/types.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
-#include <corbasim/gui/ModelNode.hpp>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/item/ModelNode.hpp>
 #include <corbasim/gui/export.hpp>
 
 namespace corbasim 
@@ -60,7 +59,7 @@ public:
 
     corbasim::event::request_ptr getRequest(int pos);
 
-    void initialize(core::interface_reflective_base const * instance);
+    void initialize(InterfaceDescriptor_ptr instance);
 
     int indexToPosition(const QModelIndex& index) const;
 
@@ -81,14 +80,14 @@ protected:
 
     void append(corbasim::event::request_ptr req, int pos);
 
-    core::interface_reflective_base const * m_instance;
+    InterfaceDescriptor_ptr m_instance;
 
     QIcon m_outputIcon;
 
     struct LogEntry
     {
         QString text;
-        core::operation_reflective_base const * reflective;
+        OperationDescriptor_ptr reflective;
         corbasim::event::request_ptr req;
         QDateTime dateTime;
         QIcon * icon;

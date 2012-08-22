@@ -22,7 +22,7 @@
 
 using namespace corbasim::gui;
 
-Node::Node(corbasim::core::reflective_base const * r,
+Node::Node(TypeDescriptor_ptr r,
         corbasim::core::holder h, Node * p, unsigned int idx) :
     reflective(r), holder(h), parent(p), index(idx), initialized(false)
 {
@@ -40,7 +40,7 @@ void Node::initialize()
         const unsigned int count = reflective->get_length(holder);
         children.reserve(count);
 
-        core::reflective_base const * slice =
+        TypeDescriptor_ptr slice =
             reflective->get_slice();
 
         for (unsigned int i = 0; i < count; i++) 
@@ -92,7 +92,7 @@ void Node::check_for_initialized()
         initialize();
 }
 
-MetaNode::MetaNode(corbasim::core::reflective_base const * r,
+MetaNode::MetaNode(TypeDescriptor_ptr r,
         MetaNode * p, unsigned int idx) :
     reflective(r), parent(p), index(idx), initialized(false)
 {
@@ -126,7 +126,7 @@ void MetaNode::initialize()
     {
         children.reserve(max_childs);
 
-        core::reflective_base const * slice =reflective->get_slice();
+        TypeDescriptor_ptr slice =reflective->get_slice();
 
         for (unsigned int i = 0; i < max_childs; i++) 
         {

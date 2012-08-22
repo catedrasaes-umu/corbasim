@@ -25,7 +25,7 @@ namespace corbasim
 namespace gui 
 {
 
-QString getFieldName(core::operation_reflective_base const * operation,
+QString getFieldName(OperationDescriptor_ptr operation,
         const ReflectivePath_t& path)
 {
     using namespace corbasim::core;
@@ -55,7 +55,7 @@ QString getFieldName(core::operation_reflective_base const * operation,
     return res;
 }
 
-::corbasim::core::interface_reflective_base const * 
+InterfaceDescriptor_ptr
 getReflectiveByFQN(const char * fqn)
 {
     QString symbol (fqn);

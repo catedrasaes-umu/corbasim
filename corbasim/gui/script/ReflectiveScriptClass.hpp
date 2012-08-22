@@ -21,7 +21,7 @@
 #define CORBASIM_GUI_REFLECTIVESCRIPTCLASS_HPP
 
 #include <QtScript>
-#include <corbasim/gui/ModelNode.hpp>
+#include <corbasim/gui/item/ModelNode.hpp>
 
 Q_DECLARE_METATYPE(corbasim::gui::Node_ptr)
 

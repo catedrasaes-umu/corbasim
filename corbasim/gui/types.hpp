@@ -59,6 +59,17 @@ typedef boost::shared_ptr< Servant > Servant_ptr;
 
 class ObjrefRepository;
 
+
+struct ObjrefConfig
+{
+    std::string name;
+    std::string fqn;
+    std::string entry;
+    CORBA::Object_var reference;
+};
+
+typedef ObjrefConfig ServantConfig;
+
 } // namespace gui
 } // namespace corbasim
 

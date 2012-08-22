@@ -24,7 +24,8 @@
 #include <map>
 #include <fstream>
 #include <corbasim/gui/export.hpp>
-#include <corbasim/gui/OperationParametersModel.hpp>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/item/OperationParametersModel.hpp>
 #include <corbasim/gui/Sender.hpp>
 
 namespace corbasim 
@@ -48,7 +49,7 @@ class CORBASIM_GUI_DECLSPEC FilesItemProcessor : public SenderItemProcessor
 public:
 
     FilesItemProcessor(
-        ::corbasim::core::operation_reflective_base const * reflective,
+        OperationDescriptor_ptr reflective,
         const QList< int > path,
         const QStringList files,
         int currentFile,
@@ -58,8 +59,8 @@ public:
     virtual ~FilesItemProcessor();
     
     void process( 
-            ::corbasim::core::reflective_base const * reflective,
-            ::corbasim::core::holder holder);
+            TypeDescriptor_ptr reflective,
+            Holder holder);
 
 signals:
 
@@ -69,7 +70,7 @@ protected:
 
     void openFile();
 
-    ::corbasim::core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
     const QStringList m_files;
     int m_currentFile;
     const int m_format;
@@ -89,12 +90,12 @@ class CORBASIM_GUI_DECLSPEC FilesItem : public QWidget
 public:
 
     FilesItem(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             const QList< int >& path, 
             QWidget * parent = 0);
     virtual ~FilesItem();
 
-    core::operation_reflective_base const * getReflective() const;
+    OperationDescriptor_ptr getReflective() const;
 
     inline const QList< int >& getPath() const
     {
@@ -122,7 +123,7 @@ protected slots:
 
 protected:
 
-    core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
     const QList< int > m_path;
 
     QStringList m_files;
@@ -144,18 +145,18 @@ public:
     void load(const QVariant& settings);
 
     void initialize(
-            ::corbasim::core::operation_reflective_base const * reflective);
+            OperationDescriptor_ptr reflective);
 
     void createProcessors(QList< SenderItemProcessor_ptr >& processors);
 
 public slots:
 
     FilesItem * createFilesItem(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             const QList< int >& path);
 
     void deleteFilesItem(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             const QList< int >& path);
 
     void clear();

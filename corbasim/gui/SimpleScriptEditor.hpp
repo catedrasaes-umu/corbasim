@@ -26,7 +26,7 @@
 
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
-#include <corbasim/gui/ScriptModel.hpp>
+#include <corbasim/gui/item/ScriptModel.hpp>
 
 namespace corbasim 
 {

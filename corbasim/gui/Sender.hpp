@@ -28,7 +28,7 @@
 #include <boost/weak_ptr.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
-#include <corbasim/gui/ScriptEvaluator.hpp>
+#include <corbasim/gui/script/ScriptEvaluator.hpp>
 
 namespace corbasim 
 {

@@ -44,6 +44,10 @@ public:
            InterfaceDescriptor_ptr interfaceDescriptor,
            QObject * parent = 0);
 
+    Objref(const ObjrefConfig& cfg,
+           InterfaceDescriptor_ptr interfaceDescriptor,
+           QObject * parent = 0);
+
     virtual ~Objref();
 
     // Properties
@@ -89,6 +93,10 @@ class CORBASIM_GUI_DECLSPEC Servant : public Objref
 public:
 
     Servant(const QString& name,
+           InterfaceDescriptor_ptr interfaceDescriptor,
+           QObject * parent = 0);
+
+    Servant(const ServantConfig& cfg,
            InterfaceDescriptor_ptr interfaceDescriptor,
            QObject * parent = 0);
 
@@ -139,6 +147,30 @@ protected:
 
     ObjrefById_t m_objrefById;
     ObjrefByName_t m_objrefByName;
+};
+
+class CORBASIM_GUI_DECLSPEC InterfaceRepository : public QObject
+{
+    Q_OBJECT
+public:
+
+    InterfaceRepository(QObject * parent = 0);
+    ~InterfaceRepository();
+
+    InterfaceDescriptor_ptr getInterface(const QString& fqn) const;
+
+public slots:
+
+    void loadDirectory(const QString& directory);
+
+signals:
+
+    void loadedInterface(InterfaceDescriptor_ptr interface);
+
+protected:
+
+    typedef QMap< QString, InterfaceDescriptor_ptr > interfaces_t;
+    interfaces_t m_interfaces;
 };
 
 } // namespace gui

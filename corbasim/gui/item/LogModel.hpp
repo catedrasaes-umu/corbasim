@@ -30,18 +30,14 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/ModelNode.hpp>
+#include <corbasim/gui/item/ModelNode.hpp>
 
 namespace corbasim 
 {
-namespace qt 
-{
-class FilterModel;
-} // namespace qt
-
 namespace gui
 {
 
+class FilterModel;
 class FilteredLogModel;
 
 class CORBASIM_GUI_DECLSPEC LogModel : 
@@ -135,7 +131,7 @@ public:
     FilteredLogModel(QObject * parent = 0);
     virtual ~FilteredLogModel();
 
-    void setFilterModel(qt::FilterModel * filter);
+    void setFilterModel(FilterModel * filter);
 
 protected slots:
 
@@ -145,7 +141,7 @@ protected:
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
-    qt::FilterModel * m_filter;
+    FilterModel * m_filter;
 };
 
 } // namespace gui

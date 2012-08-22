@@ -22,10 +22,13 @@
 
 #include <QtGui>
 #include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/item/OperationModel.hpp>
+
+// TODO eliminar
 #include <corbasim/gui/OperationSequence.hpp>
-#include <corbasim/gui/Model.hpp>
 
 #include <ostream>
 

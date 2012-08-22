@@ -49,14 +49,14 @@ bool OperationParametersModel::setData(const QModelIndex & index,
     return res;
 }
 
-corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 OperationParametersModel::getReflective() const
 {
     return m_reflective;
 }
 
 void OperationParametersModel::insertRecursive(QStandardItem * parent, 
-        corbasim::core::reflective_base const * reflective)
+        TypeDescriptor_ptr reflective)
 {
     const corbasim::core::reflective_type type = reflective->get_type();
 
@@ -69,7 +69,7 @@ void OperationParametersModel::insertRecursive(QStandardItem * parent,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        corbasim::core::reflective_base const * child =
+        TypeDescriptor_ptr child =
             reflective->get_child(i);
 
         const corbasim::core::reflective_type type = child->get_type();
@@ -116,13 +116,13 @@ void OperationParametersModel::insertRecursive(QStandardItem * parent,
     }
 }
 
-bool OperationParametersModel::isCheckable(core::reflective_base const * reflective)
+bool OperationParametersModel::isCheckable(TypeDescriptor_ptr reflective)
 {
     return true;
 }
 
 void OperationParametersModel::initialize(
-        corbasim::core::operation_reflective_base const * op)
+        OperationDescriptor_ptr op)
 {
     QStandardItem * opItem = new QStandardItem(op->get_name());
     opItem->setEditable(false);

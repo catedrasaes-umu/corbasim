@@ -56,7 +56,7 @@ bool ParametersModel::setData(const QModelIndex & index,
     return res;
 }
 
-corbasim::core::interface_reflective_base const * 
+InterfaceDescriptor_ptr 
 ParametersModel::getReflective(const QString& id) const
 {
     for (FirstLevelItems_t::const_iterator it = m_items.begin(); 
@@ -72,7 +72,7 @@ ParametersModel::getReflective(const QString& id) const
 }
 
 void ParametersModel::insertRecursive(QStandardItem * parent, 
-        corbasim::core::reflective_base const * reflective)
+        TypeDescriptor_ptr reflective)
 {
     const corbasim::core::reflective_type type = reflective->get_type();
 
@@ -85,7 +85,7 @@ void ParametersModel::insertRecursive(QStandardItem * parent,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        corbasim::core::reflective_base const * child =
+        TypeDescriptor_ptr child =
             reflective->get_child(i);
 
         const corbasim::core::reflective_type type = child->get_type();
@@ -132,13 +132,13 @@ void ParametersModel::insertRecursive(QStandardItem * parent,
     }
 }
 
-bool ParametersModel::isCheckable(core::reflective_base const * reflective)
+bool ParametersModel::isCheckable(TypeDescriptor_ptr reflective)
 {
     return true;
 }
 
 void ParametersModel::registerInstance(const QString& name,
-		corbasim::core::interface_reflective_base const * reflective)
+		InterfaceDescriptor_ptr reflective)
 {
     FirstLevelItem item;
     item.name = name;
@@ -152,7 +152,7 @@ void ParametersModel::registerInstance(const QString& name,
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        core::operation_reflective_base const * op =
+        OperationDescriptor_ptr op =
             reflective->get_reflective_by_index(i);
 
         QStandardItem * opItem = new QStandardItem(op->get_name());

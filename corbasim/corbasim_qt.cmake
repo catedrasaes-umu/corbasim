@@ -3,7 +3,6 @@ set(corbasim_qt_EXPORTED_HEADERS
     # QObjects
     qt/TabWidget.hpp
 
-    qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
     qt/types.hpp
@@ -31,7 +30,6 @@ set(corbasim_qt_MOC_HDRS
 
     qt/TabWidget.hpp
     qt/ReferenceFinder.hpp
-    qt/FilterModel.hpp
     qt/CustomLayouts.hpp
     qt/SortableGroup.hpp
     qt/ReferenceModel.hpp
@@ -50,7 +48,6 @@ set(corbasim_qt_SRCS
     qt/private/MultiScriptEditor.cpp
 
     qt/TabWidget.cpp
-    qt/FilterModel.cpp
     qt/CustomLayouts.cpp
     qt/SortableGroup.cpp
     qt/ReferenceModel.cpp

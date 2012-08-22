@@ -3,8 +3,8 @@
 
 #include <list>
 #include <QStandardItemModel>
-#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/types.hpp>
 
 namespace corbasim
 {
@@ -23,13 +23,13 @@ public:
             const QVariant& value, 
             int role = Qt::EditRole);
 
-    core::interface_reflective_base const * 
+    InterfaceDescriptor_ptr 
     getReflective(const QString& id) const;
 
 public slots:
 
     void registerInstance(const QString& name,
-            core::interface_reflective_base const * reflective);
+            InterfaceDescriptor_ptr reflective);
 
     void unregisterInstance(const QString& name);
 
@@ -39,24 +39,24 @@ public slots:
 signals:
 
     void checked(const QString& id, 
-            core::interface_reflective_base const * reflective,
+            InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 
     void unchecked(const QString& id, 
-            core::interface_reflective_base const * reflective,
+            InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 
 protected:
 
     void insertRecursive(QStandardItem * parent, 
-        corbasim::core::reflective_base const * reflective);
+        TypeDescriptor_ptr reflective);
 
-    virtual bool isCheckable(core::reflective_base const * reflective);
+    virtual bool isCheckable(TypeDescriptor_ptr reflective);
 
     struct FirstLevelItem
     {
         QString name;
-        core::interface_reflective_base const * reflective;
+        InterfaceDescriptor_ptr reflective;
     };
 
     typedef std::list< FirstLevelItem > FirstLevelItems_t;

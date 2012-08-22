@@ -24,10 +24,10 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QScrollArea>
-#include <corbasim/qt/FilterModel.hpp>
+#include <corbasim/gui/item/FilterModel.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/LogModel.hpp>
+#include <corbasim/gui/item/LogModel.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 
 namespace corbasim 
@@ -83,9 +83,8 @@ protected slots:
     void selected(const QModelIndex& index);
 
 protected:
-    ObjrefRepository m_instances;
 
-    qt::FilterModel m_filterModel;
+    FilterModel m_filterModel;
     FilteredLogModel m_model;
 
     EntryViewer * m_viewer;

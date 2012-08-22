@@ -18,7 +18,6 @@
  */
 
 #include "RequestDialog.hpp"
-#include <corbasim/qt/initialize.hpp>
 
 // Qt widgets
 #include <QSpinBox>

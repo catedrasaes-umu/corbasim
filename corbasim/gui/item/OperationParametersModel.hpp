@@ -2,8 +2,8 @@
 #define CORBASIM_GUI_OPERATIONMODEL_HPP
 
 #include <QStandardItemModel>
-#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/types.hpp>
 
 namespace corbasim
 {
@@ -23,13 +23,13 @@ public:
             const QVariant& value, 
             int role = Qt::EditRole);
 
-    core::operation_reflective_base const * 
+    OperationDescriptor_ptr 
     getReflective() const;
 
 public slots:
 
     void initialize(
-            core::operation_reflective_base const * reflective);
+            OperationDescriptor_ptr reflective);
 
     void check(const QList< int >& path);
     void uncheck(const QList< int >& path);
@@ -37,21 +37,21 @@ public slots:
 signals:
 
     void checked(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             const QList< int >& path);
 
     void unchecked(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             const QList< int >& path);
 
 protected:
 
     void insertRecursive(QStandardItem * parent, 
-        corbasim::core::reflective_base const * reflective);
+        TypeDescriptor_ptr reflective);
 
-    virtual bool isCheckable(core::reflective_base const * reflective);
+    virtual bool isCheckable(TypeDescriptor_ptr reflective);
             
-    ::corbasim::core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
 };
 
 } // gui

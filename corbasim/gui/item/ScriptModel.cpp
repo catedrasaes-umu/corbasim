@@ -58,7 +58,7 @@ QMimeData *	ScriptModel::mimeData(const QModelIndexList& indexes) const
 
         const LogEntry& entry = m_entries.at(pos);
 
-        core::operation_reflective_base const * reflective = 
+        OperationDescriptor_ptr reflective = 
             entry.reflective;
 
         core::holder holder = reflective->get_holder(entry.req);
@@ -303,7 +303,7 @@ corbasim::event::request_ptr ScriptModel::getRequest(int pos)
 }
 
 void ScriptModel::initialize(
-		corbasim::core::interface_reflective_base const * instance)
+		InterfaceDescriptor_ptr instance)
 {
     m_instance = instance;
 }
@@ -337,7 +337,7 @@ void ScriptModel::append(corbasim::event::request_ptr req,
     LogEntry entry;
     entry.dateTime = QDateTime::currentDateTime();
 
-    core::operation_reflective_base const * op =
+    OperationDescriptor_ptr op =
         m_instance->get_reflective_by_tag(req->get_tag());
 
     if (!op) return;

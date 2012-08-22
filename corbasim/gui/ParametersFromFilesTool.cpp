@@ -53,19 +53,19 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
     // connect model signals 
     QObject::connect(&m_model, 
             SIGNAL(checked(
-                    core::operation_reflective_base const *,
+                    OperationDescriptor_ptr,
                     const QList< int >&)),
             this,
             SLOT(createFilesItem(
-                    core::operation_reflective_base const *,
+                    OperationDescriptor_ptr,
                     const QList< int >&)));
     QObject::connect(&m_model, 
             SIGNAL(unchecked(
-                    core::operation_reflective_base const *,
+                    OperationDescriptor_ptr,
                     const QList< int >&)),
             this,
             SLOT(deleteFilesItem(
-                    core::operation_reflective_base const *,
+                    OperationDescriptor_ptr,
                     const QList< int >&)));
     
     setMinimumSize(650, 400);
@@ -76,7 +76,7 @@ ParametersFromFilesTool::~ParametersFromFilesTool()
 }
 
 void ParametersFromFilesTool::initialize(
-        ::corbasim::core::operation_reflective_base const * reflective)
+        OperationDescriptor_ptr reflective)
 {
     m_model.initialize(reflective);
 }
@@ -97,7 +97,7 @@ void ParametersFromFilesTool::createProcessors(
 }
 
 FilesItem * ParametersFromFilesTool::createFilesItem( 
-        core::operation_reflective_base const * op,
+        OperationDescriptor_ptr op,
         const QList< int >& path)
 {
     FilesItem * plot = NULL;
@@ -125,7 +125,7 @@ FilesItem * ParametersFromFilesTool::createFilesItem(
 }
 
 void ParametersFromFilesTool::deleteFilesItem(
-        core::operation_reflective_base const * op,
+        OperationDescriptor_ptr op,
         const QList< int >& path)
 {
     const key_t key(op->get_tag());
@@ -246,7 +246,7 @@ void ParametersFromFilesTool::clear()
 //
 
 FilesItem::FilesItem(
-        ::corbasim::core::operation_reflective_base const * reflective,
+        OperationDescriptor_ptr reflective,
         const QList< int >& path, 
         QWidget * parent) :
     QWidget(parent), m_reflective(reflective), m_path(path)
@@ -303,8 +303,7 @@ void FilesItem::browse()
     m_currentFile->addItems(m_files);
 }
 
-corbasim::core::operation_reflective_base const * 
-FilesItem::getReflective() const
+OperationDescriptor_ptr FilesItem::getReflective() const
 {
     return m_reflective;
 }
@@ -398,7 +397,7 @@ void FilesItem::load(const QVariant& settings)
 //
 
 FilesItemProcessor::FilesItemProcessor(
-        ::corbasim::core::operation_reflective_base const * reflective,
+        OperationDescriptor_ptr reflective,
         const QList< int > path,
         const QStringList files,
         int currentFile,
@@ -418,8 +417,8 @@ FilesItemProcessor::~FilesItemProcessor()
 }
 
 void FilesItemProcessor::process( 
-            ::corbasim::core::reflective_base const * reflective,
-            ::corbasim::core::holder holder)
+            TypeDescriptor_ptr reflective,
+            Holder holder)
 {
     using namespace ::corbasim::core;
 

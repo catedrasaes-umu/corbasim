@@ -21,7 +21,7 @@
 #define CORBASIM_GUI_MODELNODE_HPP
 
 #include <boost/shared_ptr.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
 
 namespace corbasim 
 {
@@ -34,10 +34,9 @@ typedef boost::shared_ptr< Node > Node_ptr;
 struct MetaNode;
 typedef boost::shared_ptr< MetaNode > MetaNode_ptr;
 
-
 struct Node
 {
-    core::reflective_base const * reflective;
+    TypeDescriptor_ptr reflective;
     core::holder holder;
 
     Node * parent;
@@ -46,7 +45,7 @@ struct Node
     bool initialized;
     std::vector< Node_ptr > children;
 
-    Node(core::reflective_base const * r,
+    Node(TypeDescriptor_ptr r,
             core::holder h, Node * p = 0, 
             unsigned int idx = 0);
 
@@ -59,7 +58,7 @@ struct Node
 
 struct MetaNode
 {
-    core::reflective_base const * reflective;
+    TypeDescriptor_ptr reflective;
 
     MetaNode * parent;
     unsigned int index;
@@ -68,7 +67,7 @@ struct MetaNode
     std::vector< MetaNode_ptr > children;
     std::vector< Node_ptr > brothers;
 
-    MetaNode(core::reflective_base const * r,
+    MetaNode(TypeDescriptor_ptr r,
             MetaNode * p = 0, 
             unsigned int idx = 0);
 

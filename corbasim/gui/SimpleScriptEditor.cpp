@@ -254,8 +254,7 @@ SimpleScriptEditor::~SimpleScriptEditor()
 {
 }
 
-void SimpleScriptEditor::initialize(
-        core::interface_reflective_base const * factory)
+void SimpleScriptEditor::initialize(InterfaceDescriptor_ptr factory)
 {
     unsigned int count = factory->operation_count();
     m_forms.reserve(count);
@@ -264,8 +263,7 @@ void SimpleScriptEditor::initialize(
 
     for (unsigned int i = 0; i < count; i++) 
     {
-        core::operation_reflective_base const * op =
-            factory->get_reflective_by_index(i);
+        OperationDescriptor_ptr op = factory->get_reflective_by_index(i);
 
         OperationInputForm * form = new OperationInputForm(op);
 
@@ -435,7 +433,7 @@ void SimpleScriptEditor::doSave()
 
         writer.new_string(op->get_name());
 
-        core::holder holder(op->get_holder(req));
+        Holder holder(op->get_holder(req));
 
         json::write(writer, op, holder);
 
@@ -576,8 +574,7 @@ void SimpleScriptEditor::copySelected()
     {
         event::request_ptr selected = m_model.getRequest(pos);
 
-        core::operation_reflective_base const * op =
-            m_factory->get_reflective_by_tag(selected->get_tag());
+        OperationDescriptor_ptr op = m_factory->get_reflective_by_tag(selected->get_tag());
 
         int cb_pos = m_selector->findText(
                 QString(op->get_name()),

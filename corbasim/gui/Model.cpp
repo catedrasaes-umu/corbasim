@@ -35,6 +35,20 @@ Objref::Objref(const QString& name,
     m_caller.reset(m_interfaceDescriptor->create_caller());
 }
 
+Objref::Objref(const ObjrefConfig& cfg,
+       InterfaceDescriptor_ptr interfaceDescriptor,
+       QObject * parent) :
+    m_name(cfg.name.c_str()), 
+    m_interfaceDescriptor(interfaceDescriptor),
+    QObject(parent)
+{
+    assert(m_interfaceDescriptor);
+
+    m_caller.reset(m_interfaceDescriptor->create_caller());
+
+    setReference(cfg.reference);
+}
+
 Objref::~Objref()
 {
 }
@@ -103,6 +117,13 @@ Servant::Servant(const QString& name,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
     Objref(name, interfaceDescriptor, parent)
+{
+}
+
+Servant::Servant(const ServantConfig& cfg,
+       InterfaceDescriptor_ptr interfaceDescriptor,
+       QObject * parent) :
+    Objref(cfg, interfaceDescriptor, parent)
 {
 }
 
@@ -209,5 +230,29 @@ void ObjrefRepository::del(const QString& name)
         emit deleted(objref);
         emit deleted(objref->id());
     }
+}
+
+//
+//
+// InterfaceRepository
+//
+//
+
+InterfaceRepository::InterfaceRepository(QObject * parent) :
+    QObject(parent)
+{
+}
+
+InterfaceRepository::~InterfaceRepository()
+{
+}
+
+InterfaceDescriptor_ptr InterfaceRepository::getInterface(const QString& fqn) const
+{
+    return InterfaceDescriptor_ptr();
+}
+
+void InterfaceRepository::loadDirectory(const QString& path)
+{
 }
 

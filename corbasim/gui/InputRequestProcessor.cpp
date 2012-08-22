@@ -69,7 +69,7 @@ void processRecursive(corbasim::core::reflective_base const * reflec,
 
 } // namespace 
 
-RequestProcessor::RequestProcessor(const QString& id,
+RequestProcessor::RequestProcessor(ObjectId id,
         const ReflectivePath_t& path) :
     m_id(id), m_path(path)
 {
@@ -77,7 +77,7 @@ RequestProcessor::RequestProcessor(const QString& id,
 
 RequestProcessor::~RequestProcessor() {}
 
-const QString& RequestProcessor::getId() const
+ObjectId RequestProcessor::getId() const
 {
     return m_id;
 }
@@ -96,35 +96,34 @@ InputRequestController::~InputRequestController()
 {
 }
 
-void InputRequestController::registerInstance(const QString& id, 
-        const corbasim::core::interface_reflective_base * factory)
+void InputRequestController::registerInstance(Objref_ptr objref)
 {
-    m_instances.insert(std::make_pair(id, factory));
+    m_instances.add(objref);
 }
 
-void InputRequestController::unregisterInstance(const QString& id)
+void InputRequestController::unregisterInstance(ObjectId id)
 {
-    m_instances.erase(id);
+    m_instances.del(id);
 }
 
-void InputRequestController::processRequest(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr res)
+void InputRequestController::processRequest(ObjectId id, 
+        Request_ptr req,
+        Event_ptr res)
 {
     // creates the key
     map_t::iterator it = m_processors.find(
             std::make_pair(id, req->get_tag()));
 
-    instances_t::const_iterator iface = m_instances.find(id);
+    Objref_ptr iface = m_instances.find(id);
 
     if (it != m_processors.end() && 
-            iface != m_instances.end() &&
+            iface &&
             !it->second.empty())
     {
-        core::operation_reflective_base const * op =
-            iface->second->get_reflective_by_tag(req->get_tag());
+        OperationDescriptor_ptr op =
+            iface->interface()->get_reflective_by_tag(req->get_tag());
 
-        core::holder hold = op->get_holder(req);
+        Holder hold = op->get_holder(req);
 
         for (int i = 0; i < it->second.size(); i++) 
         {
@@ -135,14 +134,14 @@ void InputRequestController::processRequest(const QString& id,
 }
 
 void InputRequestController::addProcessor(
-        corbasim::gui::RequestProcessor_ptr p)
+        RequestProcessor_ptr p)
 {
-    instances_t::const_iterator iface = m_instances.find(p->getId());
+    Objref_ptr iface = m_instances.find(p->getId());
 
-    if (iface != m_instances.end())
+    if (iface)
     {
-        core::operation_reflective_base const * op =
-            iface->second->get_reflective_by_index(
+        OperationDescriptor_ptr op =
+            iface->interface()->get_reflective_by_index(
                     p->getPath().front());
 
         // Inserts the processor
@@ -152,14 +151,14 @@ void InputRequestController::addProcessor(
 }
 
 void InputRequestController::removeProcessor(
-        corbasim::gui::RequestProcessor_ptr p)
+        RequestProcessor_ptr p)
 {
-    instances_t::const_iterator iface = m_instances.find(p->getId());
+    Objref_ptr iface = m_instances.find(p->getId());
 
-    if (iface != m_instances.end())
+    if (iface)
     {
-        core::operation_reflective_base const * op =
-            iface->second->get_reflective_by_index(
+        OperationDescriptor_ptr op =
+            iface->interface()->get_reflective_by_index(
                     p->getPath().front());
 
         // Removes the processor

@@ -24,8 +24,10 @@
 #include <QObject>
 #include <map>
 #include <corbasim/event_fwd.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/utils.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/Model.hpp>
 
 namespace corbasim 
 {
@@ -38,20 +40,20 @@ public:
 
     virtual ~RequestProcessor();
 
-    virtual void process(event::request_ptr req, 
-            core::reflective_base const * ref,
-            core::holder hold) = 0;
+    virtual void process(Request_ptr req, 
+            TypeDescriptor_ptr ref,
+            Holder hold) = 0;
 
-    virtual const QString& getId() const;
+    virtual ObjectId getId() const;
 
     virtual const ReflectivePath_t& getPath() const;
 
 protected:
 
-    RequestProcessor(const QString& id, 
+    RequestProcessor(ObjectId, 
             const ReflectivePath_t& path);
 
-    const QString m_id;
+    const ObjectId m_id;
     const ReflectivePath_t m_path;
 };
 
@@ -75,24 +77,23 @@ public:
 public slots:
 
     // Instances
-    void registerInstance(const QString& id, 
-            const corbasim::core::interface_reflective_base * factory);
-    void unregisterInstance(const QString& id);
+    void registerInstance(Objref_ptr objref);
+    void unregisterInstance(ObjectId id);
 
-    void processRequest(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr res);
+    void processRequest(ObjectId id, 
+            Request_ptr req,
+            Event_ptr res);
 
     // Processors
-    void addProcessor(corbasim::gui::RequestProcessor_ptr);
-    void removeProcessor(corbasim::gui::RequestProcessor_ptr);
+    void addProcessor(RequestProcessor_ptr);
+    void removeProcessor(RequestProcessor_ptr);
 
 protected:
 
-    typedef std::pair< QString, tag_t > key_t;
+    typedef std::pair< ObjectId, tag_t > key_t;
     typedef std::map< key_t, QList< RequestProcessor_ptr > > map_t;
-    typedef std::map< QString, core::interface_reflective_base const * >
-        instances_t;
+
+    typedef ObjrefRepository instances_t;
 
     /**
      * @brief Registred instances.

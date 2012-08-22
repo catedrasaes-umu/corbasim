@@ -20,7 +20,7 @@
 #include "Sender.hpp"
 #include <boost/bind.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/ModelNode.hpp>
+#include <corbasim/gui/item/ModelNode.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <memory>
 #include <iostream>

@@ -39,7 +39,7 @@ namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC DumpProcessor : public QObject,
-    public gui::RequestProcessor
+    public RequestProcessor
 {
     Q_OBJECT
 public:
@@ -60,8 +60,8 @@ public:
         unsigned int suffixLength;
     };
 
-    DumpProcessor(const QString& id,
-            const gui::ReflectivePath_t path,
+    DumpProcessor(ObjectId id,
+            const ReflectivePath_t path,
             const Config& config);
     ~DumpProcessor();
 
@@ -85,19 +85,19 @@ class CORBASIM_GUI_DECLSPEC Dumper : public QWidget
 public:
 
     Dumper(const QString& id,
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             const QList< int >& path, 
             QWidget * parent = 0);
     virtual ~Dumper();
 
-    core::operation_reflective_base const * getReflective() const;
+    OperationDescriptor_ptr getReflective() const;
 
     inline const QList< int >& getPath() const
     {
         return m_path;
     }
 
-    inline gui::RequestProcessor_ptr getProcessor() const
+    inline RequestProcessor_ptr getProcessor() const
     {
         return m_processor;
     }
@@ -117,15 +117,15 @@ protected slots:
 
 signals:
 
-    void addProcessor(corbasim::gui::RequestProcessor_ptr);
-    void removeProcessor(corbasim::gui::RequestProcessor_ptr);
+    void addProcessor(RequestProcessor_ptr);
+    void removeProcessor(RequestProcessor_ptr);
 
 protected:
 
-    gui::RequestProcessor_ptr m_processor;
+    RequestProcessor_ptr m_processor;
 
     const QString m_id;
-    core::operation_reflective_base const * m_reflective;
+    OperationDescriptor_ptr m_reflective;
     const QList< int > m_path;
 
     QLineEdit * m_filePrefix;
@@ -148,17 +148,16 @@ public:
 
 public slots:
 
-    void registerInstance(const QString& name,
-            const corbasim::core::interface_reflective_base * reflective);
+    void registerInstance(Objref_ptr objref);
 
-    void unregisterInstance(const QString& name);
+    void unregisterInstance(ObjectId id);
 
     Dumper * createDumper(const QString& id, 
-            core::interface_reflective_base const * reflective,
+            InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 
     void deleteDumper(const QString& id, 
-            core::interface_reflective_base const * reflective,
+            InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 
 protected slots:

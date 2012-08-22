@@ -27,7 +27,7 @@
 #include <corbasim/core/reflective_fwd.hpp>
 
 #include <corbasim/qt/ObjrefWidget.hpp>
-#include <corbasim/gui/LogModel.hpp>
+#include <corbasim/gui/item/LogModel.hpp>
 
 #include <corbasim/qt/ReferenceFinder.hpp>
 

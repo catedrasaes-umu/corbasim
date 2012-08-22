@@ -8,7 +8,7 @@ if(QT_FOUND)
     include(corbasim_gui.cmake)
 
     if (Qwt6_FOUND)
-        include(corbasim_qwt.cmake)
+        #        include(corbasim_qwt.cmake)
     endif()
 endif()
 

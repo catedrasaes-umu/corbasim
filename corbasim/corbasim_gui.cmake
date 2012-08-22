@@ -3,33 +3,42 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/json.hpp
     gui/utils.hpp
     gui/qvariant.hpp
+    gui/types.hpp
+    gui/Model.hpp
+    gui/Application.hpp
+
+    # item models
+    gui/item/ModelNode.hpp
+    gui/item/LogModel.hpp
+    gui/item/FilterModel.hpp
+    gui/item/ParametersModel.hpp
+    gui/item/OperationModel.hpp
+    gui/item/OperationParametersModel.hpp
+    gui/item/ScriptModel.hpp
+
+    # script
+    gui/script/ReflectiveScriptClass.hpp
+    gui/script/ScriptEvaluator.hpp
+
     gui/InputRequestProcessor.hpp
-    gui/ModelNode.hpp
     gui/OperationSequence.hpp
     gui/SimpleScriptEditor.hpp
     gui/RequestDialog.hpp
-    gui/LogModel.hpp
-    gui/ParametersModel.hpp
-    gui/OperationParametersModel.hpp
     gui/FilteredLogView.hpp
-    gui/ScriptModel.hpp
     gui/SimpleClient.hpp
-    gui/DumpTool.hpp
     gui/ReflectiveGUI.hpp
-    gui/RecorderTool.hpp
     
     gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
-    gui/ReflectiveScriptClass.hpp
-    gui/ScriptEvaluator.hpp
+
+
     gui/OperationForm.hpp
     gui/Sender.hpp
 
-    gui/types.hpp
-    gui/Model.hpp
-
-    # gui/Server.hpp
-    # gui/ServerApp.hpp
+    # TODO gui/DumpTool.hpp
+    # TODO gui/RecorderTool.hpp
+    # TODO gui/Server.hpp
+    # TODO gui/ServerApp.hpp
 )
 
 foreach(_header ${corbasim_gui_EXPORTED_HEADERS})
@@ -39,29 +48,35 @@ foreach(_header ${corbasim_gui_EXPORTED_HEADERS})
 endforeach(_header ${corbasim_gui_EXPORTED_HEADERS})
 
 set(corbasim_gui_MOC_HDRS
+    gui/Model.hpp
+    gui/Application.hpp
+
+    # item models
+    gui/item/LogModel.hpp
+    gui/item/FilterModel.hpp
+    gui/item/ParametersModel.hpp
+    gui/item/OperationModel.hpp
+    gui/item/OperationParametersModel.hpp
+    gui/item/ScriptModel.hpp
+
+    # script
+    gui/script/ScriptEvaluator.hpp
+
+    gui/ReflectiveGUI.hpp
+    gui/RequestDialog.hpp
+    gui/OperationForm.hpp
     gui/InputRequestProcessor.hpp
     gui/OperationSequence.hpp
     gui/SimpleScriptEditor.hpp
-    gui/RequestDialog.hpp
-    gui/LogModel.hpp
-    gui/ParametersModel.hpp
-    gui/OperationParametersModel.hpp
     gui/FilteredLogView.hpp
-    gui/ScriptModel.hpp
     gui/SimpleClient.hpp
-    gui/DumpTool.hpp
-    gui/ReflectiveGUI.hpp
-    gui/RecorderTool.hpp
-    
     gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
-    gui/ScriptEvaluator.hpp
-    gui/OperationForm.hpp
     gui/Sender.hpp
-    
-    gui/Model.hpp
 
-    # gui/Server.hpp
+    # TODO gui/DumpTool.hpp
+    # TODO gui/RecorderTool.hpp
+    # TODO gui/Server.hpp
 )
 
 set(corbasim_gui_SRCS
@@ -69,33 +84,39 @@ set(corbasim_gui_SRCS
     gui/utils.hpp
     gui/utils.cpp
     gui/qvariant.cpp
+    gui/initialize.cpp
+    gui/Model.cpp
+    gui/Application.cpp
+
+    # item model
+    gui/item/ModelNode.cpp
+    gui/item/FilterModel.cpp
+    gui/item/LogModel.cpp
+    gui/item/ParametersModel.cpp
+    gui/item/OperationModel.cpp
+    gui/item/OperationParametersModel.cpp
+    gui/item/ScriptModel.cpp
+
+    # script
+    gui/script/ReflectiveScriptClass.cpp
+    gui/script/ScriptEvaluator.cpp
+
     gui/InputRequestProcessor.cpp
-    gui/ModelNode.cpp
     gui/OperationSequence.cpp
     gui/SimpleScriptEditor.cpp
     gui/RequestDialog.cpp
-    gui/ParametersModel.cpp
-    gui/OperationParametersModel.cpp
-    gui/LogModel.cpp
     gui/FilteredLogView.cpp
-    gui/ScriptModel.cpp
     gui/SimpleClient.cpp
-    gui/DumpTool.cpp
     gui/ReflectiveGUI.cpp
-    gui/RecorderTool.cpp
-    
     gui/SenderSequence.cpp
     gui/ParametersFromFilesTool.cpp
-    gui/ScriptEvaluator.cpp
-    gui/ReflectiveScriptClass.cpp
     gui/OperationForm.cpp
     gui/Sender.cpp
 
-    gui/Model.cpp
-    gui/initialize.cpp
-
-    # gui/Server.cpp
-    # gui/ServerApp.cpp
+    # TODO gui/DumpTool.cpp
+    # TODO gui/RecorderTool.cpp
+    # TODO gui/Server.cpp
+    # TODO gui/ServerApp.cpp
 )
 
 set(corbasim_gui_LIBS
@@ -121,7 +142,7 @@ add_library(corbasim_gui_s STATIC ${corbasim_gui_SRCS}
 install(TARGETS corbasim_gui corbasim_gui_s DESTINATION lib)
 
 add_executable(corbasim_script_evaluator_test 
-    gui/ScriptEvaluatorTest.cpp)
+    gui/script/ScriptEvaluatorTest.cpp)
 target_link_libraries(corbasim_script_evaluator_test
     corbasim_gui
     boost_program_options)
@@ -132,7 +153,7 @@ target_link_libraries(corbasim_client.real
     corbasim_gui
     boost_program_options)
 add_executable(corbasim_client
-    ${CMAKE_CURRENT_SOURCE_DIR}/../corbasim_app/launcher.cpp)
+    gui/launcher.cpp)
 target_link_libraries(corbasim_client
     ${QT_LIBRARIES})
 install(TARGETS corbasim_client corbasim_client.real DESTINATION bin)

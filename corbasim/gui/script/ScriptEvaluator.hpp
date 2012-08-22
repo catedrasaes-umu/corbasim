@@ -25,7 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
-#include <corbasim/gui/ReflectiveScriptClass.hpp>
+#include <corbasim/gui/script/ReflectiveScriptClass.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 
 namespace corbasim 

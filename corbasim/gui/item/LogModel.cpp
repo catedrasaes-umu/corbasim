@@ -25,7 +25,7 @@
 #include <corbasim/core/reference_repository.hpp>
 #include <corbasim/gui/qvariant.hpp>
 
-#include <corbasim/qt/FilterModel.hpp>
+#include <corbasim/gui/item/FilterModel.hpp>
 
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
@@ -496,13 +496,13 @@ bool FilteredLogModel::filterAcceptsRow(int sourceRow, const QModelIndex& source
     {
         const LogModel::LogEntry& entry(model->getLogEntry(sourceRow));
 
-        return m_filter->visibleOperation(entry.object->name(), entry.reflective->get_tag());
+        return m_filter->visibleOperation(entry.object->id(), entry.reflective->get_tag());
     }
 
     return false;
 }
 
-void FilteredLogModel::setFilterModel(qt::FilterModel * filter)
+void FilteredLogModel::setFilterModel(FilterModel * filter)
 {
     if (m_filter)
     {

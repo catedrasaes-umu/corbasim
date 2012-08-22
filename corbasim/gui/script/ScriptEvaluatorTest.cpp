@@ -1,4 +1,4 @@
-#include <corbasim/gui/ScriptEvaluator.hpp>
+#include <corbasim/gui/script/ScriptEvaluator.hpp>
 #include <corbasim/gui/utils.hpp>
 #include <corbasim/gui/Sender.hpp>
 #include <iostream>

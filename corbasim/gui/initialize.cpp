@@ -20,10 +20,6 @@
 #include "types.hpp"
 
 #include <QMetaType>
-#include <boost/shared_ptr.hpp>
-#include <corbasim/event_fwd.hpp>
-#include <corbasim/impl.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
 #include <corbasim/gui/Sender.hpp>
 #include <corbasim/core/file_format_helper.hpp>

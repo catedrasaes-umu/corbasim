@@ -26,7 +26,6 @@ using namespace corbasim::gui;
 
 FilteredLogView::FilteredLogView(QWidget * parent) :
     QWidget(parent), 
-    m_instances(this),
     m_filterModel(this), m_model(this),
     m_sourceModel(NULL)
 {
@@ -75,23 +74,13 @@ FilteredLogView::~FilteredLogView()
 
 void FilteredLogView::registerInstance(Objref_ptr object)
 {
-    m_instances.add(object);
-
-    m_filterModel.registerInstance(object->name(), object->interface());
+    m_filterModel.registerInstance(object);
 }
 
 void FilteredLogView::unregisterInstance(ObjectId id)
 {
-    Objref_ptr object = m_instances.find(id);
-
-    if (object)
-    {
-        m_filterModel.unregisterInstance(object->name());
-
-        m_instances.del(id);
-    }
+    m_filterModel.unregisterInstance(id);
 }
-
 
 void FilteredLogView::setLogModel(QAbstractItemModel * model)
 {
