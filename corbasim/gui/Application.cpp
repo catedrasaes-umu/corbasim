@@ -97,6 +97,10 @@ void Application::createObjref(const ObjrefConfig& cfg)
 
         emit objrefCreated(obj);
     }
+    else
+    {
+        emit error(QString("Unable to find '%1'!").arg(cfg.fqn.c_str()));
+    }
 }
 
 void Application::createServant(const ServantConfig& cfg)

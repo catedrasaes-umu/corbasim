@@ -18,10 +18,12 @@
  */
 
 #include "AppMainWindow.hpp"
+#include <iostream>
 
 // Tools
 #include <corbasim/gui/OperationSequence.hpp>
 #include <corbasim/gui/SenderSequence.hpp>
+#include <corbasim/gui/dialog/CreateDialog.hpp>
 
 using namespace corbasim::app;
 
@@ -29,6 +31,9 @@ namespace
 {
     enum SubWindows
     {
+        kCreateObjrefDialog,
+        kCreateServantDialog,
+
         kOperationSequenceTool,
         kSenderSequenceTool,
 
@@ -36,6 +41,8 @@ namespace
     };
 
     const char * SubWindowTitles[] = {
+        "Create new object reference",
+        "Create new servant",
         "Operation sequence tool",
         "Sender sequence tool"
     };
@@ -47,6 +54,10 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_servants(this),
     m_logModel(this),
     m_actions(this),
+
+    // Dialogs
+    m_createObjrefDialog(NULL),
+    m_createServantDialog(NULL),
 
     // Tools
     m_operationSequenceTool(NULL),
@@ -61,6 +72,11 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 
     // No more window
+
+    menuFile->addAction("&New object reference", 
+            this, SLOT(showCreateObjrefDialog()));
+    menuFile->addAction("&New servant", 
+            this, SLOT(showCreateServantDialog()));
 
     menuTool->addAction("&Operation sequences", 
             this, SLOT(showOperationSequenceTool()));
@@ -82,6 +98,7 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
 
     ObjrefView_ptr view(new ObjrefView(mdiArea, objref, this));
     m_objrefViews.insert(objref->id(), view);
+    menuObject_references->addMenu(view->getMenu());
 
     // connect signals
     connect(objref.get(), SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
@@ -133,6 +150,57 @@ void AppMainWindow::displayMessage(const QString& msg)
 {
 }
 
+//
+//
+// Dialogs
+//
+//
+void AppMainWindow::showCreateObjrefDialog()
+{
+    QMdiSubWindow *& sub = m_subWindows[kCreateObjrefDialog];
+
+    if (!m_createObjrefDialog)
+    {
+        m_createObjrefDialog = new ObjrefCreateDialog(this);
+
+        sub = mdiArea->addSubWindow(m_createObjrefDialog);
+
+        sub->setWindowTitle(SubWindowTitles[kCreateObjrefDialog]);
+
+        connect(m_createObjrefDialog, 
+                SIGNAL(createObjref(const ObjrefConfig&)),
+                this, 
+                SIGNAL(createObjref(const ObjrefConfig&)));
+    }
+
+    m_createObjrefDialog->show();
+    sub->show();
+    mdiArea->setActiveSubWindow(sub);
+}
+
+void AppMainWindow::showCreateServantDialog()
+{
+    QMdiSubWindow *& sub = m_subWindows[kCreateServantDialog];
+
+    if (!m_createServantDialog)
+    {
+        m_createServantDialog = new ServantCreateDialog(this);
+
+        sub = mdiArea->addSubWindow(m_createServantDialog);
+
+        sub->setWindowTitle(SubWindowTitles[kCreateServantDialog]);
+
+        connect(m_createServantDialog, 
+                SIGNAL(createServant(const ServantConfig&)),
+                this, 
+                SIGNAL(createServant(const ServantConfig&)));
+    }
+
+    m_createServantDialog->show();
+    sub->show();
+    mdiArea->setActiveSubWindow(sub);
+}
+
 // 
 //
 // Tools
@@ -140,18 +208,19 @@ void AppMainWindow::displayMessage(const QString& msg)
 //
 void AppMainWindow::createOperationSequenceTool()
 {
+    QMdiSubWindow *& sub = m_subWindows[kOperationSequenceTool];
+
     if (!m_operationSequenceTool)
     {
         m_operationSequenceTool = new OperationSequenceTool(this);
         
-        m_subWindows[kOperationSequenceTool] = 
-            mdiArea->addSubWindow(m_operationSequenceTool);
+        sub = mdiArea->addSubWindow(m_operationSequenceTool);
         
-        m_subWindows[kOperationSequenceTool]->setWindowTitle(SubWindowTitles[kOperationSequenceTool]);
+        sub->setWindowTitle(SubWindowTitles[kOperationSequenceTool]);
 
         // Initilizes the tool
         ObjrefRepository::const_iterator it = m_objrefs.begin();
-        ObjrefRepository::const_iterator end = m_objrefs.begin();
+        ObjrefRepository::const_iterator end = m_objrefs.end();
 
         for(; it != end; it++)
             m_operationSequenceTool->objrefCreated(it.value());
@@ -160,25 +229,29 @@ void AppMainWindow::createOperationSequenceTool()
 
 void AppMainWindow::showOperationSequenceTool()
 {
+    QMdiSubWindow *& sub = m_subWindows[kOperationSequenceTool];
+
     createOperationSequenceTool();
 
-    m_subWindows[kOperationSequenceTool]->show();
+    sub->show();
+    mdiArea->setActiveSubWindow(sub);
 }
 
 void AppMainWindow::createSenderSequenceTool()
 {
+    QMdiSubWindow *& sub = m_subWindows[kSenderSequenceTool];
+    
     if (!m_senderSequenceTool)
     {
         m_senderSequenceTool = new SenderSequenceTool(this);
 
-        m_subWindows[kSenderSequenceTool] = 
-            mdiArea->addSubWindow(m_senderSequenceTool);
+        sub =  mdiArea->addSubWindow(m_senderSequenceTool);
         
-        m_subWindows[kSenderSequenceTool]->setWindowTitle(SubWindowTitles[kSenderSequenceTool]);
+        sub->setWindowTitle(SubWindowTitles[kSenderSequenceTool]);
 
         // Initilizes the tool
         ObjrefRepository::const_iterator it = m_objrefs.begin();
-        ObjrefRepository::const_iterator end = m_objrefs.begin();
+        ObjrefRepository::const_iterator end = m_objrefs.end();
 
         for(; it != end; it++)
             m_senderSequenceTool->objrefCreated(it.value());
@@ -187,8 +260,11 @@ void AppMainWindow::createSenderSequenceTool()
 
 void AppMainWindow::showSenderSequenceTool()
 {
+    QMdiSubWindow *& sub = m_subWindows[kSenderSequenceTool];
+
     createSenderSequenceTool();
 
-    m_subWindows[kSenderSequenceTool]->show();
+    sub->show();
+    mdiArea->setActiveSubWindow(sub);
 }
 

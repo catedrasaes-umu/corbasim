@@ -27,8 +27,6 @@
 #include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/SimpleScriptEditor.hpp>
 
-#include "CreateDialog.hpp"
-
 namespace corbasim 
 {
 namespace app 
@@ -94,10 +92,8 @@ protected:
     subwindows_t m_subwindows_senders;
 
     QMdiSubWindow * m_sub_script;
-    QMdiSubWindow * m_sub_reference;
 
     SimpleScriptEditor * m_script;
-    ReferenceValidatedWidget * m_reference;
 
     QMenu * m_menu;
 };

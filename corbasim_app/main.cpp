@@ -151,7 +151,7 @@ int main(int argc, char **argv)
             config->plugin_directories.begin(); it != end2; ++it) 
     {
         std::cout << "loading: " << (*it) << std::endl;
-        // TODO model.loadDirectory(it->c_str());
+        application.loadDirectory(it->c_str());
     }
 
     // Load configuration files

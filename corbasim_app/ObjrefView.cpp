@@ -26,9 +26,7 @@ ObjrefView::ObjrefView(QMdiArea * area,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_objref(objref),
     m_sub_script(NULL), 
-    m_sub_reference(NULL),
-    m_script(NULL),
-    m_reference(NULL)
+    m_script(NULL)
 {
     InterfaceDescriptor_ptr factory = objref->interface();
     const QString& name = objref->name();
@@ -105,9 +103,6 @@ ObjrefView::~ObjrefView()
 
     delete m_script;
     delete m_sub_script;
-
-    delete m_reference;
-    delete m_sub_reference;
 }
 
 QMenu * ObjrefView::getMenu() const
@@ -186,7 +181,7 @@ RequestDialog * ObjrefView::getRequestDialog(int idx)
 
         connect(dlg,
             SIGNAL(sendRequest(Request_ptr)),
-            this, 
+            m_objref.get(), 
             SLOT(sendRequest(Request_ptr)));
 
         m_dialogs[idx] = dlg;
@@ -249,7 +244,7 @@ void ObjrefView::showScriptEditor()
 
         connect(m_script,
             SIGNAL(sendRequest(Request_ptr)),
-            this, 
+            m_objref.get(), 
             SLOT(sendRequest(Request_ptr)));
     }
     m_sub_script->showNormal();

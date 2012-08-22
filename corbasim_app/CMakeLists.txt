@@ -6,7 +6,6 @@ set(corbasim_app_SRCS
     AboutDialog.cpp
     AppConfiguration.cpp
 
-    CreateDialog.cpp
     ObjrefView.cpp
     # view/Servant.cpp
 
@@ -22,7 +21,6 @@ set(corbasim_app_MOC_HDRS
     AppMainWindow.hpp
     AboutDialog.hpp
 
-    CreateDialog.hpp
     ObjrefView.hpp
     # view/Servant.hpp
 

@@ -33,6 +33,9 @@ namespace corbasim
 {
 namespace gui 
 {
+    class ObjrefCreateDialog;
+    class ServantCreateDialog;
+
     class OperationSequenceTool;
     class SenderSequenceTool;
 } // namespace gui
@@ -65,6 +68,10 @@ public slots:
     void displayError(const QString& err);
     void displayMessage(const QString& msg);
 
+    // Dialogs
+    void showCreateObjrefDialog();
+    void showCreateServantDialog();
+
     // Tools
     void createOperationSequenceTool();
     void showOperationSequenceTool();
@@ -88,6 +95,10 @@ protected:
     QActionGroup m_actions;
 
     std::vector< QMdiSubWindow * > m_subWindows;
+
+    // Dialogs
+    ObjrefCreateDialog * m_createObjrefDialog;
+    ServantCreateDialog * m_createServantDialog;
 
     // Tools
     OperationSequenceTool * m_operationSequenceTool;

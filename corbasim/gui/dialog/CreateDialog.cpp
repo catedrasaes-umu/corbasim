@@ -18,22 +18,32 @@
  */
 
 #include "CreateDialog.hpp"
-#include <corbasim/core/reflective.hpp>
 
-using namespace corbasim::app;
+using namespace corbasim::gui;
 
 ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     QDialog(parent)
 {
-    QVBoxLayout * layout = new QVBoxLayout;
+    QVBoxLayout * layout = new QVBoxLayout();
 
+    QGridLayout * grid = new QGridLayout();
+
+    grid->addWidget(new QLabel("Object name"), 0, 0);
+    m_name = new QLineEdit();
+    grid->addWidget(m_name, 0, 1);
+ 
+    grid->addWidget(new QLabel("Interface"), 1, 0);
+    m_fqn = new QLineEdit();
+    grid->addWidget(m_fqn, 1, 1); 
+
+    layout->addLayout(grid);
+
+    // Buttons
     QDialogButtonBox * btns = new QDialogButtonBox();
-
     QPushButton * createButton = 
         btns->addButton("&Create", QDialogButtonBox::AcceptRole);
     QPushButton * cancelButton = 
         btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
-
     layout->addWidget(btns);
 
     connect(createButton, SIGNAL(clicked()),
@@ -41,6 +51,7 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     connect(cancelButton, SIGNAL(clicked()),
             window(), SLOT(hide()));
+    // End buttons
 
     setLayout(layout);
 }
@@ -51,6 +62,12 @@ ObjrefCreateDialog::~ObjrefCreateDialog()
 
 void ObjrefCreateDialog::createClicked()
 {
+    ObjrefConfig cfg;
+
+    cfg.name = m_name->text().toStdString();
+    cfg.fqn = m_fqn->text().toStdString();
+
+    emit createObjref(cfg);
 }
 
 void ObjrefCreateDialog::hideEvent(QHideEvent* event)
@@ -106,59 +123,6 @@ void ServantCreateDialog::hideEvent(QHideEvent* event)
         parent->hide();
 
     event->accept();
-}
-
-ReferenceValidatedWidget::ReferenceValidatedWidget(
-	corbasim::core::reference_validator_base * validator,
-        QWidget * parent) :
-    QWidget(parent), m_validator(validator)
-{
-    QVBoxLayout * l = new QVBoxLayout;
-
-    m_widget = new qt::ObjrefWidget(validator, this);
-    l->addWidget(m_widget);
-
-    // TODO use QDialogButtonBox
-    
-    QPushButton * applyBtn = new QPushButton("&Apply", this);
-    QPushButton * pasteBtn = new QPushButton("&Paste IOR from clipboard", this);
-
-    connect(applyBtn, SIGNAL(clicked()),
-            this, SLOT(applyClicked()));
-    connect(pasteBtn, SIGNAL(clicked()),
-            m_widget, SLOT(pasteIOR()));
-
-    QHBoxLayout * hl = new QHBoxLayout;
-
-    // Horizontal spacer
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
-            QSizePolicy::Expanding, QSizePolicy::Minimum);
-    hl->addItem(spacer);
-
-    hl->addWidget(applyBtn);
-    hl->addWidget(pasteBtn);
-
-    l->addLayout(hl);
-
-    setLayout(l);
-}
-
-ReferenceValidatedWidget::~ReferenceValidatedWidget()
-{
-    delete m_validator;
-}
-
-void ReferenceValidatedWidget::updateReference(const CORBA::Object_var& ref)
-{
-    m_validator->set_reference(ref);
-    m_widget->validatorHasChanged();
-}
-
-void ReferenceValidatedWidget::applyClicked()
-{
-    CORBA::Object_var ref = m_validator->get_reference();
-
-    emit updatedReference(ref);
 }
 
 

@@ -20,6 +20,9 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/script/ReflectiveScriptClass.hpp
     gui/script/ScriptEvaluator.hpp
 
+    # dialogs
+    gui/dialog/CreateDialog.hpp
+
     gui/InputRequestProcessor.hpp
     gui/OperationSequence.hpp
     gui/SimpleScriptEditor.hpp
@@ -62,6 +65,9 @@ set(corbasim_gui_MOC_HDRS
     # script
     gui/script/ScriptEvaluator.hpp
 
+    # dialogs
+    gui/dialog/CreateDialog.hpp
+
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
     gui/OperationForm.hpp
@@ -100,6 +106,9 @@ set(corbasim_gui_SRCS
     # script
     gui/script/ReflectiveScriptClass.cpp
     gui/script/ScriptEvaluator.cpp
+
+    # dialogs
+    gui/dialog/CreateDialog.cpp
 
     gui/InputRequestProcessor.cpp
     gui/OperationSequence.cpp

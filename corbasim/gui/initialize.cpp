@@ -54,6 +54,19 @@ public:
         qRegisterMetaType< SenderConfig_ptr >
             ("SenderConfig_ptr");
 
+        qRegisterMetaType< ObjectId >
+            ("ObjectId");
+
+        qRegisterMetaType< Objref_ptr >
+            ("Objref_ptr");
+        qRegisterMetaType< Servant_ptr >
+            ("Servant_ptr");
+
+        qRegisterMetaType< ObjrefConfig >
+            ("ObjrefConfig");
+        qRegisterMetaType< ServantConfig >
+            ("ServantConfig");
+
         // Ensure created all file format helpers
         {
             using namespace ::corbasim::core;

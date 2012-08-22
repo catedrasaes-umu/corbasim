@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_VIEW_CREATEDIALOG_HPP
-#define CORBASIM_APP_VIEW_CREATEDIALOG_HPP
+#ifndef CORBASIM_GUI_CREATEDIALOG_HPP
+#define CORBASIM_GUI_CREATEDIALOG_HPP
 
 #include <QtGui>
 #include <corbasim/gui/types.hpp>
@@ -26,10 +26,8 @@
 
 namespace corbasim 
 {
-namespace app 
+namespace gui 
 {
-
-using namespace corbasim::gui;
 
 class ObjrefCreateDialog : public QDialog
 {
@@ -49,6 +47,10 @@ signals:
 protected:
     
     void hideEvent(QHideEvent* event);
+
+    QLineEdit * m_name;
+    QLineEdit * m_fqn;
+    qt::ObjrefWidget * m_reference;
 };
 
 class ServantCreateDialog : public QDialog
@@ -71,33 +73,8 @@ protected:
     void hideEvent(QHideEvent* event);
 };
 
-class ReferenceValidatedWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    ReferenceValidatedWidget(
-            core::reference_validator_base * validator,
-            QWidget * parent = 0);
-    virtual ~ReferenceValidatedWidget();
-
-public slots:    
-
-    void updateReference(const CORBA::Object_var& ref);
-
-    void applyClicked();
-
-signals:
-
-    void updatedReference(CORBA::Object_var);
-
-protected:
-
-    core::reference_validator_base * m_validator;
-    qt::ObjrefWidget * m_widget;
-};
-
-} // namespace app
+} // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_VIEW_CREATEDIALOG_HPP */
+#endif /* CORBASIM_GUI_CREATEDIALOG_HPP */
 
