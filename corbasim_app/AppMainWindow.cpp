@@ -80,11 +80,36 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 
     // No more window
-
-    menuFile->addAction("&New object reference", 
+    //
+    // New object
+    QAction * newObjAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "&New object reference", this);
+    newObjAction->setShortcut(QKeySequence::New);
+    connect(newObjAction, SIGNAL(triggered()), 
             this, SLOT(showCreateObjrefDialog()));
-    menuFile->addAction("&New servant", 
+
+    // New servant
+    QAction * newSrvAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "N&ew servant", this);
+    newSrvAction->setShortcut(QKeySequence::Save);
+    connect(newSrvAction, SIGNAL(triggered()), 
             this, SLOT(showCreateServantDialog()));
+
+    // Tool bar
+    QToolBar * toolBar = addToolBar("File");
+    //toolBar->addAction(loadScenarioAction);
+    //toolBar->addAction(saveScenarioAction);
+    toolBar->addAction(newObjAction);
+    toolBar->addAction(newSrvAction);
+
+    menuFile->addAction(newObjAction);
+    menuFile->addAction(newSrvAction);
+    menuFile->addSeparator();
+    QAction * closeAction = 
+        menuFile->addAction("&Exit", this, SLOT(close()));
+    closeAction->setShortcut(QKeySequence::Close);
 
     menuTool->addAction("&Operation sequences", 
             this, SLOT(showOperationSequenceTool()));
