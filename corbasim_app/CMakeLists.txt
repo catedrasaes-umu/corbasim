@@ -7,7 +7,7 @@ set(corbasim_app_SRCS
     AppConfiguration.cpp
 
     ObjrefView.cpp
-    # view/Servant.cpp
+    ServantView.cpp
 
     # TODO
     # AppFileWatcher.cpp
@@ -22,7 +22,7 @@ set(corbasim_app_MOC_HDRS
     AboutDialog.hpp
 
     ObjrefView.hpp
-    # view/Servant.hpp
+    ServantView.hpp
 
     # TODO
     # AppFileWatcher.hpp

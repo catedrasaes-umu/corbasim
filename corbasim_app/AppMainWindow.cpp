@@ -107,6 +107,9 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
     m_objrefViews.insert(objref->id(), view);
     menuObject_references->addMenu(view->getMenu());
 
+    connect(view.get(), SIGNAL(deleteObjref(ObjectId)),
+            this, SIGNAL(deleteObjref(ObjectId)));
+
     // connect signals
     connect(objref.get(), SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
         &m_logModel, SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
@@ -144,6 +147,13 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
     m_servants.add(servant);
     m_logModel.registerInstance(servant);
     
+    ServantView_ptr view(new ServantView(mdiArea, servant, this));
+    m_servantViews.insert(servant->id(), view);
+    menuServants->addMenu(view->getMenu());
+
+    connect(view.get(), SIGNAL(deleteServant(ObjectId)),
+            this, SIGNAL(deleteServant(ObjectId)));
+
     // connect signals
     connect(servant.get(), SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
         &m_logModel, SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
@@ -156,6 +166,8 @@ void AppMainWindow::servantDeleted(ObjectId id)
 {
     m_servants.del(id);
     m_logModel.unregisterInstance(id);
+    
+    m_servantViews.remove(id);
 
     // Tools
     if (m_filteredLogView)

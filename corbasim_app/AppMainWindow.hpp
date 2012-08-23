@@ -27,6 +27,7 @@
 #include <corbasim/gui/item/LogModel.hpp>
 
 #include "ObjrefView.hpp"
+#include "ServantView.hpp"
 #include "ui_AppMainWindow.h"
 
 namespace corbasim 
@@ -110,6 +111,9 @@ protected:
 
     typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
     ObjrefViews_t m_objrefViews;
+
+    typedef QMap< ObjectId, ServantView_ptr > ServantViews_t;
+    ServantViews_t m_servantViews;
 
     void createToolSubWindow(int tool, QWidget * widget);
     void showToolSubWindow(int tool);

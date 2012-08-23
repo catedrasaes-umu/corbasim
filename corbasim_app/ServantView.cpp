@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * Servant.cpp
+ * ServantView.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,19 +17,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Servant.hpp"
+#include "ServantView.hpp"
 #include <corbasim/core/reflective_fwd.hpp>
 
-using namespace corbasim::app::view;
+using namespace corbasim::app;
 
-Servant::Servant(QMdiArea * area,
-				 const QString& id, const corbasim::core::interface_reflective_base* factory,
+ServantView::ServantView(QMdiArea * area,
+        Objref_ptr servant,
         QObject * parent) :
-    QObject(parent), m_mdi_area(area), m_id(id), m_factory(factory),
+    QObject(parent), m_mdi_area(area), m_servant(servant),
     m_sub_script(NULL), m_script(NULL)
 {
-    QString menu_entry = QString("%1 (%2)")
-        .arg(m_id).arg(factory->get_fqn());
+    const QString menu_entry = QString("%1 (%2)")
+        .arg(servant->name())
+        .arg(servant->interface()->get_fqn());
 
     m_menu = new QMenu(menu_entry);
     // TODO
@@ -38,66 +39,61 @@ Servant::Servant(QMdiArea * area,
     m_menu->addAction("&Delete", this, SLOT(deleteServant()));
 }
 
-Servant::~Servant()
+ServantView::~ServantView()
 {
     delete m_menu;
     delete m_script;
     delete m_sub_script;
 }
 
-QMenu * Servant::getMenu() const
+QMenu * ServantView::getMenu() const
 {
     return m_menu;
 }
 
-const corbasim::core::interface_reflective_base * Servant::getFactory() const
+InterfaceDescriptor_ptr ServantView::getFactory() const
 {
-    return m_factory;
+    return m_servant->interface();
 }
 
-void Servant::deleteServant()
+void ServantView::deleteServant()
 {
-    emit deleteServant(m_id);
+    emit deleteServant(m_servant->id());
 }
 
-void Servant::showSelfStimulator()
+void ServantView::showSelfStimulator()
 {
     if (!m_sub_script)
     {
-        m_script = new gui::SimpleScriptEditor();
-        m_script->initialize(m_factory);
+        m_script = new SimpleScriptEditor();
+        m_script->initialize(m_servant->interface());
 
-        m_sub_script = new QMdiSubWindow;
+        m_sub_script = new QMdiSubWindow();
         m_sub_script->setWidget(m_script);
-        m_sub_script->setWindowTitle(QString("%1: Self-stimulator").arg(m_id));
+        m_sub_script->setWindowTitle(QString("%1: Self-stimulator").arg(m_servant->name()));
         m_mdi_area->addSubWindow(m_sub_script);
 
         QObject::connect(m_script,
-            SIGNAL(sendRequest(corbasim::event::request_ptr)),
-            this, 
-            SLOT(sendRequest(corbasim::event::request_ptr)));
+            SIGNAL(sendRequest(Request_ptr)),
+            m_servant.get(), 
+            SLOT(sendRequest(Request_ptr)));
     }
     m_sub_script->showNormal();
     m_script->show();
     m_mdi_area->setActiveSubWindow(m_sub_script);
 }
 
-void Servant::sendRequest(corbasim::event::request_ptr req)
-{
-    emit sendRequest(m_id, req);
-}
-
 // Settings
-void Servant::save(QVariant& settings) 
+void ServantView::save(QVariant& settings) 
 {
     QVariantMap map;
 
-    map["fqn"] = m_factory->get_fqn();
+    map["fqn"] = m_servant->interface()->get_fqn();
 
     settings = map;
 }
 
-void Servant::load(const QVariant& settings) 
+void ServantView::load(const QVariant& settings) 
 {
 }
 

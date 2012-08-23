@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * Objref.hpp
+ * ServantView.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,42 +17,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_APP_VIEW_OBJREF_HPP
-#define CORBASIM_APP_VIEW_OBJREF_HPP
+#ifndef CORBASIM_APP_VIEW_SERVANT_HPP
+#define CORBASIM_APP_VIEW_SERVANT_HPP
 
 #include <QtGui>
+#include <boost/shared_ptr.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/RequestDialog.hpp>
-#include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/SimpleScriptEditor.hpp>
-#include "CreateDialog.hpp"
 
 namespace corbasim 
 {
 namespace app 
 {
-namespace view 
-{
 
 using namespace corbasim::gui;
 
-class ObjrefView : public QObject
+class ServantView : public QObject
 {
     Q_OBJECT
 public:
-    ObjrefView(QMdiArea * area,
-            Objref_ptr objref,
+    ServantView(QMdiArea * area,
+            Objref_ptr servant,
             QObject * parent = 0);
-    virtual ~ObjrefView();
+    virtual ~ServantView();
 
     QMenu * getMenu() const;
-
-    RequestDialog * getRequestDialog(int idx);
-    QMdiSubWindow * getWindow(int idx);
-
-    OperationSender * getSenderDialog(int idx);
-    QMdiSubWindow * getSenderWindow(int idx);
 
     InterfaceDescriptor_ptr getFactory() const;
 
@@ -61,53 +51,29 @@ public:
 
 public slots:
 
-    void deleteObjref();
+    void deleteServant();
 
-    void showRequestDialog(int idx);
-    void showRequestDialog(QAction * act);
-    void showSenderDialog(int idx);
-    void showSenderDialog(QAction * act);
-    void showScriptEditor();
-
-    void showSetReference();
+    void showSelfStimulator();
 
 signals:
 
-    void deleteObjref(ObjectId);
-
+    void deleteServant(ObjectId);
+            
 protected:
-
     QMdiArea * m_mdi_area;
 
-    Objref_ptr m_objref;
-
-    // Operation dialogs
-    typedef std::vector< RequestDialog * > dialogs_t;
-    dialogs_t m_dialogs;
-    
-    typedef std::vector< QMdiSubWindow * > subwindows_t;
-    subwindows_t m_subwindows;
-
-    // Senders
-    typedef std::vector< OperationSender * > senders_t;
-    senders_t m_senders;
-
-    subwindows_t m_subwindows_senders;
+    Objref_ptr m_servant;
 
     QMdiSubWindow * m_sub_script;
-    QMdiSubWindow * m_sub_reference;
-
     SimpleScriptEditor * m_script;
-    ReferenceValidatedWidget * m_reference;
 
     QMenu * m_menu;
 };
 
-typedef boost::shared_ptr< ObjrefView > ObjrefView_ptr;
+typedef boost::shared_ptr< ServantView > ServantView_ptr;
 
-} // namespace view
 } // namespace app
 } // namespace corbasim
 
-#endif /* CORBASIM_APP_VIEW_OBJREF_HPP */
+#endif /* CORBASIM_APP_VIEW_SERVANT_HPP */
 
