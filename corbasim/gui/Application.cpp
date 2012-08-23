@@ -216,14 +216,13 @@ void Application::deleteServant(ObjectId id)
 
     if (obj)
     {
-#if 0
-        // Temporal - Proof of concept
-        PortableServer::ObjectId_var myObjID = 
-            m_data->rootPOA->servant_to_id(it->second->getServant()); 
+        Servant_ptr servant = boost::static_pointer_cast< Servant >(obj);
 
-        m_data->rootPOA->deactivate_object (myObjID);
-        // End temporal
-#endif
+        PortableServer::ObjectId_var myObjID = 
+            m_data->m_rootPOA->servant_to_id(servant->getServant()); 
+
+        m_data->m_rootPOA->deactivate_object (myObjID);
+
         m_servants.del(id);
     }
     else

@@ -177,6 +177,8 @@ public:
 
 public slots:
 
+    void addInterface(InterfaceDescriptor_ptr interface);
+
     void loadDirectory(const QString& directory);
 
 signals:

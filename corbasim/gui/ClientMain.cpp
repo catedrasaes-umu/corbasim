@@ -1,5 +1,6 @@
 #include <corbasim/impl.hpp>
 #include <corbasim/gui/utils.hpp>
+#include <corbasim/gui/Application.hpp>
 #include <corbasim/gui/SimpleClient.hpp>
 #include <iostream>
 
@@ -33,7 +34,9 @@ int main(int argc, char **argv)
 	CORBA::Object_var obj;
 	
 	corbasim::gui::SimpleClient window;
-	window.initialize(reflective);
+    corbasim::gui::Objref_ptr object(
+            new corbasim::gui::Objref("Referenced object", reflective));
+	window.initialize(object);
 	
 	if(argc > 2)
 	{

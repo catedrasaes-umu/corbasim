@@ -29,8 +29,6 @@
 #include <corbasim/qt/ObjrefWidget.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
 
-#include <corbasim/qt/ReferenceFinder.hpp>
-
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
 
@@ -51,7 +49,7 @@ public:
     SimpleClient(QWidget * parent = 0);
     virtual ~SimpleClient();
 
-    void initialize(InterfaceDescriptor_ptr);
+    void initialize(Objref_ptr objref);
     void setReference(CORBA::Object_ptr ref);
 
 public slots:
@@ -82,8 +80,6 @@ signals:
 protected:
 
     LogModel m_log_model;
-
-    qt::ReferenceFinder m_finder;
 
     Objref_ptr m_objref;
     Caller_ptr m_validator;

@@ -29,7 +29,8 @@ ObjrefView::ObjrefView(QMdiArea * area,
     m_script(NULL),
 
     m_subUpdateReference(NULL),
-    m_updateReference(NULL)
+    m_updateReference(NULL),
+    m_client(NULL)
 {
     InterfaceDescriptor_ptr factory = objref->interface();
     const QString& name = objref->name();
@@ -72,6 +73,7 @@ ObjrefView::ObjrefView(QMdiArea * area,
             SLOT(showSenderDialog(QAction*)));
 
     m_menu->addAction("&Script editor", this, SLOT(showScriptEditor()));
+    m_menu->addAction("&Client application", this, SLOT(showClient()));
     m_menu->addAction("Set &reference", this, SLOT(showSetReference()));
     m_menu->addSeparator();
     m_menu->addAction("&Delete", this, SLOT(deleteObjref()));
@@ -373,5 +375,16 @@ void ObjrefView::load(const QVariant& settings)
             }
         }
     }
+}
+
+void ObjrefView::showClient()
+{
+    if (!m_client)
+    {
+        m_client = new SimpleClient(qobject_cast< QWidget *>(parent()));
+        m_client->initialize(m_objref);
+    }
+    
+    m_client->show();
 }
 

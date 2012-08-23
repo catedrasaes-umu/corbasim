@@ -26,6 +26,7 @@
 #include <corbasim/gui/RequestDialog.hpp>
 #include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/SimpleScriptEditor.hpp>
+#include <corbasim/gui/SimpleClient.hpp>
 #include <corbasim/gui/dialog/UpdateReferenceDialog.hpp>
 
 namespace corbasim 
@@ -68,6 +69,7 @@ public slots:
     void showScriptEditor();
 
     void showSetReference();
+    void showClient();
 
 signals:
 
@@ -98,6 +100,7 @@ protected:
     QMdiSubWindow * m_subUpdateReference;
     UpdateReferenceDialog * m_updateReference;
 
+    SimpleClient * m_client;
 
     QMenu * m_menu;
 };

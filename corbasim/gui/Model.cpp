@@ -323,9 +323,7 @@ InterfaceDescriptor_ptr InterfaceRepository::loadLibrary(const QString& file)
 
     if (m_interfaces.find(factory->get_fqn()) == m_interfaces.end())
     {
-        m_interfaces.insert(factory->get_fqn(), factory);
-
-        emit loadedInterface(factory);
+        addInterface(factory);;
     }
 
     return factory;
@@ -345,6 +343,14 @@ InterfaceDescriptor_ptr InterfaceRepository::getInterface(const QString& fqn)
     lib.prepend("corbasim_reflective_");
 
     return loadLibrary(lib);
+}
+
+void InterfaceRepository::addInterface(
+        InterfaceDescriptor_ptr factory)
+{
+    m_interfaces.insert(factory->get_fqn(), factory);
+
+    emit loadedInterface(factory);
 }
 
 void InterfaceRepository::loadDirectory(const QString& path)

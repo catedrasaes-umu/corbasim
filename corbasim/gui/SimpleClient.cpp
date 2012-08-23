@@ -174,18 +174,11 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QObject::connect(&m_actions, SIGNAL(triggered(QAction *)), 
             this, SLOT(showDialog(QAction *)));
 
-    QObject::connect(&m_finder, 
-            SIGNAL(found(const CORBA::Object_var&)),
-            this,
-            SLOT(updateReference(const CORBA::Object_var&)));
-
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
 
 SimpleClient::~SimpleClient()
 {
-    m_finder.terminate();
-    m_finder.wait();
 }
 
 void SimpleClient::pasteIOR()
@@ -205,10 +198,9 @@ void SimpleClient::clearAll()
     setReference(CORBA::Object::_nil());
 }
 
-void SimpleClient::initialize(InterfaceDescriptor_ptr factory)
+void SimpleClient::initialize(Objref_ptr objref)
 {
-    const QString& objectName ("Referenced object");
-    m_objref.reset(new Objref(objectName, factory, this));
+    m_objref = objref;
 
     // Signals
     QObject::connect(this, SIGNAL(sendRequest(Request_ptr)),
@@ -218,8 +210,10 @@ void SimpleClient::initialize(InterfaceDescriptor_ptr factory)
 
     m_log_model.registerInstance(m_objref);
 
-    QObject::connect(m_objref.get(), SIGNAL(requestSent(ObjectId, const Request_ptr&, const Event_ptr&)),
-            &m_log_model, SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
+    QObject::connect(m_objref.get(), 
+            SIGNAL(requestSent(ObjectId, const Request_ptr&, const Event_ptr&)),
+            &m_log_model, 
+            SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 
     m_filtered_log->registerInstance(m_objref);
 
@@ -227,6 +221,7 @@ void SimpleClient::initialize(InterfaceDescriptor_ptr factory)
         m_seq_tool->objrefCreated(m_objref);
 
     QGridLayout * grid = NULL;
+    InterfaceDescriptor_ptr factory = m_objref->interface();
     const unsigned int count = factory->operation_count();
 
     // Inicializa los dialogos a nulo
@@ -269,8 +264,6 @@ void SimpleClient::initialize(InterfaceDescriptor_ptr factory)
     // Validator for reference updates
     m_validator.reset(factory->create_caller());
     m_ref->setValidator(m_validator.get());
-
-    m_finder.start();
 }
 
 void SimpleClient::setReference(CORBA::Object_ptr ref)
