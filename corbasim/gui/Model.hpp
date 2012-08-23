@@ -101,6 +101,20 @@ public:
            QObject * parent = 0);
 
     ~Servant();
+
+    PortableServer::ServantBase * getServant() const;
+
+signals:
+
+    void requestReceived(ObjectId id, 
+            const Request_ptr& request,
+            const Event_ptr& event);
+
+protected:
+
+    friend class ServantData;
+    struct ServantData;
+    ServantData * m_data;
 };
 
 class CORBASIM_GUI_DECLSPEC ObjrefRepository : public QObject

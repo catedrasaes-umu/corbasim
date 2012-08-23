@@ -147,12 +147,19 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
     // connect signals
     connect(servant.get(), SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
         &m_logModel, SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
+
+    if (m_filteredLogView)
+        m_filteredLogView->registerInstance(servant);
 }
 
 void AppMainWindow::servantDeleted(ObjectId id)
 {
     m_servants.del(id);
     m_logModel.unregisterInstance(id);
+
+    // Tools
+    if (m_filteredLogView)
+        m_filteredLogView->unregisterInstance(id);
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -241,6 +248,12 @@ void AppMainWindow::createFilteredLogView()
         // Initilizes the tool
         ObjrefRepository::const_iterator it = m_objrefs.begin();
         ObjrefRepository::const_iterator end = m_objrefs.end();
+
+        for(; it != end; it++)
+            m_filteredLogView->registerInstance(it.value());
+
+        it = m_servants.begin();
+        end = m_servants.end();
 
         for(; it != end; it++)
             m_filteredLogView->registerInstance(it.value());

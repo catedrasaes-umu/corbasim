@@ -111,6 +111,35 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
 {
     QVBoxLayout * layout = new QVBoxLayout;
 
+    QGridLayout * grid = new QGridLayout();
+
+    grid->addWidget(new QLabel("Servant name"), 0, 0);
+    m_name = new QLineEdit();
+    m_name->setObjectName("name");
+    grid->addWidget(m_name, 0, 1);
+ 
+    grid->addWidget(new QLabel("Interface"), 1, 0);
+    m_fqn = new QLineEdit();
+    m_fqn->setObjectName("fqn");
+    grid->addWidget(m_fqn, 1, 1); 
+
+    layout->addLayout(grid);
+
+#if 0
+    QGroupBox * group = new QGroupBox("Object reference");
+    m_fqn->setObjectName("reference_group");
+    QVBoxLayout * groupLayout = new QVBoxLayout();
+    groupLayout->setMargin(0);
+
+    m_reference = new qt::ObjrefWidget();
+    m_reference->setObjectName("reference");
+    groupLayout->addWidget(m_reference);
+    group->setLayout(groupLayout);
+
+    grid->addWidget(group, 2, 0, 1, 2);
+#endif
+
+    // Buttons
     QDialogButtonBox * btns = new QDialogButtonBox();
 
     QPushButton * createButton = 
@@ -137,6 +166,12 @@ ServantCreateDialog::~ServantCreateDialog()
 
 void ServantCreateDialog::createClicked()
 {
+    ServantConfig cfg;
+
+    cfg.name = m_name->text().toStdString();
+    cfg.fqn = m_fqn->text().toStdString();
+
+    emit createServant(cfg);
 }
 
 void ServantCreateDialog::hideEvent(QHideEvent* event)

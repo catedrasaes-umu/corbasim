@@ -18,8 +18,38 @@
  */
 
 #include "Application.hpp"
+#include <iostream>
 
 using namespace corbasim::gui;
+
+struct Application::ApplicationData
+{
+    Application& m_this;
+
+    CORBA::ORB_var m_orb;
+    PortableServer::POA_var m_rootPOA;
+    PortableServer::POAManager_var m_manager; 
+
+    ApplicationData(Application& this_) : 
+        m_this(this_) 
+    {
+        int argc = 0;
+        m_orb = CORBA::ORB_init(argc, NULL);
+
+        CORBA::Object_var rootPOAObj = 
+            m_orb->resolve_initial_references ("RootPOA");
+
+        m_rootPOA = PortableServer::POA::_narrow(rootPOAObj.in());
+
+        m_manager = m_rootPOA->the_POAManager();
+
+        m_manager->activate();
+    }
+
+    ~ApplicationData()
+    {
+    }
+};
 
 //
 //
@@ -31,7 +61,8 @@ Application::Application(QObject * parent) :
     QObject(parent), 
     m_interfaces(this), 
     m_objrefs(this),
-    m_servants(this)
+    m_servants(this),
+    m_data(new ApplicationData(*this))
 {
     connect(&m_interfaces, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
@@ -51,6 +82,7 @@ Application::Application(QObject * parent) :
 
 Application::~Application()
 {
+    delete m_data;
 }
 
 void Application::loadScenario(const QString& file)
@@ -120,21 +152,17 @@ void Application::createServant(const ServantConfig& cfg)
     {
         Servant_ptr obj(new Servant(cfg, factory, this));
         
-#if 0
-        // Temporal - Proof of concept
-
         PortableServer::ObjectId_var myObjID = 
-            m_data->rootPOA->activate_object (obj->getServant());
+            m_data->m_rootPOA->activate_object (obj->getServant());
     
         CORBA::Object_var objSrv = 
-            m_data->rootPOA->servant_to_reference(obj->getServant());
+            m_data->m_rootPOA->servant_to_reference(obj->getServant());
 
         // Displaying reference
-        CORBA::String_var ref = m_data->orb->object_to_string (objSrv);
-        std::cout << cfg.id << ": " << ref << std::endl;
-#endif
+        CORBA::String_var ref = m_data->m_orb->object_to_string (objSrv);
+        std::cout << cfg.name << ": " << ref << std::endl;
 
-        // End temporal
+        obj->setReference(objSrv);
 
         m_servants.add(obj);
 

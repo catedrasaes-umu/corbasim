@@ -21,6 +21,7 @@
 #include <cassert>
 #include <corbasim/event.hpp>
 #include <QLibrary>
+#include <iostream>
 
 using namespace corbasim::gui;
 
@@ -86,6 +87,8 @@ void Objref::setReference(const CORBA::Object_var& reference)
     {
         m_reference = reference;
 
+        m_caller->set_reference(reference);
+
         emit updatedReference(m_reference);
     }
 }
@@ -114,22 +117,55 @@ Event_ptr Objref::sendRequest(const Request_ptr& request)
 //
 //
 
+struct Servant::ServantData :
+    public ::corbasim::core::request_processor
+{
+    Servant& m_this;
+    PortableServer::ServantBase * m_servant;
+
+    ServantData(Servant& this_) : 
+        m_this(this_), 
+        m_servant(this_.interface()->create_servant(this))
+    {
+    }
+
+    ~ServantData()
+    {
+        delete m_servant;
+    }
+
+    ::corbasim::event::event_ptr operator()(
+            ::corbasim::event::request_ptr req,
+            ::corbasim::event::response_ptr resp)
+    {
+        emit m_this.requestReceived(m_this.id(), req, resp);
+        return resp;
+    }
+};
+
 Servant::Servant(const QString& name,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
-    Objref(name, interfaceDescriptor, parent)
+    Objref(name, interfaceDescriptor, parent), 
+    m_data(new ServantData(*this))
 {
 }
 
 Servant::Servant(const ServantConfig& cfg,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
-    Objref(cfg, interfaceDescriptor, parent)
+    Objref(cfg, interfaceDescriptor, parent),
+    m_data(new ServantData(*this))
 {
 }
 
 Servant::~Servant()
 {
+}
+
+PortableServer::ServantBase * Servant::getServant() const
+{
+    return m_data->m_servant;
 }
 
 //

@@ -79,6 +79,10 @@ protected:
     ObjrefRepository m_objrefs;
     ObjrefRepository m_servants;
 
+    struct ApplicationData;
+    friend class ApplicationData;
+    ApplicationData * m_data;
+
 };
 
 } // namespace gui

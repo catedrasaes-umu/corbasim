@@ -73,6 +73,9 @@ signals:
 protected:
 
     void hideEvent(QHideEvent* event);
+
+    QLineEdit * m_name;
+    QLineEdit * m_fqn;
 };
 
 } // namespace gui
