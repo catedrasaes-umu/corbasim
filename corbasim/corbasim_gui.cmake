@@ -31,15 +31,12 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/FilteredLogView.hpp
     gui/SimpleClient.hpp
     gui/ReflectiveGUI.hpp
-    
     gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
-
-
     gui/OperationForm.hpp
     gui/Sender.hpp
+    gui/DumpTool.hpp
 
-    # TODO gui/DumpTool.hpp
     # TODO gui/RecorderTool.hpp
     # TODO gui/Server.hpp
     # TODO gui/ServerApp.hpp
@@ -81,8 +78,8 @@ set(corbasim_gui_MOC_HDRS
     gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
     gui/Sender.hpp
+    gui/DumpTool.hpp
 
-    # TODO gui/DumpTool.hpp
     # TODO gui/RecorderTool.hpp
     # TODO gui/Server.hpp
 )
@@ -124,8 +121,8 @@ set(corbasim_gui_SRCS
     gui/ParametersFromFilesTool.cpp
     gui/OperationForm.cpp
     gui/Sender.cpp
+    gui/DumpTool.cpp
 
-    # TODO gui/DumpTool.cpp
     # TODO gui/RecorderTool.cpp
     # TODO gui/Server.cpp
     # TODO gui/ServerApp.cpp

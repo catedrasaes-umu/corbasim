@@ -24,6 +24,7 @@
 #include <corbasim/gui/FilteredLogView.hpp>
 #include <corbasim/gui/OperationSequence.hpp>
 #include <corbasim/gui/SenderSequence.hpp>
+#include <corbasim/gui/DumpTool.hpp>
 #include <corbasim/gui/dialog/CreateDialog.hpp>
 
 using namespace corbasim::app;
@@ -38,6 +39,7 @@ namespace
         kFilteredLogView,
         kOperationSequenceTool,
         kSenderSequenceTool,
+        kDumpTool,
 
         kSubWindowsMax
     };
@@ -47,7 +49,8 @@ namespace
         "Create new servant",
         "Filtered log",
         "Operation sequence tool",
-        "Sender sequence tool"
+        "Sender sequence tool",
+        "Dump tool"
     };
 } // namespace
 
@@ -65,7 +68,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     // Tools
     m_filteredLogView(NULL),
     m_operationSequenceTool(NULL),
-    m_senderSequenceTool(NULL)
+    m_senderSequenceTool(NULL),
+    m_dumpTool(NULL)
 
 {
     setupUi(this);
@@ -86,6 +90,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             this, SLOT(showOperationSequenceTool()));
     menuTool->addAction("&Sender sequences", 
             this, SLOT(showSenderSequenceTool()));
+    menuTool->addAction("&Dump tool", 
+            this, SLOT(showDumpTool()));
     menuTool->addSeparator();
     menuTool->addAction("&Filtered log", 
             this, SLOT(showFilteredLogView()));
@@ -160,6 +166,9 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
 
     if (m_filteredLogView)
         m_filteredLogView->registerInstance(servant);
+
+    if (m_dumpTool)
+        m_dumpTool->registerInstance(servant);
 }
 
 void AppMainWindow::servantDeleted(ObjectId id)
@@ -172,6 +181,9 @@ void AppMainWindow::servantDeleted(ObjectId id)
     // Tools
     if (m_filteredLogView)
         m_filteredLogView->unregisterInstance(id);
+    
+    if (m_dumpTool)
+        m_dumpTool->unregisterInstance(id);
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -322,5 +334,28 @@ void AppMainWindow::showSenderSequenceTool()
 {
     createSenderSequenceTool();
     showToolSubWindow(kSenderSequenceTool);
+}
+
+void AppMainWindow::createDumpTool()
+{
+    if (!m_dumpTool)
+    {
+        m_dumpTool = new DumpTool(this);
+
+        createToolSubWindow(kDumpTool, m_dumpTool);
+
+        // Initilizes the tool
+        ObjrefRepository::const_iterator it = m_servants.begin();
+        ObjrefRepository::const_iterator end = m_servants.end();
+
+        for(; it != end; it++)
+            m_dumpTool->registerInstance(it.value());
+    }
+}
+
+void AppMainWindow::showDumpTool()
+{
+    createDumpTool();
+    showToolSubWindow(kDumpTool);
 }
 

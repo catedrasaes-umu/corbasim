@@ -31,10 +31,10 @@
 
 using namespace corbasim::gui;
 
-DumpProcessor::DumpProcessor(const QString& id,
-        const gui::ReflectivePath_t path, 
+DumpProcessor::DumpProcessor(ObjectId id,
+        const ReflectivePath_t path, 
         const Config& config) :
-    gui::RequestProcessor(id, path), m_config(config),
+    RequestProcessor(id, path), m_config(config),
     m_currentIndex(0)
 {
     switch(m_config.format)
@@ -144,12 +144,15 @@ void DumpProcessor::process(event::request_ptr req,
 
 // Reflective plot
 
-Dumper::Dumper(const QString& id,
-        core::operation_reflective_base const * reflective,
+Dumper::Dumper(Objref_ptr objref,
+        OperationDescriptor_ptr reflective,
         const QList< int >& path, 
         QWidget * parent) :
-    QWidget(parent), m_id(id), m_reflective(reflective), m_path(path)
+    QWidget(parent), m_objref(objref), 
+    m_reflective(reflective), m_path(path)
 {
+    const QString& id = objref->name();
+
     QGridLayout * layout = new QGridLayout();
 
     int row = 0;
@@ -258,7 +261,7 @@ void Dumper::doStart(bool start)
             };
             
             DumpProcessor * processor =
-                new DumpProcessor(m_id, m_path, config);
+                new DumpProcessor(m_objref->id(), m_path, config);
 
             m_processor.reset(processor);
 
@@ -306,19 +309,19 @@ DumpTool::DumpTool(QWidget * parent) :
     // connect model signals 
     QObject::connect(&m_model, 
             SIGNAL(checked(const QString&,
-                    core::interface_reflective_base const *,
+                    InterfaceDescriptor_ptr,
                     const QList< int >&)),
             this,
             SLOT(createDumper(const QString&,
-                    core::interface_reflective_base const *,
+                    InterfaceDescriptor_ptr,
                     const QList< int >&)));
     QObject::connect(&m_model, 
             SIGNAL(unchecked(const QString&,
-                    core::interface_reflective_base const *,
+                    InterfaceDescriptor_ptr,
                     const QList< int >&)),
             this,
             SLOT(deleteDumper(const QString&,
-                    core::interface_reflective_base const *,
+                    InterfaceDescriptor_ptr,
                     const QList< int >&)));
     
     setMinimumSize(650, 400);
@@ -328,48 +331,55 @@ DumpTool::~DumpTool()
 {
 }
 
-void DumpTool::registerInstance(const QString& name,
-        core::interface_reflective_base const * reflective)
+void DumpTool::registerInstance(Objref_ptr objref)
 {
-    m_model.registerInstance(name, reflective);
+    m_instances.add(objref);
+    m_model.registerInstance(objref->name(), objref->interface());
 }
 
-void DumpTool::unregisterInstance(const QString& name)
+void DumpTool::unregisterInstance(ObjectId id)
 {
+    Objref_ptr objref = m_instances.find(id);
+
+    if (!objref)
+        return;
+
     // Maps
     map_t::iterator it = m_map.begin();
     for(; it != m_map.end(); it++)
     {
-        if (name == it->first.first)
+        if (objref->name() == it->first.first)
         {
             for (int i = 0; i < it->second.size(); i++) 
             {
                 Dumper * plot = it->second[i];
 
                 m_inverse_map.erase(plot);
-                m_model.uncheck(it->first.first, plot->getPath());
-
+                m_model.uncheck(objref->name(), plot->getPath());
             }
 
             m_map.erase(it);
         }
     }
 
-    m_model.unregisterInstance(name);
+    m_model.unregisterInstance(objref->name());
+    m_instances.del(id);
 }
 
 Dumper * DumpTool::createDumper(const QString& id, 
-        core::interface_reflective_base const * reflective,
+        InterfaceDescriptor_ptr reflective,
         const QList< int >& path)
 {
-    core::operation_reflective_base const * op =
+    Objref_ptr objref = m_instances.find(id);
+
+    OperationDescriptor_ptr op =
         reflective->get_reflective_by_index(path.front());
 
     Dumper * plot = NULL;
 
-    if (op)
+    if (op && objref)
     {
-        plot = new Dumper(id, op, path);
+        plot = new Dumper(objref, op, path);
 
         const key_t key(id, op->get_tag());
         m_map[key].push_back(plot);
@@ -380,34 +390,30 @@ Dumper * DumpTool::createDumper(const QString& id,
 
         item->showDetails();
 
-        const QString title(gui::getFieldName(op, path));
+        const QString title(getFieldName(op, path));
         item->setTitle(id + "." + title);
 
         m_group->appendItem(item);
 
         // connect with the processor
         QObject::connect(plot, 
-                SIGNAL(addProcessor(
-                        corbasim::gui::RequestProcessor_ptr)),
-                gui::getDefaultInputRequestController(),
-                SLOT(addProcessor(
-                        corbasim::gui::RequestProcessor_ptr)));
+                SIGNAL(addProcessor(RequestProcessor_ptr)),
+                getDefaultInputRequestController(),
+                SLOT(addProcessor(RequestProcessor_ptr)));
         QObject::connect(plot, 
-                SIGNAL(removeProcessor(
-                        corbasim::gui::RequestProcessor_ptr)),
-                gui::getDefaultInputRequestController(),
-                SLOT(removeProcessor(
-                        corbasim::gui::RequestProcessor_ptr)));
+                SIGNAL(removeProcessor(RequestProcessor_ptr)),
+                getDefaultInputRequestController(),
+                SLOT(removeProcessor(RequestProcessor_ptr)));
     }
 
     return plot;
 }
 
 void DumpTool::deleteDumper(const QString& id, 
-        core::interface_reflective_base const * reflective,
+        InterfaceDescriptor_ptr reflective,
         const QList< int >& path)
 {
-    core::operation_reflective_base const * op =
+    OperationDescriptor_ptr op =
         reflective->get_reflective_by_index(path.front());
 
     const key_t key(id, op->get_tag());
@@ -443,6 +449,7 @@ void DumpTool::deleteRequested(qt::SortableGroupItem* item)
         if (it != m_inverse_map.end())
         {
             const key_t key(it->second);
+
             m_map[key].removeAll(plot);
 
             // notify to model
@@ -536,7 +543,7 @@ void DumpTool::load(const QVariant& settings)
             path << vpath.at(j).toInt();
         }
 
-        core::interface_reflective_base const * ref =
+        InterfaceDescriptor_ptr ref =
             m_model.getReflective(id);
 
         if (ref)

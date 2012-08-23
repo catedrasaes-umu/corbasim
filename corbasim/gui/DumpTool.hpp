@@ -21,7 +21,8 @@
 #define CORBASIM_GUI_DUMPTOOL_HPP
 
 #include <QtGui>
-#include <corbasim/gui/ParametersModel.hpp>
+#include <corbasim/gui/item/ParametersModel.hpp>
+#include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
 #include <map>
 
@@ -84,7 +85,7 @@ class CORBASIM_GUI_DECLSPEC Dumper : public QWidget
     Q_OBJECT
 public:
 
-    Dumper(const QString& id,
+    Dumper(Objref_ptr objref,
             OperationDescriptor_ptr reflective,
             const QList< int >& path, 
             QWidget * parent = 0);
@@ -124,7 +125,7 @@ protected:
 
     RequestProcessor_ptr m_processor;
 
-    const QString m_id;
+    Objref_ptr m_objref;
     OperationDescriptor_ptr m_reflective;
     const QList< int > m_path;
 
@@ -165,6 +166,9 @@ protected slots:
     void deleteRequested(corbasim::qt::SortableGroupItem *);
 
 protected:
+
+    ObjrefRepository m_instances;
+
     ParametersModel m_model;
     qt::SortableGroup * m_group;
 
