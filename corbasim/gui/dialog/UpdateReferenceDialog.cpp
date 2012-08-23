@@ -62,15 +62,18 @@ UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :
 
     // Buttons
     QDialogButtonBox * btns = new QDialogButtonBox();
+    QPushButton * pasteButton = 
+        btns->addButton("&Paste IOR from clipboard", QDialogButtonBox::ActionRole);
     QPushButton * createButton = 
-        btns->addButton("&Create", QDialogButtonBox::AcceptRole);
+        btns->addButton("&Apply", QDialogButtonBox::AcceptRole);
     QPushButton * cancelButton = 
         btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
     layout->addWidget(btns);
 
+    connect(pasteButton, SIGNAL(clicked()),
+            m_reference, SLOT(pasteIOR()));
     connect(createButton, SIGNAL(clicked()),
             this, SLOT(update()));
-
     connect(cancelButton, SIGNAL(clicked()),
             window(), SLOT(hide()));
     // End buttons

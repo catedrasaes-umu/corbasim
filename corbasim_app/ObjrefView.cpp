@@ -138,7 +138,10 @@ QMdiSubWindow * ObjrefView::getRequestWindow(int idx)
 
     if (!win)
     {
-        m_subwindows[idx] = m_mdi_area->addSubWindow(getRequestDialog(idx));
+        QWidget * widget = getRequestDialog(idx);
+        m_subwindows[idx] = new QMdiSubWindow();
+        m_subwindows[idx]->setWidget(widget);
+        m_mdi_area->addSubWindow(m_subwindows[idx]);
         
         // Window title
         const QString title = QString("%1: %2").arg(m_objref->name()).arg(
@@ -182,7 +185,10 @@ QMdiSubWindow * ObjrefView::getSenderWindow(int idx)
 
     if (!win)
     {
-        m_subwindows_senders[idx] = m_mdi_area->addSubWindow(getSenderDialog(idx));
+        QWidget * widget = getSenderDialog(idx);
+        m_subwindows_senders[idx] = new QMdiSubWindow();
+        m_subwindows_senders[idx]->setWidget(widget);
+        m_mdi_area->addSubWindow(m_subwindows_senders[idx]);
         
         // Window title
         const QString title = QString("%1: %2").arg(m_objref->name()).arg(
@@ -224,7 +230,9 @@ void ObjrefView::showScriptEditor()
         m_script = new SimpleScriptEditor();
         m_script->initialize(m_objref->interface());
 
-        m_sub_script = m_mdi_area->addSubWindow(m_script);
+        m_sub_script = new QMdiSubWindow();
+        m_sub_script->setWidget(m_script);
+        m_mdi_area->addSubWindow(m_sub_script);
         m_sub_script->setWindowTitle(
                 QString("%1: Script editor").arg(m_objref->name()));
 
@@ -233,6 +241,7 @@ void ObjrefView::showScriptEditor()
             m_objref.get(), 
             SLOT(sendRequest(Request_ptr)));
     }
+
     m_sub_script->showNormal();
     m_script->show();
     m_mdi_area->setActiveSubWindow(m_sub_script);
