@@ -36,6 +36,7 @@ namespace gui
     class ObjrefCreateDialog;
     class ServantCreateDialog;
 
+    class FilteredLogView;
     class OperationSequenceTool;
     class SenderSequenceTool;
 } // namespace gui
@@ -73,6 +74,8 @@ public slots:
     void showCreateServantDialog();
 
     // Tools
+    void createFilteredLogView();
+    void showFilteredLogView();
     void createOperationSequenceTool();
     void showOperationSequenceTool();
     void createSenderSequenceTool();
@@ -101,11 +104,15 @@ protected:
     ServantCreateDialog * m_createServantDialog;
 
     // Tools
+    FilteredLogView * m_filteredLogView;
     OperationSequenceTool * m_operationSequenceTool;
     SenderSequenceTool * m_senderSequenceTool;
 
     typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
     ObjrefViews_t m_objrefViews;
+
+    void createToolSubWindow(int tool, QWidget * widget);
+    void showToolSubWindow(int tool);
 };
 
 } // namespace app

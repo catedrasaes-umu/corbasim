@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * CreateDialog.hpp
+ * UpdateReferenceDialog.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_GUI_CREATEDIALOG_HPP
-#define CORBASIM_GUI_CREATEDIALOG_HPP
+#ifndef CORBASIM_GUI_UPDATEREFERENCEDIALOG_HPP
+#define CORBASIM_GUI_UPDATEREFERENCEDIALOG_HPP
 
 #include <QtGui>
 #include <corbasim/gui/types.hpp>
@@ -29,54 +29,42 @@ namespace corbasim
 namespace gui 
 {
 
-class ObjrefCreateDialog : public QDialog
+class UpdateReferenceDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ObjrefCreateDialog(QWidget * parent = 0);
-    virtual ~ObjrefCreateDialog();
+    UpdateReferenceDialog(QWidget * parent = 0);
+    virtual ~UpdateReferenceDialog();
 
 public slots:
 
-    void createClicked();
+    void setObjref(Objref_ptr objref);
+
+    void updatedReference(const CORBA::Object_var& reference);
 
 signals:
 
-    void createObjref(ObjrefConfig);
+    void updateReference(const CORBA::Object_var& reference);
+
+protected slots:
+
+    void update();
 
 protected:
     
     void hideEvent(QHideEvent* event);
 
-    QLineEdit * m_name;
-    QLineEdit * m_fqn;
+    qt::ObjrefWidget * m_status;
     qt::ObjrefWidget * m_reference;
 
-    core::reference_validator_ptr m_validator;
-};
+    core::reference_validator_ptr m_statusValidator;
+    core::reference_validator_ptr m_referenceValidator;
 
-class ServantCreateDialog : public QDialog
-{
-    Q_OBJECT
-public:
-    ServantCreateDialog(QWidget * parent = 0);
-    virtual ~ServantCreateDialog();
-
-public slots:
-
-    void createClicked();
-
-signals:
-
-    void createServant(ServantConfig);
-
-protected:
-
-    void hideEvent(QHideEvent* event);
+    Objref_ptr m_objref;
 };
 
 } // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_GUI_CREATEDIALOG_HPP */
+#endif /* CORBASIM_GUI_UPDATEREFERENCEDIALOG_HPP */
 

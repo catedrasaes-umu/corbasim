@@ -26,6 +26,7 @@
 #include <corbasim/gui/RequestDialog.hpp>
 #include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/SimpleScriptEditor.hpp>
+#include <corbasim/gui/dialog/UpdateReferenceDialog.hpp>
 
 namespace corbasim 
 {
@@ -92,8 +93,11 @@ protected:
     subwindows_t m_subwindows_senders;
 
     QMdiSubWindow * m_sub_script;
-
     SimpleScriptEditor * m_script;
+
+    QMdiSubWindow * m_subUpdateReference;
+    UpdateReferenceDialog * m_updateReference;
+
 
     QMenu * m_menu;
 };

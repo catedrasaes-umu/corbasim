@@ -18,6 +18,10 @@
  */
 
 #include "CreateDialog.hpp"
+#include <corbasim/adapted.hpp>
+#include <corbasim/corba_adapted.hpp>
+#define CORBASIM_NO_IMPL
+#include <corbasim/core/reflective.hpp>
 
 using namespace corbasim::gui;
 
@@ -30,11 +34,25 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     grid->addWidget(new QLabel("Object name"), 0, 0);
     m_name = new QLineEdit();
+    m_name->setObjectName("name");
     grid->addWidget(m_name, 0, 1);
  
     grid->addWidget(new QLabel("Interface"), 1, 0);
     m_fqn = new QLineEdit();
+    m_fqn->setObjectName("fqn");
     grid->addWidget(m_fqn, 1, 1); 
+
+    QGroupBox * group = new QGroupBox("Object reference");
+    m_fqn->setObjectName("reference_group");
+    QVBoxLayout * groupLayout = new QVBoxLayout();
+    groupLayout->setMargin(0);
+
+    m_reference = new qt::ObjrefWidget();
+    m_reference->setObjectName("reference");
+    groupLayout->addWidget(m_reference);
+    group->setLayout(groupLayout);
+    
+    grid->addWidget(group, 2, 0, 1, 2);
 
     layout->addLayout(grid);
 
@@ -54,6 +72,10 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     // End buttons
 
     setLayout(layout);
+
+    ::corbasim::core::detail::objrefvar_reflective< CORBA::Object_var > iface;
+    m_validator.reset(iface.create_validator());
+    m_reference->setValidator(m_validator.get());
 }
 
 ObjrefCreateDialog::~ObjrefCreateDialog()
@@ -66,6 +88,8 @@ void ObjrefCreateDialog::createClicked()
 
     cfg.name = m_name->text().toStdString();
     cfg.fqn = m_fqn->text().toStdString();
+    cfg.reference = m_validator->get_reference();
+    cfg.entry = m_reference->getNSEntry().toStdString();
 
     emit createObjref(cfg);
 }

@@ -133,6 +133,7 @@ SortableGroup::SortableGroup(QWidget * parent) :
     m_layout = new CustomVLayout();
     scrollWidget->setLayout(scrollLayout);
     scrollLayout->addLayout(m_layout);
+    scrollLayout->setMargin(0);
 
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Expanding);

@@ -22,6 +22,7 @@ set(corbasim_gui_EXPORTED_HEADERS
 
     # dialogs
     gui/dialog/CreateDialog.hpp
+    gui/dialog/UpdateReferenceDialog.hpp
 
     gui/InputRequestProcessor.hpp
     gui/OperationSequence.hpp
@@ -67,6 +68,7 @@ set(corbasim_gui_MOC_HDRS
 
     # dialogs
     gui/dialog/CreateDialog.hpp
+    gui/dialog/UpdateReferenceDialog.hpp
 
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
@@ -109,6 +111,7 @@ set(corbasim_gui_SRCS
 
     # dialogs
     gui/dialog/CreateDialog.cpp
+    gui/dialog/UpdateReferenceDialog.cpp
 
     gui/InputRequestProcessor.cpp
     gui/OperationSequence.cpp
