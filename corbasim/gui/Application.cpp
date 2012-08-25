@@ -87,6 +87,7 @@ Application::~Application()
 
 void Application::loadScenario(const QString& file)
 {
+    // clear scenario
 }
 
 void Application::saveScenario(const QString& file)
@@ -127,6 +128,12 @@ void Application::createObjref(const ObjrefConfig& cfg)
 
         m_objrefs.add(obj);
 
+        const char * signal =
+            SIGNAL(requestSent(ObjectId, Request_ptr, 
+                        Event_ptr));
+
+        connect(obj.get(), signal, this, signal);
+
         emit objrefCreated(obj);
     }
     else
@@ -165,6 +172,12 @@ void Application::createServant(const ServantConfig& cfg)
         obj->setReference(objSrv);
 
         m_servants.add(obj);
+
+        const char * signal =
+            SIGNAL(requestReceived(ObjectId, Request_ptr, 
+                        Event_ptr));
+
+        connect(obj.get(), signal, this, signal);
 
         emit servantCreated(obj);
 

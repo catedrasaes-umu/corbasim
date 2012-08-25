@@ -113,6 +113,12 @@ int main(int argc, char **argv)
             &application, SLOT(deleteObjref(ObjectId)));
     QObject::connect(&window, SIGNAL(deleteServant(ObjectId)), 
             &application, SLOT(deleteServant(ObjectId)));
+    QObject::connect(&window, SIGNAL(loadDirectory(const QString&)),
+            &application, SLOT(loadDirectory(const QString&)));
+    QObject::connect(&window, SIGNAL(loadScenario(const QString&)),
+            &application, SLOT(loadScenario(const QString&)));
+    QObject::connect(&window, SIGNAL(saveScenario(const QString&)),
+            &application, SLOT(saveScenario(const QString&)));
     // End signals window -> application
 
     // Executed in dedicated threads

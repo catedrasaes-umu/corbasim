@@ -15,6 +15,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/item/OperationModel.hpp
     gui/item/OperationParametersModel.hpp
     gui/item/ScriptModel.hpp
+    gui/item/TreeView.hpp
 
     # script
     gui/script/ReflectiveScriptClass.hpp
@@ -23,6 +24,9 @@ set(corbasim_gui_EXPORTED_HEADERS
     # dialogs
     gui/dialog/CreateDialog.hpp
     gui/dialog/UpdateReferenceDialog.hpp
+
+    # server
+    gui/server/Server.hpp
 
     gui/InputRequestProcessor.hpp
     gui/OperationSequence.hpp
@@ -38,7 +42,6 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/DumpTool.hpp
 
     # TODO gui/RecorderTool.hpp
-    # TODO gui/Server.hpp
     # TODO gui/ServerApp.hpp
 )
 
@@ -59,6 +62,7 @@ set(corbasim_gui_MOC_HDRS
     gui/item/OperationModel.hpp
     gui/item/OperationParametersModel.hpp
     gui/item/ScriptModel.hpp
+    gui/item/TreeView.hpp
 
     # script
     gui/script/ScriptEvaluator.hpp
@@ -66,6 +70,9 @@ set(corbasim_gui_MOC_HDRS
     # dialogs
     gui/dialog/CreateDialog.hpp
     gui/dialog/UpdateReferenceDialog.hpp
+
+    # server
+    gui/server/Server.hpp
 
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
@@ -81,7 +88,6 @@ set(corbasim_gui_MOC_HDRS
     gui/DumpTool.hpp
 
     # TODO gui/RecorderTool.hpp
-    # TODO gui/Server.hpp
 )
 
 set(corbasim_gui_SRCS
@@ -101,6 +107,7 @@ set(corbasim_gui_SRCS
     gui/item/OperationModel.cpp
     gui/item/OperationParametersModel.cpp
     gui/item/ScriptModel.cpp
+    gui/item/TreeView.cpp
 
     # script
     gui/script/ReflectiveScriptClass.cpp
@@ -109,6 +116,9 @@ set(corbasim_gui_SRCS
     # dialogs
     gui/dialog/CreateDialog.cpp
     gui/dialog/UpdateReferenceDialog.cpp
+
+    # server
+    gui/server/Server.cpp
 
     gui/InputRequestProcessor.cpp
     gui/OperationSequence.cpp
@@ -124,7 +134,6 @@ set(corbasim_gui_SRCS
     gui/DumpTool.cpp
 
     # TODO gui/RecorderTool.cpp
-    # TODO gui/Server.cpp
     # TODO gui/ServerApp.cpp
 )
 

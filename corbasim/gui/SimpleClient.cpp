@@ -26,6 +26,7 @@
 #include <corbasim/gui/OperationSequence.hpp>
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/gui/json.hpp>
+#include <corbasim/gui/item/TreeView.hpp>
 #include <fstream>
 
 using namespace corbasim;
@@ -94,7 +95,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
         SLOT(setVisible(bool)));
 
     gbLayout = new QHBoxLayout;
-    m_tree = new QTreeView();
+    m_tree = new TreeView();
     m_tree->setModel(&m_log_model);
     gbLayout->addWidget(m_tree);
     gb->setLayout(gbLayout);

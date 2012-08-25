@@ -90,6 +90,7 @@ protected:
 class CORBASIM_GUI_DECLSPEC Servant : public Objref
 {
     Q_OBJECT
+    Q_PROPERTY(Objref_ptr proxy READ proxy WRITE setProxy)
 public:
 
     Servant(const QString& name,
@@ -103,6 +104,10 @@ public:
     ~Servant();
 
     PortableServer::ServantBase * getServant() const;
+    
+    Objref_ptr proxy() const;
+
+    void setProxy(Objref_ptr proxy);
 
 signals:
 
@@ -115,6 +120,8 @@ protected:
     friend class ServantData;
     struct ServantData;
     ServantData * m_data;
+
+    Objref_ptr m_proxy;
 };
 
 class CORBASIM_GUI_DECLSPEC ObjrefRepository : public QObject

@@ -138,6 +138,16 @@ struct Servant::ServantData :
             ::corbasim::event::request_ptr req,
             ::corbasim::event::response_ptr resp)
     {
+        if (m_this.proxy())
+        {
+            // Proxy and servant must be in the same thread
+            ::corbasim::event::event_ptr ev =
+                m_this.proxy()->sendRequest(req);
+
+            emit m_this.requestReceived(m_this.id(), req, ev);
+            return ev;
+        }
+
         emit m_this.requestReceived(m_this.id(), req, resp);
         return resp;
     }
@@ -166,6 +176,16 @@ Servant::~Servant()
 PortableServer::ServantBase * Servant::getServant() const
 {
     return m_data->m_servant;
+}
+
+Objref_ptr Servant::proxy() const
+{
+    return m_proxy;
+}
+
+void Servant::setProxy(Objref_ptr proxy)
+{
+    m_proxy = proxy;
 }
 
 //

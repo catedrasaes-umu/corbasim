@@ -85,6 +85,12 @@ public slots:
     void createDumpTool();
     void showDumpTool();
 
+    void showLoadDirectory();
+    void showLoadScenario();
+    void showSaveScenario();
+
+    void actionHovered(QAction *);
+
 signals:
 
     void createObjref(const ObjrefConfig&);
@@ -93,6 +99,11 @@ signals:
     void createServant(const ServantConfig&);
     void deleteServant(ObjectId);
 
+    void loadDirectory(const QString&);
+    void loadScenario(const QString&);
+    void saveScenario(const QString&);
+    void clearScenario();
+
 protected:
 
     ObjrefRepository m_objrefs;
@@ -100,6 +111,8 @@ protected:
     LogModel m_logModel;
 
     QActionGroup m_actions;
+
+    QTreeView * m_logView;
 
     std::vector< QMdiSubWindow * > m_subWindows;
 

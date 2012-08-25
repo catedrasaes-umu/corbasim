@@ -26,6 +26,7 @@
 #include <corbasim/gui/SenderSequence.hpp>
 #include <corbasim/gui/DumpTool.hpp>
 #include <corbasim/gui/dialog/CreateDialog.hpp>
+#include <corbasim/gui/item/TreeView.hpp>
 
 using namespace corbasim::app;
 
@@ -79,8 +80,25 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 
+    // Log view
+    QDockWidget * logViewDock = new QDockWidget("Log", this);
+    m_logView = new TreeView(this);
+    m_logView->setModel(&m_logModel);
+    logViewDock->setWidget(m_logView);
+    addDockWidget(Qt::BottomDockWidgetArea, logViewDock);
+
+    // Column Width
+    int columnCount = m_logModel.columnCount();
+    for (int i = 0; i < columnCount; i++) 
+    {
+        m_logView->setColumnWidth(i, width() / columnCount);
+    }
+
     // No more window
-    //
+    
+    connect(menuBar(), SIGNAL(hovered(QAction *)),
+            this, SLOT(actionHovered(QAction *)));
+
     // New object
     QAction * newObjAction = new QAction(
             style()->standardIcon(QStyle::SP_FileIcon),
@@ -97,15 +115,77 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     connect(newSrvAction, SIGNAL(triggered()), 
             this, SLOT(showCreateServantDialog()));
 
+    // New servant
+    QAction * clearAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear log", this);
+    // clearAction->setShortcut(QKeySequence::Save);
+    connect(clearAction, SIGNAL(triggered()), 
+            &m_logModel, SLOT(clearLog()));
+
+    // Load scenario
+    QAction * loadScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogOpenButton),
+            "&Load scenario", this);
+    loadScenarioAction->setShortcut(QKeySequence::Open);
+    connect(loadScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showLoadScenario()));
+
+    // Save scenario
+    QAction * saveScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogSaveButton),
+            "&Save scenario", this);
+    saveScenarioAction->setShortcut(QKeySequence::SaveAs);
+    connect(saveScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showSaveScenario()));
+
+    // Clear scenario
+    QAction * clearScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear scenario", this);
+    // clearScenarioAction->setShortcut(QKeySequence::SaveAs);
+    connect(clearScenarioAction, SIGNAL(triggered()), 
+            this, SIGNAL(clearScenario()));
+
+    // Load directory
+    QAction * loadDirectoryAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileDialogNewFolder),
+            "&Load plug-in directory", this);
+    loadDirectoryAction->setShortcut(QKeySequence::SelectAll);
+    connect(loadDirectoryAction, SIGNAL(triggered()), 
+            this, SLOT(showLoadDirectory()));
+
+    // Show log
+    QAction * showLogAction = new QAction(
+            // style()->standardIcon(QStyle::SP_FileDialogNewFolder),
+            "Show &log", this);
+    // showLogAction->setShortcut(QKeySequence::SelectAll);
+    connect(showLogAction, SIGNAL(triggered()), 
+            logViewDock, SLOT(show()));
+
     // Tool bar
     QToolBar * toolBar = addToolBar("File");
-    //toolBar->addAction(loadScenarioAction);
-    //toolBar->addAction(saveScenarioAction);
+    toolBar->addAction(loadScenarioAction);
+    toolBar->addAction(saveScenarioAction);
+    toolBar->addAction(clearScenarioAction);
+    toolBar->addSeparator();
+    toolBar->addAction(loadDirectoryAction);
+    toolBar->addSeparator();
     toolBar->addAction(newObjAction);
     toolBar->addAction(newSrvAction);
+    
+    toolBar = addToolBar("Window");
+    toolBar->addAction(clearAction);
 
+    // Menus
     menuFile->addAction(newObjAction);
     menuFile->addAction(newSrvAction);
+    menuFile->addSeparator();
+    menuFile->addAction(loadScenarioAction);
+    menuFile->addAction(saveScenarioAction);
+    menuFile->addAction(clearScenarioAction);
+    menuFile->addSeparator();
+    menuFile->addAction(loadDirectoryAction);
     menuFile->addSeparator();
     QAction * closeAction = 
         menuFile->addAction("&Exit", this, SLOT(close()));
@@ -121,6 +201,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuTool->addAction("&Filtered log", 
             this, SLOT(showFilteredLogView()));
 
+    menuWindow->addAction(showLogAction);
+    menuWindow->addAction(clearAction);
+
     // Subwindows
     m_subWindows.resize(kSubWindowsMax, NULL);
 }
@@ -131,6 +214,9 @@ AppMainWindow::~AppMainWindow()
 
 void AppMainWindow::objrefCreated(Objref_ptr objref)
 {
+    if (m_subWindows[kCreateObjrefDialog])
+        m_subWindows[kCreateObjrefDialog]->close();
+
     m_objrefs.add(objref);
     m_logModel.registerInstance(objref);
 
@@ -175,6 +261,9 @@ void AppMainWindow::objrefDeleted(ObjectId id)
 
 void AppMainWindow::servantCreated(Objref_ptr servant)
 {
+    if (m_subWindows[kCreateServantDialog])
+        m_subWindows[kCreateServantDialog]->close();
+
     m_servants.add(servant);
     m_logModel.registerInstance(servant);
     
@@ -214,10 +303,13 @@ void AppMainWindow::servantDeleted(ObjectId id)
 void AppMainWindow::displayError(const QString& err)
 {
     QMessageBox::critical(this, "Error", err);
+
+    statusBar()->showMessage(err, 30000);
 }
 
 void AppMainWindow::displayMessage(const QString& msg)
 {
+    statusBar()->showMessage(msg, 30000);
 }
 
 //
@@ -382,5 +474,46 @@ void AppMainWindow::showDumpTool()
 {
     createDumpTool();
     showToolSubWindow(kDumpTool);
+}
+
+void AppMainWindow::showLoadDirectory()
+{
+    const QString directory = 
+        QFileDialog::getExistingDirectory(0, 
+                "Select a directory", ".");
+
+    if (!directory.isEmpty())
+    {
+        emit loadDirectory(directory);
+    }
+}
+
+void AppMainWindow::showLoadScenario()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".");
+
+    if (!file.isEmpty())
+    {
+        emit loadScenario(file);
+    }
+}
+
+void AppMainWindow::showSaveScenario()
+{
+    const QString file = 
+        QFileDialog::getSaveFileName(0, 
+                "Select a file", ".");
+
+    if (!file.isEmpty())
+    {
+        emit saveScenario(file);
+    }
+}
+
+void AppMainWindow::actionHovered(QAction * action)
+{
+    statusBar()->showMessage(action->text(), 30000);
 }
 

@@ -21,6 +21,7 @@
 #include <QHBoxLayout>
 #include <QTreeView>
 #include <QSplitter>
+#include <corbasim/gui/item/TreeView.hpp>
 
 using namespace corbasim::gui;
 
@@ -34,7 +35,7 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     QSplitter * splitter = new QSplitter(Qt::Horizontal);
 
     QTreeView * filterView = new QTreeView();
-    QTreeView * logView = new QTreeView();
+    QTreeView * logView = new TreeView();
     filterView->setObjectName("filterView");
     logView->setObjectName("logView");
 
