@@ -23,6 +23,10 @@
 
 using namespace corbasim::gui;
 
+AbstractNode::~AbstractNode()
+{
+}
+
 InstanceNode::InstanceNode(Objref_ptr o) :
     instance(o),
     reflective(o->interface()), 

@@ -38,7 +38,15 @@ typedef boost::shared_ptr< Node > Node_ptr;
 struct MetaNode;
 typedef boost::shared_ptr< MetaNode > MetaNode_ptr;
 
-struct InstanceNode
+struct InstanceNode;
+typedef boost::shared_ptr< InstanceNode > InstanceNode_ptr;
+
+struct AbstractNode
+{
+    virtual ~AbstractNode();
+};
+
+struct InstanceNode : public AbstractNode
 {
     Objref_ptr instance;
     InterfaceDescriptor_ptr reflective;
@@ -55,7 +63,7 @@ struct InstanceNode
     void reset();
 };
 
-struct DescriptorNode
+struct DescriptorNode : public AbstractNode
 {
     TypeDescriptor_ptr reflective;
 
