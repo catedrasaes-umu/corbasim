@@ -23,16 +23,61 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/types.hpp>
 
+
 namespace corbasim 
 {
 namespace gui 
 {
+
+struct DescriptorNode;
+typedef boost::shared_ptr< DescriptorNode > DescriptorNode_ptr;
 
 struct Node;
 typedef boost::shared_ptr< Node > Node_ptr;
 
 struct MetaNode;
 typedef boost::shared_ptr< MetaNode > MetaNode_ptr;
+
+struct InstanceNode
+{
+    Objref_ptr instance;
+    InterfaceDescriptor_ptr reflective;
+
+    bool initialized;
+    std::vector< DescriptorNode_ptr > children;
+
+    InstanceNode(Objref_ptr o);
+
+    void initialize();
+
+    void check_for_initialized();
+
+    void reset();
+};
+
+struct DescriptorNode
+{
+    TypeDescriptor_ptr reflective;
+
+    InstanceNode * instance;
+
+    DescriptorNode * parent;
+    unsigned int index;
+
+    bool initialized;
+    std::vector< DescriptorNode_ptr > children;
+
+    DescriptorNode(TypeDescriptor_ptr r,
+            InstanceNode * i = 0,
+            DescriptorNode * p = 0, 
+            unsigned int idx = 0);
+
+    void initialize();
+
+    void check_for_initialized();
+
+    void reset();
+};
 
 struct Node
 {

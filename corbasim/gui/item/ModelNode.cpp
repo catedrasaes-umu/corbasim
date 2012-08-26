@@ -18,10 +18,117 @@
  */
 
 #include "ModelNode.hpp"
+#include <corbasim/gui/Model.hpp>
 #include <set>
 
 using namespace corbasim::gui;
 
+InstanceNode::InstanceNode(Objref_ptr o) :
+    instance(o),
+    reflective(o->interface()), 
+    initialized(false)
+{
+}
+
+void InstanceNode::reset()
+{
+    initialized = false;
+}
+
+void InstanceNode::initialize()
+{
+    const unsigned int count = 
+        reflective->operation_count();
+    children.reserve(count);
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        DescriptorNode_ptr child(new DescriptorNode(
+                    reflective->get_reflective_by_index(i), 
+                    this, 0, i));
+
+        children.push_back(child);
+    }
+
+    initialized = true;
+}
+
+void InstanceNode::check_for_initialized()
+{
+    if (!initialized)
+        initialize();
+}
+
+//
+//
+// Descriptor Node
+//
+//
+DescriptorNode::DescriptorNode(TypeDescriptor_ptr r,
+        InstanceNode * i,
+        DescriptorNode * p, unsigned int idx) :
+    reflective(r), instance(i),
+    parent(p), index(idx), initialized(false)
+{
+}
+
+void DescriptorNode::reset()
+{
+    initialized = false;
+}
+
+void DescriptorNode::initialize()
+{
+    if (reflective->is_repeated())
+    {
+        core::holder dummy;
+        const unsigned int count = 
+            (reflective->is_variable_length())? 1:
+                reflective->get_length(dummy);
+        children.reserve(count);
+
+        TypeDescriptor_ptr slice =
+            reflective->get_slice();
+
+        for (unsigned int i = 0; i < count; i++) 
+        {
+            DescriptorNode_ptr child(new DescriptorNode(slice, 
+                        instance, this, i));
+
+            children.push_back(child);
+        }
+    }
+    else if(reflective->get_type() == core::TYPE_STRUCT || 
+            reflective->get_type() == core::TYPE_UNION)
+    {
+        const unsigned int count = 
+            reflective->get_children_count();
+        children.reserve(count);
+
+        for (unsigned int i = 0; i < count; i++) 
+        {
+            DescriptorNode_ptr child(new DescriptorNode(
+                        reflective->get_child(i), 
+                        instance, this, i));
+
+            children.push_back(child);
+        }
+    }
+
+    initialized = true;
+}
+
+void DescriptorNode::check_for_initialized()
+{
+    if (!initialized)
+        initialize();
+}
+
+// 
+//
+// Node
+//
+//
 Node::Node(TypeDescriptor_ptr r,
         corbasim::core::holder h, Node * p, unsigned int idx) :
     reflective(r), holder(h), parent(p), index(idx), initialized(false)
@@ -91,6 +198,7 @@ void Node::check_for_initialized()
     if (!initialized)
         initialize();
 }
+
 
 MetaNode::MetaNode(TypeDescriptor_ptr r,
         MetaNode * p, unsigned int idx) :
