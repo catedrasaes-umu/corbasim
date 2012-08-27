@@ -38,6 +38,8 @@ public:
     Application(QObject * parent = 0);
     ~Application();
 
+    static Application * currentApplication();
+
 public slots:
 
     void loadScenario(const QString& file);

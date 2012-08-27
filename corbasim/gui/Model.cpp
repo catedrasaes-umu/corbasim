@@ -343,7 +343,7 @@ InterfaceDescriptor_ptr InterfaceRepository::loadLibrary(const QString& file)
 
     if (m_interfaces.find(factory->get_fqn()) == m_interfaces.end())
     {
-        addInterface(factory);;
+        addInterface(factory);
     }
 
     return factory;

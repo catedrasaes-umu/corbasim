@@ -22,9 +22,10 @@
 #include <QMetaType>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/impl.hpp>
-#include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/core/file_format_helper.hpp>
+
+#include <cassert>
 
 namespace  
 {
@@ -32,7 +33,8 @@ namespace
 class Initializer
 {
 public:
-    Initializer()
+    Initializer() :
+        defaultInstanceModel(NULL)
     {
         // Q_INIT_RESOURCE(corbasim_qt);
 
@@ -40,7 +42,6 @@ public:
             ("CORBA::Object_var");
 
         // Singleton instances
-        corbasim::qt::ReferenceModel::getDefaultModel();
 
         // Ensure created all file format helpers
         {
@@ -55,13 +56,35 @@ public:
             }
         }
     }
+
+    QAbstractItemModel * defaultInstanceModel;
+
+    static Initializer* getInstance()
+    {
+        static boost::shared_ptr< Initializer > instance(new Initializer);
+        return instance.get();
+    }
 };
 
 } // namespace
 
 CORBASIM_QT_DECLSPEC void corbasim::qt::initialize()
 {
-    static boost::shared_ptr< Initializer > instance(new Initializer);
+    Initializer::getInstance();
 }
 
+CORBASIM_QT_DECLSPEC void corbasim::qt::setDefaultInstanceModel(QAbstractItemModel * model)
+{
+    Initializer * initializer = Initializer::getInstance();
+    assert(!initializer->defaultInstanceModel);
+
+    initializer->defaultInstanceModel = model;
+}
+
+CORBASIM_QT_DECLSPEC QAbstractItemModel * corbasim::qt::getDefaultInstanceModel()
+{
+    Initializer * initializer = Initializer::getInstance();
+
+    return initializer->defaultInstanceModel;
+}
 

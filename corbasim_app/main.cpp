@@ -86,10 +86,12 @@ int main(int argc, char **argv)
     corbasim::app::NSWatcher nsWatcher;
 #endif
 
-    corbasim::app::AppMainWindow window;
     corbasim::gui::Application application;
+    corbasim::app::AppMainWindow window;
 
     // Signals application -> window
+    QObject::connect(&application, SIGNAL(loadedInterface(InterfaceDescriptor_ptr)), 
+            &window, SLOT(loadedInterface(InterfaceDescriptor_ptr)));
     QObject::connect(&application, SIGNAL(objrefCreated(Objref_ptr)), 
             &window, SLOT(objrefCreated(Objref_ptr)));
     QObject::connect(&application, SIGNAL(servantCreated(Objref_ptr)), 

@@ -36,6 +36,8 @@ public:
     ObjrefCreateDialog(QWidget * parent = 0);
     virtual ~ObjrefCreateDialog();
 
+    void setFQNModel(QAbstractItemModel * model);
+
 public slots:
 
     void createClicked();
@@ -49,7 +51,7 @@ protected:
     void hideEvent(QHideEvent* event);
 
     QLineEdit * m_name;
-    QLineEdit * m_fqn;
+    QComboBox * m_fqn;
     qt::ObjrefWidget * m_reference;
 
     core::reference_validator_ptr m_validator;
@@ -61,6 +63,8 @@ class ServantCreateDialog : public QDialog
 public:
     ServantCreateDialog(QWidget * parent = 0);
     virtual ~ServantCreateDialog();
+    
+    void setFQNModel(QAbstractItemModel * model);
 
 public slots:
 
@@ -75,7 +79,7 @@ protected:
     void hideEvent(QHideEvent* event);
 
     QLineEdit * m_name;
-    QLineEdit * m_fqn;
+    QComboBox * m_fqn;
 };
 
 } // namespace gui

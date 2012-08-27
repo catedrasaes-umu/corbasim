@@ -57,6 +57,22 @@ struct Application::ApplicationData
 //
 //
 
+namespace  
+{
+    using corbasim::gui::Application;
+
+    Application *& currentApplication()
+    {
+        static Application * instance = NULL;
+        return instance;
+    }
+} // namespace
+
+Application * Application::currentApplication()
+{
+    return ::currentApplication();
+}
+
 Application::Application(QObject * parent) :
     QObject(parent), 
     m_interfaces(this), 
@@ -64,6 +80,8 @@ Application::Application(QObject * parent) :
     m_servants(this),
     m_data(new ApplicationData(*this))
 {
+    ::currentApplication() = this;
+
     connect(&m_interfaces, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
             this, 
@@ -111,6 +129,12 @@ void Application::loadInterface(const QString& fqn)
 
 void Application::createObjref(const ObjrefConfig& cfg)
 {
+    if (cfg.name.empty())
+    {
+        emit error("You must specify an object name");
+        return;
+    }
+
     const QString name(cfg.name.c_str());
 
     if (m_servants.find(name) || m_objrefs.find(name))
@@ -144,6 +168,12 @@ void Application::createObjref(const ObjrefConfig& cfg)
 
 void Application::createServant(const ServantConfig& cfg)
 {
+    if (cfg.name.empty())
+    {
+        emit error("You must specify an object name");
+        return;
+    }
+
     const QString name(cfg.name.c_str());
 
     if (m_servants.find(name) || m_objrefs.find(name))

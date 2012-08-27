@@ -9,6 +9,8 @@ set(corbasim_gui_EXPORTED_HEADERS
 
     # item models
     gui/item/ModelNode.hpp
+    gui/item/InstanceModel.hpp
+    gui/item/InterfaceModel.hpp
     gui/item/LogModel.hpp
     gui/item/FilterModel.hpp
     gui/item/ParametersModel.hpp
@@ -24,6 +26,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     # dialogs
     gui/dialog/CreateDialog.hpp
     gui/dialog/UpdateReferenceDialog.hpp
+    gui/dialog/SetReferenceDialog.hpp
 
     # server
     gui/server/Server.hpp
@@ -57,6 +60,8 @@ set(corbasim_gui_MOC_HDRS
 
     # item models
     gui/item/LogModel.hpp
+    gui/item/InstanceModel.hpp
+    gui/item/InterfaceModel.hpp
     gui/item/FilterModel.hpp
     gui/item/ParametersModel.hpp
     gui/item/OperationModel.hpp
@@ -70,6 +75,7 @@ set(corbasim_gui_MOC_HDRS
     # dialogs
     gui/dialog/CreateDialog.hpp
     gui/dialog/UpdateReferenceDialog.hpp
+    gui/dialog/SetReferenceDialog.hpp
 
     # server
     gui/server/Server.hpp
@@ -101,6 +107,8 @@ set(corbasim_gui_SRCS
 
     # item model
     gui/item/ModelNode.cpp
+    gui/item/InstanceModel.cpp
+    gui/item/InterfaceModel.cpp
     gui/item/FilterModel.cpp
     gui/item/LogModel.cpp
     gui/item/ParametersModel.cpp
@@ -116,6 +124,7 @@ set(corbasim_gui_SRCS
     # dialogs
     gui/dialog/CreateDialog.cpp
     gui/dialog/UpdateReferenceDialog.cpp
+    gui/dialog/SetReferenceDialog.cpp
 
     # server
     gui/server/Server.cpp

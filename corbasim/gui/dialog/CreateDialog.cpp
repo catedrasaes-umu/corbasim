@@ -38,7 +38,8 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     grid->addWidget(m_name, 0, 1);
  
     grid->addWidget(new QLabel("Interface"), 1, 0);
-    m_fqn = new QLineEdit();
+    m_fqn = new QComboBox();
+    m_fqn->setEditable(true);
     m_fqn->setObjectName("fqn");
     grid->addWidget(m_fqn, 1, 1); 
 
@@ -82,12 +83,17 @@ ObjrefCreateDialog::~ObjrefCreateDialog()
 {
 }
 
+void ObjrefCreateDialog::setFQNModel(QAbstractItemModel * model)
+{
+    m_fqn->setModel(model);
+}
+
 void ObjrefCreateDialog::createClicked()
 {
     ObjrefConfig cfg;
 
     cfg.name = m_name->text().toStdString();
-    cfg.fqn = m_fqn->text().toStdString();
+    cfg.fqn = m_fqn->currentText().toStdString();
     cfg.reference = m_validator->get_reference();
     cfg.entry = m_reference->getNSEntry().toStdString();
 
@@ -119,7 +125,7 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     grid->addWidget(m_name, 0, 1);
  
     grid->addWidget(new QLabel("Interface"), 1, 0);
-    m_fqn = new QLineEdit();
+    m_fqn = new QComboBox();
     m_fqn->setObjectName("fqn");
     grid->addWidget(m_fqn, 1, 1); 
 
@@ -164,12 +170,17 @@ ServantCreateDialog::~ServantCreateDialog()
 {
 }
 
+void ServantCreateDialog::setFQNModel(QAbstractItemModel * model)
+{
+    m_fqn->setModel(model);
+}
+
 void ServantCreateDialog::createClicked()
 {
     ServantConfig cfg;
 
     cfg.name = m_name->text().toStdString();
-    cfg.fqn = m_fqn->text().toStdString();
+    cfg.fqn = m_fqn->currentText().toStdString();
 
     emit createServant(cfg);
 }

@@ -31,7 +31,7 @@ void InstanceModel::registerInstance(Objref_ptr objref)
 void InstanceModel::unregisterInstance(ObjectId id)
 {
     int i = 0;
-    for (Nodes_t::const_iterator it = m_nodes.begin();
+    for (Nodes_t::iterator it = m_nodes.begin();
             it != m_nodes.end(); ++it, i++) 
     {
         if ((*it)->instance->id() == id)
@@ -39,6 +39,8 @@ void InstanceModel::unregisterInstance(ObjectId id)
             beginRemoveRows(QModelIndex(), i, i);
 
             m_instances.del(id);
+
+            m_nodes.erase(it);
             
             endRemoveRows();
             break;
@@ -84,19 +86,21 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
     if (!index.isValid())
         return QVariant();
 
+    AbstractNode * node = static_cast< AbstractNode * >(
+            index.internalPointer());
+
+    InstanceNode * iNode = 
+        dynamic_cast< InstanceNode *>(node);
+
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-        AbstractNode * node = static_cast< AbstractNode * >(
-                index.internalPointer());
-
-        InstanceNode * iNode = 
-            dynamic_cast< InstanceNode *>(node);
-
         if (iNode)
         {
             iNode->check_for_initialized();
 
-            return iNode->instance->name();
+            return iNode->instance->name() + 
+                " (" + iNode->reflective->get_fqn() +
+                ")";
         }
         else
         {
@@ -115,6 +119,14 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
             {
                 return dNode->parent->reflective->get_child_name(dNode->index);
             }
+        }
+    }
+    else if (role == Qt::UserRole)
+    {
+        if (iNode)
+        {
+            return QVariant::fromValue(
+                    iNode->instance->reference());
         }
     }
 
@@ -240,22 +252,32 @@ int InstanceModel::rowCount(const QModelIndex &parent) const
     if (parent.column() > 0)
         return 0;
 
+    if (!parent.isValid())
+        return m_nodes.size(); 
+
     if (!parent.parent().isValid())
     {
         InstanceNode * node = 
             static_cast< InstanceNode * >(parent.internalPointer());
-        node->check_for_initialized();
 
-        return node->children.size();
+        if (node)
+        {
+            node->check_for_initialized();
+
+            return node->children.size();
+        }
     }
     else 
     {
         Node * node = 
             static_cast< Node * >(parent.internalPointer());
 
-        node->check_for_initialized();
+        if (node)
+        {
+            node->check_for_initialized();
 
-        return node->children.size();
+            return node->children.size();
+        }
     }
 
     return 0;

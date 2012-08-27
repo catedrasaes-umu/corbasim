@@ -25,6 +25,8 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
+#include <corbasim/gui/item/InstanceModel.hpp>
+#include <corbasim/gui/item/InterfaceModel.hpp>
 
 #include "ObjrefView.hpp"
 #include "ServantView.hpp"
@@ -36,6 +38,7 @@ namespace gui
 {
     class ObjrefCreateDialog;
     class ServantCreateDialog;
+    class SetReferenceDialog;
 
     class FilteredLogView;
     class OperationSequenceTool;
@@ -62,6 +65,8 @@ public slots:
 
     // Notificaciones del controlador
 
+    void loadedInterface(InterfaceDescriptor_ptr interface);
+
     void objrefCreated(Objref_ptr objref);
     void objrefDeleted(ObjectId id);
 
@@ -74,6 +79,7 @@ public slots:
     // Dialogs
     void showCreateObjrefDialog();
     void showCreateServantDialog();
+    void showSetNameServiceDialog();
 
     // Tools
     void createFilteredLogView();
@@ -91,6 +97,8 @@ public slots:
 
     void actionHovered(QAction *);
 
+    void stopAll();
+
 signals:
 
     void createObjref(const ObjrefConfig&);
@@ -104,11 +112,15 @@ signals:
     void saveScenario(const QString&);
     void clearScenario();
 
+    void setNameService(const CORBA::Object_var&);
+
 protected:
 
     ObjrefRepository m_objrefs;
     ObjrefRepository m_servants;
     LogModel m_logModel;
+    InstanceModel m_instanceModel;
+    InterfaceModel m_interfaceModel;
 
     QActionGroup m_actions;
 
@@ -119,6 +131,7 @@ protected:
     // Dialogs
     ObjrefCreateDialog * m_createObjrefDialog;
     ServantCreateDialog * m_createServantDialog;
+    SetReferenceDialog * m_setNameServiceDialog;
 
     // Tools
     FilteredLogView * m_filteredLogView;

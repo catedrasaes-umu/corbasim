@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * initialize.hpp
+ * SetReferenceDialog.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,25 +17,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QT_INITIALIZE_HPP
-#define CORBASIM_QT_INITIALIZE_HPP
+#ifndef CORBASIM_GUI_SETREFERENCEDIALOG_HPP
+#define CORBASIM_GUI_SETREFERENCEDIALOG_HPP
 
-#include <corbasim/qt/export.hpp>
-
-class QAbstractItemModel;
+#include <QtGui>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/qt/ObjrefWidget.hpp>
 
 namespace corbasim 
 {
-namespace qt 
+namespace gui 
 {
 
-CORBASIM_QT_DECLSPEC void initialize();
+class SetReferenceDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    SetReferenceDialog(QWidget * parent = 0);
+    virtual ~SetReferenceDialog();
 
-CORBASIM_QT_DECLSPEC void setDefaultInstanceModel(QAbstractItemModel * model);
-CORBASIM_QT_DECLSPEC QAbstractItemModel * getDefaultInstanceModel();
+    void setInterface(InterfaceDescriptor_ptr interface);
 
-} // namespace qt
+public slots:
+
+    void updatedReference(const CORBA::Object_var& reference);
+
+signals:
+
+    void setReference(const CORBA::Object_var& reference);
+
+protected slots:
+
+    void update();
+
+protected:
+    
+    void hideEvent(QHideEvent* event);
+
+    qt::ObjrefWidget * m_reference;
+
+    core::reference_validator_ptr m_referenceValidator;
+};
+
+} // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_QT_INITIALIZE_HPP */
+#endif /* CORBASIM_GUI_SETREFERENCEDIALOG_HPP */
 

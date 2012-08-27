@@ -6,8 +6,8 @@
 #include <corbasim/core/reference_repository.hpp>
 #include <corbasim/core/reference_validator.hpp>
 #include <corbasim/qt/Status.hpp>
-#include <corbasim/qt/ReferenceModel.hpp>
 #include <corbasim/qt/types.hpp>
+#include <corbasim/qt/initialize.hpp>
 
 #include <QtGui>
 
@@ -89,7 +89,11 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
             SLOT(valueChanged()));
 
     // Default model
-    setModel(ReferenceModel::getDefaultModel());
+    QAbstractItemModel * model = getDefaultInstanceModel();
+    if (model)
+    {
+        setModel(model);
+    }
 
     setMaximumHeight(100);
 }

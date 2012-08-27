@@ -26,7 +26,9 @@
 #include <corbasim/gui/SenderSequence.hpp>
 #include <corbasim/gui/DumpTool.hpp>
 #include <corbasim/gui/dialog/CreateDialog.hpp>
+#include <corbasim/gui/dialog/SetReferenceDialog.hpp>
 #include <corbasim/gui/item/TreeView.hpp>
+#include <corbasim/qt/initialize.hpp>
 
 using namespace corbasim::app;
 
@@ -36,6 +38,7 @@ namespace
     {
         kCreateObjrefDialog,
         kCreateServantDialog,
+        kSetNameServiceDialog,
 
         kFilteredLogView,
         kOperationSequenceTool,
@@ -48,6 +51,7 @@ namespace
     const char * SubWindowTitles[] = {
         "Create new object reference",
         "Create new servant",
+        "Set Name Service",
         "Filtered log",
         "Operation sequence tool",
         "Sender sequence tool",
@@ -60,11 +64,14 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_objrefs(this), 
     m_servants(this),
     m_logModel(this),
+    m_instanceModel(this),
+    m_interfaceModel(this),
     m_actions(this),
 
     // Dialogs
     m_createObjrefDialog(NULL),
     m_createServantDialog(NULL),
+    m_setNameServiceDialog(NULL),
 
     // Tools
     m_filteredLogView(NULL),
@@ -73,6 +80,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_dumpTool(NULL)
 
 {
+    corbasim::qt::setDefaultInstanceModel(&m_instanceModel);
+
     setupUi(this);
     
     // TODO
@@ -82,7 +91,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Log view
     QDockWidget * logViewDock = new QDockWidget("Log", this);
-    m_logView = new TreeView(this);
+    m_logView = new TreeView();
     m_logView->setModel(&m_logModel);
     logViewDock->setWidget(m_logView);
     addDockWidget(Qt::BottomDockWidgetArea, logViewDock);
@@ -93,6 +102,22 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     {
         m_logView->setColumnWidth(i, width() / columnCount);
     }
+
+    // Instances view
+    QDockWidget * instanceViewDock = new QDockWidget("Instances", this);
+    TreeView * instanceView = new TreeView();
+    instanceView->setHeaderHidden(true);
+    instanceView->setModel(&m_instanceModel);
+    instanceViewDock->setWidget(instanceView);
+    addDockWidget(Qt::LeftDockWidgetArea, instanceViewDock);
+
+    // Interfaces view
+    QDockWidget * interfaceViewDock = new QDockWidget("Interfaces", this);
+    TreeView * interfaceView = new TreeView();
+    interfaceView->setHeaderHidden(true);
+    interfaceView->setModel(&m_interfaceModel);
+    interfaceViewDock->setWidget(interfaceView);
+    addDockWidget(Qt::LeftDockWidgetArea, interfaceViewDock);
 
     // No more window
     
@@ -115,7 +140,15 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     connect(newSrvAction, SIGNAL(triggered()), 
             this, SLOT(showCreateServantDialog()));
 
-    // New servant
+    // Set name service reference
+    QAction * setNSAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "Set Name Service reference", this);
+    // setNSAction->setShortcut(QKeySequence::Save);
+    connect(setNSAction, SIGNAL(triggered()), 
+            this, SLOT(showSetNameServiceDialog()));
+
+    // Clear log
     QAction * clearAction = new QAction(
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear log", this);
@@ -163,6 +196,14 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     connect(showLogAction, SIGNAL(triggered()), 
             logViewDock, SLOT(show()));
 
+    // Stop
+    QAction * stopAction = new QAction(
+            style()->standardIcon(QStyle::SP_MediaStop),
+            "&Stop all", this);
+    // stopAction->setShortcut(QKeySequence::Cut);
+    connect(stopAction, SIGNAL(triggered()), 
+            this, SLOT(stopAll()));
+
     // Tool bar
     QToolBar * toolBar = addToolBar("File");
     toolBar->addAction(loadScenarioAction);
@@ -176,6 +217,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     
     toolBar = addToolBar("Window");
     toolBar->addAction(clearAction);
+    toolBar->addAction(stopAction);
 
     // Menus
     menuFile->addAction(newObjAction);
@@ -201,8 +243,12 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuTool->addAction("&Filtered log", 
             this, SLOT(showFilteredLogView()));
 
+    menuWindow->addAction(setNSAction);
+    menuWindow->addSeparator();
     menuWindow->addAction(showLogAction);
     menuWindow->addAction(clearAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(stopAction);
 
     // Subwindows
     m_subWindows.resize(kSubWindowsMax, NULL);
@@ -212,6 +258,13 @@ AppMainWindow::~AppMainWindow()
 {
 }
 
+
+void AppMainWindow::loadedInterface(
+        InterfaceDescriptor_ptr interface)
+{
+    m_interfaceModel.addInterface(interface);
+}
+
 void AppMainWindow::objrefCreated(Objref_ptr objref)
 {
     if (m_subWindows[kCreateObjrefDialog])
@@ -219,6 +272,7 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
 
     m_objrefs.add(objref);
     m_logModel.registerInstance(objref);
+    m_instanceModel.registerInstance(objref);
 
     ObjrefView_ptr view(new ObjrefView(mdiArea, objref, this));
     m_objrefViews.insert(objref->id(), view);
@@ -245,6 +299,7 @@ void AppMainWindow::objrefDeleted(ObjectId id)
 {
     m_objrefs.del(id);
     m_logModel.unregisterInstance(id);
+    m_instanceModel.unregisterInstance(id);
 
     m_objrefViews.remove(id);
 
@@ -266,6 +321,7 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
 
     m_servants.add(servant);
     m_logModel.registerInstance(servant);
+    m_instanceModel.registerInstance(servant);
     
     ServantView_ptr view(new ServantView(mdiArea, servant, this));
     m_servantViews.insert(servant->id(), view);
@@ -289,6 +345,7 @@ void AppMainWindow::servantDeleted(ObjectId id)
 {
     m_servants.del(id);
     m_logModel.unregisterInstance(id);
+    m_instanceModel.unregisterInstance(id);
     
     m_servantViews.remove(id);
 
@@ -322,6 +379,7 @@ void AppMainWindow::showCreateObjrefDialog()
     if (!m_createObjrefDialog)
     {
         m_createObjrefDialog = new ObjrefCreateDialog(this);
+        m_createObjrefDialog->setFQNModel(&m_interfaceModel);
 
         createToolSubWindow(kCreateObjrefDialog, m_createObjrefDialog);
 
@@ -339,6 +397,7 @@ void AppMainWindow::showCreateServantDialog()
     if (!m_createServantDialog)
     {
         m_createServantDialog = new ServantCreateDialog(this);
+        m_createServantDialog->setFQNModel(&m_interfaceModel);
 
         createToolSubWindow(kCreateServantDialog, m_createServantDialog);
 
@@ -349,6 +408,23 @@ void AppMainWindow::showCreateServantDialog()
     }
 
     showToolSubWindow(kCreateServantDialog);
+}
+
+void AppMainWindow::showSetNameServiceDialog()
+{
+    if (!m_setNameServiceDialog)
+    {
+        m_setNameServiceDialog = new SetReferenceDialog(this);
+
+        createToolSubWindow(kSetNameServiceDialog, m_setNameServiceDialog);
+
+        connect(m_setNameServiceDialog, 
+                SIGNAL(setReference(const CORBA::Object_var&)),
+                this, 
+                SIGNAL(setNameService(const CORBA::Object_var&)));
+    }
+
+    showToolSubWindow(kSetNameServiceDialog);
 }
 
 // 
@@ -515,5 +591,10 @@ void AppMainWindow::showSaveScenario()
 void AppMainWindow::actionHovered(QAction * action)
 {
     statusBar()->showMessage(action->text(), 30000);
+}
+
+void AppMainWindow::stopAll()
+{
+    // TODO
 }
 
