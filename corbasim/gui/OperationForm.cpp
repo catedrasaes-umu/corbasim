@@ -658,3 +658,8 @@ void OperationSender::activeUpdateForm(bool update)
 
 }
 
+void OperationSender::stop()
+{
+    finished();
+}
+

@@ -595,6 +595,10 @@ void AppMainWindow::actionHovered(QAction * action)
 
 void AppMainWindow::stopAll()
 {
-    // TODO
+    for (ObjrefViews_t::iterator it = m_objrefViews.begin(); 
+            it != m_objrefViews.end(); ++it) 
+    {
+        (*it)->stopAll();
+    }
 }
 

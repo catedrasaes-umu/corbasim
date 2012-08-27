@@ -148,6 +148,10 @@ public:
         return m_reflective;
     }
 
+public slots:
+
+    void stop();
+
 signals:
 
     void updateForm(Request_ptr req);

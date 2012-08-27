@@ -71,6 +71,8 @@ public slots:
     void showSetReference();
     void showClient();
 
+    void stopAll();
+
 signals:
 
     void deleteObjref(ObjectId);

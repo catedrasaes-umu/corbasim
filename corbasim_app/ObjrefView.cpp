@@ -388,3 +388,24 @@ void ObjrefView::showClient()
     m_client->show();
 }
 
+void ObjrefView::stopAll()
+{
+    for (dialogs_t::iterator it = m_dialogs.begin(); 
+            it != m_dialogs.end(); ++it) 
+    {
+        if (*it)
+        {
+            (*it)->stopTimer();
+        }
+    }
+
+    for (senders_t::iterator it = m_senders.begin(); 
+            it != m_senders.end(); ++it) 
+    {
+        if (*it)
+        {
+            (*it)->stop();
+        }
+    }
+}
+
