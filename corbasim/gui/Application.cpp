@@ -19,7 +19,9 @@
 
 #include "Application.hpp"
 #include <iostream>
+#include <fstream>
 #include <corbasim/gui/types.hpp>
+#include <corbasim/gui/json.hpp>
 
 using namespace corbasim::gui;
 
@@ -122,6 +124,103 @@ Application::~Application()
     delete m_data;
 }
 
+void Application::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    // Objrefs
+    {
+        const QVariantList list = map["objects"].toList();
+
+        QVariantList::const_iterator it = list.begin();
+        QVariantList::const_iterator end = list.end();
+
+        for (; it != end; it++)
+        {
+            const QVariantMap value = it->toMap();
+
+            ObjrefConfig cfg;
+            cfg.name = value["name"].toString().toStdString();
+            cfg.fqn = value["fqn"].toString().toStdString();
+
+            createObjref(cfg);
+        }
+    }
+
+    // Sevants
+    {
+        const QVariantList list = map["servants"].toList();
+
+        QVariantList::const_iterator it = list.begin();
+        QVariantList::const_iterator end = list.end();
+
+        for (; it != end; it++)
+        {
+            const QVariantMap value = it->toMap();
+
+            ServantConfig cfg;
+            cfg.name = value["name"].toString().toStdString();
+            cfg.fqn = value["fqn"].toString().toStdString();
+
+            createServant(cfg);
+        }
+    }
+}
+
+void Application::save(QVariant& settings) const
+{
+    QVariantMap map;
+
+    // Objrefs
+    {
+        QVariantList list;
+
+        ObjrefRepository::const_iterator it = m_objrefs.begin();
+        ObjrefRepository::const_iterator end = m_objrefs.end();
+
+        for (; it != end; it++)
+        {
+            QVariantMap value;
+
+            value["name"] = (*it)->name();
+            value["fqn"] = (*it)->interface()->get_fqn();
+            
+            CORBA::String_var ref = 
+                m_data->m_orb->object_to_string((*it)->reference());
+
+            value["reference"] = ref.in();
+
+            list << value;
+        }
+
+        map["objects"] = list;
+    }
+
+    // Servants
+    {
+        QVariantList list;
+
+        ObjrefRepository::const_iterator it = m_servants.begin();
+        ObjrefRepository::const_iterator end = m_servants.end();
+
+        for (; it != end; it++)
+        {
+            QVariantMap value;
+
+            value["name"] = (*it)->name();
+            value["fqn"] = (*it)->interface()->get_fqn();
+
+            // its reference doesn't matter
+
+            list << value;
+        }
+
+        map["servants"] = list;
+    }
+
+    settings = map;
+};
+
 void Application::clearScenario()
 {
     m_objrefs.clear();
@@ -130,11 +229,29 @@ void Application::clearScenario()
 
 void Application::loadScenario(const QString& file)
 {
-    // clear scenario
+    clearScenario();
+    QVariant settings;
+    
+    bool res = gui::fromJsonFile(file.toStdString().c_str(), settings);
+
+    if (res)
+    {
+        load(settings);
+    }
+    else
+    {
+        emit error(QString("Unable to load '%1'").arg(file));
+    }
 }
 
 void Application::saveScenario(const QString& file)
 {
+    QVariant settings;
+    save(settings);
+
+    std::ofstream ofs(file.toStdString().c_str());
+    json::ostream_writer_t ow(ofs, true);
+    gui::toJson(ow, settings);
 }
 
 void Application::loadDirectory(const QString& directory)

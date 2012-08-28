@@ -40,6 +40,9 @@ public:
 
     static Application * currentApplication();
 
+    void load(const QVariant& settings);
+    void save(QVariant& settings) const;
+
 public slots:
 
     void clearScenario();
