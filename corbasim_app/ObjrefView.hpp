@@ -26,7 +26,7 @@
 #include <corbasim/gui/RequestDialog.hpp>
 #include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/SimpleScriptEditor.hpp>
-#include <corbasim/gui/SimpleClient.hpp>
+#include <corbasim/gui/client/SimpleClient.hpp>
 #include <corbasim/gui/dialog/UpdateReferenceDialog.hpp>
 
 namespace corbasim 

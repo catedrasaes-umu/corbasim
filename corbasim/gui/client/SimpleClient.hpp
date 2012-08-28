@@ -49,11 +49,11 @@ public:
     SimpleClient(QWidget * parent = 0);
     virtual ~SimpleClient();
 
-    void initialize(Objref_ptr objref);
     void setReference(CORBA::Object_ptr ref);
 
 public slots:
 
+    void initialize(Objref_ptr objref);
 
     void clearAll();
     void stopAllTimers();

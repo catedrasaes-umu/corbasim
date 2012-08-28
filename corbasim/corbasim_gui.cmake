@@ -31,12 +31,14 @@ set(corbasim_gui_EXPORTED_HEADERS
     # server
     gui/server/Server.hpp
 
+    # client
+    gui/client/SimpleClient.hpp
+
     gui/InputRequestProcessor.hpp
     gui/OperationSequence.hpp
     gui/SimpleScriptEditor.hpp
     gui/RequestDialog.hpp
     gui/FilteredLogView.hpp
-    gui/SimpleClient.hpp
     gui/ReflectiveGUI.hpp
     gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
@@ -80,6 +82,9 @@ set(corbasim_gui_MOC_HDRS
     # server
     gui/server/Server.hpp
 
+    # client
+    gui/client/SimpleClient.hpp
+
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
     gui/OperationForm.hpp
@@ -87,7 +92,6 @@ set(corbasim_gui_MOC_HDRS
     gui/OperationSequence.hpp
     gui/SimpleScriptEditor.hpp
     gui/FilteredLogView.hpp
-    gui/SimpleClient.hpp
     gui/SenderSequence.hpp
     gui/ParametersFromFilesTool.hpp
     gui/Sender.hpp
@@ -129,12 +133,14 @@ set(corbasim_gui_SRCS
     # server
     gui/server/Server.cpp
 
+    # client
+    gui/client/SimpleClient.cpp
+
     gui/InputRequestProcessor.cpp
     gui/OperationSequence.cpp
     gui/SimpleScriptEditor.cpp
     gui/RequestDialog.cpp
     gui/FilteredLogView.cpp
-    gui/SimpleClient.cpp
     gui/ReflectiveGUI.cpp
     gui/SenderSequence.cpp
     gui/ParametersFromFilesTool.cpp
@@ -175,7 +181,7 @@ target_link_libraries(corbasim_script_evaluator_test
     boost_program_options)
 
 add_executable(corbasim_client.real
-    gui/ClientMain.cpp)
+    gui/client/ClientMain.cpp)
 target_link_libraries(corbasim_client.real
     corbasim_gui
     boost_program_options)
