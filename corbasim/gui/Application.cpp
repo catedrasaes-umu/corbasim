@@ -19,6 +19,7 @@
 
 #include "Application.hpp"
 #include <iostream>
+#include <corbasim/gui/types.hpp>
 
 using namespace corbasim::gui;
 
@@ -80,6 +81,8 @@ Application::Application(QObject * parent) :
     m_servants(this),
     m_data(new ApplicationData(*this))
 {
+    corbasim::gui::initialize();
+
     ::currentApplication() = this;
 
     connect(&m_interfaces, 

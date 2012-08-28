@@ -62,6 +62,13 @@ public:
         qRegisterMetaType< Servant_ptr >
             ("Servant_ptr");
 
+        qRegisterMetaType< InterfaceDescriptor_ptr >
+            ("InterfaceDescriptor_ptr");
+        qRegisterMetaType< TypeDescriptor_ptr >
+            ("TypeDescriptor_ptr");
+        qRegisterMetaType< OperationDescriptor_ptr >
+            ("OperationDescriptor_ptr");
+
         qRegisterMetaType< ObjrefConfig >
             ("ObjrefConfig");
         qRegisterMetaType< ServantConfig >
