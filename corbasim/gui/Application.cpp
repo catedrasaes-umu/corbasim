@@ -143,6 +143,14 @@ void Application::load(const QVariant& settings)
             cfg.name = value["name"].toString().toStdString();
             cfg.fqn = value["fqn"].toString().toStdString();
 
+            try
+            {
+                cfg.reference =
+                    m_data->m_orb->string_to_object(value["reference"].toString().toStdString().c_str());
+            }
+            catch(...)
+            {}
+
             createObjref(cfg);
         }
     }
