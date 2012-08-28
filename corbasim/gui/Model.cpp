@@ -223,6 +223,21 @@ ObjrefRepository::const_iterator ObjrefRepository::end() const
     return m_objrefById.end();
 }
 
+void ObjrefRepository::clear()
+{
+    ObjrefById_t::const_iterator it = m_objrefById.begin();
+    ObjrefById_t::const_iterator end = m_objrefById.end();
+
+    for (; it != end; it++)
+    {
+        emit deleted(it.key());
+        emit deleted(it.value());
+    }
+
+    m_objrefById.clear();
+    m_objrefByName.clear();
+}
+
 Objref_ptr ObjrefRepository::find(ObjectId id) const
 {
     ObjrefById_t::const_iterator it = m_objrefById.find(id);

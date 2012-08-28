@@ -121,7 +121,16 @@ int main(int argc, char **argv)
             &application, SLOT(loadScenario(const QString&)));
     QObject::connect(&window, SIGNAL(saveScenario(const QString&)),
             &application, SLOT(saveScenario(const QString&)));
+    QObject::connect(&window, SIGNAL(clearScenario()),
+            &application, SLOT(clearScenario()));
     // End signals window -> application
+
+    // Signals application -> input controller
+    QObject::connect(&application, SIGNAL(servantCreated(Objref_ptr)), 
+            &inputReqCntl, SLOT(registerInstance(Objref_ptr)));
+    QObject::connect(&application, SIGNAL(servantDeleted(ObjectId)), 
+            &inputReqCntl, SLOT(unregisterInstance(ObjectId)));
+    // End signals application -> input controller
 
     // Executed in dedicated threads
     inputReqCntl.moveToThread(&threadInputReqCntl);

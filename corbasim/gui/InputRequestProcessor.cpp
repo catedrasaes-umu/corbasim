@@ -98,12 +98,29 @@ InputRequestController::~InputRequestController()
 
 void InputRequestController::registerInstance(Objref_ptr objref)
 {
+    connect(objref.get(),
+            SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
+            this, 
+            SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+
     m_instances.add(objref);
 }
 
 void InputRequestController::unregisterInstance(ObjectId id)
 {
-    m_instances.del(id);
+    Objref_ptr objref = m_instances.find(id);
+
+    if (objref)
+    {
+        disconnect(objref.get(),
+                SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
+                this, 
+                SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+
+        m_instances.del(id);
+    }
+
+    // TODO remove its processors
 }
 
 void InputRequestController::processRequest(ObjectId id, 

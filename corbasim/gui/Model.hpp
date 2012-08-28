@@ -151,6 +151,8 @@ public:
     Objref_ptr find(ObjectId id) const;
     Objref_ptr find(const QString& name) const;
 
+    void clear();
+
 public slots:
 
     void add(Objref_ptr objref);

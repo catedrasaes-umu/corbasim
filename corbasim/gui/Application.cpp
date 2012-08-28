@@ -103,6 +103,12 @@ Application::~Application()
     delete m_data;
 }
 
+void Application::clearScenario()
+{
+    m_objrefs.clear();
+    m_servants.clear();
+}
+
 void Application::loadScenario(const QString& file)
 {
     // clear scenario

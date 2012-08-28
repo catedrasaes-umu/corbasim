@@ -42,6 +42,8 @@ public:
 
 public slots:
 
+    void clearScenario();
+
     void loadScenario(const QString& file);
     void saveScenario(const QString& file);
     
@@ -84,7 +86,6 @@ protected:
     struct ApplicationData;
     friend class ApplicationData;
     ApplicationData * m_data;
-
 };
 
 } // namespace gui
