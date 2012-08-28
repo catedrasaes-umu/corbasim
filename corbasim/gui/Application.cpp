@@ -100,6 +100,22 @@ Application::Application(QObject * parent) :
 
 Application::~Application()
 {
+    ObjrefRepository::iterator it = m_objrefs.begin();
+    ObjrefRepository::iterator end = m_objrefs.end();
+
+    for (; it != end; it++)
+    {
+        it.value()->setParent(0);
+    }
+
+    it = m_servants.begin();
+    end = m_servants.end();
+
+    for (; it != end; it++)
+    {
+        it.value()->setParent(0);
+    }
+
     delete m_data;
 }
 

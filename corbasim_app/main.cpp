@@ -20,11 +20,6 @@
 #include <iostream>
 #include "AppConfiguration.hpp"
 #include "AppMainWindow.hpp"
-// TODO #include "TriggerEngine.hpp"
-// TODO #include "AppFileWatcher.hpp"
-// TODO #include "NSBrowser.hpp"
-// TODO #include "NSWatcher.hpp"
-// TODO #include "IDLBuilder.hpp"
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Application.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
@@ -43,6 +38,8 @@ int main(int argc, char **argv)
     // Default ORB
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
     QApplication app(argc, argv); 
+    
+    corbasim::gui::Application application;
 
     corbasim::app::AppConfiguration * config =
         corbasim::app::AppConfiguration::getInstance();
@@ -56,12 +53,6 @@ int main(int argc, char **argv)
     // Force initialization
     corbasim::gui::initialize();
     QThread threadApplication;
-
-#ifdef CORBASIM_FUTURE_FEATURES
-    QThread threadEngine;
-    QThread threadWatcher;
-    QThread threadBuilder;
-#endif
 
     QThread threadInputReqCntl;
 
@@ -79,14 +70,6 @@ int main(int argc, char **argv)
     corbasim::gui::InputRequestController& inputReqCntl = 
         *corbasim::gui::getDefaultInputRequestController();
 
-#ifdef CORBASIM_FUTURE_FEATURES
-    corbasim::app::TriggerEngine engine;
-    corbasim::app::AppFileWatcher watcher;
-    corbasim::app::IDLBuilder builder;
-    corbasim::app::NSWatcher nsWatcher;
-#endif
-
-    corbasim::gui::Application application;
     corbasim::app::AppMainWindow window;
 
     // Signals application -> window
@@ -136,30 +119,6 @@ int main(int argc, char **argv)
     inputReqCntl.moveToThread(&threadInputReqCntl);
     threadInputReqCntl.start();
 
-#ifdef CORBASIM_FUTURE_FEATURES
-    if (config->enable_scripting)
-    {
-        engine.moveToThread(&threadEngine);
-        threadEngine.start();
-        window.setEngine(&engine);
-    }
-
-    if (config->enable_watch_directory)
-    {
-        watcher.setDirectory(config->watch_directory.c_str());
-        watcher.setController(&controller);
-
-        watcher.moveToThread(&threadWatcher);
-        threadWatcher.start();
-    }
-
-    builder.moveToThread(&threadBuilder);
-    threadBuilder.start();
-    nsWatcher.moveToThread(&threadWatcher);
-    threadWatcher.start();
-    nsWatcher.start();
-#endif
-
     window.show();
 
     // Directories with corbasim_app plugins
@@ -194,13 +153,6 @@ int main(int argc, char **argv)
     
     // Wait for child threads
     threadApplication.quit();
-
-#ifdef CORBASIM_FUTURE_FEATURES
-    threadEngine.quit();
-    threadWatcher.quit();
-    threadBuilder.quit();
-#endif
-
     threadInputReqCntl.quit();
 
     // Sender
@@ -211,13 +163,6 @@ int main(int argc, char **argv)
     // End sender
 
     threadApplication.wait();
-
-#ifdef CORBASIM_FUTURE_FEATURES
-    threadEngine.wait();
-    threadWatcher.wait();
-    threadBuilder.wait();
-#endif
-
     threadInputReqCntl.wait();
 
     orb->shutdown(1);
