@@ -380,3 +380,8 @@ Objref_ptr InstanceModel::getInstance(const QModelIndex& index) const
     return Objref_ptr();
 }
 
+Objref_ptr InstanceModel::getInstance(const QString& name) const
+{
+    return m_instances.find(name);
+}
+

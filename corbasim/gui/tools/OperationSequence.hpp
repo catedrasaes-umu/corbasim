@@ -42,12 +42,12 @@ class CORBASIM_GUI_DECLSPEC OperationSequenceItem :
 {
     Q_OBJECT
 public:
-    OperationSequenceItem(const QString& id,
+    OperationSequenceItem(Objref_ptr object,
             OperationInputForm * dlg,
             QWidget * parent = 0);
     virtual ~OperationSequenceItem();
 
-    const QString& getObjrefId() const;
+    ObjectId objectId() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -78,7 +78,7 @@ private slots:
 
 protected:
 
-    const QString m_id;
+    Objref_ptr m_object;
     OperationInputForm * m_dlg;
     QLayout * m_layout;
     QLineEdit * m_title;
@@ -111,9 +111,9 @@ public:
     /**
      * @brief Remove all the items related to an instance.
      *
-     * @param name The name of the instance.
+     * @param id The identifier of the instance.
      */
-    void removeInstance(const QString& name);
+    void removeInstance(ObjectId id);
 
 public slots:
 
@@ -140,7 +140,7 @@ protected:
     /**
      * @brief The sequence name. 
      *
-     * Currently it is not possible to modify.
+     * TODO Currently it is not possible to modify.
      */
     QString m_name;
 
@@ -174,7 +174,7 @@ public slots:
     void objrefDeleted(ObjectId id);
 
     OperationSequenceItem * appendOperation(
-            const QString& id, 
+            Objref_ptr object,
             OperationDescriptor_ptr op);
 
     OperationSequence* createSequence();
@@ -191,14 +191,6 @@ private slots:
     void sequenceModified();
 
 protected:
-    
-    /**
-     * @brief The instances registered into this tool.
-     *
-     * TODO This instances are also registered into the model 
-     * in this tool. Should be removed.
-     */
-    ObjrefRepository m_instances;
 
     InstanceModel m_model;
 

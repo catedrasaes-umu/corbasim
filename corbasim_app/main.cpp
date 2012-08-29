@@ -136,7 +136,7 @@ int main(int argc, char **argv)
             config->load_files.begin(); it != end; ++it) 
     {
         std::cout << "loading: " << (*it) << std::endl;
-        // TODO controller.loadFile(it->c_str());
+        application.loadScenario(it->c_str());
     }
 
     if (!config->load_configuration.empty())

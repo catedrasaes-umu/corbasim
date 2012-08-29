@@ -45,7 +45,7 @@ void OperationsView::clicked(const QModelIndex& index)
         OperationDescriptor_ptr op = 
             instance->interface()->get_reflective_by_index(index.row());
 
-        emit selectedOperation(instance->name(), op);
+        emit selectedOperation(instance, op);
     }
 }
 

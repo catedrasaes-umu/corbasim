@@ -42,12 +42,11 @@ class CORBASIM_GUI_DECLSPEC SenderSequenceItem :
 {
     Q_OBJECT
 public:
-    SenderSequenceItem(const QString& id,
-            OperationSender * dlg,
+    SenderSequenceItem(OperationSender * dlg,
             QWidget * parent = 0);
     virtual ~SenderSequenceItem();
 
-    const QString& getObjrefId() const;
+    ObjectId objectId() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -60,9 +59,7 @@ signals:
 
 protected:
 
-    const QString m_id;
     OperationSender * m_dlg;
-    QLayout * m_layout;
     QLineEdit * m_title;
 };
 
@@ -79,6 +76,8 @@ public:
     void load(const QVariant& settings);
 
 public slots:
+
+    void removeItems(ObjectId id);
 
     void appendItem(SenderSequenceItem * item);
 
@@ -103,7 +102,10 @@ protected:
     QString m_name;
 
     qt::CustomVLayout * m_layout;
-    QList< SenderSequenceItem * > m_items;
+
+    typedef QList< SenderSequenceItem * > items_t;
+    items_t m_items;
+
     QScrollArea * m_scroll;
 
 };
@@ -124,7 +126,7 @@ public slots:
     void objrefCreated(Objref_ptr object);
     void objrefDeleted(ObjectId id);
 
-    SenderSequenceItem * appendOperation(const QString& id, 
+    SenderSequenceItem * appendOperation(Objref_ptr instance, 
             OperationDescriptor_ptr op);
 
     SenderSequence* createSequence();
@@ -148,7 +150,9 @@ protected:
 
     OperationsView * m_view;
     QTabWidget * m_tabs;
-    QList< SenderSequence * > m_sequences;
+
+    typedef QList< SenderSequence * > sequences_t;
+    sequences_t m_sequences;
 
     QMenu * m_menu;
 };

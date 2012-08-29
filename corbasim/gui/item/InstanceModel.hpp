@@ -63,6 +63,7 @@ public:
             const QString& operation) const;
 
     Objref_ptr getInstance(const QModelIndex&) const;
+    Objref_ptr getInstance(const QString&) const;
 
 public slots:
 

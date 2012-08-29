@@ -43,7 +43,8 @@ protected slots:
 
 signals:
 
-    void selectedOperation(const QString&, OperationDescriptor_ptr);
+    void selectedOperation(Objref_ptr, OperationDescriptor_ptr);
+
 };
 
 } // namespace gui

@@ -27,12 +27,14 @@
 
 using namespace corbasim::gui;
 
-SenderSequenceItem::SenderSequenceItem(const QString& id,
+SenderSequenceItem::SenderSequenceItem(
         OperationSender * dlg,
         QWidget * parent) : 
-    QFrame(parent), m_id(id), m_dlg(dlg)
+    QFrame(parent), m_dlg(dlg)
 {
-    core::operation_reflective_base const * reflective =
+    const QString& id = dlg->object()->name();
+
+    OperationDescriptor_ptr reflective =
         dlg->getReflective();
 
     QVBoxLayout * layout = new QVBoxLayout();
@@ -66,13 +68,13 @@ SenderSequenceItem::SenderSequenceItem(const QString& id,
         tLayout->addWidget(btDown);
         tLayout->addWidget(btDelete);
 
-        QObject::connect(btShowInput, SIGNAL(toggled(bool)),
+        connect(btShowInput, SIGNAL(toggled(bool)),
                 dlg->getForm(), SLOT(setVisible(bool)));
-        QObject::connect(btDelete, SIGNAL(clicked()),
+        connect(btDelete, SIGNAL(clicked()),
                 this, SIGNAL(doDelete()));
-        QObject::connect(btUp, SIGNAL(clicked()),
+        connect(btUp, SIGNAL(clicked()),
                 this, SIGNAL(up()));
-        QObject::connect(btDown, SIGNAL(clicked()),
+        connect(btDown, SIGNAL(clicked()),
                 this, SIGNAL(down()));
 
         // Tooltips
@@ -94,11 +96,9 @@ SenderSequenceItem::SenderSequenceItem(const QString& id,
     }
 
     // Editor
-    m_layout = new QVBoxLayout();
-    m_layout->setMargin(0);
-    m_layout->addWidget(dlg);
+    dlg->layout()->setMargin(0);
     dlg->getForm()->hide();
-    layout->addLayout(m_layout);
+    layout->addWidget(dlg);
 
     setLayout(layout);
 
@@ -110,12 +110,13 @@ SenderSequenceItem::~SenderSequenceItem()
 {
 }
 
-const QString& SenderSequenceItem::getObjrefId() const
+ObjectId SenderSequenceItem::objectId() const
 {
-    return m_id;
+    return m_dlg->object()->id();
 }
 
-SenderSequence::SenderSequence(const QString& name, QWidget * parent) :
+SenderSequence::SenderSequence(const QString& name, 
+        QWidget * parent) :
     QWidget(parent), m_name(name)
 {
     QVBoxLayout * layout = new QVBoxLayout();
@@ -157,7 +158,7 @@ SenderSequence::SenderSequence(const QString& name, QWidget * parent) :
         stBtn->setCheckable(true);
         hLayout->addWidget(stBtn);
 
-        QObject::connect(stBtn, SIGNAL(clicked(bool)), 
+        connect(stBtn, SIGNAL(clicked(bool)), 
                 this, SLOT(startOrStopAll(bool)));
 
         layout->addLayout(hLayout);
@@ -180,6 +181,25 @@ const QString& SenderSequence::getName() const
     return m_name;
 }
 
+void SenderSequence::removeItems(ObjectId id)
+{
+    const items_t old = m_items;
+
+    for (items_t::const_iterator it = old.begin(); 
+            it != old.end(); it++) 
+    {
+        SenderSequenceItem * ptr = *it;
+
+        if (ptr->objectId() == id)
+        {
+            m_items.removeAll(ptr);
+            ptr->deleteLater();
+
+            emit modified();
+        }
+    }
+}
+
 void SenderSequence::appendItem(SenderSequenceItem * item)
 {
     // Before spacer
@@ -188,11 +208,11 @@ void SenderSequence::appendItem(SenderSequenceItem * item)
     // Scroll to item
     // m_scroll->ensureWidgetVisible(item);
 
-    QObject::connect(item, SIGNAL(doDelete()),
+    connect(item, SIGNAL(doDelete()),
             this, SLOT(deleteItem()));
-    QObject::connect(item, SIGNAL(up()),
+    connect(item, SIGNAL(up()),
             this, SLOT(moveUpItem()));
-    QObject::connect(item, SIGNAL(down()),
+    connect(item, SIGNAL(down()),
             this, SLOT(moveDownItem()));
 
     m_items.push_back(item);
@@ -273,7 +293,7 @@ void SenderSequence::moveDownItem()
 
 // Tool
 SenderSequenceTool::SenderSequenceTool(QWidget * parent) :
-    QWidget(parent), m_instances(this)
+    QWidget(parent)
 {
     m_model.setDisplayParameters(false);
 
@@ -303,22 +323,22 @@ SenderSequenceTool::SenderSequenceTool(QWidget * parent) :
     setLayout(layout);
 
     // Signals
-    QObject::connect(m_view, 
-            SIGNAL(selectedOperation(QString, 
+    connect(m_view, 
+            SIGNAL(selectedOperation(Objref_ptr, 
                     OperationDescriptor_ptr)),
             this,
-            SLOT(appendOperation(const QString&, 
+            SLOT(appendOperation(Objref_ptr, 
                     OperationDescriptor_ptr)));
 
-    QObject::connect(btNewTab, SIGNAL(clicked()),
+    connect(btNewTab, SIGNAL(clicked()),
             this, SLOT(createSequence()));
 
-    QObject::connect(m_tabs, SIGNAL(tabCloseRequested(int)),
+    connect(m_tabs, SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeSequence(int)));
 
     // Context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
-    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(showContextMenu(const QPoint&)));
 
     setMinimumHeight(400);
@@ -341,28 +361,25 @@ SenderSequenceTool::~SenderSequenceTool()
 void SenderSequenceTool::objrefCreated(Objref_ptr object)
 {
     m_model.registerInstance(object);
-
-    m_instances.add(object);
 }
 
 void SenderSequenceTool::objrefDeleted(ObjectId id)
 {
-    Objref_ptr object = m_instances.find(id);
+    m_model.unregisterInstance(id);
 
-    if (object)
+    // Remove all its associated senders
+    for (sequences_t::iterator it = m_sequences.begin(); 
+            it != m_sequences.end(); ++it) 
     {
-        m_model.unregisterInstance(id);
-        m_instances.del(id);
+        (*it)->removeItems(id);
     }
 }
 
 SenderSequenceItem * 
-SenderSequenceTool::appendOperation(const QString& id, 
+SenderSequenceTool::appendOperation(Objref_ptr object, 
 		OperationDescriptor_ptr op)
 {
-    Objref_ptr object = m_instances.find(id);
-
-    if (!object)
+    if (!object || !op)
         return NULL;
 
     SenderSequence * seq = NULL;
@@ -374,7 +391,7 @@ SenderSequenceTool::appendOperation(const QString& id,
     OperationSender * sender = new OperationSender(object);
     sender->initialize(op);
     SenderSequenceItem * item = 
-        new SenderSequenceItem(object->name(), sender);
+        new SenderSequenceItem(sender);
 
     seq->appendItem(item);
 
@@ -388,7 +405,7 @@ SenderSequence* SenderSequenceTool::createSequence()
     m_tabs->addTab(seq, seq->getName());
     m_tabs->setCurrentIndex(m_tabs->count() - 1);
 
-    QObject::connect(seq, SIGNAL(modified()),
+    connect(seq, SIGNAL(modified()),
             this, SLOT(sequenceModified()));
 
     return seq;
@@ -472,7 +489,7 @@ void SenderSequenceItem::save(QVariant& settings)
 {
     QVariantMap map;
 
-    map["object"] = m_id;
+    map["object"] = m_dlg->object()->name();
     map["operation"] = m_dlg->getReflective()->get_name();
 
     // User-defined title
@@ -538,6 +555,7 @@ void SenderSequenceTool::load(const QVariant& settings)
         delete m_sequences.at(i);
     }
     m_sequences.clear();
+    // En clear
 
     const QVariantList list = settings.toList();
 
@@ -551,18 +569,17 @@ void SenderSequenceTool::load(const QVariant& settings)
         for (int j = 0; j < seqList.size(); j++) 
         {
             const QVariantMap map = seqList.at(j).toMap();
+            const QString obj = map.value("object").toString();
+            const std::string operation = 
+                map.value("operation").toString().toStdString();
 
-            if (map.contains("object") && map.contains("operation"))
+            Objref_ptr object = m_model.getInstance(obj);
+            OperationDescriptor_ptr op = NULL;
+
+            if (object && 
+                    (op = object->interface()->get_reflective_by_name(operation.c_str())))
             {
-                const QString obj = map.value("object").toString();
-                const QString operation = 
-                    map.value("operation").toString();
-
-                OperationDescriptor_ptr op =
-                    m_model.getOperation(obj, operation);
-
-                // Create and load
-                if (op) appendOperation(obj, op)->load(seqList.at(j));
+                appendOperation(object, op)->load(seqList.at(j));
             }
         }
     }

@@ -27,11 +27,14 @@
 
 using namespace corbasim::gui;
 
-OperationSequenceItem::OperationSequenceItem(const QString& id,
+OperationSequenceItem::OperationSequenceItem(
+        Objref_ptr object,
         OperationInputForm * dlg,
         QWidget * parent) : 
-    QFrame(parent), m_id(id), m_dlg(dlg)
+    QFrame(parent), m_object(object), m_dlg(dlg)
 {
+    const QString& id = object->name();
+
     OperationDescriptor_ptr reflective =
         dlg->getReflective();
 
@@ -66,13 +69,13 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
         tLayout->addWidget(btDown);
         tLayout->addWidget(btDelete);
 
-        QObject::connect(btShowInput, SIGNAL(toggled(bool)),
+        connect(btShowInput, SIGNAL(toggled(bool)),
                 dlg, SLOT(setVisible(bool)));
-        QObject::connect(btDelete, SIGNAL(clicked()),
+        connect(btDelete, SIGNAL(clicked()),
                 this, SIGNAL(doDelete()));
-        QObject::connect(btUp, SIGNAL(clicked()),
+        connect(btUp, SIGNAL(clicked()),
                 this, SIGNAL(up()));
-        QObject::connect(btDown, SIGNAL(clicked()),
+        connect(btDown, SIGNAL(clicked()),
                 this, SIGNAL(down()));
 
         // Tooltips
@@ -149,13 +152,13 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
     bLayout->addWidget(btSend);
     // bLayout->addWidget(btSendNext);
    
-    QObject::connect(btSend, SIGNAL(clicked()),
+    connect(btSend, SIGNAL(clicked()),
             this, SLOT(sendClicked()));
-    QObject::connect(m_pbUpdate, SIGNAL(clicked()), 
+    connect(m_pbUpdate, SIGNAL(clicked()), 
             this, SLOT(storeRequest()));
-    QObject::connect(m_pbStartStop, SIGNAL(toggled(bool)), 
+    connect(m_pbStartStop, SIGNAL(toggled(bool)), 
             this, SLOT(startStopChecked(bool)));
-    QObject::connect(&m_timer, SIGNAL(timeout()), 
+    connect(&m_timer, SIGNAL(timeout()), 
             this, SLOT(sendStored()));
 
     layout->addLayout(bLayout);
@@ -171,9 +174,9 @@ OperationSequenceItem::~OperationSequenceItem()
 {
 }
 
-const QString& OperationSequenceItem::getObjrefId() const
+ObjectId OperationSequenceItem::objectId() const
 {
-    return m_id;
+    return m_object->id();
 }
 
 void OperationSequenceItem::sendClicked()
@@ -260,7 +263,7 @@ OperationSequence::OperationSequence(const QString& name, QWidget * parent) :
         stBtn->setCheckable(true);
         hLayout->addWidget(stBtn);
 
-        QObject::connect(stBtn, SIGNAL(clicked(bool)), 
+        connect(stBtn, SIGNAL(clicked(bool)), 
                 this, SLOT(startOrStopAll(bool)));
 
         layout->addLayout(hLayout);
@@ -294,16 +297,18 @@ const QString& OperationSequence::getName() const
     return m_name;
 }
 
-void OperationSequence::removeInstance(const QString& name)
+void OperationSequence::removeInstance(ObjectId id)
 {
-    for (items_t::iterator it = m_items.begin(); 
-            it != m_items.end(); it++) 
+    const items_t old = m_items;
+
+    for (items_t::const_iterator it = old.begin(); 
+            it != old.end(); it++) 
     {
         OperationSequenceItem * ptr = *it;
 
-        if (name == ptr->getObjrefId()) 
+        if (ptr->objectId() == id)
         {
-            m_items.erase(it);
+            m_items.removeAll(ptr);
             ptr->deleteLater();
 
             emit modified();
@@ -319,11 +324,11 @@ void OperationSequence::appendItem(OperationSequenceItem * item)
     // Scroll to item
     // m_scroll->ensureWidgetVisible(item);
 
-    QObject::connect(item, SIGNAL(doDelete()),
+    connect(item, SIGNAL(doDelete()),
             this, SLOT(deleteItem()));
-    QObject::connect(item, SIGNAL(up()),
+    connect(item, SIGNAL(up()),
             this, SLOT(moveUpItem()));
-    QObject::connect(item, SIGNAL(down()),
+    connect(item, SIGNAL(down()),
             this, SLOT(moveDownItem()));
 
     m_items.push_back(item);
@@ -404,7 +409,7 @@ void OperationSequence::moveDownItem()
 
 // Tool
 OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
-    QWidget(parent), m_instances(this)
+    QWidget(parent)
 {
     m_model.setDisplayParameters(false);
 
@@ -434,22 +439,22 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
     setLayout(layout);
 
     // Signals
-    QObject::connect(m_view, 
-            SIGNAL(selectedOperation(const QString&,
+    connect(m_view, 
+            SIGNAL(selectedOperation(Objref_ptr,
                     OperationDescriptor_ptr)),
             this,
-            SLOT(appendOperation(const QString&, 
+            SLOT(appendOperation(Objref_ptr, 
                     OperationDescriptor_ptr)));
 
-    QObject::connect(btNewTab, SIGNAL(clicked()),
+    connect(btNewTab, SIGNAL(clicked()),
             this, SLOT(createSequence()));
 
-    QObject::connect(m_tabs, SIGNAL(tabCloseRequested(int)),
+    connect(m_tabs, SIGNAL(tabCloseRequested(int)),
             this, SLOT(closeSequence(int)));
 
     // Context menu
     setContextMenuPolicy(Qt::CustomContextMenu);
-    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(showContextMenu(const QPoint&)));
 
     setMinimumHeight(400);
@@ -472,33 +477,25 @@ OperationSequenceTool::~OperationSequenceTool()
 void OperationSequenceTool::objrefCreated(Objref_ptr object)
 {
     m_model.registerInstance(object);
-
-    m_instances.add(object);
 }
 
 void OperationSequenceTool::objrefDeleted(ObjectId id)
 {
-    Objref_ptr object = m_instances.find(id);
+    m_model.unregisterInstance(id);
 
-    if (object)
+    for (sequences_t::iterator it = m_sequences.begin(); 
+            it != m_sequences.end(); ++it) 
     {
-        m_model.unregisterInstance(id);
-        m_instances.del(id);
-
-        for (sequences_t::iterator it = m_sequences.begin(); it != m_sequences.end(); ++it) 
-        {
-            (*it)->removeInstance(object->name());
-        }
+        (*it)->removeInstance(id);
     }
 }
 
 OperationSequenceItem * 
-OperationSequenceTool::appendOperation(const QString& id, 
+OperationSequenceTool::appendOperation(
+        Objref_ptr object, 
 		OperationDescriptor_ptr op)
 {
-    Objref_ptr object = m_instances.find(id);
-
-    if (!object)
+    if (!object || !op)
         return NULL;
 
     OperationSequence * seq = NULL;
@@ -508,11 +505,12 @@ OperationSequenceTool::appendOperation(const QString& id,
         seq = m_sequences[m_tabs->currentIndex()];
 
     OperationSequenceItem * item = 
-        new OperationSequenceItem(id, new OperationInputForm(op));
+        new OperationSequenceItem(object, 
+                new OperationInputForm(op));
 
     seq->appendItem(item);
 
-    QObject::connect(item, SIGNAL(sendRequest(Request_ptr)),
+    connect(item, SIGNAL(sendRequest(Request_ptr)),
                 object.get(), SLOT(sendRequest(Request_ptr)));
 
     return item;
@@ -525,7 +523,7 @@ OperationSequence* OperationSequenceTool::createSequence()
     m_tabs->addTab(seq, seq->getName());
     m_tabs->setCurrentIndex(m_tabs->count() - 1);
 
-    QObject::connect(seq, SIGNAL(modified()),
+    connect(seq, SIGNAL(modified()),
             this, SLOT(sequenceModified()));
 
     return seq;
@@ -609,7 +607,7 @@ void OperationSequenceItem::save(QVariant& settings)
 {
     QVariantMap map;
 
-    map["object"] = m_id;
+    map["object"] = m_object->name();
     map["operation"] = m_dlg->getReflective()->get_name();
 
     // User-defined title
@@ -718,18 +716,17 @@ void OperationSequenceTool::load(const QVariant& settings)
         for (int j = 0; j < seqList.size(); j++) 
         {
             const QVariantMap map = seqList.at(j).toMap();
+            const QString obj = map.value("object").toString();
+            const std::string operation = 
+                map.value("operation").toString().toStdString();
 
-            if (map.contains("object") && map.contains("operation"))
+            Objref_ptr object = m_model.getInstance(obj);
+            OperationDescriptor_ptr op = NULL;
+
+            if (object && 
+                    (op = object->interface()->get_reflective_by_name(operation.c_str())))
             {
-                const QString obj = map.value("object").toString();
-                const QString operation = 
-                    map.value("operation").toString();
-
-                OperationDescriptor_ptr op =
-                    m_model.getOperation(obj, operation);
-
-                // Create and load
-                if (op) appendOperation(obj, op)->load(seqList.at(j));
+                appendOperation(object, op)->load(seqList.at(j));
             }
         }
     }
