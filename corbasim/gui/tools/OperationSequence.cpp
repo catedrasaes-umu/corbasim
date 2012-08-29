@@ -69,11 +69,11 @@ OperationSequenceItem::OperationSequenceItem(const QString& id,
         QObject::connect(btShowInput, SIGNAL(toggled(bool)),
                 dlg, SLOT(setVisible(bool)));
         QObject::connect(btDelete, SIGNAL(clicked()),
-                this, SLOT(deleteClicked()));
+                this, SIGNAL(doDelete()));
         QObject::connect(btUp, SIGNAL(clicked()),
-                this, SLOT(upClicked()));
+                this, SIGNAL(up()));
         QObject::connect(btDown, SIGNAL(clicked()),
-                this, SLOT(downClicked()));
+                this, SIGNAL(down()));
 
         // Tooltips
         btShowInput->setToolTip("Show/hide detailed input form");
@@ -216,21 +216,6 @@ void OperationSequenceItem::sendStored()
 void OperationSequenceItem::stopTimer()
 {
     m_pbStartStop->setChecked(false);
-}
-
-void OperationSequenceItem::deleteClicked()
-{
-    emit doDelete();
-}
-
-void OperationSequenceItem::upClicked()
-{
-    emit up();
-}
-
-void OperationSequenceItem::downClicked()
-{
-    emit down();
 }
 
 OperationSequence::OperationSequence(const QString& name, QWidget * parent) :

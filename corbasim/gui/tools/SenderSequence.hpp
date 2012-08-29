@@ -48,7 +48,6 @@ public:
     virtual ~SenderSequenceItem();
 
     const QString& getObjrefId() const;
-    const char * getOperationName() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -58,12 +57,6 @@ signals:
     void doDelete();
     void up();
     void down();
-
-private slots:
-
-    void deleteClicked();
-    void upClicked();
-    void downClicked();
 
 protected:
 

@@ -54,6 +54,13 @@ public:
 
 signals:
 
+    /**
+     * @brief Used for sending a request. 
+     *
+     * Will be connected to an object reference.
+     *
+     * @param Request_ptr The request pointer
+     */
     void sendRequest(Request_ptr);
 
     void doDelete();
@@ -61,10 +68,6 @@ signals:
     void down();
 
 private slots:
-
-    void deleteClicked();
-    void upClicked();
-    void downClicked();
 
     void sendClicked();
 
@@ -105,6 +108,11 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    /**
+     * @brief Remove all the items related to an instance.
+     *
+     * @param name The name of the instance.
+     */
     void removeInstance(const QString& name);
 
 public slots:
@@ -129,13 +137,19 @@ signals:
 
 protected:
 
+    /**
+     * @brief The sequence name. 
+     *
+     * Currently it is not possible to modify.
+     */
     QString m_name;
 
     qt::CustomVLayout * m_layout;
+
     typedef QList< OperationSequenceItem * > items_t;
     items_t m_items;
-    QScrollArea * m_scroll;
 
+    QScrollArea * m_scroll;
 };
 
 class CORBASIM_GUI_DECLSPEC OperationSequenceTool : 
@@ -151,6 +165,11 @@ public:
 
 public slots:
 
+    /**
+     * @brief Register an instance into this tool.
+     *
+     * @param object
+     */
     void objrefCreated(Objref_ptr object);
     void objrefDeleted(ObjectId id);
 
@@ -172,7 +191,13 @@ private slots:
     void sequenceModified();
 
 protected:
-
+    
+    /**
+     * @brief The instances registered into this tool.
+     *
+     * TODO This instances are also registered into the model 
+     * in this tool. Should be removed.
+     */
     ObjrefRepository m_instances;
 
     InstanceModel m_model;

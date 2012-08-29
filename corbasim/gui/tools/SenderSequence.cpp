@@ -69,11 +69,11 @@ SenderSequenceItem::SenderSequenceItem(const QString& id,
         QObject::connect(btShowInput, SIGNAL(toggled(bool)),
                 dlg->getForm(), SLOT(setVisible(bool)));
         QObject::connect(btDelete, SIGNAL(clicked()),
-                this, SLOT(deleteClicked()));
+                this, SIGNAL(doDelete()));
         QObject::connect(btUp, SIGNAL(clicked()),
-                this, SLOT(upClicked()));
+                this, SIGNAL(up()));
         QObject::connect(btDown, SIGNAL(clicked()),
-                this, SLOT(downClicked()));
+                this, SIGNAL(down()));
 
         // Tooltips
         btShowInput->setToolTip("Show/hide detailed input form");
@@ -113,26 +113,6 @@ SenderSequenceItem::~SenderSequenceItem()
 const QString& SenderSequenceItem::getObjrefId() const
 {
     return m_id;
-}
-
-const char * SenderSequenceItem::getOperationName() const
-{
-    return "TODO";
-}
-
-void SenderSequenceItem::deleteClicked()
-{
-    emit doDelete();
-}
-
-void SenderSequenceItem::upClicked()
-{
-    emit up();
-}
-
-void SenderSequenceItem::downClicked()
-{
-    emit down();
 }
 
 SenderSequence::SenderSequence(const QString& name, QWidget * parent) :
