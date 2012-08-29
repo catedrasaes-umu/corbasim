@@ -19,7 +19,7 @@
 
 #include "OperationForm.hpp"
 #include <corbasim/qt/private/ScriptEditor.hpp>
-#include <corbasim/gui/ParametersFromFilesTool.hpp>
+#include <corbasim/gui/tools/ParametersFromFilesTool.hpp>
 #include <corbasim/gui/qvariant.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <limits>

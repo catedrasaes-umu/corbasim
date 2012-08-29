@@ -33,10 +33,8 @@ set(corbasim_gui_EXPORTED_HEADERS
 
     # client
     gui/client/SimpleClient.hpp
-
     gui/InputRequestProcessor.hpp
     gui/OperationForm.hpp
-    gui/ParametersFromFilesTool.hpp
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
     gui/Sender.hpp
@@ -45,6 +43,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/tools/DumpTool.hpp
     gui/tools/FilteredLogView.hpp
     gui/tools/OperationSequence.hpp
+    gui/tools/ParametersFromFilesTool.hpp
     gui/tools/SenderSequence.hpp
     gui/tools/SimpleScriptEditor.hpp
 
@@ -89,7 +88,6 @@ set(corbasim_gui_MOC_HDRS
 
     gui/InputRequestProcessor.hpp
     gui/OperationForm.hpp
-    gui/ParametersFromFilesTool.hpp
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
     gui/Sender.hpp
@@ -98,6 +96,7 @@ set(corbasim_gui_MOC_HDRS
     gui/tools/DumpTool.hpp
     gui/tools/FilteredLogView.hpp
     gui/tools/OperationSequence.hpp
+    gui/tools/ParametersFromFilesTool.hpp
     gui/tools/SenderSequence.hpp
     gui/tools/SimpleScriptEditor.hpp
 
@@ -143,7 +142,6 @@ set(corbasim_gui_SRCS
     gui/Sender.cpp
     gui/InputRequestProcessor.cpp
     gui/OperationForm.cpp
-    gui/ParametersFromFilesTool.cpp
     gui/ReflectiveGUI.cpp
     gui/RequestDialog.cpp
 
@@ -151,6 +149,7 @@ set(corbasim_gui_SRCS
     gui/tools/DumpTool.cpp
     gui/tools/FilteredLogView.cpp
     gui/tools/OperationSequence.cpp
+    gui/tools/ParametersFromFilesTool.cpp
     gui/tools/SenderSequence.cpp
     gui/tools/SimpleScriptEditor.cpp
 
