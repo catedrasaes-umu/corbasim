@@ -48,7 +48,6 @@ public:
     virtual ~OperationSequenceItem();
 
     const QString& getObjrefId() const;
-    const char * getOperationName() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -106,6 +105,8 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    void removeInstance(const QString& name);
+
 public slots:
 
     void appendItem(OperationSequenceItem * item);
@@ -131,7 +132,8 @@ protected:
     QString m_name;
 
     qt::CustomVLayout * m_layout;
-    QList< OperationSequenceItem * > m_items;
+    typedef QList< OperationSequenceItem * > items_t;
+    items_t m_items;
     QScrollArea * m_scroll;
 
 };
@@ -177,7 +179,9 @@ protected:
 
     OperationsView * m_view;
     QTabWidget * m_tabs;
-    QList< OperationSequence * > m_sequences;
+
+    typedef QList< OperationSequence * > sequences_t;
+    sequences_t m_sequences;
 
     QMenu * m_menu;
 };

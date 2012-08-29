@@ -21,11 +21,13 @@ void InstanceModel::registerInstance(Objref_ptr objref)
 
     InstanceNode_ptr node(new InstanceNode(objref));
 
-    beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
+    // beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
 
     m_nodes.push_back(node);
         
-    endInsertRows();
+    // endInsertRows();
+
+    reset();
 }
 
 void InstanceModel::unregisterInstance(ObjectId id)
@@ -36,13 +38,15 @@ void InstanceModel::unregisterInstance(ObjectId id)
     {
         if ((*it)->instance->id() == id)
         {
-            beginRemoveRows(QModelIndex(), i, i);
+            // beginRemoveRows(QModelIndex(), i, i);
 
             m_instances.del(id);
 
             m_nodes.erase(it);
             
-            endRemoveRows();
+            // endRemoveRows();
+
+            reset();
             break;
         }
     }

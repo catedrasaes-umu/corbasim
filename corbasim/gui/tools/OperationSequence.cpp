@@ -176,11 +176,6 @@ const QString& OperationSequenceItem::getObjrefId() const
     return m_id;
 }
 
-const char * OperationSequenceItem::getOperationName() const
-{
-    return "TODO";
-}
-
 void OperationSequenceItem::sendClicked()
 {
      emit sendRequest(m_dlg->createRequest());
@@ -312,6 +307,23 @@ void OperationSequence::startOrStopAll(bool checked)
 const QString& OperationSequence::getName() const
 {
     return m_name;
+}
+
+void OperationSequence::removeInstance(const QString& name)
+{
+    for (items_t::iterator it = m_items.begin(); 
+            it != m_items.end(); it++) 
+    {
+        OperationSequenceItem * ptr = *it;
+
+        if (name == ptr->getObjrefId()) 
+        {
+            m_items.erase(it);
+            ptr->deleteLater();
+
+            emit modified();
+        }
+    }
 }
 
 void OperationSequence::appendItem(OperationSequenceItem * item)
@@ -487,6 +499,11 @@ void OperationSequenceTool::objrefDeleted(ObjectId id)
     {
         m_model.unregisterInstance(id);
         m_instances.del(id);
+
+        for (sequences_t::iterator it = m_sequences.begin(); it != m_sequences.end(); ++it) 
+        {
+            (*it)->removeInstance(object->name());
+        }
     }
 }
 
