@@ -405,20 +405,12 @@ void OperationSequence::moveDownItem()
         moveDownItem(sndObj);
 }
 
-// View
-OperationsView::OperationsView(QWidget * parent) :
-    QTreeView(parent)
-{
-}
-
-OperationsView::~OperationsView()
-{
-}
-
 // Tool
 OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
     QWidget(parent), m_instances(this)
 {
+    m_model.setDisplayParameters(false);
+
     QHBoxLayout * layout = new QHBoxLayout();
     QSplitter * splitter = new QSplitter(Qt::Horizontal);
 
@@ -446,12 +438,7 @@ OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
 
     // Signals
     QObject::connect(m_view, 
-            SIGNAL(doubleClicked(const QModelIndex&)),
-            &m_model,
-            SLOT(doubleClicked(const QModelIndex&)));
-
-    QObject::connect(&m_model, 
-            SIGNAL(selectedOperation(QString, 
+            SIGNAL(selectedOperation(const QString&,
                     OperationDescriptor_ptr)),
             this,
             SLOT(appendOperation(const QString&, 
@@ -487,7 +474,7 @@ OperationSequenceTool::~OperationSequenceTool()
 
 void OperationSequenceTool::objrefCreated(Objref_ptr object)
 {
-    m_model.registerInstance(object->name(), object->interface());
+    m_model.registerInstance(object);
 
     m_instances.add(object);
 }
@@ -498,7 +485,7 @@ void OperationSequenceTool::objrefDeleted(ObjectId id)
 
     if (object)
     {
-        m_model.unregisterInstance(object->name());
+        m_model.unregisterInstance(id);
         m_instances.del(id);
     }
 }
@@ -732,7 +719,6 @@ void OperationSequenceTool::load(const QVariant& settings)
 
             if (map.contains("object") && map.contains("operation"))
             {
-                // TODO display errors
                 const QString obj = map.value("object").toString();
                 const QString operation = 
                     map.value("operation").toString();

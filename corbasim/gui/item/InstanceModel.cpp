@@ -65,10 +65,16 @@ int InstanceModel::maxLevel() const
 
 void InstanceModel::setDisplayOperations(bool value)
 {
+    m_maxLevel = (value)? 1: 0;
+
+    reset();
 }
 
 void InstanceModel::setDisplayParameters(bool value)
 {
+    m_maxLevel = (value)? std::numeric_limits< int >::max(): 1;
+
+    reset();
 }
 
 void InstanceModel::setMaxLevel(int value)
@@ -80,6 +86,32 @@ int InstanceModel::columnCount(const QModelIndex&) const
 {
     return 1;
 }
+
+namespace 
+{
+
+QString getNodeName(DescriptorNode const * node)
+{
+    if (node->parent && node->parent->reflective->is_repeated())
+    {
+        return QString("[%1]").arg(node->index);
+    }
+    else if (node->parent && node->parent->reflective->get_type() ==
+            corbasim::core::TYPE_STRUCT)
+    {
+        return node->parent->reflective->get_child_name(node->index);
+    }
+    else if (node->parent && node->parent->reflective->get_type() ==
+            corbasim::core::TYPE_UNION)
+    {
+        return node->parent->reflective->get_child_name(
+                node->reflective->get_child_index());
+    }
+
+    return "Error!";
+}
+
+} // namespace 
 
 QVariant InstanceModel::data(const QModelIndex& index, int role) const
 {
@@ -117,7 +149,7 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
             }
             else
             {
-                return dNode->parent->reflective->get_child_name(dNode->index);
+                return getNodeName(dNode);
             }
         }
     }
@@ -260,7 +292,7 @@ int InstanceModel::rowCount(const QModelIndex &parent) const
         InstanceNode * node = 
             static_cast< InstanceNode * >(parent.internalPointer());
 
-        if (node)
+        if (node && displayOperations())
         {
             node->check_for_initialized();
 
@@ -269,10 +301,10 @@ int InstanceModel::rowCount(const QModelIndex &parent) const
     }
     else 
     {
-        Node * node = 
-            static_cast< Node * >(parent.internalPointer());
+        DescriptorNode * node = 
+            static_cast< DescriptorNode * >(parent.internalPointer());
 
-        if (node)
+        if (node && displayParameters())
         {
             node->check_for_initialized();
 
@@ -289,13 +321,58 @@ bool InstanceModel::isOperationNode(const QModelIndex& index) const
     if (!index.isValid())
         return false;
 
-    // TODO 
+    AbstractNode * node = 
+        static_cast< AbstractNode * >(index.internalPointer());
 
-    return false;
+    DescriptorNode * dNode = 
+        dynamic_cast< DescriptorNode * >(node);
+
+    return dNode && !dNode->parent;
 }
 
 bool InstanceModel::isInstanceNode(const QModelIndex& index) const
 {
-    // TODO
+    if (!index.isValid())
+        return false;
+
+    return !index.parent().isValid();
+}
+
+OperationDescriptor_ptr InstanceModel::getOperation(
+        const QString& instance,
+        const QString& operation) const
+{
+    Objref_ptr obj = m_instances.find(instance);
+
+    if (obj)
+    {
+        const std::string str (operation.toStdString());
+        return obj->interface()->get_reflective_by_name(str.c_str());
+    }
+
+    return NULL;
+}
+
+Objref_ptr InstanceModel::getInstance(const QModelIndex& index) const
+{
+    if (!index.isValid())
+        return Objref_ptr();
+
+    if (!index.parent().isValid())
+    {
+        InstanceNode * node = 
+            static_cast< InstanceNode * >(index.internalPointer());
+
+        return node->instance;
+    }
+    else 
+    {
+        DescriptorNode * node = 
+            static_cast< DescriptorNode * >(index.internalPointer());
+
+        return node->instance->instance;
+    }
+
+    return Objref_ptr();
 }
 

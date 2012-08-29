@@ -68,7 +68,11 @@ public slots:
 
     Event_ptr sendRequest(const Request_ptr& request);
 
+    // void updateConfig(const ObjrefConfig& cfg);
+
 signals:
+    
+    void updatedConfig(const ObjrefConfig& cfg);
 
     void updatedReference(const CORBA::Object_var& reference);
 
@@ -107,9 +111,15 @@ public:
     
     Objref_ptr proxy() const;
 
+public slots:
+
     void setProxy(Objref_ptr proxy);
+    
+    // void updateConfig(const ServantConfig& cfg);
 
 signals:
+    
+    void updatedConfig(const ServantConfig& cfg);
 
     void requestReceived(ObjectId id, 
             const Request_ptr& request,

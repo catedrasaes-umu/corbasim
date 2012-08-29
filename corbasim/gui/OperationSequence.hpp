@@ -25,7 +25,8 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/item/OperationModel.hpp>
+#include <corbasim/gui/item/InstanceModel.hpp>
+#include <corbasim/gui/item/OperationsView.hpp>
 
 #include <ostream>
 
@@ -135,15 +136,6 @@ protected:
 
 };
 
-class CORBASIM_GUI_DECLSPEC OperationsView : public QTreeView
-{
-    Q_OBJECT
-public:
-    OperationsView(QWidget * parent = 0);
-    virtual ~OperationsView();
-};
-
-
 class CORBASIM_GUI_DECLSPEC OperationSequenceTool : 
     public QWidget
 {
@@ -181,7 +173,7 @@ protected:
 
     ObjrefRepository m_instances;
 
-    OperationModel m_model;
+    InstanceModel m_model;
 
     OperationsView * m_view;
     QTabWidget * m_tabs;

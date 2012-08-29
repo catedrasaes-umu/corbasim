@@ -25,10 +25,8 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/gui/export.hpp>
-#include <corbasim/gui/item/OperationModel.hpp>
-
-// TODO eliminar
-#include <corbasim/gui/OperationSequence.hpp>
+#include <corbasim/gui/item/InstanceModel.hpp>
+#include <corbasim/gui/item/OperationsView.hpp>
 
 #include <ostream>
 
@@ -153,7 +151,7 @@ protected:
 
     ObjrefRepository m_instances;
 
-    OperationModel m_model;
+    InstanceModel m_model;
 
     OperationsView * m_view;
     QTabWidget * m_tabs;

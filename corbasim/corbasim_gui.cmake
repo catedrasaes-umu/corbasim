@@ -14,7 +14,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/item/LogModel.hpp
     gui/item/FilterModel.hpp
     gui/item/ParametersModel.hpp
-    gui/item/OperationModel.hpp
+    gui/item/OperationsView.hpp
     gui/item/OperationParametersModel.hpp
     gui/item/ScriptModel.hpp
     gui/item/TreeView.hpp
@@ -66,7 +66,7 @@ set(corbasim_gui_MOC_HDRS
     gui/item/InterfaceModel.hpp
     gui/item/FilterModel.hpp
     gui/item/ParametersModel.hpp
-    gui/item/OperationModel.hpp
+    gui/item/OperationsView.hpp
     gui/item/OperationParametersModel.hpp
     gui/item/ScriptModel.hpp
     gui/item/TreeView.hpp
@@ -116,7 +116,7 @@ set(corbasim_gui_SRCS
     gui/item/FilterModel.cpp
     gui/item/LogModel.cpp
     gui/item/ParametersModel.cpp
-    gui/item/OperationModel.cpp
+    gui/item/OperationsView.cpp
     gui/item/OperationParametersModel.cpp
     gui/item/ScriptModel.cpp
     gui/item/TreeView.cpp

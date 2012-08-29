@@ -87,7 +87,7 @@ void DescriptorNode::initialize()
     {
         core::holder dummy;
         const unsigned int count = 
-            (reflective->is_variable_length())? 1:
+            (reflective->is_variable_length())? 0:
                 reflective->get_length(dummy);
         children.reserve(count);
 

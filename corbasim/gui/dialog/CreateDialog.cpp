@@ -129,6 +129,23 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     m_fqn->setObjectName("fqn");
     grid->addWidget(m_fqn, 1, 1); 
 
+    grid->addWidget(new QLabel("Name service key"), 2, 0);
+    m_entry = new QLineEdit();
+    m_entry->setObjectName("entry");
+    grid->addWidget(m_entry, 2, 1);
+
+    QHBoxLayout * saveFileLayout = new QHBoxLayout();
+    grid->addWidget(new QLabel("Save reference"), 3, 0);
+    m_saveFile = new QLineEdit();
+    m_saveFile->setObjectName("save-reference");
+    saveFileLayout->addWidget(m_saveFile);
+    QPushButton * browseButton = new QPushButton("Browse");
+    saveFileLayout->addWidget(browseButton);
+    grid->addLayout(saveFileLayout, 3, 1);
+
+    connect(browseButton, SIGNAL(clicked()), 
+            this, SLOT(browse()));
+
     layout->addLayout(grid);
 
 #if 0
@@ -181,8 +198,19 @@ void ServantCreateDialog::createClicked()
 
     cfg.name = m_name->text().toStdString();
     cfg.fqn = m_fqn->currentText().toStdString();
+    cfg.entry = m_entry->text().toStdString();
+    cfg.saveFile = m_saveFile->text().toStdString();
 
     emit createServant(cfg);
+}
+
+void ServantCreateDialog::browse()
+{
+    const QString file = 
+        QFileDialog::getSaveFileName(0, 
+                "Select a file", ".");
+
+    m_saveFile->setText(file);
 }
 
 void ServantCreateDialog::hideEvent(QHideEvent* event)

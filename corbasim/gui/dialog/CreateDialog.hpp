@@ -70,6 +70,10 @@ public slots:
 
     void createClicked();
 
+protected slots:
+    
+    void browse();
+
 signals:
 
     void createServant(ServantConfig);
@@ -80,6 +84,8 @@ protected:
 
     QLineEdit * m_name;
     QComboBox * m_fqn;
+    QLineEdit * m_entry;
+    QLineEdit * m_saveFile;
 };
 
 } // namespace gui

@@ -66,9 +66,14 @@ struct ObjrefConfig
     std::string fqn;
     std::string entry;
     CORBA::Object_var reference;
+    std::string watchFile;
 };
 
-typedef ObjrefConfig ServantConfig;
+struct ServantConfig : public ObjrefConfig
+{
+    std::string saveFile;
+    Objref_ptr relayTo;
+};
 
 } // namespace gui
 } // namespace corbasim

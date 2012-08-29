@@ -347,7 +347,7 @@ void Application::createServant(const ServantConfig& cfg)
 
         // Displaying reference
         CORBA::String_var ref = m_data->m_orb->object_to_string (objSrv);
-        std::cout << cfg.name << ": " << ref << std::endl;
+        std::cout << cfg.name << ": " << ref.in() << std::endl;
 
         obj->setReference(objSrv);
 
@@ -358,6 +358,12 @@ void Application::createServant(const ServantConfig& cfg)
                         Event_ptr));
 
         connect(obj.get(), signal, this, signal);
+
+        if (!cfg.saveFile.empty())
+        {
+            std::ofstream ofs(cfg.saveFile.c_str());
+            ofs << ref.in();
+        }
 
         emit servantCreated(obj);
 

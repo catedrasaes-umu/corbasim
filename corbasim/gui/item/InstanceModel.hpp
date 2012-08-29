@@ -59,6 +59,11 @@ public:
     bool isOperationNode(const QModelIndex& index) const;
     bool isInstanceNode(const QModelIndex& index) const;
 
+    OperationDescriptor_ptr getOperation(const QString& instance,
+            const QString& operation) const;
+
+    Objref_ptr getInstance(const QModelIndex&) const;
+
 public slots:
 
     void registerInstance(Objref_ptr objref);
