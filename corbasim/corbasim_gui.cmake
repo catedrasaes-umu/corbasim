@@ -1,21 +1,21 @@
 set(corbasim_gui_EXPORTED_HEADERS
+    gui/Application.hpp
+    gui/Model.hpp
     gui/export.hpp
     gui/json.hpp
-    gui/utils.hpp
     gui/qvariant.hpp
     gui/types.hpp
-    gui/Model.hpp
-    gui/Application.hpp
+    gui/utils.hpp
 
     # item models
-    gui/item/ModelNode.hpp
+    gui/item/FilterModel.hpp
     gui/item/InstanceModel.hpp
     gui/item/InterfaceModel.hpp
     gui/item/LogModel.hpp
-    gui/item/FilterModel.hpp
-    gui/item/ParametersModel.hpp
-    gui/item/OperationsView.hpp
+    gui/item/ModelNode.hpp
     gui/item/OperationParametersModel.hpp
+    gui/item/OperationsView.hpp
+    gui/item/ParametersModel.hpp
     gui/item/ScriptModel.hpp
     gui/item/TreeView.hpp
 
@@ -25,8 +25,8 @@ set(corbasim_gui_EXPORTED_HEADERS
 
     # dialogs
     gui/dialog/CreateDialog.hpp
-    gui/dialog/UpdateReferenceDialog.hpp
     gui/dialog/SetReferenceDialog.hpp
+    gui/dialog/UpdateReferenceDialog.hpp
 
     # server
     gui/server/Server.hpp
@@ -35,16 +35,18 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/client/SimpleClient.hpp
 
     gui/InputRequestProcessor.hpp
-    gui/OperationSequence.hpp
-    gui/SimpleScriptEditor.hpp
-    gui/RequestDialog.hpp
-    gui/FilteredLogView.hpp
-    gui/ReflectiveGUI.hpp
-    gui/SenderSequence.hpp
-    gui/ParametersFromFilesTool.hpp
     gui/OperationForm.hpp
+    gui/ParametersFromFilesTool.hpp
+    gui/ReflectiveGUI.hpp
+    gui/RequestDialog.hpp
     gui/Sender.hpp
-    gui/DumpTool.hpp
+
+    # tools
+    gui/tools/DumpTool.hpp
+    gui/tools/FilteredLogView.hpp
+    gui/tools/OperationSequence.hpp
+    gui/tools/SenderSequence.hpp
+    gui/tools/SimpleScriptEditor.hpp
 
     # TODO gui/RecorderTool.hpp
     # TODO gui/ServerApp.hpp
@@ -85,17 +87,19 @@ set(corbasim_gui_MOC_HDRS
     # client
     gui/client/SimpleClient.hpp
 
+    gui/InputRequestProcessor.hpp
+    gui/OperationForm.hpp
+    gui/ParametersFromFilesTool.hpp
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
-    gui/OperationForm.hpp
-    gui/InputRequestProcessor.hpp
-    gui/OperationSequence.hpp
-    gui/SimpleScriptEditor.hpp
-    gui/FilteredLogView.hpp
-    gui/SenderSequence.hpp
-    gui/ParametersFromFilesTool.hpp
     gui/Sender.hpp
-    gui/DumpTool.hpp
+
+    # tools
+    gui/tools/DumpTool.hpp
+    gui/tools/FilteredLogView.hpp
+    gui/tools/OperationSequence.hpp
+    gui/tools/SenderSequence.hpp
+    gui/tools/SimpleScriptEditor.hpp
 
     # TODO gui/RecorderTool.hpp
 )
@@ -136,17 +140,19 @@ set(corbasim_gui_SRCS
     # client
     gui/client/SimpleClient.cpp
 
-    gui/InputRequestProcessor.cpp
-    gui/OperationSequence.cpp
-    gui/SimpleScriptEditor.cpp
-    gui/RequestDialog.cpp
-    gui/FilteredLogView.cpp
-    gui/ReflectiveGUI.cpp
-    gui/SenderSequence.cpp
-    gui/ParametersFromFilesTool.cpp
-    gui/OperationForm.cpp
     gui/Sender.cpp
-    gui/DumpTool.cpp
+    gui/InputRequestProcessor.cpp
+    gui/OperationForm.cpp
+    gui/ParametersFromFilesTool.cpp
+    gui/ReflectiveGUI.cpp
+    gui/RequestDialog.cpp
+
+    # tools
+    gui/tools/DumpTool.cpp
+    gui/tools/FilteredLogView.cpp
+    gui/tools/OperationSequence.cpp
+    gui/tools/SenderSequence.cpp
+    gui/tools/SimpleScriptEditor.cpp
 
     # TODO gui/RecorderTool.cpp
     # TODO gui/ServerApp.cpp

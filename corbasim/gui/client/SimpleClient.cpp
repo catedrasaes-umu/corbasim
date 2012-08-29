@@ -21,9 +21,9 @@
 #include <iostream>
 #include <string>
 #include <corbasim/gui/RequestDialog.hpp>
-#include <corbasim/gui/FilteredLogView.hpp>
-#include <corbasim/gui/SimpleScriptEditor.hpp>
-#include <corbasim/gui/OperationSequence.hpp>
+#include <corbasim/gui/tools/FilteredLogView.hpp>
+#include <corbasim/gui/tools/SimpleScriptEditor.hpp>
+#include <corbasim/gui/tools/OperationSequence.hpp>
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/item/TreeView.hpp>

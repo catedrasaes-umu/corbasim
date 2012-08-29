@@ -24,7 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/SimpleScriptEditor.hpp>
+#include <corbasim/gui/tools/SimpleScriptEditor.hpp>
 
 namespace corbasim 
 {

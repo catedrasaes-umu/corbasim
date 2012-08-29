@@ -21,10 +21,10 @@
 #include <iostream>
 
 // Tools
-#include <corbasim/gui/FilteredLogView.hpp>
-#include <corbasim/gui/OperationSequence.hpp>
-#include <corbasim/gui/SenderSequence.hpp>
-#include <corbasim/gui/DumpTool.hpp>
+#include <corbasim/gui/tools/FilteredLogView.hpp>
+#include <corbasim/gui/tools/OperationSequence.hpp>
+#include <corbasim/gui/tools/SenderSequence.hpp>
+#include <corbasim/gui/tools/DumpTool.hpp>
 #include <corbasim/gui/dialog/CreateDialog.hpp>
 #include <corbasim/gui/dialog/SetReferenceDialog.hpp>
 #include <corbasim/gui/item/TreeView.hpp>

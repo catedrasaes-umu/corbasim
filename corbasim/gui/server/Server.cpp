@@ -18,9 +18,9 @@
  */
 
 #include "Server.hpp"
-#include <corbasim/gui/FilteredLogView.hpp>
-#include <corbasim/gui/OperationSequence.hpp>
-#include <corbasim/gui/DumpTool.hpp>
+#include <corbasim/gui/tools/FilteredLogView.hpp>
+#include <corbasim/gui/tools/OperationSequence.hpp>
+#include <corbasim/gui/tools/DumpTool.hpp>
 
 #include <cassert>
 
