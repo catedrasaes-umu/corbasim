@@ -31,10 +31,10 @@
 
 using namespace corbasim::gui;
 
-DumpProcessor::DumpProcessor(ObjectId id,
+DumpProcessor::DumpProcessor(Objref_ptr object,
         const ReflectivePath_t path, 
         const Config& config) :
-    RequestProcessor(id, path), m_config(config),
+    RequestProcessor(object, path), m_config(config),
     m_currentIndex(0)
 {
     switch(m_config.format)
@@ -75,9 +75,9 @@ void DumpProcessor::nextFile()
     m_nextFile = oss.str();
 }
 
-void DumpProcessor::process(event::request_ptr req, 
-        core::reflective_base const * ref,
-        core::holder hold)
+void DumpProcessor::process(Request_ptr req, 
+        TypeDescriptor_ptr ref,
+        Holder hold)
 {
     using namespace ::corbasim::core;
 
@@ -233,8 +233,7 @@ void Dumper::setEnabled(bool enabled)
     m_multipleFiles->setEnabled(!enabled);
 }
 
-corbasim::core::operation_reflective_base const * 
-Dumper::getReflective() const
+OperationDescriptor_ptr Dumper::getReflective() const
 {
     return m_reflective;
 }
@@ -261,7 +260,7 @@ void Dumper::doStart(bool start)
             };
             
             DumpProcessor * processor =
-                new DumpProcessor(m_objref->id(), m_path, config);
+                new DumpProcessor(m_objref, m_path, config);
 
             m_processor.reset(processor);
 

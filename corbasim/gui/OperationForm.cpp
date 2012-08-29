@@ -45,8 +45,7 @@ OperationForm::~OperationForm()
 {
 }
 
-void OperationForm::initialize(
-    ::corbasim::core::operation_reflective_base const * factory)
+void OperationForm::initialize(OperationDescriptor_ptr factory)
 {
     m_reflective = factory;
 
@@ -147,7 +146,7 @@ void OperationForm::load(const QVariant& settings)
 //
 
 OperationFormWidget::OperationFormWidget(
-        corbasim::core::operation_reflective_base const * reflective,
+        OperationDescriptor_ptr reflective,
         QWidget * parent) :
     QWidget(parent), m_reflective(reflective)
 {
@@ -170,8 +169,7 @@ OperationFormWidget::OperationFormWidget(
 
         if (type == core::DIRECTION_IN || type == core::DIRECTION_INOUT)
         {
-            core::reflective_base const * child = 
-                reflective->get_child(i);
+            TypeDescriptor_ptr child = reflective->get_child(i);
 
             const char * child_name = reflective->get_child_name(i);
 
@@ -235,7 +233,7 @@ OperationFormWidget::~OperationFormWidget()
 
 void OperationFormWidget::setValue(const QVariant& var)
 {
-    event::request_ptr req = m_reflective->create_request();
+    Request_ptr req = m_reflective->create_request();
     core::holder h = m_reflective->get_holder(req);
 
     if (fromQVariant(m_reflective, h, var))
@@ -246,13 +244,13 @@ void OperationFormWidget::setValue(const QVariant& var)
 
 QVariant OperationFormWidget::value()
 {
-    event::request_ptr req (createRequest());
+    Request_ptr req (createRequest());
     core::holder holder(m_reflective->get_holder(req));
 
     return toQVariant(m_reflective, holder);
 }
 
-corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 OperationFormWidget::getReflective() const
 {
     return m_reflective;
@@ -260,7 +258,7 @@ OperationFormWidget::getReflective() const
 
 Request_ptr OperationFormWidget::createRequest()
 {
-    event::request_ptr req (m_reflective->create_request());
+    Request_ptr req (m_reflective->create_request());
     core::holder holder(m_reflective->get_holder(req));
 
     const unsigned int count = m_reflective->get_children_count();
@@ -386,7 +384,7 @@ void OperationFormWidget::dropEvent(QDropEvent *event)
 
     try 
     {
-        event::request_ptr req = m_reflective->create_request();
+        Request_ptr req = m_reflective->create_request();
         core::holder holder = m_reflective->get_holder(req);
 
         bool res = json::parse(m_reflective, holder, 
@@ -423,7 +421,7 @@ void OperationFormWidget::mouseMoveEvent(QMouseEvent *event)
     QMimeData *mimeData = new QMimeData;
 
     std::ostringstream oss;
-    event::request_ptr req = createRequest();
+    Request_ptr req = createRequest();
     
     core::holder holder = m_reflective->get_holder(req);
 
@@ -524,8 +522,7 @@ OperationSender::~OperationSender()
     reset();
 }
 
-void OperationSender::initialize(
-        ::corbasim::core::operation_reflective_base const * op)
+void OperationSender::initialize(OperationDescriptor_ptr op)
 {
     m_reflective = op;
 

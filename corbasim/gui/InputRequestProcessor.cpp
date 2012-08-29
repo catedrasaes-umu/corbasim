@@ -69,17 +69,22 @@ void processRecursive(corbasim::core::reflective_base const * reflec,
 
 } // namespace 
 
-RequestProcessor::RequestProcessor(ObjectId id,
+RequestProcessor::RequestProcessor(Objref_ptr object,
         const ReflectivePath_t& path) :
-    m_id(id), m_path(path)
+    m_object(object), m_path(path)
 {
 }
 
 RequestProcessor::~RequestProcessor() {}
 
-ObjectId RequestProcessor::getId() const
+Objref_ptr RequestProcessor::object() const
 {
-    return m_id;
+    return m_object;
+}
+
+ObjectId RequestProcessor::id() const
+{
+    return m_object->id();
 }
 
 const ReflectivePath_t& RequestProcessor::getPath() const
@@ -131,21 +136,20 @@ void InputRequestController::processRequest(ObjectId id,
     map_t::iterator it = m_processors.find(
             std::make_pair(id, req->get_tag()));
 
-    Objref_ptr iface = m_instances.find(id);
-
     if (it != m_processors.end() && 
-            iface &&
             !it->second.empty())
     {
-        OperationDescriptor_ptr op =
-            iface->interface()->get_reflective_by_tag(req->get_tag());
-
-        Holder hold = op->get_holder(req);
-
-        for (int i = 0; i < it->second.size(); i++) 
+        for (processors_t::const_iterator pit = it->second.begin(); 
+                pit != it->second.end(); ++pit) 
         {
-            // Must be optimized!!!
-            processRecursive(op, it->second.at(i), req, hold, 1);
+            unsigned int idx = (unsigned int) (*pit)->getPath().front();
+
+            OperationDescriptor_ptr op = 
+                (*pit)->object()->interface()->get_reflective_by_index(idx);
+
+            Holder hold = op->get_holder(req);
+            
+            processRecursive(op, *pit, req, hold, 1);
         }
     }
 }
@@ -153,35 +157,25 @@ void InputRequestController::processRequest(ObjectId id,
 void InputRequestController::addProcessor(
         RequestProcessor_ptr p)
 {
-    Objref_ptr iface = m_instances.find(p->getId());
+    OperationDescriptor_ptr op =
+        p->object()->interface()->get_reflective_by_index(
+                p->getPath().front());
 
-    if (iface)
-    {
-        OperationDescriptor_ptr op =
-            iface->interface()->get_reflective_by_index(
-                    p->getPath().front());
-
-        // Inserts the processor
-        key_t key (p->getId(), op->get_tag());
-        m_processors[key].push_back(p);
-    }
+    // Inserts the processor
+    key_t key (p->id(), op->get_tag());
+    m_processors[key].push_back(p);
 }
 
 void InputRequestController::removeProcessor(
         RequestProcessor_ptr p)
 {
-    Objref_ptr iface = m_instances.find(p->getId());
+    OperationDescriptor_ptr op =
+        p->object()->interface()->get_reflective_by_index(
+                p->getPath().front());
 
-    if (iface)
-    {
-        OperationDescriptor_ptr op =
-            iface->interface()->get_reflective_by_index(
-                    p->getPath().front());
-
-        // Removes the processor
-        key_t key (p->getId(), op->get_tag());
-        m_processors[key].removeAll(p);
-    }
+    // Removes the processor
+    key_t key (p->id(), op->get_tag());
+    m_processors[key].removeAll(p);
 }
 
 

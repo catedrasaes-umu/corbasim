@@ -61,14 +61,14 @@ public:
         unsigned int suffixLength;
     };
 
-    DumpProcessor(ObjectId id,
+    DumpProcessor(Objref_ptr object,
             const ReflectivePath_t path,
             const Config& config);
     ~DumpProcessor();
 
-    void process(event::request_ptr req, 
-            core::reflective_base const * ref,
-            core::holder hold);
+    void process(Request_ptr req, 
+            TypeDescriptor_ptr ref,
+            Holder hold);
 
 protected:
 

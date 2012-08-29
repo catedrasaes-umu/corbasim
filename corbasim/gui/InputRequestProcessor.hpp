@@ -44,16 +44,18 @@ public:
             TypeDescriptor_ptr ref,
             Holder hold) = 0;
 
-    virtual ObjectId getId() const;
+    ObjectId id() const;
 
-    virtual const ReflectivePath_t& getPath() const;
+    Objref_ptr object() const;
+
+    const ReflectivePath_t& getPath() const;
 
 protected:
 
-    RequestProcessor(ObjectId, 
+    RequestProcessor(Objref_ptr object,
             const ReflectivePath_t& path);
 
-    const ObjectId m_id;
+    Objref_ptr m_object;
     const ReflectivePath_t m_path;
 };
 
@@ -91,7 +93,8 @@ public slots:
 protected:
 
     typedef std::pair< ObjectId, tag_t > key_t;
-    typedef std::map< key_t, QList< RequestProcessor_ptr > > map_t;
+    typedef QList< RequestProcessor_ptr > processors_t;
+    typedef std::map< key_t, processors_t > map_t;
 
     typedef ObjrefRepository instances_t;
 
