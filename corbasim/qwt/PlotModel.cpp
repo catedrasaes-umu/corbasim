@@ -17,7 +17,7 @@ PlotModel::~PlotModel()
 {
 }
 
-bool PlotModel::isCheckable(core::reflective_base const * reflective)
+bool PlotModel::isCheckable(gui::TypeDescriptor_ptr reflective)
 {
     while (reflective->is_repeated())
         reflective = reflective->get_slice();

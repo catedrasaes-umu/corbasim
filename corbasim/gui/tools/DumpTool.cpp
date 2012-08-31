@@ -18,7 +18,6 @@
  */
 
 #include "DumpTool.hpp"
-#include <corbasim/qt/SortableGroup.hpp>
 #include <corbasim/gui/utils.hpp>
 #include <corbasim/core/file_format_helper.hpp>
 #include <QHBoxLayout>
@@ -148,8 +147,7 @@ Dumper::Dumper(Objref_ptr objref,
         OperationDescriptor_ptr reflective,
         const QList< int >& path, 
         QWidget * parent) :
-    QWidget(parent), m_objref(objref), 
-    m_reflective(reflective), m_path(path)
+    AbstractInputItem(objref, reflective, path, parent)
 {
     const QString& id = objref->name();
 
@@ -195,15 +193,15 @@ Dumper::Dumper(Objref_ptr objref,
 
     setLayout(layout);
 
-    QObject::connect(m_startStopButton,
+    connect(m_startStopButton,
             SIGNAL(clicked(bool)),
             this, SLOT(doStart(bool)));
 
-    QObject::connect(m_startStopButton,
+    connect(m_startStopButton,
             SIGNAL(toggled(bool)),
             this, SLOT(setEnabled(bool)));
 
-    QObject::connect(browse, SIGNAL(clicked()),
+    connect(browse, SIGNAL(clicked()),
             this, SLOT(browse()));
 
     QString defaultFile(id);
@@ -231,11 +229,6 @@ void Dumper::setEnabled(bool enabled)
     m_format->setEnabled(!enabled);
     m_suffixLength->setEnabled(!enabled);
     m_multipleFiles->setEnabled(!enabled);
-}
-
-OperationDescriptor_ptr Dumper::getReflective() const
-{
-    return m_reflective;
 }
 
 void Dumper::doStart(bool start)
@@ -279,186 +272,23 @@ void Dumper::reset()
 }
 
 DumpTool::DumpTool(QWidget * parent) :
-    QWidget(parent)
+    AbstractInputTool(parent)
 {
-    QHBoxLayout * layout = new QHBoxLayout(this);
-
-    // TODO splitter
-
-    // Model view
-    QTreeView * view = new QTreeView(this);
-    view->setModel(&m_model);
-    layout->addWidget(view);
-    view->setMaximumWidth(300);
-    view->setColumnWidth(0, 210);
-
-    // Plots
-    m_group = new qt::SortableGroup(this);
-    m_group->setDelete(false);
-    layout->addWidget(m_group);
-
-    setLayout(layout);
-
-    // widget signals
-    QObject::connect(m_group, 
-            SIGNAL(deleteRequested(corbasim::qt::SortableGroupItem *)),
-            this, 
-            SLOT(deleteRequested(corbasim::qt::SortableGroupItem *)));
-
-    // connect model signals 
-    QObject::connect(&m_model, 
-            SIGNAL(checked(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)),
-            this,
-            SLOT(createDumper(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)));
-    QObject::connect(&m_model, 
-            SIGNAL(unchecked(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)),
-            this,
-            SLOT(deleteDumper(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)));
-    
-    setMinimumSize(650, 400);
 }
 
 DumpTool::~DumpTool()
 {
 }
 
-void DumpTool::registerInstance(Objref_ptr objref)
-{
-    m_instances.add(objref);
-    m_model.registerInstance(objref->name(), objref->interface());
-}
-
-void DumpTool::unregisterInstance(ObjectId id)
-{
-    Objref_ptr objref = m_instances.find(id);
-
-    if (!objref)
-        return;
-
-    // Maps
-    map_t::iterator it = m_map.begin();
-    for(; it != m_map.end(); it++)
-    {
-        if (objref->name() == it->first.first)
-        {
-            for (int i = 0; i < it->second.size(); i++) 
-            {
-                Dumper * plot = it->second[i];
-
-                m_inverse_map.erase(plot);
-                m_model.uncheck(objref->name(), plot->getPath());
-            }
-
-            m_map.erase(it);
-        }
-    }
-
-    m_model.unregisterInstance(objref->name());
-    m_instances.del(id);
-}
-
-Dumper * DumpTool::createDumper(const QString& id, 
-        InterfaceDescriptor_ptr reflective,
+AbstractInputItem * DumpTool::createItem(
+        Objref_ptr objref, 
+        OperationDescriptor_ptr reflective,
         const QList< int >& path)
 {
-    Objref_ptr objref = m_instances.find(id);
-
-    OperationDescriptor_ptr op =
-        reflective->get_reflective_by_index(path.front());
-
-    Dumper * plot = NULL;
-
-    if (op && objref)
-    {
-        plot = new Dumper(objref, op, path);
-
-        const key_t key(id, op->get_tag());
-        m_map[key].push_back(plot);
-        m_inverse_map[plot] = key;
-
-        qt::SortableGroupItem * item = 
-            new qt::SortableGroupItem(plot, m_group);
-
-        item->showDetails();
-
-        const QString title(getFieldName(op, path));
-        item->setTitle(id + "." + title);
-
-        m_group->appendItem(item);
-
-        // connect with the processor
-        QObject::connect(plot, 
-                SIGNAL(addProcessor(RequestProcessor_ptr)),
-                getDefaultInputRequestController(),
-                SLOT(addProcessor(RequestProcessor_ptr)));
-        QObject::connect(plot, 
-                SIGNAL(removeProcessor(RequestProcessor_ptr)),
-                getDefaultInputRequestController(),
-                SLOT(removeProcessor(RequestProcessor_ptr)));
-    }
-
-    return plot;
+    return new Dumper(objref, reflective, path);
 }
 
-void DumpTool::deleteDumper(const QString& id, 
-        InterfaceDescriptor_ptr reflective,
-        const QList< int >& path)
-{
-    OperationDescriptor_ptr op =
-        reflective->get_reflective_by_index(path.front());
-
-    const key_t key(id, op->get_tag());
-    QList< Dumper * >& list = m_map[key];
-
-    for (int i = 0; i < list.size(); i++) 
-    {
-        Dumper * plot = list[i];
-        if (plot->getPath() == path)
-        {
-            list.removeAt(i);
-            m_inverse_map.erase(plot);
-            m_group->deleteItem(
-                    qobject_cast< qt::SortableGroupItem * >
-                        (plot->parent()));
-
-            // Notify to the processor
-            plot->reset();
-            break;
-        }
-    }
-}
-
-void DumpTool::deleteRequested(qt::SortableGroupItem* item)
-{
-    Dumper * plot = 
-        qobject_cast< Dumper * >(item->getWidget());
-
-    if (plot)
-    {
-        inverse_map_t::iterator it = m_inverse_map.find(plot);
-
-        if (it != m_inverse_map.end())
-        {
-            const key_t key(it->second);
-
-            m_map[key].removeAll(plot);
-
-            // notify to model
-            m_model.uncheck(key.first, plot->getPath());
-
-            m_inverse_map.erase(it);
-        }
-    }
-    m_group->deleteItem(item);
-}
+// Save and load
 
 void Dumper::save(QVariant& settings)
 {
@@ -492,70 +322,5 @@ void Dumper::load(const QVariant& settings)
     }
 
     m_startStopButton->setChecked(map["running"].toBool());
-}
-
-void DumpTool::save(QVariant& settings)
-{
-    QVariantList list;
-
-    for (map_t::iterator it = m_map.begin(); 
-            it != m_map.end(); ++it) 
-    {
-        for (int i = 0; i < it->second.size(); i++) 
-        {
-            QVariantMap map;
-            QVariantList vpath;
-
-            const QList< int >& path = it->second.at(i)->getPath();
-
-            for (int j = 0; j < path.size(); j++) 
-            {
-                vpath << path.at(j);
-            }
-
-            map["instance"] = it->first.first;
-            map["path"] = vpath;
-
-            it->second.at(i)->save(map["config"]);
-
-            list << map;
-        }
-    }
-
-    settings = list;
-}
-
-void DumpTool::load(const QVariant& settings)
-{
-    const QVariantList list = settings.toList();
-
-    for (int i = 0; i < list.size(); i++) 
-    {
-        const QVariantMap map = list.at(i).toMap();
-
-        const QString id = map["instance"].toString();
-
-        const QVariantList vpath = map["path"].toList();
-        QList< int > path;
-        for (int j = 0; j < vpath.size(); j++) 
-        {
-            path << vpath.at(j).toInt();
-        }
-
-        InterfaceDescriptor_ptr ref =
-            m_model.getReflective(id);
-
-        if (ref)
-        {
-            Dumper * dumper = createDumper(id, ref, path);
-
-            if (dumper)
-            {
-                dumper->load(map["config"]);
-
-                m_model.check(id, path);
-            }
-        }
-    }
 }
 

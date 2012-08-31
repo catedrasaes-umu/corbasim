@@ -5,7 +5,7 @@
 #include <corbasim/core/reflective_fwd.hpp>
 #include <list>
 #include <corbasim/qwt/export.hpp>
-#include <corbasim/gui/ParametersModel.hpp>
+#include <corbasim/gui/item/ParametersModel.hpp>
 
 namespace corbasim
 {
@@ -22,7 +22,7 @@ public:
     virtual ~PlotModel();
 
 protected:
-    virtual bool isCheckable(core::reflective_base const * reflective);
+    virtual bool isCheckable(gui::TypeDescriptor_ptr reflective);
 };
 
 } // qwt

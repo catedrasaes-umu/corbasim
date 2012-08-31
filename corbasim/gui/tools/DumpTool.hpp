@@ -21,21 +21,12 @@
 #define CORBASIM_GUI_DUMPTOOL_HPP
 
 #include <QtGui>
-#include <corbasim/gui/item/ParametersModel.hpp>
-#include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
-#include <map>
-
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/tools/AbstractInputTool.hpp>
+#include <corbasim/gui/InputRequestProcessor.hpp>
 
 namespace corbasim 
 {
-namespace qt 
-{
-class SortableGroup;
-class SortableGroupItem;
-} // namespace qt
-
 namespace gui 
 {
 
@@ -80,7 +71,7 @@ protected:
     std::string m_extension;
 };
 
-class CORBASIM_GUI_DECLSPEC Dumper : public QWidget
+class CORBASIM_GUI_DECLSPEC Dumper : public AbstractInputItem
 {
     Q_OBJECT
 public:
@@ -90,18 +81,6 @@ public:
             const QList< int >& path, 
             QWidget * parent = 0);
     virtual ~Dumper();
-
-    OperationDescriptor_ptr getReflective() const;
-
-    inline const QList< int >& getPath() const
-    {
-        return m_path;
-    }
-
-    inline RequestProcessor_ptr getProcessor() const
-    {
-        return m_processor;
-    }
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -116,18 +95,7 @@ protected slots:
     void browse();
     void setEnabled(bool);
 
-signals:
-
-    void addProcessor(RequestProcessor_ptr);
-    void removeProcessor(RequestProcessor_ptr);
-
 protected:
-
-    RequestProcessor_ptr m_processor;
-
-    Objref_ptr m_objref;
-    OperationDescriptor_ptr m_reflective;
-    const QList< int > m_path;
 
     QLineEdit * m_filePrefix;
     QComboBox * m_format;
@@ -136,7 +104,7 @@ protected:
     QPushButton * m_startStopButton;
 };
 
-class CORBASIM_GUI_DECLSPEC DumpTool : public QWidget
+class CORBASIM_GUI_DECLSPEC DumpTool : public AbstractInputTool
 {
     Q_OBJECT
 public:
@@ -144,40 +112,13 @@ public:
     DumpTool(QWidget * parent = 0);
     virtual ~DumpTool();
 
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
-
-public slots:
-
-    void registerInstance(Objref_ptr objref);
-
-    void unregisterInstance(ObjectId id);
-
-    Dumper * createDumper(const QString& id, 
-            InterfaceDescriptor_ptr reflective,
-            const QList< int >& path);
-
-    void deleteDumper(const QString& id, 
-            InterfaceDescriptor_ptr reflective,
-            const QList< int >& path);
-
-protected slots:
-
-    void deleteRequested(corbasim::qt::SortableGroupItem *);
-
 protected:
 
-    ObjrefRepository m_instances;
+    AbstractInputItem * createItem(
+            Objref_ptr objref, 
+            OperationDescriptor_ptr reflective,
+            const QList< int >& path);
 
-    ParametersModel m_model;
-    qt::SortableGroup * m_group;
-
-    typedef std::pair< QString, tag_t > key_t;
-    typedef std::map< key_t, QList< Dumper * > > map_t;
-    typedef std::map< Dumper *, key_t > inverse_map_t;
-
-    map_t m_map;
-    inverse_map_t m_inverse_map;
 };
 
 } // namespace gui

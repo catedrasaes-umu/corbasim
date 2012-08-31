@@ -20,87 +20,64 @@
 #ifndef CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
 #define CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
 
-#include <QWidget>
 #include <corbasim/qwt/PlotModel.hpp>
 #include <corbasim/qwt/SimplePlot.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
-#include <map>
+#include <corbasim/gui/tools/AbstractInputTool.hpp>
+#include <corbasim/gui/Model.hpp>
 
 #include <corbasim/qwt/export.hpp>
 
 namespace corbasim 
 {
-namespace qt 
-{
-class SortableGroup;
-class SortableGroupItem;
-} // namespace qt
-
 namespace qwt 
 {
 
+using namespace ::corbasim::gui;
+
 class CORBASIM_QWT_DECLSPEC PlotProcessor : public QObject,
-    public gui::RequestProcessor
+    public RequestProcessor
 {
     Q_OBJECT
 public:
 
-    PlotProcessor(const QString& id,
-            const gui::ReflectivePath_t path);
+    PlotProcessor(Objref_ptr objref,
+            const QList< int >& path);
     ~PlotProcessor();
 
-    void process(event::request_ptr req, 
-            core::reflective_base const * ref,
-            core::holder hold);
+    void process(Request_ptr req, 
+            TypeDescriptor_ptr ref,
+            Holder hold);
 
 signals:
 
-    void append(corbasim::event::request_ptr, 
-            const corbasim::core::reflective_base *,
-            corbasim::core::holder);
+    void append(Request_ptr, 
+            TypeDescriptor_ptr,
+            Holder);
 };
 
-class CORBASIM_QWT_DECLSPEC ReflectivePlot : public SimplePlot
+class CORBASIM_QWT_DECLSPEC ReflectivePlot : public AbstractInputItem
 {
     Q_OBJECT
 public:
 
-    ReflectivePlot(const QString& id,
-            core::operation_reflective_base const * reflective,
+    ReflectivePlot(Objref_ptr objref,
+            OperationDescriptor_ptr reflective,
             const QList< int >& path, 
             QWidget * parent = 0);
     virtual ~ReflectivePlot();
 
-    core::operation_reflective_base const * getReflective() const;
-
-    inline const QList< int >& getPath() const
-    {
-        return m_path;
-    }
-
-    inline gui::RequestProcessor_ptr getProcessor() const
-    {
-        return m_processor;
-    }
-
 public slots:
 
-    void appendValue(corbasim::event::request_ptr, 
-            const corbasim::core::reflective_base *,
-            corbasim::core::holder);
+    void appendValue(Request_ptr, 
+            TypeDescriptor_ptr,
+            Holder);
 
 protected:
-
-    gui::RequestProcessor_ptr m_processor;
-
-    const QString m_id;
-    core::operation_reflective_base const * m_reflective;
-    const QList< int > m_path;
 
     SimplePlot * m_plot;
 };
 
-class CORBASIM_QWT_DECLSPEC ReflectivePlotTool : public QWidget
+class CORBASIM_QWT_DECLSPEC ReflectivePlotTool : public AbstractInputTool
 {
     Q_OBJECT
 public:
@@ -108,43 +85,14 @@ public:
     ReflectivePlotTool(QWidget * parent = 0);
     virtual ~ReflectivePlotTool();
 
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
-
-public slots:
-
-    void registerInstance(const QString& name,
-            const corbasim::core::interface_reflective_base * reflective);
-
-    void unregisterInstance(const QString& name);
-
-    ReflectivePlot * createPlot(const QString& id, 
-            core::interface_reflective_base const * reflective,
-            const QList< int >& path);
-
-    void deletePlot(const QString& id, 
-            core::interface_reflective_base const * reflective,
-            const QList< int >& path);
-
-signals:
-
-    void addProcessor(corbasim::gui::RequestProcessor_ptr);
-    void removeProcessor(corbasim::gui::RequestProcessor_ptr);
-
-protected slots:
-
-    void deleteRequested(corbasim::qt::SortableGroupItem *);
-
 protected:
-    PlotModel m_model;
-    qt::SortableGroup * m_group;
 
-    typedef std::pair< QString, tag_t > key_t;
-    typedef std::map< key_t, QList< ReflectivePlot * > > map_t;
-    typedef std::map< ReflectivePlot *, key_t > inverse_map_t;
+    AbstractInputItem * createItem(
+            Objref_ptr objref, 
+            OperationDescriptor_ptr reflective,
+            const QList< int >& path);
 
-    map_t m_map;
-    inverse_map_t m_inverse_map;
+    ParametersModel * createModel() const;
 };
 
 } // namespace qwt
