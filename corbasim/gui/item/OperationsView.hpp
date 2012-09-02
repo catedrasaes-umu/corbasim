@@ -43,7 +43,14 @@ protected slots:
 
 signals:
 
-    void selectedOperation(Objref_ptr, OperationDescriptor_ptr);
+    void selectedOperation(Objref_ptr, 
+            OperationDescriptor_ptr);
+
+    void selectedItem(Objref_ptr, 
+            OperationDescriptor_ptr,
+            const QList< int >&);
+
+    void selectedInstance(Objref_ptr);
 
 };
 

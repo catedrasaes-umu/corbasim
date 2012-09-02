@@ -199,11 +199,21 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Show log
     QAction * showLogAction = new QAction(
-            // style()->standardIcon(QStyle::SP_FileDialogNewFolder),
             "Show &log", this);
-    // showLogAction->setShortcut(QKeySequence::SelectAll);
     connect(showLogAction, SIGNAL(triggered()), 
             logViewDock, SLOT(show()));
+
+    // Show instances
+    QAction * showInstancesAction = new QAction(
+            "Show &instances", this);
+    connect(showInstancesAction, SIGNAL(triggered()), 
+            instanceViewDock, SLOT(show()));
+
+    // Show interfaces
+    QAction * showInterfacesAction = new QAction(
+            "Show i&nterfaces", this);
+    connect(showInterfacesAction, SIGNAL(triggered()), 
+            interfaceViewDock, SLOT(show()));
 
     // Stop
     QAction * stopAction = new QAction(
@@ -259,6 +269,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuWindow->addSeparator();
     menuWindow->addAction(showLogAction);
     menuWindow->addAction(clearAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(showInstancesAction);
+    menuWindow->addAction(showInterfacesAction);
     menuWindow->addSeparator();
     menuWindow->addAction(stopAction);
 

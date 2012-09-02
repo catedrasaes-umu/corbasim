@@ -38,14 +38,37 @@ void OperationsView::clicked(const QModelIndex& index)
 {
     InstanceModel * src = dynamic_cast< InstanceModel * >(model());
 
-    if (src && src->isOperationNode(index))
+    if (src)
     {
         Objref_ptr instance = src->getInstance(index);
 
-        OperationDescriptor_ptr op = 
-            instance->interface()->get_reflective_by_index(index.row());
+        if (src->isInstanceNode(index))
+        {
+            emit selectedInstance(instance);
+        }
+        else if (src->isOperationNode(index))
+        {
+            OperationDescriptor_ptr op = 
+                instance->interface()->get_reflective_by_index(index.row());
 
-        emit selectedOperation(instance, op);
+            emit selectedOperation(instance, op);
+        }
+        else
+        {
+            QList< int > list;
+
+            QModelIndex current = index;
+            while(current.parent().isValid())
+            {
+                list.push_front(current.row());
+                current = current.parent();
+            }
+
+            OperationDescriptor_ptr op = 
+                instance->interface()->get_reflective_by_index(list.front());
+
+            emit selectedItem(instance, op, list);
+        }
     }
 }
 
