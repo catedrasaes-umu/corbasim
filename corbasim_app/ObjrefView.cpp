@@ -108,6 +108,20 @@ void ObjrefView::deleteObjref()
     emit deleteObjref(m_objref->id());
 }
 
+void ObjrefView::showRequestDialog(OperationDescriptor_ptr op)
+{
+    InterfaceDescriptor_ptr iface = m_objref->interface();
+
+    for (int i = 0; i < (int) iface->operation_count(); i++) 
+    {
+        if (op == iface->get_reflective_by_index(i))
+        {
+            showRequestDialog(i);
+            break;
+        }
+    }
+}
+
 void ObjrefView::showRequestDialog(int idx)
 {
     QMdiSubWindow * w = getRequestWindow(idx);

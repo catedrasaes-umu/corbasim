@@ -102,6 +102,8 @@ public slots:
 
     void stopAll();
 
+    void selectedOperation(Objref_ptr, OperationDescriptor_ptr);
+
 signals:
 
     void createObjref(const ObjrefConfig&);

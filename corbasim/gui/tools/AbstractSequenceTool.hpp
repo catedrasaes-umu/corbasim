@@ -162,6 +162,8 @@ public slots:
     void saveCurrentSequence();
     void loadSequence();
 
+    void setTreeVisible(bool visible);
+
 private slots:
 
     void sequenceModified();

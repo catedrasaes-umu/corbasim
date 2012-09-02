@@ -27,6 +27,7 @@
 #include <corbasim/gui/tools/DumpTool.hpp>
 #include <corbasim/gui/dialog/CreateDialog.hpp>
 #include <corbasim/gui/dialog/SetReferenceDialog.hpp>
+#include <corbasim/gui/item/OperationsView.hpp>
 #include <corbasim/gui/item/TreeView.hpp>
 #include <corbasim/qt/initialize.hpp>
 
@@ -108,11 +109,16 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Instances view
     QDockWidget * instanceViewDock = new QDockWidget("Instances", this);
-    TreeView * instanceView = new TreeView();
+    QTreeView * instanceView = new OperationsView();
     instanceView->setHeaderHidden(true);
     instanceView->setModel(&m_instanceModel);
     instanceViewDock->setWidget(instanceView);
     addDockWidget(Qt::LeftDockWidgetArea, instanceViewDock);
+
+    connect(instanceView, 
+            SIGNAL(selectedOperation(Objref_ptr, OperationDescriptor_ptr)),
+            this,
+            SLOT(selectedOperation(Objref_ptr, OperationDescriptor_ptr)));
 
     // Interfaces view
     QDockWidget * interfaceViewDock = new QDockWidget("Interfaces", this);
@@ -503,6 +509,7 @@ void AppMainWindow::createOperationSequenceTool()
     if (!m_operationSequenceTool)
     {
         m_operationSequenceTool = new OperationSequenceTool(this);
+        m_operationSequenceTool->setTreeVisible(false);
 
         createToolSubWindow(kOperationSequenceTool, m_operationSequenceTool);
 
@@ -526,6 +533,7 @@ void AppMainWindow::createSenderSequenceTool()
     if (!m_senderSequenceTool)
     {
         m_senderSequenceTool = new SenderSequenceTool(this);
+        m_senderSequenceTool->setTreeVisible(false);
 
         createToolSubWindow(kSenderSequenceTool, m_senderSequenceTool);
 
@@ -655,6 +663,37 @@ void AppMainWindow::stopAll()
             it != m_objrefViews.end(); ++it) 
     {
         (*it)->stopAll();
+    }
+}
+
+void AppMainWindow::selectedOperation(Objref_ptr object, 
+        OperationDescriptor_ptr op)
+{
+    QMdiSubWindow * sub = mdiArea->activeSubWindow();
+
+    if (!dynamic_cast< Servant * >(object.get()))
+    {
+        if (sub && m_subWindows[kOperationSequenceTool] == sub)
+        {
+            m_operationSequenceTool->appendAbstractItem(
+                    object, op);
+        }
+        else if (sub && 
+                m_subWindows[kSenderSequenceTool] == sub)
+        {
+            m_senderSequenceTool->appendAbstractItem(
+                    object, op);
+        }
+        else
+        {
+            ObjrefViews_t::iterator it = 
+                m_objrefViews.find(object->id());
+
+            if (it != m_objrefViews.end())
+            {
+                (*it)->showRequestDialog(op);
+            }
+        }
     }
 }
 

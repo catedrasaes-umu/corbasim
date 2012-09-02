@@ -484,6 +484,11 @@ void AbstractSequenceTool::sequenceModified()
     }
 }
 
+void AbstractSequenceTool::setTreeVisible(bool visible)
+{
+    m_view->setVisible(visible);
+}
+
 // Settings
 
 void AbstractSequenceItem::save(QVariant& settings)

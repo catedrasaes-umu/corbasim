@@ -62,6 +62,7 @@ public slots:
 
     void deleteObjref();
 
+    void showRequestDialog(OperationDescriptor_ptr op);
     void showRequestDialog(int idx);
     void showRequestDialog(QAction * act);
     void showSenderDialog(int idx);
