@@ -20,15 +20,8 @@
 #ifndef CORBASIM_GUI_SENDERSEQUENCE_HPP
 #define CORBASIM_GUI_SENDERSEQUENCE_HPP
 
-#include <QtGui>
-#include <corbasim/gui/types.hpp>
-#include <corbasim/gui/Model.hpp>
-#include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/gui/export.hpp>
-#include <corbasim/gui/item/InstanceModel.hpp>
-#include <corbasim/gui/item/OperationsView.hpp>
-
-#include <ostream>
+#include <corbasim/gui/tools/AbstractSequenceTool.hpp>
 
 namespace corbasim 
 {
@@ -38,123 +31,40 @@ namespace gui
 class OperationSender;
 
 class CORBASIM_GUI_DECLSPEC SenderSequenceItem : 
-    public QFrame
+    public AbstractSequenceItem
 {
     Q_OBJECT
 public:
-    SenderSequenceItem(OperationSender * dlg,
+    SenderSequenceItem(Objref_ptr object,
+            OperationDescriptor_ptr operation,
             QWidget * parent = 0);
     virtual ~SenderSequenceItem();
 
-    ObjectId objectId() const;
-
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
-
-signals:
-
-    void doDelete();
-    void up();
-    void down();
+public slots:
+    
+    void showDetails(bool show);
 
 protected:
+
+    void doSave(QVariantMap& map);
+    void doLoad(const QVariantMap& map);
 
     OperationSender * m_dlg;
-    QLineEdit * m_title;
-};
-
-class CORBASIM_GUI_DECLSPEC SenderSequence : public QWidget
-{
-    Q_OBJECT
-public:
-    SenderSequence(const QString& name, QWidget * parent = 0);
-    virtual ~SenderSequence();
-
-    const QString& getName() const;
-
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
-
-public slots:
-
-    void removeItems(ObjectId id);
-
-    void appendItem(SenderSequenceItem * item);
-
-    void deleteItem(SenderSequenceItem * item);
-    void moveUpItem(SenderSequenceItem * item);
-    void moveDownItem(SenderSequenceItem * item);
-
-private slots:
-
-    void startOrStopAll(bool checked);
-
-    void deleteItem();
-    void moveUpItem();
-    void moveDownItem();
-
-signals:
-
-    void modified();
-
-protected:
-
-    QString m_name;
-
-    qt::CustomVLayout * m_layout;
-
-    typedef QList< SenderSequenceItem * > items_t;
-    items_t m_items;
-
-    QScrollArea * m_scroll;
-
 };
 
 class CORBASIM_GUI_DECLSPEC SenderSequenceTool : 
-    public QWidget
+    public AbstractSequenceTool
 {
     Q_OBJECT
 public:
     SenderSequenceTool(QWidget * parent = 0);
     virtual ~SenderSequenceTool();
 
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
-
-public slots:
-
-    void objrefCreated(Objref_ptr object);
-    void objrefDeleted(ObjectId id);
-
-    SenderSequenceItem * appendOperation(Objref_ptr instance, 
-            OperationDescriptor_ptr op);
-
-    SenderSequence* createSequence();
-
-    void closeSequence(int idx);
-
-    void showContextMenu(const QPoint& pos);
-
-    void saveCurrentSequence();
-    void loadSequence();
-
-private slots:
-    
-    void sequenceModified();
-
 protected:
 
-    ObjrefRepository m_instances;
-
-    InstanceModel m_model;
-
-    OperationsView * m_view;
-    QTabWidget * m_tabs;
-
-    typedef QList< SenderSequence * > sequences_t;
-    sequences_t m_sequences;
-
-    QMenu * m_menu;
+    AbstractSequenceItem * createAbstractItem(
+            Objref_ptr object, 
+            OperationDescriptor_ptr op);
 };
 
 } // namespace gui

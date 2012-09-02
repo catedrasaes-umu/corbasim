@@ -20,15 +20,8 @@
 #ifndef CORBASIM_GUI_OPERATIONSEQUENCE_HPP
 #define CORBASIM_GUI_OPERATIONSEQUENCE_HPP
 
-#include <QtGui>
-#include <corbasim/qt/CustomLayouts.hpp>
-#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
-#include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/item/InstanceModel.hpp>
-#include <corbasim/gui/item/OperationsView.hpp>
-
-#include <ostream>
+#include <corbasim/gui/tools/AbstractSequenceTool.hpp>
 
 namespace corbasim 
 {
@@ -38,19 +31,18 @@ namespace gui
 class OperationInputForm;
 
 class CORBASIM_GUI_DECLSPEC OperationSequenceItem : 
-    public QFrame
+    public AbstractSequenceItem
 {
     Q_OBJECT
 public:
     OperationSequenceItem(Objref_ptr object,
-            OperationInputForm * dlg,
+            OperationDescriptor_ptr operaation,
             QWidget * parent = 0);
     virtual ~OperationSequenceItem();
 
-    ObjectId objectId() const;
-
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
+public slots:
+    
+    void showDetails(bool show);
 
 signals:
 
@@ -63,9 +55,6 @@ signals:
      */
     void sendRequest(Request_ptr);
 
-    void doDelete();
-    void up();
-    void down();
 
 private slots:
 
@@ -78,10 +67,10 @@ private slots:
 
 protected:
 
-    Objref_ptr m_object;
+    void doSave(QVariantMap& map);
+    void doLoad(const QVariantMap& map);
+
     OperationInputForm * m_dlg;
-    QLayout * m_layout;
-    QLineEdit * m_title;
 
     // Periodic
     QSpinBox * m_sbPeriod;
@@ -96,111 +85,19 @@ protected:
     // End periodic
 };
 
-class CORBASIM_GUI_DECLSPEC OperationSequence : public QWidget
-{
-    Q_OBJECT
-public:
-    OperationSequence(const QString& name, QWidget * parent = 0);
-    virtual ~OperationSequence();
-
-    const QString& getName() const;
-
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
-
-    /**
-     * @brief Remove all the items related to an instance.
-     *
-     * @param id The identifier of the instance.
-     */
-    void removeInstance(ObjectId id);
-
-public slots:
-
-    void appendItem(OperationSequenceItem * item);
-
-    void deleteItem(OperationSequenceItem * item);
-    void moveUpItem(OperationSequenceItem * item);
-    void moveDownItem(OperationSequenceItem * item);
-
-private slots:
-
-    void startOrStopAll(bool checked);
-
-    void deleteItem();
-    void moveUpItem();
-    void moveDownItem();
-
-signals:
-
-    void modified();
-
-protected:
-
-    /**
-     * @brief The sequence name. 
-     *
-     * TODO Currently it is not possible to modify.
-     */
-    QString m_name;
-
-    qt::CustomVLayout * m_layout;
-
-    typedef QList< OperationSequenceItem * > items_t;
-    items_t m_items;
-
-    QScrollArea * m_scroll;
-};
-
 class CORBASIM_GUI_DECLSPEC OperationSequenceTool : 
-    public QWidget
+    public AbstractSequenceTool
 {
     Q_OBJECT
 public:
     OperationSequenceTool(QWidget * parent = 0);
     virtual ~OperationSequenceTool();
 
-    void save(QVariant& settings);
-    void load(const QVariant& settings);
-
-public slots:
-
-    /**
-     * @brief Register an instance into this tool.
-     *
-     * @param object
-     */
-    void objrefCreated(Objref_ptr object);
-    void objrefDeleted(ObjectId id);
-
-    OperationSequenceItem * appendOperation(
-            Objref_ptr object,
-            OperationDescriptor_ptr op);
-
-    OperationSequence* createSequence();
-
-    void closeSequence(int idx);
-
-    void showContextMenu(const QPoint& pos);
-
-    void saveCurrentSequence();
-    void loadSequence();
-
-private slots:
-
-    void sequenceModified();
-
 protected:
 
-    InstanceModel m_model;
-
-    OperationsView * m_view;
-    QTabWidget * m_tabs;
-
-    typedef QList< OperationSequence * > sequences_t;
-    sequences_t m_sequences;
-
-    QMenu * m_menu;
+    AbstractSequenceItem * createAbstractItem(
+            Objref_ptr object, 
+            OperationDescriptor_ptr op);
 };
 
 } // namespace gui

@@ -41,6 +41,7 @@ set(corbasim_gui_EXPORTED_HEADERS
 
     # tools
     gui/tools/AbstractInputTool.hpp
+    gui/tools/AbstractSequenceTool.hpp
     gui/tools/DumpTool.hpp
     gui/tools/FilteredLogView.hpp
     gui/tools/OperationSequence.hpp
@@ -95,6 +96,7 @@ set(corbasim_gui_MOC_HDRS
 
     # tools
     gui/tools/AbstractInputTool.hpp
+    gui/tools/AbstractSequenceTool.hpp
     gui/tools/DumpTool.hpp
     gui/tools/FilteredLogView.hpp
     gui/tools/OperationSequence.hpp
@@ -149,6 +151,7 @@ set(corbasim_gui_SRCS
 
     # tools
     gui/tools/AbstractInputTool.cpp
+    gui/tools/AbstractSequenceTool.cpp
     gui/tools/DumpTool.cpp
     gui/tools/FilteredLogView.cpp
     gui/tools/OperationSequence.cpp
