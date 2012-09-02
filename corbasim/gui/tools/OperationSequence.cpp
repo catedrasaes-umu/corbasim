@@ -19,11 +19,6 @@
 
 #include "OperationSequence.hpp"
 #include <corbasim/gui/ReflectiveGUI.hpp>
-#include <corbasim/gui/json.hpp>
-
-
-#include <fstream>
-#include <iostream>
 
 using namespace corbasim::gui;
 
