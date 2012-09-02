@@ -184,6 +184,11 @@ const QString& AbstractSequence::getName() const
     return m_name;
 }
 
+void AbstractSequence::setName(const QString& name)
+{
+    m_name = name;
+}
+
 void AbstractSequence::removeInstance(ObjectId id)
 {
     const items_t old = m_items;
@@ -353,8 +358,12 @@ AbstractSequenceTool::AbstractSequenceTool(QWidget * parent) :
     m_menu = new QMenu();
     m_menu->addAction("Save as...", this, SLOT(saveCurrentSequence()));
     m_menu->addSeparator();
+    m_menu->addAction("Set name", this, SLOT(showSetName()));
+    m_menu->addSeparator();
     m_menu->addAction("New", this, SLOT(createSequence()));
     m_menu->addAction("Load", this, SLOT(loadSequence()));
+
+    createSequence();
 }
 
 AbstractSequenceTool::~AbstractSequenceTool()
@@ -489,6 +498,22 @@ void AbstractSequenceTool::setTreeVisible(bool visible)
     m_view->setVisible(visible);
 }
 
+void AbstractSequenceTool::showSetName()
+{
+    bool ok = false;
+    const QString name = QInputDialog::getText(this,
+            "Sequence name", "Insert name for the sequence",
+            QLineEdit::Normal, QString(), &ok);
+
+    if (ok)
+    {
+        int currentIndex = m_tabs->currentIndex();
+
+        m_sequences[currentIndex]->setName(name);
+        m_tabs->setTabText(currentIndex, name);
+    }
+}
+
 // Settings
 
 void AbstractSequenceItem::save(QVariant& settings)
@@ -518,6 +543,7 @@ void AbstractSequenceItem::load(const QVariant& settings)
 
 void AbstractSequence::save(QVariant& settings)
 {
+    QVariantMap map;
     QVariantList list;
     
     for (int i = 0; i < m_items.size(); i++) 
@@ -527,23 +553,28 @@ void AbstractSequence::save(QVariant& settings)
         list << v;
     }
 
-    settings = list;
+    map["name"] = getName();
+    map["items"] = list;
+
+    settings = map;
 }
 
 void AbstractSequence::load(const QVariant& settings)
 {
-    // TODO currently impossible
+    const QVariantMap map = settings.toMap();
+    setName(map["name"].toString());
 }
 
 void AbstractSequenceTool::save(QVariant& settings)
 {
     QVariantList list;
     
-    for (int i = 0; i < m_sequences.size(); i++) 
+    for (sequences_t::iterator it = m_sequences.begin(); 
+            it != m_sequences.end(); ++it) 
     {
         QVariant v;
-        m_sequences.at(i)->save(v);
-        list << v;
+        (*it)->save(v);
+        list << v;       
     }
 
     settings = list;
@@ -553,24 +584,27 @@ void AbstractSequenceTool::load(const QVariant& settings)
 {
     // Clear its current configuration
     m_tabs->clear();
-    for (int i = 0; i < m_sequences.size(); i++) 
+    for (sequences_t::iterator it = m_sequences.begin(); 
+            it != m_sequences.end(); ++it) 
     {
-        delete m_sequences.at(i);
+        delete *it;
     }
     m_sequences.clear();
 
     const QVariantList list = settings.toList();
 
-    for (int i = 0; i < list.size(); i++) 
+    for (QVariantList::const_iterator it = list.begin();
+            it != list.end(); it++) 
     {
         AbstractSequence * seq = createSequence();
-        // It is not possible seq->load(list.at(i));
 
-        const QVariantList seqList = list.at(i).toList();
+        const QVariantMap seqMap = it->toMap();
+        const QVariantList seqList = seqMap["items"].toList();
 
-        for (int j = 0; j < seqList.size(); j++) 
+        for (QVariantList::const_iterator lit = seqList.begin();
+                lit != seqList.end(); lit++) 
         {
-            const QVariantMap map = seqList.at(j).toMap();
+            const QVariantMap map = lit->toMap();
             const QString obj = map.value("object").toString();
             const std::string operation = 
                 map.value("operation").toString().toStdString();
@@ -581,10 +615,11 @@ void AbstractSequenceTool::load(const QVariant& settings)
             if (object && 
                     (op = object->interface()->get_reflective_by_name(operation.c_str())))
             {
-                appendAbstractItem(object, op)->load(seqList.at(j));
+                appendAbstractItem(object, op)->load(*lit);
             }
         }
+
+        seq->load(*it);
     }
 }
-
 

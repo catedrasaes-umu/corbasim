@@ -80,6 +80,7 @@ public:
     virtual ~AbstractSequence();
 
     const QString& getName() const;
+    void setName(const QString& name);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -163,6 +164,8 @@ public slots:
     void loadSequence();
 
     void setTreeVisible(bool visible);
+
+    void showSetName();
 
 private slots:
 

@@ -45,13 +45,13 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
     setLayout(layout);
 
     // widget signals
-    QObject::connect(m_group, 
+    connect(m_group, 
             SIGNAL(deleteRequested(corbasim::qt::SortableGroupItem *)),
             this, 
             SLOT(deleteRequested(corbasim::qt::SortableGroupItem *)));
 
     // connect model signals 
-    QObject::connect(&m_model, 
+    connect(&m_model, 
             SIGNAL(checked(
                     OperationDescriptor_ptr,
                     const QList< int >&)),
@@ -59,7 +59,7 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
             SLOT(createFilesItem(
                     OperationDescriptor_ptr,
                     const QList< int >&)));
-    QObject::connect(&m_model, 
+    connect(&m_model, 
             SIGNAL(unchecked(
                     OperationDescriptor_ptr,
                     const QList< int >&)),
@@ -282,10 +282,10 @@ FilesItem::FilesItem(
 
     setLayout(layout);
 
-    QObject::connect(browse, SIGNAL(clicked()),
+    connect(browse, SIGNAL(clicked()),
             this, SLOT(browse()));
 
-    QObject::connect(this, SIGNAL(nextFile(int)),
+    connect(this, SIGNAL(nextFile(int)),
             m_currentFile, SLOT(setCurrentIndex(int)));
 }
 
@@ -422,7 +422,7 @@ void FilesItemProcessor::process(
 {
     using namespace ::corbasim::core;
 
-    std::cout << __FUNCTION__  << std::endl;
+    // std::cout << __FUNCTION__  << std::endl;
 
     if (m_files.size() == 0)
         return;
@@ -473,8 +473,8 @@ void FilesItemProcessor::openFile()
     
         if (m_currentFile < m_files.size())
         {
-            std::cout << __FUNCTION__ << " " << 
-                m_files.at(m_currentFile).toStdString() << std::endl;
+            // std::cout << __FUNCTION__ << " " << 
+            //     m_files.at(m_currentFile).toStdString() << std::endl;
 
             m_currentIStream.reset(new std::ifstream(
                         m_files.at(m_currentFile).toStdString().c_str()));
