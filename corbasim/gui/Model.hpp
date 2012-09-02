@@ -89,6 +89,9 @@ protected:
     CORBA::Object_var m_reference;
 
     Caller_ptr m_caller;
+
+    struct Data;
+    Data * m_data;
 };
 
 class CORBASIM_GUI_DECLSPEC Servant : public Objref

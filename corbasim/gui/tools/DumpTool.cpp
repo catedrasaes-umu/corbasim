@@ -152,6 +152,7 @@ Dumper::Dumper(Objref_ptr objref,
     const QString& id = objref->name();
 
     QGridLayout * layout = new QGridLayout();
+    layout->setMargin(0);
 
     int row = 0;
 

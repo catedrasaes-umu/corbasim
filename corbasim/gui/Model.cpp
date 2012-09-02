@@ -22,15 +22,24 @@
 #include <corbasim/event.hpp>
 #include <QLibrary>
 #include <iostream>
+#include <boost/thread/shared_mutex.hpp>
 
 using namespace corbasim::gui;
+
+typedef boost::shared_lock< boost::shared_mutex > shared_lock;
+typedef boost::unique_lock< boost::shared_mutex > unique_lock;
+
+struct Objref::Data
+{
+    boost::shared_mutex refMutex;
+};
 
 Objref::Objref(const QString& name,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
     m_name(name), 
     m_interfaceDescriptor(interfaceDescriptor),
-    QObject(parent)
+    QObject(parent), m_data(new Data)
 {
     assert(m_interfaceDescriptor);
 
@@ -42,7 +51,7 @@ Objref::Objref(const ObjrefConfig& cfg,
        QObject * parent) :
     m_name(cfg.name.c_str()), 
     m_interfaceDescriptor(interfaceDescriptor),
-    QObject(parent)
+    QObject(parent), m_data(new Data)
 {
     assert(m_interfaceDescriptor);
 
@@ -53,6 +62,7 @@ Objref::Objref(const ObjrefConfig& cfg,
 
 Objref::~Objref()
 {
+    delete m_data;
 }
 
 ObjectId Objref::id() const
@@ -72,11 +82,14 @@ const QString& Objref::name() const
 
 CORBA::Object_var Objref::reference() const
 {
+    shared_lock lock(m_data->refMutex);
     return m_reference;
 }
 
 void Objref::setReference(const CORBA::Object_var& reference)
 {
+    unique_lock lock(m_data->refMutex);
+
     bool newNil = CORBA::is_nil(reference);
     bool oldNil = CORBA::is_nil(m_reference);
 
@@ -95,6 +108,8 @@ void Objref::setReference(const CORBA::Object_var& reference)
 
 Event_ptr Objref::sendRequest(const Request_ptr& request)
 {
+    shared_lock lock(m_data->refMutex);
+
     Event_ptr ev;
 
     if (!m_caller || m_caller->is_nil())

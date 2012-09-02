@@ -48,8 +48,13 @@ void OperationsView::clicked(const QModelIndex& index)
         }
         else if (src->isOperationNode(index))
         {
+            QList< int > list;
+            list << index.row();
+
             OperationDescriptor_ptr op = 
                 instance->interface()->get_reflective_by_index(index.row());
+
+            emit selectedItem(instance, op, list);
 
             emit selectedOperation(instance, op);
         }
