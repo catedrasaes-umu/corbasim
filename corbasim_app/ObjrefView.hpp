@@ -45,6 +45,8 @@ public:
             QObject * parent = 0);
     virtual ~ObjrefView();
 
+    Objref_ptr objref() const;
+
     QMenu * getMenu() const;
 
     RequestDialog * getRequestDialog(int idx);

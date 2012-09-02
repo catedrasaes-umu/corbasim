@@ -318,8 +318,11 @@ void AppMainWindow::save(QVariant& settings)
         for (ObjrefViews_t::iterator it = m_objrefViews.begin(); 
                 it != m_objrefViews.end(); ++it) 
         {
-            QVariant value;
-            (*it)->save(value);
+            QVariantMap value;
+            value["name"] = (*it)->objref()->name();
+            (*it)->save(value["value"]);
+
+            objects << value;
         }
 
         map["objects"] = objects;
@@ -332,8 +335,11 @@ void AppMainWindow::save(QVariant& settings)
         for (ServantViews_t::iterator it = m_servantViews.begin(); 
                 it != m_servantViews.end(); ++it) 
         {
-            QVariant value;
-            (*it)->save(value);
+            QVariantMap value;
+            value["name"] = (*it)->servant()->name();
+            (*it)->save(value["value"]);
+
+            servants << value;
         }
 
         map["servants"] = servants;
@@ -364,7 +370,43 @@ void AppMainWindow::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
 
-    // TODO objects and servants
+    // Objects
+    {
+        const QVariantList list = map["objects"].toList();
+
+        for (QVariantList::const_iterator it = list.begin(); 
+                it != list.end(); ++it) 
+        {
+            const QVariantMap value = it->toMap();
+            const QString name = value["name"].toString();
+            
+            Objref_ptr objref = m_objrefs.find(name);
+
+            if (objref)
+            {
+                m_objrefViews[objref->id()]->load(value["value"]);
+            }
+        }
+    }
+
+    // Servants
+    {
+        const QVariantList list = map["servants"].toList();
+
+        for (QVariantList::const_iterator it = list.begin(); 
+                it != list.end(); ++it) 
+        {
+            const QVariantMap value = it->toMap();
+            const QString name = value["name"].toString();
+            
+            Objref_ptr servant = m_servants.find(name);
+
+            if (servant)
+            {
+                m_servantViews[servant->id()]->load(value["value"]);
+            }
+        }
+    }
     
     // Tools
     {

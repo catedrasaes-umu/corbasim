@@ -42,6 +42,8 @@ public:
             QObject * parent = 0);
     virtual ~ServantView();
 
+    Objref_ptr servant() const;
+
     QMenu * getMenu() const;
 
     InterfaceDescriptor_ptr getFactory() const;

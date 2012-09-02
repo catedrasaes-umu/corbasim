@@ -46,6 +46,11 @@ ServantView::~ServantView()
     delete m_sub_script;
 }
 
+Objref_ptr ServantView::servant() const
+{
+    return m_servant;
+}
+
 QMenu * ServantView::getMenu() const
 {
     return m_menu;

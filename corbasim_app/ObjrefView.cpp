@@ -93,6 +93,11 @@ ObjrefView::~ObjrefView()
     delete m_sub_script;
 }
 
+Objref_ptr ObjrefView::objref() const
+{
+    return m_objref;
+}
+
 QMenu * ObjrefView::getMenu() const
 {
     return m_menu;
