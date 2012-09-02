@@ -44,6 +44,7 @@ namespace
         kOperationSequenceTool,
         kSenderSequenceTool,
         kDumpTool,
+        kPlotTool,
 
         kSubWindowsMax
     };
@@ -55,7 +56,8 @@ namespace
         "Filtered log",
         "Operation sequence tool",
         "Sender sequence tool",
-        "Dump tool"
+        "Dump tool",
+        "Plot tool"
     };
 } // namespace
 
@@ -77,7 +79,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_filteredLogView(NULL),
     m_operationSequenceTool(NULL),
     m_senderSequenceTool(NULL),
-    m_dumpTool(NULL)
+    m_dumpTool(NULL),
+    m_plotTool(NULL)
 
 {
     corbasim::qt::setDefaultInstanceModel(&m_instanceModel);
@@ -237,8 +240,11 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             this, SLOT(showOperationSequenceTool()));
     menuTool->addAction("&Sender sequences", 
             this, SLOT(showSenderSequenceTool()));
+    menuTool->addSeparator();
     menuTool->addAction("&Dump tool", 
             this, SLOT(showDumpTool()));
+    menuTool->addAction("&Plot tool", 
+            this, SLOT(showPlotTool()));
     menuTool->addSeparator();
     menuTool->addAction("&Filtered log", 
             this, SLOT(showFilteredLogView()));
@@ -339,6 +345,9 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
 
     if (m_dumpTool)
         m_dumpTool->registerInstance(servant);
+
+    if (m_plotTool)
+        m_plotTool->registerInstance(servant);
 }
 
 void AppMainWindow::servantDeleted(ObjectId id)
@@ -355,6 +364,9 @@ void AppMainWindow::servantDeleted(ObjectId id)
     
     if (m_dumpTool)
         m_dumpTool->unregisterInstance(id);
+
+    if (m_plotTool)
+        m_plotTool->unregisterInstance(id);
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -448,9 +460,12 @@ void AppMainWindow::showToolSubWindow(int tool)
 {
     QMdiSubWindow * sub = m_subWindows[tool];
 
-    sub->showNormal();
-    sub->widget()->show();
-    mdiArea->setActiveSubWindow(sub);
+    if (sub)
+    {
+        sub->showNormal();
+        sub->widget()->show();
+        mdiArea->setActiveSubWindow(sub);
+    }
 }
 
 void AppMainWindow::createFilteredLogView()
@@ -550,6 +565,47 @@ void AppMainWindow::showDumpTool()
 {
     createDumpTool();
     showToolSubWindow(kDumpTool);
+}
+
+void AppMainWindow::createPlotTool()
+{
+    typedef AbstractInputTool* (*create_t)(QWidget*);
+
+    if (!m_plotTool)
+    {
+        // Loads the library
+        QLibrary lib("corbasim_qwt");
+        lib.load();
+
+        create_t create = (create_t) lib.resolve("createPlotTool");
+
+        if (create)
+        {
+            // Creates the tool
+            m_plotTool = create(NULL);
+
+            createToolSubWindow(kPlotTool, m_plotTool);
+
+            // Initilizes the tool
+            ObjrefRepository::const_iterator it = m_servants.begin();
+            ObjrefRepository::const_iterator end = m_servants.end();
+
+            for(; it != end; it++)
+                m_plotTool->registerInstance(it.value());
+        }
+        else
+        {
+            QMessageBox::critical(this, "Error initializing plot tool", 
+                    "Unable to load corbasim_qwt. "
+                    "Ensure you have built corbasim with qwt.");
+        }
+    }
+}
+
+void AppMainWindow::showPlotTool()
+{
+    createPlotTool();
+    showToolSubWindow(kPlotTool);
 }
 
 void AppMainWindow::showLoadDirectory()

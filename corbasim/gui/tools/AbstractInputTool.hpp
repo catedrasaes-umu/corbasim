@@ -68,6 +68,7 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    virtual void start();
     virtual void reset();
 
 signals:
@@ -95,6 +96,8 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    void setModel(ParametersModel * model);
+
 protected:
     
     virtual AbstractInputItem * createItem(
@@ -102,7 +105,7 @@ protected:
             OperationDescriptor_ptr reflective,
             const QList< int >& path) = 0;
 
-    virtual ParametersModel * createModel() const;
+    virtual ParametersModel * createModel();
 
 public slots:
 
@@ -135,6 +138,8 @@ protected:
 
     map_t m_map;
     inverse_map_t m_inverse_map;
+
+    QTreeView * m_view;
 };
 
 } // namespace gui

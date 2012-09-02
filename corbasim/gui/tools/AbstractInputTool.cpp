@@ -51,6 +51,10 @@ OperationDescriptor_ptr AbstractInputItem::getReflective() const
     return m_reflective;
 }
 
+void AbstractInputItem::start()
+{
+}
+
 void AbstractInputItem::reset()
 {
 }
@@ -62,18 +66,15 @@ void AbstractInputItem::reset()
 //
 
 AbstractInputTool::AbstractInputTool(QWidget * parent) :
-    QWidget(parent)
+    QWidget(parent), m_model(NULL)
 {
-    m_model = createModel();
-
     QHBoxLayout * layout = new QHBoxLayout(this);
 
     // Model view
-    QTreeView * view = new QTreeView(this);
-    view->setModel(m_model);
-    layout->addWidget(view);
-    view->setMaximumWidth(300);
-    view->setColumnWidth(0, 210);
+    m_view = new QTreeView(this);
+    layout->addWidget(m_view);
+    m_view->setMaximumWidth(300);
+    m_view->setColumnWidth(0, 210);
 
     // Plots
     m_group = new qt::SortableGroup(this);
@@ -87,26 +88,10 @@ AbstractInputTool::AbstractInputTool(QWidget * parent) :
             SIGNAL(deleteRequested(corbasim::qt::SortableGroupItem *)),
             this, 
             SLOT(deleteRequested(corbasim::qt::SortableGroupItem *)));
-
-    // connect model signals 
-    connect(m_model, 
-            SIGNAL(checked(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)),
-            this,
-            SLOT(createAbstractInputItem(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)));
-    connect(m_model, 
-            SIGNAL(unchecked(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)),
-            this,
-            SLOT(deleteAbstractInputItem(const QString&,
-                    InterfaceDescriptor_ptr,
-                    const QList< int >&)));
     
     setMinimumSize(650, 400);
+
+    setModel(createModel());
 }
 
 AbstractInputTool::~AbstractInputTool()
@@ -114,9 +99,42 @@ AbstractInputTool::~AbstractInputTool()
     delete m_model;
 }
 
-ParametersModel * AbstractInputTool::createModel() const
+void AbstractInputTool::setModel(ParametersModel * model)
 {
-    return new ParametersModel();
+    if (m_model)
+    {
+        delete m_model;
+    }
+
+    m_model = model;
+
+    if (model)
+    {
+        m_view->setModel(m_model);
+
+        // connect model signals 
+        connect(m_model, 
+                SIGNAL(checked(const QString&,
+                        InterfaceDescriptor_ptr,
+                        const QList< int >&)),
+                this,
+                SLOT(createAbstractInputItem(const QString&,
+                        InterfaceDescriptor_ptr,
+                        const QList< int >&)));
+        connect(m_model, 
+                SIGNAL(unchecked(const QString&,
+                        InterfaceDescriptor_ptr,
+                        const QList< int >&)),
+                this,
+                SLOT(deleteAbstractInputItem(const QString&,
+                        InterfaceDescriptor_ptr,
+                        const QList< int >&)));
+    }
+}
+
+ParametersModel * AbstractInputTool::createModel() 
+{
+    return new ParametersModel(this);
 }
 
 void AbstractInputTool::registerInstance(Objref_ptr objref)
@@ -192,6 +210,8 @@ AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id
                 SIGNAL(removeProcessor(RequestProcessor_ptr)),
                 getDefaultInputRequestController(),
                 SLOT(removeProcessor(RequestProcessor_ptr)));
+
+        item->start();
     }
 
     return item;

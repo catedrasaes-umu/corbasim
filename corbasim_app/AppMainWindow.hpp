@@ -43,6 +43,7 @@ namespace gui
     class FilteredLogView;
     class OperationSequenceTool;
     class SenderSequenceTool;
+    class AbstractInputTool;
     class DumpTool;
 } // namespace gui
 
@@ -90,6 +91,8 @@ public slots:
     void showSenderSequenceTool();
     void createDumpTool();
     void showDumpTool();
+    void createPlotTool();
+    void showPlotTool();
 
     void showLoadDirectory();
     void showLoadScenario();
@@ -138,6 +141,7 @@ protected:
     OperationSequenceTool * m_operationSequenceTool;
     SenderSequenceTool * m_senderSequenceTool;
     DumpTool * m_dumpTool;
+    AbstractInputTool * m_plotTool;
 
     typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
     ObjrefViews_t m_objrefViews;

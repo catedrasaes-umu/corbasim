@@ -4,7 +4,7 @@ set(corbasim_qwt_EXPORTED_HEADERS
     qwt/export.hpp
     qwt/SimplePlot.hpp
     qwt/PlotModel.hpp
-    qwt/ReflectivePlotTool.hpp
+    qwt/PlotTool.hpp
     )
 
 foreach(_header ${corbasim_qwt_EXPORTED_HEADERS})
@@ -16,14 +16,14 @@ endforeach(_header ${corbasim_qwt_EXPORTED_HEADERS})
 set(corbasim_qwt_MOC_HDRS
     qwt/SimplePlot.hpp
     qwt/PlotModel.hpp
-    qwt/ReflectivePlotTool.hpp
+    qwt/PlotTool.hpp
     qwt/private/Plot.hpp
     )
 
 set(corbasim_qwt_SRCS
     qwt/SimplePlot.cpp
     qwt/PlotModel.cpp
-    qwt/ReflectivePlotTool.cpp
+    qwt/PlotTool.cpp
     qwt/private/Plot.cpp
     qwt/private/HistoricData.cpp
     )

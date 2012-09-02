@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * ReflectivePlotTool.hpp
+ * PlotTool.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -47,7 +47,7 @@ public:
     void process(Request_ptr req, 
             TypeDescriptor_ptr ref,
             Holder hold);
-
+    
 signals:
 
     void append(Request_ptr, 
@@ -66,6 +66,8 @@ public:
             QWidget * parent = 0);
     virtual ~ReflectivePlot();
 
+    virtual void start();
+
 public slots:
 
     void appendValue(Request_ptr, 
@@ -77,13 +79,13 @@ protected:
     SimplePlot * m_plot;
 };
 
-class CORBASIM_QWT_DECLSPEC ReflectivePlotTool : public AbstractInputTool
+class CORBASIM_QWT_DECLSPEC PlotTool : public AbstractInputTool
 {
     Q_OBJECT
 public:
 
-    ReflectivePlotTool(QWidget * parent = 0);
-    virtual ~ReflectivePlotTool();
+    PlotTool(QWidget * parent = 0);
+    virtual ~PlotTool();
 
 protected:
 
@@ -92,7 +94,7 @@ protected:
             OperationDescriptor_ptr reflective,
             const QList< int >& path);
 
-    ParametersModel * createModel() const;
+    ParametersModel * createModel();
 };
 
 } // namespace qwt

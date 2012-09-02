@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * ReflectivePlotTool.cpp
+ * PlotTool.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ReflectivePlotTool.hpp"
+#include "PlotTool.hpp"
 #include <corbasim/gui/utils.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
@@ -64,7 +64,7 @@ ReflectivePlot::ReflectivePlot(Objref_ptr objref,
             this,
             SLOT(appendValue(Request_ptr,
                     TypeDescriptor_ptr,
-                    iHolder)));
+                    Holder)));
 
     // widget
     QVBoxLayout * layout = new QVBoxLayout();
@@ -79,6 +79,11 @@ ReflectivePlot::ReflectivePlot(Objref_ptr objref,
 
 ReflectivePlot::~ReflectivePlot()
 {
+}
+
+void ReflectivePlot::start()
+{
+    emit addProcessor(m_processor);
 }
 
 void ReflectivePlot::appendValue(Request_ptr req, 
@@ -108,16 +113,17 @@ void ReflectivePlot::appendValue(Request_ptr req,
     }
 }
 
-ReflectivePlotTool::ReflectivePlotTool(QWidget * parent) :
+PlotTool::PlotTool(QWidget * parent) :
     AbstractInputTool(parent)
 {
+    setModel(createModel());
 }
 
-ReflectivePlotTool::~ReflectivePlotTool()
+PlotTool::~PlotTool()
 {
 }
 
-AbstractInputItem * ReflectivePlotTool::createItem(
+AbstractInputItem * PlotTool::createItem(
         Objref_ptr objref, 
         OperationDescriptor_ptr reflective,
         const QList< int >& path)
@@ -125,18 +131,18 @@ AbstractInputItem * ReflectivePlotTool::createItem(
     return new ReflectivePlot(objref, reflective, path); 
 }
 
-ParametersModel * ReflectivePlotTool::createModel() const
+ParametersModel * PlotTool::createModel()
 {
-    new PlotModel();
+    return new PlotModel(this);
 }
 
 extern "C" 
 {
 
-    corbasim::qwt::ReflectivePlotTool * createReflectivePlotTool(
+    corbasim::gui::AbstractInputTool * createPlotTool(
             QWidget * parent)
     {
-        return new corbasim::qwt::ReflectivePlotTool(parent);
+        return new corbasim::qwt::PlotTool(parent);
     }
 
 } // extern C
