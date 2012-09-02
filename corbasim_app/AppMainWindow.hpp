@@ -59,8 +59,8 @@ public:
     AppMainWindow(QWidget * parent = 0);
     virtual ~AppMainWindow();
 
-    // void save(QVariant& settings);
-    // void load(const QVariant& settings);
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
 
 public slots:
 
@@ -97,6 +97,9 @@ public slots:
     void showLoadDirectory();
     void showLoadScenario();
     void showSaveScenario();
+
+    void doLoadConfiguration();
+    void doSaveConfiguration();
 
     void actionHovered(QAction *);
 

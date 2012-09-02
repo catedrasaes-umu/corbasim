@@ -19,6 +19,7 @@
 
 #include "AppMainWindow.hpp"
 #include <iostream>
+#include <fstream>
 
 // Tools
 #include <corbasim/gui/tools/FilteredLogView.hpp>
@@ -30,6 +31,9 @@
 #include <corbasim/gui/item/OperationsView.hpp>
 #include <corbasim/gui/item/TreeView.hpp>
 #include <corbasim/qt/initialize.hpp>
+#include <corbasim/gui/json.hpp>
+
+#include <corbasim/version.hpp>
 
 using namespace corbasim::app;
 
@@ -197,6 +201,20 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     connect(loadDirectoryAction, SIGNAL(triggered()), 
             this, SLOT(showLoadDirectory()));
 
+    // Load configuration
+    QAction * loadConfigurationAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogOpenButton),
+            "&Load configuration", this);
+    connect(loadConfigurationAction, SIGNAL(triggered()), 
+            this, SLOT(doLoadConfiguration()));
+
+    // Save configuration
+    QAction * saveConfigurationAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogSaveButton),
+            "&Save configuration", this);
+    connect(saveConfigurationAction, SIGNAL(triggered()), 
+            this, SLOT(doSaveConfiguration()));
+
     // Show log
     QAction * showLogAction = new QAction(
             "Show &log", this);
@@ -229,6 +247,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     toolBar->addAction(saveScenarioAction);
     toolBar->addAction(clearScenarioAction);
     toolBar->addSeparator();
+    toolBar->addAction(loadConfigurationAction);
+    toolBar->addAction(saveConfigurationAction);
+    toolBar->addSeparator();
     toolBar->addAction(loadDirectoryAction);
     toolBar->addSeparator();
     toolBar->addAction(newObjAction);
@@ -245,6 +266,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuFile->addAction(loadScenarioAction);
     menuFile->addAction(saveScenarioAction);
     menuFile->addAction(clearScenarioAction);
+    menuFile->addSeparator();
+    menuFile->addAction(loadConfigurationAction);
+    menuFile->addAction(saveConfigurationAction);
     menuFile->addSeparator();
     menuFile->addAction(loadDirectoryAction);
     menuFile->addSeparator();
@@ -283,6 +307,98 @@ AppMainWindow::~AppMainWindow()
 {
 }
 
+void AppMainWindow::save(QVariant& settings)
+{
+    QVariantMap map;
+
+    // objects
+    {
+        QVariantList objects;
+
+        for (ObjrefViews_t::iterator it = m_objrefViews.begin(); 
+                it != m_objrefViews.end(); ++it) 
+        {
+            QVariant value;
+            (*it)->save(value);
+        }
+
+        map["objects"] = objects;
+    }
+
+    // Servants
+    {
+        QVariantList servants;
+
+        for (ServantViews_t::iterator it = m_servantViews.begin(); 
+                it != m_servantViews.end(); ++it) 
+        {
+            QVariant value;
+            (*it)->save(value);
+        }
+
+        map["servants"] = servants;
+    }
+
+    // Tools
+    {
+        if (m_filteredLogView)
+            m_filteredLogView->save(map["filtered_log"]);
+
+        if (m_senderSequenceTool)
+            m_senderSequenceTool->save(map["sender_sequences"]);
+
+        if (m_operationSequenceTool)
+            m_operationSequenceTool->save(map["sequences"]);
+
+        if (m_dumpTool)
+            m_dumpTool->save(map["dumpers"]);
+
+        if (m_plotTool)
+            m_plotTool->save(map["plots"]);
+    }
+
+    settings = map;
+}
+
+void AppMainWindow::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    // TODO objects and servants
+    
+    // Tools
+    {
+        if (map.contains("filtered_log"))
+        {
+            createFilteredLogView();
+            m_filteredLogView->load(map["filtered_log"]);
+        }
+
+        if (map.contains("sender_sequences"))
+        {
+            createSenderSequenceTool();
+            m_senderSequenceTool->load(map["sender_sequences"]);
+        }
+
+        if (map.contains("sequences"))
+        {
+            createOperationSequenceTool();
+            m_operationSequenceTool->load(map["sequences"]);
+        }
+
+        if (map.contains("dumpers"))
+        {
+            createDumpTool();
+            m_dumpTool->load(map["dumpers"]);
+        }
+
+        if (map.contains("plots"))
+        {
+            createPlotTool();
+            m_plotTool->load(map["plots"]);
+        }
+    }
+}
 
 void AppMainWindow::loadedInterface(
         InterfaceDescriptor_ptr interface)
@@ -662,6 +778,52 @@ void AppMainWindow::showSaveScenario()
     if (!file.isEmpty())
     {
         emit saveScenario(file);
+    }
+}
+
+void AppMainWindow::doLoadConfiguration()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".");
+
+    if (!file.isEmpty())
+    {
+        QVariant var;
+
+        // Try to Read a JSON file
+        bool res = 
+            gui::fromJsonFile(file.toStdString().c_str(), var);
+
+        if (res)
+        {
+            load(var);
+        }
+        else
+        {
+            QMessageBox::critical(this, 
+                    "Error loading configuration", 
+                    QString("Unable to load file ") +
+                    file);
+        }
+    }
+}
+
+void AppMainWindow::doSaveConfiguration()
+{
+    const QString file = 
+        QFileDialog::getSaveFileName(0, 
+                "Select a file", ".");
+
+    if (!file.isEmpty())
+    {
+        QVariant settings;
+        save(settings);
+
+        std::ofstream ofs(file.toStdString().c_str());
+        json::ostream_writer_t ow(ofs, true);
+
+        gui::toJson(ow, settings);
     }
 }
 
