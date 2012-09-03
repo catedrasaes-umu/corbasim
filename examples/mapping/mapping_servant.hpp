@@ -1,8 +1,62 @@
-#ifndef HUGE_SERVANT_HPP
-#define HUGE_SERVANT_HPP
+#ifndef MAPPING_SERVANT_HPP
+#define MAPPING_SERVANT_HPP
 
-#include "hugeS.h"
-#include "huge_adapted.hpp"
+#include "mappingS.h"
+#include "mapping_adapted.hpp"
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct servant< HelloApp::Hello >
+{
+	template < typename F >
+	class _type : public virtual POA_HelloApp::Hello
+	{
+	public:
+	
+		_type(F f) : 
+			__f(f)
+		{
+		}
+	
+		
+		char* sayHello()
+		{
+			_corbasim_HelloApp::Hello::sayHello _val;
+	
+			__f(_val);		
+			
+			return CORBA::string_dup(_val._return);
+		}
+		
+		char* sayHelloTo(const HelloApp::Names& people)
+		{
+			_corbasim_HelloApp::Hello::sayHelloTo _val(people);
+	
+			__f(_val);		
+			
+			return CORBA::string_dup(_val._return);
+		}
+		
+		void shutdown()
+		{
+			_corbasim_HelloApp::Hello::shutdown _val;
+	
+			__f(_val);		
+			
+		}
+		
+		
+	protected:
+		F __f;
+	};
+};
+
+} // adapted
+} // corbasim
 
 namespace corbasim
 {
@@ -1624,8 +1678,285 @@ struct servant< Test::Huge >
 } // adapted
 } // corbasim
 
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct servant< AAAAAAAAA::IIIIIIIIII >
+{
+	template < typename F >
+	class _type : public virtual POA_AAAAAAAAA::IIIIIIIIII
+	{
+	public:
+	
+		_type(F f) : 
+			__f(f)
+		{
+		}
+	
+		
+		AAAAAAAAA::EEESeq* op1()
+		{
+			_corbasim_AAAAAAAAA::IIIIIIIIII::op1 _val;
+	
+			__f(_val);		
+			
+			return _val._return._retn();
+		}
+		
+		AAAAAAAAA::ESS* op2()
+		{
+			_corbasim_AAAAAAAAA::IIIIIIIIII::op2 _val;
+	
+			__f(_val);		
+			
+			return _val._return._retn();
+		}
+		
+		
+	protected:
+		F __f;
+	};
+};
+
+} // adapted
+} // corbasim
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct servant< SimpleExample::Test >
+{
+	template < typename F >
+	class _type : public virtual POA_SimpleExample::Test
+	{
+	public:
+	
+		_type(F f) : 
+			__f(f)
+		{
+		}
+	
+		
+		void operation1(::CORBA::Long a, ::CORBA::Long b, const SimpleExample::St& c)
+		{
+			_corbasim_SimpleExample::Test::operation1 _val(a, b, c);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation4(SimpleExample::Test_ptr a)
+		{
+			_corbasim_SimpleExample::Test::operation4 _val(a);
+	
+			__f(_val);		
+			
+		}
+		
+		
+	protected:
+		F __f;
+	};
+};
+
+} // adapted
+} // corbasim
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct servant< StringTest::InterfaceString >
+{
+	template < typename F >
+	class _type : public virtual POA_StringTest::InterfaceString
+	{
+	public:
+	
+		_type(F f) : 
+			__f(f)
+		{
+		}
+	
+		
+		void operation1(const char* s)
+		{
+			_corbasim_StringTest::InterfaceString::operation1 _val(s);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation2(const char* n)
+		{
+			_corbasim_StringTest::InterfaceString::operation2 _val(n);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation3(const StringTest::NameSeq& n)
+		{
+			_corbasim_StringTest::InterfaceString::operation3 _val(n);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation4(const StringTest::StructWithStrings& n)
+		{
+			_corbasim_StringTest::InterfaceString::operation4 _val(n);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation5(const char* n)
+		{
+			_corbasim_StringTest::InterfaceString::operation5 _val(n);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation6(const StringTest::NameIDSeq& n)
+		{
+			_corbasim_StringTest::InterfaceString::operation6 _val(n);
+	
+			__f(_val);		
+			
+		}
+		
+		
+	protected:
+		F __f;
+	};
+};
+
+} // adapted
+} // corbasim
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct servant< MyModule::MyInterface >
+{
+	template < typename F >
+	class _type : public virtual POA_MyModule::MyInterface
+	{
+	public:
+	
+		_type(F f) : 
+			__f(f)
+		{
+		}
+	
+		
+		void operation(const MyModule::MyUnion& uni)
+		{
+			_corbasim_MyModule::MyInterface::operation _val(uni);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation1(const MyModule::MyUnion2& uni)
+		{
+			_corbasim_MyModule::MyInterface::operation1 _val(uni);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation2(const MyModule::MyStruct& uni)
+		{
+			_corbasim_MyModule::MyInterface::operation2 _val(uni);
+	
+			__f(_val);		
+			
+		}
+		
+		void operation3(const MyModule::MyUnion3& uni)
+		{
+			_corbasim_MyModule::MyInterface::operation3 _val(uni);
+	
+			__f(_val);		
+			
+		}
+		
+		
+	protected:
+		F __f;
+	};
+};
+
+} // adapted
+} // corbasim
+
+namespace corbasim
+{
+namespace adapted
+{
+
+template< >
+struct servant< Test::Prueba >
+{
+	template < typename F >
+	class _type : public virtual POA_Test::Prueba
+	{
+	public:
+	
+		_type(F f) : 
+			__f(f)
+		{
+		}
+	
+		
+		void operacion1(const Test::St2& a, const Test::St& b)
+		{
+			_corbasim_Test::Prueba::operacion1 _val(a, b);
+	
+			__f(_val);		
+			
+		}
+		
+		void operacion2(Test::Prueba_ptr myref)
+		{
+			_corbasim_Test::Prueba::operacion2 _val(myref);
+	
+			__f(_val);		
+			
+		}
+		
+		void operacion3()
+		{
+			_corbasim_Test::Prueba::operacion3 _val;
+	
+			__f(_val);		
+			
+		}
+		
+		
+	protected:
+		F __f;
+	};
+};
+
+} // adapted
+} // corbasim
 
 
-#endif // HUGE_SERVANT_HPP
+#endif // MAPPING_SERVANT_HPP
 
 
