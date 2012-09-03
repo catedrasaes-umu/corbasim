@@ -34,8 +34,8 @@ using namespace corbasim::gui;
 
 SimpleClient::SimpleClient(QWidget * parent) :
     QMainWindow(parent), m_actions(this),
-    m_script_editor(NULL), m_dlg_seq_tool(NULL),
-    m_seq_tool(NULL)
+    m_script_editor(NULL), m_dlgSeqTool(NULL),
+    m_seqTool(NULL)
 {
     corbasim::gui::initialize();
 
@@ -64,7 +64,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QAction * act = menuWindow->addAction("&Reference");
     act->setCheckable(true);
     act->setChecked(true);
-    QObject::connect(act, SIGNAL(toggled(bool)), gb,
+    connect(act, SIGNAL(toggled(bool)), gb,
         SLOT(setVisible(bool)));
     QHBoxLayout * gbLayout = new QHBoxLayout;
     m_ref = new qt::ObjrefWidget;
@@ -78,7 +78,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     act = menuWindow->addAction("&Operations");
     act->setCheckable(true);
     act->setChecked(true);
-    QObject::connect(act, SIGNAL(toggled(bool)), gb,
+    connect(act, SIGNAL(toggled(bool)), gb,
         SLOT(setVisible(bool)));
     QVBoxLayout * opsLayout = new QVBoxLayout;
     m_tab = new QTabWidget;
@@ -91,7 +91,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     act = menuWindow->addAction("&Events");
     act->setCheckable(true);
     act->setChecked(true);
-    QObject::connect(act, SIGNAL(toggled(bool)), gb,
+    connect(act, SIGNAL(toggled(bool)), gb,
         SLOT(setVisible(bool)));
 
     gbLayout = new QHBoxLayout;
@@ -104,10 +104,10 @@ SimpleClient::SimpleClient(QWidget * parent) :
     // Filtered log
     QDialog * filteredLogDlg = new QDialog(this);
     QVBoxLayout * filteredLayout = new QVBoxLayout();
-    m_filtered_log = new FilteredLogView();
-    m_filtered_log->setLogModel(&m_log_model);
+    m_filteredLog = new FilteredLogView();
+    m_filteredLog->setLogModel(&m_log_model);
     filteredLayout->setMargin(0);
-    filteredLayout->addWidget(m_filtered_log);
+    filteredLayout->addWidget(m_filteredLog);
     filteredLogDlg->setLayout(filteredLayout);
     filteredLogDlg->hide();
 
@@ -116,7 +116,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load configuration", this);
     loadAction->setShortcut(QKeySequence::Open);
-    QObject::connect(loadAction, SIGNAL(triggered()), 
+    connect(loadAction, SIGNAL(triggered()), 
             this, SLOT(doLoad()));
 
     // Save
@@ -124,7 +124,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save configuration", this);
     saveAction->setShortcut(QKeySequence::SaveAs);
-    QObject::connect(saveAction, SIGNAL(triggered()), 
+    connect(saveAction, SIGNAL(triggered()), 
             this, SLOT(doSave()));
 
     menuFile->addAction(loadAction);
@@ -141,24 +141,24 @@ SimpleClient::SimpleClient(QWidget * parent) :
     QAction * pasteAction = new QAction("Paste &IOR from clipboard", 
             this);
     pasteAction->setShortcut(QKeySequence::Paste);
-    QObject::connect(pasteAction, SIGNAL(triggered()), 
+    connect(pasteAction, SIGNAL(triggered()), 
             this, SLOT(pasteIOR()));
 
     QAction * clearAction = new QAction("&Clear",
             this);
     clearAction->setShortcut(QKeySequence::Cut);
-    QObject::connect(clearAction, SIGNAL(triggered()), 
+    connect(clearAction, SIGNAL(triggered()), 
             this, SLOT(clearAll()));
 
     QAction * clearLogAction = new QAction("&Clear log",
             this);
-    QObject::connect(clearLogAction, SIGNAL(triggered()), 
+    connect(clearLogAction, SIGNAL(triggered()), 
             &m_log_model, SLOT(clearLog()));
 
     QAction * stopAction = new QAction("&Stop all timers",
             this);
     // stopAction->setShortcut(QKeySequence::Cut);
-    QObject::connect(stopAction, SIGNAL(triggered()), 
+    connect(stopAction, SIGNAL(triggered()), 
             this, SLOT(stopAllTimers()));
 
     editMenu->addAction(pasteAction);
@@ -169,11 +169,14 @@ SimpleClient::SimpleClient(QWidget * parent) :
     central->setLayout(layout);
     setCentralWidget(central);
 
-    QObject::connect(&m_buttons, SIGNAL(buttonClicked(int)), 
+    connect(&m_buttons, SIGNAL(buttonClicked(int)), 
             this, SLOT(showDialog(int)));
 
-    QObject::connect(&m_actions, SIGNAL(triggered(QAction *)), 
+    connect(&m_actions, SIGNAL(triggered(QAction *)), 
             this, SLOT(showDialog(QAction *)));
+
+    connect(m_ref, SIGNAL(valueHasChanged(CORBA::Object_var)),
+            this, SIGNAL(applyUpdateReference(const CORBA::Object_var&)));
 
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
@@ -204,22 +207,22 @@ void SimpleClient::initialize(Objref_ptr objref)
     m_objref = objref;
 
     // Signals
-    QObject::connect(this, SIGNAL(sendRequest(Request_ptr)),
+    connect(this, SIGNAL(sendRequest(Request_ptr)),
             m_objref.get(), SLOT(sendRequest(Request_ptr)));
-    QObject::connect(this, SIGNAL(applyUpdateReference(CORBA::Object_var)),
+    connect(this, SIGNAL(applyUpdateReference(CORBA::Object_var)),
             m_objref.get(), SLOT(setReference(const CORBA::Object_var&)));
 
     m_log_model.registerInstance(m_objref);
 
-    QObject::connect(m_objref.get(), 
+    connect(m_objref.get(), 
             SIGNAL(requestSent(ObjectId, const Request_ptr&, const Event_ptr&)),
             &m_log_model, 
             SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 
-    m_filtered_log->registerInstance(m_objref);
+    m_filteredLog->registerInstance(m_objref);
 
-    if (m_seq_tool)
-        m_seq_tool->objrefCreated(m_objref);
+    if (m_seqTool)
+        m_seqTool->objrefCreated(m_objref);
 
     QGridLayout * grid = NULL;
     InterfaceDescriptor_ptr factory = m_objref->interface();
@@ -298,7 +301,7 @@ corbasim::gui::RequestDialog * SimpleClient::getRequestDialog(int idx)
         dlg = new RequestDialog(op, this);
         dlg->setWindowTitle(name);
 
-        QObject::connect(dlg,
+        connect(dlg,
             SIGNAL(sendRequest(Request_ptr)),
             this, 
             SIGNAL(sendRequest(Request_ptr)));
@@ -317,7 +320,7 @@ void SimpleClient::showScriptEditor()
         m_script_editor->initialize(m_objref->interface());
 
         // Send Request
-        QObject::connect(m_script_editor,
+        connect(m_script_editor,
                 SIGNAL(sendRequest(Request_ptr)),
                 this, 
                 SIGNAL(sendRequest(Request_ptr)));
@@ -361,7 +364,7 @@ void SimpleClient::load(const QVariant& settings)
 
     if (map.contains("filtered_log"))
     {
-        m_filtered_log->load(map["filtered_log"]);
+        m_filteredLog->load(map["filtered_log"]);
     }
 
     if (map.contains("operations"))
@@ -369,7 +372,7 @@ void SimpleClient::load(const QVariant& settings)
         // ensure created
         showOperationSequenceTool();
 
-        m_seq_tool->load(map["operations"]);
+        m_seqTool->load(map["operations"]);
     }
 }
 
@@ -393,10 +396,10 @@ void SimpleClient::save(QVariant& settings)
 
     // Filtered log
     QVariant filtered;
-    m_filtered_log->save(filtered);
+    m_filteredLog->save(filtered);
     map["filtered_log"] = filtered;
 
-    if (m_seq_tool) m_seq_tool->save(map["operations"]);
+    if (m_seqTool) m_seqTool->save(map["operations"]);
 
     settings = map;
 }
@@ -492,21 +495,21 @@ void SimpleClient::updateReference(const CORBA::Object_var& ref)
 
 void SimpleClient::showOperationSequenceTool()
 {
-    if (!m_seq_tool)
+    if (!m_seqTool)
     {
         QVBoxLayout * layout = new QVBoxLayout();
         layout->setMargin(0);
-        m_dlg_seq_tool = new QDialog(this);
-        m_seq_tool = new gui::OperationSequenceTool();
+        m_dlgSeqTool = new QDialog(this);
+        m_seqTool = new gui::OperationSequenceTool();
         
-        layout->addWidget(m_seq_tool);
-        m_dlg_seq_tool->setLayout(layout);
+        layout->addWidget(m_seqTool);
+        m_dlgSeqTool->setLayout(layout);
 
         // Initializes the tool
         if (m_objref->interface())
-            m_seq_tool->objrefCreated(m_objref);
+            m_seqTool->objrefCreated(m_objref);
     }
 
-    m_dlg_seq_tool->show();
+    m_dlgSeqTool->show();
 }
 

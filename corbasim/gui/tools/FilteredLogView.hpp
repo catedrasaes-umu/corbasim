@@ -24,16 +24,19 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QScrollArea>
-#include <corbasim/gui/item/FilterModel.hpp>
+
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
-#include <corbasim/gui/ReflectiveGUI.hpp>
+#include <corbasim/gui/item/FilterModel.hpp>
+
 
 namespace corbasim 
 {
 namespace gui 
 {
+
+class LogModel;
 
 class CORBASIM_GUI_DECLSPEC EntryViewer : public QWidget
 {

@@ -20,9 +20,7 @@
 #include "LogModel.hpp"
 #include <QStyle>
 #include <QApplication>
-#include <QDateTime>
 
-#include <corbasim/core/reference_repository.hpp>
 #include <corbasim/gui/qvariant.hpp>
 
 #include <corbasim/gui/item/FilterModel.hpp>

@@ -22,7 +22,6 @@
 #include <limits>
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
-#include <corbasim/qt/MultiFileSelectionWidget.hpp>
 
 #ifdef CORBASIM_USE_QTSCRIPT
 #include <corbasim/qt/private/ScriptEditor.hpp>

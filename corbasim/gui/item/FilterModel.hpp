@@ -1,8 +1,8 @@
 #ifndef CORBASIM_GUI_FILTERMODEL_HPP
 #define CORBASIM_GUI_FILTERMODEL_HPP
 
-#include <QStandardItemModel>
 #include <QMap>
+#include <QStandardItemModel>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>

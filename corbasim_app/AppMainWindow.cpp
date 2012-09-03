@@ -311,6 +311,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuWindow->addAction(showInterfacesAction);
     menuWindow->addSeparator();
     menuWindow->addAction(stopAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction("Cascade", mdiArea, SLOT(cascadeSubWindows()));
+    menuWindow->addAction("Tile", mdiArea, SLOT(tileSubWindows()));
 
     menuHelp->addAction(aboutAction);
 

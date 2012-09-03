@@ -1,8 +1,8 @@
 #ifndef CORBASIM_GUI_INTERFACEMODEL_HPP
 #define CORBASIM_GUI_INTERFACEMODEL_HPP
 
-#include <QAbstractItemModel>
 #include <QList>
+#include <QAbstractItemModel>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>

@@ -102,10 +102,10 @@ protected:
     typedef std::vector< RequestDialog * > dialogs_t;
     dialogs_t m_dialogs;
 
-    FilteredLogView * m_filtered_log;
+    FilteredLogView * m_filteredLog;
 
-    QDialog * m_dlg_seq_tool;
-    OperationSequenceTool * m_seq_tool;
+    QDialog * m_dlgSeqTool;
+    OperationSequenceTool * m_seqTool;
 
     static const int _max_btns_per_row = 4;
     static const int _max_btns_per_page = 16;

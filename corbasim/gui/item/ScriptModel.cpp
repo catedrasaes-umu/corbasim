@@ -20,10 +20,8 @@
 #include "ScriptModel.hpp"
 #include <QStyle>
 #include <QApplication>
-#include <QDateTime>
 #include <QMimeData>
 
-#include <corbasim/core/reference_repository.hpp>
 #include <corbasim/gui/qvariant.hpp>
 
 #include <corbasim/json/reflective.hpp>

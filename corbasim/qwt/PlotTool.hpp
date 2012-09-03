@@ -20,12 +20,9 @@
 #ifndef CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
 #define CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
 
-#include <corbasim/qwt/PlotModel.hpp>
-#include <corbasim/qwt/SimplePlot.hpp>
-#include <corbasim/gui/tools/AbstractInputTool.hpp>
-#include <corbasim/gui/Model.hpp>
-
 #include <corbasim/qwt/export.hpp>
+#include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/tools/AbstractInputTool.hpp>
 
 namespace corbasim 
 {
@@ -33,6 +30,9 @@ namespace qwt
 {
 
 using namespace ::corbasim::gui;
+
+class SimplePlot;
+class PlotModel;
 
 class CORBASIM_QWT_DECLSPEC PlotProcessor : public QObject,
     public RequestProcessor

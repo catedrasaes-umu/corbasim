@@ -19,6 +19,7 @@
 
 #include "AbstractSequenceTool.hpp"
 #include <corbasim/gui/json.hpp>
+#include <corbasim/gui/item/OperationsView.hpp>
 
 #include <fstream>
 #include <iostream>

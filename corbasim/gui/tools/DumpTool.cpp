@@ -18,7 +18,6 @@
  */
 
 #include "DumpTool.hpp"
-#include <corbasim/gui/utils.hpp>
 #include <corbasim/core/file_format_helper.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>

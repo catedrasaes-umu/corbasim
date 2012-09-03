@@ -1,9 +1,6 @@
 #ifndef CORBASIM_QWT_PLOTMODEL_HPP
 #define CORBASIM_QWT_PLOTMODEL_HPP
 
-#include <QStandardItemModel>
-#include <corbasim/core/reflective_fwd.hpp>
-#include <list>
 #include <corbasim/qwt/export.hpp>
 #include <corbasim/gui/item/ParametersModel.hpp>
 

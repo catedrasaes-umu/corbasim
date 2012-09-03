@@ -22,6 +22,7 @@
 #include <QTreeView>
 #include <QSplitter>
 #include <corbasim/gui/item/TreeView.hpp>
+#include <corbasim/gui/ReflectiveGUI.hpp>
 
 using namespace corbasim::gui;
 

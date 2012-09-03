@@ -1,6 +1,5 @@
 #include "FilterModel.hpp"
 #include <iostream>
-#include <boost/next_prior.hpp>
 
 using namespace corbasim::gui;
 

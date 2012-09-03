@@ -18,9 +18,8 @@
  */
 
 #include "PlotTool.hpp"
-#include <corbasim/gui/utils.hpp>
-#include <QHBoxLayout>
-#include <QTreeView>
+#include <corbasim/qwt/SimplePlot.hpp>
+#include <corbasim/qwt/PlotModel.hpp>
 
 #include <iostream>
 

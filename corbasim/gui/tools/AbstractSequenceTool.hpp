@@ -26,12 +26,13 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/InstanceModel.hpp>
-#include <corbasim/gui/item/OperationsView.hpp>
 
 namespace corbasim 
 {
 namespace gui 
 {
+
+class OperationsView;
 
 class CORBASIM_GUI_DECLSPEC AbstractSequenceItem : 
     public QFrame
@@ -116,8 +117,6 @@ protected:
 
     /**
      * @brief The sequence name. 
-     *
-     * TODO Currently it is not possible to modify.
      */
     QString m_name;
 

@@ -20,8 +20,6 @@
 #ifndef CORBASIM_GUI_NEWLOGMODEL_HPP
 #define CORBASIM_GUI_NEWLOGMODEL_HPP
 
-#include <map>
-
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include <QDateTime>

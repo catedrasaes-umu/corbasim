@@ -19,14 +19,9 @@
 
 #include "AbstractInputTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
-#include <corbasim/gui/utils.hpp>
-#include <corbasim/core/file_format_helper.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
 
-#include <fstream>
-#include <sstream>
-#include <iomanip>
 #include <iostream>
 
 using namespace corbasim::gui;
