@@ -39,6 +39,8 @@ LogModel::LogModel(QObject * parent) :
 {
     m_inputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
     m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
+
+    m_entries.reserve(2 * m_maxEntries);
 }
 
 LogModel::~LogModel()
@@ -340,7 +342,7 @@ int LogModel::maxEntries() const
 void LogModel::setMaxEntries(int max)
 {
     m_maxEntries = max;
-
+    m_entries.reserve(2 * m_maxEntries);
     // TODO remove
 }
 

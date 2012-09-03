@@ -241,6 +241,18 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     connect(stopAction, SIGNAL(triggered()), 
             this, SLOT(stopAll()));
 
+    // About
+    QAction * setMaxLogSizeAction = new QAction(
+            "Set &max log size", this);
+    connect(setMaxLogSizeAction, SIGNAL(triggered()), 
+            this, SLOT(showSetMaxLogSize()));
+
+    // About
+    QAction * aboutAction = new QAction(
+            "&About corbasim", this);
+    connect(aboutAction, SIGNAL(triggered()), 
+            this, SLOT(showAbout()));
+
     // Tool bar
     QToolBar * toolBar = addToolBar("File");
     toolBar->addAction(loadScenarioAction);
@@ -291,6 +303,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     menuWindow->addAction(setNSAction);
     menuWindow->addSeparator();
+    menuWindow->addAction(setMaxLogSizeAction);
     menuWindow->addAction(showLogAction);
     menuWindow->addAction(clearAction);
     menuWindow->addSeparator();
@@ -298,6 +311,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuWindow->addAction(showInterfacesAction);
     menuWindow->addSeparator();
     menuWindow->addAction(stopAction);
+
+    menuHelp->addAction(aboutAction);
 
     // Subwindows
     m_subWindows.resize(kSubWindowsMax, NULL);
@@ -911,6 +926,30 @@ void AppMainWindow::selectedOperation(Objref_ptr object,
                 (*it)->showRequestDialog(op);
             }
         }
+    }
+}
+
+void AppMainWindow::showAbout()
+{
+    static const char * aboutText = 
+        "corbasim version " CORBASIM_VERSION "\n"
+        "Developed by: Andres Senac <andres@senac.es>";
+
+    QMessageBox::about(this, "About corbasim", 
+            aboutText);
+}
+
+void AppMainWindow::showSetMaxLogSize()
+{   
+    bool ok = false;
+    int res = QInputDialog::getInt(this, "Max log size",
+            "Insert the log maximum size", 
+            m_logModel.maxEntries(),
+            1, 10000, 1, &ok);
+
+    if (ok)
+    {
+        m_logModel.setMaxEntries(res);
     }
 }
 

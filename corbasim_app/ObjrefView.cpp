@@ -402,6 +402,7 @@ void ObjrefView::showClient()
     {
         m_client = new SimpleClient(qobject_cast< QWidget *>(parent()));
         m_client->initialize(m_objref);
+        m_client->setWindowTitle(m_objref->name());
     }
     
     m_client->show();

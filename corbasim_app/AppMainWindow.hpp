@@ -107,6 +107,10 @@ public slots:
 
     void selectedOperation(Objref_ptr, OperationDescriptor_ptr);
 
+    void showAbout();
+
+    void showSetMaxLogSize();
+
 signals:
 
     void createObjref(const ObjrefConfig&);

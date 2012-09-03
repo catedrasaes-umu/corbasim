@@ -3,7 +3,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set(CORBASIM_PREFIX corbasim_)
 set(corbasim_app_SRCS
     AppMainWindow.cpp
-    AboutDialog.cpp
     AppConfiguration.cpp
 
     ObjrefView.cpp
@@ -19,7 +18,6 @@ set(corbasim_app_SRCS
 
 set(corbasim_app_MOC_HDRS
     AppMainWindow.hpp
-    AboutDialog.hpp
 
     ObjrefView.hpp
     ServantView.hpp
