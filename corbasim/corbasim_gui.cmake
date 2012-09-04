@@ -7,6 +7,12 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/types.hpp
     gui/utils.hpp
 
+    # proc
+    gui/proc/RequestProcessor.hpp
+    gui/proc/DumpProcessor.hpp
+    gui/proc/FileLoaderProcessor.hpp
+    gui/proc/HolderEmitter.hpp
+
     # item models
     gui/item/FilterModel.hpp
     gui/item/InstanceModel.hpp
@@ -63,6 +69,11 @@ set(corbasim_gui_MOC_HDRS
     gui/Model.hpp
     gui/Application.hpp
 
+    # proc
+    gui/proc/DumpProcessor.hpp
+    gui/proc/FileLoaderProcessor.hpp
+    gui/proc/HolderEmitter.hpp
+
     # item models
     gui/item/LogModel.hpp
     gui/item/InstanceModel.hpp
@@ -115,6 +126,12 @@ set(corbasim_gui_SRCS
     gui/initialize.cpp
     gui/Model.cpp
     gui/Application.cpp
+
+    # proc
+    gui/proc/RequestProcessor.cpp
+    gui/proc/DumpProcessor.cpp
+    gui/proc/FileLoaderProcessor.cpp
+    gui/proc/HolderEmitter.cpp
 
     # item model
     gui/item/ModelNode.cpp

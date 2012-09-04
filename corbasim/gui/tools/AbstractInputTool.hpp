@@ -23,7 +23,7 @@
 #include <QtGui>
 #include <corbasim/gui/item/ParametersModel.hpp>
 #include <corbasim/gui/Model.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/proc/RequestProcessor.hpp>
 #include <map>
 
 #include <corbasim/gui/export.hpp>

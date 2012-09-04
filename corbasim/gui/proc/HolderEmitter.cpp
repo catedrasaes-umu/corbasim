@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * utils.hpp
+ * HolderEmitter.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,38 +17,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_GUI_UTILS_HPP
-#define CORBASIM_GUI_UTILS_HPP
+#include "HolderEmitter.hpp"
+#include <iostream>
 
-#include <QList>
-#include <QString>
-#include <corbasim/gui/export.hpp>
-#include <corbasim/gui/types.hpp>
+using namespace corbasim::gui;
 
-namespace corbasim 
+HolderEmitter::HolderEmitter(Objref_ptr objref,
+        const QList< int >& path) :
+    RequestProcessor(objref, path)
 {
-namespace gui 
+}
+
+HolderEmitter::~HolderEmitter()
 {
+}
 
-typedef QList< int > ReflectivePath_t;
-
-QString getFieldName(OperationDescriptor_ptr operation,
-        const ReflectivePath_t& path);
-
-TypeDescriptor_ptr followPath(
-        OperationDescriptor_ptr operation,
-        const ReflectivePath_t& path);
-
-bool followPath(
-        OperationDescriptor_ptr operation,
-        Holder holder,
-        const ReflectivePath_t& path,
-        TypeDescriptor_ptr& descriptor,
-        Holder& value);
-
-InterfaceDescriptor_ptr getReflectiveByFQN(const char * fqn);
-
-} // namespace gui
-} // namespace corbasim
-#endif /* CORBASIM_GUI_UTILS_HPP */
+void HolderEmitter::process(Request_ptr req, 
+        TypeDescriptor_ptr ref,
+        Holder hold)
+{
+    emit append(req, ref, hold);
+}
 

@@ -11,7 +11,8 @@ namespace corbasim
 namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC ParametersModel : public QStandardItemModel
+class CORBASIM_GUI_DECLSPEC ParametersModel : 
+    public QStandardItemModel
 {
     Q_OBJECT
 

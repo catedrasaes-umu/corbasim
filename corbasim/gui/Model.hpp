@@ -34,10 +34,16 @@ class CORBASIM_GUI_DECLSPEC Objref : public QObject
     Q_OBJECT
     Q_PROPERTY(ObjectId id READ id)
     Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(InterfaceDescriptor_ptr interface READ interface)
+    Q_PROPERTY(InterfaceDescriptor_ptr interface 
+            READ interface)
     Q_PROPERTY(CORBA::Object_var reference 
             READ reference 
             WRITE setReference)
+    /*
+    Q_PROPERTY(QString nsEntry
+            READ nsEntry
+            WRITE setNsEntry)
+            */
 public:
 
     Objref(const QString& name,

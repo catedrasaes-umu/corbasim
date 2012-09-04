@@ -21,12 +21,12 @@
 #define CORBASIM_GUI_PARAMETERSFROMFILESTOOL_HPP
 
 #include <QtGui>
-#include <map>
+#include <QList>
 #include <fstream>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/item/OperationParametersModel.hpp>
-#include <corbasim/gui/Sender.hpp>
+#include <corbasim/gui/proc/FileLoaderProcessor.hpp>
 
 namespace corbasim 
 {
@@ -39,47 +39,6 @@ class SortableGroupItem;
 namespace gui 
 {
 
-class FilesItemProcessor;
-
-typedef boost::shared_ptr< FilesItemProcessor > FilesItemProcessor_ptr;
-
-class CORBASIM_GUI_DECLSPEC FilesItemProcessor : public SenderItemProcessor
-{
-    Q_OBJECT
-public:
-
-    FilesItemProcessor(
-        OperationDescriptor_ptr reflective,
-        const QList< int > path,
-        const QStringList files,
-        int currentFile,
-        const int format,
-        const bool repeat);
-
-    virtual ~FilesItemProcessor();
-    
-    void process( 
-            TypeDescriptor_ptr reflective,
-            Holder holder);
-
-signals:
-
-    void nextFile(int index);
-
-protected:
-
-    void openFile();
-
-    OperationDescriptor_ptr m_reflective;
-    const QStringList m_files;
-    int m_currentFile;
-    const int m_format;
-    const bool m_repeat;
-
-    typedef boost::shared_ptr< std::ifstream > ifstream_ptr;
-    ifstream_ptr m_currentIStream;
-};
-
 class CORBASIM_GUI_DECLSPEC FilesItem : public QWidget
 {
     Q_OBJECT
@@ -90,6 +49,7 @@ class CORBASIM_GUI_DECLSPEC FilesItem : public QWidget
 public:
 
     FilesItem(
+            Objref_ptr objref,
             OperationDescriptor_ptr reflective,
             const QList< int >& path, 
             QWidget * parent = 0);
@@ -97,7 +57,7 @@ public:
 
     OperationDescriptor_ptr getReflective() const;
 
-    inline const QList< int >& getPath() const
+    inline const QList< int >& path() const
     {
         return m_path;
     }
@@ -111,7 +71,7 @@ public:
     int format() const;
     bool repeat() const;
 
-    FilesItemProcessor_ptr createProcessor();
+    FileLoaderProcessor_ptr createProcessor();
 
 signals:
 
@@ -123,6 +83,7 @@ protected slots:
 
 protected:
 
+    Objref_ptr m_objref;
     OperationDescriptor_ptr m_reflective;
     const QList< int > m_path;
 
@@ -133,7 +94,8 @@ protected:
     QCheckBox * m_repeat;
 };
 
-class CORBASIM_GUI_DECLSPEC ParametersFromFilesTool : public QWidget
+class CORBASIM_GUI_DECLSPEC ParametersFromFilesTool : 
+    public QWidget
 {
     Q_OBJECT
 public:
@@ -145,18 +107,19 @@ public:
     void load(const QVariant& settings);
 
     void initialize(
+            Objref_ptr objref,
             OperationDescriptor_ptr reflective);
 
-    void createProcessors(QList< SenderItemProcessor_ptr >& processors);
+    void createProcessors(QList< RequestProcessor_ptr >& processors);
 
 public slots:
 
     FilesItem * createFilesItem(
-            OperationDescriptor_ptr reflective,
+            OperationDescriptor_ptr,
             const QList< int >& path);
 
     void deleteFilesItem(
-            OperationDescriptor_ptr reflective,
+            OperationDescriptor_ptr,
             const QList< int >& path);
 
     void clear();
@@ -169,12 +132,11 @@ protected:
     OperationParametersModel m_model;
     qt::SortableGroup * m_group;
 
-    typedef tag_t key_t;
-    typedef std::map< key_t, QList< FilesItem * > > map_t;
-    typedef std::map< FilesItem *, key_t > inverse_map_t;
-
-    map_t m_map;
-    inverse_map_t m_inverse_map;
+    typedef QList< FilesItem * > items_t;
+    items_t m_items;
+    
+    Objref_ptr m_objref;
+    OperationDescriptor_ptr m_operation;
 };
 
 } // namespace gui

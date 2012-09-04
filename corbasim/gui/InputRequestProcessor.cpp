@@ -18,6 +18,7 @@
  */
 
 #include "InputRequestProcessor.hpp"
+#include <corbasim/gui/utils.hpp>
 
 using namespace corbasim::gui;
 
@@ -28,69 +29,11 @@ corbasim::gui::getDefaultInputRequestController()
     return &_instance;
 }
 
-namespace  
-{
-
-void processRecursive(corbasim::core::reflective_base const * reflec,
-        RequestProcessor_ptr processor,
-        corbasim::event::request_ptr& req,
-        corbasim::core::holder& hold,
-        int level)
-{
-    using namespace corbasim;
-
-    const ReflectivePath_t& path = processor->getPath();
-
-    int size = path.size();
-
-    core::holder tmp = hold;
-
-    for (int i = 1; i < size; i++) 
-    {
-        // Unsupported case!
-        if (reflec->is_variable_length()) return;
-
-        tmp = reflec->get_child_value(tmp, path[i]);
-
-        if (reflec->get_type() == core::TYPE_STRUCT)
-        {
-            reflec = reflec->get_child(path[i]);
-        }
-        else if(reflec->is_repeated())
-        {
-            reflec = reflec->get_slice();
-        } 
-        else
-            return; // Unsupported case!
-    }
-
-    processor->process(req, reflec, tmp);
-}
-
-} // namespace 
-
-RequestProcessor::RequestProcessor(Objref_ptr object,
-        const ReflectivePath_t& path) :
-    m_object(object), m_path(path)
-{
-}
-
-RequestProcessor::~RequestProcessor() {}
-
-Objref_ptr RequestProcessor::object() const
-{
-    return m_object;
-}
-
-ObjectId RequestProcessor::id() const
-{
-    return m_object->id();
-}
-
-const ReflectivePath_t& RequestProcessor::getPath() const
-{
-    return m_path;
-}
+//
+//
+// Input Request Controller
+//
+//
 
 InputRequestController::InputRequestController(QObject * parent) :
     QObject(parent)
@@ -139,17 +82,28 @@ void InputRequestController::processRequest(ObjectId id,
     if (it != m_processors.end() && 
             !it->second.empty())
     {
-        for (processors_t::const_iterator pit = it->second.begin(); 
-                pit != it->second.end(); ++pit) 
+        // Iterates over its associated processors
+        processors_t::const_iterator pit = it->second.begin(); 
+
+        for (; pit != it->second.end(); ++pit) 
         {
-            unsigned int idx = (unsigned int) (*pit)->getPath().front();
+            const RequestProcessor_ptr processor = *pit;
+            const ReflectivePath_t& path = processor->path();
+            const OperationDescriptor_ptr op = 
+                processor->operation();
 
-            OperationDescriptor_ptr op = 
-                (*pit)->object()->interface()->get_reflective_by_index(idx);
+            Holder holder = op->get_holder(req);
 
-            Holder hold = op->get_holder(req);
-            
-            processRecursive(op, *pit, req, hold, 1);
+            // Results
+            TypeDescriptor_ptr descriptor = NULL;
+            Holder value;
+
+            bool res = followPath(op, holder, path, 
+                    // Results
+                    descriptor, value);
+
+            if (res)
+                processor->process(req, descriptor, value);
         }
     }
 }
@@ -157,9 +111,7 @@ void InputRequestController::processRequest(ObjectId id,
 void InputRequestController::addProcessor(
         RequestProcessor_ptr p)
 {
-    OperationDescriptor_ptr op =
-        p->object()->interface()->get_reflective_by_index(
-                p->getPath().front());
+    const OperationDescriptor_ptr op = p->operation();
 
     // Inserts the processor
     key_t key (p->id(), op->get_tag());
@@ -169,9 +121,7 @@ void InputRequestController::addProcessor(
 void InputRequestController::removeProcessor(
         RequestProcessor_ptr p)
 {
-    OperationDescriptor_ptr op =
-        p->object()->interface()->get_reflective_by_index(
-                p->getPath().front());
+    const OperationDescriptor_ptr op = p->operation();
 
     // Removes the processor
     key_t key (p->id(), op->get_tag());

@@ -70,6 +70,10 @@ struct array_reflective : public reflective_base
 
     array_reflective(reflective_base const * parent, unsigned int idx);
 
+    unsigned int get_children_count() const;
+
+    reflective_base const * get_child(unsigned int idx) const;
+
     bool is_repeated() const;
 
     reflective_base const * get_slice() const;
@@ -120,6 +124,8 @@ struct sequence_reflective : public reflective_base
             unsigned int idx = 0);
     
     ~sequence_reflective();
+
+    reflective_base const * get_child(unsigned int idx) const;
 
     bool is_repeated() const;
     bool is_variable_length() const;

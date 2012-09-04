@@ -18,129 +18,14 @@
  */
 
 #include "DumpTool.hpp"
-#include <corbasim/core/file_format_helper.hpp>
+#include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/proc/DumpProcessor.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
 
-#include <fstream>
-#include <sstream>
-#include <iomanip>
-#include <iostream>
-
 using namespace corbasim::gui;
 
-DumpProcessor::DumpProcessor(Objref_ptr object,
-        const ReflectivePath_t path, 
-        const Config& config) :
-    RequestProcessor(object, path), m_config(config),
-    m_currentIndex(0)
-{
-    switch(m_config.format)
-    {
-    case FORMAT_JSON:
-        m_extension = ".json";
-        break;
-
-    case FORMAT_TEXT:
-        m_extension = ".txt";
-        break;
-
-    case FORMAT_BINARY:
-        m_extension = ".bin";
-        break;
-
-    default:
-        break;
-    }
-    
-    nextFile();
-}
-
-DumpProcessor::~DumpProcessor()
-{
-}
-
-void DumpProcessor::nextFile()
-{
-    std::ostringstream oss;
-
-    oss << m_config.filePrefix 
-        << std::setfill('0')
-        << std::setw(m_config.suffixLength)
-        << m_currentIndex
-        << m_extension;
-
-    m_nextFile = oss.str();
-}
-
-void DumpProcessor::process(Request_ptr req, 
-        TypeDescriptor_ptr ref,
-        Holder hold)
-{
-    using namespace ::corbasim::core;
-
-    std::ios_base::openmode flags = std::ios_base::out;
-
-    const file_format_factory * factory = 
-        file_format_factory::get_instance();
-
-    if (!m_config.multipleFiles)
-    {
-        flags = flags | std::ios_base::app;
-    }
-
-    try 
-    {
-        switch(m_config.format)
-        {
-        case FORMAT_JSON:
-            {
-                std::ofstream out(m_nextFile.c_str(), flags);
-
-                factory->get_helper(FILE_FORMAT_JSON)->save(out, ref, hold);
-                
-                out.close();
-            }
-            break;
-
-        case FORMAT_TEXT:
-            {
-                std::ofstream out(m_nextFile.c_str(), flags);
-
-                factory->get_helper(FILE_FORMAT_TEXT)->save(out, ref, hold);
-
-                out.close();
-            }
-            break;
-
-        case FORMAT_BINARY:
-            {
-                flags = flags | std::ios::binary;
-
-                std::ofstream out(m_nextFile.c_str(), flags);
-
-                factory->get_helper(FILE_FORMAT_BINARY)->save(out, ref, hold);
-
-                out.close();
-            }
-            break;
-
-        default:
-            break;
-        }
-    } 
-    catch(...) 
-    {
-    }
-
-    if (m_config.multipleFiles)
-    {
-        m_currentIndex++;
-        nextFile();
-    }
-}
-
-// Reflective plot
+// Dumper
 
 Dumper::Dumper(Objref_ptr objref,
         OperationDescriptor_ptr reflective,

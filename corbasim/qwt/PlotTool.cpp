@@ -20,27 +20,11 @@
 #include "PlotTool.hpp"
 #include <corbasim/qwt/SimplePlot.hpp>
 #include <corbasim/qwt/PlotModel.hpp>
+#include <corbasim/gui/proc/HolderEmitter.hpp>
 
 #include <iostream>
 
 using namespace corbasim::qwt;
-
-PlotProcessor::PlotProcessor(Objref_ptr objref,
-        const QList< int >& path) :
-    RequestProcessor(objref, path)
-{
-}
-
-PlotProcessor::~PlotProcessor()
-{
-}
-
-void PlotProcessor::process(event::request_ptr req, 
-        core::reflective_base const * ref,
-        core::holder hold)
-{
-    emit append(req, ref, hold);
-}
 
 // Reflective plot
 
@@ -50,8 +34,8 @@ ReflectivePlot::ReflectivePlot(Objref_ptr objref,
         QWidget * parent) :
     AbstractInputItem(objref, reflective, path, parent)
 {
-    PlotProcessor * processor =
-        new PlotProcessor(objref, path);
+    HolderEmitter * processor =
+        new HolderEmitter(objref, path);
 
     m_processor.reset(processor);
 

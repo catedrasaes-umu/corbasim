@@ -91,19 +91,15 @@ class CORBASIM_GUI_DECLSPEC OperationForm :
 {
     Q_OBJECT
     Q_PROPERTY(QString code READ code WRITE setCode)
-    Q_PROPERTY(QString objectId READ objectId)
 public:
-    OperationForm(const QString& objectId = "this",
-            QWidget * parent = 0);
+    OperationForm(QWidget * parent = 0);
     virtual ~OperationForm();
     
-    void initialize(OperationDescriptor_ptr);
+    void initialize(Objref_ptr, OperationDescriptor_ptr);
 
     // Property code
     void setCode(const QString& code);
     QString code() const;
-    
-    const QString& objectId() const;
     
     Request_ptr createRequest();
 
@@ -115,7 +111,6 @@ public:
 
 protected:
 
-    const QString m_objectId;
     OperationDescriptor_ptr m_reflective;
 
     QPlainTextEdit * m_code;

@@ -29,6 +29,7 @@ public:
 public slots:
 
     void initialize(
+            int index,
             OperationDescriptor_ptr reflective);
 
     void check(const QList< int >& path);
@@ -50,6 +51,8 @@ protected:
         TypeDescriptor_ptr reflective);
 
     virtual bool isCheckable(TypeDescriptor_ptr reflective);
+
+    int m_index;
             
     OperationDescriptor_ptr m_reflective;
 };

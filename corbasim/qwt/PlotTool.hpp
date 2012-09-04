@@ -34,28 +34,8 @@ using namespace ::corbasim::gui;
 class SimplePlot;
 class PlotModel;
 
-class CORBASIM_QWT_DECLSPEC PlotProcessor : public QObject,
-    public RequestProcessor
-{
-    Q_OBJECT
-public:
-
-    PlotProcessor(Objref_ptr objref,
-            const QList< int >& path);
-    ~PlotProcessor();
-
-    void process(Request_ptr req, 
-            TypeDescriptor_ptr ref,
-            Holder hold);
-    
-signals:
-
-    void append(Request_ptr, 
-            TypeDescriptor_ptr,
-            Holder);
-};
-
-class CORBASIM_QWT_DECLSPEC ReflectivePlot : public AbstractInputItem
+class CORBASIM_QWT_DECLSPEC ReflectivePlot : 
+    public AbstractInputItem
 {
     Q_OBJECT
 public:

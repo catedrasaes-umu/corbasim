@@ -23,53 +23,12 @@
 #include <QtGui>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/proc/RequestProcessor.hpp>
 
 namespace corbasim 
 {
 namespace gui 
 {
-
-class CORBASIM_GUI_DECLSPEC DumpProcessor : public QObject,
-    public RequestProcessor
-{
-    Q_OBJECT
-public:
-
-    enum Format
-    {
-        FORMAT_BINARY,
-        FORMAT_TEXT,
-        FORMAT_JSON,
-        FORMAT_MAX
-    };
-
-    struct Config
-    {
-        bool multipleFiles;
-        std::string filePrefix;
-        Format format;
-        unsigned int suffixLength;
-    };
-
-    DumpProcessor(Objref_ptr object,
-            const ReflectivePath_t path,
-            const Config& config);
-    ~DumpProcessor();
-
-    void process(Request_ptr req, 
-            TypeDescriptor_ptr ref,
-            Holder hold);
-
-protected:
-
-    void nextFile();
-
-    const Config m_config;
-    unsigned int m_currentIndex;
-    std::string m_nextFile;
-    std::string m_extension;
-};
 
 class CORBASIM_GUI_DECLSPEC Dumper : public AbstractInputItem
 {

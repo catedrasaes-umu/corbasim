@@ -3,8 +3,11 @@
 
 using namespace corbasim::gui;
 
-OperationParametersModel::OperationParametersModel(QObject *parent)
-    : QStandardItemModel(parent), m_reflective(NULL)
+OperationParametersModel::OperationParametersModel(
+        QObject *parent) : 
+    QStandardItemModel(parent), 
+    m_index(0),
+    m_reflective(NULL)
 {
     QStringList headers;
     headers << "Parameters";
@@ -36,7 +39,7 @@ bool OperationParametersModel::setData(const QModelIndex & index,
         } while(parent.isValid());
         
         // Operation item
-        // path.pop_front();
+        path.front() = m_index;
         
         QStandardItem * mitem = itemFromIndex(index);
 
@@ -122,8 +125,11 @@ bool OperationParametersModel::isCheckable(TypeDescriptor_ptr reflective)
 }
 
 void OperationParametersModel::initialize(
+        int index,
         OperationDescriptor_ptr op)
 {
+    m_index = index;
+
     QStandardItem * opItem = new QStandardItem(op->get_name());
     opItem->setEditable(false);
     opItem->setCheckable(isCheckable(op));

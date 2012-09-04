@@ -19,6 +19,7 @@
 
 #include "AbstractInputTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
+#include <corbasim/gui/InputRequestProcessor.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
 

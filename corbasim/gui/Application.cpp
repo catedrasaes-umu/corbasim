@@ -22,8 +22,12 @@
 #include <fstream>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/json.hpp>
+#include <boost/thread/shared_mutex.hpp>
 
 using namespace corbasim::gui;
+
+typedef boost::shared_lock< boost::shared_mutex > shared_lock;
+typedef boost::unique_lock< boost::shared_mutex > unique_lock;
 
 struct Application::ApplicationData
 {
@@ -32,6 +36,10 @@ struct Application::ApplicationData
     CORBA::ORB_var m_orb;
     PortableServer::POA_var m_rootPOA;
     PortableServer::POAManager_var m_manager; 
+
+    // Mutex
+    boost::shared_mutex m_objrefsMutex;
+    boost::shared_mutex m_servantsMutex;
 
     ApplicationData(Application& this_) : 
         m_this(this_) 
@@ -279,6 +287,8 @@ void Application::loadInterface(const QString& fqn)
 
 void Application::createObjref(const ObjrefConfig& cfg)
 {
+    unique_lock lock(m_data->m_objrefsMutex);
+
     if (cfg.name.empty())
     {
         emit error("You must specify an object name");
@@ -318,6 +328,8 @@ void Application::createObjref(const ObjrefConfig& cfg)
 
 void Application::createServant(const ServantConfig& cfg)
 {
+    unique_lock lock(m_data->m_servantsMutex);
+
     if (cfg.name.empty())
     {
         emit error("You must specify an object name");
@@ -397,6 +409,8 @@ void Application::createServant(const ServantConfig& cfg)
 
 void Application::deleteObjref(ObjectId id)
 {
+    unique_lock lock(m_data->m_objrefsMutex);
+
     Objref_ptr obj = m_objrefs.find(id);
 
     if (obj)
@@ -411,6 +425,8 @@ void Application::deleteObjref(ObjectId id)
 
 void Application::deleteServant(ObjectId id)
 {
+    unique_lock lock(m_data->m_servantsMutex);
+
     Objref_ptr obj = m_servants.find(id);
 
     if (obj)

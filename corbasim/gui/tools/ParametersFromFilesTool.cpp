@@ -19,14 +19,13 @@
 
 #include "ParametersFromFilesTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
-#include <corbasim/core/file_format_helper.hpp>
 #include <corbasim/gui/utils.hpp>
 #include <iostream>
 
 using namespace corbasim::gui;
 
 ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
-    QWidget(parent)
+    QWidget(parent), m_operation(NULL)
 {
     QHBoxLayout * layout = new QHBoxLayout(this);
 
@@ -76,13 +75,23 @@ ParametersFromFilesTool::~ParametersFromFilesTool()
 }
 
 void ParametersFromFilesTool::initialize(
+        Objref_ptr objref,
         OperationDescriptor_ptr reflective)
 {
-    m_model.initialize(reflective);
+    const InterfaceDescriptor_ptr iface = objref->interface();
+
+    int i = 0;
+    while (i < iface->operation_count() &&
+            iface->get_reflective_by_index(i) != reflective) 
+        i++;
+
+    m_model.initialize(i, reflective);
+    m_objref = objref;
+    m_operation = reflective;
 }
 
 void ParametersFromFilesTool::createProcessors(
-        QList< SenderItemProcessor_ptr >& processors)
+        QList< RequestProcessor_ptr >& processors)
 {
     const QList< qt::SortableGroupItem * >& items = 
         m_group->getItems();
@@ -97,47 +106,41 @@ void ParametersFromFilesTool::createProcessors(
 }
 
 FilesItem * ParametersFromFilesTool::createFilesItem( 
-        OperationDescriptor_ptr op,
+        OperationDescriptor_ptr,
         const QList< int >& path)
 {
     FilesItem * plot = NULL;
 
-    if (op)
+    if (m_operation && m_objref)
     {
-        plot = new FilesItem(op, path);
-
-        const key_t key(op->get_tag());
-        m_map[key].push_back(plot);
-        m_inverse_map[plot] = key;
+        plot = new FilesItem(m_objref, m_operation, path);
 
         qt::SortableGroupItem * item = 
             new qt::SortableGroupItem(plot, m_group);
 
         item->showDetails();
 
-        const QString title(gui::getFieldName(op, path));
+        const QString title(getFieldName(m_operation, path));
         item->setTitle(title);
 
         m_group->appendItem(item);
+
+        m_items.push_back(plot);
     }
 
     return plot;
 }
 
 void ParametersFromFilesTool::deleteFilesItem(
-        OperationDescriptor_ptr op,
+        OperationDescriptor_ptr,
         const QList< int >& path)
 {
-    const key_t key(op->get_tag());
-    QList< FilesItem * >& list = m_map[key];
-
-    for (int i = 0; i < list.size(); i++) 
+    for (int i = 0; i < m_items.size(); i++) 
     {
-        FilesItem * plot = list[i];
-        if (plot->getPath() == path)
+        FilesItem * plot = m_items[i];
+        if (plot->path() == path)
         {
-            list.removeAt(i);
-            m_inverse_map.erase(plot);
+            m_items.removeAt(i);
             m_group->deleteItem(
                     qobject_cast< qt::SortableGroupItem * >
                         (plot->parent()));
@@ -153,19 +156,11 @@ void ParametersFromFilesTool::deleteRequested(qt::SortableGroupItem* item)
 
     if (plot)
     {
-        inverse_map_t::iterator it = m_inverse_map.find(plot);
+        m_model.uncheck(plot->path());
 
-        if (it != m_inverse_map.end())
-        {
-            const key_t key(it->second);
-            m_map[key].removeAll(plot);
-
-            // notify to model
-            m_model.uncheck(plot->getPath());
-
-            m_inverse_map.erase(it);
-        }
+        m_items.removeAll(plot);
     }
+
     m_group->deleteItem(item);
 }
 
@@ -215,7 +210,8 @@ void ParametersFromFilesTool::load(const QVariant& settings)
         }
 
         FilesItem * item = createFilesItem(
-                m_model.getReflective(), path);
+                m_operation, // unused
+                path);
 
         if (item)
         {
@@ -228,15 +224,14 @@ void ParametersFromFilesTool::load(const QVariant& settings)
 
 void ParametersFromFilesTool::clear()
 {
-    for (inverse_map_t::const_iterator it = m_inverse_map.begin(); 
-            it != m_inverse_map.end(); ++it) 
+    for (items_t::const_iterator it = m_items.begin(); 
+            it != m_items.end(); ++it) 
     {
         // notify to model
-        m_model.uncheck(it->first->getPath());
+        m_model.uncheck((*it)->path());
     }
 
-    m_map.clear();
-    m_inverse_map.clear();
+    m_items.clear();
 }
 
 //
@@ -246,10 +241,14 @@ void ParametersFromFilesTool::clear()
 //
 
 FilesItem::FilesItem(
+        Objref_ptr objref,
         OperationDescriptor_ptr reflective,
         const QList< int >& path, 
         QWidget * parent) :
-    QWidget(parent), m_reflective(reflective), m_path(path)
+    QWidget(parent), 
+    m_objref(objref),
+    m_reflective(reflective), 
+    m_path(path)
 {
     QGridLayout * layout = new QGridLayout();
 
@@ -334,11 +333,11 @@ bool FilesItem::repeat() const
     return m_repeat->isChecked();
 }
 
-FilesItemProcessor_ptr FilesItem::createProcessor()
+FileLoaderProcessor_ptr FilesItem::createProcessor()
 {
-    FilesItemProcessor_ptr processor(
-        new FilesItemProcessor(
-                m_reflective,
+    FileLoaderProcessor_ptr processor(
+        new FileLoaderProcessor(
+                m_objref,
                 m_path,
                 files(),
                 currentFile(),
@@ -359,7 +358,7 @@ void FilesItem::save(QVariant& settings)
     QVariantMap map;
 
     map["operation"] = m_reflective->get_name();
-    map["title"] = gui::getFieldName(m_reflective, m_path);
+    map["title"] = getFieldName(m_reflective, m_path);
 
     QVariantList list;
     for (int i = 0; i < m_path.size(); i++) 
@@ -390,100 +389,4 @@ void FilesItem::load(const QVariant& settings)
     m_format->setCurrentIndex(m_format->findText(map["format"].toString()));
 }
 
-// 
-//
-// FilesItemProcessor
-//
-//
-
-FilesItemProcessor::FilesItemProcessor(
-        OperationDescriptor_ptr reflective,
-        const QList< int > path,
-        const QStringList files,
-        int currentFile,
-        const int format,
-        const bool repeat) :
-    SenderItemProcessor(path),
-    m_reflective(reflective), 
-    m_files(files), 
-    m_currentFile(currentFile), 
-    m_format(format), 
-    m_repeat(repeat)
-{
-}
-
-FilesItemProcessor::~FilesItemProcessor()
-{
-}
-
-void FilesItemProcessor::process( 
-            TypeDescriptor_ptr reflective,
-            Holder holder)
-{
-    using namespace ::corbasim::core;
-
-    // std::cout << __FUNCTION__  << std::endl;
-
-    if (m_files.size() == 0)
-        return;
-
-    file_format_factory const * factory = 
-        file_format_factory::get_instance();
-
-    file_format_helper const * helper = 
-        factory->get_helper(static_cast< file_format >(m_format));
-
-    if (helper)
-    {
-        if (!m_currentIStream || !m_currentIStream->good())
-        {
-            openFile();
-        }
-
-        bool end = false;
-        int i = 0;
-        while (m_currentIStream && !end 
-                && i++ < m_files.size())
-        {
-            end = helper->load(
-                    *m_currentIStream, 
-                    reflective, 
-                    holder);
-
-            if (!end) openFile();
-        }
-    }
-    else
-    {
-        std::cerr << "Invalid file helper!" << std::endl;
-    }
-}
-
-void FilesItemProcessor::openFile()
-{
-    m_currentIStream.reset();
-
-    if (m_files.size() > 0 && 
-            (m_currentFile < m_files.size() || m_repeat))
-    {
-        if (m_repeat && m_currentFile == m_files.size())
-        {
-            m_currentFile = 0;
-        }
-    
-        if (m_currentFile < m_files.size())
-        {
-            // std::cout << __FUNCTION__ << " " << 
-            //     m_files.at(m_currentFile).toStdString() << std::endl;
-
-            m_currentIStream.reset(new std::ifstream(
-                        m_files.at(m_currentFile).toStdString().c_str()));
-
-            // open a new file
-            emit nextFile(m_currentFile);
-
-            m_currentFile++;
-        }
-    }
-}
 

@@ -31,10 +31,8 @@
 using namespace corbasim::gui;
 
 OperationForm::OperationForm(
-        const QString& objectId,
         QWidget * parent) :
     QWidget(parent), 
-    m_objectId(objectId),
     m_reflective(NULL), 
     m_widget(NULL),
     m_files(NULL)
@@ -45,7 +43,9 @@ OperationForm::~OperationForm()
 {
 }
 
-void OperationForm::initialize(OperationDescriptor_ptr factory)
+void OperationForm::initialize(
+        Objref_ptr object,
+        OperationDescriptor_ptr factory)
 {
     m_reflective = factory;
 
@@ -68,7 +68,7 @@ void OperationForm::initialize(OperationDescriptor_ptr factory)
  
     // Files
     m_files = new ParametersFromFilesTool();
-    m_files->initialize(factory);
+    m_files->initialize(object, factory);
     tabs->addTab(m_files, "Files");
 
     // Main layout
@@ -106,11 +106,6 @@ void OperationForm::setCode(const QString& code)
 QString OperationForm::code() const
 {
     return m_code->toPlainText();
-}
-
-const QString& OperationForm::objectId() const
-{
-    return m_objectId;
 }
 
 //
@@ -465,7 +460,7 @@ OperationSender::OperationSender(
     QVBoxLayout * mainLayout = new QVBoxLayout();
 
     // Form
-    m_form = new OperationForm(m_object->name());
+    m_form = new OperationForm();
     mainLayout->addWidget(m_form);
 
     // Configuration
@@ -495,23 +490,23 @@ OperationSender::OperationSender(
     setLayout(mainLayout);
 
     // signals
-    QObject::connect(m_playButton,
+    connect(m_playButton,
             SIGNAL(clicked(bool)),
             this,
             SLOT(playClicked(bool)));
 
-    QObject::connect(
+    connect(
             this,
             SIGNAL(addSender(SenderConfig_ptr)),
             SenderController::getInstance(),
             SLOT(addSender(SenderConfig_ptr)));
-    QObject::connect(
+    connect(
             this,
             SIGNAL(deleteSender(SenderConfig_ptr)),
             SenderController::getInstance(),
             SLOT(deleteSender(SenderConfig_ptr)));
 
-    QObject::connect(m_updateForm,
+    connect(m_updateForm,
             SIGNAL(toggled(bool)),
             this,
             SLOT(activeUpdateForm(bool)));
@@ -522,14 +517,15 @@ OperationSender::~OperationSender()
     reset();
 }
 
-void OperationSender::initialize(OperationDescriptor_ptr op)
+void OperationSender::initialize(
+        OperationDescriptor_ptr op)
 {
     m_reflective = op;
 
-    m_form->initialize(op);
+    m_form->initialize(m_object, op);
 
     // signals
-    QObject::connect(this, 
+    connect(this, 
             SIGNAL(updateForm(Request_ptr)),
             m_form->getWidget(),
             SLOT(setValue(Request_ptr)));
@@ -574,12 +570,12 @@ void OperationSender::reset()
     if (m_config)
     {
         // disconnect
-        QObject::disconnect(m_config.get(),
+        disconnect(m_config.get(),
                 SIGNAL(requestSent(Request_ptr)),
                 this,
                 SIGNAL(updateForm(Request_ptr)));
 
-        QObject::disconnect(m_config.get(),
+        disconnect(m_config.get(),
                 SIGNAL(finished()), 
                 this,
                 SLOT(finished()));
@@ -598,7 +594,7 @@ void OperationSender::playClicked(bool play)
         m_form->setEnabled(false);
 
         // Create processors
-        QList< SenderItemProcessor_ptr > processors;
+        QList< RequestProcessor_ptr > processors;
         m_form->getFiles()->createProcessors(processors);
 
         m_config.reset(new SenderConfig(
@@ -613,7 +609,7 @@ void OperationSender::playClicked(bool play)
         // connect signals
         activeUpdateForm(m_updateForm->isChecked());
 
-        QObject::connect(m_config.get(),
+        connect(m_config.get(),
                 SIGNAL(finished()), 
                 this,
                 SLOT(finished()));
@@ -638,14 +634,14 @@ void OperationSender::activeUpdateForm(bool update)
     {
         if (update)
         {
-            QObject::connect(m_config.get(),
+            connect(m_config.get(),
                     SIGNAL(requestSent(Request_ptr)),
                     this,
                     SIGNAL(updateForm(Request_ptr)));
         }
         else
         {
-            QObject::disconnect(m_config.get(),
+            disconnect(m_config.get(),
                     SIGNAL(requestSent(Request_ptr)),
                     this,
                     SIGNAL(updateForm(Request_ptr)));

@@ -1,5 +1,5 @@
 
-set(CORBASIM_INSTALL_PREFIX /usr/local)
+set(CORBASIM_INSTALL_PREFIX /home/asenac/dev/next_version_installed)
 
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)

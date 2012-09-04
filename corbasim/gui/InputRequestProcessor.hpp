@@ -20,47 +20,18 @@
 #ifndef CORBASIM_GUI_INPUTREQUESTPROCESSOR_HPP
 #define CORBASIM_GUI_INPUTREQUESTPROCESSOR_HPP
 
+#include <map>
 #include <QString>
 #include <QObject>
-#include <map>
-#include <corbasim/event_fwd.hpp>
 #include <corbasim/gui/types.hpp>
-#include <corbasim/gui/utils.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/proc/RequestProcessor.hpp>
 
 namespace corbasim 
 {
 namespace gui 
 {
-
-class CORBASIM_GUI_DECLSPEC RequestProcessor
-{
-public:
-
-    virtual ~RequestProcessor();
-
-    virtual void process(Request_ptr req, 
-            TypeDescriptor_ptr ref,
-            Holder hold) = 0;
-
-    ObjectId id() const;
-
-    Objref_ptr object() const;
-
-    const ReflectivePath_t& getPath() const;
-
-protected:
-
-    RequestProcessor(Objref_ptr object,
-            const ReflectivePath_t& path);
-
-    Objref_ptr m_object;
-    const ReflectivePath_t m_path;
-};
-
-typedef boost::shared_ptr< RequestProcessor > RequestProcessor_ptr;
-
 
 /**
  * @brief Process input requests in a non-GUI thread.

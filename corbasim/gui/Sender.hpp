@@ -28,6 +28,7 @@
 #include <boost/weak_ptr.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/proc/RequestProcessor.hpp>
 #include <corbasim/gui/script/ScriptEvaluator.hpp>
 
 namespace corbasim 
@@ -38,11 +39,6 @@ namespace gui
 class SenderConfig;
 
 typedef boost::shared_ptr< SenderConfig > SenderConfig_ptr;
-
-class SenderItemProcessor;
-
-typedef boost::shared_ptr< SenderItemProcessor > 
-    SenderItemProcessor_ptr;
 
 class Sender;
 
@@ -61,7 +57,7 @@ public:
         OperationDescriptor_ptr operation,
         Request_ptr request,
         const QString& code,
-        const QList< SenderItemProcessor_ptr >& processors,
+        const QList< RequestProcessor_ptr >& processors,
         int times,
         unsigned int period);
     ~SenderConfig();
@@ -71,7 +67,7 @@ public:
     OperationDescriptor_ptr operation() const;
     Request_ptr request() const;
     const QString& code() const;
-    const QList< SenderItemProcessor_ptr >& processors() const;
+    const QList< RequestProcessor_ptr >& processors() const;
     int times();
     unsigned int period() const;
 
@@ -91,29 +87,9 @@ protected:
     OperationDescriptor_ptr m_operation;
     Request_ptr m_request;
     const QString m_code;
-    const QList< SenderItemProcessor_ptr > m_processors;
+    const QList< RequestProcessor_ptr > m_processors;
     const int m_times;
     const unsigned int m_period;
-};
-
-class CORBASIM_GUI_DECLSPEC SenderItemProcessor : public QObject
-{
-    Q_OBJECT
-public:
-
-    virtual ~SenderItemProcessor();
-
-    virtual void process(
-            TypeDescriptor_ptr reflective,
-            Holder holder) = 0;
-    
-    const QList< int >& getPath() const;
-
-protected:
-
-    SenderItemProcessor(const QList< int >& path);
-
-    const QList< int > m_path;
 };
 
 class CORBASIM_GUI_DECLSPEC Sender : public QObject
@@ -146,7 +122,8 @@ protected:
             const boost::system::error_code& error);
 
     void applyProcessor(
-            SenderItemProcessor_ptr processor,
+            Request_ptr request,
+            RequestProcessor_ptr processor,
             Holder holder);
 
     boost::asio::deadline_timer m_timer;
