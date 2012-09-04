@@ -93,6 +93,8 @@ public slots:
     void showDumpTool();
     void createPlotTool();
     void showPlotTool();
+    void createValueViewerTool();
+    void showValueViewerTool();
 
     void showLoadDirectory();
     void showLoadScenario();
@@ -151,6 +153,7 @@ protected:
     SenderSequenceTool * m_senderSequenceTool;
     DumpTool * m_dumpTool;
     AbstractInputTool * m_plotTool;
+    AbstractInputTool * m_valueViewerTool;
 
     typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
     ObjrefViews_t m_objrefViews;

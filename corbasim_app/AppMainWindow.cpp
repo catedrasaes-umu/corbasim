@@ -26,6 +26,7 @@
 #include <corbasim/gui/tools/OperationSequence.hpp>
 #include <corbasim/gui/tools/SenderSequence.hpp>
 #include <corbasim/gui/tools/DumpTool.hpp>
+#include <corbasim/gui/tools/ValueViewerTool.hpp>
 #include <corbasim/gui/dialog/CreateDialog.hpp>
 #include <corbasim/gui/dialog/SetReferenceDialog.hpp>
 #include <corbasim/gui/item/OperationsView.hpp>
@@ -50,6 +51,7 @@ namespace
         kSenderSequenceTool,
         kDumpTool,
         kPlotTool,
+        kValueViewerTool,
 
         kSubWindowsMax
     };
@@ -62,7 +64,8 @@ namespace
         "Operation sequence tool",
         "Sender sequence tool",
         "Dump tool",
-        "Plot tool"
+        "Plot tool",
+        "Value viewer"
     };
 } // namespace
 
@@ -85,7 +88,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_operationSequenceTool(NULL),
     m_senderSequenceTool(NULL),
     m_dumpTool(NULL),
-    m_plotTool(NULL)
+    m_plotTool(NULL),
+    m_valueViewerTool(NULL)
 
 {
     corbasim::qt::setDefaultInstanceModel(&m_instanceModel);
@@ -297,6 +301,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             this, SLOT(showDumpTool()));
     menuTool->addAction("&Plot tool", 
             this, SLOT(showPlotTool()));
+    menuTool->addAction("&Value viewer", 
+            this, SLOT(showValueViewerTool()));
     menuTool->addSeparator();
     menuTool->addAction("&Filtered log", 
             this, SLOT(showFilteredLogView()));
@@ -379,6 +385,9 @@ void AppMainWindow::save(QVariant& settings)
 
         if (m_plotTool)
             m_plotTool->save(map["plots"]);
+
+        if (m_valueViewerTool)
+            m_valueViewerTool->save(map["viewers"]);
     }
 
     settings = map;
@@ -456,6 +465,12 @@ void AppMainWindow::load(const QVariant& settings)
         {
             createPlotTool();
             m_plotTool->load(map["plots"]);
+        }
+
+        if (map.contains("viewers"))
+        {
+            createValueViewerTool();
+            m_valueViewerTool->load(map["viewers"]);
         }
     }
 }
@@ -543,6 +558,9 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
 
     if (m_plotTool)
         m_plotTool->registerInstance(servant);
+
+    if (m_valueViewerTool)
+        m_valueViewerTool->registerInstance(servant);
 }
 
 void AppMainWindow::servantDeleted(ObjectId id)
@@ -562,6 +580,9 @@ void AppMainWindow::servantDeleted(ObjectId id)
 
     if (m_plotTool)
         m_plotTool->unregisterInstance(id);
+
+     if (m_valueViewerTool)
+        m_valueViewerTool->unregisterInstance(id);
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -779,7 +800,7 @@ void AppMainWindow::createPlotTool()
         if (create)
         {
             // Creates the tool
-            m_plotTool = create(NULL);
+            m_plotTool = create(this);
 
             createToolSubWindow(kPlotTool, m_plotTool);
 
@@ -803,6 +824,32 @@ void AppMainWindow::showPlotTool()
 {
     createPlotTool();
     showToolSubWindow(kPlotTool);
+}
+
+void AppMainWindow::createValueViewerTool()
+{
+    typedef AbstractInputTool* (*create_t)(QWidget*);
+
+    if (!m_valueViewerTool)
+    {
+        // Creates the tool
+        m_valueViewerTool = new ValueViewerTool(this);
+
+        createToolSubWindow(kValueViewerTool, m_valueViewerTool);
+
+        // Initilizes the tool
+        ObjrefRepository::const_iterator it = m_servants.begin();
+        ObjrefRepository::const_iterator end = m_servants.end();
+
+        for(; it != end; it++)
+            m_valueViewerTool->registerInstance(it.value());
+    }
+}
+
+void AppMainWindow::showValueViewerTool()
+{
+    createValueViewerTool();
+    showToolSubWindow(kValueViewerTool);
 }
 
 void AppMainWindow::showLoadDirectory()

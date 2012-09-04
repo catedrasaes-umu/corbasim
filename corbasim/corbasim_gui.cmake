@@ -54,6 +54,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/tools/ParametersFromFilesTool.hpp
     gui/tools/SenderSequence.hpp
     gui/tools/SimpleScriptEditor.hpp
+    gui/tools/ValueViewerTool.hpp
 
     # TODO gui/RecorderTool.hpp
     # TODO gui/ServerApp.hpp
@@ -114,6 +115,7 @@ set(corbasim_gui_MOC_HDRS
     gui/tools/ParametersFromFilesTool.hpp
     gui/tools/SenderSequence.hpp
     gui/tools/SimpleScriptEditor.hpp
+    gui/tools/ValueViewerTool.hpp
 
     # TODO gui/RecorderTool.hpp
 )
@@ -175,6 +177,7 @@ set(corbasim_gui_SRCS
     gui/tools/ParametersFromFilesTool.cpp
     gui/tools/SenderSequence.cpp
     gui/tools/SimpleScriptEditor.cpp
+    gui/tools/ValueViewerTool.cpp
 
     # TODO gui/RecorderTool.cpp
     # TODO gui/ServerApp.cpp

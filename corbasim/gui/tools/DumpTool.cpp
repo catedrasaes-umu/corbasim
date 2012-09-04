@@ -147,14 +147,11 @@ void Dumper::doStart(bool start)
     }
 }
 
-void Dumper::reset()
-{
-    if (m_processor)
-    {
-        emit removeProcessor(m_processor);
-        m_processor.reset();
-    }
-}
+//
+//
+// Dump Tool
+//
+//
 
 DumpTool::DumpTool(QWidget * parent) :
     AbstractInputTool(parent)

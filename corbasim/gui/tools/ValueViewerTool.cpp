@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * PlotTool.cpp
+ * ValueViewerTool.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,23 +17,44 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PlotTool.hpp"
-#include <corbasim/qwt/SimplePlot.hpp>
-#include <corbasim/qwt/PlotModel.hpp>
+#include "ValueViewerTool.hpp"
 #include <corbasim/gui/proc/HolderEmitter.hpp>
+#include <corbasim/gui/utils.hpp>
+#include <corbasim/gui/ReflectiveGUI.hpp>
 
-#include <iostream>
+using namespace corbasim::gui;
 
-using namespace corbasim::qwt;
+// ValueViewer
 
-// Reflective plot
-
-ReflectivePlot::ReflectivePlot(Objref_ptr objref,
+ValueViewer::ValueViewer(Objref_ptr objref,
         OperationDescriptor_ptr reflective,
         const QList< int >& path, 
         QWidget * parent) :
     AbstractInputItem(objref, reflective, path, parent)
 {
+    TypeDescriptor_ptr descriptor = 
+        followPath(reflective, path);
+
+    QGridLayout * grid = new QGridLayout();
+
+    // Timestamp
+    m_date = new QDateTimeEdit();
+    m_date->setEnabled(false);
+    grid->addWidget(new QLabel("Timestamp"), 0, 0);
+    grid->addWidget(m_date, 0, 1);
+
+    // Value
+    QGroupBox * box = new QGroupBox("Value");
+    QVBoxLayout * boxLayout = new QVBoxLayout();
+
+    m_widget = createSimpleWidget(descriptor, NULL);
+    boxLayout->addWidget(m_widget);
+    box->setLayout(boxLayout);
+    grid->addWidget(box, 1, 0, 1, 2);
+
+    setLayout(grid);
+
+    // Processor
     HolderEmitter * processor =
         new HolderEmitter(objref, path);
 
@@ -48,81 +69,64 @@ ReflectivePlot::ReflectivePlot(Objref_ptr objref,
             SLOT(appendValue(Request_ptr,
                     TypeDescriptor_ptr,
                     Holder)));
-
-    // widget
-    QVBoxLayout * layout = new QVBoxLayout();
-    m_plot = new SimplePlot(this);
-    layout->addWidget(m_plot);
-    layout->setMargin(0);
-
-    // TODO start button
-
-    setLayout(layout);
 }
 
-ReflectivePlot::~ReflectivePlot()
+ValueViewer::~ValueViewer()
 {
 }
 
-void ReflectivePlot::appendValue(Request_ptr req, 
+void ValueViewer::start()
+{
+    emit addProcessor(m_processor);
+}
+
+void ValueViewer::appendValue(Request_ptr req, 
         TypeDescriptor_ptr reflec,
         Holder hold)
 {
-    if (reflec->is_primitive())
-    {
-        m_plot->append(reflec->to_double(hold));
-    }
-    else if(reflec->is_repeated() && 
-            reflec->get_slice()->is_primitive())
-    {
-        QVector< double > values;
-        
-        const unsigned int length = reflec->get_length(hold);
-        core::reflective_base const * slice = reflec->get_slice();
+    m_date->setDateTime(QDateTime::currentDateTime());
 
-        for (unsigned int i = 0; i < length; i++) 
-        {
-            const core::holder h = reflec->get_child_value(hold, i);
-            values.push_back(slice->to_double(h));
-        }
+    ReflectiveWidgetBase * w = 
+        dynamic_cast< ReflectiveWidgetBase * >(m_widget);
 
-        if (!values.isEmpty())
-            m_plot->append(values);
-    }
+    if (w)
+        w->fromHolder(hold);
 }
 
-PlotTool::PlotTool(QWidget * parent) :
+//
+//
+// Dump Tool
+//
+//
+
+ValueViewerTool::ValueViewerTool(QWidget * parent) :
     AbstractInputTool(parent)
 {
-    setModel(createModel());
 }
 
-PlotTool::~PlotTool()
+ValueViewerTool::~ValueViewerTool()
 {
 }
 
-AbstractInputItem * PlotTool::createItem(
+AbstractInputItem * ValueViewerTool::createItem(
         Objref_ptr objref, 
         OperationDescriptor_ptr reflective,
         const QList< int >& path)
 {
-    return new ReflectivePlot(objref, reflective, path); 
+    return new ValueViewer(objref, reflective, path);
 }
 
-ParametersModel * PlotTool::createModel()
+// Save and load
+
+void ValueViewer::save(QVariant& settings)
 {
-    return new PlotModel(this);
+    QVariantMap map;
+
+    settings = map;
 }
 
-extern "C" 
+void ValueViewer::load(const QVariant& settings)
 {
-
-    corbasim::gui::AbstractInputTool * createPlotTool(
-            QWidget * parent)
-    {
-        return new corbasim::qwt::PlotTool(parent);
-    }
-
-} // extern C
-
+    const QVariantMap map = settings.toMap();
+}
 

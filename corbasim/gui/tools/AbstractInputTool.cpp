@@ -49,10 +49,17 @@ OperationDescriptor_ptr AbstractInputItem::getReflective() const
 
 void AbstractInputItem::start()
 {
+    if (m_processor)
+        emit addProcessor(m_processor); 
 }
 
 void AbstractInputItem::reset()
 {
+    if (m_processor)
+    {
+        emit removeProcessor(m_processor); 
+        m_processor.reset();
+    }
 }
 
 //
@@ -154,10 +161,19 @@ void AbstractInputTool::unregisterInstance(ObjectId id)
         {
             for (int i = 0; i < it->second.size(); i++) 
             {
-                AbstractInputItem * plot = it->second[i];
+                AbstractInputItem * item = it->second[i];
 
-                m_inverse_map.erase(plot);
-                m_model->uncheck(objref->name(), plot->getPath());
+                m_inverse_map.erase(item);
+                m_model->uncheck(objref->name(), item->getPath());
+
+                // Notify to the processor
+                item->reset();
+
+                m_group->deleteItem(
+                        qobject_cast< qt::SortableGroupItem * >
+                            (item->parent()));
+
+                delete item;
             }
 
             m_map.erase(it);
@@ -230,12 +246,15 @@ void AbstractInputTool::deleteAbstractInputItem(const QString& id,
         {
             list.removeAt(i);
             m_inverse_map.erase(item);
+
+            // Notify to the processor
+            item->reset();
+
             m_group->deleteItem(
                     qobject_cast< qt::SortableGroupItem * >
                         (item->parent()));
 
-            // Notify to the processor
-            item->reset();
+            delete item;
             break;
         }
     }

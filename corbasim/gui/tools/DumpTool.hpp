@@ -47,7 +47,6 @@ public:
 public slots:
 
     void doStart(bool);
-    void reset();
 
 protected slots:
 

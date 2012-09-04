@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * PlotTool.hpp
+ * ValueViewerTool.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,34 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
-#define CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP
+#ifndef CORBASIM_GUI_VALUEVIEWERTOOL_HPP
+#define CORBASIM_GUI_VALUEVIEWERTOOL_HPP
 
-#include <corbasim/qwt/export.hpp>
-#include <corbasim/gui/Model.hpp>
+#include <QtGui>
+#include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
+#include <corbasim/gui/proc/RequestProcessor.hpp>
 
 namespace corbasim 
 {
-namespace qwt 
+namespace gui 
 {
 
-using namespace ::corbasim::gui;
-
-class SimplePlot;
-class PlotModel;
-
-class CORBASIM_QWT_DECLSPEC ReflectivePlot : 
-    public AbstractInputItem
+class CORBASIM_GUI_DECLSPEC ValueViewer : public AbstractInputItem
 {
     Q_OBJECT
 public:
 
-    ReflectivePlot(Objref_ptr objref,
+    ValueViewer(Objref_ptr objref,
             OperationDescriptor_ptr reflective,
             const QList< int >& path, 
             QWidget * parent = 0);
-    virtual ~ReflectivePlot();
+    virtual ~ValueViewer();
+
+    void save(QVariant& settings);
+    void load(const QVariant& settings);
+
+    void start();
 
 public slots:
 
@@ -54,16 +54,17 @@ public slots:
 
 protected:
 
-    SimplePlot * m_plot;
+    QDateTimeEdit * m_date;
+    QWidget * m_widget;
 };
 
-class CORBASIM_QWT_DECLSPEC PlotTool : public AbstractInputTool
+class CORBASIM_GUI_DECLSPEC ValueViewerTool : public AbstractInputTool
 {
     Q_OBJECT
 public:
 
-    PlotTool(QWidget * parent = 0);
-    virtual ~PlotTool();
+    ValueViewerTool(QWidget * parent = 0);
+    virtual ~ValueViewerTool();
 
 protected:
 
@@ -72,10 +73,9 @@ protected:
             OperationDescriptor_ptr reflective,
             const QList< int >& path);
 
-    ParametersModel * createModel();
 };
 
-} // namespace qwt
+} // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_QWT_REFLECTIVEPLOTTOOL_HPP */
+#endif /* CORBASIM_GUI_VALUEVIEWERTOOL_HPP */
