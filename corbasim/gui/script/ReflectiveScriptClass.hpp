@@ -71,7 +71,7 @@ public:
     bool    supportsExtension ( Extension extension ) const;
     */
 
-protected:
+// protected:
 
     QScriptValue toScriptValue(Node_ptr node);
 

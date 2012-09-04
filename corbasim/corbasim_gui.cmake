@@ -28,6 +28,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     # script
     gui/script/ReflectiveScriptClass.hpp
     gui/script/ScriptEvaluator.hpp
+    gui/script/TriggerEngine.hpp
 
     # dialogs
     gui/dialog/CreateDialog.hpp
@@ -88,6 +89,7 @@ set(corbasim_gui_MOC_HDRS
 
     # script
     gui/script/ScriptEvaluator.hpp
+    gui/script/TriggerEngine.hpp
 
     # dialogs
     gui/dialog/CreateDialog.hpp
@@ -150,6 +152,7 @@ set(corbasim_gui_SRCS
     # script
     gui/script/ReflectiveScriptClass.cpp
     gui/script/ScriptEvaluator.cpp
+    gui/script/TriggerEngine.cpp
 
     # dialogs
     gui/dialog/CreateDialog.cpp

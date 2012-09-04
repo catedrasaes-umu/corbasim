@@ -113,6 +113,8 @@ public slots:
 
     void showSetMaxLogSize();
 
+    void showRunFile();
+
 signals:
 
     void createObjref(const ObjrefConfig&);
@@ -127,6 +129,9 @@ signals:
     void clearScenario();
 
     void setNameService(const CORBA::Object_var&);
+
+    void runCode(const QString&);
+    void runFile(const QString&);
 
 protected:
 

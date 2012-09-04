@@ -306,6 +306,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuTool->addSeparator();
     menuTool->addAction("&Filtered log", 
             this, SLOT(showFilteredLogView()));
+    menuTool->addSeparator();
+    menuTool->addAction("&Run file", 
+            this, SLOT(showRunFile()));
 
     menuWindow->addAction(setNSAction);
     menuWindow->addSeparator();
@@ -1000,6 +1003,18 @@ void AppMainWindow::showSetMaxLogSize()
     if (ok)
     {
         m_logModel.setMaxEntries(res);
+    }
+}
+
+void AppMainWindow::showRunFile()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".");
+
+    if (!file.isEmpty())
+    {
+        emit runFile(file);
     }
 }
 

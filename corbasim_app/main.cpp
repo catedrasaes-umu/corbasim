@@ -24,6 +24,7 @@
 #include <corbasim/gui/Application.hpp>
 #include <corbasim/gui/InputRequestProcessor.hpp>
 #include <corbasim/gui/Sender.hpp>
+#include <corbasim/gui/script/TriggerEngine.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
 #include <sstream>
@@ -53,8 +54,8 @@ int main(int argc, char **argv)
     // Force initialization
     corbasim::gui::initialize();
     QThread threadApplication;
-
     QThread threadInputReqCntl;
+    QThread threadEngine;
 
     // Sender
     corbasim::gui::SenderController * senderController =
@@ -71,6 +72,7 @@ int main(int argc, char **argv)
         *corbasim::gui::getDefaultInputRequestController();
 
     corbasim::app::AppMainWindow window;
+    corbasim::gui::TriggerEngine engine;
 
     // Signals application -> window
     QObject::connect(&application, SIGNAL(loadedInterface(InterfaceDescriptor_ptr)), 
@@ -114,10 +116,31 @@ int main(int argc, char **argv)
     QObject::connect(&application, SIGNAL(servantDeleted(ObjectId)), 
             &inputReqCntl, SLOT(unregisterInstance(ObjectId)));
     // End signals application -> input controller
+    
+    // Signals application -> script engine
+    QObject::connect(&application, SIGNAL(servantCreated(Objref_ptr)), 
+            &engine, SLOT(servantCreated(Objref_ptr)));
+    QObject::connect(&application, SIGNAL(servantDeleted(ObjectId)), 
+            &engine, SLOT(servantDeleted(ObjectId)));
+    QObject::connect(&application, SIGNAL(objrefCreated(Objref_ptr)), 
+            &engine, SLOT(objrefCreated(Objref_ptr)));
+    QObject::connect(&application, SIGNAL(objrefDeleted(ObjectId)), 
+            &engine, SLOT(objrefDeleted(ObjectId)));
+    // End signals application -> script engine
+
+    QObject::connect(&window, SIGNAL(runCode(const QString&)),
+            &engine, SLOT(runCode(const QString&)));
+    QObject::connect(&window, SIGNAL(runFile(const QString&)),
+            &engine, SLOT(runFile(const QString&)));
+    QObject::connect(&engine, SIGNAL(error(const QString&)), 
+            &window, SLOT(displayError(const QString&)));
 
     // Executed in dedicated threads
     inputReqCntl.moveToThread(&threadInputReqCntl);
     threadInputReqCntl.start();
+
+    engine.moveToThread(&threadEngine);
+    threadEngine.start();
 
     window.show();
 
@@ -154,6 +177,7 @@ int main(int argc, char **argv)
     // Wait for child threads
     threadApplication.quit();
     threadInputReqCntl.quit();
+    threadEngine.quit();
 
     // Sender
     senderController->stop();
@@ -164,6 +188,7 @@ int main(int argc, char **argv)
 
     threadApplication.wait();
     threadInputReqCntl.wait();
+    threadEngine.wait();
 
     orb->shutdown(1);
     orbThread.join();
