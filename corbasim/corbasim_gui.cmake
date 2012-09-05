@@ -39,7 +39,9 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/server/Server.hpp
 
     # client
+    gui/client/ClientApp.hpp
     gui/client/SimpleClient.hpp
+
     gui/InputRequestProcessor.hpp
     gui/OperationForm.hpp
     gui/ReflectiveGUI.hpp
@@ -163,6 +165,7 @@ set(corbasim_gui_SRCS
     gui/server/Server.cpp
 
     # client
+    gui/client/ClientApp.cpp
     gui/client/SimpleClient.cpp
 
     gui/Sender.cpp
