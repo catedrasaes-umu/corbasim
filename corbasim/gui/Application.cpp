@@ -24,6 +24,13 @@
 #include <corbasim/gui/json.hpp>
 #include <boost/thread/shared_mutex.hpp>
 
+// Services
+#include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/Sender.hpp>
+#include <corbasim/gui/script/TriggerEngine.hpp>
+
+#include <cassert>
+
 using namespace corbasim::gui;
 
 typedef boost::shared_lock< boost::shared_mutex > shared_lock;
@@ -36,6 +43,16 @@ struct Application::ApplicationData
     CORBA::ORB_var m_orb;
     PortableServer::POA_var m_rootPOA;
     PortableServer::POAManager_var m_manager; 
+
+    // Services
+    InputRequestController * m_inputReqCtl;
+    QThread m_inputReqCtlThread;
+
+    SenderController * m_senderCtl;
+    QThread m_senderCtlThread;
+
+    TriggerEngine * m_scriptEngine;
+    QThread m_scriptEngineThread;
 
     // Mutex
     boost::shared_mutex m_objrefsMutex;
@@ -93,26 +110,94 @@ Application::Application(QObject * parent) :
 {
     corbasim::gui::initialize();
 
+    assert(!::currentApplication());
+
     ::currentApplication() = this;
 
     connect(&m_interfaces, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
             this, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)));
-
     connect(&m_objrefs, 
             SIGNAL(deleted(ObjectId)),
             this, 
             SIGNAL(objrefDeleted(ObjectId)));
-
     connect(&m_servants, 
             SIGNAL(deleted(ObjectId)),
             this, 
             SIGNAL(servantDeleted(ObjectId)));
+
+    // Services
+    // Without parent because its own thread
+    m_data->m_inputReqCtl = new InputRequestController();
+    m_data->m_senderCtl = new SenderController();
+    m_data->m_scriptEngine = new TriggerEngine();
+
+    // Input request controller
+    connect(this, 
+            SIGNAL(servantCreated(Objref_ptr)), 
+            m_data->m_inputReqCtl, 
+            SLOT(registerInstance(Objref_ptr)));
+    connect(this, 
+            SIGNAL(servantDeleted(ObjectId)), 
+            m_data->m_inputReqCtl, 
+            SLOT(unregisterInstance(ObjectId)));
+
+    // Signals application <-> script engine
+    connect(this, 
+            SIGNAL(servantCreated(Objref_ptr)), 
+            m_data->m_scriptEngine, 
+            SLOT(servantCreated(Objref_ptr)));
+    connect(this, 
+            SIGNAL(servantDeleted(ObjectId)), 
+            m_data->m_scriptEngine, 
+            SLOT(servantDeleted(ObjectId)));
+    connect(this, 
+            SIGNAL(objrefCreated(Objref_ptr)), 
+            m_data->m_scriptEngine, 
+            SLOT(objrefCreated(Objref_ptr)));
+    connect(this, SIGNAL(objrefDeleted(ObjectId)), 
+            m_data->m_scriptEngine, 
+            SLOT(objrefDeleted(ObjectId)));
+
+    // Error notification
+    connect(m_data->m_scriptEngine, 
+            SIGNAL(error(const QString&)), 
+            this, 
+            SIGNAL(error(const QString&)));
+    // End signals application <-> script engine
+
+    // Services dedicated threads
+    m_data->m_inputReqCtl->moveToThread(
+            &m_data->m_inputReqCtlThread);
+    m_data->m_senderCtl->moveToThread(
+            &m_data->m_senderCtlThread);
+    m_data->m_scriptEngine->moveToThread(
+            &m_data->m_scriptEngineThread);
+
+    m_data->m_inputReqCtlThread.start();
+    
+    m_data->m_senderCtl->start(); // its thread pool
+    m_data->m_senderCtlThread.start();
+    
+    m_data->m_scriptEngineThread.start();
 }
 
 Application::~Application()
 {
+    // Stop al the services
+    m_data->m_inputReqCtlThread.quit();
+    m_data->m_senderCtl->stop(); // its thread pool
+    m_data->m_senderCtlThread.quit();
+    m_data->m_scriptEngineThread.quit();
+
+    m_data->m_inputReqCtlThread.wait();
+    m_data->m_senderCtl->join(); // its thread pool
+    m_data->m_senderCtlThread.wait();
+    m_data->m_scriptEngineThread.wait();
+
+    // They shouldn't be referenced by others
+    // but anyway... let shared_ptr work
     ObjrefRepository::iterator it = m_objrefs.begin();
     ObjrefRepository::iterator end = m_objrefs.end();
 
@@ -129,7 +214,25 @@ Application::~Application()
         it.value()->setParent(0);
     }
 
+    delete m_data->m_inputReqCtl;
+    delete m_data->m_senderCtl;
     delete m_data;
+}
+
+
+QObject * Application::inputRequestController() const
+{
+    return m_data->m_inputReqCtl;
+}
+
+QObject * Application::senderController() const
+{
+    return m_data->m_senderCtl;
+}
+
+QObject * Application::scriptEngine() const
+{
+    return m_data->m_scriptEngine;
 }
 
 void Application::load(const QVariant& settings)
@@ -153,8 +256,11 @@ void Application::load(const QVariant& settings)
 
             try
             {
+                const std::string ref =
+                    value["reference"].toString().toStdString();
+
                 cfg.reference =
-                    m_data->m_orb->string_to_object(value["reference"].toString().toStdString().c_str());
+                    m_data->m_orb->string_to_object(ref.c_str());
             }
             catch(...)
             {}

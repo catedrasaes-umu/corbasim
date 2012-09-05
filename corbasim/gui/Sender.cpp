@@ -43,12 +43,6 @@ SenderController::~SenderController()
 {
 }
 
-SenderController * SenderController::getInstance()
-{
-    static std::auto_ptr< SenderController > _instance(new SenderController());
-    return _instance.get();
-}
-
 void SenderController::start(unsigned int numberOfThreads)
 {
     // std::cout << "SenderController::" 

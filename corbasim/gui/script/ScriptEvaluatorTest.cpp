@@ -1,6 +1,6 @@
+#include <corbasim/gui/Application.hpp>
 #include <corbasim/gui/script/ScriptEvaluator.hpp>
 #include <corbasim/gui/utils.hpp>
-#include <corbasim/gui/Sender.hpp>
 #include <iostream>
 
 int main(int argc, char **argv)
@@ -14,10 +14,11 @@ int main(int argc, char **argv)
 
     QApplication app(argc, argv);
 
-    ::corbasim::gui::initialize();
+    // Required by evaluator
+    corbasim::gui::Application application;
 
-    ::corbasim::core::interface_reflective_base const * reflective = 
-        ::corbasim::gui::getReflectiveByFQN(argv[1]);
+    corbasim::core::interface_reflective_base const * reflective = 
+        corbasim::gui::getReflectiveByFQN(argv[1]);
 
     if (!reflective)
     {
@@ -25,26 +26,12 @@ int main(int argc, char **argv)
         return -1;
     }
 
-    corbasim::gui::SenderController * senderController =
-        corbasim::gui::SenderController::getInstance();
-
-    QThread senderThread;
-    senderController->moveToThread(&senderThread);
-
-    senderController->start();
-    senderThread.start();
-
     corbasim::gui::ScriptEvaluatorWidget ev;
     ev.initialize(reflective);
 
     ev.show();
 
     int res = app.exec();
-
-    senderController->stop();
-    senderThread.quit();
-    senderController->join();
-    senderThread.wait();
 
     return res;
 }

@@ -22,12 +22,8 @@
 #include "AppMainWindow.hpp"
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Application.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
-#include <corbasim/gui/Sender.hpp>
-#include <corbasim/gui/script/TriggerEngine.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
-#include <sstream>
 #include <cstdlib>
 #include <iterator>
 #include <algorithm>
@@ -51,28 +47,8 @@ int main(int argc, char **argv)
     if (config->exit)
         return 0;
 
-    // Force initialization
-    corbasim::gui::initialize();
     QThread threadApplication;
-    QThread threadInputReqCntl;
-    QThread threadEngine;
-
-    // Sender
-    corbasim::gui::SenderController * senderController =
-        corbasim::gui::SenderController::getInstance();
-
-    QThread senderThread;
-    senderController->moveToThread(&senderThread);
-
-    senderController->start();
-    senderThread.start();
-    // End sender
-
-    corbasim::gui::InputRequestController& inputReqCntl = 
-        *corbasim::gui::getDefaultInputRequestController();
-
     corbasim::app::AppMainWindow window;
-    corbasim::gui::TriggerEngine engine;
 
     // Signals application -> window
     QObject::connect(&application, SIGNAL(loadedInterface(InterfaceDescriptor_ptr)), 
@@ -109,38 +85,14 @@ int main(int argc, char **argv)
     QObject::connect(&window, SIGNAL(clearScenario()),
             &application, SLOT(clearScenario()));
     // End signals window -> application
-
-    // Signals application -> input controller
-    QObject::connect(&application, SIGNAL(servantCreated(Objref_ptr)), 
-            &inputReqCntl, SLOT(registerInstance(Objref_ptr)));
-    QObject::connect(&application, SIGNAL(servantDeleted(ObjectId)), 
-            &inputReqCntl, SLOT(unregisterInstance(ObjectId)));
-    // End signals application -> input controller
-    
-    // Signals application -> script engine
-    QObject::connect(&application, SIGNAL(servantCreated(Objref_ptr)), 
-            &engine, SLOT(servantCreated(Objref_ptr)));
-    QObject::connect(&application, SIGNAL(servantDeleted(ObjectId)), 
-            &engine, SLOT(servantDeleted(ObjectId)));
-    QObject::connect(&application, SIGNAL(objrefCreated(Objref_ptr)), 
-            &engine, SLOT(objrefCreated(Objref_ptr)));
-    QObject::connect(&application, SIGNAL(objrefDeleted(ObjectId)), 
-            &engine, SLOT(objrefDeleted(ObjectId)));
-    // End signals application -> script engine
-
-    QObject::connect(&window, SIGNAL(runCode(const QString&)),
-            &engine, SLOT(runCode(const QString&)));
+   
+    QObject::connect(&window, 
+            SIGNAL(runCode(const QString&)),
+            application.scriptEngine(), 
+            SLOT(runCode(const QString&)));
     QObject::connect(&window, SIGNAL(runFile(const QString&)),
-            &engine, SLOT(runFile(const QString&)));
-    QObject::connect(&engine, SIGNAL(error(const QString&)), 
-            &window, SLOT(displayError(const QString&)));
-
-    // Executed in dedicated threads
-    inputReqCntl.moveToThread(&threadInputReqCntl);
-    threadInputReqCntl.start();
-
-    engine.moveToThread(&threadEngine);
-    threadEngine.start();
+            application.scriptEngine(), 
+            SLOT(runFile(const QString&)));
 
     window.show();
 
@@ -170,25 +122,15 @@ int main(int argc, char **argv)
     application.moveToThread(&threadApplication);
     threadApplication.start();
 
-    boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));
+    // ORB worker
+    boost::thread orbThread(boost::bind(&CORBA::ORB::run, 
+                orb.in()));
 
     int res = app.exec();
     
     // Wait for child threads
     threadApplication.quit();
-    threadInputReqCntl.quit();
-    threadEngine.quit();
-
-    // Sender
-    senderController->stop();
-    senderThread.quit();
-    senderController->join();
-    senderThread.wait();
-    // End sender
-
     threadApplication.wait();
-    threadInputReqCntl.wait();
-    threadEngine.wait();
 
     orb->shutdown(1);
     orbThread.join();

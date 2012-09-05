@@ -40,6 +40,11 @@ public:
 
     static Application * currentApplication();
 
+    // Services
+    QObject * inputRequestController() const;
+    QObject * senderController() const;
+    QObject * scriptEngine() const;
+
     void load(const QVariant& settings);
     void save(QVariant& settings) const;
 

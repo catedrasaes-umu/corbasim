@@ -22,6 +22,7 @@
 #include <corbasim/gui/tools/ParametersFromFilesTool.hpp>
 #include <corbasim/gui/qvariant.hpp>
 #include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/Application.hpp>
 #include <limits>
 
 // JSON
@@ -495,15 +496,18 @@ OperationSender::OperationSender(
             this,
             SLOT(playClicked(bool)));
 
+    QObject * senderCtl = 
+        Application::currentApplication()->senderController();
+
     connect(
             this,
             SIGNAL(addSender(SenderConfig_ptr)),
-            SenderController::getInstance(),
+            senderCtl,
             SLOT(addSender(SenderConfig_ptr)));
     connect(
             this,
             SIGNAL(deleteSender(SenderConfig_ptr)),
-            SenderController::getInstance(),
+            senderCtl,
             SLOT(deleteSender(SenderConfig_ptr)));
 
     connect(m_updateForm,

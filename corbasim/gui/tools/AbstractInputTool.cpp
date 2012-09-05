@@ -19,7 +19,8 @@
 
 #include "AbstractInputTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
+// #include <corbasim/gui/InputRequestProcessor.hpp>
+#include <corbasim/gui/Application.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
 
@@ -214,13 +215,15 @@ AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id
         m_group->appendItem(sitem);
 
         // connect with the processor
+        QObject * inputRequestController = 
+            Application::currentApplication()->inputRequestController();
         connect(item, 
                 SIGNAL(addProcessor(RequestProcessor_ptr)),
-                getDefaultInputRequestController(),
+                inputRequestController,
                 SLOT(addProcessor(RequestProcessor_ptr)));
         connect(item, 
                 SIGNAL(removeProcessor(RequestProcessor_ptr)),
-                getDefaultInputRequestController(),
+                inputRequestController,
                 SLOT(removeProcessor(RequestProcessor_ptr)));
 
         item->start();

@@ -22,13 +22,6 @@
 
 using namespace corbasim::gui;
 
-InputRequestController * 
-corbasim::gui::getDefaultInputRequestController()
-{
-    static InputRequestController _instance;
-    return &_instance;
-}
-
 //
 //
 // Input Request Controller

@@ -146,8 +146,6 @@ public:
     void join();
     void stop();
 
-    static SenderController * getInstance();
-
 public slots:
 
     void addSender(SenderConfig_ptr cfg);

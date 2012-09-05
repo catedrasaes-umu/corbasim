@@ -21,7 +21,6 @@
 #define CORBASIM_GUI_INPUTREQUESTPROCESSOR_HPP
 
 #include <map>
-#include <QString>
 #include <QObject>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
@@ -82,9 +81,6 @@ protected:
     map_t m_processors;
 
 };
-
-CORBASIM_GUI_DECLSPEC 
-InputRequestController * getDefaultInputRequestController();
 
 } // namespace gui
 } // namespace corbasim
