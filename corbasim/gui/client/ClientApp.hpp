@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * ClientMain.cpp
+ * ClientApp.hpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -17,25 +17,34 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <corbasim/impl.hpp>
-#include <corbasim/gui/client/ClientApp.hpp>
-#include <iostream>
+#ifndef CORBASIM_GUI_CLIENTAPP_HPP
+#define CORBASIM_GUI_CLIENTAPP_HPP
 
-using namespace corbasim::gui;
+#include <QApplication>
 
-int main(int argc, char **argv)
+class QWidget;
+
+namespace corbasim 
 {
-    if (argc < 2)
-    {
-        std::cerr << "You must specify an interface full qualified name" 
-            << std::endl;
-        return -1;
-    }
+namespace gui 
+{
 
-    CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
-	QApplication app(argc, argv);
-    ClientApp client(argv[1]);
+class ClientApp
+{
+public:
 
-    return app.exec();
-}
+    ClientApp(const char * fqn);
+    ~ClientApp();
+
+    QWidget * window() const;
+
+protected:
+    struct ClientData;
+    ClientData * m_data;
+};
+
+} // namespace gui
+} // namespace corbasim
+
+#endif /* CORBASIM_GUI_CLIENTAPP_HPP */
 
