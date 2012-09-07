@@ -21,7 +21,7 @@ BOOST_ROOT=/usr
 QMAKE_DIR=
 
 CORBASIM_ORBIMPL=TAO
-CORBASIM_IDL_COMPILER_OPTIONS=
+CORBASIM_ORB_IDL_COMPILER_OPTIONS=
 
 # Command line options
 
@@ -48,12 +48,15 @@ $CMAKE --version >/dev/null 2>&1 || { echo >&2 "$MSG ERROR: cmake not found"; ex
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
 
-$CMAKE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}                              \
-       -DCMAKE_BUILD_TYPE=${BUILD_TYPE}                                      \
-       -DCMAKE_C_COMPILER=${C_COMPILER}                                      \
-       -DCMAKE_CXX_COMPILER=${CXX_COMPILER}                                  \
-       -DCORBASIM_ORBIMPL=${CORBASIM_ORBIMPL}                                \
-       -DCORBASIM_IDL_COMPILER_OPTIONS=${CORBASIM_IDL_COMPILER_OPTIONS}      \
+echo $TAO_ROOT
+echo $ACE_ROOT
+
+$CMAKE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}                                     \
+       -DCMAKE_BUILD_TYPE=${BUILD_TYPE}                                             \
+       -DCMAKE_C_COMPILER=${C_COMPILER}                                             \
+       -DCMAKE_CXX_COMPILER=${CXX_COMPILER}                                         \
+       -DCORBASIM_ORBIMPL=${CORBASIM_ORBIMPL}                                       \
+       -DCORBASIM_ORB_IDL_COMPILER_OPTIONS=${CORBASIM_ORB_IDL_COMPILER_OPTIONS}     \
        $BASEDIR
 
 cd $OLDPWD

@@ -7,9 +7,10 @@ MACRO(FIND_ACE LIBNAME)
   GET_FILENAME_COMPONENT(parent_dir_ "${PROJECT_SOURCE_DIR}/.." ABSOLUTE)
   FIND_PATH(
     ACE_INCLUDE_DIR ace/ACE.h
-    PATHS "${CMAKE_INSTALL_PREFIX}/include" "${parent_dir_}/ACE_wrappers"
-    $ENV{ACE_ROOT} $ENV{ACE_ROOT}/include ${ACE_TAO_DEFAULT}/include
+    PATHS 
+    $ENV{ACE_ROOT} $ENV{ACE_ROOT}/include
     DOC "Path to ace/ACE.h"
+    NO_DEFAULT_PATH
     )
   
   # This prevents it being taken from cache.
@@ -17,9 +18,9 @@ MACRO(FIND_ACE LIBNAME)
   
   FIND_LIBRARY(
     ACE_LIBRARY "${LIBNAME}"
-    PATHS "${CMAKE_INSTALL_PREFIX}/lib" "${parent_dir_}/ACE_wrappers/ace"
-    $ENV{ACE_ROOT} $ENV{ACE_ROOT}/lib ${ACE_TAO_DEFAULT}/lib
+    PATHS $ENV{ACE_ROOT} $ENV{ACE_ROOT}/lib
     DOC "Path to ACE library file"
+    NO_DEFAULT_PATH
     )
   IF(ACE_INCLUDE_DIR AND ACE_LIBRARY)
     SET(ACE_FOUND TRUE)
