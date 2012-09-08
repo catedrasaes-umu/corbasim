@@ -30,12 +30,12 @@ endif()
 if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
     include(check_ace_tao)
     set(CORBASIM_ORB_LIBS
-        ACE
-        TAO 
-        TAO_PortableServer 
-        TAO_AnyTypeCode 
-        TAO_CosNaming 
-        TAO_ObjRefTemplate)
+        ${ACE_LIBRARY}
+        ${TAO_LIBRARY}
+        ${TAO_PortableServer_LIB}
+        ${TAO_AnyTypeCode_LIB}
+        ${TAO_CosNaming_LIB}
+        ${TAO_ObjRefTemplate_LIB})
     set(CORBASIM_ORB_INCLUDE_DIRS
         ${ACE_INCLUDE_DIR}
         ${TAO_INCLUDE_DIR}
@@ -94,6 +94,16 @@ if(NOT Qwt6_FOUND)
 else()
     message(STATUS "Qwt6 available at: ${Qwt6_INCLUDE_DIR}")
 endif()
+
+
+# Libraries for clients
+set(CORBASIM_CLIENT_LIBS 
+    corbasim corbasim_qt corbasim_gui boost_program_options)
+set(CORBASIM_CLIENT_STATIC_LIBS 
+    corbasim_gui_s corbasim_qt_s corbasim_s boost_program_options)
+# Libraries for servers
+set(CORBASIM_SERVER_LIBS 
+    corbasim boost_program_options)
 
 add_subdirectory(corbasim)
 add_subdirectory(corbasim_idl)
