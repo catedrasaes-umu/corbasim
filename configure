@@ -3,7 +3,33 @@
 BASEDIR=`dirname $0`
 BASEDIR=`cd $BASEDIR && pwd`
 
+USAGE()
+{
+    echo ""
+    echo "USAGE: "
+    echo "    configure [-h] [-c <config file>]"
+    echo ""
+    echo "OPTIONS:"
+    echo "    -h  help"
+    echo "    -c  config file"
+    echo ""
+    exit $E_OPTERROR    # Exit and explain usage, if no argument(s) given.
+}
+
 CONFIG_FILE=corbasim.cfg
+
+# Processing arguments
+while getopts ":h:c:" Option
+do
+    case $Option in
+        h    ) USAGE
+               exit 0;;
+        c    ) CONFIG_FILE=$OPTARG ;;
+        *    ) echo ""
+               echo "Invalid option."
+               USAGE   # DEFAULT
+    esac
+done
 
 # Default options
 CMAKE=cmake
@@ -47,9 +73,6 @@ $CMAKE --version >/dev/null 2>&1 || { echo >&2 "$MSG ERROR: cmake not found"; ex
 
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
-
-echo $TAO_ROOT
-echo $ACE_ROOT
 
 $CMAKE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}                                     \
        -DCMAKE_BUILD_TYPE=${BUILD_TYPE}                                             \
