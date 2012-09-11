@@ -43,9 +43,14 @@ if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
     set(CORBASIM_ORB_LIBRARY_DIRS
         ${TAO_LIBRARY_DIR})
     set(CORBASIM_ORB_IDL_COMPILER ${TAO_IDL_COMPILER})
+    set(CORBASIM_COSNAMING_LIBS
+        ${CORBASIM_ORB_LIBS}
+        ${TAO_CosNaming_Serv_LIB} ${TAO_ImR_Client_LIB} ${TAO_Svc_Utils_LIB}
+        ${TAO_Messaging_LIB} ${TAO_PI_LIB} ${TAO_CodecFactory_LIB} ${TAO_Valuetype_LIB} ${TAO_IORTable_LIB}
+        )
 
     if (TAO_FOUND)
-        include_directories($ENV{ACE_ROOT}/include $ENV{TAO_ROOT}/include)
+        include_directories(${ACE_INCLUDE_DIR} ${TAO_INCLUDE_DIR})
     endif()
 elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni

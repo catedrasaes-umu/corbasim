@@ -16,7 +16,9 @@ set(TAO_LIBRARIES ${TAO_LIBRARY})
 
 set(TAO_FIND_LIBS "PortableServer"  "CosNaming" 
     "CosEvent" "CosEvent_Skel" "AnyTypeCode"
-    "ObjRefTemplate")
+    "ObjRefTemplate" 
+    "CosNaming_Serv" "ImR_Client" "Svc_Utils"
+    "Messaging" "PI" "CodecFactory" "Valuetype" "IORTable")
 if(TAO_FOUND)
     foreach(LIBRARY ${TAO_FIND_LIBS})
         find_library(TAO_${LIBRARY}_LIB NAMES "TAO_${LIBRARY}" "TAO_${LIBRARY}d" ${TAO_LIBRARY} 
