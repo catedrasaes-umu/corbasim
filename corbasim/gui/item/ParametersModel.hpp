@@ -2,7 +2,6 @@
 #define CORBASIM_GUI_PARAMETERSMODEL_HPP
 
 #include <list>
-#include <QStandardItemModel>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/item/InstanceModel.hpp>

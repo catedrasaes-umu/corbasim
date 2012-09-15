@@ -91,8 +91,6 @@ int InstanceModel::columnCount(const QModelIndex&) const
     return 1;
 }
 
-namespace 
-{
 
 QString getNodeName(DescriptorNode const * node)
 {
@@ -120,8 +118,6 @@ QString getNodeName(DescriptorNode const * node)
 
     return "Error!";
 }
-
-} // namespace 
 
 QVariant InstanceModel::data(const QModelIndex& index, int role) const
 {
