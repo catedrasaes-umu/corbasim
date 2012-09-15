@@ -96,20 +96,26 @@ namespace
 
 QString getNodeName(DescriptorNode const * node)
 {
-    if (node->parent && node->parent->reflective->is_repeated())
+    using namespace corbasim::core;
+    DescriptorNode const * parent = node->parent;
+
+    if (parent)
     {
-        return QString("[%1]").arg(node->index);
-    }
-    else if (node->parent && node->parent->reflective->get_type() ==
-            corbasim::core::TYPE_STRUCT)
-    {
-        return node->parent->reflective->get_child_name(node->index);
-    }
-    else if (node->parent && node->parent->reflective->get_type() ==
-            corbasim::core::TYPE_UNION)
-    {
-        return node->parent->reflective->get_child_name(
-                node->reflective->get_child_index());
+        TypeDescriptor_ptr reflective = parent->reflective;
+
+        if (reflective->is_repeated())
+        {
+            return QString("[%1]").arg(node->index);
+        }
+        else if (reflective->get_type() == TYPE_STRUCT)
+        {
+            return reflective->get_child_name(node->index);
+        }
+        else if (reflective->get_type() == TYPE_UNION)
+        {
+            return reflective->get_child_name(
+                    node->reflective->get_child_index());
+        }
     }
 
     return "Error!";
@@ -149,7 +155,8 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
             if (!dNode->parent)
             {
                 // Operation name
-                return dNode->instance->reflective->get_reflective_by_index(dNode->index)->get_name();
+                return dNode->instance->reflective->get_reflective_by_index(
+                        dNode->index)->get_name();
             }
             else
             {
@@ -165,6 +172,16 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
                     iNode->instance->reference());
         }
     }
+    else if (!iNode && role == Qt::CheckStateRole)
+    {
+        DescriptorNode * dNode = 
+            static_cast< DescriptorNode *>(node);
+        
+        dNode->check_for_initialized();
+
+        if (isCheckable(dNode->reflective))
+            return (node->checked)? Qt::Checked: Qt::Unchecked;
+    }
 
     return QVariant();
 }
@@ -172,6 +189,66 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
 bool InstanceModel::setData(const QModelIndex & index, 
         const QVariant& value, int role)
 {
+    if (!index.isValid())
+        return false;
+
+    AbstractNode * aNode = 
+        static_cast< AbstractNode * >(index.internalPointer());
+    DescriptorNode * node = 
+        dynamic_cast< DescriptorNode * >(aNode);
+
+    if (role == Qt::CheckStateRole && node && isCheckable(node->reflective))
+    {
+        QList< int > path;
+        node->check_for_initialized();
+
+        const DescriptorNode * cnode = node;
+
+        // Calculate path
+        while(cnode)
+        {
+            path.push_front(cnode->index);
+            cnode = cnode->parent;
+        }
+        
+        if (path.size() > 0)
+        {
+            Qt::CheckState state = 
+                static_cast<Qt::CheckState>(value.toUInt());
+
+            bool check = (state == Qt::Checked)? true: false;
+            bool old = node->checked;
+
+            if (check != old)
+            {
+                InterfaceDescriptor_ptr iface = node->instance->reflective;
+                const QString name (node->instance->instance->name());
+                node->checked = check;
+
+                emit dataChanged(index, index);
+
+                if (check)
+                {
+                    emit checked(name, iface, path);
+#if 0
+                    if (m_items.size() == 1)
+                        emit checked(item.reflective, path);
+#endif
+                }
+                else
+                {
+                    emit unchecked(name, iface, path);
+#if 0
+                    if (m_items.size() == 1)
+                        emit unchecked(item.reflective, path);
+#endif
+                }
+            }
+
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -179,14 +256,21 @@ Qt::ItemFlags InstanceModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
-/*
-    // Value is editable by default
-    if (index.column())
-        return Qt::ItemIsEnabled 
-            | Qt::ItemIsSelectable 
-            | Qt::ItemIsEditable;
- */
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    
+    Qt::ItemFlags f =  Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
+    if (!isInstanceNode(index))
+    {
+        DescriptorNode * node = static_cast< DescriptorNode * >(
+                index.internalPointer());
+
+        node->check_for_initialized();
+
+        if (isCheckable(node->reflective))
+            f = f | Qt::ItemIsUserCheckable;
+    }
+
+    return f;
 }
 
 QVariant InstanceModel::headerData(int section, 
@@ -383,5 +467,57 @@ Objref_ptr InstanceModel::getInstance(const QModelIndex& index) const
 Objref_ptr InstanceModel::getInstance(const QString& name) const
 {
     return m_instances.find(name);
+}
+
+// Checkable
+bool InstanceModel::isCheckable(TypeDescriptor_ptr reflective) const
+{
+    return false;
+}
+
+void InstanceModel::check(const QString& id, const QList< int >& path) 
+{
+    int i = 0;
+    for (Nodes_t::iterator it = m_nodes.begin();
+            it != m_nodes.end(); ++it, i++) 
+    {
+        if ((*it)->instance->name() == id)
+        {
+            // Instance element
+            QModelIndex idx = index(i, 0, QModelIndex());
+            
+            for (int ii = 0; ii < path.size(); ii++) 
+            {
+                idx = index(path[ii], 0, idx);
+            }
+
+            setData(idx, Qt::Checked, Qt::CheckStateRole);
+
+            break;
+        }
+    }
+}
+
+void InstanceModel::uncheck(const QString& id, const QList< int >& path) 
+{
+    int i = 0;
+    for (Nodes_t::iterator it = m_nodes.begin();
+            it != m_nodes.end(); ++it, i++) 
+    {
+        if ((*it)->instance->name() == id)
+        {
+            // Instance element
+            QModelIndex idx = index(i, 0, QModelIndex());
+            
+            for (int ii = 0; ii < path.size(); ii++) 
+            {
+                idx = index(path[ii], 0, idx);
+            }
+
+            setData(idx, Qt::Unchecked, Qt::CheckStateRole);
+
+            break;
+        }
+    }
 }
 

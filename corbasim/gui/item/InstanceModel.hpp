@@ -74,9 +74,22 @@ public slots:
     void setDisplayParameters(bool value);
     void setMaxLevel(int value);
 
+    void check(const QString& id, const QList< int >& path);
+    void uncheck(const QString& id, const QList< int >& path);
+
 signals:
 
+    void checked(const QString& id, 
+            InterfaceDescriptor_ptr reflective,
+            const QList< int >& path);
+
+    void unchecked(const QString& id, 
+            InterfaceDescriptor_ptr reflective,
+            const QList< int >& path);
+
 protected:
+
+    virtual bool isCheckable(TypeDescriptor_ptr reflective) const;
 
     typedef QList< InstanceNode_ptr > Nodes_t;
     Nodes_t m_nodes;

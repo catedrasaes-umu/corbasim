@@ -23,6 +23,10 @@
 
 using namespace corbasim::gui;
 
+AbstractNode::AbstractNode() : checked(false)
+{
+}
+
 AbstractNode::~AbstractNode()
 {
 }

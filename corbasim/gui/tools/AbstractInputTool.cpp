@@ -144,7 +144,7 @@ ParametersModel * AbstractInputTool::createModel()
 void AbstractInputTool::registerInstance(Objref_ptr objref)
 {
     m_instances.add(objref);
-    m_model->registerInstance(objref->name(), objref->interface());
+    m_model->registerInstance(objref);
 }
 
 void AbstractInputTool::unregisterInstance(ObjectId id)
@@ -181,7 +181,7 @@ void AbstractInputTool::unregisterInstance(ObjectId id)
         }
     }
 
-    m_model->unregisterInstance(objref->name());
+    m_model->unregisterInstance(id);
     m_instances.del(id);
 }
 

@@ -43,6 +43,8 @@ typedef boost::shared_ptr< InstanceNode > InstanceNode_ptr;
 
 struct AbstractNode
 {
+    bool checked;
+    AbstractNode();
     virtual ~AbstractNode();
 };
 

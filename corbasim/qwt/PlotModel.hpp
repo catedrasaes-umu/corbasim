@@ -19,7 +19,7 @@ public:
     virtual ~PlotModel();
 
 protected:
-    virtual bool isCheckable(gui::TypeDescriptor_ptr reflective);
+    virtual bool isCheckable(gui::TypeDescriptor_ptr reflective) const;
 };
 
 } // qwt
