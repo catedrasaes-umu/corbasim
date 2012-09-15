@@ -339,6 +339,8 @@ void AbstractInputTool::save(QVariant& settings)
 
 void AbstractInputTool::load(const QVariant& settings)
 {
+    clear();
+
     const QVariantList list = settings.toList();
 
     for (int i = 0; i < list.size(); i++) 
@@ -370,5 +372,26 @@ void AbstractInputTool::load(const QVariant& settings)
             }
         }
     }
+}
+
+void AbstractInputTool::clear()
+{
+    for (inverse_map_t::const_iterator it = m_inverse_map.begin(); 
+            it != m_inverse_map.end(); ++it) 
+    {
+        AbstractInputItem * item = it->first;
+
+        // Notify to the processor
+        item->reset();
+
+        m_group->deleteItem(
+                qobject_cast< qt::SortableGroupItem * >
+                    (item->parent()));
+
+        delete item;
+    }
+
+    m_map.clear();
+    m_inverse_map.clear();
 }
 
