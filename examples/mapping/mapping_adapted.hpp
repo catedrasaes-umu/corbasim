@@ -16,7 +16,7 @@ namespace adapted
 template < >
 struct is_corbaseq< HelloApp::Names > : public cs_mpl::true_
 {
-	typedef ::corbasim::orbimpl::String_Manager slice_type;
+	typedef ::CORBA::String_var slice_type;
 };
 
 } // adapted
@@ -648,7 +648,7 @@ namespace adapted
 template < >
 struct is_corbaseq< SimpleExample::St::_ss_seq > : public cs_mpl::true_
 {
-	typedef ::corbasim::orbimpl::String_Manager slice_type;
+	typedef ::CORBA::String_var slice_type;
 };
 
 } // adapted
@@ -969,7 +969,23 @@ namespace adapted
 template < >
 struct is_corbaseq< StringTest::NameSeq > : public cs_mpl::true_
 {
-	typedef StringTest::Name slice_type;
+	typedef ::CORBA::String_var slice_type;
+};
+
+} // adapted
+} // corbasim
+
+
+        
+namespace corbasim
+{
+namespace adapted
+{
+
+template < >
+struct is_corbaseq< StringTest::StringSeq > : public cs_mpl::true_
+{
+	typedef ::CORBA::String_var slice_type;
 };
 
 } // adapted
@@ -987,7 +1003,7 @@ namespace adapted
 template < >
 struct is_corbaseq< StringTest::NameIDSeq > : public cs_mpl::true_
 {
-	typedef StringTest::NameID slice_type;
+	typedef ::CORBA::String_var slice_type;
 };
 
 } // adapted
@@ -1091,6 +1107,8 @@ struct is_objrefvar< StringTest::InterfaceString_var > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
+
+
 
 
 
@@ -5862,6 +5880,8 @@ namespace _corbasim_StringTest
 
 
 
+
+
 struct StructWithStrings
 {
 	typedef corbasim::adapted::member< ::StringTest::StructWithStrings, 0 > str_corbasim_member;
@@ -5991,6 +6011,26 @@ struct __operation6
 };
 
 typedef __operation6 operation6;
+
+
+struct __operation7
+{
+	typedef boost::mpl::vector< corbasim::Arg_IN< const StringTest::StringSeq& > > _arg_list;
+
+	typedef corbasim::adapted::member< __operation7, 0 > n_corbasim_member;
+
+	StringTest::StringSeq n;
+	
+	
+	__operation7();
+	
+	__operation7(const StringTest::StringSeq& _n);
+	
+	// Copy constructor
+	__operation7(const __operation7& o);
+};
+
+typedef __operation7 operation7;
 
 } // InterfaceString
 
@@ -12661,6 +12701,8 @@ struct call< _corbasim_SimpleExample::Test::operation4 >
 
 
 
+
+
 namespace corbasim
 {
 namespace adapted
@@ -12669,7 +12711,7 @@ namespace adapted
 template < >
 struct interface < StringTest::InterfaceString >
 {
-	typedef cs_mpl::list< _corbasim_StringTest::InterfaceString::operation1, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation2, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation3, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation4, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation5, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation6  >  >  >  >  >  >   _op_list;
+	typedef cs_mpl::list< _corbasim_StringTest::InterfaceString::operation1, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation2, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation3, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation4, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation5, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation6, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation7  >  >  >  >  >  >  >   _op_list;
 	
 };
 
@@ -12831,6 +12873,33 @@ struct call< _corbasim_StringTest::InterfaceString::operation6 >
     static inline void invoke(Interface * ref, Value& value)
     {
  ref->operation6(value.n);
+    }
+};
+
+} // adapted
+} // corbasim
+
+
+// OperationDef: StringTest::InterfaceString::operation7
+BOOST_FUSION_ADAPT_STRUCT(
+	_corbasim_StringTest::InterfaceString::operation7,
+	( StringTest::StringSeq, n)
+     )
+
+namespace corbasim
+{
+namespace adapted
+{     
+
+template< >
+struct call< _corbasim_StringTest::InterfaceString::operation7 >
+{
+	typedef _corbasim_StringTest::InterfaceString::operation7 Value;
+	
+    template < typename Interface >
+    static inline void invoke(Interface * ref, Value& value)
+    {
+ ref->operation7(value.n);
     }
 };
 

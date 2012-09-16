@@ -1835,6 +1835,14 @@ struct servant< StringTest::InterfaceString >
 			
 		}
 		
+		void operation7(const StringTest::StringSeq& n)
+		{
+			_corbasim_StringTest::InterfaceString::operation7 _val(n);
+	
+			__f(_val);		
+			
+		}
+		
 		
 	protected:
 		F __f;

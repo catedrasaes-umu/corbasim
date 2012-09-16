@@ -1627,6 +1627,8 @@ const char * name< SimpleExample::Abuelo >::call()
 
 
 
+
+
 template< >
 const char * full_qualified_name< StringTest::StructWithStrings >::call()
 {
@@ -1698,6 +1700,13 @@ template< >
 const char * name< _corbasim_StringTest::InterfaceString::operation6 >::call()
 {
 	return "operation6";
+}
+
+
+template< >
+const char * name< _corbasim_StringTest::InterfaceString::operation7 >::call()
+{
+	return "operation7";
 }
 
 
@@ -6044,6 +6053,8 @@ namespace _corbasim_StringTest
 
 
 
+
+
 namespace InterfaceString 
 {
 
@@ -6159,6 +6170,26 @@ __operation6::__operation6(const StringTest::NameIDSeq& _n):
 
 // Copy constructor
 __operation6::__operation6(const __operation6& o) :
+	n(o.n)
+{
+	
+}
+
+
+
+
+__operation7::__operation7()
+{
+}
+
+__operation7::__operation7(const StringTest::StringSeq& _n):
+	n(_n)
+{
+	
+}
+
+// Copy constructor
+__operation7::__operation7(const __operation7& o) :
 	n(o.n)
 {
 	
