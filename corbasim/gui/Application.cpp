@@ -67,7 +67,8 @@ struct Application::ApplicationData
         CORBA::Object_var rootPOAObj = 
             m_orb->resolve_initial_references ("RootPOA");
 
-        m_rootPOA = PortableServer::POA::_narrow(rootPOAObj.in());
+        m_rootPOA = 
+            PortableServer::POA::_narrow(rootPOAObj.in());
 
         m_manager = m_rootPOA->the_POAManager();
 
@@ -196,22 +197,32 @@ Application::~Application()
     m_data->m_senderCtlThread.wait();
     m_data->m_scriptEngineThread.wait();
 
-    // They shouldn't be referenced by others
-    // but anyway... let shared_ptr work
-    ObjrefRepository::iterator it = m_objrefs.begin();
-    ObjrefRepository::iterator end = m_objrefs.end();
-
-    for (; it != end; it++)
+    // Objrefs
     {
-        it.value()->setParent(0);
+        unique_lock lock(m_data->m_objrefsMutex);
+
+        // They shouldn't be referenced by others
+        // but anyway... let shared_ptr work
+        ObjrefRepository::iterator it = m_objrefs.begin();
+        ObjrefRepository::iterator end = m_objrefs.end();
+
+        for (; it != end; it++)
+        {
+            it.value()->setParent(0);
+        }
     }
 
-    it = m_servants.begin();
-    end = m_servants.end();
-
-    for (; it != end; it++)
+    // Servants
     {
-        it.value()->setParent(0);
+        unique_lock lock(m_data->m_servantsMutex);
+
+        ObjrefRepository::iterator it = m_servants.begin();
+        ObjrefRepository::iterator end = m_servants.end();
+
+        for (; it != end; it++)
+        {
+            it.value()->setParent(0);
+        }
     }
 
     delete m_data->m_inputReqCtl;
@@ -295,6 +306,8 @@ void Application::save(QVariant& settings) const
 
     // Objrefs
     {
+        shared_lock lock(m_data->m_objrefsMutex);
+
         QVariantList list;
 
         ObjrefRepository::const_iterator it = m_objrefs.begin();
@@ -320,10 +333,14 @@ void Application::save(QVariant& settings) const
 
     // Servants
     {
+        shared_lock lock(m_data->m_servantsMutex);
+
         QVariantList list;
 
-        ObjrefRepository::const_iterator it = m_servants.begin();
-        ObjrefRepository::const_iterator end = m_servants.end();
+        ObjrefRepository::const_iterator it = 
+            m_servants.begin();
+        ObjrefRepository::const_iterator end = 
+            m_servants.end();
 
         for (; it != end; it++)
         {
@@ -345,8 +362,17 @@ void Application::save(QVariant& settings) const
 
 void Application::clearScenario()
 {
-    m_objrefs.clear();
-    m_servants.clear();
+    // Objrefs
+    {
+        unique_lock lock(m_data->m_objrefsMutex);
+        m_objrefs.clear();
+    }
+
+    // Servants
+    {
+        unique_lock lock(m_data->m_servantsMutex);
+        m_servants.clear();
+    }
 }
 
 void Application::loadScenario(const QString& file)
@@ -354,7 +380,8 @@ void Application::loadScenario(const QString& file)
     clearScenario();
     QVariant settings;
     
-    bool res = gui::fromJsonFile(file.toStdString().c_str(), settings);
+    bool res =
+        fromJsonFile(file.toStdString().c_str(), settings);
 
     if (res)
     {
@@ -373,7 +400,7 @@ void Application::saveScenario(const QString& file)
 
     std::ofstream ofs(file.toStdString().c_str());
     json::ostream_writer_t ow(ofs, true);
-    gui::toJson(ow, settings);
+    toJson(ow, settings);
 }
 
 void Application::loadDirectory(const QString& directory)
@@ -391,22 +418,24 @@ void Application::loadInterface(const QString& fqn)
     }
 }
 
-void Application::createObjref(const ObjrefConfig& cfg)
+Objref_ptr Application::createObjref(const ObjrefConfig& cfg)
 {
     unique_lock lock(m_data->m_objrefsMutex);
 
     if (cfg.name.empty())
     {
         emit error("You must specify an object name");
-        return;
+        return Objref_ptr();
     }
 
     const QString name(cfg.name.c_str());
 
     if (m_servants.find(name) || m_objrefs.find(name))
     {
-        emit error(QString("Object '%1' already exists!").arg(name));
-        return;
+        emit error(QString("Object '%1' already exists!")
+                .arg(name));
+
+        return Objref_ptr();
     }
 
     InterfaceDescriptor_ptr factory = 
@@ -425,29 +454,35 @@ void Application::createObjref(const ObjrefConfig& cfg)
         connect(obj.get(), signal, this, signal);
 
         emit objrefCreated(obj);
+
+        return obj;
     }
     else
     {
-        emit error(QString("Unable to find '%1'!").arg(cfg.fqn.c_str()));
+        emit error(QString("Unable to find '%1'!")
+                .arg(cfg.fqn.c_str()));
     }
+
+    return Objref_ptr();
 }
 
-void Application::createServant(const ServantConfig& cfg)
+Objref_ptr Application::createServant(const ServantConfig& cfg)
 {
     unique_lock lock(m_data->m_servantsMutex);
 
     if (cfg.name.empty())
     {
         emit error("You must specify an object name");
-        return;
+        return Objref_ptr();
     }
 
     const QString name(cfg.name.c_str());
 
     if (m_servants.find(name) || m_objrefs.find(name))
     {
-        emit error(QString("Object '%1' already exists!").arg(name));
-        return;
+        emit error(QString("Object '%1' already exists!")
+                .arg(name));
+        return Objref_ptr();
     }
 
     InterfaceDescriptor_ptr factory = 
@@ -458,13 +493,17 @@ void Application::createServant(const ServantConfig& cfg)
         Servant_ptr obj(new Servant(cfg, factory, this));
         
         PortableServer::ObjectId_var myObjID = 
-            m_data->m_rootPOA->activate_object (obj->getServant());
+            m_data->m_rootPOA->activate_object(
+                    obj->getServant());
     
         CORBA::Object_var objSrv = 
-            m_data->m_rootPOA->servant_to_reference(obj->getServant());
+            m_data->m_rootPOA->servant_to_reference(
+                    obj->getServant());
 
         // Displaying reference
-        CORBA::String_var ref = m_data->m_orb->object_to_string (objSrv);
+        CORBA::String_var ref = 
+            m_data->m_orb->object_to_string (objSrv);
+
         std::cout << cfg.name << ": " << ref.in() << std::endl;
 
         obj->setReference(objSrv);
@@ -510,7 +549,11 @@ void Application::createServant(const ServantConfig& cfg)
             }
         }
 #endif
+
+        return obj;
     }
+    
+    return Objref_ptr();
 }
 
 void Application::deleteObjref(ObjectId id)

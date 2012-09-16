@@ -59,10 +59,10 @@ public slots:
 
     void loadInterface(const QString& fqn);
 
-    void createObjref(const ObjrefConfig& cfg);
+    Objref_ptr createObjref(const ObjrefConfig& cfg);
     void deleteObjref(ObjectId id);
 
-    void createServant(const ServantConfig& cfg);
+    Objref_ptr createServant(const ServantConfig& cfg);
     void deleteServant(ObjectId id);
 
 signals:
