@@ -37,6 +37,7 @@ set(corbasim_gui_EXPORTED_HEADERS
 
     # server
     gui/server/Server.hpp
+    gui/server/ServerApp.hpp
 
     # client
     gui/client/ClientApp.hpp
@@ -125,13 +126,13 @@ set(corbasim_gui_MOC_HDRS
 )
 
 set(corbasim_gui_SRCS
-    gui/json.cpp
-    gui/utils.hpp
-    gui/utils.cpp
-    gui/qvariant.cpp
-    gui/initialize.cpp
-    gui/Model.cpp
     gui/Application.cpp
+    gui/Model.cpp
+    gui/initialize.cpp
+    gui/json.cpp
+    gui/qvariant.cpp
+    gui/utils.cpp
+    gui/utils.hpp
 
     # proc
     gui/proc/RequestProcessor.cpp
@@ -163,6 +164,7 @@ set(corbasim_gui_SRCS
 
     # server
     gui/server/Server.cpp
+    gui/server/ServerApp.cpp
 
     # client
     gui/client/ClientApp.cpp
@@ -215,13 +217,13 @@ add_executable(corbasim_script_evaluator_test
     gui/script/ScriptEvaluatorTest.cpp)
 target_link_libraries(corbasim_script_evaluator_test
     corbasim_gui
-    boost_program_options)
+    ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 add_executable(corbasim_client.real
     gui/client/ClientMain.cpp)
 target_link_libraries(corbasim_client.real
     corbasim_gui
-    boost_program_options)
+    ${Boost_PROGRAM_OPTIONS_LIBRARY})
 add_executable(corbasim_client
     gui/launcher.cpp)
 target_link_libraries(corbasim_client

@@ -45,9 +45,14 @@ if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
     set(CORBASIM_ORB_IDL_COMPILER ${TAO_IDL_COMPILER})
     set(CORBASIM_COSNAMING_LIBS
         ${CORBASIM_ORB_LIBS}
-        ${TAO_CosNaming_Serv_LIB} ${TAO_ImR_Client_LIB} ${TAO_Svc_Utils_LIB}
-        ${TAO_Messaging_LIB} ${TAO_PI_LIB} ${TAO_CodecFactory_LIB} ${TAO_Valuetype_LIB} ${TAO_IORTable_LIB}
-        )
+        ${TAO_CosNaming_Serv_LIB} 
+        ${TAO_ImR_Client_LIB} 
+        ${TAO_Svc_Utils_LIB}
+        ${TAO_Messaging_LIB} ${TAO_PI_LIB} 
+        ${TAO_CodecFactory_LIB} 
+        ${TAO_Valuetype_LIB} 
+        ${TAO_IORTable_LIB}
+    )
 
     if (TAO_FOUND)
         include_directories(${ACE_INCLUDE_DIR} ${TAO_INCLUDE_DIR})
@@ -86,7 +91,7 @@ endif(NOT Boost_FOUND)
 find_package(Qt4)
 find_package(Qwt6)
 find_package(Boost 1.45.0 
-    COMPONENTS regex system thread program_options)
+    COMPONENTS system thread program_options)
 
 message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 
@@ -104,15 +109,14 @@ else()
     message(STATUS "Qwt6 available at: ${Qwt6_INCLUDE_DIR}")
 endif()
 
-
 # Libraries for clients
 set(CORBASIM_CLIENT_LIBS 
-    corbasim corbasim_qt corbasim_gui boost_program_options)
+    corbasim corbasim_qt corbasim_gui ${Boost_PROGRAM_OPTIONS_LIBRARY})
 set(CORBASIM_CLIENT_STATIC_LIBS 
-    corbasim_gui_s corbasim_qt_s corbasim_s boost_program_options)
+    corbasim_gui_s corbasim_qt_s corbasim_s ${Boost_PROGRAM_OPTIONS_LIBRARY})
 # Libraries for servers
 set(CORBASIM_SERVER_LIBS 
-    corbasim boost_program_options)
+    corbasim ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 add_subdirectory(corbasim)
 add_subdirectory(corbasim_idl)

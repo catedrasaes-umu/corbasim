@@ -1,18 +1,16 @@
 set(corbasim_qt_EXPORTED_HEADERS
-    qt/export.hpp
-    # QObjects
-    qt/TabWidget.hpp
-
     qt/CustomLayouts.hpp
-    qt/SortableGroup.hpp
-    qt/types.hpp
-    qt/ReferenceFinder.hpp
-    qt/Status.hpp
-    qt/RangedWidget.hpp
     qt/MultiFileSelectionWidget.hpp
-    qt/TemplatedSpinBox.hpp
-    qt/ScriptWindow.hpp
     qt/ObjrefWidget.hpp
+    qt/RangedWidget.hpp
+    qt/ReferenceFinder.hpp
+    qt/ScriptWindow.hpp
+    qt/SortableGroup.hpp
+    qt/Status.hpp
+    qt/TabWidget.hpp
+    qt/TemplatedSpinBox.hpp
+    qt/export.hpp
+    qt/types.hpp
 )
 
 foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
@@ -23,37 +21,37 @@ endforeach(_header ${corbasim_qt_EXPORTED_HEADERS})
 
 set(corbasim_qt_MOC_HDRS
     # private
-    qt/private/codeeditor.h
-    qt/private/ScriptEditor.hpp
     qt/private/MultiScriptEditor.hpp
+    qt/private/ScriptEditor.hpp
+    qt/private/codeeditor.h
 
-    qt/TabWidget.hpp
-    qt/ReferenceFinder.hpp
     qt/CustomLayouts.hpp
-    qt/SortableGroup.hpp
-    qt/ScriptWindow.hpp
-    qt/ObjrefWidget.hpp
     qt/MultiFileSelectionWidget.hpp
+    qt/ObjrefWidget.hpp
     qt/RangedWidget.hpp
+    qt/ReferenceFinder.hpp
+    qt/ScriptWindow.hpp
+    qt/SortableGroup.hpp
     qt/Status.hpp
+    qt/TabWidget.hpp
 )
 
 set(corbasim_qt_SRCS
     # private
+    qt/private/MultiScriptEditor.cpp
+    qt/private/ScriptEditor.cpp
     qt/private/codeeditor.cpp
     qt/private/qscriptsyntaxhighlighter.cpp
-    qt/private/ScriptEditor.cpp
-    qt/private/MultiScriptEditor.cpp
 
-    qt/TabWidget.cpp
     qt/CustomLayouts.cpp
-    qt/SortableGroup.cpp
-    qt/ReferenceFinder.cpp
-    qt/initialize.cpp
-    qt/ScriptWindow.cpp
-    qt/ObjrefWidget.cpp
     qt/MultiFileSelectionWidget.cpp
+    qt/ObjrefWidget.cpp
+    qt/ReferenceFinder.cpp
+    qt/ScriptWindow.cpp
+    qt/SortableGroup.cpp
     qt/Status.cpp
+    qt/TabWidget.cpp
+    qt/initialize.cpp
 )
 
 message(STATUS "Qt libraries: ${QT_LIBRARIES}")
@@ -65,7 +63,8 @@ set(corbasim_qt_LIBS
 qt4_add_resources(corbasim_qt_RCC qt/corbasim_qt.qrc)
 
 # NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
-qt4_wrap_cpp(corbasim_qt_MOC_SRCS ${corbasim_qt_MOC_HDRS} OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
+qt4_wrap_cpp(corbasim_qt_MOC_SRCS ${corbasim_qt_MOC_HDRS} 
+    OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
 
 add_library(corbasim_qt SHARED ${corbasim_qt_SRCS}
     ${corbasim_qt_MOC_SRCS}
