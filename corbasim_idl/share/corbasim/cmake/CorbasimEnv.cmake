@@ -1,37 +1,37 @@
 
-set(CORBASIM_INSTALL_PREFIX /home/asenac/dev/next_version_installed)
+set(CORBASIM_INSTALL_PREFIX /usr/local)
 
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
 
 # Boost C++ Libraries
-include_directories(/usr/include)
-link_directories(/usr/lib)
+include_directories(/opt/boost/1_51_0/include)
+link_directories(/opt/boost/1_51_0/lib)
 
 # ORB
 set(CORBASIM_ORBIMPL
     TAO)
 
 set(CORBASIM_ORB_LIBS
-    ACE;TAO;TAO_PortableServer;TAO_AnyTypeCode;TAO_CosNaming;TAO_ObjRefTemplate)
+    /home/asenac/local/ACE+TAO-5.7.9/lib/libACE.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_PortableServer.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_AnyTypeCode.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_CosNaming.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_ObjRefTemplate.so)
 
-include_directories(/orbsvcs)
-link_directories()
+include_directories(/home/asenac/local/ACE+TAO-5.7.9/include;/home/asenac/local/ACE+TAO-5.7.9/include;/home/asenac/local/ACE+TAO-5.7.9/include/orbsvcs)
+link_directories(/home/asenac/local/ACE+TAO-5.7.9/lib)
 
 set(CORBASIM_ORB_IDL_COMPILER
-    tao_idl)
+    /home/asenac/local/ACE+TAO-5.7.9/bin/tao_idl)
 
 set(CORBASIM_ORB_IDL_COMPILER_OPTIONS
     )
 
 # Libraries for clients
 set(CORBASIM_CLIENT_LIBS 
-    corbasim corbasim_qt corbasim_gui boost_program_options)
+    corbasim;corbasim_qt;corbasim_gui;/opt/boost/1_51_0/lib/libboost_program_options.so)
 
 set(CORBASIM_CLIENT_STATIC_LIBS 
-    corbasim_gui_s corbasim_qt_s corbasim_s boost_program_options)
+    corbasim_gui_s;corbasim_qt_s;corbasim_s;/opt/boost/1_51_0/lib/libboost_program_options.so)
 
 # Libraries for servers
 set(CORBASIM_SERVER_LIBS 
-    corbasim boost_program_options)
+    corbasim;/opt/boost/1_51_0/lib/libboost_program_options.so)
 
