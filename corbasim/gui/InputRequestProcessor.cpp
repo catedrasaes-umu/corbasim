@@ -59,9 +59,28 @@ void InputRequestController::unregisterInstance(ObjectId id)
                 SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
 
         m_instances.del(id);
-    }
 
-    // TODO remove its processors
+        // Remove its processors
+        map_t::iterator it = m_processors.begin();
+
+        for (; it != m_processors.end();)
+        {
+            map_t::iterator old = it++;
+
+            if (old->first.first == id)
+            {
+                // Notify deletion of all its processors
+                for (processors_t::const_iterator pit = 
+                        old->second.begin(); 
+                        pit != old->second.end(); ++pit) 
+                {
+                    emit removedProcessor(*pit);    
+                }
+
+                m_processors.erase(old);
+            }
+        }
+    }
 }
 
 void InputRequestController::processRequest(ObjectId id, 
@@ -109,6 +128,8 @@ void InputRequestController::addProcessor(
     // Inserts the processor
     key_t key (p->id(), op->get_tag());
     m_processors[key].push_back(p);
+    
+    emit addedProcessor(p);
 }
 
 void InputRequestController::removeProcessor(
@@ -119,6 +140,8 @@ void InputRequestController::removeProcessor(
     // Removes the processor
     key_t key (p->id(), op->get_tag());
     m_processors[key].removeAll(p);
+
+    emit removedProcessor(p);
 }
 
 
