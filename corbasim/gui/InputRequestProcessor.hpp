@@ -60,6 +60,11 @@ public slots:
     void addProcessor(RequestProcessor_ptr);
     void removeProcessor(RequestProcessor_ptr);
 
+signals:
+
+    void addedProcessor(RequestProcessor_ptr);
+    void removedProcessor(RequestProcessor_ptr);
+
 protected:
 
     typedef std::pair< ObjectId, tag_t > key_t;
