@@ -1829,7 +1829,7 @@ void SequenceWidget::save(QVariant& settings)
 
     map["index"] = m_sbCurrentIndex->value();
 
-    map["sequence"] = value();
+    map["value"] = value();
 
     settings = map;
 }
