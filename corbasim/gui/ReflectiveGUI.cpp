@@ -1829,7 +1829,7 @@ void SequenceWidget::save(QVariant& settings)
 
     map["index"] = m_sbCurrentIndex->value();
 
-    // map["sequence"] = value();
+    map["sequence"] = value();
 
     settings = map;
 }
@@ -1845,7 +1845,7 @@ void SequenceWidget::load(const QVariant& settings)
 
     m_sbCurrentIndex->setValue(map["index"].toInt());
 
-    // TODO value
+    setValue(map["value"]);
 }
 
 void ComplexSequenceWidget::save(QVariant& settings)
