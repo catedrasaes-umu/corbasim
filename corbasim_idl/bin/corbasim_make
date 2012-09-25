@@ -68,6 +68,9 @@ echo "Processing files: $INPUTFILES"
 
 cat $INPUTFILES | cpp -E -P $PREPROCESSOROPTIONS -o $PROJECTNAME.idl || exit 1
 
+# Fix union case required whitespace
+sed -i 's/case \(.*\):/case \1 :/g' $PROJECTNAME.idl
+
 echo "Generated temporary file: $PROJECTNAME.idl"
 
 $BASEDIR/corbasim_idl $CORBASIMIDLOPTIONS $PROJECTNAME.idl
