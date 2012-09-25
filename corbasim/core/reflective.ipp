@@ -146,7 +146,7 @@ holder array_reflective< T >::get_child_value(holder& value,
 template< typename T >
 void array_reflective< T >::copy(holder const& src, holder& dst) const
 {
-    for (unsigned i = 0; i < size; i++) 
+    for (std::size_t i = 0; i < size; i++) 
     {
         holder child_src = get_child_value(const_cast< holder& >(src), i);
         holder child_dst = get_child_value(dst, i);
@@ -295,7 +295,7 @@ void sequence_reflective< T >::copy(holder const& src, holder& dst) const
     unsigned int length = get_length(src);
     set_length(dst, length);
 
-    for (unsigned i = 0; i < length; i++) 
+    for (std::size_t i = 0; i < length; i++) 
     {
         holder child_src = get_child_value(const_cast< holder& >(src), i);
         holder child_dst = get_child_value(dst, i);
@@ -448,7 +448,7 @@ reflective_type struct_reflective< T >::get_type() const
 template< typename T >
 void struct_reflective< T >::copy(holder const& src, holder& dst) const
 {
-    for (unsigned i = 0; i < members_count; i++) 
+    for (std::size_t i = 0; i < members_count; i++) 
     {
         holder child_src = get_child_value(
                 const_cast< holder& >(src), i);
