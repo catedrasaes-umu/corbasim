@@ -323,7 +323,7 @@ namespace «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
 «ENDDEFINE»
 
 «DEFINE values FOR StructDef-»
-struct «identifier»
+struct «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
 {
 	«FOREACH members AS mem ITERATOR it-»
 	typedef corbasim::adapted::member< ::«getFQN()», «it.counter0» > «mem.identifier»_corbasim_member;
