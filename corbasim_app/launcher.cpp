@@ -10,7 +10,7 @@ int main(int argc, char **argv)
     proc.setProcessChannelMode(QProcess::ForwardedChannels);
 
     QStringList args;
-    for (int i = 0; i < argc; i++) 
+    for (int i = 1; i < argc; i++) 
     {
         args << argv[i];
     }

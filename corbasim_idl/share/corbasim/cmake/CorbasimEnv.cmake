@@ -1,5 +1,5 @@
 
-set(CORBASIM_INSTALL_PREFIX /tmp/corbasim)
+set(CORBASIM_INSTALL_PREFIX /usr/local)
 
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
@@ -15,8 +15,8 @@ set(CORBASIM_ORBIMPL
 set(CORBASIM_ORB_LIBS
     ACE;TAO;TAO_PortableServer;TAO_AnyTypeCode;TAO_CosNaming;TAO_ObjRefTemplate)
 
-include_directories(/orbsvcs)
-link_directories()
+include_directories(/usr/include;/usr/include;/usr/include/orbsvcs)
+link_directories(/usr/lib)
 
 set(CORBASIM_ORB_IDL_COMPILER
     tao_idl)
