@@ -986,6 +986,7 @@ void AppMainWindow::showAbout()
 {
     static const char * aboutText = 
         "corbasim version " CORBASIM_VERSION "\n"
+        "Build " __DATE__ "\n"
         "Developed by: Andres Senac <andres@senac.es>";
 
     QMessageBox::about(this, "About corbasim", 
