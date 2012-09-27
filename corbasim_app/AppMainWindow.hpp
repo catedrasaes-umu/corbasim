@@ -114,6 +114,7 @@ public slots:
     void showSetMaxLogSize();
 
     void showRunFile();
+    void showDebugger();
 
 signals:
 
@@ -159,6 +160,7 @@ protected:
     DumpTool * m_dumpTool;
     AbstractInputTool * m_plotTool;
     AbstractInputTool * m_valueViewerTool;
+    QMainWindow * m_debugger;
 
     typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
     ObjrefViews_t m_objrefViews;

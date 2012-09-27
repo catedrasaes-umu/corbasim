@@ -34,7 +34,11 @@
 #include <corbasim/qt/initialize.hpp>
 #include <corbasim/gui/json.hpp>
 
+#include <corbasim/gui/Application.hpp>
+
 #include <corbasim/version.hpp>
+
+#include <QScriptEngineDebugger>
 
 using namespace corbasim::app;
 
@@ -89,7 +93,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_senderSequenceTool(NULL),
     m_dumpTool(NULL),
     m_plotTool(NULL),
-    m_valueViewerTool(NULL)
+    m_valueViewerTool(NULL),
+    m_debugger(NULL)
 
 {
     corbasim::qt::setDefaultInstanceModel(&m_instanceModel);
@@ -309,6 +314,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuTool->addSeparator();
     menuTool->addAction("&Run file", 
             this, SLOT(showRunFile()));
+    menuTool->addAction("&Debugger", 
+            this, SLOT(showDebugger()));
 
     menuWindow->addAction(setNSAction);
     menuWindow->addSeparator();
@@ -1017,5 +1024,20 @@ void AppMainWindow::showRunFile()
     {
         emit runFile(file);
     }
+}
+
+void AppMainWindow::showDebugger()
+{
+    if (!m_debugger)
+    {
+        QScriptEngineDebugger * sed = new QScriptEngineDebugger(this);
+        sed->attachTo(static_cast< QScriptEngine *>(
+                    gui::Application::currentApplication()->scriptEngine()));
+        m_debugger = sed->standardWindow();
+        m_debugger->setWindowTitle("corbasim script debugger");
+        m_debugger->setWindowIcon(QIcon(":/resources/images/csu.png"));
+    }
+
+    m_debugger->show();
 }
 
