@@ -1843,9 +1843,9 @@ void SequenceWidget::load(const QVariant& settings)
         m_sbLength->setValue(map["length"].toInt());
     }
 
-    m_sbCurrentIndex->setValue(map["index"].toInt());
-
     setValue(map["value"]);
+
+    m_sbCurrentIndex->setValue(map["index"].toInt());
 }
 
 void ComplexSequenceWidget::save(QVariant& settings)
