@@ -44,6 +44,7 @@ public:
     QObject * inputRequestController() const;
     QObject * senderController() const;
     QObject * scriptEngine() const;
+    QObject * nameServiceManager() const;
 
     void load(const QVariant& settings);
     void save(QVariant& settings) const;

@@ -32,6 +32,7 @@ typedef boost::unique_lock< boost::shared_mutex > unique_lock;
 struct Objref::Data
 {
     boost::shared_mutex refMutex;
+    boost::shared_mutex nsEntryMutex;
 };
 
 Objref::Objref(const QString& name,
@@ -50,6 +51,7 @@ Objref::Objref(const ObjrefConfig& cfg,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
     m_name(cfg.name.c_str()), 
+    m_nsEntry(cfg.entry.c_str()), 
     m_interfaceDescriptor(interfaceDescriptor),
     QObject(parent), m_data(new Data)
 {
@@ -104,6 +106,20 @@ void Objref::setReference(const CORBA::Object_var& reference)
 
         emit updatedReference(m_reference);
     }
+}
+
+QString Objref::nsEntry() const
+{
+    shared_lock lock(m_data->nsEntryMutex);
+    return m_nsEntry;
+}
+
+void Objref::setNsEntry(const QString& nsEntry)
+{
+    unique_lock lock(m_data->nsEntryMutex);
+    m_nsEntry = nsEntry;
+
+    emit updatedNsEntry(m_nsEntry);
 }
 
 Event_ptr Objref::sendRequest(const Request_ptr& request)

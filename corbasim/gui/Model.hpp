@@ -39,11 +39,9 @@ class CORBASIM_GUI_DECLSPEC Objref : public QObject
     Q_PROPERTY(CORBA::Object_var reference 
             READ reference 
             WRITE setReference)
-    /*
     Q_PROPERTY(QString nsEntry
             READ nsEntry
             WRITE setNsEntry)
-            */
 public:
 
     Objref(const QString& name,
@@ -66,6 +64,8 @@ public:
 
     CORBA::Object_var reference() const;
 
+    QString nsEntry() const;
+
 public slots:
 
     // Properties
@@ -73,6 +73,8 @@ public slots:
     void setReference(const CORBA::Object_var& reference);
 
     Event_ptr sendRequest(const Request_ptr& request);
+
+    void setNsEntry(const QString& nsEntry);
 
     // void updateConfig(const ObjrefConfig& cfg);
 
@@ -86,9 +88,12 @@ signals:
             const Request_ptr& request,
             const Event_ptr& event);
 
+    void updatedNsEntry(const QString& entry);
+
 protected:
 
     const QString m_name;
+    QString m_nsEntry;
 
     InterfaceDescriptor_ptr m_interfaceDescriptor;
 

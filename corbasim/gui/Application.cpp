@@ -28,6 +28,7 @@
 #include <corbasim/gui/InputRequestProcessor.hpp>
 #include <corbasim/gui/Sender.hpp>
 #include <corbasim/gui/script/TriggerEngine.hpp>
+#include <corbasim/gui/NSManager.hpp>
 
 #include <cassert>
 
@@ -53,6 +54,9 @@ struct Application::ApplicationData
 
     TriggerEngine * m_scriptEngine;
     QThread m_scriptEngineThread;
+
+    NSManager * m_nameServiceManager;
+    QThread m_nameServiceManagerThread;
 
     // Mutex
     boost::shared_mutex m_objrefsMutex;
@@ -133,6 +137,7 @@ Application::Application(QObject * parent) :
     m_data->m_inputReqCtl = new InputRequestController();
     m_data->m_senderCtl = new SenderController();
     m_data->m_scriptEngine = new TriggerEngine();
+    m_data->m_nameServiceManager = new NSManager(m_data->m_orb);
 
     // Input request controller
     connect(this, 
@@ -168,6 +173,33 @@ Application::Application(QObject * parent) :
             SIGNAL(error(const QString&)));
     // End signals application <-> script engine
 
+    // Signals application <-> name service
+    connect(this, 
+            SIGNAL(servantCreated(Objref_ptr)), 
+            m_data->m_nameServiceManager, 
+            SLOT(servantCreated(Objref_ptr)));
+    connect(this, 
+            SIGNAL(servantDeleted(ObjectId)), 
+            m_data->m_nameServiceManager, 
+            SLOT(servantDeleted(ObjectId)));
+    connect(this, 
+            SIGNAL(objrefCreated(Objref_ptr)), 
+            m_data->m_nameServiceManager, 
+            SLOT(objrefCreated(Objref_ptr)));
+    connect(this, SIGNAL(objrefDeleted(ObjectId)), 
+            m_data->m_nameServiceManager, 
+            SLOT(objrefDeleted(ObjectId)));
+    // Error notification
+    connect(m_data->m_nameServiceManager, 
+            SIGNAL(error(const QString&)), 
+            this, 
+            SIGNAL(error(const QString&)));
+    connect(m_data->m_nameServiceManager, 
+            SIGNAL(message(const QString&)), 
+            this, 
+            SIGNAL(message(const QString&)));
+    // End signals application <-> name service
+
     // Services dedicated threads
     m_data->m_inputReqCtl->moveToThread(
             &m_data->m_inputReqCtlThread);
@@ -175,6 +207,10 @@ Application::Application(QObject * parent) :
             &m_data->m_senderCtlThread);
     m_data->m_scriptEngine->moveToThread(
             &m_data->m_scriptEngineThread);
+    m_data->m_nameServiceManager->moveToThread(
+            &m_data->m_nameServiceManagerThread);
+
+    m_data->m_nameServiceManager->start();
 
     m_data->m_inputReqCtlThread.start();
     
@@ -182,6 +218,7 @@ Application::Application(QObject * parent) :
     m_data->m_senderCtlThread.start();
     
     m_data->m_scriptEngineThread.start();
+    m_data->m_nameServiceManagerThread.start();
 }
 
 Application::~Application()
@@ -191,11 +228,13 @@ Application::~Application()
     m_data->m_senderCtl->stop(); // its thread pool
     m_data->m_senderCtlThread.quit();
     m_data->m_scriptEngineThread.quit();
+    m_data->m_nameServiceManagerThread.quit();
 
     m_data->m_inputReqCtlThread.wait();
     m_data->m_senderCtl->join(); // its thread pool
     m_data->m_senderCtlThread.wait();
     m_data->m_scriptEngineThread.wait();
+    m_data->m_nameServiceManagerThread.wait();
 
     // Objrefs
     {
@@ -246,6 +285,11 @@ QObject * Application::scriptEngine() const
     return m_data->m_scriptEngine;
 }
 
+QObject * Application::nameServiceManager() const
+{
+    return m_data->m_nameServiceManager;
+}
+
 void Application::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
@@ -264,6 +308,7 @@ void Application::load(const QVariant& settings)
             ObjrefConfig cfg;
             cfg.name = value["name"].toString().toStdString();
             cfg.fqn = value["fqn"].toString().toStdString();
+            cfg.entry = value["entry"].toString().toStdString();
 
             try
             {
@@ -294,6 +339,7 @@ void Application::load(const QVariant& settings)
             ServantConfig cfg;
             cfg.name = value["name"].toString().toStdString();
             cfg.fqn = value["fqn"].toString().toStdString();
+            cfg.entry = value["entry"].toString().toStdString();
 
             createServant(cfg);
         }
@@ -324,6 +370,7 @@ void Application::save(QVariant& settings) const
                 m_data->m_orb->object_to_string((*it)->reference());
 
             value["reference"] = ref.in();
+            value["entry"] = (*it)->nsEntry();
 
             list << value;
         }
@@ -348,6 +395,7 @@ void Application::save(QVariant& settings) const
 
             value["name"] = (*it)->name();
             value["fqn"] = (*it)->interface()->get_fqn();
+            value["entry"] = (*it)->nsEntry();
 
             // its reference doesn't matter
 
@@ -523,32 +571,6 @@ Objref_ptr Application::createServant(const ServantConfig& cfg)
         }
 
         emit servantCreated(obj);
-
-#if 0
-        // Naming service registration
-        if (std::strlen(cfg.entry.in()) > 0)
-        {
-            std::auto_ptr< core::ns_register > ptr_(
-                    new core::ns_register(m_data->orb, 
-                        cfg.entry.in(), objSrv));
-
-            if (!ptr_->error())
-            {
-                // Assumes its ownership
-                obj->set_ns_entry(ptr_.release());
-
-                emit message(
-                        QString("'%1' registred as '%2'").arg(id).
-                            arg(cfg.entry.in()));
-            }
-            else
-            {
-                emit error(
-                        QString("Unable to register '%1' as '%2'").
-                            arg(id).arg(cfg.entry.in()));
-            }
-        }
-#endif
 
         return obj;
     }

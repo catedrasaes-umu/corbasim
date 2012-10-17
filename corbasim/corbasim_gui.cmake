@@ -44,6 +44,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/client/SimpleClient.hpp
 
     gui/InputRequestProcessor.hpp
+    gui/NSManager.hpp
     gui/OperationForm.hpp
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
@@ -106,6 +107,7 @@ set(corbasim_gui_MOC_HDRS
     gui/client/SimpleClient.hpp
 
     gui/InputRequestProcessor.hpp
+    gui/NSManager.hpp
     gui/OperationForm.hpp
     gui/ReflectiveGUI.hpp
     gui/RequestDialog.hpp
@@ -172,6 +174,7 @@ set(corbasim_gui_SRCS
 
     gui/Sender.cpp
     gui/InputRequestProcessor.cpp
+    gui/NSManager.cpp
     gui/OperationForm.cpp
     gui/ReflectiveGUI.cpp
     gui/RequestDialog.cpp

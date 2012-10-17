@@ -597,6 +597,8 @@ void AppMainWindow::servantDeleted(ObjectId id)
 
 void AppMainWindow::displayError(const QString& err)
 {
+    std::cerr << err.toStdString() << std::endl;
+
     QMessageBox::critical(this, "Error", err);
 
     statusBar()->showMessage(err, 30000);
@@ -604,6 +606,8 @@ void AppMainWindow::displayError(const QString& err)
 
 void AppMainWindow::displayMessage(const QString& msg)
 {
+    std::cout << msg.toStdString() << std::endl;
+
     statusBar()->showMessage(msg, 30000);
 }
 
@@ -878,7 +882,8 @@ void AppMainWindow::showLoadScenario()
 {
     const QString file = 
         QFileDialog::getOpenFileName(0,
-                "Select a file", ".");
+                "Select a file", ".",
+                tr("CORBASIM scenarios (*.sce)"));
 
     if (!file.isEmpty())
     {
@@ -890,7 +895,8 @@ void AppMainWindow::showSaveScenario()
 {
     const QString file = 
         QFileDialog::getSaveFileName(0, 
-                "Select a file", ".");
+                "Select a file", ".", 
+                tr("CORBASIM scenarios (*.sce)"));
 
     if (!file.isEmpty())
     {
@@ -902,7 +908,8 @@ void AppMainWindow::doLoadConfiguration()
 {
     const QString file = 
         QFileDialog::getOpenFileName(0,
-                "Select a file", ".");
+                "Select a file", ".",
+                tr("CORBASIM generic application configuration (*.cfg)"));
 
     if (!file.isEmpty())
     {
@@ -930,7 +937,8 @@ void AppMainWindow::doSaveConfiguration()
 {
     const QString file = 
         QFileDialog::getSaveFileName(0, 
-                "Select a file", ".");
+                "Select a file", ".",
+                tr("CORBASIM generic application configuration (*.cfg)"));
 
     if (!file.isEmpty())
     {

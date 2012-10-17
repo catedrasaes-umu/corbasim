@@ -85,7 +85,12 @@ int main(int argc, char **argv)
     QObject::connect(&window, SIGNAL(clearScenario()),
             &application, SLOT(clearScenario()));
     // End signals window -> application
-   
+ 
+    QObject::connect(&window, 
+            SIGNAL(setNameService(const CORBA::Object_var&)), 
+            application.nameServiceManager(), 
+            SLOT(setNSReference(const CORBA::Object_var&)));  
+
     QObject::connect(&window, 
             SIGNAL(runCode(const QString&)),
             application.scriptEngine(), 
