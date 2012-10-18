@@ -34,7 +34,7 @@ SetReferenceDialog::SetReferenceDialog(QWidget * parent) :
         QVBoxLayout * groupLayout = new QVBoxLayout();
         groupLayout->setMargin(0);
 
-        m_reference = new qt::ObjrefWidget();
+        m_reference = new ObjrefWidget();
         m_reference->setObjectName("reference");
         groupLayout->addWidget(m_reference);
         group->setLayout(groupLayout);

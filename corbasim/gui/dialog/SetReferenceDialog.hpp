@@ -22,7 +22,7 @@
 
 #include <QtGui>
 #include <corbasim/gui/types.hpp>
-#include <corbasim/qt/ObjrefWidget.hpp>
+#include <corbasim/gui/ObjrefWidget.hpp>
 
 namespace corbasim 
 {
@@ -54,7 +54,7 @@ protected:
     
     void hideEvent(QHideEvent* event);
 
-    qt::ObjrefWidget * m_reference;
+    ObjrefWidget * m_reference;
 
     core::reference_validator_ptr m_referenceValidator;
 };

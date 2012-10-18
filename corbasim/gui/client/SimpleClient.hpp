@@ -26,7 +26,7 @@
 #include <corbasim/core/caller_fwd.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 
-#include <corbasim/qt/ObjrefWidget.hpp>
+#include <corbasim/gui/ObjrefWidget.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
 
 #include <corbasim/gui/types.hpp>
@@ -86,7 +86,7 @@ protected:
 
     QTabWidget * m_tab;
     QTreeView * m_tree;
-    qt::ObjrefWidget * m_ref;
+    ObjrefWidget * m_ref;
 
     QButtonGroup m_buttons;
     QActionGroup m_actions;

@@ -67,7 +67,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     connect(act, SIGNAL(toggled(bool)), gb,
         SLOT(setVisible(bool)));
     QHBoxLayout * gbLayout = new QHBoxLayout;
-    m_ref = new qt::ObjrefWidget;
+    m_ref = new ObjrefWidget;
     gbLayout->addWidget(m_ref);
     gb->setLayout(gbLayout);
 

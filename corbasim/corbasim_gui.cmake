@@ -6,6 +6,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/qvariant.hpp
     gui/types.hpp
     gui/utils.hpp
+    gui/ObjrefWidget.hpp
 
     # proc
     gui/proc/RequestProcessor.hpp
@@ -74,6 +75,7 @@ endforeach(_header ${corbasim_gui_EXPORTED_HEADERS})
 set(corbasim_gui_MOC_HDRS
     gui/Model.hpp
     gui/Application.hpp
+    gui/ObjrefWidget.hpp
 
     # proc
     gui/proc/DumpProcessor.hpp
@@ -134,7 +136,7 @@ set(corbasim_gui_SRCS
     gui/json.cpp
     gui/qvariant.cpp
     gui/utils.cpp
-    gui/utils.hpp
+    gui/ObjrefWidget.cpp
 
     # proc
     gui/proc/RequestProcessor.cpp

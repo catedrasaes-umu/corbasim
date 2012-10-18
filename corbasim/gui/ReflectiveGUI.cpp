@@ -1188,7 +1188,7 @@ void ComplexSequenceWidget::indexChanged(int idx)
 ObjrefvarWidget::ObjrefvarWidget(
         TypeDescriptor_ptr reflective,
         QWidget * parent) :
-    qt::ObjrefWidget(0, parent), ReflectiveWidgetBase(reflective)
+    ObjrefWidget(0, parent), ReflectiveWidgetBase(reflective)
 {
     // set validator
     core::objrefvar_reflective_base const * ref = 

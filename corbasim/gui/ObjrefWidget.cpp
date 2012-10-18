@@ -12,7 +12,7 @@
 #include <QtGui>
 
 using namespace corbasim;
-using namespace corbasim::qt;
+using namespace corbasim::gui;
 
 ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
         QWidget * parent) :
@@ -35,7 +35,7 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
     updateBtn->setMaximumWidth(90);
 
-    m_status = new Status;
+    m_status = new qt::Status;
     mainLayout->addWidget(m_status, 0, 3);
 
     {
@@ -89,7 +89,7 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
             SLOT(valueChanged()));
 
     // Default model
-    QAbstractItemModel * model = getDefaultInstanceModel();
+    QAbstractItemModel * model = qt::getDefaultInstanceModel();
     if (model)
     {
         setModel(model);

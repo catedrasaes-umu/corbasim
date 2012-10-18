@@ -22,7 +22,7 @@
 
 #include <QtGui>
 
-#include <corbasim/qt/ObjrefWidget.hpp>
+#include <corbasim/gui/ObjrefWidget.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 #include <corbasim/qt/TabWidget.hpp>
 
@@ -324,7 +324,7 @@ protected:
 };
 
 class CORBASIM_GUI_DECLSPEC ObjrefvarWidget : 
-    public qt::ObjrefWidget, public ReflectiveWidgetBase
+    public ObjrefWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
 public:

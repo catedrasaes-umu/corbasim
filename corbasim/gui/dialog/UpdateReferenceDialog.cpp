@@ -38,7 +38,7 @@ UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :
         QVBoxLayout * groupLayout = new QVBoxLayout();
         groupLayout->setMargin(0);
 
-        m_status = new qt::ObjrefWidget();
+        m_status = new ObjrefWidget();
         m_status->setObjectName("status");
         groupLayout->addWidget(m_status);
         group->setLayout(groupLayout);
@@ -50,7 +50,7 @@ UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :
         QVBoxLayout * groupLayout = new QVBoxLayout();
         groupLayout->setMargin(0);
 
-        m_reference = new qt::ObjrefWidget();
+        m_reference = new ObjrefWidget();
         m_reference->setObjectName("reference");
         groupLayout->addWidget(m_reference);
         group->setLayout(groupLayout);

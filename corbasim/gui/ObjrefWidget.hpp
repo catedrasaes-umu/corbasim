@@ -17,11 +17,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CORBASIM_QT_OBJREFWIDGET_HPP
-#define CORBASIM_QT_OBJREFWIDGET_HPP
+#ifndef CORBASIM_GUI_OBJREFWIDGET_HPP
+#define CORBASIM_GUI_OBJREFWIDGET_HPP
 
 #include <QWidget>
-#include <corbasim/qt/export.hpp>
+#include <corbasim/gui/export.hpp>
 #include <corbasim/core/caller_fwd.hpp>
 
 class QComboBox;
@@ -31,12 +31,15 @@ class QAbstractItemModel;
 
 namespace corbasim 
 {
-namespace qt 
+namespace qt
+{
+class Status;
+} // namespace qt
+
+namespace gui
 {
 
-class Status;
-
-class CORBASIM_QT_DECLSPEC ObjrefWidget : public QWidget
+class CORBASIM_GUI_DECLSPEC ObjrefWidget : public QWidget
 {
     Q_OBJECT
 public:
@@ -66,7 +69,7 @@ signals:
 protected:
     QComboBox * m_selector;
     QStackedWidget * m_stack;
-    Status * m_status;
+    qt::Status * m_status;
     QTextEdit * m_ior;
 
     core::reference_validator_base * m_validator;
@@ -79,8 +82,8 @@ protected:
     QString m_nsEntry;
 };
 
-} // namespace qt
+} // namespace gui
 } // namespace corbasim
 
-#endif /* CORBASIM_QT_OBJREFWIDGET_HPP */
+#endif /* CORBASIM_GUI_OBJREFWIDGET_HPP */
 
