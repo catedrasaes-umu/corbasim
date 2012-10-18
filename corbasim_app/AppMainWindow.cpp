@@ -883,7 +883,7 @@ void AppMainWindow::showLoadScenario()
     const QString file = 
         QFileDialog::getOpenFileName(0,
                 "Select a file", ".",
-                tr("CORBASIM scenarios (*.sce)"));
+                tr("CORBASIM scenario (*.sce)"));
 
     if (!file.isEmpty())
     {
@@ -893,13 +893,16 @@ void AppMainWindow::showLoadScenario()
 
 void AppMainWindow::showSaveScenario()
 {
-    const QString file = 
+    QString file = 
         QFileDialog::getSaveFileName(0, 
                 "Select a file", ".", 
-                tr("CORBASIM scenarios (*.sce)"));
+                tr("CORBASIM scenario (*.sce)"));
 
     if (!file.isEmpty())
     {
+        if(!file.endsWith(".sce"))
+            file.append(".sce");
+
         emit saveScenario(file);
     }
 }
@@ -935,13 +938,16 @@ void AppMainWindow::doLoadConfiguration()
 
 void AppMainWindow::doSaveConfiguration()
 {
-    const QString file = 
+    QString file = 
         QFileDialog::getSaveFileName(0, 
                 "Select a file", ".",
                 tr("CORBASIM generic application configuration (*.cfg)"));
 
     if (!file.isEmpty())
     {
+        if(!file.endsWith(".cfg"))
+            file.append(".cfg");
+
         QVariant settings;
         save(settings);
 

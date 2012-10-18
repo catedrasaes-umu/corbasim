@@ -433,11 +433,14 @@ void AbstractSequenceTool::showContextMenu(const QPoint& pos)
 void AbstractSequenceTool::saveCurrentSequence()
 {
     QString file = QFileDialog::getSaveFileName( 0, tr(
-                "Select a file"), ".");
+                "Select a file"), ".", m_filter);
 
     // User cancels
     if (file.isEmpty())
         return;
+
+    if(!m_extension.isEmpty() && !file.endsWith(m_extension))
+        file.append(m_extension);
 
     QVariant v;
     save(v);
@@ -451,7 +454,7 @@ void AbstractSequenceTool::saveCurrentSequence()
 void AbstractSequenceTool::loadSequence()
 {
     const QString file = QFileDialog::getOpenFileName( 0, tr(
-                "Select some file"), ".");
+                "Select some file"), ".", m_filter);
 
     // User cancels
     if (file.isEmpty())

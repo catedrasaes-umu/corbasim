@@ -18,9 +18,7 @@
  */
 
 #include "NSManager.hpp"
-#include <corbasim/core/reference_repository.hpp>
 #include <iostream>
-#include <cstring>
 
 using namespace corbasim::gui;
 
@@ -57,6 +55,49 @@ void NSManager::doStart()
     m_timer.start(5000);
 }
 
+void NSManager::resolve(Objref_ptr objref)
+{
+    // Invalid name service
+    if (CORBA::is_nil(m_nameService))
+        return;
+
+    CORBA::Object_var oldRef = objref->reference();
+    CORBA::Object_var newRef;
+    bool is_equivalent = true;
+
+    const std::string str = objref->nsEntry().toStdString();
+
+    if (!str.empty())
+    {
+        try {
+            
+            newRef = m_nameService->resolve_str(str.c_str());
+
+            if (!CORBA::is_nil(oldRef))
+            {
+                is_equivalent = oldRef->_is_equivalent(newRef);
+            }
+            else if ((CORBA::is_nil(oldRef) && !CORBA::is_nil(newRef)))
+            {
+                is_equivalent = false;
+            }
+
+        } catch(...) {
+
+            is_equivalent = CORBA::is_nil(newRef);
+        }
+    }
+
+    if (!is_equivalent)
+    {
+        objref->setReference(newRef);
+
+        emit message(
+                QString("Updated reference for '%1'").
+                    arg(objref->name()));
+    }
+}
+
 void NSManager::refreshNS()
 {
     // Invalid name service
@@ -68,49 +109,35 @@ void NSManager::refreshNS()
 
     for (; it != end; it++)
     {
-        CORBA::Object_var oldRef = it.value()->reference();
-        CORBA::Object_var newRef;
-        bool is_equivalent = true;
-
-        const std::string str = it.value()->nsEntry().toStdString();
-
-        if (!str.empty())
-        {
-            try {
-                
-                newRef = m_nameService->resolve_str(str.c_str());
-
-                if (!CORBA::is_nil(oldRef))
-                {
-                    is_equivalent = oldRef->_is_equivalent(newRef);
-                }
-                else if ((CORBA::is_nil(oldRef) && !CORBA::is_nil(newRef)))
-                {
-                    is_equivalent = false;
-                }
-
-            } catch(...) {
-
-                is_equivalent = CORBA::is_nil(newRef);
-            }
-        }
-
-        if (!is_equivalent)
-        {
-            it.value()->setReference(newRef);
-
-            emit message(
-                    QString("Updated reference for '%1'").arg(it.value()->name()));
-        }
+        resolve(it.value());
     }
 }
 
 void NSManager::setNSReference(const CORBA::Object_var& ref)
 {
     m_nameService = CosNaming::NamingContextExt::_narrow(ref);
-    
+
     if (CORBA::is_nil(m_nameService))
         emit error("Invalid Naming Service reference!");
+
+    // TODO check if equivalent references
+    resetRegisters();
+}
+
+void NSManager::resetRegisters()
+{
+    m_registers.clear();
+
+    if (!CORBA::is_nil(m_nameService))
+    {
+        ObjrefRepository::iterator it = m_servants.begin();
+        ObjrefRepository::iterator end = m_servants.end();
+
+        for (; it != end; it++)
+        {
+            registerServant(it.value());
+        }
+    }
 }
 
 void NSManager::objrefCreated(Objref_ptr objref) 
@@ -123,63 +150,43 @@ void NSManager::objrefDeleted(ObjectId id)
     m_objrefs.del(id);
 }
 
+void NSManager::registerServant(Objref_ptr servant)
+{
+    const std::string str = servant->nsEntry().toStdString();
+    const CORBA::Object_var ref = servant->reference();
+
+    // TODO Have I to check if ref is nil?
+    if (!str.empty())
+    {
+        register_ptr reg(
+                new core::ns_register(
+                    m_nameService, str, ref));
+
+        if (reg->error())
+        {
+            emit error(QString("Unable to register '%1' as '%2'").
+                    arg(servant->name()).arg(str.c_str()));
+        }
+        else
+        {
+            m_registers.insert(servant->id(), reg);
+        }
+    }
+}
+
 void NSManager::servantCreated(Objref_ptr servant) 
 {
     m_servants.add(servant);
 
     if (!CORBA::is_nil(m_nameService))
     {
-        const std::string str = servant->nsEntry().toStdString();
-        const CORBA::Object_var ref = servant->reference();
-
-        // TODO Have I to check if ref is nil?
-        if (!str.empty())
-        {
-            bool err = false;
-            try {
-                
-                const CosNaming::Name_var name = 
-                    m_nameService->to_name(str.c_str());
-
-                // Registra los contextos
-                for (unsigned int i = 0; !err && i < name->length() - 1; i++)
-                { 
-                    CosNaming::Name ctx(name.in());
-                    ctx.length(i + 1);
-                    
-                    try {
-                        CORBA::Object_var ctxObj = m_nameService->resolve(ctx); 
-
-                        CosNaming::NamingContextExt_var ctxVar = 
-                            CosNaming::NamingContextExt::_narrow(ctxObj);
-                        
-                        // Is it a context?
-                        err = !(CORBA::is_nil(ctxVar));
-
-                    } catch (...) {
-                        m_nameService->bind_new_context(ctx);
-                    }
-                }
-                
-                m_nameService->rebind(name.in(), ref);  
-
-            } catch(...) {
-                err = true;
-            }
-
-            if (err)
-            {
-                emit error(QString("Unable to register '%1' as '%2'").
-                        arg(servant->name()).arg(str.c_str()));
-            }
-        }
+        registerServant(servant);
     }
 }
 
 void NSManager::servantDeleted(ObjectId id) 
 {
-    // TODO unregister it and close the door
-
     m_servants.del(id);
+    m_registers.remove(id);
 }
 

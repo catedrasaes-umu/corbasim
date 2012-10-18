@@ -154,6 +154,8 @@ void OperationSequenceItem::stopTimer()
 OperationSequenceTool::OperationSequenceTool(QWidget * parent) :
     AbstractSequenceTool(parent)
 {
+    m_filter = tr("CORBASIM Operation Sequence Tool (*.ost)");
+    m_extension = ".ost";
 }
 
 OperationSequenceTool::~OperationSequenceTool()

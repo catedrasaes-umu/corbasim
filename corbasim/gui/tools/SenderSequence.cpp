@@ -53,6 +53,8 @@ void SenderSequenceItem::showDetails(bool show)
 SenderSequenceTool::SenderSequenceTool(QWidget * parent) :
     AbstractSequenceTool(parent)
 {
+    m_filter = tr("CORBASIM Sender Sequence Tool (*.sst)");
+    m_extension = ".sst";
 }
 
 SenderSequenceTool::~SenderSequenceTool()

@@ -26,16 +26,36 @@ ns_register::ns_register(CORBA::ORB_ptr orb,
         const std::string& key, 
         CORBA::Object_ptr ref, 
         bool release_at_exit) : 
-    m_error(false), m_release(true) 
+    m_error(false), m_release(release_at_exit) 
 {
-    m_release = release_at_exit;
-    
     try {
 
         CORBA::Object_var obj = 
             orb->resolve_initial_references("NameService");
         m_nsObj = CosNaming::NamingContextExt::_narrow(obj);
         
+        do_register(key, ref);
+        
+    } catch (...) { 
+        std::cerr << "Error during registration into Naming Service!" 
+            << std::endl;
+        m_error = true;
+    }
+}
+
+ns_register::ns_register(const CosNaming::NamingContextExt_var& ns,
+        const std::string& key, 
+        CORBA::Object_ptr ref, 
+        bool release_at_exit) :
+    m_error(false), m_release(release_at_exit), m_nsObj(ns)
+{
+    do_register(key, ref);
+}
+
+void ns_register::do_register(const std::string& key, 
+        CORBA::Object_ptr ref)
+{
+    try {
         if (CORBA::is_nil(m_nsObj))
         {
             std::cerr << "Unable to get Naming Service reference!" 
@@ -53,7 +73,7 @@ ns_register::ns_register(CORBA::ORB_ptr orb,
             ctx.length(i + 1);
             
             try {
-                CORBA::Object_var ctxObj = m_nsObj->resolve(ctx);           
+                CORBA::Object_var ctxObj = m_nsObj->resolve(ctx); 
                 CosNaming::NamingContextExt_var ctxVar = 
                     CosNaming::NamingContextExt::_narrow(ctxObj);
                 
@@ -71,7 +91,7 @@ ns_register::ns_register(CORBA::ORB_ptr orb,
             }
         }
         
-        m_nsObj->rebind(m_name, ref);   
+        m_nsObj->rebind(m_name, ref);  
         
     } catch (...) { 
         std::cerr << "Error during registration into Naming Service!" 

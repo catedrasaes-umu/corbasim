@@ -185,6 +185,9 @@ protected:
     sequences_t m_sequences;
 
     QMenu * m_menu;
+
+    QString m_filter;
+    QString m_extension;
 };
 
 } // namespace gui
