@@ -55,8 +55,6 @@ protected:
     void hideEvent(QHideEvent* event);
 
     ObjrefWidget * m_reference;
-
-    core::reference_validator_ptr m_referenceValidator;
 };
 
 } // namespace gui

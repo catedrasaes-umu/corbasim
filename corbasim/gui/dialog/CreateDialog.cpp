@@ -74,9 +74,12 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     setLayout(layout);
 
+    // TODO deprecated
+    /*
     ::corbasim::core::detail::objrefvar_reflective< CORBA::Object_var > iface;
     m_validator.reset(iface.create_validator());
     m_reference->setValidator(m_validator.get());
+     */
 }
 
 ObjrefCreateDialog::~ObjrefCreateDialog()
@@ -94,7 +97,7 @@ void ObjrefCreateDialog::createClicked()
 
     cfg.name = m_name->text().toStdString();
     cfg.fqn = m_fqn->currentText().toStdString();
-    cfg.reference = m_validator->get_reference();
+    cfg.reference = m_reference->reference();
     cfg.entry = m_reference->getNSEntry().toStdString();
 
     emit createObjref(cfg);

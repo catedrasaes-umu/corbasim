@@ -9,15 +9,20 @@
 #include <corbasim/qt/types.hpp>
 #include <corbasim/qt/initialize.hpp>
 
+#include <corbasim/gui/Application.hpp>
+#include <corbasim/gui/NSManager.hpp>
+
 #include <QtGui>
 
 using namespace corbasim;
 using namespace corbasim::gui;
 
-ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
+ObjrefWidget::ObjrefWidget(InterfaceDescriptor_ptr iface,
         QWidget * parent) :
-    QWidget(parent), m_validator(validator), m_model(NULL)
+    QWidget(parent), m_model(NULL)
 {
+    setInterface(iface);
+
     QGridLayout * mainLayout = new QGridLayout;
     QHBoxLayout * layout = new QHBoxLayout;
 
@@ -45,15 +50,8 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
         m_ior->setAcceptRichText(false);
         m_stack->addWidget(m_ior);
 
-        // IOR from file
-        // m_selector->addItem("IOR from file");
-
         // NameService query
         m_selector->addItem("Name service query");
-        // TODO m_resolve = new resolve_wt;
-        m_stack->addWidget(new QWidget());
-        
-        m_selector->addItem("Name service query from string");
         m_resolve_str = new QTextEdit;
         m_stack->addWidget(m_resolve_str);
 
@@ -70,23 +68,27 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
     setLayout(mainLayout);
 
-    QObject::connect(m_selector, SIGNAL(currentIndexChanged(int)),
+    connect(m_selector, SIGNAL(currentIndexChanged(int)),
             m_stack, SLOT(setCurrentIndex(int)));
 
-    QObject::connect(m_selector, SIGNAL(currentIndexChanged(int)),
+    connect(m_selector, SIGNAL(currentIndexChanged(int)),
             this, SLOT(valueChanged()));
 
-    QObject::connect(m_object_selector, SIGNAL(currentIndexChanged(int)),
+    connect(m_object_selector, SIGNAL(currentIndexChanged(int)),
             this, SLOT(valueChanged()));
 
-    QObject::connect(m_ior, SIGNAL(textChanged()), this, 
+    connect(m_ior, SIGNAL(textChanged()), this, 
             SLOT(valueChanged()));
 
-    QObject::connect(m_resolve_str, SIGNAL(textChanged()), this, 
+    connect(m_resolve_str, SIGNAL(textChanged()), this, 
             SLOT(valueChanged()));
 
-    QObject::connect(updateBtn, SIGNAL(clicked()), this, 
+    connect(updateBtn, SIGNAL(clicked()), this, 
             SLOT(valueChanged()));
+
+    connect(this, SIGNAL(resolve(Objref_ptr)),
+            Application::currentApplication()->nameServiceManager(),
+            SLOT(resolve(Objref_ptr)));
 
     // Default model
     QAbstractItemModel * model = qt::getDefaultInstanceModel();
@@ -100,29 +102,7 @@ ObjrefWidget::ObjrefWidget(core::reference_validator_base* validator,
 
 ObjrefWidget::~ObjrefWidget()
 {
-    // TODO delete m_resolve;
     delete m_resolve_str;
-}
-
-void ObjrefWidget::setValidator(
-        core::reference_validator_base * validator)
-{
-    m_validator = validator;
-
-    if (!validator)
-        return;
-
-    CORBA::Object_var ref = validator->get_reference();
-
-    if (CORBA::is_nil(ref))
-        return;
-
-    core::reference_repository * rr = 
-        core::reference_repository::get_instance();
-
-    CORBA::String_var ior = rr->object_to_string(ref);
-    m_ior->setPlainText(ior.in());
-    m_stack->setCurrentIndex(0);
 }
 
 void ObjrefWidget::setModel(QAbstractItemModel * model)
@@ -141,32 +121,27 @@ void ObjrefWidget::setModel(QAbstractItemModel * model)
     {
         m_object_selector->setModel(model);
 
-        QObject::connect(m_model, SIGNAL(modelReset()),
+        connect(m_model, SIGNAL(modelReset()),
                 this, SLOT(modelChanged()));
     }
 }
 
-const QString& ObjrefWidget::getNSEntry() const
+QString ObjrefWidget::getNSEntry() const
 {
-    return m_nsEntry;
+    if (m_stack->currentIndex() != 1)
+        return QString();
+
+    return m_objref->nsEntry();
 }
 
 void ObjrefWidget::modelChanged()
 {
-    if (m_stack->currentIndex() == 3)
+    if (m_stack->currentIndex() == 2)
         valueChanged();
 }
 
 void ObjrefWidget::valueChanged()
 {
-    m_nsEntry.clear();
-
-    if (!m_validator)
-    {
-        m_status->setRedLight();
-        return;
-    }
-
     CORBA::Object_var ref;
     core::reference_repository * rr = 
         core::reference_repository::get_instance();
@@ -174,29 +149,17 @@ void ObjrefWidget::valueChanged()
     try {
         switch(m_stack->currentIndex())
         {
-        // NS query
+        // NS query 
         case 1:
             {
-                /*
-                CosNaming::Name name;
-                static_cast< resolve_wt* >(m_resolve)->get_value(name);
-                ref = rr->resolve(name);
-                */
-                // TODO convert name to m_nsEntry
-            }
-            break;
-        // NS query from str
-        case 2:
-            {
-                const std::string str = 
-                    m_resolve_str->toPlainText().toStdString();
-                ref = rr->resolve_str(str);
+                m_objref->setNsEntry(m_resolve_str->toPlainText());
 
-                m_nsEntry = str.c_str();
+                // Async resolution
+                emit resolve(m_objref);
             }
             break;
         // Well-known objects
-        case 3:
+        case 2:
             {
                 int idx = m_object_selector->currentIndex();
 
@@ -208,6 +171,8 @@ void ObjrefWidget::valueChanged()
                         ref = v.value< CORBA::Object_var >();
                     }
                 }
+
+                m_objref->setReference(ref);
             }
             break;
          // IOR
@@ -216,22 +181,15 @@ void ObjrefWidget::valueChanged()
             {
                 std::string str = m_ior->toPlainText().toStdString();
                 ref = rr->string_to_object(str);
+
+                m_objref->setReference(ref);
             }
             break;
         }
     } catch (...) {
-        m_nsEntry.clear();
+        // NIL
+        m_objref->setReference(ref);
     }
-
-    m_validator->set_reference(ref);
-
-    // Notify its modification
-    emit valueHasChanged(ref);
-
-    if (m_validator->is_nil())
-        m_status->setRedLight();
-    else
-        m_status->setGreenLight();
 }
 
 void ObjrefWidget::pasteIOR()
@@ -243,27 +201,13 @@ void ObjrefWidget::pasteIOR()
 
 void ObjrefWidget::validatorHasChanged()
 {
-    if (!m_validator)
+    if (!m_objref || m_objref->isNil())
     {
         m_status->setRedLight();
-        return;
-    }
-
-    if (m_validator->is_nil())
-    {
-        m_status->setRedLight();
-        m_ior->clear();
     }
     else
     {
-        core::reference_repository * rr = 
-            core::reference_repository::get_instance();
-
-        CORBA::Object_var ref = m_validator->get_reference();
-        CORBA::String_var str = rr->object_to_string(ref);
-        
-        m_ior->setPlainText(str.in());
-        m_selector->setCurrentIndex(0);
+        m_status->setGreenLight();
     }
 }
 
@@ -296,5 +240,26 @@ void ObjrefWidget::load(const QVariant& settings)
     // TODO map["known_object"] = m_object_selector->itemData(idx, Qt::DisplayRole);
 
     valueChanged();
+}
+
+void ObjrefWidget::setInterface(InterfaceDescriptor_ptr iface)
+{
+    m_objref.reset(new Objref("", iface));
+
+    connect(m_objref.get(), SIGNAL(updatedReference(const CORBA::Object_var&)),
+            this, SIGNAL(valueHasChanged(const CORBA::Object_var&)));
+
+    connect(m_objref.get(), SIGNAL(updatedReference(const CORBA::Object_var&)),
+            this, SLOT(validatorHasChanged()));
+}
+
+CORBA::Object_var ObjrefWidget::reference() const
+{
+    return m_objref->reference();
+}
+
+void ObjrefWidget::setReference(const CORBA::Object_var& ref)
+{
+    m_objref->setReference(ref);
 }
 

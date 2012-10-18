@@ -267,13 +267,13 @@ void SimpleClient::initialize(Objref_ptr objref)
 
     // Validator for reference updates
     m_validator.reset(factory->create_caller());
-    m_ref->setValidator(m_validator.get());
+    // TODO m_ref->setValidator(m_validator.get());
 }
 
 void SimpleClient::setReference(CORBA::Object_ptr ref)
 {
     m_validator->set_reference(ref);
-    m_ref->validatorHasChanged();
+    // TODO m_ref->validatorHasChanged();
 
     emit applyUpdateReference(m_validator->get_reference());
 }

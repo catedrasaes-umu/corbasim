@@ -84,7 +84,7 @@ void NSManager::resolve(Objref_ptr objref)
 
         } catch(...) {
 
-            is_equivalent = CORBA::is_nil(newRef);
+            is_equivalent = CORBA::is_nil(oldRef);
         }
     }
 

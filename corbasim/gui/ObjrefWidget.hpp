@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/core/caller_fwd.hpp>
+#include <corbasim/gui/Model.hpp>
 
 class QComboBox;
 class QStackedWidget;
@@ -43,43 +44,49 @@ class CORBASIM_GUI_DECLSPEC ObjrefWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ObjrefWidget(core::reference_validator_base* validator = 0,
+    ObjrefWidget(InterfaceDescriptor_ptr iface = NULL,
             QWidget * parent = 0);
     virtual ~ObjrefWidget();
 
-    const QString& getNSEntry() const;
+    QString getNSEntry() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
-public slots:
-    void setValidator(core::reference_validator_base * validator);
+    CORBA::Object_var reference() const;
+
+protected slots:
+
     void valueChanged();
     void validatorHasChanged();
+    void modelChanged();
+
+public slots:
+
     void pasteIOR();
 
     void setModel(QAbstractItemModel * model);
+    
+    void setInterface(InterfaceDescriptor_ptr iface);
 
-    void modelChanged();
+    void setReference(const CORBA::Object_var& ref);
 
 signals:
 
-    void valueHasChanged(CORBA::Object_var);
+    void valueHasChanged(const CORBA::Object_var&);
+
+    void resolve(Objref_ptr);
 
 protected:
     QComboBox * m_selector;
     QStackedWidget * m_stack;
     qt::Status * m_status;
     QTextEdit * m_ior;
-
-    core::reference_validator_base * m_validator;
-    // TODO widgets::widget_base * m_resolve;
     QTextEdit * m_resolve_str;
-
     QComboBox * m_object_selector;
     QAbstractItemModel * m_model;
 
-    QString m_nsEntry;
+    Objref_ptr m_objref;
 };
 
 } // namespace gui

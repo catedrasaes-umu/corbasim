@@ -71,9 +71,7 @@ SetReferenceDialog::~SetReferenceDialog()
 
 void SetReferenceDialog::setInterface(InterfaceDescriptor_ptr interface)
 {
-    assert(interface);
-    m_referenceValidator.reset(interface->create_validator());
-    m_reference->setValidator(m_referenceValidator.get());
+    m_reference->setInterface(interface);
 }
 
 void SetReferenceDialog::hideEvent(QHideEvent* event)
@@ -88,21 +86,11 @@ void SetReferenceDialog::hideEvent(QHideEvent* event)
 
 void SetReferenceDialog::updatedReference(const CORBA::Object_var& reference)
 {
-    if (m_referenceValidator)
-        m_referenceValidator->set_reference(reference);
-    m_reference->validatorHasChanged();
+    m_reference->setReference(reference);
 }
 
 void SetReferenceDialog::update()
 {
-    if (m_referenceValidator)
-    {
-        emit setReference(
-                m_referenceValidator->get_reference());
-    }
-    else
-    {
-        emit setReference(CORBA::Object::_nil());
-    }
+    emit setReference(m_reference->reference());
 }
 

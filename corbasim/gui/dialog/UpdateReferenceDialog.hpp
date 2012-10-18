@@ -40,8 +40,6 @@ public slots:
 
     void setObjref(Objref_ptr objref);
 
-    void updatedReference(const CORBA::Object_var& reference);
-
 signals:
 
     void updateReference(const CORBA::Object_var& reference);
@@ -56,9 +54,6 @@ protected:
 
     ObjrefWidget * m_status;
     ObjrefWidget * m_reference;
-
-    core::reference_validator_ptr m_statusValidator;
-    core::reference_validator_ptr m_referenceValidator;
 
     Objref_ptr m_objref;
 };

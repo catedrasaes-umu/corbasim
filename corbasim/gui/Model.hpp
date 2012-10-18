@@ -66,6 +66,8 @@ public:
 
     QString nsEntry() const;
 
+    bool isNil() const;
+
 public slots:
 
     // Properties

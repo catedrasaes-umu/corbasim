@@ -42,9 +42,8 @@ Objref::Objref(const QString& name,
     m_interfaceDescriptor(interfaceDescriptor),
     QObject(parent), m_data(new Data)
 {
-    assert(m_interfaceDescriptor);
-
-    m_caller.reset(m_interfaceDescriptor->create_caller());
+    if(m_interfaceDescriptor)
+        m_caller.reset(m_interfaceDescriptor->create_caller());
 }
 
 Objref::Objref(const ObjrefConfig& cfg,
@@ -55,9 +54,8 @@ Objref::Objref(const ObjrefConfig& cfg,
     m_interfaceDescriptor(interfaceDescriptor),
     QObject(parent), m_data(new Data)
 {
-    assert(m_interfaceDescriptor);
-
-    m_caller.reset(m_interfaceDescriptor->create_caller());
+    if(m_interfaceDescriptor)
+        m_caller.reset(m_interfaceDescriptor->create_caller());
 
     setReference(cfg.reference);
 }
@@ -90,19 +88,34 @@ CORBA::Object_var Objref::reference() const
 
 void Objref::setReference(const CORBA::Object_var& reference)
 {
-    unique_lock lock(m_data->refMutex);
-
-    bool newNil = CORBA::is_nil(reference);
-    bool oldNil = CORBA::is_nil(m_reference);
-
-    if (newNil && oldNil)
-        return;
-
-    if (oldNil || !m_reference->_is_equivalent(reference))
+    bool doEmit = false;
     {
-        m_reference = reference;
+        unique_lock lock(m_data->refMutex);
 
-        m_caller->set_reference(reference);
+        bool newNil = CORBA::is_nil(reference);
+        bool oldNil = CORBA::is_nil(m_reference);
+
+        if (newNil && oldNil)
+            return;
+
+        if (oldNil || !m_reference->_is_equivalent(reference))
+        {
+            m_reference = reference;
+
+            if (m_caller)
+            {
+                // Validates the reference
+                m_caller->set_reference(reference);
+                m_reference = m_caller->get_reference();
+            }
+
+            doEmit = true;
+        }
+    }
+
+    if (doEmit)
+    {
+        shared_lock lock(m_data->refMutex);
 
         emit updatedReference(m_reference);
     }
@@ -114,12 +127,24 @@ QString Objref::nsEntry() const
     return m_nsEntry;
 }
 
+bool Objref::isNil() const
+{
+    shared_lock lock(m_data->refMutex);
+    if (m_caller)
+        return m_caller->is_nil();
+
+    return CORBA::is_nil(m_reference);
+}
+
 void Objref::setNsEntry(const QString& nsEntry)
 {
-    unique_lock lock(m_data->nsEntryMutex);
-    m_nsEntry = nsEntry;
+    // Protected region
+    {
+        unique_lock lock(m_data->nsEntryMutex);
+        m_nsEntry = nsEntry;
+    }
 
-    emit updatedNsEntry(m_nsEntry);
+    emit updatedNsEntry(nsEntry);
 }
 
 Event_ptr Objref::sendRequest(const Request_ptr& request)

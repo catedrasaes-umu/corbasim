@@ -79,6 +79,8 @@ UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :
     // End buttons
 
     setLayout(layout);
+
+    m_status->setEnabled(false);
 }
 
 UpdateReferenceDialog::~UpdateReferenceDialog()
@@ -99,13 +101,14 @@ void UpdateReferenceDialog::setObjref(Objref_ptr objref)
 {
     if (m_objref)
     {
-        disconnect(m_objref.get(), 
-                SIGNAL(updatedReference(const CORBA::Object_var&)),
-                this,
-                SLOT(updatedReference(const CORBA::Object_var&)));
-        disconnect(this, 
+        disconnect(this,
                 SIGNAL(updateReference(const CORBA::Object_var&)),
                 m_objref.get(),
+                SLOT(setReference(const CORBA::Object_var&)));
+
+        disconnect(m_objref.get(), 
+                SIGNAL(updatedReference(const CORBA::Object_var&)),
+                m_status,
                 SLOT(setReference(const CORBA::Object_var&)));
     }
 
@@ -113,32 +116,30 @@ void UpdateReferenceDialog::setObjref(Objref_ptr objref)
 
     if (m_objref)
     {
-        m_statusValidator.reset(objref->interface()->create_validator());
-        m_referenceValidator.reset(objref->interface()->create_validator());
-        m_status->setValidator(m_statusValidator.get());
-        m_reference->setValidator(m_referenceValidator.get());
+        m_status->setInterface(objref->interface());
+        m_reference->setInterface(objref->interface());
 
-        updatedReference(objref->reference());
+        m_status->setReference(objref->reference());
 
-        connect(m_objref.get(), 
-                SIGNAL(updatedReference(const CORBA::Object_var&)),
-                this,
-                SLOT(updatedReference(const CORBA::Object_var&)));
         connect(this, 
                 SIGNAL(updateReference(const CORBA::Object_var&)),
                 m_objref.get(),
                 SLOT(setReference(const CORBA::Object_var&)));
-    }
-}
 
-void UpdateReferenceDialog::updatedReference(const CORBA::Object_var& reference)
-{
-    m_statusValidator->set_reference(reference);
-    m_status->validatorHasChanged();
+        connect(m_objref.get(), 
+                SIGNAL(updatedReference(const CORBA::Object_var&)),
+                m_status,
+                SLOT(setReference(const CORBA::Object_var&)));
+    }
 }
 
 void UpdateReferenceDialog::update()
 {
-    emit updateReference(m_referenceValidator->get_reference());
+    emit updateReference(m_reference->reference());
+
+    if (m_objref)
+    {
+        m_objref->setNsEntry(m_reference->getNSEntry());
+    }
 }
 
