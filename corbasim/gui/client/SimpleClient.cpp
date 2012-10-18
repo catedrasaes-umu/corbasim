@@ -175,9 +175,6 @@ SimpleClient::SimpleClient(QWidget * parent) :
     connect(&m_actions, SIGNAL(triggered(QAction *)), 
             this, SLOT(showDialog(QAction *)));
 
-    connect(m_ref, SIGNAL(valueHasChanged(CORBA::Object_var)),
-            this, SIGNAL(applyUpdateReference(const CORBA::Object_var&)));
-
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
 
@@ -199,7 +196,7 @@ void SimpleClient::stopAllTimers()
 
 void SimpleClient::clearAll()
 {
-    setReference(CORBA::Object::_nil());
+    // TODO do this? m_objref->setReference(CORBA::Object::_nil());
 }
 
 void SimpleClient::initialize(Objref_ptr objref)
@@ -209,8 +206,6 @@ void SimpleClient::initialize(Objref_ptr objref)
     // Signals
     connect(this, SIGNAL(sendRequest(Request_ptr)),
             m_objref.get(), SLOT(sendRequest(Request_ptr)));
-    connect(this, SIGNAL(applyUpdateReference(CORBA::Object_var)),
-            m_objref.get(), SLOT(setReference(const CORBA::Object_var&)));
 
     m_log_model.registerInstance(m_objref);
 
@@ -266,16 +261,7 @@ void SimpleClient::initialize(Objref_ptr objref)
     }
 
     // Validator for reference updates
-    m_validator.reset(factory->create_caller());
-    // TODO m_ref->setValidator(m_validator.get());
-}
-
-void SimpleClient::setReference(CORBA::Object_ptr ref)
-{
-    m_validator->set_reference(ref);
-    // TODO m_ref->validatorHasChanged();
-
-    emit applyUpdateReference(m_validator->get_reference());
+    m_ref->setObjref(m_objref);
 }
 
 void SimpleClient::showDialog(int idx)
@@ -469,28 +455,6 @@ void SimpleClient::resizeEvent(QResizeEvent * event)
     sizes.last() = available;
 
     m_mainSplitter->setSizes(sizes);
-}
-
-void SimpleClient::updateReference(const CORBA::Object_var& ref)
-{
-    if (!m_validator) return;
-
-    m_validator->set_reference(ref);
-
-    // does nothing if reference doesn't narrow
-    if (m_validator->is_nil())
-        return;
-
-    // does nothing if equivalent references
-    if (!m_validator->is_nil())
-    {
-        CORBA::Object_var old = m_validator->get_reference();
-
-        if (old->_is_equivalent(ref))
-            return;
-    }
-
-    setReference(ref);
 }
 
 void SimpleClient::showOperationSequenceTool()

@@ -49,8 +49,6 @@ public:
     SimpleClient(QWidget * parent = 0);
     virtual ~SimpleClient();
 
-    void setReference(CORBA::Object_ptr ref);
-
 public slots:
 
     void initialize(Objref_ptr objref);
@@ -69,12 +67,9 @@ public slots:
 
     void doLoad();
     void doSave();
-    
-    void updateReference(const CORBA::Object_var& ref);
 
 signals:
 
-    void applyUpdateReference(const CORBA::Object_var& ref);
     void sendRequest(Request_ptr);
 
 protected:
@@ -82,7 +77,6 @@ protected:
     LogModel m_log_model;
 
     Objref_ptr m_objref;
-    Caller_ptr m_validator;
 
     QTabWidget * m_tab;
     QTreeView * m_tree;

@@ -71,6 +71,8 @@ public slots:
 
     void setReference(const CORBA::Object_var& ref);
 
+    void setObjref(Objref_ptr objref);
+
 signals:
 
     void valueHasChanged(const CORBA::Object_var&);

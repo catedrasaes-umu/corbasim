@@ -161,6 +161,8 @@ void ObjrefWidget::valueChanged()
         // Well-known objects
         case 2:
             {
+                m_objref->setNsEntry(QString());
+
                 int idx = m_object_selector->currentIndex();
 
                 if (m_model && idx != -1)
@@ -179,6 +181,8 @@ void ObjrefWidget::valueChanged()
         case 0:
         default:
             {
+                m_objref->setNsEntry(QString());
+
                 std::string str = m_ior->toPlainText().toStdString();
                 ref = rr->string_to_object(str);
 
@@ -244,13 +248,35 @@ void ObjrefWidget::load(const QVariant& settings)
 
 void ObjrefWidget::setInterface(InterfaceDescriptor_ptr iface)
 {
-    m_objref.reset(new Objref("", iface));
+    Objref_ptr objref(new Objref("", iface));
+    setObjref(objref);
+}
 
-    connect(m_objref.get(), SIGNAL(updatedReference(const CORBA::Object_var&)),
-            this, SIGNAL(valueHasChanged(const CORBA::Object_var&)));
+void ObjrefWidget::setObjref(Objref_ptr objref)
+{
+    if (m_objref)
+    {
+        disconnect(m_objref.get(), 
+                SIGNAL(updatedReference(const CORBA::Object_var&)),
+                this, SIGNAL(valueHasChanged(const CORBA::Object_var&)));
 
-    connect(m_objref.get(), SIGNAL(updatedReference(const CORBA::Object_var&)),
-            this, SLOT(validatorHasChanged()));
+        disconnect(m_objref.get(), 
+                SIGNAL(updatedReference(const CORBA::Object_var&)),
+                this, SLOT(validatorHasChanged()));
+    }
+
+    m_objref = objref;
+
+    if (m_objref)
+    {
+        connect(m_objref.get(), 
+                SIGNAL(updatedReference(const CORBA::Object_var&)),
+                this, SIGNAL(valueHasChanged(const CORBA::Object_var&)));
+
+        connect(m_objref.get(), 
+                SIGNAL(updatedReference(const CORBA::Object_var&)),
+                this, SLOT(validatorHasChanged()));
+    }
 }
 
 CORBA::Object_var ObjrefWidget::reference() const
