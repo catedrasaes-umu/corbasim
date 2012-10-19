@@ -105,6 +105,12 @@ ObjrefWidget::~ObjrefWidget()
     delete m_resolve_str;
 }
 
+
+void ObjrefWidget::setValidator(core::reference_validator_ptr validator)
+{
+    m_objref->setValidator(validator);
+}
+
 void ObjrefWidget::setModel(QAbstractItemModel * model)
 {
     // Disconnect
@@ -174,7 +180,7 @@ void ObjrefWidget::valueChanged()
                     }
                 }
 
-                m_objref->setReference(ref);
+                setReference(ref);
             }
             break;
          // IOR
@@ -186,13 +192,13 @@ void ObjrefWidget::valueChanged()
                 std::string str = m_ior->toPlainText().toStdString();
                 ref = rr->string_to_object(str);
 
-                m_objref->setReference(ref);
+                setReference(ref);
             }
             break;
         }
     } catch (...) {
         // NIL
-        m_objref->setReference(ref);
+        setReference(ref);
     }
 }
 

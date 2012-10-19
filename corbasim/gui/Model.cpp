@@ -43,7 +43,11 @@ Objref::Objref(const QString& name,
     QObject(parent), m_data(new Data)
 {
     if(m_interfaceDescriptor)
+    {
         m_caller.reset(m_interfaceDescriptor->create_caller());
+        
+        m_validator = m_caller;
+    }
 }
 
 Objref::Objref(const ObjrefConfig& cfg,
@@ -55,7 +59,11 @@ Objref::Objref(const ObjrefConfig& cfg,
     QObject(parent), m_data(new Data)
 {
     if(m_interfaceDescriptor)
+    {
         m_caller.reset(m_interfaceDescriptor->create_caller());
+
+        m_validator = m_caller;
+    }
 
     setReference(cfg.reference);
 }
@@ -102,11 +110,11 @@ void Objref::setReference(const CORBA::Object_var& reference)
         {
             m_reference = reference;
 
-            if (m_caller)
+            if (m_validator)
             {
                 // Validates the reference
-                m_caller->set_reference(reference);
-                m_reference = m_caller->get_reference();
+                m_validator->set_reference(reference);
+                m_reference = m_validator->get_reference();
             }
 
             doEmit = true;
@@ -130,8 +138,8 @@ QString Objref::nsEntry() const
 bool Objref::isNil() const
 {
     shared_lock lock(m_data->refMutex);
-    if (m_caller)
-        return m_caller->is_nil();
+    if (m_validator)
+        return m_validator->is_nil();
 
     return CORBA::is_nil(m_reference);
 }
@@ -165,6 +173,11 @@ Event_ptr Objref::sendRequest(const Request_ptr& request)
     emit requestSent(id(), request, ev);
 
     return ev;
+}
+
+void Objref::setValidator(core::reference_validator_ptr validator)
+{
+    m_validator = validator;
 }
 
 //

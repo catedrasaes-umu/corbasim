@@ -55,6 +55,8 @@ public:
 
     CORBA::Object_var reference() const;
 
+    void setValidator(core::reference_validator_ptr validator);
+
 protected slots:
 
     void valueChanged();

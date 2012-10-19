@@ -158,18 +158,27 @@ void NSManager::registerServant(Objref_ptr servant)
     // TODO Have I to check if ref is nil?
     if (!str.empty())
     {
-        register_ptr reg(
-                new core::ns_register(
-                    m_nameService, str, ref));
+        bool err = false;
 
-        if (reg->error())
+        if (!CORBA::is_nil(m_nameService))
         {
-            emit error(QString("Unable to register '%1' as '%2'").
-                    arg(servant->name()).arg(str.c_str()));
+            register_ptr reg(
+                    new core::ns_register(m_nameService, str, ref));
+
+            if (!(err = reg->error()))
+            {
+                m_registers.insert(servant->id(), reg);
+            }
         }
         else
         {
-            m_registers.insert(servant->id(), reg);
+            err = true;
+        }
+
+        if (err)
+        {
+            emit error(QString("Unable to register '%1' as '%2'").
+                    arg(servant->name()).arg(str.c_str()));
         }
     }
 }
@@ -178,10 +187,9 @@ void NSManager::servantCreated(Objref_ptr servant)
 {
     m_servants.add(servant);
 
-    if (!CORBA::is_nil(m_nameService))
-    {
-        registerServant(servant);
-    }
+    const QString nsEntry = servant->nsEntry();
+
+    registerServant(servant);
 }
 
 void NSManager::servantDeleted(ObjectId id) 

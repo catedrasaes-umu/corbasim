@@ -1194,12 +1194,11 @@ ObjrefvarWidget::ObjrefvarWidget(
     core::objrefvar_reflective_base const * ref = 
         static_cast< core::objrefvar_reflective_base const * >(m_reflective);
 
-    // TODO setValidator(ref->create_validator());
+    setValidator(core::reference_validator_ptr(ref->create_validator()));
 }
 
 ObjrefvarWidget::~ObjrefvarWidget()
 {
-    // TODO delete m_validator;
 }
 
 void ObjrefvarWidget::toHolder(Holder& holder) 
@@ -1207,7 +1206,7 @@ void ObjrefvarWidget::toHolder(Holder& holder)
     core::objrefvar_reflective_base const * ref = 
         static_cast< core::objrefvar_reflective_base const * >(m_reflective);
 
-    // TODO ref->from_object(holder, m_validator->get_reference());
+    ref->from_object(holder, reference());
 }
 
 void ObjrefvarWidget::fromHolder(Holder& holder)
@@ -1217,9 +1216,7 @@ void ObjrefvarWidget::fromHolder(Holder& holder)
 
     CORBA::Object_var obj = ref->to_object(holder);
 
-    // TODO m_validator->set_reference(obj);
-
-    // TODO validatorHasChanged();
+    setReference(obj);
 }
 
 // Files

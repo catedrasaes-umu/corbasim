@@ -68,6 +68,8 @@ public:
 
     bool isNil() const;
 
+    void setValidator(core::reference_validator_ptr validator);
+
 public slots:
 
     // Properties
@@ -102,6 +104,7 @@ protected:
     CORBA::Object_var m_reference;
 
     Caller_ptr m_caller;
+    core::reference_validator_ptr m_validator;
 
     struct Data;
     Data * m_data;
