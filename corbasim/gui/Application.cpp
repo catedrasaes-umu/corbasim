@@ -264,6 +264,8 @@ Application::~Application()
         }
     }
 
+    delete m_data->m_scriptEngine;
+    delete m_data->m_nameServiceManager;
     delete m_data->m_inputReqCtl;
     delete m_data->m_senderCtl;
     delete m_data;

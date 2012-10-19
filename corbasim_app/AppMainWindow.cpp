@@ -40,6 +40,9 @@
 
 #include <QScriptEngineDebugger>
 
+#define CORBASIM_NO_IMPL
+#include <corbasim/core/reflective.hpp>
+
 using namespace corbasim::app;
 
 namespace  
@@ -657,6 +660,8 @@ void AppMainWindow::showSetNameServiceDialog()
     if (!m_setNameServiceDialog)
     {
         m_setNameServiceDialog = new SetReferenceDialog(this);
+        m_setNameServiceDialog->setInterface(
+                core::interface_reflective< CosNaming::NamingContextExt >::get_instance());
 
         createToolSubWindow(kSetNameServiceDialog, m_setNameServiceDialog);
 

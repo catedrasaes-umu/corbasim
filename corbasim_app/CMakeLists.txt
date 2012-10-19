@@ -7,13 +7,6 @@ set(corbasim_app_SRCS
 
     ObjrefView.cpp
     ServantView.cpp
-
-    # TODO
-    # AppFileWatcher.cpp
-    # TriggerEngine.cpp
-    # NSWatcher.cpp
-    # NSBrowser.cpp
-    # IDLBuilder.cpp
 )
 
 set(corbasim_app_MOC_HDRS
@@ -21,13 +14,6 @@ set(corbasim_app_MOC_HDRS
 
     ObjrefView.hpp
     ServantView.hpp
-
-    # TODO
-    # AppFileWatcher.hpp
-    # TriggerEngine.hpp
-    # NSWatcher.hpp
-    # NSBrowser.hpp
-    # IDLBuilder.hpp
 )
 
 set(corbasim_app_FORMS
@@ -49,7 +35,8 @@ target_link_libraries(corbasim_app.real
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     corbasim
     corbasim_qt
-    corbasim_gui)
+    corbasim_gui
+    corbasim_reflective_CosNaming_NamingContextExt)
 
 install(TARGETS corbasim_app.real DESTINATION bin)
 
