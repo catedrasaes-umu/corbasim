@@ -92,6 +92,16 @@ void OperationEvaluator::call(QScriptValue& func,
     }
 }
 
+bool OperationEvaluator::hasError() const
+{
+    return m_engine.hasUncaughtException();
+}
+
+QString OperationEvaluator::error() const
+{
+    return m_engine.uncaughtException().toString();
+}
+
 //
 //
 // Deprecated.

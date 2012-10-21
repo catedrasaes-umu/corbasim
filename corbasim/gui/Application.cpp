@@ -204,6 +204,13 @@ Application::Application(QObject * parent) :
             SIGNAL(message(const QString&)));
     // End signals application <-> name service
 
+    // Sender Controller
+    // Error notification
+    connect(m_data->m_senderCtl, 
+            SIGNAL(error(const QString&)), 
+            this, 
+            SIGNAL(error(const QString&)));
+
     // Services dedicated threads
     m_data->m_inputReqCtl->moveToThread(
             &m_data->m_inputReqCtlThread);

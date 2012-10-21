@@ -111,6 +111,7 @@ signals:
 
     void finished(SenderConfig_ptr);
     void sendRequest(Request_ptr);
+    void error(const QString& err);
 
 protected:
 
@@ -150,6 +151,10 @@ public slots:
 
     void addSender(SenderConfig_ptr cfg);
     void deleteSender(SenderConfig_ptr cfg);
+
+signals:
+
+    void error(const QString& err);
 
 protected:
 

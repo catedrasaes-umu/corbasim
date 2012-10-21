@@ -49,6 +49,9 @@ public:
             QObject * parent = 0);
     virtual ~OperationEvaluator();
 
+    bool hasError() const;
+    QString error() const;
+
 public slots:
 
     void evaluate(const QString& code);

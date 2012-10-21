@@ -25,6 +25,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <memory>
 #include <iostream>
+#include <exception>
 
 using namespace corbasim::gui;
 
@@ -77,6 +78,12 @@ void SenderController::addSender(SenderConfig_ptr cfg)
             SIGNAL(finished(SenderConfig_ptr)),
             this,
             SLOT(deleteSender(SenderConfig_ptr)));
+
+    // error notification
+    connect(sender.get(), 
+            SIGNAL(error(const QString&)),
+            this,
+            SIGNAL(error(const QString&)));
 
     m_ioService.post(
             boost::bind(&Sender::start, sender, sender));
@@ -145,12 +152,23 @@ void Sender::start(Sender_weak weak)
         // m_request is the working request
         m_evaluator.init(m_request);
 
-        m_timer.expires_from_now(
-                boost::posix_time::milliseconds(0));
+        if (!m_evaluator.hasError())
+        {
+            m_timer.expires_from_now(
+                    boost::posix_time::milliseconds(0));
 
-        m_timer.async_wait(
-                boost::bind(&Sender::handleTimeout,
-                    this, weak, _1));
+            m_timer.async_wait(
+                    boost::bind(&Sender::handleTimeout,
+                        this, weak, _1));
+        }
+        else
+        {
+            m_config->notifyFinished();
+
+            emit finished(m_config);
+
+            emit error(m_evaluator.error());
+        }
     }
 }
 
@@ -169,6 +187,7 @@ void Sender::process()
 
     // preFunc
     m_evaluator.pre(m_request);
+    if (m_evaluator.hasError()) throw m_evaluator.error();
 
     // processors
     typedef QList< RequestProcessor_ptr > processors_t;
@@ -182,6 +201,7 @@ void Sender::process()
     
     // postFunc
     m_evaluator.post(m_request);
+    if (m_evaluator.hasError()) throw m_evaluator.error();
 
     // clone request
     // we can't emit a request we're going to modify
@@ -234,26 +254,37 @@ void Sender::scheduleTimer(Sender_weak weak)
 
 void Sender::handleTimeout(
         Sender_weak weak,
-        const boost::system::error_code& error)
+        const boost::system::error_code& err)
 {
-    if (!error)
+    if (!err)
     {
         Sender_ptr ptr = weak.lock();
         
         if (ptr)
         {
-            process();
+            try 
+            {
+                process();
 
-            if (++m_currentTime == m_config->times())
+                if (++m_currentTime == m_config->times())
+                {
+                    m_config->notifyFinished();
+
+                    emit finished(m_config);
+                }
+
+                // Last step to ensure thread-safe
+                if (m_currentTime != m_config->times())
+                    scheduleTimer(weak);
+            } 
+            catch(const QString& ex)
             {
                 m_config->notifyFinished();
 
                 emit finished(m_config);
-            }
 
-            // Last step to ensure thread-safe
-            if (m_currentTime != m_config->times())
-                scheduleTimer(weak);
+                emit error(ex);
+            }
         }
     }
     else
