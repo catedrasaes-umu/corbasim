@@ -24,6 +24,7 @@
 #include <vector>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/item/ApplicationLogModel.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
 #include <corbasim/gui/item/InstanceModel.hpp>
 #include <corbasim/gui/item/InterfaceModel.hpp>
@@ -139,12 +140,14 @@ protected:
     ObjrefRepository m_objrefs;
     ObjrefRepository m_servants;
     LogModel m_logModel;
+    ApplicationLogModel m_appLogModel;
     InstanceModel m_instanceModel;
     InterfaceModel m_interfaceModel;
 
     QActionGroup m_actions;
 
     QTreeView * m_logView;
+    QTreeView * m_appLogView;
 
     std::vector< QMdiSubWindow * > m_subWindows;
 

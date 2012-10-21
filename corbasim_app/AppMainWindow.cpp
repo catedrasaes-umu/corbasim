@@ -81,6 +81,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_objrefs(this), 
     m_servants(this),
     m_logModel(this),
+    m_appLogModel(this),
     m_instanceModel(this),
     m_interfaceModel(this),
     m_actions(this),
@@ -122,6 +123,20 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     {
         m_logView->setColumnWidth(i, width() / columnCount);
     }
+
+    // Application log view
+    QDockWidget * appLogViewDock = new QDockWidget("Application log", this);
+    m_appLogView = new TreeView();
+    m_appLogView->setModel(&m_appLogModel);
+    appLogViewDock->setWidget(m_appLogView);
+    addDockWidget(Qt::BottomDockWidgetArea, appLogViewDock);
+
+    // Column Width
+    m_appLogView->setColumnWidth(0, 350);
+
+    // Moves second dock widget on top of first dock widget, 
+    // creating a tabbed docked area in the main window.
+    tabifyDockWidget(appLogViewDock, logViewDock);
 
     // Instances view
     QDockWidget * instanceViewDock = new QDockWidget("Instances", this);
@@ -600,18 +615,18 @@ void AppMainWindow::servantDeleted(ObjectId id)
 
 void AppMainWindow::displayError(const QString& err)
 {
-    std::cerr << err.toStdString() << std::endl;
-
     QMessageBox::critical(this, "Error", err);
 
     statusBar()->showMessage(err, 30000);
+
+    m_appLogModel.error(err);
 }
 
 void AppMainWindow::displayMessage(const QString& msg)
 {
-    std::cout << msg.toStdString() << std::endl;
-
     statusBar()->showMessage(msg, 30000);
+    
+    m_appLogModel.message(msg);
 }
 
 //

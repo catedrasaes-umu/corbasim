@@ -15,6 +15,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/proc/HolderEmitter.hpp
 
     # item models
+    gui/item/ApplicationLogModel.hpp
     gui/item/FilterModel.hpp
     gui/item/InstanceModel.hpp
     gui/item/InterfaceModel.hpp
@@ -83,6 +84,7 @@ set(corbasim_gui_MOC_HDRS
     gui/proc/HolderEmitter.hpp
 
     # item models
+    gui/item/ApplicationLogModel.hpp
     gui/item/LogModel.hpp
     gui/item/InstanceModel.hpp
     gui/item/InterfaceModel.hpp
@@ -145,6 +147,7 @@ set(corbasim_gui_SRCS
     gui/proc/HolderEmitter.cpp
 
     # item model
+    gui/item/ApplicationLogModel.cpp
     gui/item/ModelNode.cpp
     gui/item/InstanceModel.cpp
     gui/item/InterfaceModel.cpp
