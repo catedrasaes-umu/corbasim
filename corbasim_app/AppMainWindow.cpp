@@ -196,6 +196,13 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     connect(clearAction, SIGNAL(triggered()), 
             &m_logModel, SLOT(clearLog()));
 
+    // Clear application log
+    QAction * clearAppLogAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear application log", this);
+    connect(clearAppLogAction, SIGNAL(triggered()), 
+            &m_appLogModel, SLOT(clearLog()));
+
     // Load scenario
     QAction * loadScenarioAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
@@ -247,6 +254,11 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             "Show &log", this);
     connect(showLogAction, SIGNAL(triggered()), 
             logViewDock, SLOT(show()));
+
+    QAction * showAppLogAction = new QAction(
+            "Show app&lication log", this);
+    connect(showAppLogAction, SIGNAL(triggered()), 
+            appLogViewDock, SLOT(show()));
 
     // Show instances
     QAction * showInstancesAction = new QAction(
@@ -340,6 +352,9 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuWindow->addAction(setMaxLogSizeAction);
     menuWindow->addAction(showLogAction);
     menuWindow->addAction(clearAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(showAppLogAction);
+    menuWindow->addAction(clearAppLogAction);
     menuWindow->addSeparator();
     menuWindow->addAction(showInstancesAction);
     menuWindow->addAction(showInterfacesAction);
