@@ -70,6 +70,8 @@ public:
 
     void setValidator(core::reference_validator_ptr validator);
 
+    virtual bool isServant() const;
+
 public slots:
 
     // Properties
@@ -129,6 +131,8 @@ public:
     PortableServer::ServantBase * getServant() const;
     
     Objref_ptr proxy() const;
+    
+    bool isServant() const;
 
 public slots:
 

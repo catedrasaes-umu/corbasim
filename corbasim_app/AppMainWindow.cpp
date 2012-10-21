@@ -143,6 +143,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     QTreeView * instanceView = new OperationsView();
     instanceView->setHeaderHidden(true);
     instanceView->setModel(&m_instanceModel);
+    instanceView->setExpandsOnDoubleClick(false);
     instanceViewDock->setWidget(instanceView);
     addDockWidget(Qt::LeftDockWidgetArea, instanceViewDock);
 

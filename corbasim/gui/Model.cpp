@@ -180,11 +180,15 @@ void Objref::setValidator(core::reference_validator_ptr validator)
     m_validator = validator;
 }
 
+bool Objref::isServant() const { return false; }
+
 //
 //
 // Servant
 //
 //
+
+bool Servant::isServant() const { return true; }
 
 struct Servant::ServantData :
     public ::corbasim::core::request_processor

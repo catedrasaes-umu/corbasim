@@ -1,4 +1,6 @@
 #include "InstanceModel.hpp"
+#include <QtGui>
+#include <QStyle>
 #include <iostream>
 #include <limits>
 
@@ -9,6 +11,8 @@ InstanceModel::InstanceModel(QObject *parent)
     m_instances(this),
     m_maxLevel(std::numeric_limits< int >::max())
 {
+    m_servantIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
+    m_objrefIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
 }
 
 InstanceModel::~InstanceModel()
@@ -177,6 +181,34 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
 
         if (isCheckable(dNode->reflective))
             return (node->checked)? Qt::Checked: Qt::Unchecked;
+    }
+    else if (!index.parent().isValid() && index.column() == 0
+            && role == Qt::DecorationRole)
+    {
+        const InstanceNode_ptr entry = m_nodes.at(index.row());
+
+        if (entry->instance->isServant())
+            return m_servantIcon;
+
+        return m_objrefIcon;
+    }
+    else if (role == Qt::BackgroundRole)
+    {
+        // backward to first level item
+        AbstractNode * node = static_cast< AbstractNode * >(
+                index.internalPointer());
+
+        InstanceNode * iNode = 
+            dynamic_cast< InstanceNode *>(node);
+        DescriptorNode * dNode = 
+            static_cast< DescriptorNode *>(node);
+
+        InstanceNode * entry = (iNode)? iNode: dNode->instance;
+
+        if (entry->instance->isServant())
+            return QColor(Qt::green);
+
+        return QColor(Qt::yellow);
     }
 
     return QVariant();

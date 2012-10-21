@@ -2,6 +2,7 @@
 #define CORBASIM_GUI_INSTANCEMODEL_HPP
 
 #include <QList>
+#include <QIcon>
 #include <QAbstractItemModel>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
@@ -97,6 +98,9 @@ protected:
     ObjrefRepository m_instances;
 
     int m_maxLevel;
+
+    QIcon m_objrefIcon;
+    QIcon m_servantIcon;
 };
 
 } // gui

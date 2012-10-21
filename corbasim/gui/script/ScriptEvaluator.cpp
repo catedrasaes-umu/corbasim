@@ -58,6 +58,8 @@ void OperationEvaluator::evaluate(const QString& code)
         m_initFunc = m_engine.evaluate("init");
         m_preFunc = m_engine.evaluate("pre");
         m_postFunc = m_engine.evaluate("post");
+
+        m_engine.clearExceptions();
     }
 }
 

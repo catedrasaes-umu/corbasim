@@ -135,24 +135,31 @@ void Sender::start(Sender_weak weak)
     {
         m_evaluator.evaluate(m_config->code());
 
-        OperationDescriptor_ptr op =
-            m_config->operation();       
+        bool hasErr = m_evaluator.hasError();
 
-        // Clone the original request
-        // We can't modify an emited request
-        ::corbasim::core::holder srcHolder = 
-            op->get_holder(m_config->request());
+        if (!hasErr)
+        {
+            OperationDescriptor_ptr op =
+                m_config->operation();       
 
-        m_request = op->create_request();
-        ::corbasim::core::holder dstHolder = 
-            op->get_holder(m_request);
+            // Clone the original request
+            // We can't modify an emited request
+            ::corbasim::core::holder srcHolder = 
+                op->get_holder(m_config->request());
 
-        op->copy(srcHolder, dstHolder);
+            m_request = op->create_request();
+            ::corbasim::core::holder dstHolder = 
+                op->get_holder(m_request);
 
-        // m_request is the working request
-        m_evaluator.init(m_request);
+            op->copy(srcHolder, dstHolder);
 
-        if (!m_evaluator.hasError())
+            // m_request is the working request
+            m_evaluator.init(m_request);
+
+            hasErr = m_evaluator.hasError();
+        }
+
+        if (!hasErr)
         {
             m_timer.expires_from_now(
                     boost::posix_time::milliseconds(0));
