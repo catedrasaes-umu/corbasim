@@ -438,6 +438,8 @@ void Application::clearScenario()
         unique_lock lock(m_data->m_servantsMutex);
         m_servants.clear();
     }
+
+    emit message("Scenario cleared");
 }
 
 void Application::loadScenario(const QString& file)
