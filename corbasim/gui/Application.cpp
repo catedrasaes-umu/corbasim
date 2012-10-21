@@ -122,6 +122,10 @@ Application::Application(QObject * parent) :
     connect(&m_interfaces, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
             this, 
+            SLOT(sLoadedInterface(InterfaceDescriptor_ptr)));
+    connect(&m_interfaces, 
+            SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
+            this, 
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)));
     connect(&m_objrefs, 
             SIGNAL(deleted(ObjectId)),
@@ -271,6 +275,10 @@ Application::~Application()
     delete m_data;
 }
 
+void Application::sLoadedInterface(InterfaceDescriptor_ptr interface)
+{
+    emit message(QString("Loaded interface %1").arg(interface->get_fqn()));
+}
 
 QObject * Application::inputRequestController() const
 {
@@ -436,6 +444,8 @@ void Application::loadScenario(const QString& file)
     if (res)
     {
         load(settings);
+        
+        emit message(QString("Loaded scenario from %1").arg(file));
     }
     else
     {
@@ -451,6 +461,8 @@ void Application::saveScenario(const QString& file)
     std::ofstream ofs(file.toStdString().c_str());
     json::ostream_writer_t ow(ofs, true);
     toJson(ow, settings);
+
+    emit message(QString("Saved current scenario into %1").arg(file));
 }
 
 void Application::loadDirectory(const QString& directory)
@@ -465,6 +477,10 @@ void Application::loadInterface(const QString& fqn)
     if (!interface)
     {
         emit error(QString("Unable to load interface %1").arg(fqn));
+    }
+    else
+    {
+        emit message(QString("Loaded interface %1").arg(fqn));
     }
 }
 
@@ -505,7 +521,7 @@ Objref_ptr Application::createObjref(const ObjrefConfig& cfg)
 
         emit objrefCreated(obj);
 
-        emit message(QString("New object reference: '%1'")
+        emit message(QString("New object reference: %1")
                 .arg(cfg.fqn.c_str()));
 
         return obj;
@@ -577,7 +593,7 @@ Objref_ptr Application::createServant(const ServantConfig& cfg)
 
         emit servantCreated(obj);
 
-        emit message(QString("New servant: '%1'")
+        emit message(QString("New servant: %1")
                 .arg(cfg.fqn.c_str()));
 
         return obj;
@@ -595,6 +611,8 @@ void Application::deleteObjref(ObjectId id)
     if (obj)
     {
         m_objrefs.del(id);
+        
+        emit message(QString("Deleted object reference: %1").arg(obj->name()));
     }
     else
     {
@@ -618,6 +636,8 @@ void Application::deleteServant(ObjectId id)
         m_data->m_rootPOA->deactivate_object (myObjID);
 
         m_servants.del(id);
+
+        emit message(QString("Deleted servant: %1").arg(obj->name()));
     }
     else
     {

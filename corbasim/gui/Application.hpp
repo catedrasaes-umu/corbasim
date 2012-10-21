@@ -85,6 +85,10 @@ signals:
     void requestReceived(ObjectId id, 
             Request_ptr req, Event_ptr res);
 
+protected slots:
+
+    void sLoadedInterface(InterfaceDescriptor_ptr interface);
+
 protected:
 
     InterfaceRepository m_interfaces;

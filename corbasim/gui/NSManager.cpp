@@ -180,6 +180,11 @@ void NSManager::registerServant(Objref_ptr servant)
             emit error(QString("Unable to register '%1' as '%2'").
                     arg(servant->name()).arg(str.c_str()));
         }
+        else
+        {
+            emit message(QString("Registered '%1' as '%2'").
+                    arg(servant->name()).arg(str.c_str()));
+        }
     }
 }
 
