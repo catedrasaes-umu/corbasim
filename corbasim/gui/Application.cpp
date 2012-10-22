@@ -531,7 +531,7 @@ Objref_ptr Application::createObjref(const ObjrefConfig& cfg)
         emit objrefCreated(obj);
 
         emit message(QString("New object reference: %1")
-                .arg(cfg.fqn.c_str()));
+                .arg(cfg.name.c_str()));
 
         return obj;
     }
@@ -603,7 +603,7 @@ Objref_ptr Application::createServant(const ServantConfig& cfg)
         emit servantCreated(obj);
 
         emit message(QString("New servant: %1")
-                .arg(cfg.fqn.c_str()));
+                .arg(cfg.name.c_str()));
 
         return obj;
     }
