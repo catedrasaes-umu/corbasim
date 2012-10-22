@@ -25,6 +25,7 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
 #include <corbasim/gui/item/ApplicationLogModel.hpp>
+#include <corbasim/gui/item/InstanceModel.hpp>
 
 #include <QtGui>
 
@@ -68,13 +69,13 @@ protected:
 
     LogModel m_logModel;
     ApplicationLogModel m_appLogModel;
+    InstanceModel m_instanceModel;
 
     ObjrefRepository m_objrefs;
 
     FilteredLogView * m_view;
     OperationSequenceTool * m_seqTool;
     DumpTool * m_dumpInput;
-    DumpTool * m_dumpOutput;
 };
 
 } // namespace gui
