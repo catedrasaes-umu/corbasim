@@ -633,14 +633,14 @@ void AppMainWindow::displayError(const QString& err)
 {
     QMessageBox::critical(this, "Error", err);
 
-    statusBar()->showMessage(err, 30000);
+    statusBar()->showMessage(err, 5000);
 
     m_appLogModel.error(err);
 }
 
 void AppMainWindow::displayMessage(const QString& msg)
 {
-    statusBar()->showMessage(msg, 30000);
+    statusBar()->showMessage(msg, 5000);
     
     m_appLogModel.message(msg);
 }
@@ -996,7 +996,13 @@ void AppMainWindow::doSaveConfiguration()
 
 void AppMainWindow::actionHovered(QAction * action)
 {
-    statusBar()->showMessage(action->text(), 30000);
+    /*
+    if (action && !action->text().isEmpty() && 
+            action->text() != statusBar()->currentMessage())
+     */
+    {
+        statusBar()->showMessage(action->text(), 5000);
+    }
 }
 
 void AppMainWindow::stopAll()
