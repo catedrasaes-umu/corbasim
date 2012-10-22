@@ -37,13 +37,23 @@ public:
     ServerApp(int& argc, char ** argv);
     ~ServerApp();
 
+    void setWindowTitle(const char * title);
+
+    void setPluginDirectory(const char * directory);
+
     CORBA::Object_var setClient(
             const char * fqn, 
             const char * clientName,
             const CORBA::Object_var& ref);
 
+    CORBA::Object_var setClient(
+            const char * fqn, 
+            const char * clientName,
+            const char * nsEntry);
+
     CORBA::Object_var setServant(
             const char * fqn,
+            const char * servantName,
             PortableServer::ServantBase * servant);
 
     QWidget * window() const;

@@ -29,6 +29,8 @@ using namespace corbasim::gui;
 Server::Server(QWidget * parent) : 
     QMainWindow(parent), m_logModel(this), m_objrefs(this)
 {
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
+
     QTabWidget * tabs = new QTabWidget();
 
     // Log
@@ -88,9 +90,6 @@ void Server::objrefDeleted(ObjectId id)
 
 void Server::servantCreated(Objref_ptr servant)
 {
-    assert(!m_servant.get() && servant.get());
-    
-    m_servant = servant;
     m_logModel.registerInstance(servant);
 
     m_view->registerInstance(servant);
@@ -108,9 +107,11 @@ void Server::servantDeleted(ObjectId id)
 
 void Server::displayError(const QString& err)
 {
+    m_appLogModel.error(err);
 }
 
 void Server::displayMessage(const QString& msg)
 {
+    m_appLogModel.message(msg);
 }
 

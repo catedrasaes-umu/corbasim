@@ -24,6 +24,7 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
+#include <corbasim/gui/item/ApplicationLogModel.hpp>
 
 #include <QtGui>
 
@@ -66,8 +67,8 @@ protected slots:
 protected:
 
     LogModel m_logModel;
+    ApplicationLogModel m_appLogModel;
 
-    Objref_ptr m_servant;
     ObjrefRepository m_objrefs;
 
     FilteredLogView * m_view;

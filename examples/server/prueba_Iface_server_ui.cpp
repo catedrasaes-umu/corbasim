@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 	// Servant
     prueba_Iface_impl _impl(app);
 
-    CORBA::Object_var myRef = app.setServant("prueba::Iface", &_impl);
+    CORBA::Object_var myRef = app.setServant("prueba::Iface", "this", &_impl);
 
     /*PROTECTED REGION ID(prueba_Iface_server_ui::___main) ENABLED START*/
     app.setClient("prueba::Iface", "prueba", myRef);

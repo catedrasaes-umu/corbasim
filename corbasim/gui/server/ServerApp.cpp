@@ -36,15 +36,19 @@ struct ServerApp::ServerData
 
     Server window;
 
-    PortableServer::ServantBase * servant;
+    // Not needed yet!
+    /*
+    typedef PortableServer::ServantBase * servant_t;
+    typedef std::map< std::string, servant_t > servants_t;
+    servants_t servants;
+    */
 
     CORBA::ORB_var orb;
     PortableServer::POA_var rootPOA;
 
     ServerData(ServerApp& this__, int& argc, char ** argv) : 
         this_(this__),
-        app(argc, argv), 
-        servant(NULL) 
+        app(argc, argv)
     {
         orb = CORBA::ORB_init(argc, argv);
 
@@ -81,6 +85,11 @@ ServerApp::~ServerApp()
 QWidget * ServerApp::window() const
 {
     return &(m_impl->window);
+}
+
+void ServerApp::setPluginDirectory(const char * directory)
+{
+    m_impl->application.loadDirectory(directory);
 }
 
 CORBA::Object_var ServerApp::setClient(
@@ -142,15 +151,71 @@ CORBA::Object_var ServerApp::setClient(
     return result;
 }
 
+CORBA::Object_var ServerApp::setClient(
+        const char * fqn, 
+        const char * clientName,
+        const char * nsEntry)
+{
+    Objref_ptr objref = m_impl->clients.find(clientName);
+
+    CORBA::Object_var result;
+
+    // Client exists
+    if (objref)
+    {
+        // if the client exists we return its proxy servant
+        // reference
+        Servant * servant = 
+            static_cast< Servant * >(objref.get());
+
+        servant->proxy()->setNsEntry(nsEntry);
+
+        result = servant->reference();
+    }
+    else
+    {
+        // New client
+        // We create a new hidden servant
+        ServantConfig scfg;
+        scfg.fqn = fqn;
+        scfg.name = std::string("corbasim hide servant ") + clientName;
+        scfg.hide = true;
+
+        Objref_ptr oServant = 
+            m_impl->application.createServant(scfg);
+
+        Servant * servant = 
+            static_cast< Servant * >(oServant.get());
+
+        // user must use this reference
+        // all its calls will be derived to a proxy reference
+        result = servant->reference();
+
+        servant->setReference(result);
+
+        // We create a visible client
+        ObjrefConfig ccfg;
+        ccfg.name = clientName;
+        ccfg.fqn = fqn;
+        ccfg.entry = nsEntry;
+
+        Objref_ptr proxy = 
+            m_impl->application.createObjref(ccfg);
+
+        servant->setProxy(proxy);
+
+        m_impl->clients.add(oServant);
+    }
+
+    return result;
+}
+
 CORBA::Object_var ServerApp::setServant(
         const char * fqn,
+        const char * servantName,
         PortableServer::ServantBase * servant)
 {
-    assert(!m_impl->servant);
-
     // We activate the real servant
-    m_impl->servant = servant;
-
     PortableServer::ObjectId_var myObjID = 
         m_impl->rootPOA->activate_object(servant);
 
@@ -160,7 +225,7 @@ CORBA::Object_var ServerApp::setServant(
     // We use a fake servant
     ServantConfig scfg;
     scfg.fqn = fqn;
-    scfg.name = "this servant"; // TODO
+    scfg.name = servantName;
 
     Objref_ptr oServant = 
         m_impl->application.createServant(scfg);
@@ -175,7 +240,7 @@ CORBA::Object_var ServerApp::setServant(
     // create an objref with the real reference
     ObjrefConfig ocfg;
     ocfg.fqn = fqn;
-    ocfg.name = std::string("corbasim hide client ") + "this client"; // TODO
+    ocfg.name = std::string("corbasim hide client ") + servantName;
     ocfg.reference = realRef;
     ocfg.hide = true;
 
@@ -188,11 +253,18 @@ CORBA::Object_var ServerApp::setServant(
     return result;
 }
 
+void ServerApp::setWindowTitle(const char * title)
+{
+    m_impl->window.setWindowTitle(title);
+}
+
 int ServerApp::exec()
 {
-    assert(m_impl->servant);
+    QThread appThread;
 
-    // TODO m_impl->window.initialize(m_impl->reflective);
+    m_impl->application.moveToThread(&appThread);
+    appThread.start();
+
     m_impl->window.show();
 
     // ... and run
@@ -202,9 +274,14 @@ int ServerApp::exec()
 
     int res = m_impl->app.exec();
 
+    appThread.quit();
+    appThread.wait();
+
     m_impl->orb->shutdown(1);
 
     orbThread.join();
+
+    delete m_impl; m_impl = NULL;
 
     return res;
 }
