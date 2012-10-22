@@ -40,7 +40,6 @@ struct ServerApp::ServerData
 
     CORBA::ORB_var orb;
     PortableServer::POA_var rootPOA;
-    PortableServer::POAManager_var manager; 
 
     ServerData(ServerApp& this__, int& argc, char ** argv) : 
         this_(this__),
@@ -53,17 +52,25 @@ struct ServerApp::ServerData
             orb->resolve_initial_references ("RootPOA");
 
         rootPOA = PortableServer::POA::_narrow(rootPOAObj.in());
-
-        manager = rootPOA->the_POAManager();
-
-        manager->activate();
     }
 };
 
 ServerApp::ServerApp(int& argc, char ** argv) :
     m_impl(new ServerData(*this, argc, argv))
 {
-    // TODO connect signals
+    // connect signals
+    QObject::connect(&m_impl->application, SIGNAL(objrefCreated(Objref_ptr)), 
+            &m_impl->window, SLOT(objrefCreated(Objref_ptr)));
+    QObject::connect(&m_impl->application, SIGNAL(servantCreated(Objref_ptr)), 
+            &m_impl->window, SLOT(servantCreated(Objref_ptr)));
+    QObject::connect(&m_impl->application, SIGNAL(objrefDeleted(ObjectId)), 
+            &m_impl->window, SLOT(objrefDeleted(ObjectId)));
+    QObject::connect(&m_impl->application, SIGNAL(servantDeleted(ObjectId)), 
+            &m_impl->window, SLOT(servantDeleted(ObjectId)));
+    QObject::connect(&m_impl->application, SIGNAL(error(const QString&)), 
+            &m_impl->window, SLOT(displayError(const QString&)));
+    QObject::connect(&m_impl->application, SIGNAL(message(const QString&)), 
+            &m_impl->window, SLOT(displayMessage(const QString&)));
 }
 
 ServerApp::~ServerApp()
@@ -103,24 +110,18 @@ CORBA::Object_var ServerApp::setClient(
         // We create a new hidden servant
         ServantConfig scfg;
         scfg.fqn = fqn;
-        scfg.name = clientName;
+        scfg.name = std::string("corbasim hide servant ") + clientName;
+        scfg.hide = true;
 
-        // TODO we can't do this because of duplicated name
         Objref_ptr oServant = 
             m_impl->application.createServant(scfg);
 
         Servant * servant = 
             static_cast< Servant * >(oServant.get());
 
-        PortableServer::ObjectId_var myObjID = 
-            m_impl->rootPOA->activate_object(
-                    servant->getServant());
-
         // user must use this reference
         // all its calls will be derived to a proxy reference
-        result =  
-            m_impl->rootPOA->servant_to_reference(
-                    servant->getServant());
+        result = servant->reference();
 
         servant->setReference(result);
 
@@ -159,7 +160,7 @@ CORBA::Object_var ServerApp::setServant(
     // We use a fake servant
     ServantConfig scfg;
     scfg.fqn = fqn;
-    scfg.name = "this"; // TODO
+    scfg.name = "this servant"; // TODO
 
     Objref_ptr oServant = 
         m_impl->application.createServant(scfg);
@@ -167,19 +168,22 @@ CORBA::Object_var ServerApp::setServant(
     Servant * sServant = 
         static_cast< Servant * >(oServant.get());
 
-    myObjID = m_impl->rootPOA->activate_object(
-                sServant->getServant());
-
-    CORBA::Object_var result =  
-        m_impl->rootPOA->servant_to_reference(
-                sServant->getServant());
+    CORBA::Object_var result = sServant->reference();
 
     sServant->setReference(result);
 
-    // TODO create an objref with the real reference
-    Objref_ptr realObjref;
+    // create an objref with the real reference
+    ObjrefConfig ocfg;
+    ocfg.fqn = fqn;
+    ocfg.name = std::string("corbasim hide client ") + "this client"; // TODO
+    ocfg.reference = realRef;
+    ocfg.hide = true;
 
+    Objref_ptr realObjref = 
+        m_impl->application.createObjref(ocfg);
+    
     sServant->setProxy(realObjref);
+    // end create an objref with the real reference
 
     return result;
 }

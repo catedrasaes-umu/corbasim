@@ -67,6 +67,10 @@ struct ObjrefConfig
     std::string entry;
     CORBA::Object_var reference;
     std::string watchFile;
+
+    bool hide;
+
+    ObjrefConfig() : hide(false) {}
 };
 
 struct ServantConfig : public ObjrefConfig

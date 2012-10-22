@@ -1,0 +1,11 @@
+module prueba
+{
+
+interface Iface
+{
+
+    void operation();
+
+};
+
+};

@@ -20,7 +20,7 @@
 #include <corbasim/impl.hpp>
 #include "«getTranslationUnit().getFileNameSkelHpp()»"
 #include "«getTranslationUnit().getAdaptedFile()»"
-#include <corbasim/gui/ServerApp.hpp>
+#include <corbasim/gui/server/ServerApp.hpp>
 
 «PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___prolog"»
 «ENDPROTECT»
@@ -64,8 +64,6 @@ protected:
 	::corbasim::gui::ServerApp& m_app;
 };
 
-extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»();
-
 int main(int argc, char **argv)
 {
     corbasim::gui::ServerApp app(argc, argv);
@@ -73,7 +71,7 @@ int main(int argc, char **argv)
 	// Servant
     «fqn»_impl _impl(app);
 
-    app.setServant(corbasim_reflective_«fqn»(), &_impl);
+    CORBA::Object_var myRef = app.setServant("«getFQN()»", &_impl);
 
     «PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___main"»
     «ENDPROTECT»

@@ -70,6 +70,11 @@ void Server::objrefCreated(Objref_ptr objref)
 
     m_view->registerInstance(objref);
     m_seqTool->objrefCreated(objref);
+
+    connect(objref.get(), 
+            SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
+            &m_logModel, 
+            SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 }
 
 void Server::objrefDeleted(ObjectId id)
@@ -90,6 +95,11 @@ void Server::servantCreated(Objref_ptr servant)
 
     m_view->registerInstance(servant);
     m_dumpInput->registerInstance(servant);
+
+    connect(servant.get(), 
+            SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
+            &m_logModel, 
+            SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
 }
 
 void Server::servantDeleted(ObjectId id)

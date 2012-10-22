@@ -522,16 +522,19 @@ Objref_ptr Application::createObjref(const ObjrefConfig& cfg)
 
         m_objrefs.add(obj);
 
-        const char * signal =
-            SIGNAL(requestSent(ObjectId, Request_ptr, 
-                        Event_ptr));
+        if (!cfg.hide)
+        {
+            const char * signal =
+                SIGNAL(requestSent(ObjectId, Request_ptr, 
+                            Event_ptr));
 
-        connect(obj.get(), signal, this, signal);
+            connect(obj.get(), signal, this, signal);
 
-        emit objrefCreated(obj);
+            emit objrefCreated(obj);
 
-        emit message(QString("New object reference: %1")
-                .arg(cfg.name.c_str()));
+            emit message(QString("New object reference: %1")
+                    .arg(cfg.name.c_str()));
+        }
 
         return obj;
     }
@@ -582,28 +585,31 @@ Objref_ptr Application::createServant(const ServantConfig& cfg)
         CORBA::String_var ref = 
             m_data->m_orb->object_to_string (objSrv);
 
-        std::cout << cfg.name << ": " << ref.in() << std::endl;
-
         obj->setReference(objSrv);
 
         m_servants.add(obj);
 
-        const char * signal =
-            SIGNAL(requestReceived(ObjectId, Request_ptr, 
-                        Event_ptr));
+        if (!cfg.hide)
+        {
+            std::cout << cfg.name << ": " << ref.in() << std::endl;
 
-        connect(obj.get(), signal, this, signal);
+            const char * signal =
+                SIGNAL(requestReceived(ObjectId, Request_ptr, 
+                            Event_ptr));
+
+            connect(obj.get(), signal, this, signal);
+
+            emit servantCreated(obj);
+
+            emit message(QString("New servant: %1")
+                    .arg(cfg.name.c_str()));
+        }
 
         if (!cfg.saveFile.empty())
         {
             std::ofstream ofs(cfg.saveFile.c_str());
             ofs << ref.in();
         }
-
-        emit servantCreated(obj);
-
-        emit message(QString("New servant: %1")
-                .arg(cfg.name.c_str()));
 
         return obj;
     }
