@@ -36,6 +36,7 @@ namespace gui
 
 class FilteredLogView;
 class OperationSequenceTool;
+class SenderSequenceTool;
 class DumpTool;
 
 class CORBASIM_GUI_DECLSPEC Server : public QMainWindow
@@ -58,6 +59,8 @@ public slots:
     void displayError(const QString& err);
     void displayMessage(const QString& msg);
 
+    void selectedOperation(Objref_ptr, OperationDescriptor_ptr);
+
 signals:
 
     void createObjref(const ObjrefConfig&);
@@ -73,9 +76,15 @@ protected:
 
     ObjrefRepository m_objrefs;
 
+    QTabWidget * m_tabs;
+
     FilteredLogView * m_view;
     OperationSequenceTool * m_seqTool;
+    SenderSequenceTool * m_senderSeqTool;
     DumpTool * m_dumpInput;
+
+    int m_seqIdx;
+    int m_senderIdx;
 };
 
 } // namespace gui

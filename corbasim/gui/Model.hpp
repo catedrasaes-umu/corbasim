@@ -79,6 +79,7 @@ public slots:
     void setReference(const CORBA::Object_var& reference);
 
     Event_ptr sendRequest(const Request_ptr& request);
+    Event_ptr sendRequestThrow(const Request_ptr& request);
 
     void setNsEntry(const QString& nsEntry);
 

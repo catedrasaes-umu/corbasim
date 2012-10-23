@@ -45,6 +45,7 @@ struct CORBASIM_CORE_DECLSPEC interface_caller_base :
     public reference_validator_base
 {
     virtual event::event * do_call(event::request * req) const = 0;
+    virtual event::event * do_call_throw(event::request * req) const = 0;
 
     virtual ~interface_caller_base();
 };

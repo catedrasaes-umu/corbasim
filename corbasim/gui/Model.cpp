@@ -163,11 +163,46 @@ Event_ptr Objref::sendRequest(const Request_ptr& request)
 
     if (!m_caller || m_caller->is_nil())
     {
-        ev = Event_ptr(new corbasim::event::message("Invalid reference!"));
+        ev = Event_ptr(
+            new corbasim::event::message("Invalid reference!"));
     }
     else
     {
         ev = Event_ptr(m_caller->do_call(request.get()));
+    }
+
+    emit requestSent(id(), request, ev);
+
+    return ev;
+}
+
+Event_ptr Objref::sendRequestThrow(const Request_ptr& request)
+{
+    shared_lock lock(m_data->refMutex);
+
+    Event_ptr ev;
+
+    if (!m_caller || m_caller->is_nil())
+    {
+        // TODO throw exception?
+        ev = Event_ptr(
+                new corbasim::event::message("Invalid reference!"));
+    }
+    else
+    {
+        try 
+        {
+            ev = Event_ptr(m_caller->do_call_throw(request.get()));
+        }
+        catch(const CORBA::Exception& ex)
+        {
+            // Exception forwarding
+            ev = Event_ptr(new corbasim::event::exception(ex._name()));
+
+            emit requestSent(id(), request, ev);
+
+            ex._raise();
+        }
     }
 
     emit requestSent(id(), request, ev);
@@ -214,11 +249,24 @@ struct Servant::ServantData :
         if (m_this.proxy())
         {
             // Proxy and servant must be in the same thread
-            ::corbasim::event::event_ptr ev =
-                m_this.proxy()->sendRequest(req);
+            try
+            {
+                ::corbasim::event::event_ptr ev =
+                    m_this.proxy()->sendRequestThrow(req);
 
-            emit m_this.requestReceived(m_this.id(), req, ev);
-            return ev;
+                emit m_this.requestReceived(m_this.id(), req, ev);
+
+                return ev;
+            } 
+            catch (const CORBA::Exception& ex)
+            {
+                ::corbasim::event::event_ptr ev (
+                        new ::corbasim::event::exception(ex._name()));
+
+                emit m_this.requestReceived(m_this.id(), req, ev);
+
+                ex._raise();
+            }
         }
 
         emit m_this.requestReceived(m_this.id(), req, resp);

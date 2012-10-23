@@ -20,6 +20,7 @@
 #include "Server.hpp"
 #include <corbasim/gui/tools/FilteredLogView.hpp>
 #include <corbasim/gui/tools/OperationSequence.hpp>
+#include <corbasim/gui/tools/SenderSequence.hpp>
 #include <corbasim/gui/tools/DumpTool.hpp>
 #include <corbasim/gui/item/TreeView.hpp>
 #include <corbasim/gui/item/OperationsView.hpp>
@@ -37,7 +38,7 @@ Server::Server(QWidget * parent) :
 {
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 
-    QTabWidget * tabs = new QTabWidget();
+    m_tabs = new QTabWidget();
 
     // Log
     QTreeView * logView = new TreeView();
@@ -54,7 +55,8 @@ Server::Server(QWidget * parent) :
     }
 
     // Application log view
-    QDockWidget * appLogViewDock = new QDockWidget("Application log", this);
+    QDockWidget * appLogViewDock = 
+        new QDockWidget("Application log", this);
     QTreeView * appLogView = new TreeView();
     appLogView->setModel(&m_appLogModel);
     appLogViewDock->setWidget(appLogView);
@@ -76,43 +78,98 @@ Server::Server(QWidget * parent) :
     instanceViewDock->setWidget(instanceView);
     addDockWidget(Qt::LeftDockWidgetArea, instanceViewDock);
 
-    // TODO
-    /*
     connect(instanceView, 
             SIGNAL(selectedOperation(Objref_ptr, OperationDescriptor_ptr)),
             this,
             SLOT(selectedOperation(Objref_ptr, OperationDescriptor_ptr)));
-     */
 
     // Filtered log
     m_view = new FilteredLogView();
     m_view->setLogModel(&m_logModel);
-    tabs->addTab(m_view, "Filtered log");
+    m_tabs->addTab(m_view, "Filtered log");
 
     // Clients
     m_seqTool = new OperationSequenceTool();
-    tabs->addTab(m_seqTool, "Clients");
+    // We don't register the objrefs in the tool because we don't 
+    // use its tree view
+    m_seqTool->setTreeVisible(false);
+    m_seqIdx = m_tabs->addTab(m_seqTool, "Operations");
+
+    m_senderSeqTool = new SenderSequenceTool();
+    // We don't register the objrefs in the tool because we don't 
+    // use its tree view
+    m_senderSeqTool->setTreeVisible(false);
+    m_senderIdx = m_tabs->addTab(m_senderSeqTool, "Senders");
 
     // Dump input
     m_dumpInput = new DumpTool();
-    tabs->addTab(m_dumpInput, "Dump input");
+    m_tabs->addTab(m_dumpInput, "Dump input");
 
     // Central widget
-    setCentralWidget(tabs);
+    setCentralWidget(m_tabs);
+
+    // Status bar
+    setStatusBar(new QStatusBar());
+
+    // Actions
+    // Clear log
+    QAction * clearAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear log", this);
+    connect(clearAction, SIGNAL(triggered()), 
+            &m_logModel, SLOT(clearLog()));
+
+    // Clear application log
+    QAction * clearAppLogAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear application log", this);
+    connect(clearAppLogAction, SIGNAL(triggered()), 
+            &m_appLogModel, SLOT(clearLog()));
+
+    // Menu bar
+    QMenuBar * menuBar = new QMenuBar();
+    setMenuBar(menuBar);
+
+    // Tool bar
+    QToolBar * toolBar = NULL;
+
+    toolBar = addToolBar("Window");
+    toolBar->addAction(clearAction);
+    toolBar->addAction(clearAppLogAction);
 }
 
 Server::~Server() 
 {
 }
 
+void Server::selectedOperation(Objref_ptr object, 
+        OperationDescriptor_ptr op)
+{
+    int idx = m_tabs->currentIndex();
+
+    if (idx == m_seqIdx)
+    {
+        m_seqTool->appendAbstractItem(object, op);
+    }
+    else if (idx == m_senderIdx)
+    {
+        m_senderSeqTool->appendAbstractItem(object, op);
+    }
+    else
+    {
+        // What?
+    }
+}
+
 void Server::objrefCreated(Objref_ptr objref)
 {
+    // Models
     m_objrefs.add(objref);
     m_logModel.registerInstance(objref);
     m_instanceModel.registerInstance(objref);
 
+    // Views
     m_view->registerInstance(objref);
-    m_seqTool->objrefCreated(objref);
 
     connect(objref.get(), 
             SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
@@ -122,18 +179,21 @@ void Server::objrefCreated(Objref_ptr objref)
 
 void Server::objrefDeleted(ObjectId id)
 {
+    // Models
     m_objrefs.del(id);
     m_logModel.unregisterInstance(id);
 
+    // Views
     m_view->unregisterInstance(id);
-    m_seqTool->objrefDeleted(id);
 }
 
 void Server::servantCreated(Objref_ptr servant)
 {
+    // Models
     m_logModel.registerInstance(servant);
     m_instanceModel.registerInstance(servant);
 
+    // Views
     m_view->registerInstance(servant);
     m_dumpInput->registerInstance(servant);
 
@@ -145,6 +205,15 @@ void Server::servantCreated(Objref_ptr servant)
 
 void Server::servantDeleted(ObjectId id)
 {
+    // Models
+    m_logModel.unregisterInstance(id);
+    m_instanceModel.unregisterInstance(id);
+
+    // Views
+    m_view->unregisterInstance(id);
+    m_dumpInput->unregisterInstance(id);
+
+    // TODO disconnect signal: we need the object
 }
 
 void Server::displayError(const QString& err)

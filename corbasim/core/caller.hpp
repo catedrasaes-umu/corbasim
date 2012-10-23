@@ -148,6 +148,24 @@ struct interface_caller : public interface_caller_base
 
     event::event * do_call(event::request * req) const
     {
+        try 
+        {
+            return do_call_throw(req);
+        } 
+        catch (const CORBA::Exception& ex)
+        {
+            return new event::exception(ex._name());
+        }
+        catch (...)
+        {
+            return new event::exception();
+        }
+
+        return NULL;
+    }
+
+    event::event * do_call_throw(event::request * req) const
+    {
         if (!m_ref)
             return NULL;
 
@@ -157,18 +175,7 @@ struct interface_caller : public interface_caller_base
 
         if (it != m_callers.end())
         {
-            try 
-            {
-                return it->second->call(m_ref, req);
-            } 
-            catch (const CORBA::Exception& ex)
-            {
-                return new event::exception(ex._name());
-            }
-            catch (...)
-            {
-                return new event::exception();
-            }
+            return it->second->call(m_ref, req);
         }
 
         return NULL;
