@@ -60,7 +60,7 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     setLayout(layout);
 
     // Size
-    setMinimumSize(800, 600);
+    setMinimumSize(650, 400);
 
     splitter->setStretchFactor(0, 20);
     splitter->setStretchFactor(1, 50);

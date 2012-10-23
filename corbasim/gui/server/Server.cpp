@@ -22,6 +22,7 @@
 #include <corbasim/gui/tools/OperationSequence.hpp>
 #include <corbasim/gui/tools/SenderSequence.hpp>
 #include <corbasim/gui/tools/DumpTool.hpp>
+#include <corbasim/gui/tools/StatusView.hpp>
 #include <corbasim/gui/item/TreeView.hpp>
 #include <corbasim/gui/item/OperationsView.hpp>
 
@@ -34,11 +35,20 @@ Server::Server(QWidget * parent) :
     m_logModel(this), 
     m_appLogModel(this),
     m_instanceModel(this),
-    m_objrefs(this)
+    m_objrefs(this),
+
+    // Tools
+    m_plotTool(NULL),
+
+    m_qwtLoaded(false)
 {
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 
     m_tabs = new QTabWidget();
+
+    // StatusView
+    m_statusView = new StatusView();
+    m_tabs->addTab(m_statusView, "Status");
 
     // Log
     QTreeView * logView = new TreeView();
@@ -93,17 +103,22 @@ Server::Server(QWidget * parent) :
     // We don't register the objrefs in the tool because we don't 
     // use its tree view
     m_seqTool->setTreeVisible(false);
-    m_seqIdx = m_tabs->addTab(m_seqTool, "Operations");
+    m_tabs->addTab(m_seqTool, "Operations");
 
     m_senderSeqTool = new SenderSequenceTool();
     // We don't register the objrefs in the tool because we don't 
     // use its tree view
     m_senderSeqTool->setTreeVisible(false);
-    m_senderIdx = m_tabs->addTab(m_senderSeqTool, "Senders");
+    m_tabs->addTab(m_senderSeqTool, "Senders");
 
     // Dump input
     m_dumpInput = new DumpTool();
     m_tabs->addTab(m_dumpInput, "Dump input");
+    
+    // Plot input
+    QLabel * plotLabel = new QLabel("No corbasim_qwt library available");
+    plotLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_plotIdx = m_tabs->addTab(plotLabel, "Plot input");
 
     // Central widget
     setCentralWidget(m_tabs);
@@ -136,6 +151,9 @@ Server::Server(QWidget * parent) :
     toolBar = addToolBar("Window");
     toolBar->addAction(clearAction);
     toolBar->addAction(clearAppLogAction);
+
+    connect(m_tabs, SIGNAL(currentChanged(int)),
+            this, SLOT(currentIndexChanged(int)));
 }
 
 Server::~Server() 
@@ -145,19 +163,61 @@ Server::~Server()
 void Server::selectedOperation(Objref_ptr object, 
         OperationDescriptor_ptr op)
 {
-    int idx = m_tabs->currentIndex();
+    QWidget * w = m_tabs->currentWidget();
 
-    if (idx == m_seqIdx)
+    if (w == m_seqTool)
     {
         m_seqTool->appendAbstractItem(object, op);
     }
-    else if (idx == m_senderIdx)
+    else if (w == m_senderSeqTool)
     {
         m_senderSeqTool->appendAbstractItem(object, op);
     }
     else
     {
         // What?
+    }
+}
+
+void Server::currentIndexChanged(int index)
+{
+    if (index == m_plotIdx) loadPlotTool();
+}
+
+void Server::loadPlotTool()
+{
+    typedef AbstractInputTool* (*create_t)(QWidget*);
+
+    if (!m_qwtLoaded)
+    {
+        // Loads the library
+        QLibrary lib("corbasim_qwt");
+        lib.load();
+
+        create_t create = (create_t) lib.resolve("createPlotTool");
+
+        if (create)
+        {
+            // Creates the tool
+            m_plotTool = create(this);
+
+            m_qwtLoaded = true;
+            m_tabs->insertTab(m_plotIdx, m_plotTool, "Plot input");
+            m_tabs->removeTab(m_plotIdx + 1);
+
+            // Initilizes the tool
+            ObjrefRepository::const_iterator it = m_servants.begin();
+            ObjrefRepository::const_iterator end = m_servants.end();
+
+            for(; it != end; it++)
+                m_plotTool->registerInstance(it.value());
+        }
+        else
+        {
+            QMessageBox::critical(this, "Error initializing plot tool", 
+                    "Unable to load corbasim_qwt. "
+                    "Ensure you have built corbasim with qwt.");
+        }
     }
 }
 
@@ -170,6 +230,7 @@ void Server::objrefCreated(Objref_ptr objref)
 
     // Views
     m_view->registerInstance(objref);
+    m_statusView->registerInstance(objref);
 
     connect(objref.get(), 
             SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
@@ -185,11 +246,13 @@ void Server::objrefDeleted(ObjectId id)
 
     // Views
     m_view->unregisterInstance(id);
+    m_statusView->unregisterInstance(id);
 }
 
 void Server::servantCreated(Objref_ptr servant)
 {
     // Models
+    m_servants.add(servant);
     m_logModel.registerInstance(servant);
     m_instanceModel.registerInstance(servant);
 
@@ -206,6 +269,7 @@ void Server::servantCreated(Objref_ptr servant)
 void Server::servantDeleted(ObjectId id)
 {
     // Models
+    m_servants.del(id);
     m_logModel.unregisterInstance(id);
     m_instanceModel.unregisterInstance(id);
 
