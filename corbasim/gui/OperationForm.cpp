@@ -492,7 +492,7 @@ OperationSender::OperationSender(
 
     // signals
     connect(m_playButton,
-            SIGNAL(clicked(bool)),
+            SIGNAL(toggled(bool)),
             this,
             SLOT(playClicked(bool)));
 

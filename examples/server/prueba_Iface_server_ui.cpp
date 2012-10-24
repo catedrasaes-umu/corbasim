@@ -5,6 +5,7 @@
 #include <corbasim/gui/server/ServerApp.hpp>
 
 /*PROTECTED REGION ID(prueba_Iface_server_ui::___prolog) ENABLED START*/
+#include <iostream>
 /*PROTECTED REGION END*/
 
 class prueba_Iface_impl : virtual public POA_prueba::Iface
@@ -21,6 +22,7 @@ public:
 	{
 		
 		/*PROTECTED REGION ID(prueba_Iface_server_ui::prueba_Iface_operation) ENABLED START*/
+        std::cout << __FUNCTION__  << std::endl;
 		/*PROTECTED REGION END*/
 
 	}
