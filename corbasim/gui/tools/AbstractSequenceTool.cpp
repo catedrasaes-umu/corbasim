@@ -20,6 +20,7 @@
 #include "AbstractSequenceTool.hpp"
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/item/OperationsView.hpp>
+#include <corbasim/qt/StartStopButton.hpp>
 
 #include <fstream>
 #include <iostream>
@@ -147,8 +148,7 @@ AbstractSequence::AbstractSequence(const QString& name,
         hLayout->addItem(spacer);
 
         // Button
-        QPushButton * stBtn = new QPushButton("&Start/stop");
-        stBtn->setCheckable(true);
+        QPushButton * stBtn = new qt::StartStopButton();
         hLayout->addWidget(stBtn);
 
         connect(stBtn, SIGNAL(clicked(bool)), 

@@ -10,6 +10,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/TemplatedSpinBox.hpp
     qt/export.hpp
     qt/types.hpp
+    qt/StartStopButton.hpp
 )
 
 foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
@@ -32,6 +33,7 @@ set(corbasim_qt_MOC_HDRS
     qt/SortableGroup.hpp
     qt/Status.hpp
     qt/TabWidget.hpp
+    qt/StartStopButton.hpp
 )
 
 set(corbasim_qt_SRCS
@@ -49,6 +51,7 @@ set(corbasim_qt_SRCS
     qt/Status.cpp
     qt/TabWidget.cpp
     qt/initialize.cpp
+    qt/StartStopButton.cpp
 )
 
 message(STATUS "Qt libraries: ${QT_LIBRARIES}")

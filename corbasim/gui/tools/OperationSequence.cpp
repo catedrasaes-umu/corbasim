@@ -20,6 +20,8 @@
 #include "OperationSequence.hpp"
 #include <corbasim/gui/ReflectiveGUI.hpp>
 
+#include <corbasim/qt/StartStopButton.hpp>
+
 using namespace corbasim::gui;
 
 OperationSequenceItem::OperationSequenceItem(
@@ -71,19 +73,20 @@ OperationSequenceItem::OperationSequenceItem(
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     bLayout->addItem(spacer);
 
-    m_pbStartStop = new QPushButton("S&tart/Stop");
-    m_pbStartStop->setCheckable(true);
+    m_buttonBox = new QDialogButtonBox();
+
+    m_pbStartStop = new qt::StartStopButton();
     m_pbStartStop->setObjectName("start-stop");
-    bLayout->addWidget(m_pbStartStop);
+    m_buttonBox->addButton(m_pbStartStop, QDialogButtonBox::AcceptRole);
 
     m_pbUpdate = new QPushButton("&Update");
-    bLayout->addWidget(m_pbUpdate);
+    m_buttonBox->addButton(m_pbUpdate, QDialogButtonBox::ApplyRole);
     // end periodic
 
     QPushButton * btSend = new QPushButton("Send");
-    // QPushButton * btSendNext = new QPushButton("Send and next");
+    m_buttonBox->addButton(btSend, QDialogButtonBox::AcceptRole);
 
-    bLayout->addWidget(btSend);
+    bLayout->addWidget(m_buttonBox);
     // bLayout->addWidget(btSendNext);
    
     connect(btSend, SIGNAL(clicked()),

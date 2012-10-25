@@ -25,6 +25,8 @@
 #include <corbasim/gui/Application.hpp>
 #include <limits>
 
+#include <corbasim/qt/StartStopButton.hpp>
+
 // JSON
 #include <sstream>
 #include <corbasim/json/reflective.hpp>
@@ -474,9 +476,8 @@ OperationSender::OperationSender(
     m_period->setValue(100);
     m_updateForm = new QCheckBox();
 
-    m_playButton = new QPushButton("&Start/stop");
+    m_playButton = new qt::StartStopButton();
     m_playButton->setObjectName("start-stop");
-    m_playButton->setCheckable(true);
 
     cfgLayout->addWidget(new QLabel("Times"));
     cfgLayout->addWidget(m_times);

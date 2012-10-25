@@ -76,6 +76,7 @@ protected:
     QSpinBox * m_sbPeriod;
     QSpinBox * m_sbTimes;
     QCheckBox * m_cbUseStored;
+    QDialogButtonBox * m_buttonBox;
     QPushButton * m_pbStartStop;
     QPushButton * m_pbUpdate;
 

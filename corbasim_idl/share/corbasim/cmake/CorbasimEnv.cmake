@@ -1,37 +1,37 @@
 
-set(CORBASIM_INSTALL_PREFIX /usr/local)
+set(CORBASIM_INSTALL_PREFIX /tmp/prueba_corbasim)
 
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
 
 # Boost C++ Libraries
-include_directories(/opt/boost/1_51_0/include)
-link_directories(/opt/boost/1_51_0/lib)
+include_directories(/usr/local/include)
+link_directories(/usr/local/lib;/usr/lib)
 
 # ORB
 set(CORBASIM_ORBIMPL
     TAO)
 
 set(CORBASIM_ORB_LIBS
-    /home/asenac/local/ACE+TAO-5.7.9/lib/libACE.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_PortableServer.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_AnyTypeCode.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_CosNaming.so;/home/asenac/local/ACE+TAO-5.7.9/lib/libTAO_ObjRefTemplate.so)
+    /usr/local/ACE+TAO-5.7.9/lib/libACE.so;/usr/local/ACE+TAO-5.7.9/lib/libTAO.so;/usr/local/ACE+TAO-5.7.9/lib/libTAO_PortableServer.so;/usr/local/ACE+TAO-5.7.9/lib/libTAO_AnyTypeCode.so;/usr/local/ACE+TAO-5.7.9/lib/libTAO_CosNaming.so;/usr/local/ACE+TAO-5.7.9/lib/libTAO_ObjRefTemplate.so)
 
-include_directories(/home/asenac/local/ACE+TAO-5.7.9/include;/home/asenac/local/ACE+TAO-5.7.9/include;/home/asenac/local/ACE+TAO-5.7.9/include/orbsvcs)
-link_directories(/home/asenac/local/ACE+TAO-5.7.9/lib)
+include_directories(/usr/local/ACE+TAO-5.7.9/include;/usr/local/ACE+TAO-5.7.9/include;/usr/local/ACE+TAO-5.7.9/include/orbsvcs)
+link_directories(/usr/local/ACE+TAO-5.7.9/lib)
 
 set(CORBASIM_ORB_IDL_COMPILER
-    /home/asenac/local/ACE+TAO-5.7.9/bin/tao_idl)
+    /usr/local/ACE+TAO-5.7.9/bin/tao_idl)
 
 set(CORBASIM_ORB_IDL_COMPILER_OPTIONS
     )
 
 # Libraries for clients
 set(CORBASIM_CLIENT_LIBS 
-    corbasim;corbasim_qt;corbasim_gui;/opt/boost/1_51_0/lib/libboost_program_options.so)
+    corbasim;corbasim_qt;corbasim_gui;optimized;/usr/lib/libboost_program_options.so;debug;/usr/lib/libboost_program_options.so)
 
 set(CORBASIM_CLIENT_STATIC_LIBS 
-    corbasim_gui_s;corbasim_qt_s;corbasim_s;/opt/boost/1_51_0/lib/libboost_program_options.so)
+    corbasim_gui_s;corbasim_qt_s;corbasim_s;optimized;/usr/lib/libboost_program_options.so;debug;/usr/lib/libboost_program_options.so)
 
 # Libraries for servers
 set(CORBASIM_SERVER_LIBS 
-    corbasim;/opt/boost/1_51_0/lib/libboost_program_options.so)
+    corbasim;optimized;/usr/lib/libboost_program_options.so;debug;/usr/lib/libboost_program_options.so)
 
