@@ -27,15 +27,19 @@ StatusViewItem::StatusViewItem(Objref_ptr objref, QWidget * parent) :
 {
     m_status = new qt::Status();
 
-    const QString labelText = QString("%1 (%2)").
-        arg(objref->name()).
+    const QString labelText = QString("<b>%1</b>").
+        arg(objref->name());
+
+    const QString labelFqn = QString("<i>%2</i>").
         arg(objref->interface()->get_fqn());
 
     QGridLayout * l = new QGridLayout();
     l->addWidget(new QLabel(labelText), 0, 0);
-    l->addWidget(m_status, 0, 1);
+    l->addWidget(new QLabel(labelFqn), 1, 0);
+    l->addWidget(m_status, 0, 1, 1, 1);
 
     setLayout(l);
+    setMaximumSize(300, 100);
 
     connect(objref.get(), 
             SIGNAL(updatedReference(const CORBA::Object_var&)),
@@ -61,7 +65,7 @@ StatusView::StatusView(QWidget * parent) :
     QWidget(parent)
 {
     // Layout
-    QVBoxLayout * l = new QVBoxLayout();
+    QGridLayout * l = new QGridLayout();
     setLayout(l);
 }
 
@@ -74,9 +78,11 @@ void StatusView::registerInstance(Objref_ptr objref)
     if (m_items.find(objref->id()) == m_items.end())
     {
         StatusViewItem * item = new StatusViewItem(objref, this);
-        m_items.insert(objref->id(), item);
 
-        layout()->addWidget(item);
+        static_cast< QGridLayout * >(layout())->addWidget(item, 
+                m_items.size() / 2, m_items.size() % 2);
+
+        m_items.insert(objref->id(), item);
     }
 }
 

@@ -12,9 +12,9 @@ Status::Status(QWidget *parent)
 
 Status::~Status() {}
 
-void Status::setRedLight() { setColorLight(Qt::darkRed); }
+void Status::setRedLight() { setColorLight(Qt::red); }
 void Status::setYellowLight() { setColorLight(Qt::yellow); }
-void Status::setGreenLight() { setColorLight(Qt::darkGreen); }
+void Status::setGreenLight() { setColorLight(Qt::green); }
 
 void Status::setColorLight(const QColor& color)
 {
