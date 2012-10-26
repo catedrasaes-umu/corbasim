@@ -23,6 +23,8 @@
 #include <QHBoxLayout>
 #include <QTreeView>
 
+#include <corbasim/qt/StartStopButton.hpp>
+
 using namespace corbasim::gui;
 
 // Dumper
@@ -42,9 +44,9 @@ Dumper::Dumper(Objref_ptr objref,
 
     m_filePrefix = new QLineEdit();
     QHBoxLayout * prefixLayout = new QHBoxLayout();
-    QPushButton * browse = new QPushButton("&Browse");
+    m_browse = new QPushButton("&Browse");
     prefixLayout->addWidget(m_filePrefix);
-    prefixLayout->addWidget(browse);
+    prefixLayout->addWidget(m_browse);
     layout->addWidget(new QLabel("File prefix"), row, 0);
     layout->addLayout(prefixLayout, row++, 1);
 
@@ -67,8 +69,7 @@ Dumper::Dumper(Objref_ptr objref,
     layout->addWidget(m_format, row++, 1);
 
     // start and stop button
-    m_startStopButton = new QPushButton("&Start/stop");
-    m_startStopButton->setCheckable(true);
+    m_startStopButton = new qt::StartStopButton();
     QHBoxLayout * startStopLayout = new QHBoxLayout();
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -86,7 +87,7 @@ Dumper::Dumper(Objref_ptr objref,
             SIGNAL(toggled(bool)),
             this, SLOT(setEnabled(bool)));
 
-    connect(browse, SIGNAL(clicked()),
+    connect(m_browse, SIGNAL(clicked()),
             this, SLOT(browse()));
 
     QString defaultFile(id);
@@ -114,6 +115,7 @@ void Dumper::setEnabled(bool enabled)
     m_format->setEnabled(!enabled);
     m_suffixLength->setEnabled(!enabled);
     m_multipleFiles->setEnabled(!enabled);
+    m_browse->setEnabled(!enabled);
 }
 
 void Dumper::doStart(bool start)

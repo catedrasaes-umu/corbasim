@@ -26,6 +26,8 @@
 #include <corbasim/gui/item/TreeView.hpp>
 #include <corbasim/gui/item/OperationsView.hpp>
 
+#include <corbasim/version.hpp>
+
 #include <cassert>
 
 using namespace corbasim::gui;
@@ -127,6 +129,18 @@ Server::Server(QWidget * parent) :
     setStatusBar(new QStatusBar());
 
     // Actions
+    // Show log
+    QAction * showLogAction = new QAction(
+            "Show &log", this);
+    connect(showLogAction, SIGNAL(triggered()), 
+            logViewDock, SLOT(show()));
+
+    // Show application log
+    QAction * showAppLogAction = new QAction(
+            "Show app&lication log", this);
+    connect(showAppLogAction, SIGNAL(triggered()), 
+            appLogViewDock, SLOT(show()));
+
     // Clear log
     QAction * clearAction = new QAction(
             style()->standardIcon(QStyle::SP_TrashIcon),
@@ -141,9 +155,26 @@ Server::Server(QWidget * parent) :
     connect(clearAppLogAction, SIGNAL(triggered()), 
             &m_appLogModel, SLOT(clearLog()));
 
+    // About
+    QAction * aboutAction = new QAction(
+            "&About corbasim", this);
+    connect(aboutAction, SIGNAL(triggered()), 
+            this, SLOT(showAbout()));
+
     // Menu bar
     QMenuBar * menuBar = new QMenuBar();
     setMenuBar(menuBar);
+
+    QMenu * menuFile = menuBar->addMenu("&File");
+
+    QMenu * menuWindow = menuBar->addMenu("&Window");
+    menuWindow->addAction(showLogAction);
+    menuWindow->addAction(clearAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(showAppLogAction);
+    menuWindow->addAction(clearAppLogAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(aboutAction);
 
     // Tool bar
     QToolBar * toolBar = NULL;
@@ -289,4 +320,77 @@ void Server::displayMessage(const QString& msg)
 {
     m_appLogModel.message(msg);
 }
+
+void Server::showAbout()
+{
+    static const char * aboutText = 
+        "corbasim version " CORBASIM_VERSION "\n"
+        "Build " __DATE__ "\n"
+        "Developed by: Andres Senac <andres@senac.es>";
+
+    QMessageBox::about(this, "About corbasim", 
+            aboutText);
+}
+
+void Server::save(QVariant& settings)
+{
+    QVariantMap map;
+
+    // Tools
+    {
+        m_view->save(map["filtered_log"]);
+
+        m_senderSeqTool->save(map["sender_sequences"]);
+
+        m_seqTool->save(map["sequences"]);
+
+        m_dumpInput->save(map["dumpers"]);
+
+        if (m_plotTool)
+            m_plotTool->save(map["plots"]);
+    }
+
+    settings = map;
+}
+
+void Server::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    // Tools
+    {
+        if (map.contains("filtered_log"))
+        {
+            m_view->load(map["filtered_log"]);
+        }
+
+        if (map.contains("sender_sequences"))
+        {
+            m_senderSeqTool->load(map["sender_sequences"]);
+        }
+
+        if (map.contains("sequences"))
+        {
+            m_seqTool->load(map["sequences"]);
+        }
+
+        if (map.contains("dumpers"))
+        {
+            m_dumpInput->load(map["dumpers"]);
+        }
+
+        if (map.contains("plots") && m_plotTool)
+        {
+            m_plotTool->load(map["plots"]);
+        }
+
+        /*
+        if (map.contains("viewers"))
+        {
+            m_valueViewerTool->load(map["viewers"]);
+        }
+        */
+    }
+}
+
 

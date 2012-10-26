@@ -47,6 +47,9 @@ public:
     Server(QWidget * parent = 0);
     virtual ~Server();
 
+    void load(const QVariant& settings);
+    void save(QVariant& settings);
+
 public slots:
 
     // Notificaciones del controlador
@@ -63,6 +66,8 @@ public slots:
     void selectedOperation(Objref_ptr, OperationDescriptor_ptr);
 
     void loadPlotTool();
+
+    void showAbout();
 
 signals:
 

@@ -56,6 +56,7 @@ protected slots:
 protected:
 
     QLineEdit * m_filePrefix;
+    QPushButton * m_browse;
     QComboBox * m_format;
     QSpinBox * m_suffixLength;
     QCheckBox * m_multipleFiles;
