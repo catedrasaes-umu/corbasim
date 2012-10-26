@@ -39,6 +39,7 @@ class OperationSequenceTool;
 class SenderSequenceTool;
 class AbstractInputTool;
 class StatusView;
+class ValueViewerTool;
 
 class CORBASIM_GUI_DECLSPEC Server : public QMainWindow
 {
@@ -69,6 +70,9 @@ public slots:
 
     void showAbout();
 
+    void doLoadConfiguration();
+    void doSaveConfiguration();
+
 signals:
 
     void createObjref(const ObjrefConfig&);
@@ -95,6 +99,7 @@ protected:
     SenderSequenceTool * m_senderSeqTool;
     AbstractInputTool * m_plotTool;
     AbstractInputTool * m_dumpInput;
+    ValueViewerTool * m_valueViewerTool;
 
     bool m_qwtLoaded;
     int m_plotIdx;

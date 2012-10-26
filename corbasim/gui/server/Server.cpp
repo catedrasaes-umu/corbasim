@@ -25,9 +25,12 @@
 #include <corbasim/gui/tools/StatusView.hpp>
 #include <corbasim/gui/item/TreeView.hpp>
 #include <corbasim/gui/item/OperationsView.hpp>
+#include <corbasim/gui/tools/ValueViewerTool.hpp>
+#include <corbasim/gui/json.hpp>
 
 #include <corbasim/version.hpp>
 
+#include <fstream>
 #include <cassert>
 
 using namespace corbasim::gui;
@@ -122,6 +125,10 @@ Server::Server(QWidget * parent) :
     plotLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_plotIdx = m_tabs->addTab(plotLabel, "Plot input");
 
+    // Value viewer
+    m_valueViewerTool = new ValueViewerTool();
+    m_tabs->addTab(m_valueViewerTool, "Value viewer");
+
     // Central widget
     setCentralWidget(m_tabs);
 
@@ -129,6 +136,20 @@ Server::Server(QWidget * parent) :
     setStatusBar(new QStatusBar());
 
     // Actions
+    // Load configuration
+    QAction * loadConfigurationAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogOpenButton),
+            "&Load configuration", this);
+    connect(loadConfigurationAction, SIGNAL(triggered()), 
+            this, SLOT(doLoadConfiguration()));
+
+    // Save configuration
+    QAction * saveConfigurationAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogSaveButton),
+            "&Save configuration", this);
+    connect(saveConfigurationAction, SIGNAL(triggered()), 
+            this, SLOT(doSaveConfiguration()));
+
     // Show log
     QAction * showLogAction = new QAction(
             "Show &log", this);
@@ -166,6 +187,12 @@ Server::Server(QWidget * parent) :
     setMenuBar(menuBar);
 
     QMenu * menuFile = menuBar->addMenu("&File");
+    menuFile->addAction(loadConfigurationAction);
+    menuFile->addAction(saveConfigurationAction);
+    menuFile->addSeparator();
+    QAction * closeAction = 
+        menuFile->addAction("&Exit", this, SLOT(close()));
+    closeAction->setShortcut(QKeySequence::Close);
 
     QMenu * menuWindow = menuBar->addMenu("&Window");
     menuWindow->addAction(showLogAction);
@@ -178,6 +205,9 @@ Server::Server(QWidget * parent) :
 
     // Tool bar
     QToolBar * toolBar = NULL;
+    toolBar = addToolBar("File");
+    toolBar->addAction(loadConfigurationAction);
+    toolBar->addAction(saveConfigurationAction);
 
     toolBar = addToolBar("Window");
     toolBar->addAction(clearAction);
@@ -290,6 +320,7 @@ void Server::servantCreated(Objref_ptr servant)
     // Views
     m_view->registerInstance(servant);
     m_dumpInput->registerInstance(servant);
+    m_valueViewerTool->registerInstance(servant);
 
     connect(servant.get(), 
             SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
@@ -307,6 +338,7 @@ void Server::servantDeleted(ObjectId id)
     // Views
     m_view->unregisterInstance(id);
     m_dumpInput->unregisterInstance(id);
+    m_valueViewerTool->unregisterInstance(id);
 
     // TODO disconnect signal: we need the object
 }
@@ -348,6 +380,8 @@ void Server::save(QVariant& settings)
 
         if (m_plotTool)
             m_plotTool->save(map["plots"]);
+
+        m_valueViewerTool->save(map["viewers"]);
     }
 
     settings = map;
@@ -384,13 +418,61 @@ void Server::load(const QVariant& settings)
             m_plotTool->load(map["plots"]);
         }
 
-        /*
         if (map.contains("viewers"))
         {
             m_valueViewerTool->load(map["viewers"]);
         }
-        */
     }
 }
 
+void Server::doLoadConfiguration()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".",
+                tr("CORBASIM generic application configuration (*.cfg)"));
+
+    if (!file.isEmpty())
+    {
+        QVariant var;
+
+        // Try to Read a JSON file
+        bool res = 
+            gui::fromJsonFile(file.toStdString().c_str(), var);
+
+        if (res)
+        {
+            load(var);
+        }
+        else
+        {
+            QMessageBox::critical(this, 
+                    "Error loading configuration", 
+                    QString("Unable to load file ") +
+                    file);
+        }
+    }
+}
+
+void Server::doSaveConfiguration()
+{
+    QString file = 
+        QFileDialog::getSaveFileName(0, 
+                "Select a file", ".",
+                tr("CORBASIM generic application configuration (*.cfg)"));
+
+    if (!file.isEmpty())
+    {
+        if(!file.endsWith(".cfg"))
+            file.append(".cfg");
+
+        QVariant settings;
+        save(settings);
+
+        std::ofstream ofs(file.toStdString().c_str());
+        json::ostream_writer_t ow(ofs, true);
+
+        gui::toJson(ow, settings);
+    }
+}
 
