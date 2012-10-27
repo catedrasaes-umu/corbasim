@@ -48,6 +48,16 @@ int main(int argc, char **argv)
     /*PROTECTED REGION ID(prueba_Iface_server_ui::___main) ENABLED START*/
     app.setClient("prueba::Iface", "prueba", myRef);
     app.setClient("prueba::Iface", "nil", prueba::Iface::_nil());
+
+    app.setClient("prueba::Iface", "prueba1", myRef);
+    app.setClient("prueba::Iface", "prueba2", myRef);
+    app.setClient("prueba::Iface", "prueba3", myRef);
+    app.setClient("prueba::Iface", "prueba4", myRef);
+    app.setClient("prueba::Iface", "prueba5", myRef);
+    app.setClient("prueba::Iface", "prueba7", myRef);
+    app.setClient("prueba::Iface", "prueba8", myRef);
+    app.setClient("prueba::Iface", "prueba9", myRef);
+    app.setClient("prueba::Iface", "prueba10", myRef);
     /*PROTECTED REGION END*/
    
     return app.exec();
