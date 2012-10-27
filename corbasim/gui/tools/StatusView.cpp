@@ -22,6 +22,8 @@
 
 using namespace corbasim::gui;
 
+const int MAX_WIDTH = 300;
+
 StatusViewItem::StatusViewItem(Objref_ptr objref, QWidget * parent) :
     QWidget(parent), m_objref(objref)
 {
@@ -39,7 +41,7 @@ StatusViewItem::StatusViewItem(Objref_ptr objref, QWidget * parent) :
     l->addWidget(m_status, 0, 1, 1, 1);
 
     setLayout(l);
-    setMaximumSize(300, 100);
+    setMaximumSize(MAX_WIDTH, 80);
 
     connect(objref.get(), 
             SIGNAL(updatedReference(const CORBA::Object_var&)),
@@ -75,12 +77,14 @@ StatusView::~StatusView()
 
 void StatusView::registerInstance(Objref_ptr objref)
 {
+    int columns = width() / MAX_WIDTH;
+
     if (m_items.find(objref->id()) == m_items.end())
     {
         StatusViewItem * item = new StatusViewItem(objref, this);
 
         static_cast< QGridLayout * >(layout())->addWidget(item, 
-                m_items.size() / 2, m_items.size() % 2);
+                m_items.size() / columns, m_items.size() % columns);
 
         m_items.insert(objref->id(), item);
     }
@@ -94,6 +98,34 @@ void StatusView::unregisterInstance(ObjectId id)
     {
         delete it.value();
         m_items.erase(it);
+    }
+}
+
+void StatusView::resizeEvent(QResizeEvent * event)
+{
+    if (event->size().width() / MAX_WIDTH != 
+            event->oldSize().width() != MAX_WIDTH)
+    {
+        reallocate(event->size().width());
+    }
+}
+
+void StatusView::reallocate(int width)
+{
+    int columns = width / MAX_WIDTH;
+
+    QGridLayout * l = static_cast< QGridLayout * >(layout());
+
+    for (int i = l->count() - 1; i >= 0; i--) 
+    {
+        l->takeAt(i);
+    }
+    
+    int i = 0;
+    for (items_t::iterator it = m_items.begin(); 
+            it != m_items.end(); ++it, ++i) 
+    {
+        l->addWidget(it.value(), i / columns, i % columns);
     }
 }
 

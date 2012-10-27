@@ -53,7 +53,7 @@ void FileLoaderProcessor::process(
     // std::cout << __FUNCTION__  << std::endl;
 
     if (m_files.size() == 0)
-        return;
+        throw QString("No files.");
 
     file_format_factory const * factory = 
         file_format_factory::get_instance();
@@ -101,17 +101,23 @@ void FileLoaderProcessor::openFile()
     
         if (m_currentFile < m_files.size())
         {
-            // std::cout << __FUNCTION__ << " " << 
-            //     m_files.at(m_currentFile).toStdString() << std::endl;
+            const QString& file = m_files.at(m_currentFile);
 
             m_currentIStream.reset(new std::ifstream(
-                        m_files.at(m_currentFile).toStdString().c_str()));
+                        file.toStdString().c_str()));
+
+            if (!m_currentIStream->good())
+                throw QString("Invalid file %1").arg(file);
 
             // open a new file
             emit nextFile(m_currentFile);
 
             m_currentFile++;
         }
+    }
+    else if (!m_repeat)
+    {
+        throw QString("No more files.");
     }
 }
 

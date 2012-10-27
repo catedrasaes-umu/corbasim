@@ -66,6 +66,10 @@ public slots:
 
 protected:
 
+    void reallocate(int width);
+    
+    void resizeEvent(QResizeEvent * event);
+
     typedef QMap< ObjectId, StatusViewItem * > items_t;
     items_t m_items;
 };
