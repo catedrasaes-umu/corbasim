@@ -24,6 +24,25 @@
 
 using namespace corbasim::gui;
 
+void readOnly(QWidget * w)
+{
+    const QList< QAbstractSpinBox * > sp = 
+        w->findChildren< QAbstractSpinBox * >();
+
+    for (int i = 0; i < sp.size(); i++) 
+    {
+        sp.at(i)->setReadOnly(true);
+    }
+
+    const QList< QLineEdit * > le = 
+        w->findChildren< QLineEdit * >();
+
+    for (int i = 0; i < sp.size(); i++) 
+    {
+        le.at(i)->setReadOnly(true);
+    }
+}
+
 // ValueViewer
 
 ValueViewer::ValueViewer(Objref_ptr objref,
@@ -39,7 +58,7 @@ ValueViewer::ValueViewer(Objref_ptr objref,
 
     // Timestamp
     m_date = new QDateTimeEdit();
-    m_date->setEnabled(false);
+    m_date->setReadOnly(true);
     grid->addWidget(new QLabel("Timestamp"), 0, 0);
     grid->addWidget(m_date, 0, 1);
 
@@ -48,6 +67,8 @@ ValueViewer::ValueViewer(Objref_ptr objref,
     QVBoxLayout * boxLayout = new QVBoxLayout();
 
     m_widget = createSimpleWidget(descriptor, NULL);
+    readOnly(m_widget);
+
     boxLayout->addWidget(m_widget);
     box->setLayout(boxLayout);
     grid->addWidget(box, 1, 0, 1, 2);

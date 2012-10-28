@@ -137,6 +137,8 @@ EntryViewer::~EntryViewer()
 {
 }
 
+void readOnly(QWidget * w);
+
 void EntryViewer::show(
         corbasim::core::operation_reflective_base const * op,
         corbasim::event::request_ptr req)
@@ -162,7 +164,7 @@ void EntryViewer::show(
 
     if (r)
     {
-        w->widget()->setEnabled(false);
+        readOnly(w->widget());
 
         core::holder holder = op->get_holder(req);
         r->fromHolder(holder);
