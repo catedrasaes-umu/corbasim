@@ -23,9 +23,9 @@ struct servant< prueba::Iface >
 		}
 	
 		
-		void operation()
+		void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
 		{
-			_corbasim_prueba::Iface::operation _val;
+			_corbasim_prueba::Iface::operation _val(a, fs);
 	
 			__f(_val);		
 			

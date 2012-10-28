@@ -116,14 +116,14 @@ Server::Server(QWidget * parent) :
     m_senderSeqTool->setTreeVisible(false);
     m_tabs->addTab(m_senderSeqTool, "Senders");
 
-    // Dump input
-    m_dumpInput = new DumpTool();
-    m_tabs->addTab(m_dumpInput, "Dump input");
+    // Dump
+    m_dumpTool = new DumpTool();
+    m_tabs->addTab(m_dumpTool, "Dump");
     
     // Plot input
     QLabel * plotLabel = new QLabel("No corbasim_qwt library available");
     plotLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    m_plotIdx = m_tabs->addTab(plotLabel, "Plot input");
+    m_plotIdx = m_tabs->addTab(plotLabel, "Plot");
 
     // Value viewer
     m_valueViewerTool = new ValueViewerTool();
@@ -263,12 +263,18 @@ void Server::loadPlotTool()
             m_plotTool = create(this);
 
             m_qwtLoaded = true;
-            m_tabs->insertTab(m_plotIdx, m_plotTool, "Plot input");
+            m_tabs->insertTab(m_plotIdx, m_plotTool, "Plot");
             m_tabs->removeTab(m_plotIdx + 1);
 
             // Initilizes the tool
             ObjrefRepository::const_iterator it = m_servants.begin();
             ObjrefRepository::const_iterator end = m_servants.end();
+
+            for(; it != end; it++)
+                m_plotTool->registerInstance(it.value());
+
+            it = m_objrefs.begin();
+            end = m_objrefs.end();
 
             for(; it != end; it++)
                 m_plotTool->registerInstance(it.value());
@@ -292,6 +298,11 @@ void Server::objrefCreated(Objref_ptr objref)
     // Views
     m_view->registerInstance(objref);
     m_statusView->registerInstance(objref);
+    m_dumpTool->registerInstance(objref);
+    m_valueViewerTool->registerInstance(objref);
+
+    if (m_plotTool)
+        m_plotTool->registerInstance(objref);
 
     connect(objref.get(), 
             SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
@@ -308,6 +319,11 @@ void Server::objrefDeleted(ObjectId id)
     // Views
     m_view->unregisterInstance(id);
     m_statusView->unregisterInstance(id);
+    m_dumpTool->unregisterInstance(id);
+    m_valueViewerTool->unregisterInstance(id);
+
+    if (m_plotTool)
+        m_plotTool->unregisterInstance(id);
 }
 
 void Server::servantCreated(Objref_ptr servant)
@@ -319,8 +335,11 @@ void Server::servantCreated(Objref_ptr servant)
 
     // Views
     m_view->registerInstance(servant);
-    m_dumpInput->registerInstance(servant);
+    m_dumpTool->registerInstance(servant);
     m_valueViewerTool->registerInstance(servant);
+
+    if (m_plotTool)
+        m_plotTool->registerInstance(servant);
 
     connect(servant.get(), 
             SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
@@ -337,8 +356,11 @@ void Server::servantDeleted(ObjectId id)
 
     // Views
     m_view->unregisterInstance(id);
-    m_dumpInput->unregisterInstance(id);
+    m_dumpTool->unregisterInstance(id);
     m_valueViewerTool->unregisterInstance(id);
+
+    if (m_plotTool)
+        m_plotTool->unregisterInstance(id);
 
     // TODO disconnect signal: we need the object
 }
@@ -376,7 +398,7 @@ void Server::save(QVariant& settings)
 
         m_seqTool->save(map["sequences"]);
 
-        m_dumpInput->save(map["dumpers"]);
+        m_dumpTool->save(map["dumpers"]);
 
         if (m_plotTool)
             m_plotTool->save(map["plots"]);
@@ -410,7 +432,7 @@ void Server::load(const QVariant& settings)
 
         if (map.contains("dumpers"))
         {
-            m_dumpInput->load(map["dumpers"]);
+            m_dumpTool->load(map["dumpers"]);
         }
 
         if (map.contains("plots") && m_plotTool)

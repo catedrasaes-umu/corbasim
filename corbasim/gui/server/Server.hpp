@@ -98,7 +98,7 @@ protected:
     OperationSequenceTool * m_seqTool;
     SenderSequenceTool * m_senderSeqTool;
     AbstractInputTool * m_plotTool;
-    AbstractInputTool * m_dumpInput;
+    AbstractInputTool * m_dumpTool;
     ValueViewerTool * m_valueViewerTool;
 
     bool m_qwtLoaded;

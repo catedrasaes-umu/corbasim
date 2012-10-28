@@ -152,6 +152,14 @@ Application::Application(QObject * parent) :
             SIGNAL(servantDeleted(ObjectId)), 
             m_data->m_inputReqCtl, 
             SLOT(unregisterInstance(ObjectId)));
+    connect(this, 
+            SIGNAL(objrefCreated(Objref_ptr)), 
+            m_data->m_inputReqCtl, 
+            SLOT(registerInstance(Objref_ptr)));
+    connect(this, 
+            SIGNAL(objrefDeleted(ObjectId)), 
+            m_data->m_inputReqCtl, 
+            SLOT(unregisterInstance(ObjectId)));
 
     // Signals application <-> script engine
     connect(this, 

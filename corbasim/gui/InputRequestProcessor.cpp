@@ -39,10 +39,20 @@ InputRequestController::~InputRequestController()
 
 void InputRequestController::registerInstance(Objref_ptr objref)
 {
-    connect(objref.get(),
-            SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
-            this, 
-            SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+    if (objref->isServant())
+    {
+        connect(objref.get(),
+                SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
+                this, 
+                SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+    }
+    else
+    {
+        connect(objref.get(),
+                SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
+                this, 
+                SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+    }
 
     m_instances.add(objref);
 }
@@ -53,10 +63,20 @@ void InputRequestController::unregisterInstance(ObjectId id)
 
     if (objref)
     {
-        disconnect(objref.get(),
-                SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
-                this, 
-                SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+        if (objref->isServant())
+        {
+            disconnect(objref.get(),
+                    SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
+                    this, 
+                    SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+        }
+        else
+        {
+            disconnect(objref.get(),
+                    SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
+                    this, 
+                    SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
+        }
 
         m_instances.del(id);
 

@@ -18,8 +18,9 @@ public:
 	}
 
 	
-	void operation()
+	void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
 	{
+		_corbasim_prueba::Iface::operation _val(a, fs);
 		
 		/*PROTECTED REGION ID(prueba_Iface_server_ui::prueba_Iface_operation) ENABLED START*/
         std::cout << __FUNCTION__  << std::endl;
