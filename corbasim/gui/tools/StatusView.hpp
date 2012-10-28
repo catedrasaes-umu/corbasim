@@ -72,6 +72,8 @@ protected:
 
     typedef QMap< ObjectId, StatusViewItem * > items_t;
     items_t m_items;
+
+    QGridLayout * m_layout;
 };
 
 } // namespace gui

@@ -66,8 +66,19 @@ void StatusViewItem::update()
 StatusView::StatusView(QWidget * parent) :
     QWidget(parent)
 {
+    QVBoxLayout * l = new QVBoxLayout();
+    QScrollArea * scroll = new QScrollArea();
+    QWidget * w = new QWidget();
+
     // Layout
-    QGridLayout * l = new QGridLayout();
+    m_layout = new QGridLayout();
+
+    w->setLayout(m_layout);
+    scroll->setWidget(w);
+    scroll->setWidgetResizable(true);
+
+    l->setMargin(0);
+    l->addWidget(scroll);
     setLayout(l);
 }
 
@@ -83,7 +94,7 @@ void StatusView::registerInstance(Objref_ptr objref)
     {
         StatusViewItem * item = new StatusViewItem(objref, this);
 
-        static_cast< QGridLayout * >(layout())->addWidget(item, 
+        m_layout->addWidget(item, 
                 m_items.size() / columns, m_items.size() % columns);
 
         m_items.insert(objref->id(), item);
@@ -98,6 +109,8 @@ void StatusView::unregisterInstance(ObjectId id)
     {
         delete it.value();
         m_items.erase(it);
+
+        reallocate(width());
     }
 }
 
@@ -114,7 +127,7 @@ void StatusView::reallocate(int width)
 {
     int columns = width / MAX_WIDTH;
 
-    QGridLayout * l = static_cast< QGridLayout * >(layout());
+    QGridLayout * l = m_layout;
 
     for (int i = l->count() - 1; i >= 0; i--) 
     {
