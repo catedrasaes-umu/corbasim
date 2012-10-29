@@ -1041,8 +1041,6 @@ void SequenceWidget::indexChanged(int idx)
 {
     unsigned int length = m_reflective->get_length(m_holder);
 
-    std::cout << __FUNCTION__ << " " << m_old_idx << std::endl;
-
     // store current value
     if (m_old_idx > -1 && m_old_idx < (int) length)
     {
