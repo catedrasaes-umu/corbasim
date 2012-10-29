@@ -64,6 +64,8 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+    
+    void _setReadOnly(bool readOnly);
 
 public slots:
 
@@ -108,6 +110,8 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+    
+    void _setReadOnly(bool readOnly);
 
 protected:
 
@@ -142,6 +146,8 @@ public:
     {
         return m_reflective;
     }
+
+    void _setReadOnly(bool readOnly);
 
 public slots:
 

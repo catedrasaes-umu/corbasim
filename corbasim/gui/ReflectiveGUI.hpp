@@ -70,6 +70,8 @@ public:
     virtual void save(QVariant& settings) = 0;
     virtual void load(const QVariant& settings) = 0;
 
+    virtual void _setReadOnly(bool readOnly);
+
 protected:
 
     TypeDescriptor_ptr m_reflective;
@@ -128,6 +130,7 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    void _setReadOnly(bool readOnly);
 };
 
 class CORBASIM_GUI_DECLSPEC IntegerWidget : 
@@ -145,6 +148,7 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    void _setReadOnly(bool readOnly);
 };
 
 class CORBASIM_GUI_DECLSPEC StringWidget : 
@@ -165,6 +169,8 @@ public:
 
     QString value() const;
     void setValue(const QString& value);
+    
+    void _setReadOnly(bool readOnly);
 };
 
 class CORBASIM_GUI_DECLSPEC EnumWidget : 
@@ -182,6 +188,7 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    void _setReadOnly(bool readOnly);
 };
 
 class CORBASIM_GUI_DECLSPEC BoolWidget :
@@ -199,6 +206,7 @@ public:
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
+    void _setReadOnly(bool readOnly);
 };
 
 class CORBASIM_GUI_DECLSPEC StructWidget : 
@@ -220,6 +228,8 @@ public:
 
     void setValue(const QVariant& var);
     QVariant value();
+    
+    void _setReadOnly(bool readOnly);
 
 protected:
 
@@ -275,6 +285,8 @@ public:
 
     void setValue(const QVariant& var);
     QVariant value() const;
+    
+    void _setReadOnly(bool readOnly);
 
 protected slots:
 
@@ -309,6 +321,8 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+    
+    void _setReadOnly(bool readOnly);
 
 protected slots:
 
@@ -392,6 +406,8 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+
+    void _setReadOnly(bool readOnly);
 
 public slots:    
 

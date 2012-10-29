@@ -194,7 +194,7 @@ ReflectiveWidgetBase::getReflective() const
 {
     return m_reflective;
 }
-
+    
 AlternativesWidget::AlternativesWidget(
         TypeDescriptor_ptr reflective,
         QWidget * parent) :
@@ -966,6 +966,16 @@ QVariant SequenceWidget::value() const
 {
     Holder h = m_reflective->create_holder();
     m_reflective->copy(m_holder, h);
+    
+    // Store current value
+    // toHolder(h); // discard qualifiers
+    if (m_reflective->get_length(h) > 0)
+    {
+        core::holder child_value = m_reflective->get_child_value(
+                h, m_sbCurrentIndex->value());
+        m_slice->toHolder(child_value);
+    }
+
     return toQVariant(m_reflective, h);
 }
 
@@ -1011,10 +1021,14 @@ void SequenceWidget::lengthChanged(int len)
     if (len == 0)
     {
         m_slice_widget->hide();
+
+        m_old_idx = -1;
     }
     else
     {
         m_slice_widget->show();
+
+        m_old_idx = m_sbCurrentIndex->value();
     }
 
     m_reflective->set_length(m_holder, len);
@@ -1834,14 +1848,17 @@ void SequenceWidget::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
 
+    // Discarding old data
+    m_old_idx = -1;
+
     if (m_reflective->is_variable_length())
     {
         m_sbLength->setValue(map["length"].toInt());
     }
 
-    m_sbCurrentIndex->setValue(map["index"].toInt());
-
     setValue(map["value"]);
+
+    m_sbCurrentIndex->setValue(map["index"].toInt());
 }
 
 void ComplexSequenceWidget::save(QVariant& settings)
@@ -1989,4 +2006,78 @@ void OperationInputForm::load(const QVariant& settings)
     }
 }
 
+// Read only
+void ReflectiveWidgetBase::_setReadOnly(bool readOnly)
+{
+}
+
+void FloatWidget::_setReadOnly(bool readOnly)
+{
+    setReadOnly(readOnly);
+}
+
+void IntegerWidget::_setReadOnly(bool readOnly)
+{
+    setReadOnly(readOnly);
+}
+
+void StringWidget::_setReadOnly(bool readOnly)
+{
+    setReadOnly(readOnly);
+}
+
+void EnumWidget::_setReadOnly(bool readOnly)
+{
+    setEditable(!readOnly);
+}
+
+void BoolWidget::_setReadOnly(bool readOnly)
+{
+    setEnabled(!readOnly);
+}
+
+void StructWidget::_setReadOnly(bool readOnly)
+{
+    unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->_setReadOnly(readOnly);
+        }
+    }
+}
+
+void ComplexSequenceWidget::_setReadOnly(bool readOnly)
+{
+    for (unsigned int i = 0; i < m_stack->count(); i++) 
+    {
+        ReflectiveWidgetBase * w = 
+            dynamic_cast< ReflectiveWidgetBase * >(m_stack->widget(i));
+
+        if (w) w->_setReadOnly(readOnly);
+    }
+}
+
+void SequenceWidget::_setReadOnly(bool readOnly)
+{
+    m_slice->_setReadOnly(readOnly);
+
+    if (m_reflective->is_variable_length())
+    {
+        m_sbLength->setReadOnly(readOnly);
+    }
+}
+
+void OperationInputForm::_setReadOnly(bool readOnly)
+{
+    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->_setReadOnly(readOnly);
+        }
+    }
+}
 

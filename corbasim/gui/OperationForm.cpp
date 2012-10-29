@@ -596,7 +596,8 @@ void OperationSender::playClicked(bool play)
 
     if (play)
     {
-        m_form->setEnabled(false);
+        // m_form->setEnabled(false);
+        _setReadOnly(true);
 
         // Create processors
         QList< RequestProcessor_ptr > processors;
@@ -623,14 +624,16 @@ void OperationSender::playClicked(bool play)
     }
     else
     {
-        m_form->setEnabled(true);
+        // m_form->setEnabled(true);
+        _setReadOnly(false);
     }
 }
 
 void OperationSender::finished()
 {
     m_playButton->setChecked(false);
-    m_form->setEnabled(true);
+    // m_form->setEnabled(true);
+    _setReadOnly(false);
 }
 
 void OperationSender::activeUpdateForm(bool update)
@@ -660,5 +663,33 @@ void OperationSender::stop()
 {
     playClicked(false);
     finished();
+}
+
+// Read only
+void OperationFormWidget::_setReadOnly(bool readOnly)
+{
+    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->_setReadOnly(readOnly);
+        }
+    }
+}
+
+void OperationForm::_setReadOnly(bool readOnly)
+{
+    m_widget->_setReadOnly(readOnly);
+    m_code->setReadOnly(readOnly);
+
+    // TODO m_files->_setReadOnly(readOnly);
+}
+
+void OperationSender::_setReadOnly(bool readOnly)
+{
+    m_form->_setReadOnly(readOnly);
+    m_times->setReadOnly(readOnly);
+    m_period->setReadOnly(readOnly);
+    m_updateForm->setEnabled(!readOnly);
 }
 
