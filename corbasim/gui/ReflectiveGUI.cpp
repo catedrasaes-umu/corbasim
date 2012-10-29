@@ -967,6 +967,16 @@ QVariant SequenceWidget::value() const
 {
     core::holder h = m_reflective->create_holder();
     m_reflective->copy(m_holder, h);
+    
+    // Store current value
+    // toHolder(h); // discard qualifiers
+    if (m_reflective->get_length(h) > 0)
+    {
+        core::holder child_value = m_reflective->get_child_value(
+                h, m_sbCurrentIndex->value());
+        m_slice->toHolder(child_value);
+    }
+
     return toQVariant(m_reflective, h);
 }
 
@@ -1012,10 +1022,14 @@ void SequenceWidget::lengthChanged(int len)
     if (len == 0)
     {
         m_slice_widget->hide();
+
+        m_old_idx = -1;
     }
     else
     {
         m_slice_widget->show();
+
+        m_old_idx = m_sbCurrentIndex->value();
     }
 
     m_reflective->set_length(m_holder, len);
@@ -1026,6 +1040,8 @@ void SequenceWidget::lengthChanged(int len)
 void SequenceWidget::indexChanged(int idx)
 {
     unsigned int length = m_reflective->get_length(m_holder);
+
+    std::cout << __FUNCTION__ << " " << m_old_idx << std::endl;
 
     // store current value
     if (m_old_idx > -1 && m_old_idx < (int) length)
@@ -1837,6 +1853,9 @@ void SequenceWidget::save(QVariant& settings)
 void SequenceWidget::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
+
+    // Discarding old data
+    m_old_idx = -1;
 
     if (m_reflective->is_variable_length())
     {
