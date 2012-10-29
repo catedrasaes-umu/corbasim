@@ -682,7 +682,8 @@ void OperationForm::_setReadOnly(bool readOnly)
     m_widget->_setReadOnly(readOnly);
     m_code->setReadOnly(readOnly);
 
-    // TODO m_files->_setReadOnly(readOnly);
+    // TODO 
+    m_files->setEnabled(!readOnly);
 }
 
 void OperationSender::_setReadOnly(bool readOnly)
@@ -690,6 +691,8 @@ void OperationSender::_setReadOnly(bool readOnly)
     m_form->_setReadOnly(readOnly);
     m_times->setReadOnly(readOnly);
     m_period->setReadOnly(readOnly);
-    m_updateForm->setEnabled(!readOnly);
+
+    // Can change in read-only mode
+    // m_updateForm->setEnabled(!readOnly);
 }
 

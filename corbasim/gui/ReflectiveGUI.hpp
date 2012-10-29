@@ -102,6 +102,8 @@ public:
     int selectionIndex() const;
     void setSelectionIndex(int index);
 
+    void _setReadOnly(bool readOnly);
+
 protected slots:
 
     void changeWidget(int);
@@ -255,6 +257,8 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
+
+    void _setReadOnly(bool readOnly);
 
 protected slots:
 

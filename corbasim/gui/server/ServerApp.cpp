@@ -23,6 +23,7 @@
 
 #include <boost/thread.hpp>
 #include <cassert>
+#include <exception>
 
 using namespace corbasim::gui;
 
@@ -121,11 +122,14 @@ CORBA::Object_var ServerApp::setClient(
         // We create a new hidden servant
         ServantConfig scfg;
         scfg.fqn = fqn;
-        scfg.name = std::string("corbasim hide servant ") + clientName;
+        scfg.name = nameToFind.toStdString();
         scfg.hide = true;
 
         Objref_ptr oServant = 
             m_impl->application.createServant(scfg);
+
+        if (!oServant)
+            throw std::runtime_error("Can not create client");
 
         Servant * servant = 
             static_cast< Servant * >(oServant.get());
@@ -144,6 +148,9 @@ CORBA::Object_var ServerApp::setClient(
 
         Objref_ptr proxy = 
             m_impl->application.createObjref(ccfg);
+
+        if (!proxy)
+            throw std::runtime_error("Can not create client");
 
         servant->setProxy(proxy);
 
@@ -182,11 +189,14 @@ CORBA::Object_var ServerApp::setClient(
         // We create a new hidden servant
         ServantConfig scfg;
         scfg.fqn = fqn;
-        scfg.name = std::string("corbasim hide servant ") + clientName;
+        scfg.name = nameToFind.toStdString();
         scfg.hide = true;
 
         Objref_ptr oServant = 
             m_impl->application.createServant(scfg);
+
+        if (!oServant)
+            throw std::runtime_error("Can not create client");
 
         Servant * servant = 
             static_cast< Servant * >(oServant.get());
@@ -205,6 +215,9 @@ CORBA::Object_var ServerApp::setClient(
 
         Objref_ptr proxy = 
             m_impl->application.createObjref(ccfg);
+
+        if (!proxy)
+            throw std::runtime_error("Can not create client");
 
         servant->setProxy(proxy);
 
@@ -238,6 +251,9 @@ CORBA::Object_var ServerApp::setServant(
     Objref_ptr oServant = 
         m_impl->application.createServant(scfg);
 
+    if (!oServant)
+        throw std::runtime_error("Can not create servant");
+
     Servant * sServant = 
         static_cast< Servant * >(oServant.get());
 
@@ -254,6 +270,9 @@ CORBA::Object_var ServerApp::setServant(
 
     Objref_ptr realObjref = 
         m_impl->application.createObjref(ocfg);
+
+    if (!realObjref)
+        throw std::runtime_error("Can not create servant");
     
     sServant->setProxy(realObjref);
     // end create an objref with the real reference

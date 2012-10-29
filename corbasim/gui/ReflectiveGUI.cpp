@@ -2076,6 +2076,42 @@ void SequenceWidget::_setReadOnly(bool readOnly)
     }
 }
 
+void UnionWidget::_setReadOnly(bool readOnly)
+{
+    // Widgets
+    unsigned int count = m_widgets.size();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->_setReadOnly(readOnly);
+        }
+    }
+}
+
+void AlternativesWidget::_setReadOnly(bool readOnly)
+{
+    // Widgets
+    unsigned int count = m_widgets.size();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->_setReadOnly(readOnly);
+        }
+    }
+
+    // Buttons
+    const QList< QAbstractButton * > buttons = m_group.buttons();
+
+    for (int i = 0; i < buttons.size(); i++) 
+    {
+        buttons.at(i)->setEnabled(!readOnly);
+    }
+}
+
 void OperationInputForm::_setReadOnly(bool readOnly)
 {
     for (unsigned int i = 0; i < m_widgets.size(); i++) 
@@ -2086,4 +2122,6 @@ void OperationInputForm::_setReadOnly(bool readOnly)
         }
     }
 }
+
+
 
