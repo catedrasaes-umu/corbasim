@@ -67,6 +67,11 @@ AbstractSequenceItem::AbstractSequenceItem(
         tLayout->addWidget(btDown);
         tLayout->addWidget(btDelete);
 
+        btShowInput->setMaximumSize(20, 20);
+        btUp->setMaximumSize(20, 20);
+        btDown->setMaximumSize(20, 20);
+        btDelete->setMaximumSize(20, 20);
+
         connect(btShowInput, SIGNAL(toggled(bool)),
                 this, SLOT(showDetails(bool)));
         connect(btDelete, SIGNAL(clicked()),

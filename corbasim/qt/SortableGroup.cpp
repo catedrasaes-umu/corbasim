@@ -60,14 +60,19 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
     tLayout->addWidget(btDown);
     tLayout->addWidget(btDelete);
 
-    QObject::connect(m_btShowInput, SIGNAL(toggled(bool)),
+    m_btShowInput->setMaximumSize(20, 20);
+    btUp->setMaximumSize(20, 20);
+    btDown->setMaximumSize(20, 20);
+    btDelete->setMaximumSize(20, 20);
+
+    connect(m_btShowInput, SIGNAL(toggled(bool)),
             m_widget, SLOT(setVisible(bool)));
 
-    QObject::connect(btDelete, SIGNAL(clicked()),
+    connect(btDelete, SIGNAL(clicked()),
             this, SLOT(deleteClicked()));
-    QObject::connect(btUp, SIGNAL(clicked()),
+    connect(btUp, SIGNAL(clicked()),
             this, SLOT(upClicked()));
-    QObject::connect(btDown, SIGNAL(clicked()),
+    connect(btDown, SIGNAL(clicked()),
             this, SLOT(downClicked()));
     // End buttons
 
@@ -175,11 +180,11 @@ void SortableGroup::appendItem(SortableGroupItem * item)
     // Scroll to item
     // m_scroll->ensureWidgetVisible(item);
 
-    QObject::connect(item, SIGNAL(doDelete()),
+    connect(item, SIGNAL(doDelete()),
             this, SLOT(deleteItem()));
-    QObject::connect(item, SIGNAL(up()),
+    connect(item, SIGNAL(up()),
             this, SLOT(moveUpItem()));
-    QObject::connect(item, SIGNAL(down()),
+    connect(item, SIGNAL(down()),
             this, SLOT(moveDownItem()));
 
     m_items.push_back(item);

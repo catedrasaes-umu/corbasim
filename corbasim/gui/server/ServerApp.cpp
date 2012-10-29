@@ -97,7 +97,9 @@ CORBA::Object_var ServerApp::setClient(
         const char * clientName,
         const CORBA::Object_var& ref)
 {
-    Objref_ptr objref = m_impl->clients.find(clientName);
+    const QString nameToFind = QString("corbasim hide servant %1").arg(clientName);
+
+    Objref_ptr objref = m_impl->clients.find(nameToFind);
 
     CORBA::Object_var result;
 
@@ -156,7 +158,9 @@ CORBA::Object_var ServerApp::setClient(
         const char * clientName,
         const char * nsEntry)
 {
-    Objref_ptr objref = m_impl->clients.find(clientName);
+    const QString nameToFind = QString("corbasim hide servant %1").arg(clientName);
+
+    Objref_ptr objref = m_impl->clients.find(nameToFind);
 
     CORBA::Object_var result;
 
@@ -213,7 +217,8 @@ CORBA::Object_var ServerApp::setClient(
 CORBA::Object_var ServerApp::setServant(
         const char * fqn,
         const char * servantName,
-        PortableServer::ServantBase * servant)
+        PortableServer::ServantBase * servant,
+        const char * nsEntry)
 {
     // We activate the real servant
     PortableServer::ObjectId_var myObjID = 
@@ -226,6 +231,9 @@ CORBA::Object_var ServerApp::setServant(
     ServantConfig scfg;
     scfg.fqn = fqn;
     scfg.name = servantName;
+
+    if (nsEntry)
+        scfg.entry = nsEntry;
 
     Objref_ptr oServant = 
         m_impl->application.createServant(scfg);

@@ -54,7 +54,8 @@ public:
     CORBA::Object_var setServant(
             const char * fqn,
             const char * servantName,
-            PortableServer::ServantBase * servant);
+            PortableServer::ServantBase * servant,
+            const char * nsEntry = NULL);
 
     QWidget * window() const;
 
