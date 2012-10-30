@@ -24,25 +24,6 @@
 
 using namespace corbasim::gui;
 
-void readOnly(QWidget * w)
-{
-    const QList< QAbstractSpinBox * > sp = 
-        w->findChildren< QAbstractSpinBox * >();
-
-    for (int i = 0; i < sp.size(); i++) 
-    {
-        sp.at(i)->setReadOnly(true);
-    }
-
-    const QList< QLineEdit * > le = 
-        w->findChildren< QLineEdit * >();
-
-    for (int i = 0; i < sp.size(); i++) 
-    {
-        le.at(i)->setReadOnly(true);
-    }
-}
-
 // ValueViewer
 
 ValueViewer::ValueViewer(Objref_ptr objref,
@@ -67,7 +48,13 @@ ValueViewer::ValueViewer(Objref_ptr objref,
     QVBoxLayout * boxLayout = new QVBoxLayout();
 
     m_widget = createSimpleWidget(descriptor, NULL);
-    readOnly(m_widget);
+    ReflectiveWidgetBase * refWidget = 
+        dynamic_cast< ReflectiveWidgetBase * >(m_widget);
+
+    if (refWidget)
+    {
+        refWidget->_setReadOnly(true);
+    }
 
     boxLayout->addWidget(m_widget);
     box->setLayout(boxLayout);

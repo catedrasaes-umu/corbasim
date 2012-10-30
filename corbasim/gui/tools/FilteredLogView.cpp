@@ -66,8 +66,18 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     splitter->setStretchFactor(1, 50);
     splitter->setStretchFactor(1, 30);
 
-    QObject::connect(logView, SIGNAL(entered(const QModelIndex&)),
+    /*
+    connect(logView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(selected(const QModelIndex&)));
+    connect(logView, SIGNAL(entered(const QModelIndex&)),
+            this, SLOT(selected(const QModelIndex&)));
+    connect(logView, SIGNAL(activated(const QModelIndex&)),
+            this, SLOT(selected(const QModelIndex&)));
+    */
+
+    connect(logView->selectionModel(), 
+            SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
 }
 
 FilteredLogView::~FilteredLogView()
@@ -107,6 +117,12 @@ void FilteredLogView::load(const QVariant& settings)
     m_filterModel.load(settings);
 }
 
+void FilteredLogView::currentChanged(const QModelIndex& current,
+        const QModelIndex& previous)
+{
+    selected(current);
+}
+
 void FilteredLogView::selected(const QModelIndex& index)
 {
     QModelIndex sourceIndex = m_model.mapToSource(index);
@@ -117,7 +133,7 @@ void FilteredLogView::selected(const QModelIndex& index)
 
         if (entry)
         {
-            m_viewer->show(entry->reflective, entry->req);
+            m_viewer->show(entry->text, entry->reflective, entry->req);
         }
     }
 }
@@ -126,6 +142,12 @@ EntryViewer::EntryViewer(QWidget * parent) :
     QWidget(parent)
 {
     QVBoxLayout * layout = new QVBoxLayout();
+
+    // Label
+    m_label = new QLabel();
+    layout->addWidget(m_label);
+
+    // Stack
     m_stack = new QStackedWidget(this);
 
     layout->addWidget(m_stack);
@@ -137,12 +159,13 @@ EntryViewer::~EntryViewer()
 {
 }
 
-void readOnly(QWidget * w);
-
 void EntryViewer::show(
+        const QString& text,
         corbasim::core::operation_reflective_base const * op,
         corbasim::event::request_ptr req)
 {
+    m_label->setText(text);
+
     viewers_t::iterator it = m_viewers.find(op);
 
     QScrollArea * w = NULL;
@@ -164,7 +187,7 @@ void EntryViewer::show(
 
     if (r)
     {
-        readOnly(w->widget());
+        r->_setReadOnly(true);
 
         core::holder holder = op->get_holder(req);
         r->fromHolder(holder);

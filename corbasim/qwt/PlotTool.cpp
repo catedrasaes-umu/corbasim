@@ -89,6 +89,20 @@ void ReflectivePlot::appendValue(Request_ptr req,
         if (!values.isEmpty())
             m_plot->append(values);
     }
+    // N-dimensional types
+    else if(reflec->is_repeated() && 
+            reflec->get_slice()->is_repeated())
+    {
+        unsigned int length = reflec->get_length(hold);
+
+        for (unsigned int i = 0; i < length; i++) 
+        {
+            core::holder h = reflec->get_child_value(hold, i);
+
+            // Recursive
+            appendValue(req, reflec->get_slice(), h);
+        }
+    }
 }
 
 PlotTool::PlotTool(QWidget * parent) :

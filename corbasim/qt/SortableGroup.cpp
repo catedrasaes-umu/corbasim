@@ -178,7 +178,9 @@ void SortableGroup::appendItem(SortableGroupItem * item)
     m_layout->addWidget(item);
 
     // Scroll to item
-    // m_scroll->ensureWidgetVisible(item);
+    m_scroll->widget()->resize(m_scroll->widget()->sizeHint());
+    qApp->processEvents();
+    m_scroll->ensureWidgetVisible(item);
 
     connect(item, SIGNAL(doDelete()),
             this, SLOT(deleteItem()));

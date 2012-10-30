@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QScrollArea>
+#include <QLabel>
 
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
@@ -49,6 +50,7 @@ public:
 public slots:
 
     void show(
+            const QString& text,
             OperationDescriptor_ptr op,
             Request_ptr req);
 
@@ -60,6 +62,7 @@ protected:
 
     viewers_t m_viewers;
 
+    QLabel * m_label;
     QStackedWidget * m_stack;
 };
 
@@ -84,6 +87,7 @@ public slots:
 protected slots:
     
     void selected(const QModelIndex& index);
+    void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 
 protected:
 
