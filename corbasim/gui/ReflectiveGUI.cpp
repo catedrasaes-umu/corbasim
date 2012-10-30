@@ -930,6 +930,7 @@ SequenceWidget::SequenceWidget(
         // TODO maximo razonable
         m_sbLength->setRange(0, 9999999);
         m_sbLength->setValue(0);
+        m_sbCurrentIndex->setReadOnly(true);
     }
     else
     {
@@ -1034,6 +1035,7 @@ void SequenceWidget::lengthChanged(int len)
 
     m_reflective->set_length(m_holder, len);
 
+    m_sbCurrentIndex->setReadOnly(len == 0);
     m_sbCurrentIndex->setRange(0, len-1);
 }
 
@@ -1041,18 +1043,21 @@ void SequenceWidget::indexChanged(int idx)
 {
     unsigned int length = m_reflective->get_length(m_holder);
 
-    // store current value
-    if (m_old_idx > -1 && m_old_idx < (int) length)
+    if (length)
     {
-        core::holder child_value = m_reflective->get_child_value(
-                m_holder, m_old_idx);
-        m_slice->toHolder(child_value);
+        // store current value
+        if (m_old_idx > -1 && m_old_idx < (int) length)
+        {
+            core::holder child_value = m_reflective->get_child_value(
+                    m_holder, m_old_idx);
+            m_slice->toHolder(child_value);
+        }
+
+        m_old_idx = idx;
+
+        core::holder child_value = m_reflective->get_child_value(m_holder, idx);
+        m_slice->fromHolder(child_value);
     }
-
-    m_old_idx = idx;
-
-    core::holder child_value = m_reflective->get_child_value(m_holder, idx);
-    m_slice->fromHolder(child_value);
 }
 
 // Complex Sequence Widget
