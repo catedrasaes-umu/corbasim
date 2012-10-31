@@ -21,9 +21,35 @@
 
 using namespace corbasim::qt;
 
+void SortableGroupItem::paintEvent(QPaintEvent* event)
+{
+    QPainter painter(this);
+
+    if (m_currentAlpha > 0)
+    {
+        QColor semiTransparentColor = Qt::black;
+        semiTransparentColor.setAlpha(m_currentAlpha);
+        painter.fillRect(rect(), semiTransparentColor);
+        
+        m_currentAlpha -= 5;
+    }
+    else if (m_timer.isActive())
+    {
+        m_timer.stop();
+
+        disconnect(&m_timer, SIGNAL(timeout()),
+            this, SLOT(update()));
+    }
+
+    QRect r = rect();
+    r.setWidth(r.width() - 1);
+    r.setHeight(r.height() - 1);
+    painter.drawRect(r);
+}
+
 SortableGroupItem::SortableGroupItem(QWidget * widget,
         QWidget * parent) : 
-    QFrame(parent), m_widget(widget)
+    QFrame(parent), m_timer(this), m_currentAlpha(100), m_widget(widget)
 {
     QVBoxLayout * layout = new QVBoxLayout();
 
@@ -78,14 +104,16 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
 
     setLayout(layout);
 
-    setLineWidth(1);
-    setFrameStyle(QFrame::Box);
-
     // Tooltips
     m_btShowInput->setToolTip("Show/hide detailed input form");
     btDelete->setToolTip("Delete item");
     btUp->setToolTip("Move up");
     btDown->setToolTip("Move down");
+
+    connect(&m_timer, SIGNAL(timeout()),
+        this, SLOT(update()));
+
+    m_timer.start(25);
 }
 
 SortableGroupItem::~SortableGroupItem()

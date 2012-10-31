@@ -105,14 +105,10 @@ Server::Server(QWidget * parent) :
 
     // Clients
     m_seqTool = new OperationSequenceTool();
-    // We don't register the objrefs in the tool because we don't 
-    // use its tree view
     m_seqTool->setTreeVisible(false);
     m_tabs->addTab(m_seqTool, "Operations");
 
     m_senderSeqTool = new SenderSequenceTool();
-    // We don't register the objrefs in the tool because we don't 
-    // use its tree view
     m_senderSeqTool->setTreeVisible(false);
     m_tabs->addTab(m_senderSeqTool, "Senders");
 
@@ -300,6 +296,8 @@ void Server::objrefCreated(Objref_ptr objref)
     m_statusView->registerInstance(objref);
     m_dumpTool->registerInstance(objref);
     m_valueViewerTool->registerInstance(objref);
+    m_seqTool->objrefCreated(objref);
+    m_senderSeqTool->objrefCreated(objref);
 
     if (m_plotTool)
         m_plotTool->registerInstance(objref);
@@ -321,6 +319,8 @@ void Server::objrefDeleted(ObjectId id)
     m_statusView->unregisterInstance(id);
     m_dumpTool->unregisterInstance(id);
     m_valueViewerTool->unregisterInstance(id);
+    m_seqTool->objrefDeleted(id);
+    m_senderSeqTool->objrefDeleted(id);
 
     if (m_plotTool)
         m_plotTool->unregisterInstance(id);
@@ -337,6 +337,8 @@ void Server::servantCreated(Objref_ptr servant)
     m_view->registerInstance(servant);
     m_dumpTool->registerInstance(servant);
     m_valueViewerTool->registerInstance(servant);
+    m_seqTool->objrefCreated(servant);
+    m_senderSeqTool->objrefCreated(servant);
 
     if (m_plotTool)
         m_plotTool->registerInstance(servant);
@@ -358,6 +360,8 @@ void Server::servantDeleted(ObjectId id)
     m_view->unregisterInstance(id);
     m_dumpTool->unregisterInstance(id);
     m_valueViewerTool->unregisterInstance(id);
+    m_seqTool->objrefDeleted(id);
+    m_senderSeqTool->objrefDeleted(id);
 
     if (m_plotTool)
         m_plotTool->unregisterInstance(id);

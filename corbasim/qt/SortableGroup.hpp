@@ -63,6 +63,11 @@ private slots:
 
 protected:
 
+    void paintEvent(QPaintEvent* event);
+
+    QTimer m_timer;
+    int m_currentAlpha;
+
     QWidget * m_widget;
     QLayout * m_layout;
     QLabel * m_title;

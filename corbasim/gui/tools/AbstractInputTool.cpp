@@ -198,10 +198,19 @@ AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id
 
     if (op && objref)
     {
-        item = createItem(objref, op, path);
-
         const key_t key(id, op->get_tag());
-        m_map[key].push_back(item);
+        QList< AbstractInputItem * >& list = m_map[key];
+
+        for (int i = 0; i < list.size(); i++) 
+        {
+            if (list.at(i)->getPath() == path)
+            {
+                return NULL;
+            }
+        }
+        
+        item = createItem(objref, op, path);
+        list.push_back(item);
         m_inverse_map[item] = key;
 
         qt::SortableGroupItem * sitem = 
