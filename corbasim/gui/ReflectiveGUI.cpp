@@ -885,7 +885,7 @@ void UnionWidget::fromHolder(Holder& holder)
 SequenceWidget::SequenceWidget(
         TypeDescriptor_ptr reflective,
         QWidget * parent) :
-    QWidget(parent), ReflectiveWidgetBase(reflective), m_old_idx(-1),
+    QWidget(parent), ReflectiveWidgetBase(reflective), 
     m_sbLength(NULL), m_sbCurrentIndex(NULL)
 {
     QVBoxLayout * layout = new QVBoxLayout;
@@ -923,13 +923,12 @@ SequenceWidget::SequenceWidget(
     {
         m_slice_widget->hide();
 
-        QObject::connect(m_sbLength, SIGNAL(valueChanged(int)),
+        connect(m_sbLength, SIGNAL(valueChanged(int)),
                 this, SLOT(lengthChanged(int)));
 
         // TODO maximo razonable
         m_sbLength->setRange(0, 9999999);
         m_sbLength->setValue(0);
-
         m_sbCurrentIndex->setReadOnly(true);
     }
     else
@@ -942,12 +941,30 @@ SequenceWidget::SequenceWidget(
         m_sbLength->setValue(length);
         m_sbLength->setReadOnly(true);
 
-        m_sbCurrentIndex->setRange(0, m_reflective->get_length(m_holder) - 1);
+        m_sbCurrentIndex->setRange(0, length - 1);
         indexChanged(0);
     }
 
-    QObject::connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
+    connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
             this, SLOT(indexChanged(int)));
+
+    if (dynamic_cast< QComboBox * >(m_slice_widget))
+    {
+        connect(m_slice_widget, SIGNAL(currentIndexChanged(int)),
+                this, SLOT(saveCurrent()));
+    }
+    else if (dynamic_cast< QCheckBox * >(m_slice_widget))
+    {
+        connect(m_slice_widget, SIGNAL(stateChanged(int)),
+                this, SLOT(saveCurrent()));
+    }
+    else
+    {
+        connect(m_slice_widget, SIGNAL(editingFinished()),
+                this, SLOT(saveCurrent()));
+    }
+
+    saveCurrent();
 }
 
 SequenceWidget::~SequenceWidget()
@@ -968,29 +985,12 @@ QVariant SequenceWidget::value() const
 {
     Holder h = m_reflective->create_holder();
     m_reflective->copy(m_holder, h);
-    
-    // Store current value
-    // toHolder(h); // discard qualifiers
-    if (m_reflective->get_length(h) > 0)
-    {
-        core::holder child_value = m_reflective->get_child_value(
-                h, m_sbCurrentIndex->value());
-        m_slice->toHolder(child_value);
-    }
 
     return toQVariant(m_reflective, h);
 }
 
 void SequenceWidget::toHolder(Holder& holder)
 {
-    // store current value
-    if (m_reflective->get_length(m_holder) > 0)
-    {
-        Holder child_value = m_reflective->get_child_value(
-                m_holder, m_sbCurrentIndex->value());
-        m_slice->toHolder(child_value);
-    }
-
     m_reflective->copy(m_holder, holder);
 }
 
@@ -1000,19 +1000,12 @@ void SequenceWidget::fromHolder(Holder& holder)
 
     if (m_reflective->is_variable_length())
     {
-        // Invalidates current value
-        m_old_idx = -1;
-
         // show current value
         m_sbLength->setValue(m_reflective->get_length(m_holder));
     }
-    else if (m_old_idx > -1)
-    {
-        Holder child_value = 
-            m_reflective->get_child_value(m_holder, m_old_idx);
 
-        m_slice->fromHolder(child_value);
-    }
+    // Reload current value
+    indexChanged(m_sbCurrentIndex->value());
 }
 
 void SequenceWidget::lengthChanged(int len)
@@ -1023,40 +1016,41 @@ void SequenceWidget::lengthChanged(int len)
     if (len == 0)
     {
         m_slice_widget->hide();
-
-        m_old_idx = -1;
     }
     else
     {
         m_slice_widget->show();
-
-        m_old_idx = m_sbCurrentIndex->value();
+        m_sbCurrentIndex->setRange(0, len-1);
     }
 
     m_reflective->set_length(m_holder, len);
 
     m_sbCurrentIndex->setReadOnly(len == 0);
-    m_sbCurrentIndex->setRange(0, len-1);
 }
 
 void SequenceWidget::indexChanged(int idx)
 {
     unsigned int length = m_reflective->get_length(m_holder);
 
-    if (length)
+    if (length && idx < (int) length)
     {
-        // store current value
-        if (m_old_idx > -1 && m_old_idx < (int) length)
-        {
-            Holder child_value = m_reflective->get_child_value(
-                    m_holder, m_old_idx);
-            m_slice->toHolder(child_value);
-        }
+        core::holder child_value = 
+            m_reflective->get_child_value(m_holder, (unsigned int) idx);
 
-        m_old_idx = idx;
-
-        Holder child_value = m_reflective->get_child_value(m_holder, idx);
         m_slice->fromHolder(child_value);
+    }
+}
+
+void SequenceWidget::saveCurrent()
+{
+    unsigned int length = m_reflective->get_length(m_holder);
+    int index = m_sbCurrentIndex->value();
+
+    if (length && index < (int) length)
+    {
+        core::holder child_value = m_reflective->get_child_value(
+                m_holder, index);
+        m_slice->toHolder(child_value);
     }
 }
 
@@ -1853,9 +1847,6 @@ void SequenceWidget::save(QVariant& settings)
 void SequenceWidget::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
-
-    // Discarding old data
-    m_old_idx = -1;
 
     if (m_reflective->is_variable_length())
     {

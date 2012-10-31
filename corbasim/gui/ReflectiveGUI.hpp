@@ -296,10 +296,9 @@ protected slots:
 
     void lengthChanged(int);
     void indexChanged(int);
+    void saveCurrent();
 
 protected:
-
-    int m_old_idx;
 
     QSpinBox * m_sbLength;
     QSpinBox * m_sbCurrentIndex;
