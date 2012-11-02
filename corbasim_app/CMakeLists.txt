@@ -49,3 +49,27 @@ target_link_libraries(corbasim_app
 )
 install(TARGETS corbasim_app DESTINATION bin)
 
+set(corbasim_ui_SRCS
+)
+
+add_executable(corbasim_ui.real
+    main_ui.cpp
+    ${corbasim_ui_SRCS})
+target_link_libraries(corbasim_ui.real
+    ${Boost_PROGRAM_OPTIONS_LIBRARY}
+    corbasim
+    corbasim_qt
+    corbasim_gui
+    corbasim_reflective_CosNaming_NamingContextExt)
+
+install(TARGETS corbasim_ui.real DESTINATION bin)
+
+# Launcher
+add_executable(corbasim_ui
+    ${CMAKE_CURRENT_SOURCE_DIR}/../corbasim/gui/launcher.cpp
+)
+target_link_libraries(corbasim_ui
+    ${QT_LIBRARIES}
+)
+install(TARGETS corbasim_ui DESTINATION bin)
+
