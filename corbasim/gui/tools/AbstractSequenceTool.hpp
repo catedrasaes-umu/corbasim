@@ -26,6 +26,7 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/InstanceModel.hpp>
+#include <corbasim/qt/SortableGroup.hpp>
 
 namespace corbasim 
 {
@@ -35,7 +36,7 @@ namespace gui
 class OperationsView;
 
 class CORBASIM_GUI_DECLSPEC AbstractSequenceItem : 
-    public QFrame
+    public qt::AbstractItemFrame
 {
     Q_OBJECT
 protected:

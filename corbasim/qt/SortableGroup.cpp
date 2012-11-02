@@ -21,7 +21,20 @@
 
 using namespace corbasim::qt;
 
-void SortableGroupItem::paintEvent(QPaintEvent* event)
+AbstractItemFrame::AbstractItemFrame(QWidget * parent) : 
+    QFrame(parent), m_timer(this), m_currentAlpha(100)
+{
+    connect(&m_timer, SIGNAL(timeout()),
+        this, SLOT(update()));
+
+    m_timer.start(25);
+}
+
+AbstractItemFrame::~AbstractItemFrame()
+{
+}
+
+void AbstractItemFrame::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
 
@@ -49,7 +62,7 @@ void SortableGroupItem::paintEvent(QPaintEvent* event)
 
 SortableGroupItem::SortableGroupItem(QWidget * widget,
         QWidget * parent) : 
-    QFrame(parent), m_timer(this), m_currentAlpha(100), m_widget(widget)
+    AbstractItemFrame(parent), m_widget(widget)
 {
     QVBoxLayout * layout = new QVBoxLayout();
 
@@ -109,11 +122,6 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
     btDelete->setToolTip("Delete item");
     btUp->setToolTip("Move up");
     btDown->setToolTip("Move down");
-
-    connect(&m_timer, SIGNAL(timeout()),
-        this, SLOT(update()));
-
-    m_timer.start(25);
 }
 
 SortableGroupItem::~SortableGroupItem()

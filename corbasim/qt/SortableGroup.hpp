@@ -30,7 +30,22 @@ namespace corbasim
 namespace qt 
 {
 
-class CORBASIM_QT_DECLSPEC SortableGroupItem : public QFrame
+class CORBASIM_QT_DECLSPEC AbstractItemFrame : public QFrame
+{
+    Q_OBJECT
+public:
+    AbstractItemFrame(QWidget * parent = 0);
+    virtual ~AbstractItemFrame();
+
+protected:
+
+    void paintEvent(QPaintEvent* event);
+
+    QTimer m_timer;
+    int m_currentAlpha;
+};
+
+class CORBASIM_QT_DECLSPEC SortableGroupItem : public AbstractItemFrame
 {
     Q_PROPERTY(QString title READ title WRITE setTitle)
     // Q_PROPERTY(bool expanded READ isExpanded WRITE setExpanded)
@@ -62,11 +77,6 @@ private slots:
     void downClicked();
 
 protected:
-
-    void paintEvent(QPaintEvent* event);
-
-    QTimer m_timer;
-    int m_currentAlpha;
 
     QWidget * m_widget;
     QLayout * m_layout;

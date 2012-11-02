@@ -31,7 +31,7 @@ AbstractSequenceItem::AbstractSequenceItem(
         Objref_ptr object,
         OperationDescriptor_ptr operation,
         QWidget * parent) : 
-    QFrame(parent), m_object(object), 
+    qt::AbstractItemFrame(parent), m_object(object), 
     m_operation(operation)
 {
     const QString& id = object->name();
