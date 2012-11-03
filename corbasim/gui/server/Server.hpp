@@ -107,6 +107,9 @@ protected:
     AbstractInputTool * m_dumpTool;
     ValueViewerTool * m_valueViewerTool;
 
+    QDialog * m_createObjrefDialog;
+    QDialog * m_createServantDialog;
+
     bool m_qwtLoaded;
     int m_plotIdx;
 };

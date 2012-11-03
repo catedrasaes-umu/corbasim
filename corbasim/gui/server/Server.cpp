@@ -27,6 +27,7 @@
 #include <corbasim/gui/item/OperationsView.hpp>
 #include <corbasim/gui/tools/ValueViewerTool.hpp>
 #include <corbasim/gui/json.hpp>
+#include <corbasim/gui/dialog/CreateDialog.hpp>
 
 #include <corbasim/version.hpp>
 
@@ -44,6 +45,10 @@ Server::Server(QWidget * parent) :
 
     // Tools
     m_plotTool(NULL),
+
+    // Dialogs
+    m_createObjrefDialog(NULL),
+    m_createServantDialog(NULL),
 
     m_qwtLoaded(false)
 {
@@ -223,6 +228,9 @@ Server::Server(QWidget * parent) :
     toolBar = addToolBar("File");
     toolBar->addAction(loadConfigurationAction);
     toolBar->addAction(saveConfigurationAction);
+    toolBar->addSeparator();
+    toolBar->addAction(newObjAction);
+    toolBar->addAction(newSrvAction);
 
     toolBar = addToolBar("Window");
     toolBar->addAction(clearAction);
@@ -521,6 +529,35 @@ void Server::doSaveConfiguration()
     }
 }
 
-void Server::showCreateObjrefDialog() {}
-void Server::showCreateServantDialog() {}
+void Server::showCreateObjrefDialog() 
+{
+    if (!m_createObjrefDialog)
+    {
+        m_createObjrefDialog = new ObjrefCreateDialog(this);
+        // TODO m_createObjrefDialog->setFQNModel(&m_interfaceModel);
+
+        connect(m_createObjrefDialog, 
+                SIGNAL(createObjref(const ObjrefConfig&)),
+                this, 
+                SIGNAL(createObjref(const ObjrefConfig&)));
+    }
+
+    m_createObjrefDialog->show();
+}
+
+void Server::showCreateServantDialog() 
+{
+    if (!m_createServantDialog)
+    {
+        m_createServantDialog = new ServantCreateDialog(this);
+        // TODO m_createServantDialog->setFQNModel(&m_interfaceModel);
+
+        connect(m_createServantDialog, 
+                SIGNAL(createServant(const ServantConfig&)),
+                this, 
+                SIGNAL(createServant(const ServantConfig&)));
+    }
+
+    m_createServantDialog->show();
+}
 
