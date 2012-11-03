@@ -64,6 +64,9 @@ ServerApp::ServerApp(int& argc, char ** argv) :
     m_impl(new ServerData(*this, argc, argv))
 {
     // connect signals
+    QObject::connect(&m_impl->application, 
+            SIGNAL(loadedInterface(InterfaceDescriptor_ptr)), 
+            &m_impl->window, SLOT(loadedInterface(InterfaceDescriptor_ptr)));
     QObject::connect(&m_impl->application, SIGNAL(objrefCreated(Objref_ptr)), 
             &m_impl->window, SLOT(objrefCreated(Objref_ptr)));
     QObject::connect(&m_impl->application, SIGNAL(servantCreated(Objref_ptr)), 

@@ -41,6 +41,7 @@ Server::Server(QWidget * parent) :
     m_logModel(this), 
     m_appLogModel(this),
     m_instanceModel(this),
+    m_interfaceModel(this),
     m_objrefs(this),
 
     // Tools
@@ -143,7 +144,7 @@ Server::Server(QWidget * parent) :
             "&New object reference", this);
     newObjAction->setShortcut(QKeySequence::New);
     connect(newObjAction, SIGNAL(triggered()), 
-            this, SLOT(showCreateObjrefDialog()));
+            this, SLOT(showObjrefCreateDialog()));
 
     // New servant
     QAction * newSrvAction = new QAction(
@@ -151,7 +152,7 @@ Server::Server(QWidget * parent) :
             "N&ew servant", this);
     newSrvAction->setShortcut(QKeySequence::Save);
     connect(newSrvAction, SIGNAL(triggered()), 
-            this, SLOT(showCreateServantDialog()));
+            this, SLOT(showServantCreateDialog()));
 
     // Load configuration
     QAction * loadConfigurationAction = new QAction(
@@ -529,12 +530,12 @@ void Server::doSaveConfiguration()
     }
 }
 
-void Server::showCreateObjrefDialog() 
+void Server::showObjrefCreateDialog() 
 {
     if (!m_createObjrefDialog)
     {
         m_createObjrefDialog = new ObjrefCreateDialog(this);
-        // TODO m_createObjrefDialog->setFQNModel(&m_interfaceModel);
+        m_createObjrefDialog->setFQNModel(&m_interfaceModel);
 
         connect(m_createObjrefDialog, 
                 SIGNAL(createObjref(const ObjrefConfig&)),
@@ -545,12 +546,12 @@ void Server::showCreateObjrefDialog()
     m_createObjrefDialog->show();
 }
 
-void Server::showCreateServantDialog() 
+void Server::showServantCreateDialog() 
 {
     if (!m_createServantDialog)
     {
         m_createServantDialog = new ServantCreateDialog(this);
-        // TODO m_createServantDialog->setFQNModel(&m_interfaceModel);
+        m_createServantDialog->setFQNModel(&m_interfaceModel);
 
         connect(m_createServantDialog, 
                 SIGNAL(createServant(const ServantConfig&)),
@@ -559,5 +560,11 @@ void Server::showCreateServantDialog()
     }
 
     m_createServantDialog->show();
+}
+
+void Server::loadedInterface(
+        InterfaceDescriptor_ptr interface)
+{
+    m_interfaceModel.addInterface(interface);
 }
 

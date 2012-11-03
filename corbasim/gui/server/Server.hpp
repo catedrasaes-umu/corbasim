@@ -26,6 +26,7 @@
 #include <corbasim/gui/item/LogModel.hpp>
 #include <corbasim/gui/item/ApplicationLogModel.hpp>
 #include <corbasim/gui/item/InstanceModel.hpp>
+#include <corbasim/gui/item/InterfaceModel.hpp>
 
 #include <QtGui>
 
@@ -40,6 +41,8 @@ class SenderSequenceTool;
 class AbstractInputTool;
 class StatusView;
 class ValueViewerTool;
+class ObjrefCreateDialog;
+class ServantCreateDialog;
 
 class CORBASIM_GUI_DECLSPEC Server : public QMainWindow
 {
@@ -54,6 +57,8 @@ public:
 public slots:
 
     // Notificaciones del controlador
+
+    void loadedInterface(InterfaceDescriptor_ptr interface);
 
     void objrefCreated(Objref_ptr objref);
     void objrefDeleted(ObjectId id);
@@ -73,8 +78,9 @@ public slots:
     void doLoadConfiguration();
     void doSaveConfiguration();
 
-    void showCreateObjrefDialog();
-    void showCreateServantDialog();
+    // Dialogs
+    void showObjrefCreateDialog();
+    void showServantCreateDialog();
 
 signals:
 
@@ -93,6 +99,7 @@ protected:
     LogModel m_logModel;
     ApplicationLogModel m_appLogModel;
     InstanceModel m_instanceModel;
+    InterfaceModel m_interfaceModel;
 
     ObjrefRepository m_objrefs;
     ObjrefRepository m_servants;
@@ -107,8 +114,8 @@ protected:
     AbstractInputTool * m_dumpTool;
     ValueViewerTool * m_valueViewerTool;
 
-    QDialog * m_createObjrefDialog;
-    QDialog * m_createServantDialog;
+    ObjrefCreateDialog * m_createObjrefDialog;
+    ServantCreateDialog * m_createServantDialog;
 
     bool m_qwtLoaded;
     int m_plotIdx;
