@@ -76,6 +76,15 @@ ServerApp::ServerApp(int& argc, char ** argv) :
             &m_impl->window, SLOT(displayError(const QString&)));
     QObject::connect(&m_impl->application, SIGNAL(message(const QString&)), 
             &m_impl->window, SLOT(displayMessage(const QString&)));
+
+    QObject::connect(&m_impl->window, SIGNAL(createObjref(const ObjrefConfig&)), 
+            &m_impl->application, SLOT(createObjref(const ObjrefConfig&)));
+    QObject::connect(&m_impl->window, SIGNAL(createServant(const ServantConfig&)), 
+            &m_impl->application, SLOT(createServant(const ServantConfig&)));
+    QObject::connect(&m_impl->window, SIGNAL(deleteObjref(ObjectId)), 
+            &m_impl->application, SLOT(deleteObjref(ObjectId)));
+    QObject::connect(&m_impl->window, SIGNAL(deleteServant(ObjectId)), 
+            &m_impl->application, SLOT(deleteServant(ObjectId)));
 }
 
 ServerApp::~ServerApp()

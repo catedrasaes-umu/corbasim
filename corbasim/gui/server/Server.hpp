@@ -73,10 +73,16 @@ public slots:
     void doLoadConfiguration();
     void doSaveConfiguration();
 
+    void showCreateObjrefDialog();
+    void showCreateServantDialog();
+
 signals:
 
     void createObjref(const ObjrefConfig&);
     void deleteObjref(ObjectId);
+
+    void createServant(const ServantConfig&);
+    void deleteServant(ObjectId);
 
 protected slots:
 

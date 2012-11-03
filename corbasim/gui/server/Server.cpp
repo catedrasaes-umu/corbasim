@@ -132,6 +132,22 @@ Server::Server(QWidget * parent) :
     setStatusBar(new QStatusBar());
 
     // Actions
+    // New object
+    QAction * newObjAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "&New object reference", this);
+    newObjAction->setShortcut(QKeySequence::New);
+    connect(newObjAction, SIGNAL(triggered()), 
+            this, SLOT(showCreateObjrefDialog()));
+
+    // New servant
+    QAction * newSrvAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "N&ew servant", this);
+    newSrvAction->setShortcut(QKeySequence::Save);
+    connect(newSrvAction, SIGNAL(triggered()), 
+            this, SLOT(showCreateServantDialog()));
+
     // Load configuration
     QAction * loadConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
@@ -183,6 +199,9 @@ Server::Server(QWidget * parent) :
     setMenuBar(menuBar);
 
     QMenu * menuFile = menuBar->addMenu("&File");
+    menuFile->addAction(newObjAction);
+    menuFile->addAction(newSrvAction);
+    menuFile->addSeparator();
     menuFile->addAction(loadConfigurationAction);
     menuFile->addAction(saveConfigurationAction);
     menuFile->addSeparator();
@@ -501,4 +520,7 @@ void Server::doSaveConfiguration()
         gui::toJson(ow, settings);
     }
 }
+
+void Server::showCreateObjrefDialog() {}
+void Server::showCreateServantDialog() {}
 
