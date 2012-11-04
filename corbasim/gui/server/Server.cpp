@@ -154,6 +154,38 @@ Server::Server(QWidget * parent) :
     connect(newSrvAction, SIGNAL(triggered()), 
             this, SLOT(showServantCreateDialog()));
 
+    // Load scenario
+    QAction * loadScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogOpenButton),
+            "&Load scenario", this);
+    loadScenarioAction->setShortcut(QKeySequence::Open);
+    connect(loadScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showLoadScenario()));
+
+    // Save scenario
+    QAction * saveScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_DialogSaveButton),
+            "&Save scenario", this);
+    saveScenarioAction->setShortcut(QKeySequence::SaveAs);
+    connect(saveScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showSaveScenario()));
+
+    // Clear scenario
+    QAction * clearScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear scenario", this);
+    // clearScenarioAction->setShortcut(QKeySequence::SaveAs);
+    connect(clearScenarioAction, SIGNAL(triggered()), 
+            this, SIGNAL(clearScenario()));
+
+    // Load directory
+    QAction * loadDirectoryAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileDialogNewFolder),
+            "&Load plug-in directory", this);
+    loadDirectoryAction->setShortcut(QKeySequence::SelectAll);
+    connect(loadDirectoryAction, SIGNAL(triggered()), 
+            this, SLOT(showLoadDirectory()));
+    
     // Load configuration
     QAction * loadConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
@@ -208,8 +240,13 @@ Server::Server(QWidget * parent) :
     menuFile->addAction(newObjAction);
     menuFile->addAction(newSrvAction);
     menuFile->addSeparator();
+    menuFile->addAction(loadScenarioAction);
+    menuFile->addAction(saveScenarioAction);
+    menuFile->addSeparator();
     menuFile->addAction(loadConfigurationAction);
     menuFile->addAction(saveConfigurationAction);
+    menuFile->addSeparator();
+    menuFile->addAction(loadDirectoryAction);
     menuFile->addSeparator();
     QAction * closeAction = 
         menuFile->addAction("&Exit", this, SLOT(close()));
@@ -227,6 +264,9 @@ Server::Server(QWidget * parent) :
     // Tool bar
     QToolBar * toolBar = NULL;
     toolBar = addToolBar("File");
+    toolBar->addAction(loadScenarioAction);
+    toolBar->addAction(saveScenarioAction);
+    toolBar->addSeparator();
     toolBar->addAction(loadConfigurationAction);
     toolBar->addAction(saveConfigurationAction);
     toolBar->addSeparator();
@@ -527,6 +567,47 @@ void Server::doSaveConfiguration()
         json::ostream_writer_t ow(ofs, true);
 
         gui::toJson(ow, settings);
+    }
+}
+
+void Server::showLoadDirectory()
+{
+    const QString directory = 
+        QFileDialog::getExistingDirectory(0, 
+                "Select a directory", ".");
+
+    if (!directory.isEmpty())
+    {
+        emit loadDirectory(directory);
+    }
+}
+
+void Server::showLoadScenario()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".",
+                tr("CORBASIM scenario (*.sce)"));
+
+    if (!file.isEmpty())
+    {
+        emit loadScenario(file);
+    }
+}
+
+void Server::showSaveScenario()
+{
+    QString file = 
+        QFileDialog::getSaveFileName(0, 
+                "Select a file", ".", 
+                tr("CORBASIM scenario (*.sce)"));
+
+    if (!file.isEmpty())
+    {
+        if(!file.endsWith(".sce"))
+            file.append(".sce");
+
+        emit saveScenario(file);
     }
 }
 

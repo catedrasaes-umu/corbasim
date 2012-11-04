@@ -80,6 +80,15 @@ ServerApp::ServerApp(int& argc, char ** argv) :
     QObject::connect(&m_impl->application, SIGNAL(message(const QString&)), 
             &m_impl->window, SLOT(displayMessage(const QString&)));
 
+    QObject::connect(&m_impl->window, SIGNAL(loadDirectory(const QString&)),
+            &m_impl->application, SLOT(loadDirectory(const QString&)));
+    QObject::connect(&m_impl->window, SIGNAL(loadScenario(const QString&)),
+            &m_impl->application, SLOT(loadScenario(const QString&)));
+    QObject::connect(&m_impl->window, SIGNAL(saveScenario(const QString&)),
+            &m_impl->application, SLOT(saveScenario(const QString&)));
+    QObject::connect(&m_impl->window, SIGNAL(clearScenario()),
+            &m_impl->application, SLOT(clearScenario()));
+
     QObject::connect(&m_impl->window, SIGNAL(createObjref(const ObjrefConfig&)), 
             &m_impl->application, SLOT(createObjref(const ObjrefConfig&)));
     QObject::connect(&m_impl->window, SIGNAL(createServant(const ServantConfig&)), 

@@ -78,6 +78,10 @@ public slots:
     void doLoadConfiguration();
     void doSaveConfiguration();
 
+    void showLoadDirectory();
+    void showLoadScenario();
+    void showSaveScenario();
+
     // Dialogs
     void showObjrefCreateDialog();
     void showServantCreateDialog();
@@ -89,6 +93,13 @@ signals:
 
     void createServant(const ServantConfig&);
     void deleteServant(ObjectId);
+
+    void loadDirectory(const QString&);
+    void loadScenario(const QString&);
+    void saveScenario(const QString&);
+    void clearScenario();
+
+    void setNameService(const CORBA::Object_var&);
 
 protected slots:
 
