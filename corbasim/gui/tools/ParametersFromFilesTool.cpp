@@ -295,7 +295,8 @@ FilesItem::~FilesItem()
 void FilesItem::browse()
 {
     m_files = QFileDialog::getOpenFileNames(this, 
-            "Select some files...", ".");
+            "Select some files...", ".", 
+            m_format->currentText());
 
     m_filesWidget->setText(m_files.join(", "));
     m_currentFile->clear();

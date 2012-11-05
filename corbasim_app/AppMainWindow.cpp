@@ -27,6 +27,7 @@
 #include <corbasim/gui/tools/SenderSequence.hpp>
 #include <corbasim/gui/tools/DumpTool.hpp>
 #include <corbasim/gui/tools/ValueViewerTool.hpp>
+#include <corbasim/gui/tools/StatusView.hpp>
 #include <corbasim/gui/dialog/CreateDialog.hpp>
 #include <corbasim/gui/dialog/SetReferenceDialog.hpp>
 #include <corbasim/gui/item/OperationsView.hpp>
@@ -59,6 +60,7 @@ namespace
         kDumpTool,
         kPlotTool,
         kValueViewerTool,
+        kStatusView,
 
         kSubWindowsMax
     };
@@ -72,7 +74,8 @@ namespace
         "Sender sequence tool",
         "Dump tool",
         "Plot tool",
-        "Value viewer"
+        "Value viewer",
+        "Status"
     };
 } // namespace
 
@@ -98,6 +101,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_dumpTool(NULL),
     m_plotTool(NULL),
     m_valueViewerTool(NULL),
+    m_statusView(NULL),
     m_debugger(NULL)
 
 {
@@ -333,6 +337,8 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuTool->addAction("&Sender sequences", 
             this, SLOT(showSenderSequenceTool()));
     menuTool->addSeparator();
+    menuTool->addAction("&Status", 
+            this, SLOT(showStatusView()));
     menuTool->addAction("&Dump tool", 
             this, SLOT(showDumpTool()));
     menuTool->addAction("&Plot tool", 
@@ -553,6 +559,9 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
 
     if (m_senderSequenceTool)
         m_senderSequenceTool->objrefCreated(objref);
+
+    if (m_statusView)
+        m_statusView->registerInstance(objref);
 }
 
 void AppMainWindow::objrefDeleted(ObjectId id)
@@ -572,6 +581,9 @@ void AppMainWindow::objrefDeleted(ObjectId id)
 
     if (m_senderSequenceTool)
         m_senderSequenceTool->objrefDeleted(id);
+
+    if (m_statusView)
+        m_statusView->unregisterInstance(id);
 }
 
 void AppMainWindow::servantCreated(Objref_ptr servant)
@@ -900,6 +912,34 @@ void AppMainWindow::showValueViewerTool()
 {
     createValueViewerTool();
     showToolSubWindow(kValueViewerTool);
+}
+
+void AppMainWindow::createStatusView()
+{
+    if (!m_statusView)
+    {
+        m_statusView = new StatusView(this);
+        QScrollArea * scroll = new QScrollArea();
+        scroll->setWidget(m_statusView);
+        scroll->setWidgetResizable(true);
+
+        scroll->setMinimumSize(300, 100);
+
+        createToolSubWindow(kStatusView, scroll);
+
+        // Initilizes the tool
+        ObjrefRepository::const_iterator it = m_objrefs.begin();
+        ObjrefRepository::const_iterator end = m_objrefs.end();
+
+        for(; it != end; it++)
+            m_statusView->registerInstance(it.value());
+    }
+}
+
+void AppMainWindow::showStatusView()
+{
+    createStatusView();
+    showToolSubWindow(kStatusView);
 }
 
 void AppMainWindow::showLoadDirectory()

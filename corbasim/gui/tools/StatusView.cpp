@@ -90,6 +90,8 @@ void StatusView::registerInstance(Objref_ptr objref)
 {
     int columns = width() / MAX_WIDTH;
 
+    if (!columns) columns = 1;
+
     if (m_items.find(objref->id()) == m_items.end())
     {
         StatusViewItem * item = new StatusViewItem(objref, this);
@@ -126,6 +128,7 @@ void StatusView::resizeEvent(QResizeEvent * event)
 void StatusView::reallocate(int width)
 {
     int columns = width / MAX_WIDTH;
+    if (!columns) columns = 1;
 
     QGridLayout * l = m_layout;
 

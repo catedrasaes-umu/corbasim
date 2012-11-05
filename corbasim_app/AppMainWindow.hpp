@@ -46,6 +46,7 @@ namespace gui
     class SenderSequenceTool;
     class AbstractInputTool;
     class DumpTool;
+    class StatusView;
 } // namespace gui
 
 namespace app 
@@ -96,6 +97,8 @@ public slots:
     void showPlotTool();
     void createValueViewerTool();
     void showValueViewerTool();
+    void createStatusView();
+    void showStatusView();
 
     void showLoadDirectory();
     void showLoadScenario();
@@ -163,6 +166,7 @@ protected:
     DumpTool * m_dumpTool;
     AbstractInputTool * m_plotTool;
     AbstractInputTool * m_valueViewerTool;
+    StatusView * m_statusView;
     QMainWindow * m_debugger;
 
     typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
