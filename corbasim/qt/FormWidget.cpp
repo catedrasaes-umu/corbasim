@@ -79,7 +79,7 @@ void FormWidget::reallocate(int width)
     }
 
     if (m_minWidth <= 0)
-        m_minWidth = 100;
+        m_minWidth = 150;
 
     const int columnWidth = width / m_minWidth;
     int rowWidth = (columnWidth / 2) * 2;

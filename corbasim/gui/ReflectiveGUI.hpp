@@ -351,7 +351,8 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
-
+    
+    void _setReadOnly(bool readOnly);
 };
 
 class CORBASIM_GUI_DECLSPEC FilesWidget : 

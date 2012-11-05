@@ -1954,6 +1954,11 @@ void UnionWidget::_setReadOnly(bool readOnly)
     }
 }
 
+void ObjrefvarWidget::_setReadOnly(bool readOnly)
+{
+    setEnabled(!readOnly);
+}
+
 void AlternativesWidget::_setReadOnly(bool readOnly)
 {
     // Widgets
