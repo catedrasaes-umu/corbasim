@@ -12,11 +12,11 @@ namespace corbasim
 {
 namespace adapted
 {
-«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+«EXPAND adapt FOREACH contains-»
 } // namespace adapted
 } // namespace corbasim
 
-«EXPAND values FOREACH contains SEPARATOR "\n\n"»
+«EXPAND values FOREACH contains-»
 
 «ENDFILE»
 «ENDDEFINE»
@@ -25,9 +25,7 @@ namespace adapted
 
 «DEFINE adapt FOR Contained-»«ENDDEFINE»
 
-«DEFINE adapt FOR ModuleDef-»
-	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
-«ENDDEFINE»
+«DEFINE adapt FOR ModuleDef-»«EXPAND adapt FOREACH contains-»«ENDDEFINE»
 
 «DEFINE adapt FOR InterfaceDef-»
 template< >
@@ -48,12 +46,10 @@ CORBA::TypeCode const *  typecode< «getFQN()» >::call()
 	return «getTypeCode()»;
 }
 
-	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+	«EXPAND adapt FOREACH contains-»
 «ENDDEFINE»
 
-«DEFINE adapt FOR Container-»
-	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
-«ENDDEFINE»
+«DEFINE adapt FOR Container-»«EXPAND adapt FOREACH contains-»«ENDDEFINE»
 
 «DEFINE adapt FOR OperationDef-»
 template< >
@@ -61,6 +57,7 @@ const char * name< _corbasim_«getFQN()» >::call()
 {
 	return "«identifier»";
 }
+
 «ENDDEFINE»
 
 «DEFINE adapt FOR StructDef-»
@@ -91,6 +88,7 @@ const char * name< «getFQN()» >::call()
 {
 	return "«identifier»";
 }
+
 «ENDDEFINE»
 
 «DEFINE adapt FOR EnumDef-»«ENDDEFINE»
@@ -102,7 +100,7 @@ const char * name< «getFQN()» >::call()
 «DEFINE values FOR Container-»
 namespace «IF definedIn == null-»_corbasim_«ENDIF-»«identifier» 
 {
-	«EXPAND values FOREACH contains SEPARATOR "\n\n"»
+	«EXPAND values FOREACH contains-»
 } // «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
 «ENDDEFINE»
 
@@ -142,5 +140,6 @@ __«identifier»::__«identifier»(const __«identifier»& o)«IF !initializatio
 	«ENDFOREACH-»
 }
 «ENDLET»
+
 «ENDDEFINE»
 

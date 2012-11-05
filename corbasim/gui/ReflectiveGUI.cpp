@@ -32,6 +32,7 @@
 #include <sstream>
 #include <fstream>
 #include <corbasim/json/reflective.hpp>
+#include <corbasim/core/file_format_helper.hpp>
 
 using namespace corbasim::gui;
 
@@ -746,32 +747,18 @@ UnionWidget::UnionWidget(
 
         child_widget->setObjectName(child_name);
 
+        qt::FormWidget * form = new qt::FormWidget(this);
+
         if (child->is_primitive() || child->is_enum())
         {
-            QWidget * w = new QWidget();
-            QGridLayout * layout = new QGridLayout();
-            QLabel * label = new QLabel(child_name);
-
-            label->setObjectName(QString(child_name) + "_label");
-
-            layout->addWidget(label, 0, 0);
-            layout->addWidget(child_widget, 0, 1);
-
-            w->setLayout(layout);
-            m_stack->addWidget(w);
+            form->addField(child_name, child_widget);
         }
         else
         {
-            QGroupBox * gb = new QGroupBox(child_name, this);
-            gb->setObjectName(QString(child_name) + "_group");
-
-            QHBoxLayout * cLayout = new QHBoxLayout(gb);
-
-            cLayout->addWidget(child_widget);
-
-            gb->setLayout(cLayout);
-            m_stack->addWidget(gb);
+            form->addBigField(child_name, child_widget);
         }
+
+        m_stack->addWidget(form);
     }
 
     setLayout(layout);
@@ -1211,32 +1198,22 @@ FilesWidget::~FilesWidget()
 namespace  
 {
 
-template< typename T >
 void fromFile(const std::string& file, 
         TypeDescriptor_ptr seq,
         Holder& h)
 {
-    size_t size = 0;
+    using namespace corbasim::core;
 
     std::ifstream ifs(file.c_str(), 
             std::ios::in | std::ios::binary);
-    std::streambuf * pbuf = ifs.rdbuf();
 
-    if (seq->is_variable_length())
-    {
-        size = pbuf->in_avail() / sizeof(T);
-        seq->set_length(h, size);
-    }
-    else
-    {
-        size = seq->get_length(h);
-    }
+    const file_format_factory * factory = 
+        file_format_factory::get_instance();
 
-    for (size_t i = 0; i < size && pbuf->in_avail(); i++) 
-    {
-        T& t = seq->get_child_value(h, i).to_value< T >();
-        pbuf->sgetn(reinterpret_cast< char* >(&t), sizeof(T));
-    }
+    const file_format_helper * helper =
+        factory->get_helper(FILE_FORMAT_BINARY);
+
+    helper->load(ifs, seq, h);
 }
 
 } // namespace 
@@ -1247,49 +1224,7 @@ void FilesWidget::toHolder(Holder& holder)
 
     if (nextFile)
     {
-        core::reflective_type type = m_reflective->get_slice()->get_type();
-
-        switch (type)
-        {
-        case core::TYPE_LONG:
-            fromFile< int32_t >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_ULONG:
-            fromFile< uint32_t >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_LONGLONG:
-            fromFile< int64_t >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_ULONGLONG:
-            fromFile< uint64_t >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_SHORT:
-            fromFile< short >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_USHORT:
-            fromFile< unsigned short >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_OCTET:
-            fromFile< unsigned char >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_FLOAT:
-            fromFile< float >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        case core::TYPE_DOUBLE:
-            fromFile< double >(nextFile->toStdString(), 
-                    m_reflective, holder);
-            break;
-        default:
-            break;
-        }
+        ::fromFile(nextFile->toStdString(), m_reflective, holder);
     }
 }
 

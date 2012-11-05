@@ -86,10 +86,12 @@ void FormWidget::reallocate(int width)
     int row = 0;
     int column = 0;
 
+    /*
     for (int i = 0; i < rowWidth; i++) 
     {
         m_layout->setColumnMinimumWidth(i, columnWidth);
     }
+    */
 
     for (unsigned int i = 0; i < m_items.size(); i++) 
     {
