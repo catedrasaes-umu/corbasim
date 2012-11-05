@@ -95,7 +95,6 @@ int InstanceModel::columnCount(const QModelIndex&) const
     return 1;
 }
 
-
 QString getNodeName(DescriptorNode const * node)
 {
     using namespace corbasim::core;
@@ -134,7 +133,17 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
     InstanceNode * iNode = 
         dynamic_cast< InstanceNode *>(node);
 
-    if (role == Qt::DisplayRole || role == Qt::EditRole)
+    if (role == Qt::ToolTipRole)
+    {
+        if (iNode)
+        {
+            return QString("%1: %2 Interface: %3")
+                .arg(((iNode->instance->isServant())? "Servant": "Object reference"))
+                .arg(iNode->instance->name())
+                .arg(iNode->reflective->get_fqn());
+        }
+    }
+    else if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
         if (iNode)
         {
