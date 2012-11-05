@@ -25,6 +25,7 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 #include <corbasim/gui/Sender.hpp>
+#include <corbasim/qt/FormWidget.hpp>
 
 namespace corbasim 
 {
@@ -34,7 +35,7 @@ namespace gui
 class ParametersFromFilesTool;
 
 class CORBASIM_GUI_DECLSPEC OperationFormWidget : 
-    public QWidget
+    public qt::FormWidget
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue)

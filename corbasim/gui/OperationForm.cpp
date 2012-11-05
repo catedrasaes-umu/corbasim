@@ -146,17 +146,9 @@ void OperationForm::load(const QVariant& settings)
 OperationFormWidget::OperationFormWidget(
         OperationDescriptor_ptr reflective,
         QWidget * parent) :
-    QWidget(parent), m_reflective(reflective)
+    qt::FormWidget(parent), m_reflective(reflective)
 {
-    QGridLayout * layout = new QGridLayout(this);
-    QLayout * mlayout = layout;
-
     const unsigned int count = reflective->get_children_count();
-
-    // Max widgets per row: 2 labels + 2 widgets
-    const int rowWidth = 4;
-    int row = 0;
-    int column = 0;
 
     m_widgets.resize(count, NULL);
 
@@ -181,40 +173,14 @@ OperationFormWidget::OperationFormWidget(
 
             if (child->is_primitive() || child->is_enum())
             {
-                QLabel * label = new QLabel(child_name, this);
-                label->setObjectName(QString(child_name) + "_label");
-
-                layout->addWidget(label, row, column++);
-                layout->addWidget(child_widget, row, column++);
-
-                // Check if there are enough widgets in the 
-                // current row
-                if (column == rowWidth)
-                {
-                    row++;
-                    column = 0;
-                }
+                addField(child_name, child_widget);
             }
             else
             {
-                // Starts in a new row
-                if (column != 0) row++;
-                column = 0;
-
-                QGroupBox * gb = new QGroupBox(child_name, this);
-                gb->setObjectName(QString(child_name) + "_group");
-
-                // Group box layout
-                QHBoxLayout * cLayout = new QHBoxLayout(gb);
-                cLayout->addWidget(child_widget);
-                gb->setLayout(cLayout);
-
-                layout->addWidget(gb, row++, 0, 1, rowWidth);
+                addBigField(child_name, child_widget);
             }
         }
     }
-
-    setLayout(mlayout);
 
     setAcceptDrops(true);
 }

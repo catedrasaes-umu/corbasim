@@ -25,6 +25,7 @@
 #include <corbasim/gui/ObjrefWidget.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>
 #include <corbasim/qt/TabWidget.hpp>
+#include <corbasim/qt/FormWidget.hpp>
 
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
@@ -212,7 +213,7 @@ public:
 };
 
 class CORBASIM_GUI_DECLSPEC StructWidget : 
-    public QWidget, public ReflectiveWidgetBase
+    public qt::FormWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
     Q_PROPERTY(QVariant value READ value WRITE setValue)
@@ -234,10 +235,6 @@ public:
     void _setReadOnly(bool readOnly);
 
 protected:
-
-    QGridLayout * m_layout;
-
-    // void resizeEvent(QResizeEvent * event);
 
     std::vector< ReflectiveWidgetBase * > m_widgets;
 };

@@ -11,6 +11,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/export.hpp
     qt/types.hpp
     qt/StartStopButton.hpp
+    qt/FormWidget.hpp
 )
 
 foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
@@ -34,6 +35,7 @@ set(corbasim_qt_MOC_HDRS
     qt/Status.hpp
     qt/TabWidget.hpp
     qt/StartStopButton.hpp
+    qt/FormWidget.hpp
 )
 
 set(corbasim_qt_SRCS
@@ -52,6 +54,7 @@ set(corbasim_qt_SRCS
     qt/TabWidget.cpp
     qt/initialize.cpp
     qt/StartStopButton.cpp
+    qt/FormWidget.cpp
 )
 
 message(STATUS "Qt libraries: ${QT_LIBRARIES}")

@@ -581,23 +581,11 @@ StructWidget::StructWidget(
         TypeDescriptor_ptr reflective,
         WidgetFactory_t factory,
         QWidget * parent) :
-    QWidget(parent), ReflectiveWidgetBase(reflective)
+    qt::FormWidget(parent), ReflectiveWidgetBase(reflective)
 {
     assert(reflective->get_type() == core::TYPE_STRUCT);
 
-    m_layout = new QGridLayout(this);
-
     unsigned int count = reflective->get_children_count();
-
-    int level = 0;
-    TypeDescriptor_ptr p = reflective;
-    while ((p = p->get_parent())) 
-        if (p->get_type() == core::TYPE_STRUCT)
-            level++;
-
-    const int rowWidth = ((level > 2)?  2: 4);
-    int row = 0;
-    int column = 0;
 
     m_widgets.resize(count, NULL);
 
@@ -617,47 +605,19 @@ StructWidget::StructWidget(
 
         if (child->is_primitive() || child->is_enum())
         {
-            QLabel * label = new QLabel(child_name, this);
-
-            label->setObjectName(QString(child_name) + "_label");
-
-            m_layout->addWidget(label, row, column++);
-            m_layout->addWidget(child_widget, row, column++);
-
-            if (column == rowWidth)
-            {
-                row++;
-                column = 0;
-            }
+            addField(child_name, child_widget);
         }
         else
         {
-            if (column != 0) row++;
-            column = 0;
-
-            QGroupBox * gb = new QGroupBox(child_name, this);
-            gb->setObjectName(QString(child_name) + "_group");
-
-            QHBoxLayout * cLayout = new QHBoxLayout(gb);
-
-            cLayout->addWidget(child_widget);
-
-            gb->setLayout(cLayout);
-            m_layout->addWidget(gb, row++, 0, 1, rowWidth);
+            addBigField(child_name, child_widget);
         }
     }
-
-    setLayout(m_layout);
 }
 
 StructWidget::~StructWidget()
 {
 }
-/*
-void StructWidget::resizeEvent(QResizeEvent * event)
-{
-}
-*/
+
 void StructWidget::toHolder(Holder& holder) 
 {
     const unsigned int count = m_reflective->get_children_count();
@@ -1341,14 +1301,11 @@ OperationInputForm::OperationInputForm(
         QWidget * parent) :
     QWidget(parent), m_reflective(reflective)
 {
-    QGridLayout * layout = new QGridLayout(this);
-    QLayout * mlayout = layout;
+    QVBoxLayout * mlayout = new QVBoxLayout();
 
     const unsigned int count = reflective->get_children_count();
 
-    const int rowWidth = 4;
-    int row = 0;
-    int column = 0;
+    qt::FormWidget * form = new qt::FormWidget(this);
 
     m_widgets.resize(count, NULL);
 
@@ -1373,37 +1330,16 @@ OperationInputForm::OperationInputForm(
 
             if (child->is_primitive() || child->is_enum())
             {
-                QLabel * label = new QLabel(child_name, this);
-
-                label->setObjectName(QString(child_name) + "_label");
-
-                layout->addWidget(label, row, column++);
-                layout->addWidget(child_widget, row, column++);
-
-                if (column == rowWidth)
-                {
-                    row++;
-                    column = 0;
-                }
+                form->addField(child_name, child_widget);
             }
             else
             {
-                if (column != 0) row++;
-                column = 0;
-
-                QGroupBox * gb = new QGroupBox(child_name, this);
-                gb->setObjectName(QString(child_name) + "_group");
-
-                QHBoxLayout * cLayout = new QHBoxLayout(gb);
-
-                cLayout->addWidget(child_widget);
-
-                gb->setLayout(cLayout);
-
-                layout->addWidget(gb, row++, 0, 1, rowWidth);
+                form->addBigField(child_name, child_widget);
             }
         }
     }
+
+    mlayout->addWidget(form);
 
 #ifdef CORBASIM_USE_QTSCRIPT
     QVBoxLayout * mainLayout = new QVBoxLayout();
