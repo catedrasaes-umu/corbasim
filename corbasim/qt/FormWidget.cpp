@@ -81,9 +81,15 @@ void FormWidget::reallocate(int width)
     if (m_minWidth <= 0)
         m_minWidth = 100;
 
-    int rowWidth = ((width / m_minWidth) / 2) * 2;
+    const int columnWidth = width / m_minWidth;
+    int rowWidth = (columnWidth / 2) * 2;
     int row = 0;
     int column = 0;
+
+    for (int i = 0; i < rowWidth; i++) 
+    {
+        m_layout->setColumnMinimumWidth(i, columnWidth);
+    }
 
     for (unsigned int i = 0; i < m_items.size(); i++) 
     {

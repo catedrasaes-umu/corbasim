@@ -216,7 +216,7 @@ AlternativesWidget::AlternativesWidget(
     layout->setMargin(0);
     setLayout(layout);
 
-    QObject::connect(&m_group, SIGNAL(buttonClicked(int)), 
+    connect(&m_group, SIGNAL(buttonClicked(int)), 
             this, SLOT(changeWidget(int)));
 }
 
@@ -699,28 +699,28 @@ UnionWidget::UnionWidget(
 
         if (qobject_cast< QComboBox * >(child_widget))
         {
-            QObject::connect(child_widget, 
+            connect(child_widget, 
                     SIGNAL(currentIndexChanged(int)),
                     this,
                     SLOT(discriminatorChanged()));
         }
         else if (qobject_cast< QSpinBox * >(child_widget))
         {
-            QObject::connect(child_widget, 
+            connect(child_widget, 
                     SIGNAL(valueChanged(int)),
                     this,
                     SLOT(discriminatorChanged()));
         }
         else if (qobject_cast< QDoubleSpinBox * >(child_widget))
         {
-            QObject::connect(child_widget, 
+            connect(child_widget, 
                     SIGNAL(valueChanged(double)),
                     this,
                     SLOT(discriminatorChanged()));
         }
         else if (qobject_cast< QCheckBox * >(child_widget))
         {
-            QObject::connect(child_widget, 
+            connect(child_widget, 
                     SIGNAL(stateChanged(int)),
                     this,
                     SLOT(discriminatorChanged()));
@@ -1045,15 +1045,17 @@ ComplexSequenceWidget::ComplexSequenceWidget(
     layout->addWidget(m_stack);
 
     // Spacer
+    /*
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addItem(spacer);
+    */
 
     setLayout(layout);
 
     if (reflective->is_variable_length())
     {
-        QObject::connect(m_sbLength, SIGNAL(valueChanged(int)),
+        connect(m_sbLength, SIGNAL(valueChanged(int)),
                 this, SLOT(lengthChanged(int)));
 
         // TODO maximo razonable
@@ -1080,7 +1082,7 @@ ComplexSequenceWidget::ComplexSequenceWidget(
         indexChanged(0);
     }
 
-    QObject::connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
+    connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
             this, SLOT(indexChanged(int)));
 }
 
@@ -1367,7 +1369,7 @@ OperationInputForm::OperationInputForm(
     button->resize(20, 20);
     tabBar->setTabButton(1, QTabBar::LeftSide, button);
 
-    QObject::connect(button, SIGNAL(clicked()),
+    connect(button, SIGNAL(clicked()),
             this, SLOT(reloadScript()));
 
 #endif
@@ -2049,6 +2051,4 @@ void OperationInputForm::_setReadOnly(bool readOnly)
         }
     }
 }
-
-
 
