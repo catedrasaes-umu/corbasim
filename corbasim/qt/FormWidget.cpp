@@ -23,7 +23,7 @@
 using namespace corbasim::qt;
 
 FormWidget::FormWidget(QWidget * parent) :
-    QWidget(parent), m_minWidth(std::numeric_limits< int >::max())
+    QWidget(parent), m_minWidth(std::numeric_limits< int >::min())
 {
     m_layout = new QGridLayout(this);
     setLayout(m_layout);
@@ -78,6 +78,9 @@ void FormWidget::reallocate(int width)
         m_layout->takeAt(i);
     }
 
+    if (m_minWidth <= 0)
+        m_minWidth = 100;
+
     int rowWidth = ((width / m_minWidth) / 2) * 2;
     int row = 0;
     int column = 0;
@@ -103,6 +106,7 @@ void FormWidget::reallocate(int width)
             m_layout->addWidget(m_items[i].group, row++, 0, 1, rowWidth);
         }
     }
-}
 
+    setMinimumWidth(2 * m_minWidth);
+}
 
