@@ -371,6 +371,12 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuWindow->addAction("Cascade", mdiArea, SLOT(cascadeSubWindows()));
     menuWindow->addAction("Tile", mdiArea, SLOT(tileSubWindows()));
 
+    menuObject_references->addAction(newObjAction);
+    menuObject_references->addSeparator();
+    menuServants->addAction(newSrvAction);
+    menuServants->addSeparator();
+
+
     menuHelp->addAction(aboutAction);
 
     // Subwindows

@@ -89,6 +89,12 @@ ObjrefView::~ObjrefView()
         delete m_subwindows[i];
     }
 
+    for (unsigned int i = 0; i < m_senders.size(); i++) 
+    {
+        delete m_senders[i];
+        delete m_subwindows_senders[i];
+    }
+
     delete m_script;
     delete m_sub_script;
 }
