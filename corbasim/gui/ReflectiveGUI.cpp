@@ -1898,7 +1898,7 @@ void StringWidget::_setReadOnly(bool readOnly)
 
 void EnumWidget::_setReadOnly(bool readOnly)
 {
-    setEditable(!readOnly);
+    setEnabled(!readOnly);
 }
 
 void BoolWidget::_setReadOnly(bool readOnly)

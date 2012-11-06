@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 project(corbasim C CXX)
 
 # Numero de version
-set(${PROJECT_NAME}_MAJOR_VERSION 0)
-set(${PROJECT_NAME}_MINOR_VERSION 2)
-set(${PROJECT_NAME}_PATCH_LEVEL 1)
+set(${PROJECT_NAME}_MAJOR_VERSION 1)
+set(${PROJECT_NAME}_MINOR_VERSION 0)
+set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(${PROJECT_NAME}_VERSION
         "${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL}")
 
@@ -100,7 +100,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 if(QT_FOUND)
     set(QT_USE_QTSCRIPT 1)
     set(QT_USE_QTSCRIPTTOOLS 1)
-    include_directories(/usr/local/Trolltech/Qt-4.7.2/include/QtScriptTools)
     include(${QT_USE_FILE})
 endif()
 
