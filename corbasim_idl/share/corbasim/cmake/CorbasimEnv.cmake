@@ -5,8 +5,8 @@ include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
 
 # Boost C++ Libraries
-include_directories(/opt/boost/1_51_0/include)
-link_directories(/opt/boost/1_51_0/lib)
+include_directories(/usr/include)
+link_directories(/usr/lib)
 
 # ORB
 set(CORBASIM_ORBIMPL
@@ -26,12 +26,12 @@ set(CORBASIM_ORB_IDL_COMPILER_OPTIONS
 
 # Libraries for clients
 set(CORBASIM_CLIENT_LIBS 
-    corbasim;corbasim_qt;corbasim_gui;/opt/boost/1_51_0/lib/libboost_program_options.so)
+    corbasim;corbasim_qt;corbasim_gui;/usr/lib/libboost_program_options.so)
 
 set(CORBASIM_CLIENT_STATIC_LIBS 
-    corbasim_gui_s;corbasim_qt_s;corbasim_s;/opt/boost/1_51_0/lib/libboost_program_options.so)
+    corbasim_gui_s;corbasim_qt_s;corbasim_s;/usr/lib/libboost_program_options.so)
 
 # Libraries for servers
 set(CORBASIM_SERVER_LIBS 
-    corbasim;/opt/boost/1_51_0/lib/libboost_program_options.so)
+    corbasim;/usr/lib/libboost_program_options.so)
 
