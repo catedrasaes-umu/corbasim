@@ -309,7 +309,7 @@ void AbstractSequence::moveDownItem()
 
 // Tool
 AbstractSequenceTool::AbstractSequenceTool(QWidget * parent) :
-    QWidget(parent)
+    AbstractTool(parent)
 {
     m_model.setDisplayParameters(false);
 
@@ -378,12 +378,12 @@ AbstractSequenceTool::~AbstractSequenceTool()
 {
 }
 
-void AbstractSequenceTool::objrefCreated(Objref_ptr object)
+void AbstractSequenceTool::registerInstance(Objref_ptr object)
 {
     m_model.registerInstance(object);
 }
 
-void AbstractSequenceTool::objrefDeleted(ObjectId id)
+void AbstractSequenceTool::unregisterInstance(ObjectId id)
 {
     m_model.unregisterInstance(id);
 

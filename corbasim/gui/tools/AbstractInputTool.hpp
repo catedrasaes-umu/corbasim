@@ -21,6 +21,7 @@
 #define CORBASIM_GUI_ABSTRACTINPUTTOOL_HPP
 
 #include <QtGui>
+#include <corbasim/gui/tools/AbstractTool.hpp>
 #include <corbasim/gui/item/ParametersModel.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
@@ -85,7 +86,7 @@ protected:
     const QList< int > m_path;
 };
 
-class CORBASIM_GUI_DECLSPEC AbstractInputTool : public QWidget
+class CORBASIM_GUI_DECLSPEC AbstractInputTool : public AbstractTool
 {
     Q_OBJECT
 public:

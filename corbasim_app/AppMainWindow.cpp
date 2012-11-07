@@ -561,10 +561,10 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
         m_filteredLogView->registerInstance(objref);
 
     if (m_operationSequenceTool)
-        m_operationSequenceTool->objrefCreated(objref);
+        m_operationSequenceTool->registerInstance(objref);
 
     if (m_senderSequenceTool)
-        m_senderSequenceTool->objrefCreated(objref);
+        m_senderSequenceTool->registerInstance(objref);
 
     if (m_statusView)
         m_statusView->registerInstance(objref);
@@ -583,10 +583,10 @@ void AppMainWindow::objrefDeleted(ObjectId id)
         m_filteredLogView->unregisterInstance(id);
 
     if (m_operationSequenceTool)
-        m_operationSequenceTool->objrefDeleted(id);
+        m_operationSequenceTool->unregisterInstance(id);
 
     if (m_senderSequenceTool)
-        m_senderSequenceTool->objrefDeleted(id);
+        m_senderSequenceTool->unregisterInstance(id);
 
     if (m_statusView)
         m_statusView->unregisterInstance(id);
@@ -796,7 +796,7 @@ void AppMainWindow::createOperationSequenceTool()
         ObjrefRepository::const_iterator end = m_objrefs.end();
 
         for(; it != end; it++)
-            m_operationSequenceTool->objrefCreated(it.value());
+            m_operationSequenceTool->registerInstance(it.value());
     }
 }
 
@@ -820,7 +820,7 @@ void AppMainWindow::createSenderSequenceTool()
         ObjrefRepository::const_iterator end = m_objrefs.end();
 
         for(; it != end; it++)
-            m_senderSequenceTool->objrefCreated(it.value());
+            m_senderSequenceTool->registerInstance(it.value());
     }
 }
 

@@ -53,6 +53,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/Sender.hpp
 
     # tools
+    gui/tools/AbstractTool.hpp
     gui/tools/AbstractInputTool.hpp
     gui/tools/AbstractSequenceTool.hpp
     gui/tools/DumpTool.hpp
@@ -118,6 +119,7 @@ set(corbasim_gui_MOC_HDRS
     gui/Sender.hpp
 
     # tools
+    gui/tools/AbstractTool.hpp
     gui/tools/AbstractInputTool.hpp
     gui/tools/AbstractSequenceTool.hpp
     gui/tools/DumpTool.hpp
@@ -186,6 +188,7 @@ set(corbasim_gui_SRCS
     gui/RequestDialog.cpp
 
     # tools
+    gui/tools/AbstractTool.cpp
     gui/tools/AbstractInputTool.cpp
     gui/tools/AbstractSequenceTool.cpp
     gui/tools/DumpTool.cpp

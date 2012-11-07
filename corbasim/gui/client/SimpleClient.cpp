@@ -217,7 +217,7 @@ void SimpleClient::initialize(Objref_ptr objref)
     m_filteredLog->registerInstance(m_objref);
 
     if (m_seqTool)
-        m_seqTool->objrefCreated(m_objref);
+        m_seqTool->registerInstance(m_objref);
 
     QGridLayout * grid = NULL;
     InterfaceDescriptor_ptr factory = m_objref->interface();
@@ -471,7 +471,7 @@ void SimpleClient::showOperationSequenceTool()
 
         // Initializes the tool
         if (m_objref->interface())
-            m_seqTool->objrefCreated(m_objref);
+            m_seqTool->registerInstance(m_objref);
     }
 
     m_dlgSeqTool->show();

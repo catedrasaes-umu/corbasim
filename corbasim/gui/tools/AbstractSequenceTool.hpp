@@ -26,6 +26,7 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/InstanceModel.hpp>
+#include <corbasim/gui/tools/AbstractTool.hpp>
 #include <corbasim/qt/SortableGroup.hpp>
 
 namespace corbasim 
@@ -130,7 +131,7 @@ protected:
 };
 
 class CORBASIM_GUI_DECLSPEC AbstractSequenceTool : 
-    public QWidget
+    public AbstractTool
 {
     Q_OBJECT
 public:
@@ -147,8 +148,8 @@ public slots:
      *
      * @param object
      */
-    void objrefCreated(Objref_ptr object);
-    void objrefDeleted(ObjectId id);
+    void registerInstance(Objref_ptr object);
+    void unregisterInstance(ObjectId id);
 
     AbstractSequenceItem * appendAbstractItem(
             Objref_ptr object,

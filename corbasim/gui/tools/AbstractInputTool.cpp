@@ -70,7 +70,7 @@ void AbstractInputItem::reset()
 //
 
 AbstractInputTool::AbstractInputTool(QWidget * parent) :
-    QWidget(parent), m_model(NULL)
+    AbstractTool(parent), m_model(NULL)
 {
     QHBoxLayout * layout = new QHBoxLayout(this);
 

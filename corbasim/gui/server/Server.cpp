@@ -364,8 +364,8 @@ void Server::objrefCreated(Objref_ptr objref)
     m_statusView->registerInstance(objref);
     m_dumpTool->registerInstance(objref);
     m_valueViewerTool->registerInstance(objref);
-    m_seqTool->objrefCreated(objref);
-    m_senderSeqTool->objrefCreated(objref);
+    m_seqTool->registerInstance(objref);
+    m_senderSeqTool->registerInstance(objref);
 
     if (m_plotTool)
         m_plotTool->registerInstance(objref);
@@ -387,8 +387,8 @@ void Server::objrefDeleted(ObjectId id)
     m_statusView->unregisterInstance(id);
     m_dumpTool->unregisterInstance(id);
     m_valueViewerTool->unregisterInstance(id);
-    m_seqTool->objrefDeleted(id);
-    m_senderSeqTool->objrefDeleted(id);
+    m_seqTool->unregisterInstance(id);
+    m_senderSeqTool->unregisterInstance(id);
 
     if (m_plotTool)
         m_plotTool->unregisterInstance(id);
@@ -405,8 +405,8 @@ void Server::servantCreated(Objref_ptr servant)
     m_view->registerInstance(servant);
     m_dumpTool->registerInstance(servant);
     m_valueViewerTool->registerInstance(servant);
-    m_seqTool->objrefCreated(servant);
-    m_senderSeqTool->objrefCreated(servant);
+    m_seqTool->registerInstance(servant);
+    m_senderSeqTool->registerInstance(servant);
 
     if (m_plotTool)
         m_plotTool->registerInstance(servant);
@@ -428,8 +428,8 @@ void Server::servantDeleted(ObjectId id)
     m_view->unregisterInstance(id);
     m_dumpTool->unregisterInstance(id);
     m_valueViewerTool->unregisterInstance(id);
-    m_seqTool->objrefDeleted(id);
-    m_senderSeqTool->objrefDeleted(id);
+    m_seqTool->unregisterInstance(id);
+    m_senderSeqTool->unregisterInstance(id);
 
     if (m_plotTool)
         m_plotTool->unregisterInstance(id);
