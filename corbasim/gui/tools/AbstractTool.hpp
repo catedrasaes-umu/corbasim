@@ -33,11 +33,24 @@ class CORBASIM_GUI_DECLSPEC AbstractTool : public QWidget
 {
     Q_OBJECT
 public:
+
+    struct Register
+    {
+        AbstractTool * _this;
+        Register(AbstractTool * __this) : _this(__this) {}
+
+        void operator()(Objref_ptr o)
+        {
+            _this->registerInstance(o);
+        }
+    };
+
     AbstractTool(QWidget * parent = 0);
     virtual ~AbstractTool();
 
     virtual void save(QVariant& settings) = 0;
     virtual void load(const QVariant& settings) = 0;
+
 
 public slots:
 

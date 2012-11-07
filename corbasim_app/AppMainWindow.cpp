@@ -20,6 +20,7 @@
 #include "AppMainWindow.hpp"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 // Tools
 #include <corbasim/gui/tools/FilteredLogView.hpp>
@@ -77,6 +78,44 @@ namespace
         "Value viewer",
         "Status"
     };
+
+    enum Tools
+    {
+        tOperationSequenceTool,
+        tSenderSequenceTool,
+        tFilteredLogView,
+        tDumpTool,
+        tPlotTool,
+        tValueViewerTool,
+
+        tToolsMax,
+        tObjrefToolMin = tOperationSequenceTool,
+        tObjrefToolMax = tFilteredLogView,
+        tServantToolMin = tFilteredLogView,
+        tServantToolMax = tValueViewerTool
+    };
+
+    // Tools
+
+    const char * ToolNames[] = {
+        "sequences",
+        "sender_sequences",
+        "filtered_log",
+        "dumpers",
+        "plots",
+        "viewers"
+    };
+
+    typedef void (AppMainWindow::*create_t)();
+
+    create_t CreateTool[] = {
+        &AppMainWindow::createOperationSequenceTool,
+        &AppMainWindow::createSenderSequenceTool,
+        &AppMainWindow::createFilteredLogView,
+        &AppMainWindow::createDumpTool,
+        &AppMainWindow::createPlotTool,
+        &AppMainWindow::createValueViewerTool
+    };
 } // namespace
 
 AppMainWindow::AppMainWindow(QWidget * parent) :
@@ -95,12 +134,6 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     m_setNameServiceDialog(NULL),
 
     // Tools
-    m_filteredLogView(NULL),
-    m_operationSequenceTool(NULL),
-    m_senderSequenceTool(NULL),
-    m_dumpTool(NULL),
-    m_plotTool(NULL),
-    m_valueViewerTool(NULL),
     m_statusView(NULL),
     m_debugger(NULL)
 
@@ -376,11 +409,11 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuServants->addAction(newSrvAction);
     menuServants->addSeparator();
 
-
     menuHelp->addAction(aboutAction);
 
     // Subwindows
     m_subWindows.resize(kSubWindowsMax, NULL);
+    m_tools.resize(tToolsMax, NULL);
 }
 
 AppMainWindow::~AppMainWindow()
@@ -426,24 +459,10 @@ void AppMainWindow::save(QVariant& settings)
     }
 
     // Tools
+    for (int i = 0; i < tToolsMax; i++) 
     {
-        if (m_filteredLogView)
-            m_filteredLogView->save(map["filtered_log"]);
-
-        if (m_senderSequenceTool)
-            m_senderSequenceTool->save(map["sender_sequences"]);
-
-        if (m_operationSequenceTool)
-            m_operationSequenceTool->save(map["sequences"]);
-
-        if (m_dumpTool)
-            m_dumpTool->save(map["dumpers"]);
-
-        if (m_plotTool)
-            m_plotTool->save(map["plots"]);
-
-        if (m_valueViewerTool)
-            m_valueViewerTool->save(map["viewers"]);
+        if (m_tools[i])
+            m_tools[i]->save(map[ToolNames[i]]);
     }
 
     settings = map;
@@ -492,41 +511,12 @@ void AppMainWindow::load(const QVariant& settings)
     }
     
     // Tools
+    for (int i = 0; i < tToolsMax; i++) 
     {
-        if (map.contains("filtered_log"))
+        if (map.contains(ToolNames[i]))
         {
-            createFilteredLogView();
-            m_filteredLogView->load(map["filtered_log"]);
-        }
-
-        if (map.contains("sender_sequences"))
-        {
-            createSenderSequenceTool();
-            m_senderSequenceTool->load(map["sender_sequences"]);
-        }
-
-        if (map.contains("sequences"))
-        {
-            createOperationSequenceTool();
-            m_operationSequenceTool->load(map["sequences"]);
-        }
-
-        if (map.contains("dumpers"))
-        {
-            createDumpTool();
-            m_dumpTool->load(map["dumpers"]);
-        }
-
-        if (map.contains("plots"))
-        {
-            createPlotTool();
-            m_plotTool->load(map["plots"]);
-        }
-
-        if (map.contains("viewers"))
-        {
-            createValueViewerTool();
-            m_valueViewerTool->load(map["viewers"]);
+            create_t c = CreateTool[i]; (this->*c)();
+            m_tools[i]->load(map[ToolNames[i]]);
         }
     }
 }
@@ -554,17 +544,17 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
             this, SIGNAL(deleteObjref(ObjectId)));
 
     // connect signals
-    connect(objref.get(), SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
-        &m_logModel, SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
+    connect(objref.get(), 
+            SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
+            &m_logModel, 
+            SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 
-    if (m_filteredLogView)
-        m_filteredLogView->registerInstance(objref);
-
-    if (m_operationSequenceTool)
-        m_operationSequenceTool->registerInstance(objref);
-
-    if (m_senderSequenceTool)
-        m_senderSequenceTool->registerInstance(objref);
+    // Tools
+    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->registerInstance(objref);
+    }
 
     if (m_statusView)
         m_statusView->registerInstance(objref);
@@ -579,14 +569,11 @@ void AppMainWindow::objrefDeleted(ObjectId id)
     m_objrefViews.remove(id);
 
     // Tools
-    if (m_filteredLogView)
-        m_filteredLogView->unregisterInstance(id);
-
-    if (m_operationSequenceTool)
-        m_operationSequenceTool->unregisterInstance(id);
-
-    if (m_senderSequenceTool)
-        m_senderSequenceTool->unregisterInstance(id);
+    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->unregisterInstance(id);
+    }
 
     if (m_statusView)
         m_statusView->unregisterInstance(id);
@@ -609,20 +596,16 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
             this, SIGNAL(deleteServant(ObjectId)));
 
     // connect signals
-    connect(servant.get(), SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
-        &m_logModel, SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
+    connect(servant.get(), 
+            SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
+            &m_logModel, 
+            SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
 
-    if (m_filteredLogView)
-        m_filteredLogView->registerInstance(servant);
-
-    if (m_dumpTool)
-        m_dumpTool->registerInstance(servant);
-
-    if (m_plotTool)
-        m_plotTool->registerInstance(servant);
-
-    if (m_valueViewerTool)
-        m_valueViewerTool->registerInstance(servant);
+    for (int i = tServantToolMin; i <= tServantToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->registerInstance(servant);
+    }
 }
 
 void AppMainWindow::servantDeleted(ObjectId id)
@@ -634,17 +617,11 @@ void AppMainWindow::servantDeleted(ObjectId id)
     m_servantViews.remove(id);
 
     // Tools
-    if (m_filteredLogView)
-        m_filteredLogView->unregisterInstance(id);
-    
-    if (m_dumpTool)
-        m_dumpTool->unregisterInstance(id);
-
-    if (m_plotTool)
-        m_plotTool->unregisterInstance(id);
-
-     if (m_valueViewerTool)
-        m_valueViewerTool->unregisterInstance(id);
+    for (int i = tServantToolMin; i <= tServantToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->unregisterInstance(id);
+    }
 }
 
 void AppMainWindow::displayError(const QString& err)
@@ -754,25 +731,18 @@ void AppMainWindow::showToolSubWindow(int tool)
 
 void AppMainWindow::createFilteredLogView()
 {
-    if (!m_filteredLogView)
+    if (!m_tools[tFilteredLogView])
     {
-        m_filteredLogView = new FilteredLogView();
-        m_filteredLogView->setLogModel(&m_logModel);
+        m_tools[tFilteredLogView] = new FilteredLogView();
+        static_cast< FilteredLogView * >(
+                m_tools[tFilteredLogView])->setLogModel(&m_logModel);
 
-        createToolSubWindow(kFilteredLogView, m_filteredLogView);
+        createToolSubWindow(kFilteredLogView, m_tools[tFilteredLogView]);
 
         // Initilizes the tool
-        ObjrefRepository::const_iterator it = m_objrefs.begin();
-        ObjrefRepository::const_iterator end = m_objrefs.end();
-
-        for(; it != end; it++)
-            m_filteredLogView->registerInstance(it.value());
-
-        it = m_servants.begin();
-        end = m_servants.end();
-
-        for(; it != end; it++)
-            m_filteredLogView->registerInstance(it.value());
+        AbstractTool::Register reg(m_tools[tFilteredLogView]);
+        std::for_each(m_objrefs.begin(), m_objrefs.end(), reg);
+        std::for_each(m_servants.begin(), m_servants.end(), reg);
     }
 }
 
@@ -784,19 +754,18 @@ void AppMainWindow::showFilteredLogView()
 
 void AppMainWindow::createOperationSequenceTool()
 {
-    if (!m_operationSequenceTool)
+    if (!m_tools[tOperationSequenceTool])
     {
-        m_operationSequenceTool = new OperationSequenceTool(this);
-        m_operationSequenceTool->setTreeVisible(false);
+        m_tools[tOperationSequenceTool] = new OperationSequenceTool(this);
+        static_cast< AbstractSequenceTool * >(
+                m_tools[tOperationSequenceTool])->setTreeVisible(false);
 
-        createToolSubWindow(kOperationSequenceTool, m_operationSequenceTool);
+        createToolSubWindow(kOperationSequenceTool, 
+                m_tools[tOperationSequenceTool]);
 
         // Initilizes the tool
-        ObjrefRepository::const_iterator it = m_objrefs.begin();
-        ObjrefRepository::const_iterator end = m_objrefs.end();
-
-        for(; it != end; it++)
-            m_operationSequenceTool->registerInstance(it.value());
+        AbstractTool::Register reg(m_tools[tOperationSequenceTool]);
+        std::for_each(m_objrefs.begin(), m_objrefs.end(), reg);
     }
 }
 
@@ -808,19 +777,18 @@ void AppMainWindow::showOperationSequenceTool()
 
 void AppMainWindow::createSenderSequenceTool()
 {
-    if (!m_senderSequenceTool)
+    if (!m_tools[tSenderSequenceTool])
     {
-        m_senderSequenceTool = new SenderSequenceTool(this);
-        m_senderSequenceTool->setTreeVisible(false);
+        m_tools[tSenderSequenceTool] = new SenderSequenceTool(this);
+        static_cast< AbstractSequenceTool * >(
+            m_tools[tSenderSequenceTool])->setTreeVisible(false);
 
-        createToolSubWindow(kSenderSequenceTool, m_senderSequenceTool);
+        createToolSubWindow(kSenderSequenceTool, 
+                m_tools[tSenderSequenceTool]);
 
         // Initilizes the tool
-        ObjrefRepository::const_iterator it = m_objrefs.begin();
-        ObjrefRepository::const_iterator end = m_objrefs.end();
-
-        for(; it != end; it++)
-            m_senderSequenceTool->registerInstance(it.value());
+        AbstractTool::Register reg(m_tools[tSenderSequenceTool]);
+        std::for_each(m_objrefs.begin(), m_objrefs.end(), reg);
     }
 }
 
@@ -832,18 +800,15 @@ void AppMainWindow::showSenderSequenceTool()
 
 void AppMainWindow::createDumpTool()
 {
-    if (!m_dumpTool)
+    if (!m_tools[tDumpTool])
     {
-        m_dumpTool = new DumpTool(this);
+        m_tools[tDumpTool] = new DumpTool(this);
 
-        createToolSubWindow(kDumpTool, m_dumpTool);
+        createToolSubWindow(kDumpTool, m_tools[tDumpTool]);
 
         // Initilizes the tool
-        ObjrefRepository::const_iterator it = m_servants.begin();
-        ObjrefRepository::const_iterator end = m_servants.end();
-
-        for(; it != end; it++)
-            m_dumpTool->registerInstance(it.value());
+        AbstractTool::Register reg(m_tools[tDumpTool]);
+        std::for_each(m_servants.begin(), m_servants.end(), reg);
     }
 }
 
@@ -857,7 +822,7 @@ void AppMainWindow::createPlotTool()
 {
     typedef AbstractInputTool* (*create_t)(QWidget*);
 
-    if (!m_plotTool)
+    if (!m_tools[tPlotTool])
     {
         // Loads the library
         QLibrary lib("corbasim_qwt");
@@ -868,16 +833,13 @@ void AppMainWindow::createPlotTool()
         if (create)
         {
             // Creates the tool
-            m_plotTool = create(this);
+            m_tools[tPlotTool] = create(this);
 
-            createToolSubWindow(kPlotTool, m_plotTool);
+            createToolSubWindow(kPlotTool, m_tools[tPlotTool]);
 
             // Initilizes the tool
-            ObjrefRepository::const_iterator it = m_servants.begin();
-            ObjrefRepository::const_iterator end = m_servants.end();
-
-            for(; it != end; it++)
-                m_plotTool->registerInstance(it.value());
+            AbstractTool::Register reg(m_tools[tPlotTool]);
+            std::for_each(m_servants.begin(), m_servants.end(), reg);
         }
         else
         {
@@ -898,19 +860,16 @@ void AppMainWindow::createValueViewerTool()
 {
     typedef AbstractInputTool* (*create_t)(QWidget*);
 
-    if (!m_valueViewerTool)
+    if (!m_tools[tValueViewerTool])
     {
         // Creates the tool
-        m_valueViewerTool = new ValueViewerTool(this);
+        m_tools[tValueViewerTool] = new ValueViewerTool(this);
 
-        createToolSubWindow(kValueViewerTool, m_valueViewerTool);
+        createToolSubWindow(kValueViewerTool, m_tools[tValueViewerTool]);
 
         // Initilizes the tool
-        ObjrefRepository::const_iterator it = m_servants.begin();
-        ObjrefRepository::const_iterator end = m_servants.end();
-
-        for(; it != end; it++)
-            m_valueViewerTool->registerInstance(it.value());
+        AbstractTool::Register reg(m_tools[tValueViewerTool]);
+        std::for_each(m_servants.begin(), m_servants.end(), reg);
     }
 }
 
@@ -1069,14 +1028,16 @@ void AppMainWindow::selectedOperation(Objref_ptr object,
     {
         if (sub && m_subWindows[kOperationSequenceTool] == sub)
         {
-            m_operationSequenceTool->appendAbstractItem(
-                    object, op);
+            static_cast< AbstractSequenceTool * >(
+                m_tools[tOperationSequenceTool])->appendAbstractItem(
+                        object, op);
         }
         else if (sub && 
                 m_subWindows[kSenderSequenceTool] == sub)
         {
-            m_senderSequenceTool->appendAbstractItem(
-                    object, op);
+            static_cast< AbstractSequenceTool * >(
+                m_tools[tSenderSequenceTool])->appendAbstractItem(
+                        object, op);
         }
         else
         {

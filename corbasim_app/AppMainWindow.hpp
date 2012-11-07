@@ -41,11 +41,7 @@ namespace gui
     class ServantCreateDialog;
     class SetReferenceDialog;
 
-    class FilteredLogView;
-    class OperationSequenceTool;
-    class SenderSequenceTool;
-    class AbstractInputTool;
-    class DumpTool;
+    class AbstractTool;
     class StatusView;
 } // namespace gui
 
@@ -160,12 +156,7 @@ protected:
     SetReferenceDialog * m_setNameServiceDialog;
 
     // Tools
-    FilteredLogView * m_filteredLogView;
-    OperationSequenceTool * m_operationSequenceTool;
-    SenderSequenceTool * m_senderSequenceTool;
-    DumpTool * m_dumpTool;
-    AbstractInputTool * m_plotTool;
-    AbstractInputTool * m_valueViewerTool;
+    std::vector< AbstractTool * > m_tools;
     StatusView * m_statusView;
     QMainWindow * m_debugger;
 
