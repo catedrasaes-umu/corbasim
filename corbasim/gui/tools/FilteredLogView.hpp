@@ -30,7 +30,7 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
 #include <corbasim/gui/item/FilterModel.hpp>
-
+#include <corbasim/gui/tools/AbstractTool.hpp>
 
 namespace corbasim 
 {
@@ -66,7 +66,7 @@ protected:
     QStackedWidget * m_stack;
 };
 
-class CORBASIM_GUI_DECLSPEC FilteredLogView : public QWidget
+class CORBASIM_GUI_DECLSPEC FilteredLogView : public AbstractTool
 {
     Q_OBJECT
 public:

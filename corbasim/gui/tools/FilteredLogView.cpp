@@ -27,7 +27,7 @@
 using namespace corbasim::gui;
 
 FilteredLogView::FilteredLogView(QWidget * parent) :
-    QWidget(parent), 
+    AbstractTool(parent), 
     m_filterModel(this), m_model(this),
     m_sourceModel(NULL)
 {

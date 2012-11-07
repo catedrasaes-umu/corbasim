@@ -64,8 +64,7 @@ set(corbasim_gui_EXPORTED_HEADERS
     gui/tools/StatusView.hpp
     gui/tools/SimpleScriptEditor.hpp
     gui/tools/ValueViewerTool.hpp
-
-    # TODO gui/RecorderTool.hpp
+    gui/tools/RecorderTool.hpp
 )
 
 foreach(_header ${corbasim_gui_EXPORTED_HEADERS})
@@ -130,8 +129,7 @@ set(corbasim_gui_MOC_HDRS
     gui/tools/SimpleScriptEditor.hpp
     gui/tools/StatusView.hpp
     gui/tools/ValueViewerTool.hpp
-
-    # TODO gui/RecorderTool.hpp
+    gui/tools/RecorderTool.hpp
 )
 
 set(corbasim_gui_SRCS
@@ -199,8 +197,7 @@ set(corbasim_gui_SRCS
     gui/tools/SimpleScriptEditor.cpp
     gui/tools/StatusView.cpp
     gui/tools/ValueViewerTool.cpp
-
-    # TODO gui/RecorderTool.cpp
+    gui/tools/RecorderTool.cpp
 )
 
 set(corbasim_gui_LIBS

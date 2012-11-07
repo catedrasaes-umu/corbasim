@@ -20,11 +20,7 @@
 #ifndef CORBASIM_GUI_RECORDERTOOL_HPP
 #define CORBASIM_GUI_RECORDERTOOL_HPP
 
-#include <QtGui>
-#include <corbasim/gui/ParametersModel.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
-#include <map>
-
+#include <corbasim/gui/tools/AbstractTool.hpp>
 #include <corbasim/gui/export.hpp>
 
 namespace corbasim 
@@ -32,7 +28,7 @@ namespace corbasim
 namespace gui 
 {
 
-class CORBASIM_GUI_DECLSPEC RecorderTool : public QWidget
+class CORBASIM_GUI_DECLSPEC RecorderTool : public AbstractTool
 {
     Q_OBJECT
 public:
@@ -45,14 +41,11 @@ public:
 
 public slots:
 
-    void registerInstance(const QString& name,
-            const corbasim::core::interface_reflective_base * reflective);
-
-    void unregisterInstance(const QString& name);
+    void registerInstance(Objref_ptr object);
+    void unregisterInstance(ObjectId id);
 
 protected:
 
-    ParametersModel m_model;
 };
 
 } // namespace gui
