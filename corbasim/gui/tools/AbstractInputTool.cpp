@@ -165,7 +165,13 @@ void AbstractInputTool::unregisterInstance(ObjectId id)
                 AbstractInputItem * item = it->second[i];
 
                 m_inverse_map.erase(item);
+
+                // FIXME we need to block signals because uncheck
+                // method is connected to deleteAbstractItem
+                // Must be changed for a better implementation
+                m_model->blockSignals(true);
                 m_model->uncheck(objref->name(), item->getPath());
+                m_model->blockSignals(false);
 
                 // Notify to the processor
                 item->reset();
