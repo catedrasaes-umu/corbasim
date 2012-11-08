@@ -59,6 +59,7 @@ void FilterModel::registerInstance(Objref_ptr objref)
     ifItem->setCheckable(true);
     ifItem->setTristate(true);
     ifItem->setCheckState(Qt::Checked);
+    item.item = ifItem;
 
     const unsigned int count = objref->interface()->operation_count();
 
@@ -84,10 +85,25 @@ void FilterModel::registerInstance(Objref_ptr objref)
 
 void FilterModel::unregisterInstance(ObjectId id)
 {
-    m_instances.del(id);
-    m_items.remove(id);
+    FirstLevelItems_t::iterator it = m_items.find(id);
 
-    emit filterChanged();
+    if (it != m_items.end())
+    {
+        // I don't like it
+        for (int i = 0; i < rowCount(); i++) 
+        {
+            if (item(i)->text() == it->objref->name())
+            {
+                removeRows(i, 1);
+                break;
+            }
+        }
+
+        m_instances.del(id);
+        m_items.erase(it);
+
+        emit filterChanged();
+    }
 }
 
 bool FilterModel::visibleOperation(ObjectId id, tag_t tag) const

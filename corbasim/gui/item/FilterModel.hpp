@@ -47,6 +47,7 @@ protected:
     {
         Objref_ptr objref;
         OperationsMap_t operations;
+        QStandardItem * item;
     };
 
     typedef QMap< ObjectId, FirstLevelItem > FirstLevelItems_t;
