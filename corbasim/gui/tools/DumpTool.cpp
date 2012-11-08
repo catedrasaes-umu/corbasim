@@ -70,6 +70,7 @@ Dumper::Dumper(Objref_ptr objref,
 
     // start and stop button
     m_startStopButton = new qt::StartStopButton();
+    m_startStopButton->setObjectName("start-stop");
     QHBoxLayout * startStopLayout = new QHBoxLayout();
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Minimum);
