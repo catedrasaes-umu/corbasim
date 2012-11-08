@@ -130,6 +130,7 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     grid->addWidget(new QLabel("Interface"), 1, 0);
     m_fqn = new QComboBox();
     m_fqn->setObjectName("fqn");
+    m_fqn->setEditable(true);
     grid->addWidget(m_fqn, 1, 1); 
 
     grid->addWidget(new QLabel("Name service key"), 2, 0);
