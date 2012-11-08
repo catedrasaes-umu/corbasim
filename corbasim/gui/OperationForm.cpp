@@ -19,9 +19,13 @@
 
 #include "OperationForm.hpp"
 #include <corbasim/qt/private/ScriptEditor.hpp>
-#include <corbasim/gui/ParametersFromFilesTool.hpp>
+#include <corbasim/gui/tools/ParametersFromFilesTool.hpp>
 #include <corbasim/gui/qvariant.hpp>
+#include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/Application.hpp>
 #include <limits>
+
+#include <corbasim/qt/StartStopButton.hpp>
 
 // JSON
 #include <sstream>
@@ -30,10 +34,8 @@
 using namespace corbasim::gui;
 
 OperationForm::OperationForm(
-        const QString& objectId,
         QWidget * parent) :
     QWidget(parent), 
-    m_objectId(objectId),
     m_reflective(NULL), 
     m_widget(NULL),
     m_files(NULL)
@@ -45,7 +47,8 @@ OperationForm::~OperationForm()
 }
 
 void OperationForm::initialize(
-    ::corbasim::core::operation_reflective_base const * factory)
+        Objref_ptr object,
+        OperationDescriptor_ptr factory)
 {
     m_reflective = factory;
 
@@ -68,7 +71,7 @@ void OperationForm::initialize(
  
     // Files
     m_files = new ParametersFromFilesTool();
-    m_files->initialize(factory);
+    m_files->initialize(object, factory);
     tabs->addTab(m_files, "Files");
 
     // Main layout
@@ -77,7 +80,7 @@ void OperationForm::initialize(
     setLayout(ly);
 }
 
-corbasim::event::request_ptr OperationForm::createRequest()
+Request_ptr OperationForm::createRequest()
 {
     return m_widget->createRequest();
 }
@@ -106,11 +109,6 @@ void OperationForm::setCode(const QString& code)
 QString OperationForm::code() const
 {
     return m_code->toPlainText();
-}
-
-const QString& OperationForm::objectId() const
-{
-    return m_objectId;
 }
 
 //
@@ -146,19 +144,11 @@ void OperationForm::load(const QVariant& settings)
 //
 
 OperationFormWidget::OperationFormWidget(
-        corbasim::core::operation_reflective_base const * reflective,
+        OperationDescriptor_ptr reflective,
         QWidget * parent) :
-    QWidget(parent), m_reflective(reflective)
+    qt::FormWidget(parent), m_reflective(reflective)
 {
-    QGridLayout * layout = new QGridLayout(this);
-    QLayout * mlayout = layout;
-
     const unsigned int count = reflective->get_children_count();
-
-    // Max widgets per row: 2 labels + 2 widgets
-    const int rowWidth = 4;
-    int row = 0;
-    int column = 0;
 
     m_widgets.resize(count, NULL);
 
@@ -169,8 +159,7 @@ OperationFormWidget::OperationFormWidget(
 
         if (type == core::DIRECTION_IN || type == core::DIRECTION_INOUT)
         {
-            core::reflective_base const * child = 
-                reflective->get_child(i);
+            TypeDescriptor_ptr child = reflective->get_child(i);
 
             const char * child_name = reflective->get_child_name(i);
 
@@ -184,40 +173,14 @@ OperationFormWidget::OperationFormWidget(
 
             if (child->is_primitive() || child->is_enum())
             {
-                QLabel * label = new QLabel(child_name, this);
-                label->setObjectName(QString(child_name) + "_label");
-
-                layout->addWidget(label, row, column++);
-                layout->addWidget(child_widget, row, column++);
-
-                // Check if there are enough widgets in the 
-                // current row
-                if (column == rowWidth)
-                {
-                    row++;
-                    column = 0;
-                }
+                addField(child_name, child_widget);
             }
             else
             {
-                // Starts in a new row
-                if (column != 0) row++;
-                column = 0;
-
-                QGroupBox * gb = new QGroupBox(child_name, this);
-                gb->setObjectName(QString(child_name) + "_group");
-
-                // Group box layout
-                QHBoxLayout * cLayout = new QHBoxLayout(gb);
-                cLayout->addWidget(child_widget);
-                gb->setLayout(cLayout);
-
-                layout->addWidget(gb, row++, 0, 1, rowWidth);
+                addBigField(child_name, child_widget);
             }
         }
     }
-
-    setLayout(mlayout);
 
     setAcceptDrops(true);
 }
@@ -234,7 +197,7 @@ OperationFormWidget::~OperationFormWidget()
 
 void OperationFormWidget::setValue(const QVariant& var)
 {
-    event::request_ptr req = m_reflective->create_request();
+    Request_ptr req = m_reflective->create_request();
     core::holder h = m_reflective->get_holder(req);
 
     if (fromQVariant(m_reflective, h, var))
@@ -245,21 +208,21 @@ void OperationFormWidget::setValue(const QVariant& var)
 
 QVariant OperationFormWidget::value()
 {
-    event::request_ptr req (createRequest());
+    Request_ptr req (createRequest());
     core::holder holder(m_reflective->get_holder(req));
 
     return toQVariant(m_reflective, holder);
 }
 
-corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 OperationFormWidget::getReflective() const
 {
     return m_reflective;
 }
 
-corbasim::event::request_ptr OperationFormWidget::createRequest()
+Request_ptr OperationFormWidget::createRequest()
 {
-    event::request_ptr req (m_reflective->create_request());
+    Request_ptr req (m_reflective->create_request());
     core::holder holder(m_reflective->get_holder(req));
 
     const unsigned int count = m_reflective->get_children_count();
@@ -277,7 +240,7 @@ corbasim::event::request_ptr OperationFormWidget::createRequest()
     return req;
 }
 
-void OperationFormWidget::setValue(corbasim::event::request_ptr req)
+void OperationFormWidget::setValue(Request_ptr req)
 {
     core::holder holder(m_reflective->get_holder(req));
 
@@ -385,7 +348,7 @@ void OperationFormWidget::dropEvent(QDropEvent *event)
 
     try 
     {
-        event::request_ptr req = m_reflective->create_request();
+        Request_ptr req = m_reflective->create_request();
         core::holder holder = m_reflective->get_holder(req);
 
         bool res = json::parse(m_reflective, holder, 
@@ -422,7 +385,7 @@ void OperationFormWidget::mouseMoveEvent(QMouseEvent *event)
     QMimeData *mimeData = new QMimeData;
 
     std::ostringstream oss;
-    event::request_ptr req = createRequest();
+    Request_ptr req = createRequest();
     
     core::holder holder = m_reflective->get_holder(req);
 
@@ -458,15 +421,15 @@ void OperationFormWidget::load(const QVariant& settings)
 //
 
 OperationSender::OperationSender(
-        const QString& objectId,
+        Objref_ptr object,
         QWidget * parent) :
     QWidget(parent), 
-    m_objectId(objectId), m_reflective(NULL)
+    m_object(object), m_reflective(NULL)
 {
     QVBoxLayout * mainLayout = new QVBoxLayout();
 
     // Form
-    m_form = new OperationForm(m_objectId);
+    m_form = new OperationForm();
     mainLayout->addWidget(m_form);
 
     // Configuration
@@ -479,9 +442,8 @@ OperationSender::OperationSender(
     m_period->setValue(100);
     m_updateForm = new QCheckBox();
 
-    m_playButton = new QPushButton("&Start/stop");
+    m_playButton = new qt::StartStopButton();
     m_playButton->setObjectName("start-stop");
-    m_playButton->setCheckable(true);
 
     cfgLayout->addWidget(new QLabel("Times"));
     cfgLayout->addWidget(m_times);
@@ -496,23 +458,26 @@ OperationSender::OperationSender(
     setLayout(mainLayout);
 
     // signals
-    QObject::connect(m_playButton,
-            SIGNAL(clicked(bool)),
+    connect(m_playButton,
+            SIGNAL(toggled(bool)),
             this,
             SLOT(playClicked(bool)));
 
-    QObject::connect(
+    QObject * senderCtl = 
+        Application::currentApplication()->senderController();
+
+    connect(
             this,
             SIGNAL(addSender(SenderConfig_ptr)),
-            SenderController::getInstance(),
+            senderCtl,
             SLOT(addSender(SenderConfig_ptr)));
-    QObject::connect(
+    connect(
             this,
             SIGNAL(deleteSender(SenderConfig_ptr)),
-            SenderController::getInstance(),
+            senderCtl,
             SLOT(deleteSender(SenderConfig_ptr)));
 
-    QObject::connect(m_updateForm,
+    connect(m_updateForm,
             SIGNAL(toggled(bool)),
             this,
             SLOT(activeUpdateForm(bool)));
@@ -524,22 +489,22 @@ OperationSender::~OperationSender()
 }
 
 void OperationSender::initialize(
-        ::corbasim::core::operation_reflective_base const * op)
+        OperationDescriptor_ptr op)
 {
     m_reflective = op;
 
-    m_form->initialize(op);
+    m_form->initialize(m_object, op);
 
     // signals
-    QObject::connect(this, 
-            SIGNAL(updateForm(corbasim::event::request_ptr)),
+    connect(this, 
+            SIGNAL(updateForm(Request_ptr)),
             m_form->getWidget(),
-            SLOT(setValue(corbasim::event::request_ptr)));
+            SLOT(setValue(Request_ptr)));
 }
 
-const QString& OperationSender::objectId() const
+Objref_ptr OperationSender::object() const
 {
-    return m_objectId;
+    return m_object;
 }
 
 void OperationSender::save(QVariant& settings)
@@ -576,12 +541,12 @@ void OperationSender::reset()
     if (m_config)
     {
         // disconnect
-        QObject::disconnect(m_config.get(),
-                SIGNAL(requestSent(corbasim::event::request_ptr)),
+        disconnect(m_config.get(),
+                SIGNAL(requestSent(Request_ptr)),
                 this,
-                SIGNAL(updateForm(corbasim::event::request_ptr)));
+                SIGNAL(updateForm(Request_ptr)));
 
-        QObject::disconnect(m_config.get(),
+        disconnect(m_config.get(),
                 SIGNAL(finished()), 
                 this,
                 SLOT(finished()));
@@ -597,14 +562,15 @@ void OperationSender::playClicked(bool play)
 
     if (play)
     {
-        m_form->setEnabled(false);
+        // m_form->setEnabled(false);
+        _setReadOnly(true);
 
         // Create processors
-        QList< SenderItemProcessor_ptr > processors;
+        QList< RequestProcessor_ptr > processors;
         m_form->getFiles()->createProcessors(processors);
 
         m_config.reset(new SenderConfig(
-                    objectId(),
+                    object(),
                     m_reflective,
                     m_form->createRequest(),
                     m_form->code(),
@@ -615,7 +581,7 @@ void OperationSender::playClicked(bool play)
         // connect signals
         activeUpdateForm(m_updateForm->isChecked());
 
-        QObject::connect(m_config.get(),
+        connect(m_config.get(),
                 SIGNAL(finished()), 
                 this,
                 SLOT(finished()));
@@ -624,14 +590,16 @@ void OperationSender::playClicked(bool play)
     }
     else
     {
-        m_form->setEnabled(true);
+        // m_form->setEnabled(true);
+        _setReadOnly(false);
     }
 }
 
 void OperationSender::finished()
 {
     m_playButton->setChecked(false);
-    m_form->setEnabled(true);
+    // m_form->setEnabled(true);
+    _setReadOnly(false);
 }
 
 void OperationSender::activeUpdateForm(bool update)
@@ -640,20 +608,57 @@ void OperationSender::activeUpdateForm(bool update)
     {
         if (update)
         {
-            QObject::connect(m_config.get(),
-                    SIGNAL(requestSent(corbasim::event::request_ptr)),
+            connect(m_config.get(),
+                    SIGNAL(requestSent(Request_ptr)),
                     this,
-                    SIGNAL(updateForm(corbasim::event::request_ptr)));
+                    SIGNAL(updateForm(Request_ptr)));
         }
         else
         {
-            QObject::disconnect(m_config.get(),
-                    SIGNAL(requestSent(corbasim::event::request_ptr)),
+            disconnect(m_config.get(),
+                    SIGNAL(requestSent(Request_ptr)),
                     this,
-                    SIGNAL(updateForm(corbasim::event::request_ptr)));
+                    SIGNAL(updateForm(Request_ptr)));
 
         }
     }
 
+}
+
+void OperationSender::stop()
+{
+    playClicked(false);
+    finished();
+}
+
+// Read only
+void OperationFormWidget::_setReadOnly(bool readOnly)
+{
+    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->_setReadOnly(readOnly);
+        }
+    }
+}
+
+void OperationForm::_setReadOnly(bool readOnly)
+{
+    m_widget->_setReadOnly(readOnly);
+    m_code->setReadOnly(readOnly);
+
+    // TODO 
+    m_files->setEnabled(!readOnly);
+}
+
+void OperationSender::_setReadOnly(bool readOnly)
+{
+    m_form->_setReadOnly(readOnly);
+    m_times->setReadOnly(readOnly);
+    m_period->setReadOnly(readOnly);
+
+    // Can change in read-only mode
+    // m_updateForm->setEnabled(!readOnly);
 }
 

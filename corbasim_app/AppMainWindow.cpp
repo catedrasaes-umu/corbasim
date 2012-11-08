@@ -18,1045 +18,1094 @@
  */
 
 #include "AppMainWindow.hpp"
-#include "AppController.hpp"
-#include "TriggerEngine.hpp"
-#include "view/CreateDialog.hpp"
-#include "AboutDialog.hpp"
-#include <corbasim/qt/ScriptWindow.hpp>
-#include <corbasim/gui/OperationSequence.hpp>
-#include <corbasim/gui/SenderSequence.hpp>
-#include <corbasim/gui/FilteredLogView.hpp>
-#include <corbasim/qwt/ReflectivePlotTool.hpp>
-#include <corbasim/gui/DumpTool.hpp>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+
+// Tools
+#include <corbasim/gui/tools/FilteredLogView.hpp>
+#include <corbasim/gui/tools/OperationSequence.hpp>
+#include <corbasim/gui/tools/SenderSequence.hpp>
+#include <corbasim/gui/tools/DumpTool.hpp>
+#include <corbasim/gui/tools/ValueViewerTool.hpp>
+#include <corbasim/gui/tools/StatusView.hpp>
+#include <corbasim/gui/dialog/CreateDialog.hpp>
+#include <corbasim/gui/dialog/SetReferenceDialog.hpp>
+#include <corbasim/gui/item/OperationsView.hpp>
+#include <corbasim/gui/item/TreeView.hpp>
+#include <corbasim/qt/initialize.hpp>
 #include <corbasim/gui/json.hpp>
+
+#include <corbasim/gui/Application.hpp>
 
 #include <corbasim/version.hpp>
 
-#include <QLibrary>
-#include <QtScript>
-#include <fstream>
+#include <QScriptEngineDebugger>
+
+#define CORBASIM_NO_IMPL
+#include <corbasim/core/reflective.hpp>
 
 using namespace corbasim::app;
 
-AppMainWindow::AppMainWindow(QWidget * parent) :
-    QMainWindow(parent), m_controller(NULL), m_engine(NULL),
-
-    m_aboutDlg(NULL),
-
-    // Subwindows
-    m_sub_create_objref(NULL),
-    m_sub_create_servant(NULL),
-    m_sub_script(NULL),
-    m_sub_seq_tool(NULL),
-    m_sub_sender_seq_tool(NULL),
-
-    // Widgets
-    m_create_objref(NULL),
-    m_create_servant(NULL),
-    m_script(NULL),
-    m_seq_tool(NULL),
-    m_sender_seq_tool(NULL),
-
-    m_filtered_log(NULL),
-
-    m_dlg_dump_tool(NULL),
-    m_dump_tool(NULL),
-    m_plot_tool(NULL)
+namespace  
 {
-    m_mdi_area = new QMdiArea;
-
-    // Log dock widget
-    m_dock_log = new QDockWidget("Log", this);
-    m_log = new QTreeView();
-
-    m_dock_log->setWidget(m_log);
-    addDockWidget(Qt::RightDockWidgetArea, m_dock_log);
-
-    // Dock widgets
-    m_dock_app_log = new QDockWidget("Application log", this);
-    m_app_log = new QTreeWidget;
-    m_dock_app_log->setWidget(m_app_log);
-    addDockWidget(Qt::RightDockWidgetArea, m_dock_app_log);
-
-    // FQNs
-    m_dock_fqn = new QDockWidget("Available interfaces", this);
-    m_fqn = new QTreeView;
-    m_dock_fqn->setWidget(m_fqn);
-    addDockWidget(Qt::RightDockWidgetArea, m_dock_fqn);
-
-    // Disables the header
-    // m_log->header()->hide();
-    m_app_log->header()->hide();
-    m_fqn->header()->hide();
-
-    setCentralWidget(m_mdi_area);
-
-    QMainWindow * filtered_log_dlg = new QMainWindow(this);
-    // Filtered log
+    enum SubWindows
     {
-        m_filtered_log = new gui::FilteredLogView();
+        kCreateObjrefDialog,
+        kCreateServantDialog,
+        kSetNameServiceDialog,
 
-        filtered_log_dlg->setCentralWidget(m_filtered_log);
+        kFilteredLogView,
+        kOperationSequenceTool,
+        kSenderSequenceTool,
+        kDumpTool,
+        kPlotTool,
+        kValueViewerTool,
+        kStatusView,
 
-        filtered_log_dlg->setWindowTitle("Filtered log");
+        kSubWindowsMax
+    };
+
+    const char * SubWindowTitles[] = {
+        "Create new object reference",
+        "Create new servant",
+        "Set Name Service",
+        "Filtered log",
+        "Operation sequence tool",
+        "Sender sequence tool",
+        "Dump tool",
+        "Plot tool",
+        "Value viewer",
+        "Status"
+    };
+
+    enum Tools
+    {
+        tOperationSequenceTool,
+        tSenderSequenceTool,
+        tFilteredLogView,
+        tDumpTool,
+        tPlotTool,
+        tValueViewerTool,
+
+        tToolsMax,
+        tObjrefToolMin = tOperationSequenceTool,
+        tObjrefToolMax = tFilteredLogView,
+        tServantToolMin = tFilteredLogView,
+        tServantToolMax = tValueViewerTool
+    };
+
+    // Tools
+
+    const char * ToolNames[] = {
+        "sequences",
+        "sender_sequences",
+        "filtered_log",
+        "dumpers",
+        "plots",
+        "viewers"
+    };
+
+    typedef void (AppMainWindow::*create_t)();
+
+    create_t CreateTool[] = {
+        &AppMainWindow::createOperationSequenceTool,
+        &AppMainWindow::createSenderSequenceTool,
+        &AppMainWindow::createFilteredLogView,
+        &AppMainWindow::createDumpTool,
+        &AppMainWindow::createPlotTool,
+        &AppMainWindow::createValueViewerTool
+    };
+} // namespace
+
+AppMainWindow::AppMainWindow(QWidget * parent) :
+    QMainWindow(parent), 
+    m_objrefs(this), 
+    m_servants(this),
+    m_logModel(this),
+    m_appLogModel(this),
+    m_instanceModel(this),
+    m_interfaceModel(this),
+    m_actions(this),
+
+    // Dialogs
+    m_createObjrefDialog(NULL),
+    m_createServantDialog(NULL),
+    m_setNameServiceDialog(NULL),
+
+    // Tools
+    m_statusView(NULL),
+    m_debugger(NULL)
+
+{
+    corbasim::qt::setDefaultInstanceModel(&m_instanceModel);
+
+    setupUi(this);
+    
+    // TODO
+    centralWidget()->layout()->setMargin(0);
+
+    setWindowIcon(QIcon(":/resources/images/csu.png"));
+
+    // Log view
+    QDockWidget * logViewDock = new QDockWidget("Log", this);
+    m_logView = new TreeView();
+    m_logView->setModel(&m_logModel);
+    logViewDock->setWidget(m_logView);
+    addDockWidget(Qt::BottomDockWidgetArea, logViewDock);
+
+    // Column Width
+    int columnCount = m_logModel.columnCount();
+    for (int i = 0; i < columnCount; i++) 
+    {
+        m_logView->setColumnWidth(i, width() / columnCount);
     }
-    // Actions
-   
+
+    // Application log view
+    QDockWidget * appLogViewDock = new QDockWidget("Application log", this);
+    m_appLogView = new TreeView();
+    m_appLogView->setModel(&m_appLogModel);
+    appLogViewDock->setWidget(m_appLogView);
+    addDockWidget(Qt::BottomDockWidgetArea, appLogViewDock);
+
+    // Column Width
+    m_appLogView->setColumnWidth(0, 350);
+
+    // Moves second dock widget on top of first dock widget, 
+    // creating a tabbed docked area in the main window.
+    tabifyDockWidget(appLogViewDock, logViewDock);
+
+    // Instances view
+    QDockWidget * instanceViewDock = new QDockWidget("Instances", this);
+    QTreeView * instanceView = new OperationsView();
+    instanceView->setHeaderHidden(true);
+    instanceView->setModel(&m_instanceModel);
+    instanceView->setExpandsOnDoubleClick(false);
+    instanceViewDock->setWidget(instanceView);
+    addDockWidget(Qt::LeftDockWidgetArea, instanceViewDock);
+
+    connect(instanceView, 
+            SIGNAL(selectedOperation(Objref_ptr, OperationDescriptor_ptr)),
+            this,
+            SLOT(selectedOperation(Objref_ptr, OperationDescriptor_ptr)));
+
+    // Interfaces view
+    QDockWidget * interfaceViewDock = new QDockWidget("Interfaces", this);
+    TreeView * interfaceView = new TreeView();
+    interfaceView->setHeaderHidden(true);
+    interfaceView->setModel(&m_interfaceModel);
+    interfaceViewDock->setWidget(interfaceView);
+    addDockWidget(Qt::LeftDockWidgetArea, interfaceViewDock);
+
+    // No more window
+    
+    connect(menuBar(), SIGNAL(hovered(QAction *)),
+            this, SLOT(actionHovered(QAction *)));
+
     // New object
     QAction * newObjAction = new QAction(
             style()->standardIcon(QStyle::SP_FileIcon),
             "&New object reference", this);
     newObjAction->setShortcut(QKeySequence::New);
-    QObject::connect(newObjAction, SIGNAL(triggered()), 
-            this, SLOT(showCreateObjref()));
+    connect(newObjAction, SIGNAL(triggered()), 
+            this, SLOT(showCreateObjrefDialog()));
 
     // New servant
     QAction * newSrvAction = new QAction(
             style()->standardIcon(QStyle::SP_FileIcon),
             "N&ew servant", this);
     newSrvAction->setShortcut(QKeySequence::Save);
-    QObject::connect(newSrvAction, SIGNAL(triggered()), 
-            this, SLOT(showCreateServant()));
+    connect(newSrvAction, SIGNAL(triggered()), 
+            this, SLOT(showCreateServantDialog()));
 
-    // Load
+    // Set name service reference
+    QAction * setNSAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileIcon),
+            "Set Name Service reference", this);
+    // setNSAction->setShortcut(QKeySequence::Save);
+    connect(setNSAction, SIGNAL(triggered()), 
+            this, SLOT(showSetNameServiceDialog()));
+
+    // Clear log
+    QAction * clearAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear log", this);
+    // clearAction->setShortcut(QKeySequence::Save);
+    connect(clearAction, SIGNAL(triggered()), 
+            &m_logModel, SLOT(clearLog()));
+
+    // Clear application log
+    QAction * clearAppLogAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear application log", this);
+    connect(clearAppLogAction, SIGNAL(triggered()), 
+            &m_appLogModel, SLOT(clearLog()));
+
+    // Load scenario
     QAction * loadScenarioAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load scenario", this);
     loadScenarioAction->setShortcut(QKeySequence::Open);
-    QObject::connect(loadScenarioAction, SIGNAL(triggered()), 
-            this, SLOT(showLoad()));
+    connect(loadScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showLoadScenario()));
 
-    // Save
+    // Save scenario
     QAction * saveScenarioAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save scenario", this);
     saveScenarioAction->setShortcut(QKeySequence::SaveAs);
-    QObject::connect(saveScenarioAction, SIGNAL(triggered()), 
-            this, SLOT(showSave()));
+    connect(saveScenarioAction, SIGNAL(triggered()), 
+            this, SLOT(showSaveScenario()));
 
-    // Load
-    QAction * loadAction = new QAction(
+    // Clear scenario
+    QAction * clearScenarioAction = new QAction(
+            style()->standardIcon(QStyle::SP_TrashIcon),
+            "&Clear scenario", this);
+    // clearScenarioAction->setShortcut(QKeySequence::SaveAs);
+    connect(clearScenarioAction, SIGNAL(triggered()), 
+            this, SIGNAL(clearScenario()));
+
+    // Load directory
+    QAction * loadDirectoryAction = new QAction(
+            style()->standardIcon(QStyle::SP_FileDialogNewFolder),
+            "&Load plug-in directory", this);
+    loadDirectoryAction->setShortcut(QKeySequence::SelectAll);
+    connect(loadDirectoryAction, SIGNAL(triggered()), 
+            this, SLOT(showLoadDirectory()));
+
+    // Load configuration
+    QAction * loadConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load configuration", this);
-    //loadAction->setShortcut(QKeySequence::Open);
-    QObject::connect(loadAction, SIGNAL(triggered()), 
-            this, SLOT(doLoad()));
+    connect(loadConfigurationAction, SIGNAL(triggered()), 
+            this, SLOT(doLoadConfiguration()));
 
-    // Save
-    QAction * saveAction = new QAction(
+    // Save configuration
+    QAction * saveConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save configuration", this);
-    //saveAction->setShortcut(QKeySequence::SaveAs);
-    QObject::connect(saveAction, SIGNAL(triggered()), 
-            this, SLOT(doSave()));
+    connect(saveConfigurationAction, SIGNAL(triggered()), 
+            this, SLOT(doSaveConfiguration()));
 
-    // Append
-    QAction * appendAction = new QAction(
-            style()->standardIcon(QStyle::SP_FileDialogNewFolder),
-            "&Append plug-in directory", this);
-    appendAction->setShortcut(QKeySequence::SelectAll);
-    QObject::connect(appendAction, SIGNAL(triggered()), 
-            this, SLOT(showLoadDirectory()));
+    // Show log
+    QAction * showLogAction = new QAction(
+            "Show &log", this);
+    connect(showLogAction, SIGNAL(triggered()), 
+            logViewDock, SLOT(show()));
+
+    QAction * showAppLogAction = new QAction(
+            "Show app&lication log", this);
+    connect(showAppLogAction, SIGNAL(triggered()), 
+            appLogViewDock, SLOT(show()));
+
+    // Show instances
+    QAction * showInstancesAction = new QAction(
+            "Show &instances", this);
+    connect(showInstancesAction, SIGNAL(triggered()), 
+            instanceViewDock, SLOT(show()));
+
+    // Show interfaces
+    QAction * showInterfacesAction = new QAction(
+            "Show i&nterfaces", this);
+    connect(showInterfacesAction, SIGNAL(triggered()), 
+            interfaceViewDock, SLOT(show()));
+
+    // Stop
+    QAction * stopAction = new QAction(
+            style()->standardIcon(QStyle::SP_MediaStop),
+            "&Stop all", this);
+    // stopAction->setShortcut(QKeySequence::Cut);
+    connect(stopAction, SIGNAL(triggered()), 
+            this, SLOT(stopAll()));
+
+    // About
+    QAction * setMaxLogSizeAction = new QAction(
+            "Set &max log size", this);
+    connect(setMaxLogSizeAction, SIGNAL(triggered()), 
+            this, SLOT(showSetMaxLogSize()));
+
+    // About
+    QAction * aboutAction = new QAction(
+            "&About corbasim", this);
+    connect(aboutAction, SIGNAL(triggered()), 
+            this, SLOT(showAbout()));
 
     // Tool bar
     QToolBar * toolBar = addToolBar("File");
     toolBar->addAction(loadScenarioAction);
     toolBar->addAction(saveScenarioAction);
+    toolBar->addAction(clearScenarioAction);
+    toolBar->addSeparator();
+    toolBar->addAction(loadConfigurationAction);
+    toolBar->addAction(saveConfigurationAction);
+    toolBar->addSeparator();
+    toolBar->addAction(loadDirectoryAction);
+    toolBar->addSeparator();
     toolBar->addAction(newObjAction);
     toolBar->addAction(newSrvAction);
-   
-    /*
-    toolBar->addWidget(new QLabel("Operation dialog:"));
-    m_completer = new QCompleter(this);
-    QComboBox * opSelector = new QComboBox;
-    opSelector->setEditable(true);
-    opSelector->setInsertPolicy(QComboBox::NoInsert);
-    opSelector->setCompleter(m_completer);
-    toolBar->addWidget(opSelector);
-    */
+    
+    toolBar = addToolBar("Window");
+    toolBar->addAction(clearAction);
+    toolBar->addAction(stopAction);
 
-    // Menu
-    QMenuBar * menu = new QMenuBar;
-    setMenuBar(menu);
-
-    QMenu * menuFile = menu->addMenu("&File");
+    // Menus
     menuFile->addAction(newObjAction);
     menuFile->addAction(newSrvAction);
     menuFile->addSeparator();
     menuFile->addAction(loadScenarioAction);
     menuFile->addAction(saveScenarioAction);
+    menuFile->addAction(clearScenarioAction);
     menuFile->addSeparator();
-    menuFile->addAction(loadAction);
-    menuFile->addAction(saveAction);
-/*
-    menuFile->addAction("&Clear configuration", this, 
-            SLOT(clearConfig()));
- */
+    menuFile->addAction(loadConfigurationAction);
+    menuFile->addAction(saveConfigurationAction);
     menuFile->addSeparator();
-    menuFile->addAction(appendAction);
+    menuFile->addAction(loadDirectoryAction);
     menuFile->addSeparator();
     QAction * closeAction = 
         menuFile->addAction("&Exit", this, SLOT(close()));
     closeAction->setShortcut(QKeySequence::Close);
 
-    m_menuObjects = menu->addMenu("&Objects");
-    m_menuServants = menu->addMenu("&Servants");
-    
-    QMenu * tools = menu->addMenu("&Tools");
-    tools->addAction("&Load script", this, SLOT(showLoadScript()));
-    // TODO tools->addAction("&Run script", this, SLOT(showScript()));
-    tools->addSeparator();
-    tools->addAction("&Operation sequences", 
-            this, SLOT(showOpSequenceTool()));
-    tools->addAction("&Sender sequences", 
+    menuTool->addAction("&Operation sequences", 
+            this, SLOT(showOperationSequenceTool()));
+    menuTool->addAction("&Sender sequences", 
             this, SLOT(showSenderSequenceTool()));
-    tools->addAction("&Filtered log", 
-            filtered_log_dlg, SLOT(show()));
-    tools->addSeparator();
-    tools->addAction("&Plot tool", 
-            this, SLOT(showPlotTool()));
-    tools->addAction("&Dump tool", 
+    menuTool->addSeparator();
+    menuTool->addAction("&Status", 
+            this, SLOT(showStatusView()));
+    menuTool->addAction("&Dump tool", 
             this, SLOT(showDumpTool()));
+    menuTool->addAction("&Plot tool", 
+            this, SLOT(showPlotTool()));
+    menuTool->addAction("&Value viewer", 
+            this, SLOT(showValueViewerTool()));
+    menuTool->addSeparator();
+    menuTool->addAction("&Filtered log", 
+            this, SLOT(showFilteredLogView()));
+    menuTool->addSeparator();
+    menuTool->addAction("&Run file", 
+            this, SLOT(showRunFile()));
+    menuTool->addAction("&Debugger", 
+            this, SLOT(showDebugger()));
 
-    QMenu * winMenu = menu->addMenu("&Window");
-    winMenu->addAction("&Show log", m_dock_log, SLOT(show()));
-    winMenu->addAction("&Clear log", this, SLOT(clearLog()));
-    winMenu->addSeparator();
-    winMenu->addAction("Show &application log", 
-            m_dock_app_log, SLOT(show()));
-    winMenu->addAction("Clear application &log", 
-            m_app_log, SLOT(clear()));
-    winMenu->addSeparator();
-    winMenu->addAction("Show available &interfaces", 
-            m_dock_fqn, SLOT(show()));
-    QMenu * aboutMenu = menu->addMenu("&About");
-    aboutMenu->addAction("&About corbasim generic application", 
-            this, SLOT(showAboutDlg()));
+    menuWindow->addAction(setNSAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(setMaxLogSizeAction);
+    menuWindow->addAction(showLogAction);
+    menuWindow->addAction(clearAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(showAppLogAction);
+    menuWindow->addAction(clearAppLogAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(showInstancesAction);
+    menuWindow->addAction(showInterfacesAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction(stopAction);
+    menuWindow->addSeparator();
+    menuWindow->addAction("Cascade", mdiArea, SLOT(cascadeSubWindows()));
+    menuWindow->addAction("Tile", mdiArea, SLOT(tileSubWindows()));
 
-    // Status bar
-    m_statusBar = new QStatusBar;
-    setStatusBar(m_statusBar);
-    
-    setWindowIcon(QIcon(":/resources/images/csu.png"));
-    setWindowTitle("corbasim generic application");
+    menuObject_references->addAction(newObjAction);
+    menuObject_references->addSeparator();
+    menuServants->addAction(newSrvAction);
+    menuServants->addSeparator();
 
-    // Regiter types
-    qRegisterMetaType< corbasim::app::ObjrefConfig >
-        ("corbasim::app::ObjrefConfig");
-    qRegisterMetaType< corbasim::app::ServantConfig >
-        ("corbasim::app::ServantConfig");
+    menuHelp->addAction(aboutAction);
 
-    qRegisterMetaType< CORBA::Object_var >
-        ("CORBA::Object_var");
+    // Subwindows
+    m_subWindows.resize(kSubWindowsMax, NULL);
+    m_tools.resize(tToolsMax, NULL);
 }
 
 AppMainWindow::~AppMainWindow()
 {
-    delete m_sub_create_objref;
-    delete m_sub_create_servant;
-    delete m_sub_script;
 }
 
-
-void AppMainWindow::showAboutDlg()
+void AppMainWindow::save(QVariant& settings)
 {
-    if (!m_aboutDlg)
+    QVariantMap map;
+
+    // objects
     {
-        m_aboutDlg = new AboutDialog(this);
-    }
+        QVariantList objects;
 
-    m_aboutDlg->show();
-}
-
-void AppMainWindow::clearLog()
-{
-    emit doClearLog();
-}
-
-void AppMainWindow::setController(AppController * controller)
-{
-    m_controller = controller;
-
-    m_fqn->setModel(controller->getFQNModel());
-
-    // Signals
-    QObject::connect(
-            m_controller,
-            SIGNAL(objrefCreated(
-                    QString, const corbasim::core::interface_reflective_base *)),
-            this,
-            SLOT(objrefCreated(
-                    const QString&, const 
-                    corbasim::core::interface_reflective_base *)));
-    QObject::connect(
-            m_controller,
-            SIGNAL(objrefDeleted(QString)),
-            this,
-            SLOT(objrefDeleted(const QString&)));
-
-    QObject::connect(
-            m_controller,
-            SIGNAL(servantCreated(
-                    QString, 
-                    const corbasim::core::interface_reflective_base *)),
-            this,
-            SLOT(servantCreated(
-                    const QString&, 
-                    const corbasim::core::interface_reflective_base *)));
-    QObject::connect(
-            m_controller,
-            SIGNAL(servantDeleted(QString)),
-            this,
-            SLOT(servantDeleted(const QString&)));
-
-    QObject::connect(m_controller, SIGNAL(error(QString)),
-            this, SLOT(displayError(const QString&)));
-    QObject::connect(m_controller, SIGNAL(message(QString)),
-            this, SLOT(displayMessage(const QString&)));
-
-    QObject::connect(this, SIGNAL(saveFile(QString)),
-            m_controller, SLOT(saveFile(const QString&)));
-    QObject::connect(this, SIGNAL(loadFile(QString)),
-            m_controller, SLOT(loadFile(const QString&)));
-
-    QObject::connect(this, SIGNAL(loadDirectory(QString)),
-            m_controller, SLOT(loadDirectory(const QString&)));
-
-#define CORBASIM_APP_CON(ev)                                         \
-    QObject::connect(m_controller,                                   \
-    SIGNAL(ev(QString, corbasim::event::request_ptr,                 \
-            corbasim::event::event_ptr)),                            \
-    this,                                                            \
-    SLOT(ev(const QString&, corbasim::event::request_ptr,            \
-            corbasim::event::event_ptr)));                           \
-    /***/
-
-    CORBASIM_APP_CON(requestSent);
-    CORBASIM_APP_CON(requestReceived);
-
-#undef CORBASIM_APP_CON
-
-    QObject::connect(m_controller, 
-            SIGNAL(updatedReference(QString, CORBA::Object_var)),
-            this, SLOT(updatedReference(const QString&,
-                    const CORBA::Object_var&)));
-
-    // Filtered log
-    {
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefCreated(
-                        QString, 
-                        const corbasim::core::interface_reflective_base *)),
-                m_filtered_log,
-                SLOT(registerInstance(
-                        const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefDeleted(QString)),
-                m_filtered_log,
-                SLOT(unregisterInstance(const QString&)));
-
-        QObject::connect(
-                m_controller,
-                SIGNAL(servantCreated(
-                        QString, 
-                        const corbasim::core::interface_reflective_base *)),
-                m_filtered_log,
-                SLOT(registerInstance(
-                        const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
-        QObject::connect(
-                m_controller,
-                SIGNAL(servantDeleted(QString)),
-                m_filtered_log,
-                SLOT(unregisterInstance(const QString&)));
-    }
-}
-
-void AppMainWindow::setLogModel(QAbstractItemModel * model)
-{
-    m_log->setModel(model);
-    m_log->setColumnWidth(0, 350);
-    m_log->setColumnWidth(1, 350);
-    m_log->setColumnWidth(2, 350);
-
-    m_filtered_log->setLogModel(model);
-
-    QObject::connect(this, SIGNAL(doClearLog()),
-            model, SLOT(clearLog()));
-
-    QObject::connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-            this, SLOT(scrollToItem(const QModelIndex&, int, int)));
-}
-
-void AppMainWindow::scrollToItem(const QModelIndex & parent, int start, int end)
-{
-    QModelIndex index = m_log->model()->index(start, 0, parent);
-    m_log->scrollTo(index);
-}
-
-void AppMainWindow::showPlotTool()
-{
-    typedef qwt::ReflectivePlotTool* (*create_t)(QWidget*);
-    typedef void (*init_t)(QWidget*, const QString&,
-            corbasim::core::interface_reflective_base const *);
-
-    if (!m_plot_tool)
-    {
-        QLibrary lib("corbasim_qwt");
-
-        if (!lib.load())
-            return;
-
-        create_t create = (create_t) 
-            lib.resolve("createReflectivePlotTool");
-
-        if (!create)
-            return;
-
-        m_plot_tool = create(NULL);
-        m_plot_tool->setWindowTitle("corbasim plotting tool");
-        m_plot_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
-
-        // Register current instances
-        init_t init = (init_t) lib.resolve("registerInstanceInPlotTool");
-
-        if (init)
+        for (ObjrefViews_t::iterator it = m_objrefViews.begin(); 
+                it != m_objrefViews.end(); ++it) 
         {
-            for (servants_t::const_iterator it = m_servants.begin(); 
-                    it != m_servants.end(); ++it) 
+            QVariantMap value;
+            value["name"] = (*it)->objref()->name();
+            (*it)->save(value["value"]);
+
+            objects << value;
+        }
+
+        map["objects"] = objects;
+    }
+
+    // Servants
+    {
+        QVariantList servants;
+
+        for (ServantViews_t::iterator it = m_servantViews.begin(); 
+                it != m_servantViews.end(); ++it) 
+        {
+            QVariantMap value;
+            value["name"] = (*it)->servant()->name();
+            (*it)->save(value["value"]);
+
+            servants << value;
+        }
+
+        map["servants"] = servants;
+    }
+
+    // Tools
+    for (int i = 0; i < tToolsMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->save(map[ToolNames[i]]);
+    }
+
+    settings = map;
+}
+
+void AppMainWindow::load(const QVariant& settings)
+{
+    const QVariantMap map = settings.toMap();
+
+    // Objects
+    {
+        const QVariantList list = map["objects"].toList();
+
+        for (QVariantList::const_iterator it = list.begin(); 
+                it != list.end(); ++it) 
+        {
+            const QVariantMap value = it->toMap();
+            const QString name = value["name"].toString();
+            
+            Objref_ptr objref = m_objrefs.find(name);
+
+            if (objref)
             {
-                init(m_plot_tool, it->first, it->second->getFactory());
+                m_objrefViews[objref->id()]->load(value["value"]);
             }
         }
-
-        QObject::connect(
-                m_controller,
-                SIGNAL(servantCreated(
-                        QString, 
-                        const corbasim::core::interface_reflective_base *)),
-                m_plot_tool,
-                SLOT(registerInstance(
-                        const QString&, 
-                        const corbasim::core::interface_reflective_base *)));
-        QObject::connect(
-                m_controller,
-                SIGNAL(servantDeleted(QString)),
-                m_plot_tool,
-                SLOT(unregisterInstance(const QString&)));
-
     }
 
-    if (m_plot_tool)
-        m_plot_tool->show();
-}
-
-void AppMainWindow::showDumpTool()
-{
-    if (!m_dump_tool)
+    // Servants
     {
-        m_dlg_dump_tool = new QDialog(this);
-        QVBoxLayout * layout = new QVBoxLayout();
-        layout->setMargin(0);
+        const QVariantList list = map["servants"].toList();
 
-        m_dump_tool = new gui::DumpTool(m_dlg_dump_tool);
-
-        layout->addWidget(m_dump_tool);
-        m_dlg_dump_tool->setLayout(layout);
-
-        m_dlg_dump_tool->setWindowIcon(QIcon(":/resources/images/csu.png"));
-        m_dlg_dump_tool->setWindowTitle("corbasim dump tool");
-
-        QObject::connect(
-                m_controller,
-                SIGNAL(servantCreated(
-                        QString, 
-                        const corbasim::core::interface_reflective_base *)),
-                m_dump_tool,
-                SLOT(registerInstance(
-                        const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
-        QObject::connect(
-                m_controller,
-                SIGNAL(servantDeleted(QString)),
-                m_dump_tool,
-                SLOT(unregisterInstance(const QString&)));
-
-        // Initializes the tool
-        servants_t::const_iterator it = m_servants.begin();
-
-        for (; it != m_servants.end(); it++)
-            m_dump_tool->registerInstance(it->first,
-                    it->second->getFactory());
-    }
-
-    m_dlg_dump_tool->show();
-}
-
-void AppMainWindow::setEngine(TriggerEngine * engine)
-{
-    m_engine = engine;
-
-    QObject::connect(this, SIGNAL(loadScriptFile(QString)),
-            m_engine, SLOT(runFile(const QString&)));
-}
-
-// Subwindow slot
-
-void AppMainWindow::showOpSequenceTool()
-{
-    if (!m_sub_seq_tool)
-    {
-        m_sub_seq_tool = new QMdiSubWindow();
-        m_seq_tool = new gui::OperationSequenceTool();
-
-        m_seq_tool->setWindowTitle("");
-
-        m_sub_seq_tool->setWidget(m_seq_tool);
-        m_mdi_area->addSubWindow(m_sub_seq_tool);
-
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefCreated(
-                        QString, 
-                        const corbasim::core::interface_reflective_base *)),
-                m_seq_tool,
-                SLOT(objrefCreated(
-                        const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefDeleted(QString)),
-                m_seq_tool,
-                SLOT(objrefDeleted(const QString&)));
-
-        QObject::connect(m_seq_tool,
-            SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
-            m_controller, 
-            SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-
-        // Initializes the tool
-        objrefs_t::const_iterator it = m_objrefs.begin();
-
-        for (; it != m_objrefs.end(); it++)
-            m_seq_tool->objrefCreated(it->first,
-                    it->second->getFactory());
-    }
-    m_sub_seq_tool->showNormal();
-    m_seq_tool->show();
-    m_mdi_area->setActiveSubWindow(m_sub_seq_tool);
-}
-
-void AppMainWindow::showSenderSequenceTool()
-{
-    if (!m_sub_sender_seq_tool)
-    {
-        m_sub_sender_seq_tool = new QMdiSubWindow();
-        m_sender_seq_tool = new gui::SenderSequenceTool();
-
-        m_sender_seq_tool->setWindowTitle("");
-
-        m_sub_sender_seq_tool->setWidget(m_sender_seq_tool);
-        m_mdi_area->addSubWindow(m_sub_sender_seq_tool);
-
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefCreated(
-                        QString, 
-                        const corbasim::core::interface_reflective_base *)),
-                m_sender_seq_tool,
-                SLOT(objrefCreated(
-                        const QString&, const 
-                        corbasim::core::interface_reflective_base *)));
-        QObject::connect(
-                m_controller,
-                SIGNAL(objrefDeleted(QString)),
-                m_sender_seq_tool,
-                SLOT(objrefDeleted(const QString&)));
-
-        // Initializes the tool
-        objrefs_t::const_iterator it = m_objrefs.begin();
-
-        for (; it != m_objrefs.end(); it++)
-            m_sender_seq_tool->objrefCreated(it->first,
-                    it->second->getFactory());
-    }
-    m_sub_sender_seq_tool->showNormal();
-    m_sender_seq_tool->show();
-    m_mdi_area->setActiveSubWindow(m_sub_sender_seq_tool);
-}
-
-
-void AppMainWindow::showFilteredLog()
-{
-    m_filtered_log->show();
-}
-
-
-void AppMainWindow::showCreateObjref()
-{
-    if (!m_sub_create_objref)
-    {
-        m_sub_create_objref = new QMdiSubWindow();
-        m_create_objref = new view::ObjrefCreateDialog();
-
-        m_create_objref->setWindowTitle("Create object reference");
-
-        m_sub_create_objref->setWidget(m_create_objref);
-        m_mdi_area->addSubWindow(m_sub_create_objref);
-
-        // completer
-        QLineEdit *fqn = m_create_objref->findChild< QLineEdit *>("fqn");
-        if (fqn)
+        for (QVariantList::const_iterator it = list.begin(); 
+                it != list.end(); ++it) 
         {
-            QCompleter * completer = 
-                new QCompleter(m_controller->getFQNModel());
-            completer->setCaseSensitivity(Qt::CaseInsensitive);
-            fqn->setCompleter(completer);
+            const QVariantMap value = it->toMap();
+            const QString name = value["name"].toString();
+            
+            Objref_ptr servant = m_servants.find(name);
+
+            if (servant)
+            {
+                m_servantViews[servant->id()]->load(value["value"]);
+            }
         }
-
-        QObject::connect(m_create_objref,
-                SIGNAL(createObjref(corbasim::app::ObjrefConfig)),
-                m_controller, 
-                SLOT(createObjref(const corbasim::app::ObjrefConfig&)));
     }
-    m_sub_create_objref->showNormal();
-    m_create_objref->show();
-    m_mdi_area->setActiveSubWindow(m_sub_create_objref);
-}
-
-void AppMainWindow::showCreateServant()
-{
-    if (!m_sub_create_servant)
-    {
-        m_sub_create_servant = new QMdiSubWindow();
-        m_create_servant = new view::ServantCreateDialog();
-
-        m_create_servant->setWindowTitle("Create servant");
-
-        m_sub_create_servant->setWidget(m_create_servant);
-        m_mdi_area->addSubWindow(m_sub_create_servant);
-
-        // completer
-        QLineEdit *fqn = m_create_servant->findChild< QLineEdit *>("fqn");
-        if (fqn)
-        {
-            QCompleter * completer = 
-                new QCompleter(m_controller->getFQNModel());
-            completer->setCaseSensitivity(Qt::CaseInsensitive);
-            fqn->setCompleter(completer);
-        }
-
-        QObject::connect(m_create_servant,
-                SIGNAL(createServant(corbasim::app::ServantConfig)),
-                m_controller, 
-                SLOT(createServant(const corbasim::app::ServantConfig&)));
-    }
-    m_sub_create_servant->showNormal();
-    m_create_servant->show();
-    m_mdi_area->setActiveSubWindow(m_sub_create_servant);
-}
-
-void AppMainWindow::clearConfig()
-{
-    // TODO
-}
-
-// Notificaciones del controlador
-
-void AppMainWindow::objrefCreated(const QString& id,
-    const corbasim::core::interface_reflective_base * factory)
-{
-    view::Objref_ptr objref(
-            new view::Objref(m_mdi_area, id, factory, this));
-    m_menuObjects->addMenu(objref->getMenu());
-
-    QObject::connect(objref.get(),
-        SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
-        m_controller, 
-        SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-
-    QObject::connect(objref.get(),
-                SIGNAL(deleteObjref(QString)),
-                m_controller, 
-                SLOT(deleteObjref(const QString&)));
-
-    QObject::connect(objref.get(),
-                SIGNAL(updatedReference(QString, CORBA::Object_var)),
-                m_controller, 
-                SLOT(updateReference(const QString&,
-                        const CORBA::Object_var&)));
-
-    m_objrefs.insert(std::make_pair(id, objref));
-
-    displayMessage(QString("Object '%1' created").arg(id));
-}
-
-void AppMainWindow::objrefDeleted(const QString& id)
-{
-    objrefs_t::iterator it = m_objrefs.find(id);
-
-    if (it != m_objrefs.end())
-    {
-        // Removes the submenu and deletes the objref instance
-        m_menuObjects->removeAction(it->second->getMenu()->menuAction());
-        m_objrefs.erase(it);
-
-        displayMessage(QString("Object '%1' deleted").arg(id));
-    }
-}
-
-void AppMainWindow::servantCreated(const QString& id,
-    const corbasim::core::interface_reflective_base * factory)
-{
-    view::Servant_ptr servant(
-            new view::Servant(m_mdi_area, id, factory, this));
-    m_menuServants->addMenu(servant->getMenu());
-
-    QObject::connect(servant.get(),
-        SIGNAL(sendRequest(QString, corbasim::event::request_ptr)),
-        m_controller, 
-        SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-
-    QObject::connect(servant.get(),
-                SIGNAL(deleteServant(QString)),
-                m_controller, 
-                SLOT(deleteServant(const QString&)));
-
-    m_servants.insert(std::make_pair(id, servant));
     
-    displayMessage(QString("Servant '%1' created").arg(id));
-}
-
-void AppMainWindow::servantDeleted(const QString& id)
-{
-    servants_t::iterator it = m_servants.find(id);
-
-    if (it != m_servants.end())
+    // Tools
+    for (int i = 0; i < tToolsMax; i++) 
     {
-        // Removes the submenu and deletes the servant instance
-        m_menuServants->removeAction(it->second->getMenu()->menuAction());
-        m_servants.erase(it);
-
-        displayMessage(QString("Servant '%1' deleted").arg(id));
+        if (map.contains(ToolNames[i]))
+        {
+            create_t c = CreateTool[i]; (this->*c)();
+            m_tools[i]->load(map[ToolNames[i]]);
+        }
     }
 }
 
-void AppMainWindow::requestSent(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp)
+void AppMainWindow::loadedInterface(
+        InterfaceDescriptor_ptr interface)
 {
+    m_interfaceModel.addInterface(interface);
 }
 
-void AppMainWindow::requestReceived(const QString& id, 
-        corbasim::event::request_ptr req,
-        corbasim::event::event_ptr resp)
+void AppMainWindow::objrefCreated(Objref_ptr objref)
 {
-    emit doProcessIncomingRequest(id, req);
+    if (m_subWindows[kCreateObjrefDialog])
+        m_subWindows[kCreateObjrefDialog]->close();
+
+    m_objrefs.add(objref);
+    m_logModel.registerInstance(objref);
+    m_instanceModel.registerInstance(objref);
+
+    ObjrefView_ptr view(new ObjrefView(mdiArea, objref, this));
+    m_objrefViews.insert(objref->id(), view);
+    menuObject_references->addMenu(view->getMenu());
+
+    connect(view.get(), SIGNAL(deleteObjref(ObjectId)),
+            this, SIGNAL(deleteObjref(ObjectId)));
+
+    // connect signals
+    connect(objref.get(), 
+            SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
+            &m_logModel, 
+            SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
+
+    // Tools
+    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->registerInstance(objref);
+    }
+
+    if (m_statusView)
+        m_statusView->registerInstance(objref);
+}
+
+void AppMainWindow::objrefDeleted(ObjectId id)
+{
+    m_objrefs.del(id);
+    m_logModel.unregisterInstance(id);
+    m_instanceModel.unregisterInstance(id);
+
+    m_objrefViews.remove(id);
+
+    // Tools
+    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->unregisterInstance(id);
+    }
+
+    if (m_statusView)
+        m_statusView->unregisterInstance(id);
+}
+
+void AppMainWindow::servantCreated(Objref_ptr servant)
+{
+    if (m_subWindows[kCreateServantDialog])
+        m_subWindows[kCreateServantDialog]->close();
+
+    m_servants.add(servant);
+    m_logModel.registerInstance(servant);
+    m_instanceModel.registerInstance(servant);
+    
+    ServantView_ptr view(new ServantView(mdiArea, servant, this));
+    m_servantViews.insert(servant->id(), view);
+    menuServants->addMenu(view->getMenu());
+
+    connect(view.get(), SIGNAL(deleteServant(ObjectId)),
+            this, SIGNAL(deleteServant(ObjectId)));
+
+    // connect signals
+    connect(servant.get(), 
+            SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
+            &m_logModel, 
+            SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
+
+    for (int i = tServantToolMin; i <= tServantToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->registerInstance(servant);
+    }
+}
+
+void AppMainWindow::servantDeleted(ObjectId id)
+{
+    m_servants.del(id);
+    m_logModel.unregisterInstance(id);
+    m_instanceModel.unregisterInstance(id);
+    
+    m_servantViews.remove(id);
+
+    // Tools
+    for (int i = tServantToolMin; i <= tServantToolMax; i++) 
+    {
+        if (m_tools[i])
+            m_tools[i]->unregisterInstance(id);
+    }
 }
 
 void AppMainWindow::displayError(const QString& err)
 {
     QMessageBox::critical(this, "Error", err);
+
+    statusBar()->showMessage(err, 5000);
+
+    m_appLogModel.error(err);
 }
 
 void AppMainWindow::displayMessage(const QString& msg)
 {
-    QTreeWidgetItem * item = new QTreeWidgetItem(QStringList(msg));
-    appendToAppLog(item);
+    statusBar()->showMessage(msg, 5000);
+    
+    m_appLogModel.message(msg);
 }
 
-void AppMainWindow::updatedReference(const QString& id,
-        const CORBA::Object_var& ref)
-{
-    displayMessage(QString("Updated reference for '%1'").arg(id));
-}
-
+//
+//
 // Dialogs
-
-void AppMainWindow::showLoad()
+//
+//
+void AppMainWindow::showCreateObjrefDialog()
 {
-    QString file = QFileDialog::getOpenFileName( 0, tr(
-                "Select a file"), ".");
+    if (!m_createObjrefDialog)
+    {
+        m_createObjrefDialog = new ObjrefCreateDialog(this);
+        m_createObjrefDialog->setFQNModel(&m_interfaceModel);
 
-    // User cancels
-    if (file.isEmpty())
-        return;
+        createToolSubWindow(kCreateObjrefDialog, m_createObjrefDialog);
 
-    emit loadFile(file);
+        connect(m_createObjrefDialog, 
+                SIGNAL(createObjref(const ObjrefConfig&)),
+                this, 
+                SIGNAL(createObjref(const ObjrefConfig&)));
+    }
+
+    showToolSubWindow(kCreateObjrefDialog);
+}
+
+void AppMainWindow::showCreateServantDialog()
+{
+    if (!m_createServantDialog)
+    {
+        m_createServantDialog = new ServantCreateDialog(this);
+        m_createServantDialog->setFQNModel(&m_interfaceModel);
+
+        createToolSubWindow(kCreateServantDialog, m_createServantDialog);
+
+        connect(m_createServantDialog, 
+                SIGNAL(createServant(const ServantConfig&)),
+                this, 
+                SIGNAL(createServant(const ServantConfig&)));
+    }
+
+    showToolSubWindow(kCreateServantDialog);
+}
+
+void AppMainWindow::showSetNameServiceDialog()
+{
+    if (!m_setNameServiceDialog)
+    {
+        m_setNameServiceDialog = new SetReferenceDialog(this);
+        m_setNameServiceDialog->setInterface(
+                core::interface_reflective< CosNaming::NamingContextExt >::get_instance());
+
+        createToolSubWindow(kSetNameServiceDialog, m_setNameServiceDialog);
+
+        connect(m_setNameServiceDialog, 
+                SIGNAL(setReference(const CORBA::Object_var&)),
+                this, 
+                SIGNAL(setNameService(const CORBA::Object_var&)));
+    }
+
+    showToolSubWindow(kSetNameServiceDialog);
+}
+
+// 
+//
+// Tools
+//
+//
+
+void AppMainWindow::createToolSubWindow(int tool, QWidget * widget)
+{
+    QMdiSubWindow *& sub = m_subWindows[tool];
+
+    sub = new QMdiSubWindow();
+    sub->setWidget(widget);
+    sub->setWindowTitle(SubWindowTitles[tool]);
+    sub->setWindowIcon(QIcon(":/resources/images/csu.png"));
+    mdiArea->addSubWindow(sub);
+}
+
+void AppMainWindow::showToolSubWindow(int tool)
+{
+    QMdiSubWindow * sub = m_subWindows[tool];
+
+    if (sub)
+    {
+        sub->showNormal();
+        sub->widget()->show();
+        mdiArea->setActiveSubWindow(sub);
+    }
+}
+
+void AppMainWindow::createFilteredLogView()
+{
+    if (!m_tools[tFilteredLogView])
+    {
+        m_tools[tFilteredLogView] = new FilteredLogView();
+        static_cast< FilteredLogView * >(
+                m_tools[tFilteredLogView])->setLogModel(&m_logModel);
+
+        createToolSubWindow(kFilteredLogView, m_tools[tFilteredLogView]);
+
+        // Initilizes the tool
+        AbstractTool::Register reg(m_tools[tFilteredLogView]);
+        std::for_each(m_objrefs.begin(), m_objrefs.end(), reg);
+        std::for_each(m_servants.begin(), m_servants.end(), reg);
+    }
+}
+
+void AppMainWindow::showFilteredLogView()
+{
+    createFilteredLogView();
+    showToolSubWindow(kFilteredLogView);
+}
+
+void AppMainWindow::createOperationSequenceTool()
+{
+    if (!m_tools[tOperationSequenceTool])
+    {
+        m_tools[tOperationSequenceTool] = new OperationSequenceTool(this);
+        static_cast< AbstractSequenceTool * >(
+                m_tools[tOperationSequenceTool])->setTreeVisible(false);
+
+        createToolSubWindow(kOperationSequenceTool, 
+                m_tools[tOperationSequenceTool]);
+
+        // Initilizes the tool
+        AbstractTool::Register reg(m_tools[tOperationSequenceTool]);
+        std::for_each(m_objrefs.begin(), m_objrefs.end(), reg);
+    }
+}
+
+void AppMainWindow::showOperationSequenceTool()
+{
+    createOperationSequenceTool();
+    showToolSubWindow(kOperationSequenceTool);
+}
+
+void AppMainWindow::createSenderSequenceTool()
+{
+    if (!m_tools[tSenderSequenceTool])
+    {
+        m_tools[tSenderSequenceTool] = new SenderSequenceTool(this);
+        static_cast< AbstractSequenceTool * >(
+            m_tools[tSenderSequenceTool])->setTreeVisible(false);
+
+        createToolSubWindow(kSenderSequenceTool, 
+                m_tools[tSenderSequenceTool]);
+
+        // Initilizes the tool
+        AbstractTool::Register reg(m_tools[tSenderSequenceTool]);
+        std::for_each(m_objrefs.begin(), m_objrefs.end(), reg);
+    }
+}
+
+void AppMainWindow::showSenderSequenceTool()
+{
+    createSenderSequenceTool();
+    showToolSubWindow(kSenderSequenceTool);
+}
+
+void AppMainWindow::createDumpTool()
+{
+    if (!m_tools[tDumpTool])
+    {
+        m_tools[tDumpTool] = new DumpTool(this);
+
+        createToolSubWindow(kDumpTool, m_tools[tDumpTool]);
+
+        // Initilizes the tool
+        AbstractTool::Register reg(m_tools[tDumpTool]);
+        std::for_each(m_servants.begin(), m_servants.end(), reg);
+    }
+}
+
+void AppMainWindow::showDumpTool()
+{
+    createDumpTool();
+    showToolSubWindow(kDumpTool);
+}
+
+void AppMainWindow::createPlotTool()
+{
+    typedef AbstractInputTool* (*create_t)(QWidget*);
+
+    if (!m_tools[tPlotTool])
+    {
+        // Loads the library
+        QLibrary lib("corbasim_qwt");
+        lib.load();
+
+        create_t create = (create_t) lib.resolve("createPlotTool");
+
+        if (create)
+        {
+            // Creates the tool
+            m_tools[tPlotTool] = create(this);
+
+            createToolSubWindow(kPlotTool, m_tools[tPlotTool]);
+
+            // Initilizes the tool
+            AbstractTool::Register reg(m_tools[tPlotTool]);
+            std::for_each(m_servants.begin(), m_servants.end(), reg);
+        }
+        else
+        {
+            QMessageBox::critical(this, "Error initializing plot tool", 
+                    "Unable to load corbasim_qwt. "
+                    "Ensure you have built corbasim with qwt.");
+        }
+    }
+}
+
+void AppMainWindow::showPlotTool()
+{
+    createPlotTool();
+    showToolSubWindow(kPlotTool);
+}
+
+void AppMainWindow::createValueViewerTool()
+{
+    typedef AbstractInputTool* (*create_t)(QWidget*);
+
+    if (!m_tools[tValueViewerTool])
+    {
+        // Creates the tool
+        m_tools[tValueViewerTool] = new ValueViewerTool(this);
+
+        createToolSubWindow(kValueViewerTool, m_tools[tValueViewerTool]);
+
+        // Initilizes the tool
+        AbstractTool::Register reg(m_tools[tValueViewerTool]);
+        std::for_each(m_servants.begin(), m_servants.end(), reg);
+    }
+}
+
+void AppMainWindow::showValueViewerTool()
+{
+    createValueViewerTool();
+    showToolSubWindow(kValueViewerTool);
+}
+
+void AppMainWindow::createStatusView()
+{
+    if (!m_statusView)
+    {
+        m_statusView = new StatusView(this);
+        QScrollArea * scroll = new QScrollArea();
+        scroll->setWidget(m_statusView);
+        scroll->setWidgetResizable(true);
+
+        scroll->setMinimumSize(300, 100);
+
+        createToolSubWindow(kStatusView, scroll);
+
+        // Initilizes the tool
+        ObjrefRepository::const_iterator it = m_objrefs.begin();
+        ObjrefRepository::const_iterator end = m_objrefs.end();
+
+        for(; it != end; it++)
+            m_statusView->registerInstance(it.value());
+    }
+}
+
+void AppMainWindow::showStatusView()
+{
+    createStatusView();
+    showToolSubWindow(kStatusView);
 }
 
 void AppMainWindow::showLoadDirectory()
 {
-    QString file = QFileDialog::getExistingDirectory( 0, tr(
-                "Select a file"), ".");
+    const QString directory = 
+        QFileDialog::getExistingDirectory(0, 
+                "Select a directory", ".");
 
-    // User cancels
-    if (file.isEmpty())
-        return;
-
-    emit loadDirectory(file);
-}
-
-void AppMainWindow::showLoadScript()
-{
-    QString file = QFileDialog::getOpenFileName( 0, tr(
-                "Select a script file"), ".");
-
-    // User cancels
-    if (file.isEmpty())
-        return;
-
-    emit loadScriptFile(file);
-}
-
-void AppMainWindow::showSave()
-{
-    QString file = QFileDialog::getSaveFileName( 0, tr(
-                "Select a file"), ".");
-
-    // User cancels
-    if (file.isEmpty())
-        return;
-
-    emit saveFile(file);
-}
-
-void AppMainWindow::appendToAppLog(QTreeWidgetItem * item)
-{
-    // check log size
-    if (m_app_log->topLevelItemCount() >= 200)
-        delete m_app_log->takeTopLevelItem(0);
-
-    m_app_log->addTopLevelItem(item);
-    m_app_log->scrollToItem(item);
-}
-
-void AppMainWindow::showScript()
-{
-    if (!m_sub_script)
+    if (!directory.isEmpty())
     {
-        m_sub_script = new QMdiSubWindow;
-        m_script = new qt::ScriptWindow;
-
-        m_sub_script->setWindowTitle("Run script");
-
-        m_sub_script->setWidget(m_script);
-        m_mdi_area->addSubWindow(m_sub_script);
-/*  
-        QObject::connect(m_script,
-                SIGNAL(createServant(corbasim::app::ServantConfig)),
-                m_controller, 
-                SLOT(createServant(const corbasim::app::ServantConfig&)));
- */
-    }
-    m_sub_script->showNormal();
-    m_script->show();
-    m_mdi_area->setActiveSubWindow(m_sub_script);
-}
-
-// Settings
-void AppMainWindow::doLoad() 
-{
-    const QString file = QFileDialog::getOpenFileName( 0, tr(
-                "Select some files"), ".");
-
-    // User cancels
-    if (file.isEmpty())
-        return;
-
-    QVariant var;
-
-    // Try to Read a JSON file
-    bool res = 
-        gui::fromJsonFile(file.toStdString().c_str(), var);
-
-    if (res)
-    {
-        load(var);
-    }
-    else
-    {
-        // TODO display error
+        emit loadDirectory(directory);
     }
 }
 
-void AppMainWindow::doSave() 
+void AppMainWindow::showLoadScenario()
 {
-    QString file = QFileDialog::getSaveFileName( 0, tr(
-                "Select a file"), ".");
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".",
+                tr("CORBASIM scenario (*.sce)"));
 
-    // User cancels
-    if (file.isEmpty())
-        return;
-
-    QVariant v;
-    save(v);
-
-    std::ofstream ofs(file.toStdString().c_str());
-    json::ostream_writer_t ow(ofs, true);
-
-    gui::toJson(ow, v);
+    if (!file.isEmpty())
+    {
+        emit loadScenario(file);
+    }
 }
 
-void AppMainWindow::save(QVariant& settings) 
+void AppMainWindow::showSaveScenario()
 {
-    QVariantMap window;
-    QVariantMap objrefs;
-    QVariantMap servants;
+    QString file = 
+        QFileDialog::getSaveFileName(0, 
+                "Select a file", ".", 
+                tr("CORBASIM scenario (*.sce)"));
 
-    // corbasim header
+    if (!file.isEmpty())
     {
-        QVariantMap header;
-        header["version"] = CORBASIM_VERSION; 
-        header["built"] = __DATE__; 
+        if(!file.endsWith(".sce"))
+            file.append(".sce");
 
-        window["corbasim"] = header;
+        emit saveScenario(file);
     }
+}
 
-    // configuration metadat
+void AppMainWindow::doLoadConfiguration()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".",
+                tr("CORBASIM generic application configuration (*.cfg)"));
+
+    if (!file.isEmpty())
     {
-        QVariantMap header;
-        header["saved"] = QDateTime::currentDateTime().toString(); 
-        window["metadata"] = header;
-    }
+        QVariant var;
 
-    for (objrefs_t::iterator it = m_objrefs.begin(); 
-	    it != m_objrefs.end(); ++it) 
-    {
-        it->second->save(objrefs[it->first]);
-    }
+        // Try to Read a JSON file
+        bool res = 
+            gui::fromJsonFile(file.toStdString().c_str(), var);
 
-    for (servants_t::iterator it = m_servants.begin(); 
-	    it != m_servants.end(); ++it) 
-    {
-        it->second->save(servants[it->first]);
-    }
-
-    window["objrefs"] = objrefs;
-    window["servants"] = servants;
-
-    if (m_seq_tool)
-    {
-        m_seq_tool->save(window["sequences"]);
-    }
-
-    if (m_sender_seq_tool)
-    {
-        m_sender_seq_tool->save(window["sender_sequences"]);
-    }
-
-    if (m_filtered_log)
-    {
-        m_filtered_log->save(window["filtered_log"]);
-    }
-
-    if (m_dump_tool)
-    {
-        m_dump_tool->save(window["dumpers"]);
-    }
-
-    if (m_plot_tool)
-    {
-        typedef void (*save_t)(QWidget * tool, QVariant& settings);
-        save_t savefn = (save_t) QLibrary::resolve("corbasim_qwt", 
-                "saveReflectivePlotTool");
-
-        if (savefn)
+        if (res)
         {
-            savefn(m_plot_tool, window["plots"]);
+            load(var);
+        }
+        else
+        {
+            QMessageBox::critical(this, 
+                    "Error loading configuration", 
+                    QString("Unable to load file ") +
+                    file);
         }
     }
-
-    settings = window;
 }
 
-void AppMainWindow::load(const QVariant& settings)
+void AppMainWindow::doSaveConfiguration()
 {
-    const QVariantMap window = settings.toMap();
+    QString file = 
+        QFileDialog::getSaveFileName(0, 
+                "Select a file", ".",
+                tr("CORBASIM generic application configuration (*.cfg)"));
 
-    if (window.contains("sequences"))
+    if (!file.isEmpty())
     {
-        const QVariant seq = window.value("sequences");
+        if(!file.endsWith(".cfg"))
+            file.append(".cfg");
 
-        // TODO do not show but ensure created
-        if (!m_seq_tool) showOpSequenceTool();
+        QVariant settings;
+        save(settings);
 
-        m_seq_tool->load(seq);
+        std::ofstream ofs(file.toStdString().c_str());
+        json::ostream_writer_t ow(ofs, true);
+
+        gui::toJson(ow, settings);
+    }
+}
+
+void AppMainWindow::actionHovered(QAction * action)
+{
+    /*
+    if (action && !action->text().isEmpty() && 
+            action->text() != statusBar()->currentMessage())
+     */
+    {
+        statusBar()->showMessage(action->text(), 5000);
+    }
+}
+
+void AppMainWindow::stopAll()
+{
+    for (ObjrefViews_t::iterator it = m_objrefViews.begin(); 
+            it != m_objrefViews.end(); ++it) 
+    {
+        (*it)->stopAll();
     }
 
-    if (window.contains("sender_sequences"))
+    for (int i = 0; i < tToolsMax; i++) 
     {
-        const QVariant seq = window.value("sender_sequences");
-
-        // TODO do not show but ensure created
-        if (!m_sender_seq_tool) showOpSequenceTool();
-
-        m_sender_seq_tool->load(seq);
+        if (m_tools[i]) m_tools[i]->stop();
     }
+}
 
-    if (window.contains("objrefs"))
+void AppMainWindow::selectedOperation(Objref_ptr object, 
+        OperationDescriptor_ptr op)
+{
+    QMdiSubWindow * sub = mdiArea->activeSubWindow();
+
+    if (!dynamic_cast< Servant * >(object.get()))
     {
-        const QVariantMap map = window.value("objrefs").toMap();
-
-        for (QVariantMap::const_iterator it = map.begin(); 
-                it != map.end(); ++it) 
+        if (sub && m_subWindows[kOperationSequenceTool] == sub)
         {
-            objrefs_t::iterator found = m_objrefs.find(it.key());
+            static_cast< AbstractSequenceTool * >(
+                m_tools[tOperationSequenceTool])->appendAbstractItem(
+                        object, op);
+        }
+        else if (sub && 
+                m_subWindows[kSenderSequenceTool] == sub)
+        {
+            static_cast< AbstractSequenceTool * >(
+                m_tools[tSenderSequenceTool])->appendAbstractItem(
+                        object, op);
+        }
+        else
+        {
+            ObjrefViews_t::iterator it = 
+                m_objrefViews.find(object->id());
 
-            if (found != m_objrefs.end())
+            if (it != m_objrefViews.end())
             {
-                found->second->load(it.value());
+                (*it)->showRequestDialog(op);
             }
         }
     }
+}
 
-    if (window.contains("servants"))
+void AppMainWindow::showAbout()
+{
+    static const char * aboutText = 
+        "corbasim version " CORBASIM_VERSION "\n"
+        "Build " __DATE__ "\n"
+        "Developed by: Andres Senac <andres@senac.es>";
+
+    QMessageBox::about(this, "About corbasim", 
+            aboutText);
+}
+
+void AppMainWindow::showSetMaxLogSize()
+{   
+    bool ok = false;
+    int res = QInputDialog::getInt(this, "Max log size",
+            "Insert the log maximum size", 
+            m_logModel.maxEntries(),
+            1, 10000, 1, &ok);
+
+    if (ok)
     {
-        const QVariantMap map = window.value("servants").toMap();
+        m_logModel.setMaxEntries(res);
+    }
+}
 
-        for (QVariantMap::const_iterator it = map.begin(); 
-                it != map.end(); ++it) 
-        {
-            servants_t::iterator found = m_servants.find(it.key());
+void AppMainWindow::showRunFile()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0,
+                "Select a file", ".");
 
-            if (found != m_servants.end())
-            {
-                found->second->load(it.value());
-            }
-        }
+    if (!file.isEmpty())
+    {
+        emit runFile(file);
+    }
+}
+
+void AppMainWindow::showDebugger()
+{
+    if (!m_debugger)
+    {
+        QScriptEngineDebugger * sed = new QScriptEngineDebugger(this);
+        sed->attachTo(static_cast< QScriptEngine *>(
+                    gui::Application::currentApplication()->scriptEngine()));
+        m_debugger = sed->standardWindow();
+        m_debugger->setWindowTitle("corbasim script debugger");
+        m_debugger->setWindowIcon(QIcon(":/resources/images/csu.png"));
     }
 
-    if (window.contains("filtered_log"))
-    {
-        m_filtered_log->load(window["filtered_log"]);
-    }
-
-    if (window.contains("dumpers"))
-    {
-        // TODO do not show but ensure created
-        if (!m_dump_tool) showDumpTool();
-
-        m_dump_tool->load(window["dumpers"]);
-    }
-
-    if (window.contains("plots"))
-    {
-        if (!m_plot_tool) showPlotTool();
-
-        if (m_plot_tool)
-        {
-            typedef void (*load_t)(QWidget * tool, const QVariant& settings);
-            load_t loadfn = (load_t) QLibrary::resolve("corbasim_qwt", 
-                    "loadReflectivePlotTool");
-
-            if (loadfn)
-            {
-                loadfn(m_plot_tool, window["plots"]);
-            }
-        }
-    }
+    m_debugger->show();
 }
 

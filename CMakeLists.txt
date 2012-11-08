@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 project(corbasim C CXX)
 
 # Numero de version
-set(${PROJECT_NAME}_MAJOR_VERSION 0)
-set(${PROJECT_NAME}_MINOR_VERSION 2)
-set(${PROJECT_NAME}_PATCH_LEVEL 7)
+set(${PROJECT_NAME}_MAJOR_VERSION 1)
+set(${PROJECT_NAME}_MINOR_VERSION 0)
+set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(${PROJECT_NAME}_VERSION
         "${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL}")
 
@@ -30,19 +30,33 @@ endif()
 if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
     include(check_ace_tao)
     set(CORBASIM_ORB_LIBS
-        ACE
-        TAO 
-        TAO_PortableServer 
-        TAO_AnyTypeCode 
-        TAO_CosNaming 
-        TAO_ObjRefTemplate)
+        ${ACE_LIBRARY}
+        ${TAO_LIBRARY}
+        ${TAO_PortableServer_LIB}
+        ${TAO_AnyTypeCode_LIB}
+        ${TAO_CosNaming_LIB}
+        ${TAO_ObjRefTemplate_LIB})
     set(CORBASIM_ORB_INCLUDE_DIRS
         ${ACE_INCLUDE_DIR}
         ${TAO_INCLUDE_DIR}
         ${TAO_INCLUDE_DIR}/orbsvcs)
     set(CORBASIM_ORB_LIBRARY_DIRS
         ${TAO_LIBRARY_DIR})
-    set(CORBASIM_ORB_IDL_COMPILER tao_idl)
+    set(CORBASIM_ORB_IDL_COMPILER ${TAO_IDL_COMPILER})
+    set(CORBASIM_COSNAMING_LIBS
+        ${CORBASIM_ORB_LIBS}
+        ${TAO_CosNaming_Serv_LIB} 
+        ${TAO_ImR_Client_LIB} 
+        ${TAO_Svc_Utils_LIB}
+        ${TAO_Messaging_LIB} ${TAO_PI_LIB} 
+        ${TAO_CodecFactory_LIB} 
+        ${TAO_Valuetype_LIB} 
+        ${TAO_IORTable_LIB}
+    )
+
+    if (TAO_FOUND)
+        include_directories(${ACE_INCLUDE_DIR} ${TAO_INCLUDE_DIR})
+    endif()
 elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni
     set(CORBASIM_ORB_LIBS
@@ -77,7 +91,7 @@ endif(NOT Boost_FOUND)
 find_package(Qt4)
 find_package(Qwt6)
 find_package(Boost 1.45.0 
-    COMPONENTS regex system thread program_options)
+    COMPONENTS system thread program_options)
 
 message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 
@@ -94,6 +108,15 @@ if(NOT Qwt6_FOUND)
 else()
     message(STATUS "Qwt6 available at: ${Qwt6_INCLUDE_DIR}")
 endif()
+
+# Libraries for clients
+set(CORBASIM_CLIENT_LIBS 
+    corbasim corbasim_qt corbasim_gui ${Boost_PROGRAM_OPTIONS_LIBRARY})
+set(CORBASIM_CLIENT_STATIC_LIBS 
+    corbasim_gui_s corbasim_qt_s corbasim_s ${Boost_PROGRAM_OPTIONS_LIBRARY})
+# Libraries for servers
+set(CORBASIM_SERVER_LIBS 
+    corbasim ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 add_subdirectory(corbasim)
 add_subdirectory(corbasim_idl)

@@ -25,7 +25,7 @@ namespace corbasim
 namespace gui 
 {
 
-QString getFieldName(core::operation_reflective_base const * operation,
+QString getFieldName(OperationDescriptor_ptr operation,
         const ReflectivePath_t& path)
 {
     using namespace corbasim::core;
@@ -55,7 +55,55 @@ QString getFieldName(core::operation_reflective_base const * operation,
     return res;
 }
 
-::corbasim::core::interface_reflective_base const * 
+TypeDescriptor_ptr followPath(
+        OperationDescriptor_ptr operation,
+        const ReflectivePath_t& path)
+{
+    TypeDescriptor_ptr res = operation;
+
+
+    ReflectivePath_t::const_iterator it = path.begin();
+
+    // Ignore operation index
+    ++it;
+
+    for (;it != path.end() && res; ++it) 
+    {
+        res = res->get_child(*it);
+    }
+
+    return res;
+}
+
+bool followPath(
+        OperationDescriptor_ptr operation,
+        Holder holder,
+        const ReflectivePath_t& path,
+        TypeDescriptor_ptr& descriptor,
+        Holder& value)
+{
+    value = holder;
+    descriptor = operation;
+
+    ReflectivePath_t::const_iterator it = path.begin();
+
+    // Ignore operation index
+    ++it;
+
+    for (;it != path.end() && descriptor; ++it) 
+    {
+        if (descriptor->is_variable_length())
+            return false;
+
+        value = descriptor->get_child_value(value, *it);
+        descriptor = descriptor->get_child(*it);
+    }
+
+    // valid if descriptor not null
+    return (descriptor);
+}
+
+InterfaceDescriptor_ptr
 getReflectiveByFQN(const char * fqn)
 {
     QString symbol (fqn);

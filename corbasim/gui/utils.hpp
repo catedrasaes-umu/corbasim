@@ -23,7 +23,7 @@
 #include <QList>
 #include <QString>
 #include <corbasim/gui/export.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
+#include <corbasim/gui/types.hpp>
 
 namespace corbasim 
 {
@@ -32,11 +32,21 @@ namespace gui
 
 typedef QList< int > ReflectivePath_t;
 
-QString getFieldName(core::operation_reflective_base const * operation,
+QString getFieldName(OperationDescriptor_ptr operation,
         const ReflectivePath_t& path);
 
-::corbasim::core::interface_reflective_base const * 
-    getReflectiveByFQN(const char * fqn);
+TypeDescriptor_ptr followPath(
+        OperationDescriptor_ptr operation,
+        const ReflectivePath_t& path);
+
+bool followPath(
+        OperationDescriptor_ptr operation,
+        Holder holder,
+        const ReflectivePath_t& path,
+        TypeDescriptor_ptr& descriptor,
+        Holder& value);
+
+InterfaceDescriptor_ptr getReflectiveByFQN(const char * fqn);
 
 } // namespace gui
 } // namespace corbasim

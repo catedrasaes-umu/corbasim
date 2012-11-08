@@ -20,43 +20,17 @@
 #ifndef CORBASIM_GUI_INPUTREQUESTPROCESSOR_HPP
 #define CORBASIM_GUI_INPUTREQUESTPROCESSOR_HPP
 
-#include <QString>
-#include <QObject>
 #include <map>
-#include <corbasim/event_fwd.hpp>
-#include <corbasim/gui/utils.hpp>
+#include <QObject>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
+#include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/proc/RequestProcessor.hpp>
 
 namespace corbasim 
 {
 namespace gui 
 {
-
-class CORBASIM_GUI_DECLSPEC RequestProcessor
-{
-public:
-
-    virtual ~RequestProcessor();
-
-    virtual void process(event::request_ptr req, 
-            core::reflective_base const * ref,
-            core::holder hold) = 0;
-
-    virtual const QString& getId() const;
-
-    virtual const ReflectivePath_t& getPath() const;
-
-protected:
-
-    RequestProcessor(const QString& id, 
-            const ReflectivePath_t& path);
-
-    const QString m_id;
-    const ReflectivePath_t m_path;
-};
-
-typedef boost::shared_ptr< RequestProcessor > RequestProcessor_ptr;
-
 
 /**
  * @brief Process input requests in a non-GUI thread.
@@ -75,24 +49,29 @@ public:
 public slots:
 
     // Instances
-    void registerInstance(const QString& id, 
-            const corbasim::core::interface_reflective_base * factory);
-    void unregisterInstance(const QString& id);
+    void registerInstance(Objref_ptr objref);
+    void unregisterInstance(ObjectId id);
 
-    void processRequest(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr res);
+    void processRequest(ObjectId id, 
+            Request_ptr req,
+            Event_ptr res);
 
     // Processors
-    void addProcessor(corbasim::gui::RequestProcessor_ptr);
-    void removeProcessor(corbasim::gui::RequestProcessor_ptr);
+    void addProcessor(RequestProcessor_ptr);
+    void removeProcessor(RequestProcessor_ptr);
+
+signals:
+
+    void addedProcessor(RequestProcessor_ptr);
+    void removedProcessor(RequestProcessor_ptr);
 
 protected:
 
-    typedef std::pair< QString, tag_t > key_t;
-    typedef std::map< key_t, QList< RequestProcessor_ptr > > map_t;
-    typedef std::map< QString, core::interface_reflective_base const * >
-        instances_t;
+    typedef std::pair< ObjectId, tag_t > key_t;
+    typedef QList< RequestProcessor_ptr > processors_t;
+    typedef std::map< key_t, processors_t > map_t;
+
+    typedef ObjrefRepository instances_t;
 
     /**
      * @brief Registred instances.
@@ -107,9 +86,6 @@ protected:
     map_t m_processors;
 
 };
-
-CORBASIM_GUI_DECLSPEC 
-InputRequestController * getDefaultInputRequestController();
 
 } // namespace gui
 } // namespace corbasim

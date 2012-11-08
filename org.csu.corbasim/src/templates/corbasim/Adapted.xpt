@@ -18,11 +18,9 @@
 #include "«e.translationUnit.getAdaptedFile()»"
 «ENDFOREACH»
 
-«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
-
-«EXPAND values FOREACH contains SEPARATOR "\n\n"»
-
-«EXPAND adaptvalues FOREACH contains SEPARATOR "\n\n"»
+«EXPAND adapt FOREACH contains-»
+«EXPAND values FOREACH contains-»
+«EXPAND adaptvalues FOREACH contains-»
 
 #endif // «cppDefineName»
 
@@ -34,9 +32,7 @@
 
 «DEFINE adapt FOR Contained-»«ENDDEFINE»
 
-«DEFINE adapt FOR ModuleDef-»
-	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
-«ENDDEFINE»
+«DEFINE adapt FOR ModuleDef-»«EXPAND adapt FOREACH contains-»«ENDDEFINE»
 
 «DEFINE adapt FOR InterfaceDef-»
 namespace corbasim
@@ -53,7 +49,7 @@ struct is_objrefvar< «getFQN()»_var > : public cs_mpl::true_
 } // adapted
 } // corbasim
 
-	«EXPAND adapt FOREACH contains SEPARATOR "\n\n"»
+	«EXPAND adapt FOREACH contains-»
 «ENDDEFINE»
 
 «DEFINE adapt FOR AliasDef-»
@@ -61,6 +57,7 @@ struct is_objrefvar< «getFQN()»_var > : public cs_mpl::true_
     «IF SequenceDef.isInstance(type)-»
         «EXPAND adapt(getFQN(), true) FOR (SequenceDef)type-»
     «ENDIF-»
+
 «ENDLET-»
 «ENDDEFINE»
 
@@ -73,8 +70,8 @@ namespace adapted
 template < >
 struct is_corbaseq< «fqn» > : public cs_mpl::true_
 {
-	«IF getOriginalType().isString()-»
-	typedef corbasim::orbimpl::string_for_seq slice_type;
+	«IF getType().getOriginalType().isString()-»
+	typedef ::CORBA::String_var slice_type;
 	«ELSE-»
 	typedef «getType().getMemberCPPType()» slice_type;
 	«ENDIF-»
@@ -82,13 +79,12 @@ struct is_corbaseq< «fqn» > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
+
 «ENDDEFINE»
 
 «DEFINE adaptvalues FOR Contained-»«ENDDEFINE»
 
-«DEFINE adaptvalues FOR Container-»
-	«EXPAND adaptvalues FOREACH contains SEPARATOR "\n\n"»
-«ENDDEFINE»
+«DEFINE adaptvalues FOR Container-»«EXPAND adaptvalues FOREACH contains-»«ENDDEFINE»
 
 «DEFINE adaptvalues FOR InterfaceDef-»
 
@@ -113,7 +109,7 @@ struct interface < «getFQN()» >
 } // adapted
 } // corbasim
 
-	«EXPAND adaptvalues FOREACH contains SEPARATOR "\n\n"»
+	«EXPAND adaptvalues FOREACH contains-»
 «ENDDEFINE»
 
 «DEFINE adaptvalues FOR OperationDef-»
@@ -153,6 +149,7 @@ struct call< _corbasim_«getFQN()» >
 
 } // adapted
 } // corbasim
+
 «ENDDEFINE»
 
 «DEFINE adapt FOR StructDef-»
@@ -200,6 +197,7 @@ namespace adapted
 	«ENDFOREACH-»
 } // adapted
 } // corbasim
+
 «ENDDEFINE»
 
 «DEFINE adapt FOR UnionDef-»
@@ -320,6 +318,7 @@ namespace «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
 {
 	«EXPAND values FOREACH contains SEPARATOR "\n\n"»
 } // «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
+
 «ENDDEFINE»
 
 «DEFINE values FOR StructDef-»
@@ -331,6 +330,7 @@ struct «IF definedIn == null-»_corbasim_«ENDIF-»«identifier»
 	
 	«EXPAND values FOREACH getNestedStructs()-»
 };
+
 «ENDDEFINE»
 
 «DEFINE values FOR OperationDef-»
@@ -361,5 +361,6 @@ struct __«identifier»
 };
 
 typedef __«identifier» «identifier»;
+
 «ENDDEFINE»
 

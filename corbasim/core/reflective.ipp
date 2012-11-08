@@ -100,6 +100,12 @@ reflective_base const * array_reflective< T >::get_slice() const
 }
 
 template< typename T >
+reflective_base const * array_reflective< T >::get_child(unsigned int /*unused*/) const
+{
+    return &m_slice;
+}
+
+template< typename T >
 reflective_type array_reflective< T >::get_type() const
 {
     return TYPE_ARRAY;
@@ -115,6 +121,12 @@ holder array_reflective< T >::create_holder() const
 
 template< typename T >
 unsigned int array_reflective< T >::get_length(holder const& value) const
+{
+    return size;
+}
+
+template< typename T >
+unsigned int array_reflective< T >::get_children_count() const
 {
     return size;
 }
@@ -209,6 +221,12 @@ template< typename T >
 sequence_reflective< T >::~sequence_reflective()
 {
     delete m_slice;
+}
+
+template< typename T >
+reflective_base const * sequence_reflective< T >::get_child(unsigned int /*unused*/) const
+{
+    return m_slice;
 }
 
 template< typename T >

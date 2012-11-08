@@ -21,9 +21,48 @@
 
 using namespace corbasim::qt;
 
+AbstractItemFrame::AbstractItemFrame(QWidget * parent) : 
+    QFrame(parent), m_timer(this), m_currentAlpha(100)
+{
+    connect(&m_timer, SIGNAL(timeout()),
+        this, SLOT(update()));
+
+    m_timer.start(25);
+}
+
+AbstractItemFrame::~AbstractItemFrame()
+{
+}
+
+void AbstractItemFrame::paintEvent(QPaintEvent* event)
+{
+    QPainter painter(this);
+
+    if (m_currentAlpha > 0)
+    {
+        QColor semiTransparentColor = Qt::black;
+        semiTransparentColor.setAlpha(m_currentAlpha);
+        painter.fillRect(rect(), semiTransparentColor);
+        
+        m_currentAlpha -= 5;
+    }
+    else if (m_timer.isActive())
+    {
+        m_timer.stop();
+
+        disconnect(&m_timer, SIGNAL(timeout()),
+            this, SLOT(update()));
+    }
+
+    QRect r = rect();
+    r.setWidth(r.width() - 1);
+    r.setHeight(r.height() - 1);
+    painter.drawRect(r);
+}
+
 SortableGroupItem::SortableGroupItem(QWidget * widget,
         QWidget * parent) : 
-    QFrame(parent), m_widget(widget)
+    AbstractItemFrame(parent), m_widget(widget)
 {
     QVBoxLayout * layout = new QVBoxLayout();
 
@@ -60,21 +99,23 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
     tLayout->addWidget(btDown);
     tLayout->addWidget(btDelete);
 
-    QObject::connect(m_btShowInput, SIGNAL(toggled(bool)),
+    m_btShowInput->setMaximumSize(20, 20);
+    btUp->setMaximumSize(20, 20);
+    btDown->setMaximumSize(20, 20);
+    btDelete->setMaximumSize(20, 20);
+
+    connect(m_btShowInput, SIGNAL(toggled(bool)),
             m_widget, SLOT(setVisible(bool)));
 
-    QObject::connect(btDelete, SIGNAL(clicked()),
+    connect(btDelete, SIGNAL(clicked()),
             this, SLOT(deleteClicked()));
-    QObject::connect(btUp, SIGNAL(clicked()),
+    connect(btUp, SIGNAL(clicked()),
             this, SLOT(upClicked()));
-    QObject::connect(btDown, SIGNAL(clicked()),
+    connect(btDown, SIGNAL(clicked()),
             this, SLOT(downClicked()));
     // End buttons
 
     setLayout(layout);
-
-    setLineWidth(1);
-    setFrameStyle(QFrame::Box);
 
     // Tooltips
     m_btShowInput->setToolTip("Show/hide detailed input form");
@@ -133,6 +174,7 @@ SortableGroup::SortableGroup(QWidget * parent) :
     m_layout = new CustomVLayout();
     scrollWidget->setLayout(scrollLayout);
     scrollLayout->addLayout(m_layout);
+    scrollLayout->setMargin(0);
 
     QSpacerItem * spacer = new QSpacerItem(40, 20, 
             QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -172,13 +214,15 @@ void SortableGroup::appendItem(SortableGroupItem * item)
     m_layout->addWidget(item);
 
     // Scroll to item
-    // m_scroll->ensureWidgetVisible(item);
+    m_scroll->widget()->resize(m_scroll->widget()->sizeHint());
+    qApp->processEvents();
+    m_scroll->ensureWidgetVisible(item);
 
-    QObject::connect(item, SIGNAL(doDelete()),
+    connect(item, SIGNAL(doDelete()),
             this, SLOT(deleteItem()));
-    QObject::connect(item, SIGNAL(up()),
+    connect(item, SIGNAL(up()),
             this, SLOT(moveUpItem()));
-    QObject::connect(item, SIGNAL(down()),
+    connect(item, SIGNAL(down()),
             this, SLOT(moveDownItem()));
 
     m_items.push_back(item);

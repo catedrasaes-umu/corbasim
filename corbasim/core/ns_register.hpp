@@ -40,12 +40,20 @@ public :
             const std::string& key, 
             CORBA::Object_ptr ref, 
             bool release_at_exit = true);
+
+    ns_register(const CosNaming::NamingContextExt_var& ns,
+            const std::string& key, 
+            CORBA::Object_ptr ref, 
+            bool release_at_exit = true);
     
     ~ns_register();
     
     bool error();
 
 protected :
+
+    void do_register(const std::string& key, 
+            CORBA::Object_ptr ref);
 
     bool m_error;
     

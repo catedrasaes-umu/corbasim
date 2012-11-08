@@ -28,17 +28,26 @@ IF(NOT QT4_FOUND)
 	FIND_PACKAGE( Qt4 REQUIRED QUIET )
 ENDIF(NOT QT4_FOUND)
 
+# keep QWT_ROOT variable
+if ("$ENV{QWT_ROOT}" STREQUAL "")
+    if (NOT "${QWT_DIR}" STREQUAL "")
+        set(ENV{QWT_ROOT} ${QWT_DIR})
+    endif()
+else()
+    set(QWT_DIR $ENV{QWT_ROOT} CACHE STRING "QWT directory")
+endif()
+
 IF( QT4_FOUND )
 	# Is Qwt6 installed? Look for header files
 	FIND_PATH( Qwt6_INCLUDE_DIR qwt.h 
                PATHS ${QT_INCLUDE_DIR}
+               $ENV{QWT_ROOT}/include
                /usr/local/qwt/include
                /usr/include/qwt
                /usr/local/qwt-6.0.2-svn/include/
                /usr/local/qwt-6.0.1-svn/include/
                /usr/local/qwt-6.0.0-rc1/include
                /usr/local/qwt-6.0.0-rc3/include
-               $ENV{HOME}/local/qwt-6.0.2-svn/include
                PATH_SUFFIXES
                qwt
                qwt6

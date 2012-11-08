@@ -1,8 +1,8 @@
 set(TAO_FOUND FALSE)
 
-find_path(TAO_INCLUDE_DIR tao/corba.h PATHS ${ACE_INCLUDE_DIR} $ENV{TAO_ROOT} ${ACE_TAO_DEFAULT}/include)
-find_library(TAO_LIBRARY NAMES TAO TAOd PATHS ${ACE_INCLUDE_DIR}/lib $ENV{TAO_ROOT}/lib ${ACE_TAO_DEFAULT}/lib)
-find_program(TAO_IDL_COMPILER "tao_idl" ${ACE_INCLUDE_DIR}/bin ${TAO_INCLUDE_DIR}/bin ${ACE_TAO_DEFAULT}/bin)
+find_path(TAO_INCLUDE_DIR tao/corba.h PATHS $ENV{ACE_ROOT} $ENV{TAO_ROOT} $ENV{TAO_ROOT}/include $ENV{ACE_ROOT}/include NO_DEFAULT_PATH)
+find_library(TAO_LIBRARY NAMES TAO TAOd PATHS $ENV{ACE_ROOT}/lib $ENV{TAO_ROOT}/lib NO_DEFAULT_PATH)
+find_program(TAO_IDL_COMPILER "tao_idl" $ENV{TAO_ROOT}/bin $ENV{ACE_ROOT}/bin NO_DEFAULT_PATH)
 message(STATUS "tao_idl at: ${TAO_IDL_COMPILER}")
 
 if(TAO_INCLUDE_DIR AND TAO_LIBRARY AND TAO_IDL_COMPILER)
@@ -12,17 +12,25 @@ endif(TAO_INCLUDE_DIR AND TAO_LIBRARY AND TAO_IDL_COMPILER)
 
 GET_FILENAME_COMPONENT(TAO_LIBRARY_DIR ${TAO_LIBRARY} PATH)
 
-# set(TAO_FIND_LIBS "PortableServer"  "CosNaming" "CosEvent" "CosEvent_Skel" "AnyTypeCode")
-#if(TAO_FOUND)
-#  foreach(LIBRARY ${TAO_FIND_LIBS})
-#    find_library(TAO_${LIBRARY}_LIB NAMES "TAO_${LIBRARY}" "TAO_${LIBRARY}d" ${TAO_LIBRARY} ${ACE_ROOT}/lib /usr/lib /usr/local/lib)
-#    if(TAO_${LIBRARY}_LIB)
-#      message(STATUS "${LIBRARY} found at: ${TAO_${LIBRARY}_LIB}")
-#      #list(APPEND ${TAO_LIBRARY} TAO_${LIBRARY}_LIB)
-#    else(TAO_${LIBRARY}_LIB)
-#      SET(TAO_FOUND FALSE)
-#    endif(TAO_${LIBRARY}_LIB)
-#  endforeach()
-#
-#endif(TAO_FOUND)
+set(TAO_LIBRARIES ${TAO_LIBRARY})
+
+set(TAO_FIND_LIBS "PortableServer"  "CosNaming" 
+    "CosEvent" "CosEvent_Skel" "AnyTypeCode"
+    "ObjRefTemplate" 
+    "CosNaming_Serv" "ImR_Client" "Svc_Utils"
+    "Messaging" "PI" "CodecFactory" "Valuetype" "IORTable")
+if(TAO_FOUND)
+    foreach(LIBRARY ${TAO_FIND_LIBS})
+        find_library(TAO_${LIBRARY}_LIB NAMES "TAO_${LIBRARY}" "TAO_${LIBRARY}d" ${TAO_LIBRARY} 
+            PATHS $ENV{TAO_ROOT}/lib $ENV{ACE_ROOT}/lib NO_DEFAULT_PATH)
+        if(TAO_${LIBRARY}_LIB)
+          message(STATUS "${LIBRARY} found at: ${TAO_${LIBRARY}_LIB}")
+          list(APPEND TAO_LIBRARIES ${TAO_${LIBRARY}_LIB})
+        else(TAO_${LIBRARY}_LIB)
+          set(TAO_FOUND FALSE)
+        endif(TAO_${LIBRARY}_LIB)
+    endforeach()
+endif(TAO_FOUND)
+
+message(STATUS "${TAO_LIBRARIES}")
 

@@ -1,0 +1,14 @@
+module prueba
+{
+
+interface Iface
+{
+
+    typedef sequence< float > FloatSeq;
+
+    void operation(in long a, in FloatSeq fs);
+
+};
+
+};
+

@@ -1,0 +1,86 @@
+#!/bin/bash
+
+BASEDIR=`dirname $0`
+BASEDIR=`cd $BASEDIR && pwd`
+
+USAGE()
+{
+    echo ""
+    echo "USAGE: "
+    echo "    configure [-h] [-c <config file>]"
+    echo ""
+    echo "OPTIONS:"
+    echo "    -h  help"
+    echo "    -c  config file"
+    echo ""
+    exit $E_OPTERROR    # Exit and explain usage, if no argument(s) given.
+}
+
+CONFIG_FILE=corbasim.cfg
+
+# Processing arguments
+while getopts ":h:c:" Option
+do
+    case $Option in
+        h    ) USAGE
+               exit 0;;
+        c    ) CONFIG_FILE=$OPTARG ;;
+        *    ) echo ""
+               echo "Invalid option."
+               USAGE   # DEFAULT
+    esac
+done
+
+# Default options
+CMAKE=cmake
+INSTALL_PREFIX=/usr/local
+BUILD_DIR=$BASEDIR/build
+BUILD_TYPE=Release
+
+C_COMPILER=gcc
+CXX_COMPILER=g++
+
+TAO_ROOT=/usr
+ACE_ROOT=/usr
+QWT_ROOT=/usr
+BOOST_ROOT=/usr
+QMAKE_DIR=
+
+CORBASIM_ORBIMPL=TAO
+CORBASIM_ORB_IDL_COMPILER_OPTIONS=
+
+# Command line options
+
+# Config file
+if [ -r "${CONFIG_FILE}" ]; then
+    echo "$MSG Loadind config file: ${CONFIG_FILE}"
+    source ${CONFIG_FILE}
+fi
+
+MSG="[CORBASIM CONFIGURE]"
+
+export TAO_ROOT
+export ACE_ROOT
+export QWT_ROOT
+export BOOST_ROOT
+
+if [ ! -z "${QMAKE_DIR}" ]; then
+    echo "$MSG Setting qmake directory in PATH"
+    export PATH=${QMAKE_DIR}:$PATH
+fi
+
+$CMAKE --version >/dev/null 2>&1 || { echo >&2 "$MSG ERROR: cmake not found"; exit 1; }
+
+mkdir -p ${BUILD_DIR}
+cd ${BUILD_DIR}
+
+$CMAKE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}                                     \
+       -DCMAKE_BUILD_TYPE=${BUILD_TYPE}                                             \
+       -DCMAKE_C_COMPILER=${C_COMPILER}                                             \
+       -DCMAKE_CXX_COMPILER=${CXX_COMPILER}                                         \
+       -DCORBASIM_ORBIMPL=${CORBASIM_ORBIMPL}                                       \
+       -DCORBASIM_ORB_IDL_COMPILER_OPTIONS=${CORBASIM_ORB_IDL_COMPILER_OPTIONS}     \
+       $BASEDIR
+
+cd $OLDPWD
+

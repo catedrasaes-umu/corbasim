@@ -22,7 +22,7 @@
 
 #include <QDialog>
 #include <QTimer>
-#include <corbasim/qt/types.hpp>
+#include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 
@@ -45,11 +45,11 @@ class CORBASIM_GUI_DECLSPEC RequestDialog :
 public:
         
     RequestDialog(
-            core::operation_reflective_base const * reflective,
+            OperationDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~RequestDialog();
             
-    core::operation_reflective_base const * getReflective() const;
+    OperationDescriptor_ptr getReflective() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -64,7 +64,7 @@ public slots:
 
 signals:
 
-    void sendRequest(corbasim::event::request_ptr);
+    void sendRequest(Request_ptr);
 
 protected:
 
@@ -82,7 +82,7 @@ protected:
 
     int m_currentPeriodicRequest;
 
-    event::request_ptr m_storedRequest;
+    Request_ptr m_storedRequest;
 
     void hideEvent(QHideEvent * event);
 

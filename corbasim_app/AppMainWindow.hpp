@@ -20,170 +20,154 @@
 #ifndef CORBASIM_APP_APPMAINWINDOW_HPP
 #define CORBASIM_APP_APPMAINWINDOW_HPP
 
-#include <map>
 #include <QtGui>
-#include <corbasim/core/reflective_fwd.hpp>
-#include "view/Objref.hpp"
-#include "view/Servant.hpp"
+#include <vector>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/item/ApplicationLogModel.hpp>
+#include <corbasim/gui/item/LogModel.hpp>
+#include <corbasim/gui/item/InstanceModel.hpp>
+#include <corbasim/gui/item/InterfaceModel.hpp>
+
+#include "ObjrefView.hpp"
+#include "ServantView.hpp"
+#include "ui_AppMainWindow.h"
 
 namespace corbasim 
 {
 namespace gui 
 {
-class OperationSequenceTool;
-class SenderSequenceTool;
-class DumpTool;
-class FilteredLogView;
-} // namespace gui
+    class ObjrefCreateDialog;
+    class ServantCreateDialog;
+    class SetReferenceDialog;
 
-namespace qwt 
-{
-class ReflectivePlotTool;
-} // namespace qwt
+    class AbstractTool;
+    class StatusView;
+} // namespace gui
 
 namespace app 
 {
 
-class AppController;
+using namespace corbasim::gui;
 
-class TriggerEngine;
-
-class AppMainWindow : public QMainWindow
+class AppMainWindow : public QMainWindow, private Ui_AppMainWindow
 {
     Q_OBJECT
 public:
     AppMainWindow(QWidget * parent = 0);
     virtual ~AppMainWindow();
 
-    void setController(AppController * controller);
-    void setEngine(TriggerEngine * engine);
-
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
 public slots:
 
-    void doLoad();
-    void doSave();
-
-    void showPlotTool();
-    void showDumpTool();
-
-    void setLogModel(QAbstractItemModel * model);
-
-    void showOpSequenceTool();
-    void showSenderSequenceTool();
-    void showFilteredLog();
-    
-    void showAboutDlg();
-
-    void showCreateObjref();
-    void showCreateServant();
-
-    void showLoad();
-    void showSave();
-    
-    void showLoadDirectory();
-    
-    void showLoadScript();
-    void showScript();
-
-    void clearConfig();
-    void clearLog();
-
     // Notificaciones del controlador
 
-    void objrefCreated(const QString& id,
-        const corbasim::core::interface_reflective_base * factory);
-    void objrefDeleted(const QString& id);
+    void loadedInterface(InterfaceDescriptor_ptr interface);
 
-    void servantCreated(const QString& id,
-        const corbasim::core::interface_reflective_base * factory);
-    void servantDeleted(const QString& id);
+    void objrefCreated(Objref_ptr objref);
+    void objrefDeleted(ObjectId id);
 
-    void requestSent(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
-    void requestReceived(const QString& id, 
-            corbasim::event::request_ptr req,
-            corbasim::event::event_ptr resp);
+    void servantCreated(Objref_ptr servant);
+    void servantDeleted(ObjectId id);
 
     void displayError(const QString& err);
     void displayMessage(const QString& msg);
 
-    void updatedReference(const QString& id,
-            const CORBA::Object_var& ref);
+    // Dialogs
+    void showCreateObjrefDialog();
+    void showCreateServantDialog();
+    void showSetNameServiceDialog();
 
-    void scrollToItem(const QModelIndex& parent, int start, int end);
+    // Tools
+    void createFilteredLogView();
+    void showFilteredLogView();
+    void createOperationSequenceTool();
+    void showOperationSequenceTool();
+    void createSenderSequenceTool();
+    void showSenderSequenceTool();
+    void createDumpTool();
+    void showDumpTool();
+    void createPlotTool();
+    void showPlotTool();
+    void createValueViewerTool();
+    void showValueViewerTool();
+    void createStatusView();
+    void showStatusView();
+
+    void showLoadDirectory();
+    void showLoadScenario();
+    void showSaveScenario();
+
+    void doLoadConfiguration();
+    void doSaveConfiguration();
+
+    void actionHovered(QAction *);
+
+    void stopAll();
+
+    void selectedOperation(Objref_ptr, OperationDescriptor_ptr);
+
+    void showAbout();
+
+    void showSetMaxLogSize();
+
+    void showRunFile();
+    void showDebugger();
 
 signals:
 
-    void saveFile(QString);
-    void loadFile(QString);
+    void createObjref(const ObjrefConfig&);
+    void deleteObjref(ObjectId);
     
-    void loadDirectory(QString);
-    
-    void loadScriptFile(QString);
+    void createServant(const ServantConfig&);
+    void deleteServant(ObjectId);
 
-    void doClearLog();
+    void loadDirectory(const QString&);
+    void loadScenario(const QString&);
+    void saveScenario(const QString&);
+    void clearScenario();
 
-    void doProcessIncomingRequest(QString,
-            corbasim::event::request_ptr);
+    void setNameService(const CORBA::Object_var&);
 
-    void buildIDL(const QString&, const QStringList&);
+    void runCode(const QString&);
+    void runFile(const QString&);
 
 protected:
-    AppController * m_controller;
-    TriggerEngine * m_engine;
-    QMdiArea * m_mdi_area;
 
-    typedef std::map< QString, view::Objref_ptr > objrefs_t;
-    objrefs_t m_objrefs;
+    ObjrefRepository m_objrefs;
+    ObjrefRepository m_servants;
+    LogModel m_logModel;
+    ApplicationLogModel m_appLogModel;
+    InstanceModel m_instanceModel;
+    InterfaceModel m_interfaceModel;
 
-    typedef std::map< QString, view::Servant_ptr > servants_t;
-    servants_t m_servants;
+    QActionGroup m_actions;
 
-    QMenu * m_menuObjects;
-    QMenu * m_menuServants;
+    QTreeView * m_logView;
+    QTreeView * m_appLogView;
 
-    QStatusBar * m_statusBar;
+    std::vector< QMdiSubWindow * > m_subWindows;
 
-    QDialog * m_aboutDlg;
+    // Dialogs
+    ObjrefCreateDialog * m_createObjrefDialog;
+    ServantCreateDialog * m_createServantDialog;
+    SetReferenceDialog * m_setNameServiceDialog;
 
-    // Subwindows
-    QMdiSubWindow * m_sub_create_objref;
-    QMdiSubWindow * m_sub_create_servant;
-    QMdiSubWindow * m_sub_script;
-    QMdiSubWindow * m_sub_seq_tool;
-    QMdiSubWindow * m_sub_sender_seq_tool;
-    
-    // Subwindows widgets
-    QWidget * m_create_objref;
-    QWidget * m_create_servant;
-    QWidget * m_script;
-    gui::OperationSequenceTool * m_seq_tool;
-    gui::SenderSequenceTool * m_sender_seq_tool;
+    // Tools
+    std::vector< AbstractTool * > m_tools;
+    StatusView * m_statusView;
+    QMainWindow * m_debugger;
 
-    gui::FilteredLogView * m_filtered_log;
+    typedef QMap< ObjectId, ObjrefView_ptr > ObjrefViews_t;
+    ObjrefViews_t m_objrefViews;
 
-    QDialog * m_dlg_dump_tool;
-    gui::DumpTool * m_dump_tool;
+    typedef QMap< ObjectId, ServantView_ptr > ServantViews_t;
+    ServantViews_t m_servantViews;
 
-    qwt::ReflectivePlotTool * m_plot_tool;
-
-    // Dock widgets
-    QDockWidget * m_dock_app_log;
-    QTreeWidget * m_app_log;
-
-    QDockWidget * m_dock_log;
-    QTreeView * m_log;
-    
-    QDockWidget * m_dock_fqn;
-    QTreeView * m_fqn;
-
-    QCompleter * m_completer;
-    QStringList m_op_list;
-    void appendToAppLog(QTreeWidgetItem * item);
+    void createToolSubWindow(int tool, QWidget * widget);
+    void showToolSubWindow(int tool);
 };
 
 } // namespace app

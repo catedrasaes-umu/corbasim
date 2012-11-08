@@ -19,10 +19,13 @@
 
 #include "Sender.hpp"
 #include <boost/bind.hpp>
-#include <corbasim/gui/ModelNode.hpp>
+#include <corbasim/gui/Model.hpp>
+#include <corbasim/gui/utils.hpp>
+#include <corbasim/gui/item/ModelNode.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <memory>
 #include <iostream>
+#include <exception>
 
 using namespace corbasim::gui;
 
@@ -39,12 +42,6 @@ SenderController::SenderController() :
 
 SenderController::~SenderController()
 {
-}
-
-SenderController * SenderController::getInstance()
-{
-    static std::auto_ptr< SenderController > _instance(new SenderController());
-    return _instance.get();
 }
 
 void SenderController::start(unsigned int numberOfThreads)
@@ -77,17 +74,16 @@ void SenderController::addSender(SenderConfig_ptr cfg)
     Sender_ptr sender(new Sender(m_ioService, cfg));
 
     // Self-delete
-    QObject::connect(sender.get(), 
+    connect(sender.get(), 
             SIGNAL(finished(SenderConfig_ptr)),
             this,
             SLOT(deleteSender(SenderConfig_ptr)));
 
-    QObject::connect(sender.get(), 
-            SIGNAL(sendRequest(const QString&, 
-                    corbasim::event::request_ptr)),
+    // error notification
+    connect(sender.get(), 
+            SIGNAL(error(const QString&)),
             this,
-            SIGNAL(sendRequest(const QString&, 
-                    corbasim::event::request_ptr)));
+            SIGNAL(error(const QString&)));
 
     m_ioService.post(
             boost::bind(&Sender::start, sender, sender));
@@ -116,9 +112,15 @@ void SenderController::deleteSender(SenderConfig_ptr cfg)
 
 Sender::Sender(boost::asio::io_service& ioService,
     SenderConfig_ptr config) :
-    m_timer(ioService), m_config(config),
-    m_currentTime(0), m_evaluator(config->operation(), this)
+    m_timer(ioService), 
+    m_config(config),
+    m_currentTime(0), 
+    m_evaluator(config->operation(), this)
 {
+    connect(this, 
+            SIGNAL(sendRequest(Request_ptr)),
+            config->object().get(), 
+            SLOT(sendRequest(Request_ptr)));
 }
 
 Sender::~Sender() 
@@ -133,25 +135,47 @@ void Sender::start(Sender_weak weak)
     {
         m_evaluator.evaluate(m_config->code());
 
-        ::corbasim::core::operation_reflective_base const * op =
-            m_config->operation();       
+        bool hasErr = m_evaluator.hasError();
 
-        // Clone the original request
-        // We can't modify an emited request
-        ::corbasim::core::holder srcHolder = op->get_holder(m_config->request());
-        m_request = op->create_request();
-        ::corbasim::core::holder dstHolder = op->get_holder(m_request);
+        if (!hasErr)
+        {
+            OperationDescriptor_ptr op =
+                m_config->operation();       
 
-        op->copy(srcHolder, dstHolder);
+            // Clone the original request
+            // We can't modify an emited request
+            ::corbasim::core::holder srcHolder = 
+                op->get_holder(m_config->request());
 
-        // m_request is the working request
-        m_evaluator.init(m_request);
+            m_request = op->create_request();
+            ::corbasim::core::holder dstHolder = 
+                op->get_holder(m_request);
 
-        m_timer.expires_from_now(
-                boost::posix_time::milliseconds(0));
+            op->copy(srcHolder, dstHolder);
 
-        m_timer.async_wait(
-                boost::bind(&Sender::handleTimeout,this, weak, _1));
+            // m_request is the working request
+            m_evaluator.init(m_request);
+
+            hasErr = m_evaluator.hasError();
+        }
+
+        if (!hasErr)
+        {
+            m_timer.expires_from_now(
+                    boost::posix_time::milliseconds(0));
+
+            m_timer.async_wait(
+                    boost::bind(&Sender::handleTimeout,
+                        this, weak, _1));
+        }
+        else
+        {
+            m_config->notifyFinished();
+
+            emit finished(m_config);
+
+            emit error(m_evaluator.error());
+        }
     }
 }
 
@@ -162,7 +186,7 @@ void Sender::cancel()
 
 void Sender::process()
 {
-    ::corbasim::core::operation_reflective_base const * op =
+    OperationDescriptor_ptr op =
         m_config->operation();
 
     ::corbasim::core::holder srcHolder =
@@ -170,24 +194,26 @@ void Sender::process()
 
     // preFunc
     m_evaluator.pre(m_request);
+    if (m_evaluator.hasError()) throw m_evaluator.error();
 
     // processors
-    typedef QList< SenderItemProcessor_ptr > processors_t;
+    typedef QList< RequestProcessor_ptr > processors_t;
     const processors_t& processors = m_config->processors();
 
     for (processors_t::const_iterator it = processors.begin(); 
             it != processors.end(); ++it) 
     {
-        applyProcessor(*it, srcHolder);
+        applyProcessor(m_request, *it, srcHolder);
     }
     
     // postFunc
     m_evaluator.post(m_request);
+    if (m_evaluator.hasError()) throw m_evaluator.error();
 
     // clone request
     // we can't emit a request we're going to modify
 
-    ::corbasim::event::request_ptr request =
+    Request_ptr request =
         op->create_request();
     ::corbasim::core::holder dstHolder =
         op->get_holder(request);
@@ -195,76 +221,77 @@ void Sender::process()
     op->copy(srcHolder, dstHolder);
 
     // emit request
-    emit sendRequest(m_config->objectId(), request);
+    emit sendRequest(request);
     m_config->notifyRequestSent(request);
 }
 
 void Sender::applyProcessor(
-            SenderItemProcessor_ptr processor,
-            corbasim::core::holder holder)
+        Request_ptr request,
+        RequestProcessor_ptr processor,
+        corbasim::core::holder holder)
 {
-    const QList< int >& path = processor->getPath();
+    const QList< int >& path = processor->path();
 
-    int size = path.size();
-
-    core::holder tmp = holder;
-
-    core::reflective_base const * reflec = 
+    const OperationDescriptor_ptr op = 
         m_config->operation();
 
-    for (int i = 1; i < size; i++) 
-    {
-        // Unsupported case!
-        if (reflec->is_variable_length()) return;
+    // Results
+    TypeDescriptor_ptr descriptor = NULL;
+    Holder value;
 
-        tmp = reflec->get_child_value(tmp, path[i]);
+    bool res = followPath(op, holder, path, 
+            // Results
+            descriptor, value);
 
-        if (reflec->get_type() == core::TYPE_STRUCT)
-        {
-            reflec = reflec->get_child(path[i]);
-        }
-        else if(reflec->is_repeated())
-        {
-            reflec = reflec->get_slice();
-        } 
-        else
-            return; // Unsupported case!
-    }
-
-    processor->process(reflec, tmp);
+    if (res)
+        processor->process(request, descriptor, value);
 }
 
 void Sender::scheduleTimer(Sender_weak weak)
 {
+    namespace ptime = boost::posix_time;
+
     m_timer.expires_at(m_timer.expires_at() +
-            boost::posix_time::milliseconds(m_config->period()));
+            ptime::milliseconds(m_config->period()));
 
     m_timer.async_wait(
-            boost::bind(&Sender::handleTimeout,this, weak, _1));
+            boost::bind(&Sender::handleTimeout,
+                this, weak, _1));
 }
 
 void Sender::handleTimeout(
         Sender_weak weak,
-        const boost::system::error_code& error)
+        const boost::system::error_code& err)
 {
-    if (!error)
+    if (!err)
     {
         Sender_ptr ptr = weak.lock();
         
         if (ptr)
         {
-            process();
+            try 
+            {
+                process();
 
-            if (++m_currentTime == m_config->times())
+                if (++m_currentTime == m_config->times())
+                {
+                    m_config->notifyFinished();
+
+                    emit finished(m_config);
+                }
+
+                // Last step to ensure thread-safe
+                if (m_currentTime != m_config->times())
+                    scheduleTimer(weak);
+            } 
+            catch(const QString& ex)
             {
                 m_config->notifyFinished();
 
                 emit finished(m_config);
-            }
 
-            // Last step to ensure thread-safe
-            if (m_currentTime != m_config->times())
-                scheduleTimer(weak);
+                emit error(ex);
+            }
         }
     }
     else
@@ -280,14 +307,14 @@ void Sender::handleTimeout(
 //
 
 SenderConfig::SenderConfig(
-        const QString& objectId,
-        ::corbasim::core::operation_reflective_base const * operation,
-        ::corbasim::event::request_ptr request,
+        Objref_ptr object,
+        OperationDescriptor_ptr operation,
+        Request_ptr request,
         const QString& code,
-        const QList< SenderItemProcessor_ptr >& processors,
+        const QList< RequestProcessor_ptr >& processors,
         int times,
         unsigned int period) :
-    m_objectId(objectId), m_operation(operation),
+    m_object(object), m_operation(operation),
     m_request(request),
     m_code(code), m_processors(processors),
     m_times(times), m_period(period)
@@ -298,18 +325,18 @@ SenderConfig::~SenderConfig()
 }
 
 // Accessors
-const QString& SenderConfig::objectId() const
+Objref_ptr SenderConfig::object() const
 {
-    return m_objectId;
+    return m_object;
 }
 
-::corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 SenderConfig::operation() const
 {
     return m_operation;
 }
 
-::corbasim::event::request_ptr SenderConfig::request() const
+Request_ptr SenderConfig::request() const
 {
     return m_request;
 }
@@ -319,7 +346,7 @@ const QString& SenderConfig::code() const
     return m_code;
 }
 
-const QList< SenderItemProcessor_ptr >& 
+const QList< RequestProcessor_ptr >& 
 SenderConfig::processors() const
 {
     return m_processors;
@@ -344,27 +371,5 @@ void SenderConfig::notifyRequestSent(
 void SenderConfig::notifyFinished()
 {
     emit finished();
-}
-
-//
-//
-// Sender Item Processor
-//
-//
-//
-
-SenderItemProcessor::SenderItemProcessor(
-        const QList< int >& path) :
-    m_path(path)
-{
-}
-
-SenderItemProcessor::~SenderItemProcessor()
-{
-}
-
-const QList< int >& SenderItemProcessor::getPath() const
-{
-    return m_path;
 }
 

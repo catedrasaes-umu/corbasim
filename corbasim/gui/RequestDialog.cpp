@@ -18,7 +18,6 @@
  */
 
 #include "RequestDialog.hpp"
-#include <corbasim/qt/initialize.hpp>
 
 // Qt widgets
 #include <QSpinBox>
@@ -38,11 +37,11 @@ using namespace corbasim;
 using namespace corbasim::gui;
 
 RequestDialog::RequestDialog( 
-        core::operation_reflective_base const * reflective,
+        OperationDescriptor_ptr reflective,
         QWidget * parent) :
     QDialog(parent), m_dlg(new OperationInputForm(reflective, this))
 {
-    corbasim::qt::initialize();
+    corbasim::gui::initialize();
 
     QVBoxLayout * layout = new QVBoxLayout();
 
@@ -204,7 +203,7 @@ void RequestDialog::resizeEvent(QResizeEvent * event)
     event->accept();
 }
 
-corbasim::core::operation_reflective_base const * 
+OperationDescriptor_ptr 
 RequestDialog::getReflective() const
 {
     return m_dlg->getReflective();

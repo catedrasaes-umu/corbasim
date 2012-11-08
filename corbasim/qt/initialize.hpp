@@ -22,12 +22,17 @@
 
 #include <corbasim/qt/export.hpp>
 
+class QAbstractItemModel;
+
 namespace corbasim 
 {
 namespace qt 
 {
 
 CORBASIM_QT_DECLSPEC void initialize();
+
+CORBASIM_QT_DECLSPEC void setDefaultInstanceModel(QAbstractItemModel * model);
+CORBASIM_QT_DECLSPEC QAbstractItemModel * getDefaultInstanceModel();
 
 } // namespace qt
 } // namespace corbasim

@@ -20,20 +20,10 @@
 #include <iostream>
 #include "AppConfiguration.hpp"
 #include "AppMainWindow.hpp"
-#include "AppController.hpp"
-#include "AppModel.hpp"
-#include "TriggerEngine.hpp"
-#include "AppFileWatcher.hpp"
-//#include "NSBrowser.hpp"
-#include "NSWatcher.hpp"
-#include "IDLBuilder.hpp"
-#include <corbasim/gui/LogModel.hpp>
-#include <corbasim/gui/InputRequestProcessor.hpp>
-#include <corbasim/gui/Sender.hpp>
+#include <corbasim/gui/types.hpp>
+#include <corbasim/gui/Application.hpp>
 #include <boost/thread.hpp>
 #include <boost/bind.hpp>
-#include <corbasim/qt/initialize.hpp>
-#include <sstream>
 #include <cstdlib>
 #include <iterator>
 #include <algorithm>
@@ -46,248 +36,116 @@ int main(int argc, char **argv)
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
     QApplication app(argc, argv); 
 
-    corbasim::app::AppConfiguration * config =
-        corbasim::app::AppConfiguration::getInstance();
+    int res = 0;
+    boost::thread * orbThread = NULL; 
 
-    // options
-    config->processCmdLine(argc, argv);
-
-    if (config->exit)
-        return 0;
-
-    // Force initialization
-    corbasim::qt::initialize();
-
-    QThread threadController;
-    QThread threadEngine;
-    QThread threadWatcher;
-#ifdef CORBASIM_FUTURE_FEATURES
-    QThread threadBuilder;
-#endif
-    QThread threadInputReqCntl;
-
-    // Sender
-    corbasim::gui::SenderController * senderController =
-        corbasim::gui::SenderController::getInstance();
-
-    QThread senderThread;
-    senderController->moveToThread(&senderThread);
-
-    senderController->start();
-    senderThread.start();
-    // End sender
-
-    corbasim::gui::InputRequestController& inputReqCntl = 
-        *corbasim::gui::getDefaultInputRequestController();
-
-    corbasim::app::AppModel model;
-    corbasim::app::AppController controller;
-    corbasim::app::TriggerEngine engine;
-    corbasim::app::AppFileWatcher watcher;
-#ifdef CORBASIM_FUTURE_FEATURES
-    corbasim::app::IDLBuilder builder;
-#endif
-    corbasim::app::AppMainWindow window;
-    // corbasim::gui::LogModel logModel;
-    corbasim::gui::LogModel newLogModel;
-    corbasim::app::NSWatcher nsWatcher;
-
-    // Signals between models
-    QObject::connect(&controller,
-            SIGNAL(objrefCreated(
-                    QString, const corbasim::core::interface_reflective_base *,
-                    const corbasim::app::ObjrefConfig&)),
-            &nsWatcher,
-            SLOT(objrefCreated(
-                    const QString&, 
-                    const corbasim::core::interface_reflective_base *,
-                    const corbasim::app::ObjrefConfig&)));
-    QObject::connect(&controller,
-            SIGNAL(objrefDeleted(QString)),
-            &nsWatcher,
-            SLOT(objrefDeleted(const QString&)));
-    QObject::connect(&nsWatcher,
-            SIGNAL(updateReference(const QString&, const CORBA::Object_var&)),
-            &controller, 
-            SLOT(updateReference(const QString&,
-                    const CORBA::Object_var&)));
-
-    QObject::connect(&controller,
-            SIGNAL(objrefCreated(
-                    QString, const corbasim::core::interface_reflective_base *)),
-            &newLogModel,
-            SLOT(registerInstance(
-                    const QString&, const 
-                    corbasim::core::interface_reflective_base *)));
-    QObject::connect(&controller,
-            SIGNAL(objrefDeleted(QString)),
-            &newLogModel,
-            SLOT(unregisterInstance(const QString&)));
-
-    QObject::connect(&controller,
-            SIGNAL(servantCreated(
-                    QString, 
-                    const corbasim::core::interface_reflective_base *)),
-            &newLogModel,
-            SLOT(registerInstance(
-                    const QString&, 
-                    const corbasim::core::interface_reflective_base *)));
-
-    QObject::connect(&controller,
-            SIGNAL(servantDeleted(QString)),
-            &newLogModel, SLOT(unregisterInstance(const QString&)));
-
-    QObject::connect(&controller,
-        SIGNAL(requestSent(QString, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)),
-        &newLogModel,
-        SLOT(outputRequest(const QString&, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)));
-
-    QObject::connect(&controller,
-        SIGNAL(requestReceived(QString, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)),
-        &newLogModel,
-        SLOT(inputRequest(const QString&, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)));
-    // End signals
-
-    // Input request controller
-    QObject::connect(&controller,
-            SIGNAL(servantCreated(
-                    QString, 
-                    const corbasim::core::interface_reflective_base *)),
-            &inputReqCntl,
-            SLOT(registerInstance(
-                    const QString&, 
-                    const corbasim::core::interface_reflective_base *)));
-
-    QObject::connect(&controller,
-            SIGNAL(servantDeleted(QString)),
-            &inputReqCntl, SLOT(unregisterInstance(const QString&)));
-
-    QObject::connect(&controller,
-        SIGNAL(requestReceived(QString, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)),
-        &inputReqCntl,
-        SLOT(processRequest(const QString&, corbasim::event::request_ptr,
-                corbasim::event::event_ptr)));
-    // End input request controller
-    
-    // Sender
-    QObject::connect(senderController,
-            SIGNAL(sendRequest(const QString&, corbasim::event::request_ptr)),
-            &controller,
-            SLOT(sendRequest(const QString&, corbasim::event::request_ptr)));
-    // End sender
-
-    // Executed in dedicated threads
-    controller.moveToThread(&threadController);
-    inputReqCntl.moveToThread(&threadInputReqCntl);
-    threadInputReqCntl.start();
-
-    if (config->enable_scripting)
+    // Application scope because it is a RAII
     {
-        engine.moveToThread(&threadEngine);
-        threadEngine.start();
-        engine.setController(&controller);
-        window.setEngine(&engine);
+        corbasim::gui::Application application;
+
+        corbasim::app::AppConfiguration * config =
+            corbasim::app::AppConfiguration::getInstance();
+
+        // options
+        config->processCmdLine(argc, argv);
+
+        if (config->exit)
+            return 0;
+
+        QThread threadApplication;
+        corbasim::app::AppMainWindow window;
+
+        // Signals application -> window
+        QObject::connect(&application, SIGNAL(loadedInterface(InterfaceDescriptor_ptr)), 
+                &window, SLOT(loadedInterface(InterfaceDescriptor_ptr)));
+        QObject::connect(&application, SIGNAL(objrefCreated(Objref_ptr)), 
+                &window, SLOT(objrefCreated(Objref_ptr)));
+        QObject::connect(&application, SIGNAL(servantCreated(Objref_ptr)), 
+                &window, SLOT(servantCreated(Objref_ptr)));
+        QObject::connect(&application, SIGNAL(objrefDeleted(ObjectId)), 
+                &window, SLOT(objrefDeleted(ObjectId)));
+        QObject::connect(&application, SIGNAL(servantDeleted(ObjectId)), 
+                &window, SLOT(servantDeleted(ObjectId)));
+        QObject::connect(&application, SIGNAL(error(const QString&)), 
+                &window, SLOT(displayError(const QString&)));
+        QObject::connect(&application, SIGNAL(message(const QString&)), 
+                &window, SLOT(displayMessage(const QString&)));
+        // End signals application -> window
+        
+        // Signals window -> application
+        QObject::connect(&window, SIGNAL(createObjref(const ObjrefConfig&)), 
+                &application, SLOT(createObjref(const ObjrefConfig&)));
+        QObject::connect(&window, SIGNAL(createServant(const ServantConfig&)), 
+                &application, SLOT(createServant(const ServantConfig&)));
+        QObject::connect(&window, SIGNAL(deleteObjref(ObjectId)), 
+                &application, SLOT(deleteObjref(ObjectId)));
+        QObject::connect(&window, SIGNAL(deleteServant(ObjectId)), 
+                &application, SLOT(deleteServant(ObjectId)));
+        QObject::connect(&window, SIGNAL(loadDirectory(const QString&)),
+                &application, SLOT(loadDirectory(const QString&)));
+        QObject::connect(&window, SIGNAL(loadScenario(const QString&)),
+                &application, SLOT(loadScenario(const QString&)));
+        QObject::connect(&window, SIGNAL(saveScenario(const QString&)),
+                &application, SLOT(saveScenario(const QString&)));
+        QObject::connect(&window, SIGNAL(clearScenario()),
+                &application, SLOT(clearScenario()));
+        // End signals window -> application
+     
+        QObject::connect(&window, 
+                SIGNAL(setNameService(const CORBA::Object_var&)), 
+                application.nameServiceManager(), 
+                SLOT(setNSReference(const CORBA::Object_var&)));  
+
+        QObject::connect(&window, 
+                SIGNAL(runCode(const QString&)),
+                application.scriptEngine(), 
+                SLOT(runCode(const QString&)));
+        QObject::connect(&window, SIGNAL(runFile(const QString&)),
+                application.scriptEngine(), 
+                SLOT(runFile(const QString&)));
+
+        window.show();
+
+        // Directories with corbasim_app plugins
+        strings_t::const_iterator end2 = config->plugin_directories.end();
+        for (strings_t::const_iterator it = 
+                config->plugin_directories.begin(); it != end2; ++it) 
+        {
+            std::cout << "loading: " << (*it) << std::endl;
+            application.loadDirectory(it->c_str());
+        }
+
+        // Load configuration files
+        strings_t::const_iterator end = config->load_files.end();
+        for (strings_t::const_iterator it = 
+                config->load_files.begin(); it != end; ++it) 
+        {
+            std::cout << "loading: " << (*it) << std::endl;
+            application.loadScenario(it->c_str());
+        }
+
+        if (!config->load_configuration.empty())
+        {
+            // TODO...
+        }
+
+        application.moveToThread(&threadApplication);
+        threadApplication.start();
+
+        // ORB worker
+        orbThread = new boost::thread(boost::bind(&CORBA::ORB::run, 
+                    orb.in()));
+
+        res = app.exec();
+        
+        // Wait for child threads
+        threadApplication.quit();
+        threadApplication.wait();
     }
-
-    if (config->enable_watch_directory)
-    {
-        watcher.setDirectory(config->watch_directory.c_str());
-        watcher.setController(&controller);
-
-        watcher.moveToThread(&threadWatcher);
-        threadWatcher.start();
-    }
-
-#ifdef CORBASIM_FUTURE_FEATURES
-    builder.moveToThread(&threadBuilder);
-    threadBuilder.start();
-#endif
-
-    nsWatcher.moveToThread(&threadWatcher);
-    threadWatcher.start();
-    nsWatcher.start();
-
-    threadController.start();
-
-    controller.setModel(&model);
-    model.setController(&controller);
-
-    window.setLogModel(&newLogModel);
-
-    window.setController(&controller);
-    window.show();
-
-    // Directories with corbasim_app plugins
-    strings_t::const_iterator end2 = config->plugin_directories.end();
-    for (strings_t::const_iterator it = 
-            config->plugin_directories.begin(); it != end2; ++it) 
-    {
-        std::cout << "loading: " << (*it) << std::endl;
-        model.loadDirectory(it->c_str());
-    }
-
-    // Load configuration files
-    strings_t::const_iterator end = config->load_files.end();
-    for (strings_t::const_iterator it = 
-            config->load_files.begin(); it != end; ++it) 
-    {
-        std::cout << "loading: " << (*it) << std::endl;
-        controller.loadFile(it->c_str());
-    }
-
-    if (!config->load_configuration.empty())
-    {
-        // TODO...
-    }
-
-    // borrar
-    // QTreeView view;
-    // view.setModel(&newLogModel);
-    // view.show();
-
-    // corbasim::app::NSBrowser bw;
-    // bw.show();
-    // fin borrar
-
-    boost::thread orbThread(boost::bind(&CORBA::ORB::run, orb.in()));
-
-    int res = app.exec();
-    
-    // Wait for child threads
-    threadController.quit();
-    threadEngine.quit();
-    threadWatcher.quit();
-
-#ifdef CORBASIM_FUTURE_FEATURES
-    threadBuilder.quit();
-#endif
-
-    threadInputReqCntl.quit();
-
-    // Sender
-    senderController->stop();
-    senderThread.quit();
-    senderController->join();
-    senderThread.wait();
-    // End sender
-
-    threadController.wait();
-    threadEngine.wait();
-    threadWatcher.wait();
-
-#ifdef CORBASIM_FUTURE_FEATURES
-    threadBuilder.wait();
-#endif
-
-    threadInputReqCntl.wait();
 
     orb->shutdown(1);
-    orbThread.join();
+    orbThread->join();
+    delete orbThread;
 
     return res;
 }

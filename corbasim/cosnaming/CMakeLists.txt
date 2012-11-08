@@ -1,17 +1,5 @@
 set(COSNAMING_LIBS
-    TAO_ImR_Client
-    TAO_CosNaming_Serv
-    TAO_Svc_Utils
-    TAO_Messaging
-    TAO_PI
-    TAO_CodecFactory
-    TAO_Valuetype
-    TAO_IORTable
-    TAO_CosNaming_Skel
-    TAO_PortableServer
-    TAO_CosNaming
-    TAO_AnyTypeCode
-    TAO)
+    ${CORBASIM_COSNAMING_LIBS})
 
 include(Cosnaming_static.cmake)
 
