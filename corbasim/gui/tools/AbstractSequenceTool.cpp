@@ -153,10 +153,12 @@ AbstractSequence::AbstractSequence(const QString& name,
         hLayout->addItem(spacer);
 
         // Button
-        QPushButton * stBtn = new qt::StartStopButton();
-        hLayout->addWidget(stBtn);
+        m_stBtn = new qt::StartStopButton();
+        hLayout->addWidget(m_stBtn);
 
-        connect(stBtn, SIGNAL(clicked(bool)), 
+        connect(m_stBtn, SIGNAL(clicked(bool)), 
+                this, SLOT(startOrStopAll(bool)));
+        connect(m_stBtn, SIGNAL(toggled(bool)), 
                 this, SLOT(startOrStopAll(bool)));
 
         layout->addLayout(hLayout);
@@ -522,6 +524,20 @@ void AbstractSequenceTool::showSetName()
 
         m_sequences[currentIndex]->setName(name);
         m_tabs->setTabText(currentIndex, name);
+    }
+}
+
+void AbstractSequence::stop()
+{
+    m_stBtn->setChecked(false);
+}
+
+void AbstractSequenceTool::stop()
+{
+    for (sequences_t::iterator it = m_sequences.begin(); 
+            it != m_sequences.end(); ++it) 
+    {
+        (*it)->stop();
     }
 }
 

@@ -29,11 +29,19 @@ namespace corbasim
 namespace gui 
 {
 
+/**
+ * @brief Abstraction for collections.
+ */
 class CORBASIM_GUI_DECLSPEC AbstractTool : public QWidget
 {
     Q_OBJECT
 public:
 
+    /**
+     * @brief Functor for interation.
+     *
+     * Register instances in the tool.
+     */
     struct Register
     {
         AbstractTool * _this;
@@ -54,8 +62,24 @@ public:
 
 public slots:
 
+    /**
+     * @brief Register an instance in this tool.
+     *
+     * @param object The instance.
+     */
     virtual void registerInstance(Objref_ptr object) = 0;
+
+    /**
+     * @brief Unregister an instance from this tool. 
+     *
+     * @param id The instance identifier.
+     */
     virtual void unregisterInstance(ObjectId id) = 0;
+
+    /**
+     * @brief Stop the tool. Reimplement if required. 
+     */
+    virtual void stop();
 };
 
 } // namespace gui

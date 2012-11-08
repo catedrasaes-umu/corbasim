@@ -29,3 +29,7 @@ AbstractTool::~AbstractTool()
 {
 }
 
+void AbstractTool::stop()
+{
+}
+

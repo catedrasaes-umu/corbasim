@@ -103,6 +103,8 @@ public slots:
     void moveUpItem(AbstractSequenceItem * item);
     void moveDownItem(AbstractSequenceItem * item);
 
+    void stop();
+
 private slots:
 
     void startOrStopAll(bool checked);
@@ -128,6 +130,8 @@ protected:
     items_t m_items;
 
     QScrollArea * m_scroll;
+
+    QPushButton * m_stBtn;
 };
 
 class CORBASIM_GUI_DECLSPEC AbstractSequenceTool : 
@@ -143,14 +147,20 @@ public:
 
 public slots:
 
-    /**
-     * @brief Register an instance into this tool.
-     *
-     * @param object
-     */
     void registerInstance(Objref_ptr object);
     void unregisterInstance(ObjectId id);
 
+    /**
+     * @brief Append a new item to the current sequence. It uses
+     * createAbstractItem to create the item.
+     *
+     * If no current creates a new sequence.
+     *
+     * @param object
+     * @param op
+     *
+     * @return The new item or NULL if invalid object or operation.
+     */
     AbstractSequenceItem * appendAbstractItem(
             Objref_ptr object,
             OperationDescriptor_ptr op);
@@ -168,12 +178,25 @@ public slots:
 
     void showSetName();
 
+    /**
+     * @brief Stop all the sequences.
+     */
+    void stop();
+
 private slots:
 
     void sequenceModified();
 
 protected:
 
+    /**
+     * @brief Must create an instance of a subclass of AbstractSequenceItem.
+     *
+     * @param object The associated instance.
+     * @param op The associated operation.
+     *
+     * @return The created instance or NULL if invalid object or operation.
+     */
     virtual AbstractSequenceItem * createAbstractItem(
             Objref_ptr object, 
             OperationDescriptor_ptr op) = 0;

@@ -1017,6 +1017,11 @@ void AppMainWindow::stopAll()
     {
         (*it)->stopAll();
     }
+
+    for (int i = 0; i < tToolsMax; i++) 
+    {
+        if (m_tools[i]) m_tools[i]->stop();
+    }
 }
 
 void AppMainWindow::selectedOperation(Objref_ptr object, 
