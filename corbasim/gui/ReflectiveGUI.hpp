@@ -53,6 +53,10 @@ QWidget * CORBASIM_GUI_DECLSPEC createSimpleWidget(
     TypeDescriptor_ptr reflective,
     QWidget * parent);
 
+/**
+ * @brief This is the base class of all widget abstraction 
+ * associated to a type descriptor.
+ */
 class CORBASIM_GUI_DECLSPEC ReflectiveWidgetBase
 {
 protected:
