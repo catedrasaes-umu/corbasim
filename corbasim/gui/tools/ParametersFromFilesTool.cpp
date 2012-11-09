@@ -113,6 +113,20 @@ FilesItem * ParametersFromFilesTool::createFilesItem(
 
     if (m_operation && m_objref)
     {
+        // FIXME when doing model->check it throws 
+        // the signal connected to this method, but when
+        // loading a configuration file, we call this method
+        // first and then we check it in the model. Then
+        // we have to protect us for duplicate items.
+        // It should be better implemented.
+        for (int i = 0; i < m_items.size(); i++) 
+        {
+            if (m_items.at(i)->path() == path)
+            {
+                return NULL;
+            }
+        }
+
         plot = new FilesItem(m_objref, m_operation, path);
 
         qt::SortableGroupItem * item = 
