@@ -56,7 +56,18 @@ public:
     AbstractTool(QWidget * parent = 0);
     virtual ~AbstractTool();
 
+    /**
+     * @brief Use this method to save the tool's configuration.
+     *
+     * @param settings Recipient for the configuration.
+     */
     virtual void save(QVariant& settings) = 0;
+
+    /**
+     * @brief Use this method to load the tool's configuration.
+     *
+     * @param settings Recipient for the configuration.
+     */
     virtual void load(const QVariant& settings) = 0;
 
 

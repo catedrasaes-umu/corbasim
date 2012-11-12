@@ -180,6 +180,8 @@ QWidget * ::corbasim::gui::createSimpleWidget(
     return new QLabel("Unsupported item!", parent);
 }
 
+// Widget base
+
 ReflectiveWidgetBase::ReflectiveWidgetBase(
 	TypeDescriptor_ptr reflective) :
     m_reflective(reflective)
@@ -195,6 +197,8 @@ ReflectiveWidgetBase::getReflective() const
 {
     return m_reflective;
 }
+
+// Alternatives widget
     
 AlternativesWidget::AlternativesWidget(
         TypeDescriptor_ptr reflective,
@@ -275,6 +279,8 @@ void AlternativesWidget::changeWidget(int idx)
     m_stack->setCurrentIndex(idx);
 }
 
+// Float widget
+
 FloatWidget::FloatWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QDoubleSpinBox(parent), ReflectiveWidgetBase(reflective)
@@ -343,6 +349,8 @@ void FloatWidget::fromHolder(Holder& holder)
             break;
     }
 }
+
+// Integer widget
 
 IntegerWidget::IntegerWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
@@ -472,6 +480,8 @@ void IntegerWidget::fromHolder(Holder& holder)
     }
 }
 
+// String Widget
+
 StringWidget::StringWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :
     QLineEdit(parent), ReflectiveWidgetBase(reflective)
@@ -502,6 +512,8 @@ void StringWidget::setValue(const QString& value)
 {
     setText(value);
 }
+
+// Enum Widget
 
 EnumWidget::EnumWidget(TypeDescriptor_ptr reflective,
         QWidget * parent) :

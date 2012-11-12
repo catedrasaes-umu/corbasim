@@ -134,6 +134,13 @@ protected:
     QPushButton * m_stBtn;
 };
 
+/**
+ * @brief Abstraction for operation sequences tool.
+ *
+ * It is composed of a QTabWidget with a tab per sequence.
+ * Every sequence consists in an ordered set of AbstratSequenceItem
+ * instances.
+ */
 class CORBASIM_GUI_DECLSPEC AbstractSequenceTool : 
     public AbstractTool
 {
@@ -176,6 +183,9 @@ public slots:
 
     void setTreeVisible(bool visible);
 
+    /**
+     * @brief Displays a dialog for setting the current sequence name.
+     */
     void showSetName();
 
     /**

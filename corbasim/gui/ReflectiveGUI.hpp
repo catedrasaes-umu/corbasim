@@ -82,6 +82,9 @@ protected:
     TypeDescriptor_ptr m_reflective;
 };
 
+/**
+ * @brief Will be deprecated.
+ */
 class CORBASIM_GUI_DECLSPEC AlternativesWidget : 
     public QWidget, public ReflectiveWidgetBase
 {
