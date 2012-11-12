@@ -14,7 +14,7 @@ GET_FILENAME_COMPONENT(TAO_LIBRARY_DIR ${TAO_LIBRARY} PATH)
 
 set(TAO_LIBRARIES ${TAO_LIBRARY})
 
-set(TAO_FIND_LIBS "PortableServer"  "CosNaming" 
+set(TAO_FIND_LIBS "PortableServer"  "CosNaming" "CosNaming_Skel" 
     "CosEvent" "CosEvent_Skel" "AnyTypeCode"
     "ObjRefTemplate" 
     "CosNaming_Serv" "ImR_Client" "Svc_Utils"
