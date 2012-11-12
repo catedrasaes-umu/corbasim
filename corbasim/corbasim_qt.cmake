@@ -1,13 +1,10 @@
 set(corbasim_qt_EXPORTED_HEADERS
     qt/CustomLayouts.hpp
     qt/MultiFileSelectionWidget.hpp
-    qt/RangedWidget.hpp
     qt/ReferenceFinder.hpp
-    qt/ScriptWindow.hpp
     qt/SortableGroup.hpp
     qt/Status.hpp
     qt/TabWidget.hpp
-    qt/TemplatedSpinBox.hpp
     qt/export.hpp
     qt/types.hpp
     qt/StartStopButton.hpp
@@ -28,9 +25,7 @@ set(corbasim_qt_MOC_HDRS
 
     qt/CustomLayouts.hpp
     qt/MultiFileSelectionWidget.hpp
-    qt/RangedWidget.hpp
     qt/ReferenceFinder.hpp
-    qt/ScriptWindow.hpp
     qt/SortableGroup.hpp
     qt/Status.hpp
     qt/TabWidget.hpp
@@ -48,7 +43,6 @@ set(corbasim_qt_SRCS
     qt/CustomLayouts.cpp
     qt/MultiFileSelectionWidget.cpp
     qt/ReferenceFinder.cpp
-    qt/ScriptWindow.cpp
     qt/SortableGroup.cpp
     qt/Status.cpp
     qt/TabWidget.cpp

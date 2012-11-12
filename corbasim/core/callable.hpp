@@ -45,26 +45,25 @@ struct callable
     template< typename Value >
     void operator()(Value& val)
     {
-        typedef event::request_impl< Value > request_t;
-        typedef event::response_impl< Value > response_t;
+        using namespace ::corbasim::event;
 
-        event::request_ptr _req (new request_t(val));
+        typedef request_impl< Value > request_t;
+        typedef response_impl< Value > response_t;
+
+        request_ptr _req (new request_t(val));
 
         // Proposed response
-        event::response_ptr _resp (new response_t(val));
+        response_ptr _resp (new response_t(val));
 
         // Call to the request processor
-        event::event_ptr _ev ((*m_proc)(_req, _resp));
+        event_ptr _ev ((*m_proc)(_req, _resp));
 
-        if (_ev && _ev->get_type () == event::RESPONSE)
+        if (_ev && _ev->get_type () == RESPONSE)
         {
-            response_t * _resp = dynamic_cast< response_t * > (_ev.get());
+            response_t * _resp = static_cast< response_t * > (_ev.get());
 
             val = _resp->m_values;
         }
-        else
-            ; // TODO throw exception
-        
     }
 
     request_processor * m_proc;
