@@ -226,9 +226,6 @@ void RequestDialog::save(QVariant& settings)
 
 void RequestDialog::load(const QVariant& settings) 
 {
-    if (!settings.canConvert(QVariant::Map))
-        return;
-
     const QVariantMap map = settings.toMap();
 
     m_sbPeriod->setValue(map["period"].toInt());

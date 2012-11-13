@@ -406,12 +406,43 @@ void OperationFormWidget::mouseMoveEvent(QMouseEvent *event)
 void OperationFormWidget::save(QVariant& settings)
 {
     // There are no additional settings
-    settings = value();
+    // settings = value();
+    // Isn't true. ObjrefWidget has its own settings. We have to save them.
+
+    unsigned int count = m_reflective->get_children_count();
+
+    QVariantMap value;
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            QVariant child;
+
+            m_widgets[i]->save(child);
+
+            value[m_reflective->get_child_name(i)] = child;
+        }
+    }
+
+    settings = value;
 }
 
 void OperationFormWidget::load(const QVariant& settings)
 {
-    setValue(settings);
+    // setValue(settings);
+
+    const QVariantMap value = settings.toMap();
+
+    unsigned int count = m_reflective->get_children_count();
+
+    for (unsigned int i = 0; i < count; i++) 
+    {
+        if (m_widgets[i])
+        {
+            m_widgets[i]->load(
+                    value[m_reflective->get_child_name(i)]);
+        }
+    }
 }
 
 // 

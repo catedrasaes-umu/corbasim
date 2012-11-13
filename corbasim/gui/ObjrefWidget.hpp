@@ -91,6 +91,8 @@ protected:
     QAbstractItemModel * m_model;
 
     Objref_ptr m_objref;
+
+    QString m_currentModelItem;
 };
 
 } // namespace gui

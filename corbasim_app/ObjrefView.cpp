@@ -350,27 +350,33 @@ void ObjrefView::load(const QVariant& settings)
                 it != list.end(); ++it) 
         {
             const QVariantMap map = it->toMap();
+            const QString operation = map["operation"].toString();
 
-            if (map.contains("operation") && map.contains("value"))
+            if (!operation.isEmpty() && map.contains("value"))
             {
                 // find the index
                 unsigned int i = 0;
-                bool found = false;
-                for (; !found && i < m_objref->interface()->operation_count(); 
-                        i++) 
+                const unsigned int count = 
+                    m_objref->interface()->operation_count(); 
+
+                for (; i < count; i++) 
                 {
-                    found = (m_objref->interface()->get_reflective_by_index(i)->get_name() 
-                            == map.value("operation").toString());
+                    const char * current = 
+                            m_objref->interface()->get_reflective_by_index(
+                                    i)->get_name();
+
+                    if (operation == current) break;
                 }
 
                 // load its saved value
-                if (found)
+                if (i < count)
                 {
                     getRequestDialog(i)->load(map.value("value"));
                 }
             }
         }
     }
+
     if (map.contains("senders"))
     {
         const QVariantList list = map.value("senders").toList();
@@ -379,23 +385,28 @@ void ObjrefView::load(const QVariant& settings)
                 it != list.end(); ++it) 
         {
             const QVariantMap map = it->toMap();
+            const QString operation = map["operation"].toString();
 
-            if (map.contains("operation") && map.contains("value"))
+            if (!operation.isEmpty() && map.contains("value"))
             {
                 // find the index
                 unsigned int i = 0;
-                bool found = false;
-                for (; !found && i < m_objref->interface()->operation_count(); 
-                        i++) 
+                const unsigned int count = 
+                    m_objref->interface()->operation_count(); 
+
+                for (; i < count; i++) 
                 {
-                    found = (m_objref->interface()->get_reflective_by_index(i)->get_name() 
-                            == map.value("operation").toString());
+                    const char * current = 
+                            m_objref->interface()->get_reflective_by_index(
+                                    i)->get_name();
+
+                    if (operation == current) break;
                 }
 
                 // load its saved value
-                if (found)
+                if (i < count)
                 {
-                    getRequestDialog(i)->load(map.value("value"));
+                    getSenderDialog(i - 1)->load(map.value("value"));
                 }
             }
         }
