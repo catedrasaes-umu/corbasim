@@ -35,7 +35,7 @@ template < typename Value >
 struct oneway_caller
 {
     template < typename Interface >
-    static inline event::event* invoke(Interface * ref, 
+        static inline event::event* invoke(Interface * ref, 
             event::request * req)
     {
         typedef event::request_impl< Value > request_t;
@@ -122,9 +122,12 @@ struct interface_caller : public interface_caller_base
     void set_reference(CORBA::Object_ptr ref)
     {
         CORBA::release(m_ref);
-        try {
+        try 
+        {
             m_ref = Interface::_narrow(ref);
-        } catch (...) {
+        } 
+        catch (...) 
+        {
             m_ref = Interface::_nil();
         }
     }
@@ -148,34 +151,35 @@ struct interface_caller : public interface_caller_base
 
     event::event * do_call(event::request * req) const
     {
+        event::event * ev = NULL;
+
         try 
         {
-            return do_call_throw(req);
+            ev = do_call_throw(req);
         } 
         catch (const CORBA::Exception& ex)
         {
-            return new event::exception(ex._name());
+            ev = new event::exception(ex._name());
         }
         catch (...)
         {
-            return new event::exception();
+            ev = new event::exception();
         }
 
-        return NULL;
+        return ev;
     }
 
     event::event * do_call_throw(event::request * req) const
     {
-        if (!m_ref)
-            return NULL;
-
-        typename callers_t::const_iterator it;
-        
-        it = m_callers.find(req->get_tag());
-
-        if (it != m_callers.end())
+        if (m_ref)
         {
-            return it->second->call(m_ref, req);
+            typename callers_t::const_iterator it = 
+                m_callers.find(req->get_tag());
+
+            if (it != m_callers.end())
+            {
+                return it->second->call(m_ref, req);
+            }
         }
 
         return NULL;

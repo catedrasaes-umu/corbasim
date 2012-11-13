@@ -35,6 +35,7 @@ if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
         ${TAO_PortableServer_LIB}
         ${TAO_AnyTypeCode_LIB}
         ${TAO_CosNaming_LIB}
+        ${TAO_CosNaming_Skel_LIB}
         ${TAO_ObjRefTemplate_LIB})
     set(CORBASIM_ORB_INCLUDE_DIRS
         ${ACE_INCLUDE_DIR}
