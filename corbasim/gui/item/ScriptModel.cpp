@@ -266,9 +266,8 @@ QModelIndex ScriptModel::parent(const QModelIndex &index) const
     {
         // index could be changed
         int row = 0;
-        bool found = false;
 
-        for (; row < m_nodes.size() && !found; row++) 
+        for (; row < m_nodes.size(); row++) 
             if (m_nodes.at(row).get() == node->parent)
                 return createIndex(row, 0, (void *) node->parent);
 
