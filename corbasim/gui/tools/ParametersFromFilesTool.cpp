@@ -19,6 +19,7 @@
 
 #include "ParametersFromFilesTool.hpp"
 #include <corbasim/qt/SortableGroup.hpp>
+#include <corbasim/qt/FormWidget.hpp>
 #include <corbasim/gui/utils.hpp>
 #include <iostream>
 
@@ -264,9 +265,12 @@ FilesItem::FilesItem(
     m_reflective(reflective), 
     m_path(path)
 {
-    QGridLayout * layout = new QGridLayout();
+    QVBoxLayout * layout = new QVBoxLayout();
+    layout->setMargin(0);
 
-    int row = 0;
+    qt::FormWidget * form = new qt::FormWidget();
+    form->layout()->setMargin(0);
+    layout->addWidget(form);
 
     m_filesWidget = new QLineEdit();
     m_filesWidget->setReadOnly(true);
@@ -274,24 +278,21 @@ FilesItem::FilesItem(
     QPushButton * browse = new QPushButton("&Browse");
     prefixLayout->addWidget(m_filesWidget);
     prefixLayout->addWidget(browse);
-    layout->addWidget(new QLabel("Files"), row, 0);
-    layout->addLayout(prefixLayout, row++, 1);
+    prefixLayout->setMargin(0);
+    form->addMediumField("Files", prefixLayout);
 
     m_currentFile = new QComboBox();
-    layout->addWidget(new QLabel("Next file to send"), row, 0);
-    layout->addWidget(m_currentFile, row++, 1);
-
-    m_repeat = new QCheckBox();
-    m_repeat->setChecked(true);
-    layout->addWidget(new QLabel("Repeat"), row, 0);
-    layout->addWidget(m_repeat, row++, 1);
+    form->addField("Next file to send", m_currentFile);
     
     m_format = new QComboBox();
     m_format->addItem("Binary (*.bin)");
     m_format->addItem("Text (*.txt)");
     m_format->addItem("JSON (*.json)");
-    layout->addWidget(new QLabel("Format"), row, 0);
-    layout->addWidget(m_format, row++, 1);
+    form->addField("Format", m_format);
+
+    m_repeat = new QCheckBox();
+    m_repeat->setChecked(true);
+    form->addField("Repeat", m_repeat);
 
     setLayout(layout);
 
