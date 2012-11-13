@@ -142,8 +142,18 @@ QString ObjrefWidget::getNSEntry() const
 
 void ObjrefWidget::modelChanged()
 {
+    // We restore the previous selected item
+    int idx = m_object_selector->findText(m_currentModelItem);
+
+    if (idx != -1)
+    {
+        m_object_selector->setCurrentIndex(idx);
+    }
+
     if (m_stack->currentIndex() == 2)
+    {
         valueChanged();
+    }
 }
 
 void ObjrefWidget::valueChanged()
@@ -152,7 +162,8 @@ void ObjrefWidget::valueChanged()
     core::reference_repository * rr = 
         core::reference_repository::get_instance();
        
-    try {
+    try 
+    {
         switch(m_stack->currentIndex())
         {
         // NS query 
@@ -170,9 +181,14 @@ void ObjrefWidget::valueChanged()
                 m_objref->setNsEntry(QString());
 
                 int idx = m_object_selector->currentIndex();
-
+                
                 if (m_model && idx != -1)
                 {
+                    // We keep the selected item for when model
+                    // reset
+                    m_currentModelItem = 
+                        m_object_selector->currentText();
+
                     QVariant v = m_object_selector->itemData(idx);
                     if (v.canConvert< CORBA::Object_var >())
                     {
@@ -196,7 +212,9 @@ void ObjrefWidget::valueChanged()
             }
             break;
         }
-    } catch (...) {
+    } 
+    catch (...) 
+    {
         // NIL
         setReference(ref);
     }
@@ -229,12 +247,8 @@ void ObjrefWidget::save(QVariant& settings)
     map["ior"] = m_ior->toPlainText();
     map["ns_entry_string"] = m_resolve_str->toPlainText();
    
-    int idx = m_object_selector->currentIndex();
-
-    if (idx != -1)
-    {
-        map["known_object"] = m_object_selector->itemData(idx, Qt::DisplayRole);
-    }
+    // known object
+    map["known_object"] = m_object_selector->currentText();
 
     settings = map;
 }
@@ -243,12 +257,22 @@ void ObjrefWidget::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
 
-    m_selector->setCurrentIndex(map["index"].toInt());
     m_ior->setPlainText(map["ior"].toString());
     m_resolve_str->setPlainText(map["ns_entry_string"].toString());
    
-    // TODO map["known_object"] = m_object_selector->itemData(idx, Qt::DisplayRole);
+    // known object
+    const QString knownObject = map["known_object"].toString();
+    int idx = m_object_selector->findText(knownObject);
 
+    if (idx != -1)
+    {
+        m_object_selector->setCurrentIndex(idx);
+    }
+    
+    // At the end...
+    m_selector->setCurrentIndex(map["index"].toInt());
+
+    // Already connected to setCurrentIndex, but anyway...
     valueChanged();
 }
 
