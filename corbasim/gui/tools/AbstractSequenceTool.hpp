@@ -100,6 +100,7 @@ public:
 public slots:
 
     void appendItem(AbstractSequenceItem * item);
+    void forgetItem(AbstractSequenceItem * item);
 
     void deleteItem(AbstractSequenceItem * item);
     void moveUpItem(AbstractSequenceItem * item);
@@ -189,6 +190,8 @@ public slots:
 
     void duplicateCurrentItem();
     void deleteCurrentItem();
+
+    void moveCurrentItemTo(int idx);
     // End current item slots
 
     void setTreeVisible(bool visible);
@@ -221,6 +224,8 @@ protected:
             Objref_ptr object, 
             OperationDescriptor_ptr op) = 0;
 
+    void regenerateMoveTo(int idx);
+
     InstanceModel m_model;
 
     OperationsView * m_view;
@@ -231,6 +236,8 @@ protected:
 
     QMenu * m_menu;
     QMenu * m_menuCurrentItem;
+    QMenu * m_menuCurrentItemMoveTo;
+    QSignalMapper * m_moveToSignalMapper;
 
     QString m_filter;
     QString m_extension;
