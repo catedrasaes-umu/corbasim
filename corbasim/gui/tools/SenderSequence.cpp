@@ -19,6 +19,9 @@
 
 #include "SenderSequence.hpp"
 #include <corbasim/gui/OperationForm.hpp>
+#include <corbasim/gui/json.hpp>
+
+#include <fstream>
 
 using namespace corbasim::gui;
 
@@ -44,6 +47,11 @@ SenderSequenceItem::~SenderSequenceItem()
 {
 }
 
+OperationSender * SenderSequenceItem::sender() const
+{
+    return m_dlg;
+}
+
 void SenderSequenceItem::showDetails(bool show)
 {
     m_dlg->getForm()->setVisible(show);
@@ -55,6 +63,15 @@ SenderSequenceTool::SenderSequenceTool(QWidget * parent) :
 {
     m_filter = tr("CORBASIM Sender Sequence Tool (*.sst)");
     m_extension = ".sst";
+
+    // Additional actions
+    m_menuCurrentItem->addSeparator();
+    m_currentItemActions.push_back(
+            m_menuCurrentItem->addAction("Load form value", 
+                this, SLOT(loadCurrentItemFormValue())));
+    m_currentItemActions.push_back(
+            m_menuCurrentItem->addAction("Save form value", 
+                this, SLOT(saveCurrentItemFormValue())));
 }
 
 SenderSequenceTool::~SenderSequenceTool()
@@ -70,6 +87,60 @@ SenderSequenceTool::createAbstractItem(
         new SenderSequenceItem(object, op);
 
     return item;
+}
+
+void SenderSequenceTool::saveCurrentItemFormValue()
+{
+    if (m_currentItem)
+    {
+        SenderSequenceItem * sender = 
+            static_cast< SenderSequenceItem * >(m_currentItem);
+
+        QString file = QFileDialog::getSaveFileName( 
+                0, tr("Select a file"), ".");
+
+        // User cancels
+        if (file.isEmpty())
+            return;
+
+        QVariant v;
+        sender->sender()->getForm()->getWidget()->save(v);
+
+        std::ofstream ofs(file.toStdString().c_str());
+        json::ostream_writer_t ow(ofs, true);
+
+        toJson(ow, v);
+    }
+}
+
+void SenderSequenceTool::loadCurrentItemFormValue()
+{
+    if (m_currentItem)
+    {
+        SenderSequenceItem * sender = 
+            static_cast< SenderSequenceItem * >(m_currentItem);
+
+        const QString file = QFileDialog::getOpenFileName(
+                0, tr("Select some file"), ".");
+
+        // User cancels
+        if (file.isEmpty())
+            return;
+
+        QVariant var;
+
+        // Try to Read a JSON file
+        bool res = fromJsonFile(file.toStdString().c_str(), var);
+
+        if (res)
+        {
+            sender->sender()->getForm()->getWidget()->load(var);
+        }
+        else
+        {
+            // TODO display error
+        }
+    }
 }
 
 // Settings
