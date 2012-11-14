@@ -114,6 +114,16 @@ ObjectId AbstractSequenceItem::objectId() const
     return m_object->id();
 }
 
+Objref_ptr AbstractSequenceItem::object() const
+{
+    return m_object;
+}
+
+OperationDescriptor_ptr AbstractSequenceItem::operation() const
+{
+    return m_operation;
+}
+
 AbstractSequence::AbstractSequence(const QString& name, 
         QWidget * parent) :
     QWidget(parent), m_name(name)
@@ -238,6 +248,12 @@ void AbstractSequence::appendItem(AbstractSequenceItem * item)
     emit modified();
 }
 
+void AbstractSequence::forgetItem(AbstractSequenceItem * item)
+{
+    m_items.removeAll(item);
+    emit modified();
+}
+
 void AbstractSequence::deleteItem(AbstractSequenceItem * item)
 {
     m_items.removeAll(item);
@@ -311,7 +327,7 @@ void AbstractSequence::moveDownItem()
 
 // Tool
 AbstractSequenceTool::AbstractSequenceTool(QWidget * parent) :
-    AbstractTool(parent)
+    AbstractTool(parent), m_moveToSignalMapper(NULL), m_currentItem(NULL)
 {
     m_model.setDisplayParameters(false);
 
@@ -366,18 +382,36 @@ AbstractSequenceTool::AbstractSequenceTool(QWidget * parent) :
 
     // Menu
     m_menu = new QMenu();
-    m_menu->addAction("Save as...", this, SLOT(saveCurrentSequence()));
-    m_menu->addSeparator();
     m_menu->addAction("Set name", this, SLOT(showSetName()));
     m_menu->addSeparator();
-    m_menu->addAction("New", this, SLOT(createSequence()));
-    m_menu->addAction("Load", this, SLOT(loadSequence()));
+    m_menu->addAction("New tabs", this, SLOT(createSequence()));
+    m_menu->addAction("Load tabs", this, SLOT(loadSequence()));
+    m_menu->addAction("Save tabs as...", this, SLOT(saveCurrentSequence()));
+    m_menu->addSeparator();
+    // Current item actions
+    m_menuCurrentItem = m_menu->addMenu("Current item");
+    m_currentItemActions.push_back(
+            m_menuCurrentItem->addAction("Duplicate", 
+                this, SLOT(duplicateCurrentItem())));
+    m_currentItemActions.push_back(
+            m_menuCurrentItem->addAction("Delete", 
+                this, SLOT(deleteCurrentItem())));
+    m_menuCurrentItem->addSeparator();
+    m_menuCurrentItemMoveTo = m_menuCurrentItem->addMenu("Move to tab");
+    m_menuCurrentItem->addSeparator();
+    m_currentItemActions.push_back(
+            m_menuCurrentItem->addAction("Load configuration", 
+                this, SLOT(loadCurrentItem())));
+    m_currentItemActions.push_back(
+            m_menuCurrentItem->addAction("Save configuration", 
+                this, SLOT(saveCurrentItem())));
 
     createSequence();
 }
 
 AbstractSequenceTool::~AbstractSequenceTool()
 {
+    delete m_moveToSignalMapper;
 }
 
 void AbstractSequenceTool::registerInstance(Objref_ptr object)
@@ -435,7 +469,52 @@ void AbstractSequenceTool::showContextMenu(const QPoint& pos)
 {
     if (m_sequences.size() > 0)
     {
+        // Looking for current item
+        QWidget * w = childAt(pos);
+        m_currentItem = NULL;
+
+        while (w && w != this && 
+                !(m_currentItem = dynamic_cast< AbstractSequenceItem * >(w)))
+            w = w->parentWidget();
+        // End looking for current item
+
+        // Actions enabled only when an item is under the cursor
+        for (QList< QAction * >::iterator it = m_currentItemActions.begin(); 
+                it != m_currentItemActions.end(); ++it) 
+        {
+            (*it)->setEnabled(m_currentItem != NULL);
+        }
+
+        int currentTab = m_tabs->currentIndex();
+        regenerateMoveTo(currentTab);
+
         m_menu->exec(QCursor::pos());
+    }
+}
+
+void AbstractSequenceTool::regenerateMoveTo(int idx)
+{
+    delete m_moveToSignalMapper;
+
+    m_menuCurrentItemMoveTo->clear();
+
+    m_moveToSignalMapper = new QSignalMapper(this);
+
+    connect(m_moveToSignalMapper, SIGNAL(mapped(int)),
+            this, SLOT(moveCurrentItemTo(int)));
+
+    for (int i = 0; i < m_sequences.size(); i++) 
+    {
+        QAction * action = 
+            m_menuCurrentItemMoveTo->addAction(m_sequences[i]->getName());
+
+        connect(action, SIGNAL(triggered()),
+                m_moveToSignalMapper, SLOT(map()));
+
+        // Only enabled if isn't the current sequence
+        action->setEnabled(m_currentItem && (i != idx));
+
+        m_moveToSignalMapper->setMapping(action, i);
     }
 }
 
@@ -481,6 +560,105 @@ void AbstractSequenceTool::loadSequence()
     else
     {
         // TODO display error
+    }
+}
+
+void AbstractSequenceTool::saveCurrentItem()
+{
+    if (m_currentItem)
+    {
+        QString file = QFileDialog::getSaveFileName( 
+                0, tr("Select a file"), ".");
+
+        // User cancels
+        if (file.isEmpty())
+            return;
+
+        QVariant v;
+        m_currentItem->save(v);
+
+        std::ofstream ofs(file.toStdString().c_str());
+        json::ostream_writer_t ow(ofs, true);
+
+        toJson(ow, v);
+    }
+}
+
+void AbstractSequenceTool::loadCurrentItem()
+{
+    if (m_currentItem)
+    {
+        const QString file = QFileDialog::getOpenFileName( 
+                0, tr("Select a file"), ".");
+
+        // User cancels
+        if (file.isEmpty())
+            return;
+
+        QVariant var;
+
+        // Try to Read a JSON file
+        bool res = fromJsonFile(file.toStdString().c_str(), var);
+
+        if (res)
+        {
+            m_currentItem->load(var);
+        }
+        else
+        {
+            // TODO display error
+        }
+    }
+}
+
+void AbstractSequenceTool::duplicateCurrentItem()
+{
+    int idx = m_tabs->currentIndex();
+
+    if (m_currentItem && idx > -1 && idx < m_sequences.size())
+    {
+        AbstractSequence * seq = m_sequences[idx];
+
+        // Creates the new item
+        AbstractSequenceItem * item = 
+            createAbstractItem(m_currentItem->object(), 
+                    m_currentItem->operation());
+        
+        // Save its settings
+        QVariant settings;
+        m_currentItem->save(settings);
+
+        // load this settings in the new item
+        item->load(settings);
+
+        // Appends it to the sequence
+        seq->appendItem(item);
+    }
+}
+
+void AbstractSequenceTool::deleteCurrentItem()
+{
+    int idx = m_tabs->currentIndex();
+
+    if (m_currentItem && idx > -1 && idx < m_sequences.size())
+    {
+        m_sequences[idx]->deleteItem(m_currentItem);
+
+        m_currentItem = NULL;
+    }
+}
+
+void AbstractSequenceTool::moveCurrentItemTo(int idx)
+{
+    if (m_currentItem && idx > -1 && idx < m_sequences.size())
+    {
+        int currentTab = m_tabs->currentIndex();
+
+        m_sequences[currentTab]->forgetItem(m_currentItem);
+
+        // Appends the current item in the specified tab
+        m_tabs->setCurrentIndex(idx);
+        m_sequences[idx]->appendItem(m_currentItem);
     }
 }
 

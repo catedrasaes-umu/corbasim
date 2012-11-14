@@ -37,7 +37,12 @@ public:
     virtual ~FormWidget();
 
     void addField(const QString& text, QWidget * widget);
+    void addMediumField(const QString& text, QWidget * widget);
     void addBigField(const QString& text, QWidget * widget);
+
+    void addField(const QString& text, QLayout * layout);
+    void addMediumField(const QString& text, QLayout * layout);
+    void addBigField(const QString& text, QLayout * layout);
 
 protected:
 
@@ -49,8 +54,9 @@ protected:
         QGroupBox * group;
         QLabel * label;
         QWidget * widget;
+        bool medium;
 
-        Item() : group(NULL), label(NULL), widget(NULL)
+        Item() : group(NULL), label(NULL), widget(NULL), medium(false)
         {}
     };
 

@@ -54,6 +54,19 @@ void FormWidget::addField(const QString& text, QWidget * widget)
     reallocate(width());
 }
 
+void FormWidget::addMediumField(const QString& text, QWidget * widget)
+{
+    Item item;
+    
+    item.label = new QLabel(text);
+    item.widget = widget;
+    item.medium = true;
+
+    m_items.push_back(item);
+    
+    reallocate(width());
+}
+
 void FormWidget::addBigField(const QString& text, QWidget * widget)
 {
     Item item;
@@ -95,7 +108,7 @@ void FormWidget::reallocate(int width)
 
     for (unsigned int i = 0; i < m_items.size(); i++) 
     {
-        if (m_items[i].label)
+        if (m_items[i].label && !m_items[i].medium)
         {
             m_layout->addWidget(m_items[i].label, row, column++);
             m_layout->addWidget(m_items[i].widget, row, column++);
@@ -105,6 +118,16 @@ void FormWidget::reallocate(int width)
                 row++;
                 column = 0;
             }
+        }
+        else if (m_items[i].label)
+        {
+            if (column != 0) row++;
+            column = 0;
+
+            m_layout->addWidget(m_items[i].label, row, 0);
+            m_layout->addWidget(m_items[i].widget, row, 1, 1, rowWidth - 1);
+
+            row++;
         }
         else
         {
@@ -116,5 +139,26 @@ void FormWidget::reallocate(int width)
     }
 
     setMinimumWidth(2 * m_minWidth);
+}
+
+void FormWidget::addField(const QString& text, QLayout * layout)
+{
+    QWidget * w = new QWidget(this);
+    w->setLayout(layout);
+    addField(text, w);
+}
+
+void FormWidget::addMediumField(const QString& text, QLayout * layout)
+{
+    QWidget * w = new QWidget(this);
+    w->setLayout(layout);
+    addMediumField(text, w);
+}
+
+void FormWidget::addBigField(const QString& text, QLayout * layout)
+{
+    QWidget * w = new QWidget(this);
+    w->setLayout(layout);
+    addBigField(text, w);
 }
 

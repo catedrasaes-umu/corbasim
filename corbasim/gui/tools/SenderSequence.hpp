@@ -40,6 +40,8 @@ public:
             QWidget * parent = 0);
     virtual ~SenderSequenceItem();
 
+    OperationSender * sender() const;
+
 public slots:
     
     void showDetails(bool show);
@@ -59,6 +61,11 @@ class CORBASIM_GUI_DECLSPEC SenderSequenceTool :
 public:
     SenderSequenceTool(QWidget * parent = 0);
     virtual ~SenderSequenceTool();
+
+public slots:
+
+    void saveCurrentItemFormValue();
+    void loadCurrentItemFormValue();
 
 protected:
 

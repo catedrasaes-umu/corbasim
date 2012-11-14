@@ -24,6 +24,7 @@
 #include <QTreeView>
 
 #include <corbasim/qt/StartStopButton.hpp>
+#include <corbasim/qt/FormWidget.hpp>
 
 using namespace corbasim::gui;
 
@@ -37,36 +38,35 @@ Dumper::Dumper(Objref_ptr objref,
 {
     const QString& id = objref->name();
 
-    QGridLayout * layout = new QGridLayout();
+    QVBoxLayout * layout = new QVBoxLayout();
     layout->setMargin(0);
 
-    int row = 0;
+    qt::FormWidget * form = new qt::FormWidget();
+    form->layout()->setMargin(0);
+    layout->addWidget(form);
 
     m_filePrefix = new QLineEdit();
     QHBoxLayout * prefixLayout = new QHBoxLayout();
     m_browse = new QPushButton("&Browse");
     prefixLayout->addWidget(m_filePrefix);
     prefixLayout->addWidget(m_browse);
-    layout->addWidget(new QLabel("File prefix"), row, 0);
-    layout->addLayout(prefixLayout, row++, 1);
-
-    m_multipleFiles = new QCheckBox();
-    m_multipleFiles->setChecked(true);
-    layout->addWidget(new QLabel("Multiple files"), row, 0);
-    layout->addWidget(m_multipleFiles, row++, 1);
+    prefixLayout->setMargin(0);
+    form->addMediumField("File prefix", prefixLayout);
     
     m_suffixLength = new QSpinBox();
     m_suffixLength->setRange(1, 10); 
     m_suffixLength->setValue(4);
-    layout->addWidget(new QLabel("Suffix length"), row, 0);
-    layout->addWidget(m_suffixLength, row++, 1);
+    form->addField("Suffix length", m_suffixLength);
 
     m_format = new QComboBox();
     m_format->addItem("Binary (*.bin)");
     m_format->addItem("Text (*.txt)");
     m_format->addItem("JSON (*.json)");
-    layout->addWidget(new QLabel("Format"), row, 0);
-    layout->addWidget(m_format, row++, 1);
+    form->addField("Format", m_format);
+
+    m_multipleFiles = new QCheckBox();
+    m_multipleFiles->setChecked(true);
+    form->addField("Multiple files", m_multipleFiles);
 
     // start and stop button
     m_startStopButton = new qt::StartStopButton();
@@ -76,7 +76,7 @@ Dumper::Dumper(Objref_ptr objref,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     startStopLayout->addItem(spacer);
     startStopLayout->addWidget(m_startStopButton);
-    layout->addLayout(startStopLayout, row++, 1);
+    layout->addLayout(startStopLayout);
 
     setLayout(layout);
 

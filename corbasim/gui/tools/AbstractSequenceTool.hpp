@@ -51,6 +51,8 @@ public:
     virtual ~AbstractSequenceItem();
 
     ObjectId objectId() const;
+    Objref_ptr object() const;
+    OperationDescriptor_ptr operation() const;
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
@@ -98,6 +100,7 @@ public:
 public slots:
 
     void appendItem(AbstractSequenceItem * item);
+    void forgetItem(AbstractSequenceItem * item);
 
     void deleteItem(AbstractSequenceItem * item);
     void moveUpItem(AbstractSequenceItem * item);
@@ -181,6 +184,16 @@ public slots:
     void saveCurrentSequence();
     void loadSequence();
 
+    // Current item slots
+    void saveCurrentItem();
+    void loadCurrentItem();
+
+    void duplicateCurrentItem();
+    void deleteCurrentItem();
+
+    void moveCurrentItemTo(int idx);
+    // End current item slots
+
     void setTreeVisible(bool visible);
 
     /**
@@ -211,6 +224,8 @@ protected:
             Objref_ptr object, 
             OperationDescriptor_ptr op) = 0;
 
+    void regenerateMoveTo(int idx);
+
     InstanceModel m_model;
 
     OperationsView * m_view;
@@ -220,9 +235,22 @@ protected:
     sequences_t m_sequences;
 
     QMenu * m_menu;
+    QMenu * m_menuCurrentItem;
+    QMenu * m_menuCurrentItemMoveTo;
+    QSignalMapper * m_moveToSignalMapper;
 
     QString m_filter;
     QString m_extension;
+
+    /**
+     * @brief Current item.
+     */
+    AbstractSequenceItem * m_currentItem;
+
+    /**
+     * @brief Only enabled when a current item.
+     */
+    QList< QAction * > m_currentItemActions;
 };
 
 } // namespace gui
