@@ -21,13 +21,14 @@
 #define CORBASIM_QT_SIZEGRIP_HPP
 
 #include <QtGui>
+#include <corbasim/qt/export.hpp>
 
 namespace corbasim 
 {
 namespace qt 
 {
 
-class SizeGrip : public QWidget
+class CORBASIM_QT_DECLSPEC SizeGrip : public QWidget
 {
     Q_OBJECT
 public:
