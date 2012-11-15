@@ -492,6 +492,11 @@ OperationSender::OperationSender(
     m_period->setValue(100);
     m_updateForm = new QCheckBox();
 
+    m_progressBar = new QProgressBar();
+    m_progressBar->setFixedSize(150, 15);
+    m_progressBar->setMaximum(0);
+    m_progressBar->setMaximum(1);
+
     m_playButton = new qt::StartStopButton();
     m_playButton->setObjectName("start-stop");
 
@@ -501,6 +506,7 @@ OperationSender::OperationSender(
     cfgLayout->addWidget(m_period);
     cfgLayout->addWidget(new QLabel("Update form"));
     cfgLayout->addWidget(m_updateForm);
+    cfgLayout->addWidget(m_progressBar);
     cfgLayout->addWidget(m_playButton);
 
     mainLayout->addLayout(cfgLayout);
@@ -597,6 +603,11 @@ void OperationSender::reset()
                 SIGNAL(updateForm(Request_ptr)));
 
         disconnect(m_config.get(),
+                SIGNAL(requestSent(Request_ptr)),
+                this,
+                SLOT(incrementBar()));
+
+        disconnect(m_config.get(),
                 SIGNAL(finished()), 
                 this,
                 SLOT(finished()));
@@ -606,12 +617,20 @@ void OperationSender::reset()
     }
 }
 
+void OperationSender::incrementBar()
+{
+    m_progressBar->setValue(m_progressBar->value() + 1);
+}
+
 void OperationSender::playClicked(bool play)
 {
     reset();
 
     if (play)
     {
+        m_progressBar->setRange(0, m_times->value());
+        m_progressBar->setValue(0);
+
         // m_form->setEnabled(false);
         _setReadOnly(true);
 
@@ -632,6 +651,11 @@ void OperationSender::playClicked(bool play)
         activeUpdateForm(m_updateForm->isChecked());
 
         connect(m_config.get(),
+                SIGNAL(requestSent(Request_ptr)),
+                this,
+                SLOT(incrementBar()));
+
+        connect(m_config.get(),
                 SIGNAL(finished()), 
                 this,
                 SLOT(finished()));
@@ -642,6 +666,13 @@ void OperationSender::playClicked(bool play)
     {
         // m_form->setEnabled(true);
         _setReadOnly(false);
+
+        if (!m_times->value())
+        {
+            m_progressBar->setMinimum(0);
+            m_progressBar->setRange(0, 1);
+            m_progressBar->setValue(1);
+        }
     }
 }
 
