@@ -880,8 +880,6 @@ SequenceWidget::SequenceWidget(
 
     if (reflective->is_variable_length())
     {
-        m_slice_widget->hide();
-
         connect(m_sbLength, SIGNAL(valueChanged(int)),
                 this, SLOT(lengthChanged(int)));
 
@@ -889,6 +887,7 @@ SequenceWidget::SequenceWidget(
         m_sbLength->setRange(0, 9999999);
         m_sbLength->setValue(0);
         m_sbCurrentIndex->setReadOnly(true);
+        m_slice_widget->setEnabled(false);
     }
     else
     {
@@ -972,19 +971,15 @@ void SequenceWidget::lengthChanged(int len)
     if (!m_reflective->is_variable_length())
         return;
 
-    if (len == 0)
+    if (len != 0)
     {
-        m_slice_widget->hide();
-    }
-    else
-    {
-        m_slice_widget->show();
         m_sbCurrentIndex->setRange(0, len-1);
     }
 
     m_reflective->set_length(m_holder, len);
 
     m_sbCurrentIndex->setReadOnly(len == 0);
+    m_slice_widget->setEnabled(len != 0);
 }
 
 void SequenceWidget::indexChanged(int idx)
