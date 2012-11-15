@@ -24,7 +24,9 @@ using namespace corbasim::qt;
 SizeGrip::SizeGrip(QWidget * parent) :
     QWidget(parent), m_resizing(false), m_affectedWidget(NULL)
 {
-    setFixedSize(15, 15);
+    setFixedHeight(15);
+    setMinimumWidth(150);
+    setCursor(Qt::SizeVerCursor);
 }
 
 SizeGrip::~SizeGrip()
@@ -74,6 +76,6 @@ void SizeGrip::paintEvent(QPaintEvent * paintEvent)
    
     QStyleOption opt;
     opt.rect = QRect(0, 0, width(), height());
-    style()->drawControl(QStyle::CE_SizeGrip, &opt, &painter);
+    style()->drawControl(QStyle::CE_Splitter, &opt, &painter);
 }
 

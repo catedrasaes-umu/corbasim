@@ -86,7 +86,8 @@ void OperationForm::initialize(
     sizeGrip->setAffectedWidget(tabs);
     sizeGrip->setVisible(false);
 
-    ly->addWidget(sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight);
+    //ly->addWidget(sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight);
+    ly->addWidget(sizeGrip);
     m_sizeGrip = sizeGrip;
     // End size grip
     
