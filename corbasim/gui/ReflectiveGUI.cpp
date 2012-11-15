@@ -971,6 +971,8 @@ void SequenceWidget::lengthChanged(int len)
     if (!m_reflective->is_variable_length())
         return;
 
+    unsigned int oldLength = m_reflective->get_length(m_holder);
+
     if (len != 0)
     {
         m_sbCurrentIndex->setRange(0, len-1);
@@ -980,6 +982,12 @@ void SequenceWidget::lengthChanged(int len)
 
     m_sbCurrentIndex->setReadOnly(len == 0);
     m_slice_widget->setEnabled(len != 0);
+
+    // Reload current value
+    if (!oldLength && len)
+    {
+        indexChanged(m_sbCurrentIndex->value());
+    }
 }
 
 void SequenceWidget::indexChanged(int idx)
