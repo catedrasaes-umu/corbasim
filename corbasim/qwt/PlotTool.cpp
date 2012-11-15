@@ -22,6 +22,8 @@
 #include <corbasim/qwt/PlotModel.hpp>
 #include <corbasim/gui/proc/HolderEmitter.hpp>
 
+#include <corbasim/qt/SizeGrip.hpp>
+
 #include <iostream>
 
 using namespace corbasim::qwt;
@@ -53,6 +55,12 @@ ReflectivePlot::ReflectivePlot(Objref_ptr objref,
     QVBoxLayout * layout = new QVBoxLayout();
     m_plot = new SimplePlot(this);
     layout->addWidget(m_plot);
+
+    // Size grip
+    qt::SizeGrip * sizeGrip = new qt::SizeGrip(this);
+    sizeGrip->setAffectedWidget(m_plot);
+    layout->addWidget(sizeGrip);
+
     layout->setMargin(0);
 
     // TODO start button
