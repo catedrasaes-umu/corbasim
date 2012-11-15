@@ -37,9 +37,11 @@ SenderSequenceItem::SenderSequenceItem(Objref_ptr object,
     m_dlg = new OperationSender(object);
     m_dlg->initialize(operation);
 
-    m_dlg->getForm()->hide();
-    m_dlg->layout()->setMargin(0);
+    OperationForm * form = m_dlg->getForm();
+    form->showSizeGrip(true);
 
+    form->hide();
+    m_dlg->layout()->setMargin(0);
     layout->addWidget(m_dlg);
 }
 

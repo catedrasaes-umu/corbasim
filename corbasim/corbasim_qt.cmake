@@ -9,6 +9,7 @@ set(corbasim_qt_EXPORTED_HEADERS
     qt/types.hpp
     qt/StartStopButton.hpp
     qt/FormWidget.hpp
+    qt/SizeGrip.hpp
 )
 
 foreach(_header ${corbasim_qt_EXPORTED_HEADERS})
@@ -31,6 +32,7 @@ set(corbasim_qt_MOC_HDRS
     qt/TabWidget.hpp
     qt/StartStopButton.hpp
     qt/FormWidget.hpp
+    qt/SizeGrip.hpp
 )
 
 set(corbasim_qt_SRCS
@@ -49,6 +51,7 @@ set(corbasim_qt_SRCS
     qt/initialize.cpp
     qt/StartStopButton.cpp
     qt/FormWidget.cpp
+    qt/SizeGrip.cpp
 )
 
 message(STATUS "Qt libraries: ${QT_LIBRARIES}")

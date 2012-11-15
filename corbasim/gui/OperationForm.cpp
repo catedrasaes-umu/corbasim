@@ -26,6 +26,7 @@
 #include <limits>
 
 #include <corbasim/qt/StartStopButton.hpp>
+#include <corbasim/qt/SizeGrip.hpp>
 
 // JSON
 #include <sstream>
@@ -38,7 +39,8 @@ OperationForm::OperationForm(
     QWidget(parent), 
     m_reflective(NULL), 
     m_widget(NULL),
-    m_files(NULL)
+    m_files(NULL),
+    m_sizeGrip(NULL)
 {
 }
 
@@ -76,8 +78,24 @@ void OperationForm::initialize(
 
     // Main layout
     ly->addWidget(tabs);
+
     ly->setMargin(0);
+
+    // Size grip
+    qt::SizeGrip * sizeGrip = new qt::SizeGrip(this);
+    sizeGrip->setAffectedWidget(tabs);
+    sizeGrip->setVisible(false);
+
+    ly->addWidget(sizeGrip, 0, Qt::AlignBottom | Qt::AlignRight);
+    m_sizeGrip = sizeGrip;
+    // End size grip
+    
     setLayout(ly);
+}
+
+void OperationForm::showSizeGrip(bool show)
+{
+    m_sizeGrip->setVisible(show);
 }
 
 Request_ptr OperationForm::createRequest()

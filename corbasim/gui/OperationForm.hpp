@@ -100,6 +100,8 @@ public:
     
     void initialize(Objref_ptr, OperationDescriptor_ptr);
 
+    void showSizeGrip(bool show);
+
     // Property code
     void setCode(const QString& code);
     QString code() const;
@@ -121,6 +123,8 @@ protected:
     QPlainTextEdit * m_code;
     OperationFormWidget * m_widget;
     ParametersFromFilesTool * m_files;
+
+    QWidget * m_sizeGrip;
 };
 
 class CORBASIM_GUI_DECLSPEC OperationSender : 
