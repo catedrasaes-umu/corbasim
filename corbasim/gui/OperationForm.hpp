@@ -171,6 +171,8 @@ protected slots:
     void playClicked(bool play);
     void finished();
     void activeUpdateForm(bool update);
+    
+    void incrementBar();
 
 protected:
 
@@ -181,6 +183,7 @@ protected:
     QSpinBox * m_times;
     QSpinBox * m_period;
     QCheckBox * m_updateForm;
+    QProgressBar * m_progressBar;
     QPushButton * m_playButton;
 
     SenderConfig_ptr m_config;
