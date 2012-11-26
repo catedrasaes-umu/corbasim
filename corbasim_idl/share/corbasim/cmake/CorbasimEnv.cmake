@@ -1,12 +1,14 @@
 
-set(CORBASIM_INSTALL_PREFIX /tmp/prueba_corbasim2)
+if(NOT DEFINED CORBASIM_INSTALL_PREFIX)
+    set(CORBASIM_INSTALL_PREFIX /usr/local)
+endif()
 
 include_directories(${CORBASIM_INSTALL_PREFIX}/include)
 link_directories(${CORBASIM_INSTALL_PREFIX}/lib)
 
 # Boost C++ Libraries
 include_directories(/usr/local/include)
-link_directories(/usr/lib)
+link_directories(/usr/local/lib;/usr/lib)
 
 # ORB
 set(CORBASIM_ORBIMPL
