@@ -311,6 +311,16 @@ bool binary_file_format_helper::load(
         reflective_base const * reflective, 
         holder h) const
 {
+    return load(is, reflective, h, 0);
+}
+
+bool binary_file_format_helper::load(
+        std::istream& is, 
+        reflective_base const * reflective, 
+        holder h, unsigned int level) const
+{
+    bool res = true;
+
     try
     {
         switch(reflective->get_type())
@@ -342,20 +352,49 @@ bool binary_file_format_helper::load(
                     unsigned int count = 
                         reflective->get_length(h);
 
+                    if (reflective->is_variable_length() && !level)
+                    {
+                        unsigned int max_length = 64;
+                        count = 0;
+                        reflective->set_length(h, max_length);
+
+                        res = is.good();
+
+                        while(is.good())
+                        {
+                            holder child_value = 
+                                reflective->get_child_value(h, count);
+
+                            bool read = load(is, reflective->get_slice(), 
+                                    child_value, level + 1);
+
+                            if (read && (++count == max_length))
+                            {
+                                max_length *= 2;
+                                reflective->set_length(h, max_length);
+                            }
+                        }
+                        
+                        reflective->set_length(h, count);
+
+                        break;
+                    }
+                    
                     if (reflective->is_variable_length())
                     {
-                        // save length
+                        // read length
                         is.read((char *)&count, sizeof(unsigned int));
-                        
+
                         reflective->set_length(h, count);
                     }
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++) 
                     {
                         holder child_value = 
                             reflective->get_child_value(h, i);
-                        load(is, reflective->get_child(i), 
-                                child_value);
+
+                        res = load(is, reflective->get_child(i), 
+                                child_value, level + 1);
                     }
                 }
                 break;
@@ -365,17 +404,18 @@ bool binary_file_format_helper::load(
                     const unsigned int count = 
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++) 
                     {
                         holder child_value = 
                             reflective->get_child_value(h, i);
-                        load(is, reflective->get_child(i), 
-                                child_value);
+                        res = load(is, reflective->get_child(i), 
+                                child_value, level + 1);
                     }
                 }
                 break;
 
             default:
+                res = false;
                 break;
         }
     }
@@ -384,7 +424,7 @@ bool binary_file_format_helper::load(
         return false;
     }
 
-    return true;
+    return res;
 }
 
 bool binary_file_format_helper::save(
@@ -392,6 +432,17 @@ bool binary_file_format_helper::save(
         reflective_base const * reflective, 
         holder h) const
 {
+    return save(os, reflective, h, 0);
+}
+
+bool binary_file_format_helper::save(
+        std::ostream& os, 
+        reflective_base const * reflective, 
+        holder h,
+        unsigned int level) const
+{
+    bool res = true;
+
     try
     {
         switch(reflective->get_type())
@@ -423,18 +474,18 @@ bool binary_file_format_helper::save(
                     const unsigned int count = 
                         reflective->get_length(h);
 
-                    if (reflective->is_variable_length())
+                    if (reflective->is_variable_length() && !level)
                     {
                         // save length
                         os.write((const char *)&count, sizeof(unsigned int));
                     }
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++) 
                     {
                         holder child_value = 
                             reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), 
-                                child_value);
+                        res = save(os, reflective->get_child(i), 
+                                child_value, level + 1);
                     }
                 }
                 break;
@@ -444,12 +495,12 @@ bool binary_file_format_helper::save(
                     const unsigned int count = 
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++) 
                     {
                         holder child_value = 
                             reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), 
-                                child_value);
+                        res = save(os, reflective->get_child(i), 
+                                child_value, level + 1);
                     }
                 }
                 break;
@@ -463,7 +514,7 @@ bool binary_file_format_helper::save(
         return false;
     }
 
-    return true;
+    return res;
 }
 
 const binary_file_format_helper* 

@@ -133,6 +133,16 @@ public:
 
 protected:
 
+    bool load(std::istream& is, 
+            reflective_base const * reflective, 
+            holder h,
+            unsigned int level) const; 
+
+    bool save(std::ostream& os, 
+            reflective_base const * reflective, 
+            holder h, 
+            unsigned int level) const; 
+
     binary_file_format_helper();
 };
 
