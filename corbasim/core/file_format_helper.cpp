@@ -368,7 +368,7 @@ bool binary_file_format_helper::load(
                             bool read = load(is, reflective->get_slice(), 
                                     child_value, level + 1);
 
-                            if (read && (++count == max_length))
+                            if (is.good() && (++count == max_length))
                             {
                                 max_length *= 2;
                                 reflective->set_length(h, max_length);
