@@ -182,6 +182,7 @@ protected:
     OperationForm * m_form;
     QSpinBox * m_times;
     QSpinBox * m_period;
+    QSpinBox * m_delay;
     QCheckBox * m_updateForm;
     QProgressBar * m_progressBar;
     QPushButton * m_playButton;

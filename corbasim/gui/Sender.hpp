@@ -59,7 +59,8 @@ public:
         const QString& code,
         const QList< RequestProcessor_ptr >& processors,
         int times,
-        unsigned int period);
+        unsigned int period,
+        unsigned int initDelay = 0);
     ~SenderConfig();
 
     // Accessors
@@ -70,6 +71,7 @@ public:
     const QList< RequestProcessor_ptr >& processors() const;
     int times();
     unsigned int period() const;
+    unsigned int initDelay() const;
 
 public slots:
 
@@ -90,6 +92,7 @@ protected:
     const QList< RequestProcessor_ptr > m_processors;
     const int m_times;
     const unsigned int m_period;
+    const unsigned int m_initDelay;
 };
 
 class CORBASIM_GUI_DECLSPEC Sender : public QObject

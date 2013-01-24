@@ -162,7 +162,8 @@ void Sender::start(Sender_weak weak)
         if (!hasErr)
         {
             m_timer.expires_from_now(
-                    boost::posix_time::milliseconds(0));
+                    boost::posix_time::milliseconds(
+                        m_config->initDelay()));
 
             m_timer.async_wait(
                     boost::bind(&Sender::handleTimeout,
@@ -313,13 +314,16 @@ SenderConfig::SenderConfig(
         const QString& code,
         const QList< RequestProcessor_ptr >& processors,
         int times,
-        unsigned int period) :
+        unsigned int period,
+        unsigned int initDelay) :
     m_object(object), m_operation(operation),
     m_request(request),
     m_code(code), m_processors(processors),
-    m_times(times), m_period(period)
+    m_times(times), m_period(period),
+    m_initDelay(initDelay)
 {
 }
+
 SenderConfig::~SenderConfig()
 {
 }
@@ -360,6 +364,11 @@ int SenderConfig::times()
 unsigned int SenderConfig::period() const
 {
     return m_period;
+}
+
+unsigned int SenderConfig::initDelay() const
+{
+    return m_initDelay;
 }
 
 void SenderConfig::notifyRequestSent(
