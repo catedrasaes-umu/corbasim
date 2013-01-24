@@ -490,6 +490,9 @@ OperationSender::OperationSender(
     m_period = new QSpinBox();
     m_period->setRange(0, std::numeric_limits< int >::max());
     m_period->setValue(100);
+    m_delay = new QSpinBox();
+    m_delay->setRange(0, std::numeric_limits< int >::max());
+    m_delay->setValue(0);
     m_updateForm = new QCheckBox();
 
     m_progressBar = new QProgressBar();
@@ -504,6 +507,8 @@ OperationSender::OperationSender(
     cfgLayout->addWidget(m_times);
     cfgLayout->addWidget(new QLabel("Period (ms)"));
     cfgLayout->addWidget(m_period);
+    cfgLayout->addWidget(new QLabel("Delay (ms)"));
+    cfgLayout->addWidget(m_delay);
     cfgLayout->addWidget(new QLabel("Update form"));
     cfgLayout->addWidget(m_updateForm);
     cfgLayout->addWidget(m_progressBar);
@@ -645,7 +650,8 @@ void OperationSender::playClicked(bool play)
                     m_form->code(),
                     processors,
                     m_times->value(),
-                    m_period->value()));
+                    m_period->value(),
+                    m_delay->value()));
 
         // connect signals
         activeUpdateForm(m_updateForm->isChecked());
