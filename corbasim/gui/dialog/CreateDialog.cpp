@@ -32,17 +32,20 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     QGridLayout * grid = new QGridLayout();
 
+    // Name
     grid->addWidget(new QLabel("Object name"), 0, 0);
     m_name = new QLineEdit();
     m_name->setObjectName("name");
     grid->addWidget(m_name, 0, 1);
  
+    // Interface
     grid->addWidget(new QLabel("Interface"), 1, 0);
     m_fqn = new QComboBox();
     m_fqn->setEditable(true);
     m_fqn->setObjectName("fqn");
     grid->addWidget(m_fqn, 1, 1); 
 
+    // Reference
     QGroupBox * group = new QGroupBox("Object reference");
     m_fqn->setObjectName("reference_group");
     QVBoxLayout * groupLayout = new QVBoxLayout();
@@ -54,6 +57,23 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     group->setLayout(groupLayout);
     
     grid->addWidget(group, 2, 0, 1, 2);
+    // End reference
+
+    // Watch file
+    QHBoxLayout * watchFileLayout = new QHBoxLayout();
+    grid->addWidget(new QLabel("Watch file"), 3, 0);
+
+    m_watchFile = new QLineEdit();
+    m_watchFile->setObjectName("watch-file");
+    watchFileLayout->addWidget(m_watchFile);
+    QPushButton * browseButton = new QPushButton("Browse");
+    watchFileLayout->addWidget(browseButton);
+    grid->addLayout(watchFileLayout, 3, 1);
+
+    connect(browseButton, SIGNAL(clicked()), 
+            this, SLOT(browse()));
+    // End watch file
+
 
     layout->addLayout(grid);
 
@@ -99,8 +119,18 @@ void ObjrefCreateDialog::createClicked()
     cfg.fqn = m_fqn->currentText().toStdString();
     cfg.reference = m_reference->reference();
     cfg.entry = m_reference->getNSEntry().toStdString();
+    cfg.watchFile = m_watchFile->text().toStdString();
 
     emit createObjref(cfg);
+}
+
+void ObjrefCreateDialog::browse()
+{
+    const QString file = 
+        QFileDialog::getOpenFileName(0, 
+                "Select a file", ".");
+
+    m_watchFile->setText(file);
 }
 
 void ObjrefCreateDialog::hideEvent(QHideEvent* event)
@@ -122,22 +152,26 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
 
     QGridLayout * grid = new QGridLayout();
 
+    // Name
     grid->addWidget(new QLabel("Servant name"), 0, 0);
     m_name = new QLineEdit();
     m_name->setObjectName("name");
     grid->addWidget(m_name, 0, 1);
  
+    // Interface
     grid->addWidget(new QLabel("Interface"), 1, 0);
     m_fqn = new QComboBox();
     m_fqn->setObjectName("fqn");
     m_fqn->setEditable(true);
     grid->addWidget(m_fqn, 1, 1); 
 
+    // Name service
     grid->addWidget(new QLabel("Name service key"), 2, 0);
     m_entry = new QLineEdit();
     m_entry->setObjectName("entry");
     grid->addWidget(m_entry, 2, 1);
 
+    // Reference file
     QHBoxLayout * saveFileLayout = new QHBoxLayout();
     grid->addWidget(new QLabel("Save reference"), 3, 0);
     m_saveFile = new QLineEdit();

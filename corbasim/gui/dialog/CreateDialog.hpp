@@ -42,6 +42,10 @@ public slots:
 
     void createClicked();
 
+protected slots:
+    
+    void browse();
+
 signals:
 
     void createObjref(ObjrefConfig);
@@ -53,6 +57,7 @@ protected:
     QLineEdit * m_name;
     QComboBox * m_fqn;
     ObjrefWidget * m_reference;
+    QLineEdit * m_watchFile;
 
     core::reference_validator_ptr m_validator;
 };
