@@ -798,8 +798,9 @@ void AbstractSequenceTool::load(const QVariant& settings)
 
     const QVariantList list = settings.toList();
 
+    int i = 0;
     for (QVariantList::const_iterator it = list.begin();
-            it != list.end(); it++) 
+            it != list.end(); it++, i++)
     {
         AbstractSequence * seq = createSequence();
 
@@ -825,6 +826,9 @@ void AbstractSequenceTool::load(const QVariant& settings)
         }
 
         seq->load(*it);
+
+        // Puts its name in its tab
+        m_tabs->setTabText(i, seq->getName());
     }
 }
 
