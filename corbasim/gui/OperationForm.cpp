@@ -576,6 +576,7 @@ void OperationSender::save(QVariant& settings)
 
     map["times"] = m_times->value();
     map["period"] = m_period->value();
+    map["delay"] = m_delay->value();
     map["update_form"] = m_updateForm->isChecked();
 
     settings = map;
@@ -589,6 +590,7 @@ void OperationSender::load(const QVariant& settings)
 
     m_times->setValue(map["times"].toInt());
     m_period->setValue(map["period"].toInt());
+    m_delay->setValue(map["delay"].toInt());
     m_updateForm->setChecked(map["update_form"].toBool());
 }
 
