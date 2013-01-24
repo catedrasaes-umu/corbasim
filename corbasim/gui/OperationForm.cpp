@@ -708,10 +708,8 @@ void OperationSender::activeUpdateForm(bool update)
                     SIGNAL(requestSent(Request_ptr)),
                     this,
                     SIGNAL(updateForm(Request_ptr)));
-
         }
     }
-
 }
 
 void OperationSender::stop()
