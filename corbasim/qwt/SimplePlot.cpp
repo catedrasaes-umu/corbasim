@@ -69,7 +69,7 @@ SimplePlot::SimplePlot(QWidget * parent) :
     gridLayout->addWidget(new QLabel("Displayed samples"), 0, 0);
     QSpinBox * spSamples = new QSpinBox();
     gridLayout->addWidget(spSamples, 0, 1);
-
+#if 0
     // X
     QGroupBox * gbX = new QGroupBox("Display X");
     QGridLayout * lX = new QGridLayout();
@@ -81,7 +81,7 @@ SimplePlot::SimplePlot(QWidget * parent) :
     lX->addWidget(spXMax, 1, 1);
     gbX->setLayout(lX);
     gridLayout->addWidget(gbX, 1, 0, 1, 2);
-
+#endif
     // Y
     QGroupBox * gbY = new QGroupBox("Display Y");
     QGridLayout * lY = new QGridLayout();
@@ -99,9 +99,9 @@ SimplePlot::SimplePlot(QWidget * parent) :
     spYMin->setValue(-10.0);
     spYMax->setValue(10.0);
 
-    QObject::connect(spYMin, SIGNAL(valueChanged(double)),
+    connect(spYMin, SIGNAL(valueChanged(double)),
             this, SLOT(updateY()));
-    QObject::connect(spYMax, SIGNAL(valueChanged(double)),
+    connect(spYMax, SIGNAL(valueChanged(double)),
             this, SLOT(updateY()));
 
     // Spacer
@@ -114,18 +114,20 @@ SimplePlot::SimplePlot(QWidget * parent) :
 
     // Ranges
     spSamples->setRange(10, std::numeric_limits< int >::max());
+#if 0
     spXMin->setRange(0, std::numeric_limits< int >::max());
     spXMax->setRange(10, std::numeric_limits< int >::max());
+#endif
     spYMin->setRange(std::numeric_limits< int >::min(), 
             std::numeric_limits< int >::max());
     spYMax->setRange(std::numeric_limits< int >::min(), 
             std::numeric_limits< int >::max());
 
     // Signals
-    QObject::connect(spSamples, SIGNAL(valueChanged(int)),
+    connect(spSamples, SIGNAL(valueChanged(int)),
             m_data->plot, SLOT(displayedSamples(int)));
 
-    QObject::connect(bt, SIGNAL(toggled(bool)),
+    connect(bt, SIGNAL(toggled(bool)),
             gw, SLOT(setVisible(bool)));
 
     gw->hide();
