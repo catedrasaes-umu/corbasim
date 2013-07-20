@@ -59,6 +59,7 @@ endforeach(_header ${corbasim_EXPORTED_HEADERS})
 
 set(corbasim_LIBS
     ${CORBASIM_ORB_LIBS}
+    pthread
     ${Boost_THREAD_LIBRARY}
     ${Boost_SYSTEM_LIBRARY})
 
