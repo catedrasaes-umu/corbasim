@@ -26,19 +26,17 @@
 
 #include <corbasim/core/reference_repository.hpp>
 
-//#ifdef _MSC_VER
 #include <boost/cstdint.hpp>
 using boost::uint32_t;
 using boost::int32_t;
 using boost::uint64_t;
 using boost::int64_t;
-//#endif
 
 using namespace corbasim::json;
 using namespace corbasim::core;
 
 reflective_helper::reflective_helper(
-		corbasim::core::reflective_base const * reflective,
+        corbasim::core::reflective_base const * reflective,
         corbasim::core::holder holder) :
     m_reflective(reflective), m_holder(holder), m_currentIndex(0)
 {
@@ -70,7 +68,7 @@ void reflective_helper::new_double(double value_)
             m_holder.to_value< short >() = (short) value_;
             break;
         case TYPE_USHORT:
-            m_holder.to_value< unsigned short >() = 
+            m_holder.to_value< unsigned short >() =
                 (unsigned short) value_;
             break;
         case TYPE_LONG:
@@ -102,10 +100,10 @@ void reflective_helper::new_string(const std::string& d)
 
         case TYPE_ENUM:
             {
-                const unsigned int count = 
+                const unsigned int count =
                     m_reflective->get_children_count();
 
-                for (int i = 0; i < (int) count; i++) 
+                for (int i = 0; i < (int) count; i++)
                 {
                     if (d == m_reflective->get_child_name(i))
                     {
@@ -121,17 +119,18 @@ void reflective_helper::new_string(const std::string& d)
                 core::reference_repository * rr =
                     core::reference_repository::get_instance();
 
-                objrefvar_reflective_base const * objref = 
+                objrefvar_reflective_base const * objref =
                     static_cast< objrefvar_reflective_base const * >(
                             m_reflective);
 
-
                 CORBA::Object_var obj;
 
-                try {
+                try
+                {
                     obj = rr->string_to_object(d.c_str());
-                } catch (...) {
                 }
+                catch (...)
+                {}
 
                 objref->from_object(m_holder, obj);
             }
@@ -164,7 +163,7 @@ void reflective_helper::new_null()
     {
         case TYPE_OBJREF:
             {
-                objrefvar_reflective_base const * objref = 
+                objrefvar_reflective_base const * objref =
                     static_cast< objrefvar_reflective_base const * >(
                             m_reflective);
 
@@ -184,7 +183,7 @@ helper::helper_base* reflective_helper::new_child(const std::string& name)
     if (m_reflective->get_type() == TYPE_STRUCT)
     {
         const unsigned int count = m_reflective->get_children_count();
-        for (unsigned int i = 0; i < count; i++) 
+        for (unsigned int i = 0; i < count; i++)
             if (name == m_reflective->get_child_name(i))
             {
                 return new reflective_helper(m_reflective->get_child(i),
@@ -198,33 +197,31 @@ helper::helper_base* reflective_helper::new_child(const std::string& name)
 // For arrays
 helper::helper_base* reflective_helper::new_child()
 {
-    if (m_reflective->is_repeated())
+    if (!m_reflective->is_repeated())
+        throw "Error!";
+
+    // Increments its length
+    if (m_reflective->is_variable_length())
     {
-        // Increments its length
-        if (m_reflective->is_variable_length())
-        {
-            m_reflective->set_length(m_holder, m_currentIndex + 1);
-        }
-        else
-        {
-            unsigned int length = m_reflective->get_length(m_holder);
+        m_reflective->set_length(m_holder, m_currentIndex + 1);
+    }
+    else
+    {
+        unsigned int length = m_reflective->get_length(m_holder);
 
-            if (m_currentIndex >= length)
-                throw "Error!";
-        }
-
-        return new reflective_helper(m_reflective->get_slice(),
-                m_reflective->get_child_value(m_holder, m_currentIndex++));
+        if (m_currentIndex >= length)
+            throw "Error!";
     }
 
-    throw "Error!";
+    return new reflective_helper(m_reflective->get_slice(),
+            m_reflective->get_child_value(m_holder, m_currentIndex++));
 }
 
 // Parse
-bool corbasim::json::parse(core::reflective_base const * reflective, 
+bool corbasim::json::parse(core::reflective_base const * reflective,
         core::holder& holder, const char * str, size_t size)
 {
-    helper::helper_base * initial_helper = 
+    helper::helper_base * initial_helper =
         new reflective_helper(reflective, holder);
 
     semantic_state _ss(initial_helper);
@@ -233,10 +230,10 @@ bool corbasim::json::parse(core::reflective_base const * reflective,
     return csu::corbasim::json::parser::grammar::gram::match(_st);
 }
 
-bool corbasim::json::parse(core::reflective_base const * reflective, 
+bool corbasim::json::parse(core::reflective_base const * reflective,
         core::holder& holder, std::istream& in)
 {
-    helper::helper_base * initial_helper = 
+    helper::helper_base * initial_helper =
         new reflective_helper(reflective, holder);
 
     semantic_state _ss(initial_helper);
@@ -245,9 +242,8 @@ bool corbasim::json::parse(core::reflective_base const * reflective,
     return csu::corbasim::json::parser::grammar::gram::match(_st);
 }
 
-
-void corbasim::json::write(std_writer_t& w, 
-        corbasim::core::reflective_base const * reflective, 
+void corbasim::json::write(std_writer_t& w,
+        corbasim::core::reflective_base const * reflective,
         corbasim::core::holder holder)
 {
     using namespace corbasim::core;
@@ -258,7 +254,7 @@ void corbasim::json::write(std_writer_t& w,
     {
         case TYPE_OBJREF:
             {
-                objrefvar_reflective_base const * objref = 
+                objrefvar_reflective_base const * objref =
                     static_cast< objrefvar_reflective_base const * >(
                             reflective);
 
@@ -269,12 +265,13 @@ void corbasim::json::write(std_writer_t& w,
                     w.new_null();
                     break;
                 }
-                
-                try {
+
+                try
+                {
                     reference_repository * rr =
                         reference_repository::get_instance();
 
-                    CORBA::String_var str = 
+                    CORBA::String_var str =
                         rr->object_to_string(obj);
 
                     w.new_string(str.in());
@@ -284,7 +281,6 @@ void corbasim::json::write(std_writer_t& w,
                 }
 
             }
-
             break;
 
         case TYPE_ENUM:
@@ -342,12 +338,12 @@ void corbasim::json::write(std_writer_t& w,
         case TYPE_ARRAY:
         case TYPE_SEQUENCE:
             {
-                const unsigned int count = 
+                const unsigned int count =
                     reflective->get_length(holder);
 
                 w.array_start();
 
-                for (unsigned int i = 0; i < count; i++) 
+                for (unsigned int i = 0; i < count; i++)
                 {
                     // Value
                     write(w, reflective->get_slice(),
@@ -360,12 +356,12 @@ void corbasim::json::write(std_writer_t& w,
 
         case TYPE_STRUCT:
             {
-                const unsigned int count = 
+                const unsigned int count =
                     reflective->get_children_count();
 
                 w.object_start();
 
-                for (unsigned int i = 0; i < count; i++) 
+                for (unsigned int i = 0; i < count; i++)
                 {
                     // Name
                     w.new_string(reflective->get_child_name(i));
@@ -414,8 +410,8 @@ void corbasim::json::write(std_writer_t& w,
 }
 
 // Write
-void corbasim::json::write(std::ostream& os, 
-        core::reflective_base const * reflective, 
+void corbasim::json::write(std::ostream& os,
+        core::reflective_base const * reflective,
         core::holder& holder, bool indent)
 {
     std_writer_t w(os, indent);

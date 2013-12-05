@@ -21,9 +21,9 @@
 
 #include <corbasim/core/copy.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 template< typename Value >
@@ -45,18 +45,18 @@ struct holder_ref_impl : public holder_impl_base
     T aux;
     T& t_;
 
-    holder_ref_impl() : 
+    holder_ref_impl() :
         t_(aux)
     {
     }
 
-    holder_ref_impl(T& t) : 
+    holder_ref_impl(T& t) :
         t_(t)
     {
     }
 
     // String sequence case
-    holder_ref_impl(const T& t) : 
+    holder_ref_impl(const T& t) :
         aux(t), t_(aux)
     {
     }
@@ -78,13 +78,13 @@ holder_impl_base * create_holder(const T& t)
     return new holder_ref_impl< T >(t);
 }
 
-namespace detail 
+namespace detail
 {
 
 // Array reflective
 
 template< typename T >
-array_reflective< T >::array_reflective(reflective_base const * parent, 
+array_reflective< T >::array_reflective(reflective_base const * parent,
         unsigned int idx) :
     reflective_base(parent, idx), m_slice(this, 0)
 {
@@ -132,7 +132,7 @@ unsigned int array_reflective< T >::get_children_count() const
 }
 
 template< typename T >
-holder array_reflective< T >::get_child_value(holder& value, 
+holder array_reflective< T >::get_child_value(holder& value,
     unsigned int idx) const
 {
     typedef holder_ref_impl< T > parent_impl;
@@ -146,7 +146,7 @@ holder array_reflective< T >::get_child_value(holder& value,
 template< typename T >
 void array_reflective< T >::copy(holder const& src, holder& dst) const
 {
-    for (std::size_t i = 0; i < size; i++) 
+    for (std::size_t i = 0; i < size; i++)
     {
         holder child_src = get_child_value(const_cast< holder& >(src), i);
         holder child_dst = get_child_value(dst, i);
@@ -177,7 +177,7 @@ reflective_type string_reflective< T >::get_type() const
 template< typename T >
 holder string_reflective< T >::create_holder() const
 {
-    // Note: you can not use this method for slice member 
+    // Note: you can not use this method for slice member
     // of a sequence.
     return new holder_ref_impl< orbimpl::String_Manager >();
 }
@@ -266,7 +266,7 @@ unsigned int sequence_reflective< T >::get_length(holder const& value) const
 }
 
 template< typename T >
-void sequence_reflective< T >::set_length(holder& value, 
+void sequence_reflective< T >::set_length(holder& value,
         unsigned int length) const
 {
     typedef holder_ref_impl< T > parent_impl;
@@ -278,7 +278,7 @@ void sequence_reflective< T >::set_length(holder& value,
 }
 
 template< typename T >
-holder sequence_reflective< T >::get_child_value(holder& value, 
+holder sequence_reflective< T >::get_child_value(holder& value,
     unsigned int idx) const
 {
     typedef holder_ref_impl< T > parent_impl;
@@ -295,7 +295,7 @@ void sequence_reflective< T >::copy(holder const& src, holder& dst) const
     unsigned int length = get_length(src);
     set_length(dst, length);
 
-    for (std::size_t i = 0; i < length; i++) 
+    for (std::size_t i = 0; i < length; i++)
     {
         holder child_src = get_child_value(const_cast< holder& >(src), i);
         holder child_dst = get_child_value(dst, i);
@@ -405,7 +405,7 @@ struct union_create_iterator
 
 template< typename T >
 struct_reflective< T >::struct_reflective(
-        reflective_base const * parent, 
+        reflective_base const * parent,
         unsigned int idx) :
     reflective_base(parent, idx)
 {
@@ -420,14 +420,14 @@ struct_reflective< T >::struct_reflective(
 }
 
 template< typename T >
-unsigned int struct_reflective< T >::get_children_count() const 
-{ 
+unsigned int struct_reflective< T >::get_children_count() const
+{
     return members_count;
 }
 
 template< typename T >
 const char * struct_reflective< T >::get_child_name(
-        unsigned int idx) const 
+        unsigned int idx) const
 {
     return m_child_names[idx];
 }
@@ -448,7 +448,7 @@ reflective_type struct_reflective< T >::get_type() const
 template< typename T >
 void struct_reflective< T >::copy(holder const& src, holder& dst) const
 {
-    for (std::size_t i = 0; i < members_count; i++) 
+    for (std::size_t i = 0; i < members_count; i++)
     {
         holder child_src = get_child_value(
                 const_cast< holder& >(src), i);
@@ -467,7 +467,7 @@ holder struct_reflective< T >::create_holder() const
 }
 
 template< typename T >
-holder struct_reflective< T >::get_child_value(holder& value, 
+holder struct_reflective< T >::get_child_value(holder& value,
     unsigned int idx) const
 {
     return m_accessors[idx]->get(value);
@@ -499,14 +499,14 @@ union_reflective< T >::union_reflective(reflective_base const * parent,
 }
 
 template< typename T >
-unsigned int union_reflective< T >::get_children_count() const 
-{ 
+unsigned int union_reflective< T >::get_children_count() const
+{
     return m_children.size();
 }
 
 template< typename T >
 const char * union_reflective< T >::get_child_name(
-        unsigned int idx) const 
+        unsigned int idx) const
 {
     return m_child_names[idx];
 }
@@ -545,14 +545,14 @@ union_reflective< T > const * union_reflective< T >::get_instance()
 }
 
 template< typename T >
-holder union_reflective< T >::get_child_value(holder& value, 
+holder union_reflective< T >::get_child_value(holder& value,
     unsigned int idx) const
 {
     return m_accessors[idx]->get(value);
 }
 
 template< typename T >
-void union_reflective< T >::set_child_value(holder& value, 
+void union_reflective< T >::set_child_value(holder& value,
     unsigned int idx, holder& child_value) const
 {
     m_accessors[idx]->set(value, child_value);
@@ -571,7 +571,7 @@ unsigned int union_reflective< T >::get_length(
     T& t = const_cast< holder& >(value).to_value< T >();
     discriminator_t _d = t._d();
 
-    for (unsigned int i = 0; i < adapted_t::size; i++) 
+    for (unsigned int i = 0; i < adapted_t::size; i++)
     {
         if (_d == adapted_t::discriminators()[i])
         {
@@ -631,7 +631,11 @@ void enum_reflective< T >::copy(holder const& src, holder& dst) const
 template< typename Var >
 struct calculate_iface
 {
+#ifdef CORBASIM_OMNIORB4
+    typedef typename ::corbasim::adapted::is_objrefvar< Var >::interface type;
+#else
     typedef typename Var::_obj_type type;
+#endif
 };
 
 template< >
@@ -677,26 +681,28 @@ CORBA::Object_ptr objrefvar_reflective< T, Y >::to_object(holder const& h) const
 }
 
 template< typename T, typename Y >
-void objrefvar_reflective< T, Y >::from_object(holder& h, 
+void objrefvar_reflective< T, Y >::from_object(holder& h,
         CORBA::Object_ptr obj) const
 {
     typedef typename calculate_iface< T >::type iface_t;
-    
-    h.to_value< Y >() = iface_t::_narrow(obj);;
+
+    Y& y = h.to_value< Y >();
+    typename iface_t::_ptr_type ptr = iface_t::_narrow(obj);
+    y = ptr;
 }
 
 template< typename T, typename Y>
-reference_validator_base * 
+reference_validator_base *
 objrefvar_reflective< T, Y >::create_validator() const
 {
     typedef typename calculate_iface< T >::type iface_t;
-    
+
     return new reference_validator_impl< iface_t >();
 }
 
 // Unsupported type
 template< typename T >
-unsupported_type< T >::unsupported_type(reflective_base const * parent, 
+unsupported_type< T >::unsupported_type(reflective_base const * parent,
         unsigned int idx) :
     reflective_base(parent, idx)
 {
@@ -743,15 +749,15 @@ operation_reflective< Value >::operation_reflective()
 }
 
 template < typename Value >
-unsigned int operation_reflective< Value >::get_children_count() const 
-{ 
+unsigned int operation_reflective< Value >::get_children_count() const
+{
     return base_t::get_children_count();
 }
 
 template < typename Value >
 const char * operation_reflective< Value >::get_child_name(
-        unsigned int idx) const 
-{ 
+        unsigned int idx) const
+{
     return base_t::get_child_name(idx);
 }
 
@@ -770,7 +776,7 @@ reflective_type operation_reflective< Value >::get_type() const
 
 // Dynamic information
 template < typename Value >
-holder operation_reflective< Value >::get_child_value(holder& value, 
+holder operation_reflective< Value >::get_child_value(holder& value,
     unsigned int idx) const
 {
     return base_t::get_child_value(value, idx);
@@ -825,7 +831,7 @@ holder operation_reflective< Value >::get_holder(event::response_ptr req) const
 }
 
 template < typename Value >
-operation_reflective< Value > const * 
+operation_reflective< Value > const *
 operation_reflective< Value >::get_instance()
 {
     static boost::shared_ptr< operation_reflective > _instance(
@@ -838,7 +844,7 @@ operation_reflective< Value >::get_instance()
 template < typename Interface >
 interface_reflective< Interface >::interface_reflective()
 {
-    typedef typename  adapted::interface< Interface >::_op_list 
+    typedef typename  adapted::interface< Interface >::_op_list
         operations_t;
 
     typedef core::impl::inserter< interface_reflective > inserter_t;
@@ -862,7 +868,7 @@ template < typename Interface >
 PortableServer::ServantBase * interface_reflective< Interface >::create_servant(
         request_processor * proc) const
 {
-    return new typename adapted::servant< Interface >::template 
+    return new typename adapted::servant< Interface >::template
         _type< callable >(callable(proc));
 }
 
@@ -883,14 +889,14 @@ template< typename Value >
 inline void interface_reflective< Interface >::append()
 {
     typedef operation_reflective< Value > reflective_t;
-    operation_reflective_base const * f = 
+    operation_reflective_base const * f =
         reflective_t::get_instance();
 
     insert_reflective(f->get_name(), f->get_tag(), f);
 }
 
 template < typename Interface >
-interface_reflective< Interface > const * 
+interface_reflective< Interface > const *
 interface_reflective< Interface >::get_instance()
 {
     static boost::shared_ptr< interface_reflective > _instance(

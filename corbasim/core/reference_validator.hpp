@@ -32,7 +32,7 @@ namespace detail
 template < typename Interface >
 struct narrow
 {
-    static inline Interface* invoke(CORBA::Object_ptr ref)
+    static inline typename Interface::_ptr_type invoke(CORBA::Object_ptr ref)
     {
         return Interface::_narrow(ref);
     }
@@ -82,7 +82,7 @@ struct reference_validator_impl : public reference_validator_base
         return CORBA::is_nil(m_ref);
     }
 
-    Interface * m_ref;
+    typename Interface::_ptr_type m_ref;
 };
 
 } // namespace core

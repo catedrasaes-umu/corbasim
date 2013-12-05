@@ -31,6 +31,8 @@ template CORBASIM_CORE_DECLSPEC CORBA::UShort& holder::to_value< CORBA::UShort >
 
 #ifndef CORBASIM_CORBA_CHAR_IS_UNSIGNED_CHAR
 template CORBASIM_CORE_DECLSPEC CORBA::Char& holder::to_value< CORBA::Char >();
+#else
+template CORBASIM_CORE_DECLSPEC char& holder::to_value< char >();
 #endif
 
 template CORBASIM_CORE_DECLSPEC CORBA::Octet& holder::to_value< CORBA::Octet >();
@@ -50,6 +52,8 @@ template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::UShort >;
 
 #ifndef CORBASIM_CORBA_CHAR_IS_UNSIGNED_CHAR
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Char >;
+#else
+template class CORBASIM_CORE_DECLSPEC primitive_reflective< char >;
 #endif
 
 template class CORBASIM_CORE_DECLSPEC primitive_reflective< CORBA::Octet >;

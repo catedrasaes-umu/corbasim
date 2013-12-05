@@ -61,7 +61,12 @@ if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
 elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni
     set(CORBASIM_ORB_LIBS
-        omniORB4)
+        omniCodeSets4
+        omniConnectionMgmt4
+        omniDynamic4
+        omniORB4
+        omnisslTP4
+        omnithread)
     set(CORBASIM_ORB_IDL_COMPILER omniidl)
 endif()
 

@@ -487,6 +487,7 @@ OperationSender::OperationSender(
     m_times = new QSpinBox();
     m_times->setRange(0, std::numeric_limits< int >::max());
     m_times->setValue(1);
+    m_times->setSpecialValueText("Infinite");
     m_period = new QSpinBox();
     m_period->setRange(0, std::numeric_limits< int >::max());
     m_period->setValue(100);
@@ -735,7 +736,6 @@ void OperationForm::_setReadOnly(bool readOnly)
     m_widget->_setReadOnly(readOnly);
     m_code->setReadOnly(readOnly);
 
-    // TODO 
     m_files->setEnabled(!readOnly);
 }
 

@@ -26,16 +26,16 @@
 #include <corbasim/core/inserter.hpp>
 #include <corbasim/core/caller_fwd.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 template < typename Value >
 struct oneway_caller
 {
     template < typename Interface >
-        static inline event::event* invoke(Interface * ref, 
+        static inline event::event* invoke(typename Interface::_ptr_type ref,
             event::request * req)
     {
         typedef event::request_impl< Value > request_t;
@@ -51,7 +51,7 @@ template < typename Value >
 struct default_caller
 {
     template < typename Interface >
-    static inline event::event* invoke(Interface * ref, 
+    static inline event::event* invoke(typename Interface::_ptr_type ref,
             event::request * req)
     {
         typedef event::request_impl< Value > request_t;
@@ -78,7 +78,7 @@ struct do_call : public cs_mpl::eval_if< adapted::is_oneway< Value >,
 template< typename Interface >
 struct operation_caller_base
 {
-    virtual event::event* call(Interface *, event::request*) const = 0;
+    virtual event::event* call(typename Interface::_ptr_type, event::request*) const = 0;
 
     virtual ~operation_caller_base() {}
 };
@@ -86,11 +86,11 @@ struct operation_caller_base
 template< typename Interface, typename Value >
 struct operation_caller_impl : public operation_caller_base< Interface >
 {
-    event::event* call(Interface * _this, event::request* req) const
+    event::event* call(typename Interface::_ptr_type _this, event::request* req) const
     {
-        return do_call< Value >::invoke(_this, req);
+        return do_call< Value >::template invoke< Interface >(_this, req);
     }
-    
+
     static inline operation_caller_impl * get_instance()
     {
         typedef boost::shared_ptr< operation_caller_impl > ptr_t;
@@ -102,7 +102,7 @@ struct operation_caller_impl : public operation_caller_base< Interface >
 template< typename Interface >
 struct interface_caller : public interface_caller_base
 {
-    interface_caller(Interface * ref)
+    interface_caller(typename Interface::_ptr_type ref)
         : m_ref(Interface::_duplicate(ref))
     {
         _init();
@@ -122,11 +122,11 @@ struct interface_caller : public interface_caller_base
     void set_reference(CORBA::Object_ptr ref)
     {
         CORBA::release(m_ref);
-        try 
+        try
         {
             m_ref = Interface::_narrow(ref);
-        } 
-        catch (...) 
+        }
+        catch (...)
         {
             m_ref = Interface::_nil();
         }
@@ -153,10 +153,10 @@ struct interface_caller : public interface_caller_base
     {
         event::event * ev = NULL;
 
-        try 
+        try
         {
             ev = do_call_throw(req);
-        } 
+        }
         catch (const CORBA::Exception& ex)
         {
             ev = new event::exception(ex._name());
@@ -173,7 +173,7 @@ struct interface_caller : public interface_caller_base
     {
         if (m_ref)
         {
-            typename callers_t::const_iterator it = 
+            typename callers_t::const_iterator it =
                 m_callers.find(req->get_tag());
 
             if (it != m_callers.end())
@@ -184,13 +184,13 @@ struct interface_caller : public interface_caller_base
 
         return NULL;
     }
-    
+
     bool is_nil() const
     {
         return CORBA::is_nil(m_ref);
     }
 
-    Interface * m_ref;
+    typename Interface::_ptr_type m_ref;
     callers_t m_callers;
 
 private:

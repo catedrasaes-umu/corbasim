@@ -85,8 +85,9 @@ RequestDialog::RequestDialog(
 
     periodicLayout->addWidget(new QLabel("Times"));
     m_sbTimes = new QSpinBox;
-    m_sbTimes->setRange(-1, 999999);
-    m_sbTimes->setValue(-1);
+    m_sbTimes->setRange(0, 999999);
+    m_sbTimes->setValue(1);
+    m_sbTimes->setSpecialValueText("Infinite");
     periodicLayout->addWidget(m_sbTimes);
 
     periodicLayout->addWidget(new QLabel("Use stored value"));
@@ -181,7 +182,7 @@ void RequestDialog::sendStored()
         sendClicked();
 
     ++m_currentPeriodicRequest;
-    if (m_sbTimes->value() >= 0 && 
+    if (m_sbTimes->value() > 0 && 
             m_currentPeriodicRequest >= m_sbTimes->value())
         m_pbStartStop->setChecked(false);
 }

@@ -20,6 +20,12 @@
 #include "file_format_helper.hpp"
 #include <corbasim/json/reflective.hpp>
 
+#include <boost/cstdint.hpp>
+using boost::uint32_t;
+using boost::int32_t;
+using boost::uint64_t;
+using boost::int64_t;
+
 using namespace corbasim::core;
 
 file_format_factory::file_format_factory()
@@ -32,28 +38,24 @@ file_format_factory::~file_format_factory()
 
 const file_format_factory* file_format_factory::get_instance()
 {
-    static file_format_factory instance;
+    static const file_format_factory instance;
     return &instance;
 }
 
-const file_format_helper* 
+const file_format_helper*
 file_format_factory::get_helper(file_format format) const
 {
     switch(format)
     {
         case FILE_FORMAT_JSON:
             return json_file_format_helper::get_instance();
-
         case FILE_FORMAT_TEXT:
             return text_file_format_helper::get_instance();
-
         case FILE_FORMAT_BINARY:
             return binary_file_format_helper::get_instance();
-
         default:
             break;
     }
-
     return NULL;
 }
 
@@ -76,14 +78,14 @@ json_file_format_helper::~json_file_format_helper()
 }
 
 bool json_file_format_helper::load(
-        std::istream& is, 
-        reflective_base const * reflective, 
+        std::istream& is,
+        reflective_base const * reflective,
         holder h) const
 {
     try
     {
         return json::parse(reflective, h, is);
-    } 
+    }
     catch(...)
     {
     }
@@ -92,17 +94,17 @@ bool json_file_format_helper::load(
 }
 
 bool json_file_format_helper::save(
-        std::ostream& os, 
-        reflective_base const * reflective, 
+        std::ostream& os,
+        reflective_base const * reflective,
         holder h) const
 {
-    try 
+    try
     {
         json::std_writer_t writer(os, true);
         json::write(writer, reflective, h);
         os << std::endl;
-    } 
-    catch (...) 
+    }
+    catch (...)
     {
         return false;
     }
@@ -110,7 +112,7 @@ bool json_file_format_helper::save(
     return true;
 }
 
-const json_file_format_helper* 
+const json_file_format_helper*
 json_file_format_helper::get_instance()
 {
     static json_file_format_helper instance;
@@ -128,8 +130,8 @@ text_file_format_helper::~text_file_format_helper()
 }
 
 bool text_file_format_helper::load(
-        std::istream& is, 
-        reflective_base const * reflective, 
+        std::istream& is,
+        reflective_base const * reflective,
         holder h) const
 {
     try
@@ -159,22 +161,22 @@ bool text_file_format_helper::load(
             case TYPE_ARRAY:
             case TYPE_SEQUENCE:
                 {
-                    unsigned int count = 
+                    unsigned int count =
                         reflective->get_length(h);
 
                     if (reflective->is_variable_length())
                     {
                         // save length
                         is >> count;
-                        
+
                         reflective->set_length(h, count);
                     }
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
-                        load(is, reflective->get_child(i), 
+                        load(is, reflective->get_child(i),
                                 child_value);
                     }
                 }
@@ -182,14 +184,14 @@ bool text_file_format_helper::load(
 
             case TYPE_STRUCT:
                 {
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
-                        load(is, reflective->get_child(i), 
+                        load(is, reflective->get_child(i),
                                 child_value);
                     }
                 }
@@ -208,8 +210,8 @@ bool text_file_format_helper::load(
 }
 
 bool text_file_format_helper::save(
-        std::ostream& os, 
-        reflective_base const * reflective, 
+        std::ostream& os,
+        reflective_base const * reflective,
         holder h) const
 {
     try
@@ -239,7 +241,7 @@ bool text_file_format_helper::save(
             case TYPE_ARRAY:
             case TYPE_SEQUENCE:
                 {
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_length(h);
 
                     if (reflective->is_variable_length())
@@ -248,13 +250,13 @@ bool text_file_format_helper::save(
                         os << count << ' ';
                     }
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), 
+                        save(os, reflective->get_child(i),
                                 child_value);
-                        
+
                         os << ' ';
                     }
                 }
@@ -262,14 +264,14 @@ bool text_file_format_helper::save(
 
             case TYPE_STRUCT:
                 {
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
-                        save(os, reflective->get_child(i), 
+                        save(os, reflective->get_child(i),
                                 child_value);
 
                         os << ' ';
@@ -289,7 +291,7 @@ bool text_file_format_helper::save(
     return true;
 }
 
-const text_file_format_helper* 
+const text_file_format_helper*
 text_file_format_helper::get_instance()
 {
     static text_file_format_helper instance;
@@ -307,16 +309,16 @@ binary_file_format_helper::~binary_file_format_helper()
 }
 
 bool binary_file_format_helper::load(
-        std::istream& is, 
-        reflective_base const * reflective, 
+        std::istream& is,
+        reflective_base const * reflective,
         holder h) const
 {
     return load(is, reflective, h, 0);
 }
 
 bool binary_file_format_helper::load(
-        std::istream& is, 
-        reflective_base const * reflective, 
+        std::istream& is,
+        reflective_base const * reflective,
         holder h, unsigned int level) const
 {
     bool res = true;
@@ -349,7 +351,7 @@ bool binary_file_format_helper::load(
             case TYPE_ARRAY:
             case TYPE_SEQUENCE:
                 {
-                    unsigned int count = 
+                    unsigned int count =
                         reflective->get_length(h);
 
                     if (reflective->is_variable_length() && !level)
@@ -362,10 +364,10 @@ bool binary_file_format_helper::load(
 
                         while(is.good())
                         {
-                            holder child_value = 
+                            holder child_value =
                                 reflective->get_child_value(h, count);
 
-                            bool read = load(is, reflective->get_slice(), 
+                            bool read = load(is, reflective->get_slice(),
                                     child_value, level + 1);
 
                             if (is.good() && (++count == max_length))
@@ -374,12 +376,12 @@ bool binary_file_format_helper::load(
                                 reflective->set_length(h, max_length);
                             }
                         }
-                        
+
                         reflective->set_length(h, count);
 
                         break;
                     }
-                    
+
                     if (reflective->is_variable_length())
                     {
                         // read length
@@ -388,12 +390,12 @@ bool binary_file_format_helper::load(
                         reflective->set_length(h, count);
                     }
 
-                    for (unsigned int i = 0; res && i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
 
-                        res = load(is, reflective->get_child(i), 
+                        res = load(is, reflective->get_child(i),
                                 child_value, level + 1);
                     }
                 }
@@ -401,14 +403,14 @@ bool binary_file_format_helper::load(
 
             case TYPE_STRUCT:
                 {
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; res && i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
-                        res = load(is, reflective->get_child(i), 
+                        res = load(is, reflective->get_child(i),
                                 child_value, level + 1);
                     }
                 }
@@ -428,16 +430,16 @@ bool binary_file_format_helper::load(
 }
 
 bool binary_file_format_helper::save(
-        std::ostream& os, 
-        reflective_base const * reflective, 
+        std::ostream& os,
+        reflective_base const * reflective,
         holder h) const
 {
     return save(os, reflective, h, 0);
 }
 
 bool binary_file_format_helper::save(
-        std::ostream& os, 
-        reflective_base const * reflective, 
+        std::ostream& os,
+        reflective_base const * reflective,
         holder h,
         unsigned int level) const
 {
@@ -471,7 +473,7 @@ bool binary_file_format_helper::save(
             case TYPE_ARRAY:
             case TYPE_SEQUENCE:
                 {
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_length(h);
 
                     if (reflective->is_variable_length() && !level)
@@ -480,11 +482,11 @@ bool binary_file_format_helper::save(
                         os.write((const char *)&count, sizeof(unsigned int));
                     }
 
-                    for (unsigned int i = 0; res && i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
-                        res = save(os, reflective->get_child(i), 
+                        res = save(os, reflective->get_child(i),
                                 child_value, level + 1);
                     }
                 }
@@ -492,14 +494,14 @@ bool binary_file_format_helper::save(
 
             case TYPE_STRUCT:
                 {
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; res && i < count; i++) 
+                    for (unsigned int i = 0; res && i < count; i++)
                     {
-                        holder child_value = 
+                        holder child_value =
                             reflective->get_child_value(h, i);
-                        res = save(os, reflective->get_child(i), 
+                        res = save(os, reflective->get_child(i),
                                 child_value, level + 1);
                     }
                 }
@@ -517,7 +519,7 @@ bool binary_file_format_helper::save(
     return res;
 }
 
-const binary_file_format_helper* 
+const binary_file_format_helper*
 binary_file_format_helper::get_instance()
 {
     static binary_file_format_helper instance;
