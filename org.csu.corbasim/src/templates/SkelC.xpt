@@ -91,7 +91,7 @@ __attr_parameters_«identifier»_get[] = {
     {"", NULL, 0}
 };
     «IF !isReadonly-»
-    
+
 static ::csu::mycorba::_nv_param
 __attr_parameters_«identifier»_set[] = {
     {"«identifier»", «getType().getTypeCode()», ::CORBA::ARG_IN},

@@ -4,13 +4,13 @@
 «EXTENSION templates::StructDef»
 
 «DEFINE client FOR TranslationUnit»
-	«EXPAND client FOREACH contains»
+    «EXPAND client FOREACH contains»
 «ENDDEFINE»
 
 «DEFINE client FOR Contained»«ENDDEFINE»
 
 «DEFINE client FOR ModuleDef»
-	«EXPAND client FOREACH contains»
+    «EXPAND client FOREACH contains»
 «ENDDEFINE»
 
 «REM»Cliente para interfaces«ENDREM»
@@ -23,21 +23,21 @@
 
 «REM»
 // Already linked
-extern "C" const corbasim::core::interface_reflective_base * 
+extern "C" const corbasim::core::interface_reflective_base *
 corbasim_reflective_«fqn»();
 «ENDREM»
 
 int main(int argc, char **argv)
 {
-	QTextCodec::setCodecForCStrings (QTextCodec::codecForLocale());
-	QApplication app(argc, argv);
+    QTextCodec::setCodecForCStrings (QTextCodec::codecForLocale());
+    QApplication app(argc, argv);
 
-	CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
-	CORBA::Object_var obj;
+    CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
+    CORBA::Object_var obj;
 
     corbasim::gui::ClientApp application(«fqn»);
 
-	return app.exec();
+    return app.exec();
 }
 «ENDFILE»
 

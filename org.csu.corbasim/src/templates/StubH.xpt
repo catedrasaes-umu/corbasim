@@ -73,14 +73,14 @@ typedef csu::mycorba::_interface_out_t< «this» > «this»_out;
 
 «DEFINE code FOR ForwardDef-»
 // BEGIN CODE FORWARD «identifier»
-	«EXPAND forward FOR identifier-»
+    «EXPAND forward FOR identifier-»
 // END CODE FORWARD «identifier»
 «ENDDEFINE»
 
 «DEFINE code FOR InterfaceDef-»
 // BEGIN CODE INTERFACE «identifier»
-	«EXPAND forward FOR identifier-»
-	
+    «EXPAND forward FOR identifier-»
+
 «getCode_TypeCodeDeclaration()»
 
 class «identifier» : «IF derivesFrom.isEmpty-»public virtual ::CORBA::Object
@@ -97,12 +97,12 @@ public:
 
     static «identifier»_ptr _duplicate(«identifier»_ptr obj);
     static «identifier»_ptr _narrow(::CORBA::Object_ptr obj);
-    
+
     static inline «identifier»_ptr _unchecked_narrow(::CORBA::Object_ptr obj)
     {
         return _narrow(obj);
     }
-        
+
     static «identifier»_ptr _nil(void)
     {
         return static_cast< «identifier»_ptr > (0);
@@ -281,7 +281,7 @@ struct «identifier»
     «FOREACH getAnonymousFields() AS field-»
         «EXPAND anonymous(this, field) FOR field.getType()-»
     «ENDFOREACH-»
-    
+
     «EXPAND code FOREACH getNestedStructs()-»
 
     // STRUCT MEMBERS
@@ -334,14 +334,14 @@ struct «identifier»
 // BEGIN ANY OPERATORS MODULE «getFQN()»
     «EXPAND anyOperators FOREACH contains SEPARATOR "\n\n"-»
 // END ANY OPERATORS MODULE «getFQN()»
-«ENDDEFINE» 
+«ENDDEFINE»
 
 
 
 «DEFINE anyOperators FOR InterfaceDef-»
 // BEGIN ANY OPERATORS INTERFACE «getFQN()»
 «getCode_AnyOperatorsDeclaration()»
-    «EXPAND anyOperators FOREACH contains SEPARATOR "\n\n"-»    
+    «EXPAND anyOperators FOREACH contains SEPARATOR "\n\n"-»
 // END ANY OPERATORS INTERFACE «getFQN()»
 «ENDDEFINE»
 
@@ -362,18 +362,18 @@ struct «identifier»
 «getCode_AnyOperatorsDeclaration(get_CPPType())-»
 
     «EXPAND anonymousAnyOperators(this) FOREACH getAnonymousFields() SEPARATOR "\n\n"-»
-    
+
     «EXPAND anyOperators FOREACH getNestedStructs()-»
 // END ANY OPERATORS STRUCT «getFQN()»
 «ENDDEFINE»
 
 
 «DEFINE anonymousAnyOperators(StructDef struct) FOR Field-»
-	«IF SequenceDef.isInstance(getType())-»
-	    «LET (SequenceDef) getType() AS seq-»
+    «IF SequenceDef.isInstance(getType())-»
+        «LET (SequenceDef) getType() AS seq-»
 // ANONYMOUS SEQUENCE «struct.getFQN(this)»  («getMemberTypeId()», MEMBER OF STRUCT «struct.identifier»)
 «struct.getCode_AnyOperatorsDeclaration(struct.getFQN(this))-»
-	    «ENDLET-»
+        «ENDLET-»
 «REM»
     «ELSEIF ArrayDef.isInstance(getType())-»
         «LET (SequenceDef) getType() AS seq-»

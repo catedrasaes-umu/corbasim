@@ -196,7 +196,7 @@ CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
         «IF !isOneway-»
             «IF !returnVoid()-»
     «getType().getCode_StubReturn()»
-    
+
             «ENDIF-»
     __req->invoke();
 
@@ -254,11 +254,11 @@ CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 
 «DEFINE body FOR StructDef-»
 // BEGIN BODY STRUCT «identifier»
-	«FOREACH getAnonymousFields() AS field-»
-	    «EXPAND anonymous(this, field) FOR field.getType()-»
-	«ENDFOREACH-»
-	
-	«EXPAND body FOREACH getNestedStructs()-»
+    «FOREACH getAnonymousFields() AS field-»
+        «EXPAND anonymous(this, field) FOR field.getType()-»
+    «ENDFOREACH-»
+
+    «EXPAND body FOREACH getNestedStructs()-»
 
 static ::csu::mycorba::_nv_field
 __fields_«getFQN("_")»[] = {

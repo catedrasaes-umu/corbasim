@@ -3,13 +3,13 @@
 «EXTENSION templates::corbasim::corbasim»
 
 «DEFINE server FOR TranslationUnit»
-	«EXPAND server FOREACH contains»
+    «EXPAND server FOREACH contains»
 «ENDDEFINE»
 
 «DEFINE server FOR Contained»«ENDDEFINE»
 
 «DEFINE server FOR ModuleDef»
-	«EXPAND server FOREACH contains»
+    «EXPAND server FOREACH contains»
 «ENDDEFINE»
 
 «REM»Servidor para interfaces«ENDREM»
@@ -29,53 +29,53 @@ class «fqn»_impl : virtual public «this.getPOAFQN()»
 {
 public:
 
-	«fqn»_impl( ::corbasim::gui::ServerApp& app) :
-		m_app(app)
-	{
-	}
+    «fqn»_impl( ::corbasim::gui::ServerApp& app) :
+        m_app(app)
+    {
+    }
 
-	«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op»
-	«op.getSignature()»
-	{
-		«IF !op.parameters.isEmpty || !op.returnVoid()-»
-		_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
-		«ENDIF-»
-		
-		«PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::"+op.getFQN("_")»
-		«ENDPROTECT»
+    «FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op»
+    «op.getSignature()»
+    {
+        «IF !op.parameters.isEmpty || !op.returnVoid()-»
+        _corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
+        «ENDIF-»
 
-		«IF !op.returnVoid()-»
-		«IF op.returnString()-»
-		return CORBA::string_dup(_val._return);
-		«ELSEIF op.returnWString()-»
-		return CORBA::wstring_dup(_val._return);
-		«ELSE-»
-		return _val._return;
-		«ENDIF-»
-		«ENDIF-»
-	}
-	«ENDFOREACH»
+        «PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::"+op.getFQN("_")»
+        «ENDPROTECT»
+
+        «IF !op.returnVoid()-»
+        «IF op.returnString()-»
+        return CORBA::string_dup(_val._return);
+        «ELSEIF op.returnWString()-»
+        return CORBA::wstring_dup(_val._return);
+        «ELSE-»
+        return _val._return;
+        «ENDIF-»
+        «ENDIF-»
+    }
+    «ENDFOREACH»
 
     «PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___body"»
     «ENDPROTECT»
 
 protected:
-	
-	::corbasim::gui::ServerApp& m_app;
+
+    ::corbasim::gui::ServerApp& m_app;
 };
 
 int main(int argc, char **argv)
 {
     corbasim::gui::ServerApp app(argc, argv);
 
-	// Servant
+    // Servant
     «fqn»_impl _impl(app);
 
     CORBA::Object_var myRef = app.setServant("«getFQN()»", "this", &_impl);
 
     «PROTECT CSTART '/*' CEND '*/' ID fqn+"_server_ui::___main"»
     «ENDPROTECT»
-   
+
     return app.exec();
 }
 

@@ -52,7 +52,7 @@ typedef csu::mycorba::_array_fixed_forany_t<«identifier», «identifier»_slice
     {
         return static_cast <«fqn»_slice *> (0);
     }
-  
+
     «fqn»_copy (_dup_array, _src_array);
     return _dup_array;
 }

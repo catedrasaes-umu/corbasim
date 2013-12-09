@@ -7,12 +7,12 @@ extension templates::Expression;
 String getFQN(Contained this) : getFQN(this, "::");
 String getFQN(Contained this, String separator ) : this.definedIn != null ? this.definedIn.getFQN(separator) + separator + identifier : identifier;
 String getFQN_orig(StructDef this, String separator ) : this.definedIn != null ? this.definedIn.getFQN(separator) + separator + identifier : identifier;
-String getFQN(StructDef this, String separator ) : 
-	if isNestedStruct() then 
-		// eContainer = Field, eContainer.eContainer = StructDef
-		((Contained)this.eContainer().eContainer()).getFQN(separator) + separator + identifier 
-	else
-		 getFQN_orig(separator)
+String getFQN(StructDef this, String separator ) :
+    if isNestedStruct() then
+        // eContainer = Field, eContainer.eContainer = StructDef
+        ((Contained)this.eContainer().eContainer()).getFQN(separator) + separator + identifier
+    else
+         getFQN_orig(separator)
 ;
 String getFQN(StructDef this, Field anonymous) : getFQN()+"::"+anonymous.getMemberTypeId(); // Special case for anonymous sequences
 
@@ -23,29 +23,29 @@ String getFQN_Type(InterfaceDef this) : getFQN();
 String getFQN_Type(TypedefDef this) : getFQN();
 String getFQN_Type(StringDef this) : "char *";
 String getFQN_Type(PrimitiveDef this) : switch (kind) {
-/*		case PrimitiveKind::PK_NULL : ""
-		case PrimitiveKind::PK_TYPECODE : ""
-		case PrimitiveKind::PK_PRINCIPAL : ""*/
-		case PrimitiveKind::PK_OBJREF : "::CORBA::Object"
-		case PrimitiveKind::PK_ANY : "::CORBA::Any"
-		case PrimitiveKind::PK_VOID : "void"
-		case PrimitiveKind::PK_SHORT: "::CORBA::Short"
-		case PrimitiveKind::PK_LONG : "::CORBA::Long"
-		case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
-		case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
-		case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
-		case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
-		case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
-		case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
-		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
-		case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
-		case PrimitiveKind::PK_CHAR : "::CORBA::Char"
-		case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
-		case PrimitiveKind::PK_WSTRING : "::CORBA::WChar* "
-		case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"
-		case PrimitiveKind::PK_STRING : "char*"
-		default : "/***UNUSED!***/"
-	};
+/*        case PrimitiveKind::PK_NULL : ""
+        case PrimitiveKind::PK_TYPECODE : ""
+        case PrimitiveKind::PK_PRINCIPAL : ""*/
+        case PrimitiveKind::PK_OBJREF : "::CORBA::Object"
+        case PrimitiveKind::PK_ANY : "::CORBA::Any"
+        case PrimitiveKind::PK_VOID : "void"
+        case PrimitiveKind::PK_SHORT: "::CORBA::Short"
+        case PrimitiveKind::PK_LONG : "::CORBA::Long"
+        case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
+        case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
+        case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
+        case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
+        case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
+        case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
+        case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
+        case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
+        case PrimitiveKind::PK_CHAR : "::CORBA::Char"
+        case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
+        case PrimitiveKind::PK_WSTRING : "::CORBA::WChar* "
+        case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"
+        case PrimitiveKind::PK_STRING : "char*"
+        default : "/***UNUSED!***/"
+    };
 
 IDLType getType(Typed this) : containedType != null ? containedType : sharedType;
 
@@ -58,12 +58,12 @@ IDLType getOriginalType(ArrayDef this) : this;
 
 /* get the type of an array (useful for multidimensional arrays) */
 IDLType getArrayType(ArrayDef this) :
-	let type = getType() :
-		ArrayDef.isInstance(type)?
-			((ArrayDef)type).getArrayType()
-		:
-			type
-	;
+    let type = getType() :
+        ArrayDef.isInstance(type)?
+            ((ArrayDef)type).getArrayType()
+        :
+            type
+    ;
 
 /* get a list containing the dimensions of an array */
 String getArrayDimensionsDecl(ArrayDef this) :
@@ -80,7 +80,7 @@ String getArrayDimensionsMult(ArrayDef this) :
 
 /* get the dimensions of the slice of an array */
 String getArraySliceDimensions(ArrayDef this) :
-	bounds.withoutFirst().getArrayDimensions("[", "]", "")
+    bounds.withoutFirst().getArrayDimensions("[", "]", "")
 ;
 
 /* get the dimensions of an array */
@@ -94,9 +94,9 @@ private String getArrayDimensions(List[Expression] this, String prefix, String s
 ;
 
 Boolean isObjectRef(IDLType this)
-	: ( InterfaceDef.isInstance(this) 
-	  || (PrimitiveDef.isInstance(this) && ((PrimitiveDef)this).kind == PrimitiveKind::PK_OBJREF)
-	  );
+    : ( InterfaceDef.isInstance(this)
+      || (PrimitiveDef.isInstance(this) && ((PrimitiveDef)this).kind == PrimitiveKind::PK_OBJREF)
+      );
 
 getTypeCode(IDLType this)  : "/***ERROR IDLType getTypeCode: "+metaType.name+"***/";
 
@@ -104,29 +104,29 @@ getTypeCode(PrimitiveDef this) : switch (kind) {
 /*
  ::CORBA::_tc_NamedValue;
  */
- 		case PrimitiveKind::PK_TYPECODE : "::CORBA::_tc_TypeCode;"
-		case PrimitiveKind::PK_PRINCIPAL : "::CORBA::_tc_Principal;"
-		case PrimitiveKind::PK_NULL : "::CORBA::_tc_null;"
-		case PrimitiveKind::PK_ANY : "::CORBA::_tc_any"
-		case PrimitiveKind::PK_VOID : "::CORBA::_tc_void"
-		case PrimitiveKind::PK_SHORT: "::CORBA::_tc_short"
-		case PrimitiveKind::PK_LONG : "::CORBA::_tc_long"
-		case PrimitiveKind::PK_LONGLONG : "::CORBA::_tc_longlong"
-		case PrimitiveKind::PK_USHORT : "::CORBA::_tc_ushort"
-		case PrimitiveKind::PK_ULONG : "::CORBA::_tc_ulong"
-		case PrimitiveKind::PK_ULONGLONG : "::CORBA::_tc_ulonglong"
-		case PrimitiveKind::PK_FLOAT : "::CORBA::_tc_float"
-		case PrimitiveKind::PK_DOUBLE : "::CORBA::_tc_double"
-		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::_tc_longdouble"
-		case PrimitiveKind::PK_BOOLEAN : "::CORBA::_tc_boolean"
-		case PrimitiveKind::PK_CHAR : "::CORBA::_tc_char"
-		case PrimitiveKind::PK_OCTET : "::CORBA::_tc_octet"
-		case PrimitiveKind::PK_WSTRING : "::CORBA::_tc_wstring"
-		case PrimitiveKind::PK_WCHAR : "::CORBA::_tc_wchar"
-		case PrimitiveKind::PK_STRING : "::CORBA::_tc_string"
-		case PrimitiveKind::PK_OBJREF : "::CORBA::_tc_Object"
-		default : "/***UNUSED!***/"
-	};
+         case PrimitiveKind::PK_TYPECODE : "::CORBA::_tc_TypeCode;"
+        case PrimitiveKind::PK_PRINCIPAL : "::CORBA::_tc_Principal;"
+        case PrimitiveKind::PK_NULL : "::CORBA::_tc_null;"
+        case PrimitiveKind::PK_ANY : "::CORBA::_tc_any"
+        case PrimitiveKind::PK_VOID : "::CORBA::_tc_void"
+        case PrimitiveKind::PK_SHORT: "::CORBA::_tc_short"
+        case PrimitiveKind::PK_LONG : "::CORBA::_tc_long"
+        case PrimitiveKind::PK_LONGLONG : "::CORBA::_tc_longlong"
+        case PrimitiveKind::PK_USHORT : "::CORBA::_tc_ushort"
+        case PrimitiveKind::PK_ULONG : "::CORBA::_tc_ulong"
+        case PrimitiveKind::PK_ULONGLONG : "::CORBA::_tc_ulonglong"
+        case PrimitiveKind::PK_FLOAT : "::CORBA::_tc_float"
+        case PrimitiveKind::PK_DOUBLE : "::CORBA::_tc_double"
+        case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::_tc_longdouble"
+        case PrimitiveKind::PK_BOOLEAN : "::CORBA::_tc_boolean"
+        case PrimitiveKind::PK_CHAR : "::CORBA::_tc_char"
+        case PrimitiveKind::PK_OCTET : "::CORBA::_tc_octet"
+        case PrimitiveKind::PK_WSTRING : "::CORBA::_tc_wstring"
+        case PrimitiveKind::PK_WCHAR : "::CORBA::_tc_wchar"
+        case PrimitiveKind::PK_STRING : "::CORBA::_tc_string"
+        case PrimitiveKind::PK_OBJREF : "::CORBA::_tc_Object"
+        default : "/***UNUSED!***/"
+    };
 getTypeCode(StringDef this) : "::CORBA::_tc_string";
 
 getContainedTypeCode(Contained this) :
@@ -138,7 +138,7 @@ getContainedTypeCode(Contained this) :
 
 getContainedTypeCode(StructDef this) :
     if isNestedStruct() then
-    	((StructDef) eContainer().eContainer()).getFQN() + "::_tc_" + identifier
+        ((StructDef) eContainer().eContainer()).getFQN() + "::_tc_" + identifier
     else if definedIn != null then
         definedIn.getFQN() + "::_tc_" + identifier
     else
@@ -154,28 +154,28 @@ getTypeCode(StructDef this, Field mmb) : getFQN()+"::_tc_"+mmb.getMemberTypeId()
 
 /*** Mapping C++: structrued types: fixed or variable ***/
 /*NOTE: structured types (structs, unions, arrays, sequences)
-		depending on data structure are fixed-length or variable-length */
+        depending on data structure are fixed-length or variable-length */
 Boolean isVariableLen(IDLType this) : "/***ERROR IDLType IN: "+metaType.name+"***/";
 
 /*TODO: add a valuetype as variable-length*/
 
 Boolean isVariableLen(PrimitiveDef this) : switch (kind) {
-		/*case PrimitiveKind::PK_NULL : 1*/
-		case PrimitiveKind::PK_ANY : true
-		/*case PrimitiveKind::PK_VOID : 1
-		case PrimitiveKind::PK_TYPECODE : -1
-		case PrimitiveKind::PK_PRINCIPAL : -1*/
-		case PrimitiveKind::PK_OBJREF : true
-		case PrimitiveKind::PK_WSTRING : true
-		case PrimitiveKind::PK_STRING : true
-		default : false
-	};
+        /*case PrimitiveKind::PK_NULL : 1*/
+        case PrimitiveKind::PK_ANY : true
+        /*case PrimitiveKind::PK_VOID : 1
+        case PrimitiveKind::PK_TYPECODE : -1
+        case PrimitiveKind::PK_PRINCIPAL : -1*/
+        case PrimitiveKind::PK_OBJREF : true
+        case PrimitiveKind::PK_WSTRING : true
+        case PrimitiveKind::PK_STRING : true
+        default : false
+    };
 
 // these won't exist, as they will allways be contained
 // within an aliasdef
 /*
-get_CPPType(StringDef this) :	"STRINGDEF"+bound;
-get_CPPType(FixedDef this) :	"FIXED"+digits+","+scale;
+get_CPPType(StringDef this) :    "STRINGDEF"+bound;
+get_CPPType(FixedDef this) :    "FIXED"+digits+","+scale;
 */
 Boolean isVariableLen(StringDef this) : true;
 Boolean isVariableLen(TypedefDef this) : false; /*default: enumerates and unions*/
@@ -203,41 +203,41 @@ cached List[Contained] getAllContents(Container this) :
 
 /*** Mapping C++: distinción en argumentos para templates de mycorba ***/
 
-cached String getArgType(IDLType this) : 
-		switch (_getArgType()) {
-			case 1: "Basic" /*Non struct*/
-			case 2: "Fixed" /*Fixed struct*/
-			case 3: "Variable" /*Variable struct*/
-			default: "UNKNOWN"
-		}
-	;
+cached String getArgType(IDLType this) :
+        switch (_getArgType()) {
+            case 1: "Basic" /*Non struct*/
+            case 2: "Fixed" /*Fixed struct*/
+            case 3: "Variable" /*Variable struct*/
+            default: "UNKNOWN"
+        }
+    ;
 
 private Integer _getArgType(IDLType this) : -1;
 
 private Integer _getArgType(PrimitiveDef this) : switch (kind) {
-		case PrimitiveKind::PK_NULL : 1
-		case PrimitiveKind::PK_ANY : 3
-		case PrimitiveKind::PK_VOID : 1
-		case PrimitiveKind::PK_TYPECODE : -1
-		case PrimitiveKind::PK_PRINCIPAL : -1
-		case PrimitiveKind::PK_OBJREF : 3
-		/*case PrimitiveKind::PK_SHORT: "::CORBA::Short"
-		case PrimitiveKind::PK_LONG : "::CORBA::Long"
-		case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
-		case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
-		case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
-		case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
-		case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
-		case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
-		case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
-		case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
-		case PrimitiveKind::PK_CHAR : "::CORBA::Char"
-		case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
-		case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"*/
-		case PrimitiveKind::PK_STRING : 3
-		case PrimitiveKind::PK_WSTRING : 3
-		default : 1
-	};
+        case PrimitiveKind::PK_NULL : 1
+        case PrimitiveKind::PK_ANY : 3
+        case PrimitiveKind::PK_VOID : 1
+        case PrimitiveKind::PK_TYPECODE : -1
+        case PrimitiveKind::PK_PRINCIPAL : -1
+        case PrimitiveKind::PK_OBJREF : 3
+        /*case PrimitiveKind::PK_SHORT: "::CORBA::Short"
+        case PrimitiveKind::PK_LONG : "::CORBA::Long"
+        case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
+        case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
+        case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
+        case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
+        case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
+        case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
+        case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
+        case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
+        case PrimitiveKind::PK_CHAR : "::CORBA::Char"
+        case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
+        case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"*/
+        case PrimitiveKind::PK_STRING : 3
+        case PrimitiveKind::PK_WSTRING : 3
+        default : 1
+    };
 
 private Integer _getArgType(StringDef this) : 3;
 private Integer _getArgType(TypedefDef this) : -1;
@@ -253,13 +253,13 @@ private Integer _getArgType(ConstantDef this) : getType()._getArgType();
 
 /** get the set of upper interfaces in inheritance hierarchy **/
 cached Set[InterfaceDef] getAllParentsSet(InterfaceDef this) :
-	getAllParentsList().toSet()
+    getAllParentsList().toSet()
 ;
 
 private cached List[InterfaceDef] getAllParentsList(InterfaceDef this) :
-	if derivesFrom.isEmpty then
-		derivesFrom
-	else
-		derivesFrom.addAll(derivesFrom.getAllParentsList())
+    if derivesFrom.isEmpty then
+        derivesFrom
+    else
+        derivesFrom.addAll(derivesFrom.getAllParentsList())
 ;
 

@@ -33,81 +33,81 @@ namespace adapted
 template< >
 struct servant< «this.getFQN()» >
 {
-	template < typename F >
-	class _type : public virtual «this.getPOAFQN()»
-	{
-	public:
-	
-		_type(F f) : 
-			__f(f)
-		{
-		}
-	
-		«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op-»
-		«op.getSignature()»
-		{
-			_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
-	
-			__f(_val);		
-			
-			«IF !op.returnVoid()-»
-			«IF op.returnString()-»
-			return CORBA::string_dup(_val._return);
-			«ELSEIF op.returnWString()-»
-			return CORBA::wstring_dup(_val._return);
-			«ELSEIF op.returnPointer()-»
-			return _val._return._retn();
-			«ELSE-»
-			return _val._return;
-			«ENDIF-»
-			«ENDIF-»
-		}
+    template < typename F >
+    class _type : public virtual «this.getPOAFQN()»
+    {
+    public:
 
-		«ENDFOREACH»
-	protected:
-		F __f;
-	};
+        _type(F f) :
+            __f(f)
+        {
+        }
 
-	class interceptor : public virtual «this.getPOAFQN()»
-	{
-	public:
-	
-		interceptor()
-		{
-		}
+        «FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op-»
+        «op.getSignature()»
+        {
+            _corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
+
+            __f(_val);
+
+            «IF !op.returnVoid()-»
+            «IF op.returnString()-»
+            return CORBA::string_dup(_val._return);
+            «ELSEIF op.returnWString()-»
+            return CORBA::wstring_dup(_val._return);
+            «ELSEIF op.returnPointer()-»
+            return _val._return._retn();
+            «ELSE-»
+            return _val._return;
+            «ENDIF-»
+            «ENDIF-»
+        }
+
+        «ENDFOREACH»
+    protected:
+        F __f;
+    };
+
+    class interceptor : public virtual «this.getPOAFQN()»
+    {
+    public:
+
+        interceptor()
+        {
+        }
 
         void _set_reference(CORBA::Object_ptr obj)
         {
             __ref = «this.getFQN()»::_narrow(obj);
         }
-	
-		«FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op-»
-		virtual «op.getSignature()»
-		{
-			_corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
-	
+
+        «FOREACH contains.typeSelect(OperationDef).addAll(getAllParentsSet().toList().contains.typeSelect(OperationDef)) AS op-»
+        virtual «op.getSignature()»
+        {
+            _corbasim_«op.getFQN()» _val«IF !op.parameters.isEmpty-»(«FOREACH op.parameters AS p SEPARATOR ", "»«p.identifier»«ENDFOREACH»)«ENDIF»;
+
             if (!CORBA::is_nil(__ref.in()))
             {
                 «IF !op.returnVoid()-»_val._return = «ENDIF»__ref->«op.identifier»(«FOREACH op.parameters AS p SEPARATOR ", "»_val.«p.identifier»«ENDFOREACH»);
             }
-			
-			«IF !op.returnVoid()-»
-			«IF op.returnString()-»
-			return CORBA::string_dup(_val._return);
-			«ELSEIF op.returnWString()-»
-			return CORBA::wstring_dup(_val._return);
-			«ELSEIF op.returnPointer()-»
-			return _val._return._retn();
-			«ELSE-»
-			return _val._return;
-			«ENDIF-»
-			«ENDIF-»
-		}
 
-		«ENDFOREACH»
-	protected:
-		«this.getFQN()»_var __ref;
-	};
+            «IF !op.returnVoid()-»
+            «IF op.returnString()-»
+            return CORBA::string_dup(_val._return);
+            «ELSEIF op.returnWString()-»
+            return CORBA::wstring_dup(_val._return);
+            «ELSEIF op.returnPointer()-»
+            return _val._return._retn();
+            «ELSE-»
+            return _val._return;
+            «ENDIF-»
+            «ENDIF-»
+        }
+
+        «ENDFOREACH»
+    protected:
+        «this.getFQN()»_var __ref;
+    };
 };
 
 } // adapted

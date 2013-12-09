@@ -8,7 +8,7 @@
 «DEFINE main FOR TranslationUnit-»
 «FILE getFileNameSkelImplCpp()-»
 «EXPAND templates::Header::header(getFileNameSkelImplCpp()) FOR this-»
- 
+
 #include "«getFileNameSkelImplHpp()»"
 
 «PROTECT CSTART '/*' CEND '*/' ID getFileNameSkelImplCpp() DISABLE»
@@ -17,9 +17,9 @@
 
 // TODO: Additional includes here
 «ENDPROTECT»
- 
+
 «EXPAND body FOREACH this.contains.typeSelect(Container)-»
- 
+
 «ENDFILE-»
 «ENDDEFINE»
 
@@ -38,8 +38,8 @@
 
 «DEFINE body FOR InterfaceDef-»
 // BEGIN BODY INTERFACE «getFQN()»
-	«EXPAND code FOR this-»
-	«EXPAND contents FOR this-»
+    «EXPAND code FOR this-»
+    «EXPAND contents FOR this-»
 // END BODY INTERFACE «getFQN()»
 
 «ENDDEFINE»
@@ -55,10 +55,10 @@
 «DEFINE code FOR InterfaceDef-»
 «getFQN()»_i::«identifier»_i()
 {
-	«PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i::"+identifier+"_i" DISABLE»
-	// Please, enable the protected region if you add manually written code.
-	// To do this, add the keyword ENABLED before START.
-	«ENDPROTECT»
+    «PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i::"+identifier+"_i" DISABLE»
+    // Please, enable the protected region if you add manually written code.
+    // To do this, add the keyword ENABLED before START.
+    «ENDPROTECT»
 }
 
 «getFQN()»_i::~«identifier»_i()
@@ -77,15 +77,15 @@
 
 
 «DEFINE code(InterfaceDef interface) FOR OperationDef-»
-	«IF !contexts.isEmpty-»
+    «IF !contexts.isEmpty-»
 // ERROR: CONTEXT IN OPERATIONDEF NOT SUPPORTED (YET)
-	«ENDIF-»
+    «ENDIF-»
 «getSignature(interface.getFQN() + "_i::" + identifier)»
 {
     «PROTECT CSTART '/*' CEND '*/' ID interface.getFQN()+"::"+identifier+"_i" DISABLE»
     // Please, enable the protected region if you add manually written code.
     // To do this, add the keyword ENABLED before START.
-    
+
     // TODO: Add content
     «ENDPROTECT»
 }
@@ -99,7 +99,7 @@
     «PROTECT CSTART '/*' CEND '*/' ID interface.getFQN()+"::"+identifier+"_get_i" DISABLE»
     // Please, enable the protected region if you add manually written code.
     // To do this, add the keyword ENABLED before START.
-    
+
     // TODO: Add content
     «ENDPROTECT»
 }
@@ -110,7 +110,7 @@
     «PROTECT CSTART '/*' CEND '*/' ID interface.getFQN()+"::"+identifier+"_set_i" DISABLE»
     // Please, enable the protected region if you add manually written code.
     // To do this, add the keyword ENABLED before START.
-    
+
     // TODO: Add content
     «ENDPROTECT»
 }

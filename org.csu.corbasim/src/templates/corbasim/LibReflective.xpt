@@ -4,13 +4,13 @@
 
 
 «DEFINE main FOR TranslationUnit»
-	«EXPAND main FOREACH contains SEPARATOR "\n\n"»
+    «EXPAND main FOREACH contains SEPARATOR "\n\n"»
 «ENDDEFINE»
 
 «DEFINE main FOR Contained-»«ENDDEFINE»
 
 «DEFINE main FOR ModuleDef-»
-	«EXPAND main FOREACH contains SEPARATOR "\n\n"»
+    «EXPAND main FOREACH contains SEPARATOR "\n\n"»
 «ENDDEFINE»
 
 «DEFINE main FOR InterfaceDef-»
@@ -23,7 +23,7 @@
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»()
 {
-	return corbasim::core::interface_reflective< «getFQN()» >::get_instance();
+    return corbasim::core::interface_reflective< «getFQN()» >::get_instance();
 }
 
 «ENDFILE»

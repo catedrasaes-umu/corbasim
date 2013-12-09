@@ -14,34 +14,34 @@ String getCallTypeOut(IDLType this): getMemberTypeIdNoAnonymous();
 
 String getCallTypeOut(StructDef this) : isVariableLen()? getFQN()+"_var" : getMemberTypeIdNoAnonymous();
 
-String getCallTypeOut(AliasDef this) : 
-	if SequenceDef.isInstance(getOriginalType()) then
-		getFQN()+"_var" 
-	else
-		getMemberTypeIdNoAnonymous()
+String getCallTypeOut(AliasDef this) :
+    if SequenceDef.isInstance(getOriginalType()) then
+        getFQN()+"_var"
+    else
+        getMemberTypeIdNoAnonymous()
 ;
 
 Boolean returnString(OperationDef this) :
-	let t = getOriginalType():
-	((PrimitiveDef.isInstance(t) && ((PrimitiveDef)t).kind == PrimitiveKind::PK_STRING)) ||
-	StringDef.isInstance(t)
+    let t = getOriginalType():
+    ((PrimitiveDef.isInstance(t) && ((PrimitiveDef)t).kind == PrimitiveKind::PK_STRING)) ||
+    StringDef.isInstance(t)
 ;
 
 Boolean returnWString(OperationDef this) :
-	let t = getOriginalType():
-	((PrimitiveDef.isInstance(t) && ((PrimitiveDef)t).kind == PrimitiveKind::PK_WSTRING)) ||
-	WstringDef.isInstance(t)
+    let t = getOriginalType():
+    ((PrimitiveDef.isInstance(t) && ((PrimitiveDef)t).kind == PrimitiveKind::PK_WSTRING)) ||
+    WstringDef.isInstance(t)
 ;
 
 Boolean isString(IDLType this) :
-	let t = getOriginalType():
-	((PrimitiveDef.isInstance(t) && ((PrimitiveDef)t).kind == PrimitiveKind::PK_STRING)) ||
-	StringDef.isInstance(t)
+    let t = getOriginalType():
+    ((PrimitiveDef.isInstance(t) && ((PrimitiveDef)t).kind == PrimitiveKind::PK_STRING)) ||
+    StringDef.isInstance(t)
 ;
 
 // Chapuza
 Boolean returnPointer(OperationDef this) :
-	let t = getType():
-	let r = t.getReturn_CPPType():
-	r.endsWith("*") || r.endsWith("_ptr")
+    let t = getType():
+    let r = t.getReturn_CPPType():
+    r.endsWith("*") || r.endsWith("_ptr")
 ;

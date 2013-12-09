@@ -56,11 +56,11 @@ protected:
 
 public:
     virtual ~«getPOA()»();
-    
+
     «getFQN()»_ptr _this();
 
     «EXPAND code FOREACH this.contains SEPARATOR "\n\n"-»
-    
+
 }; // «getPOA()»
 // END CODE INTERFACE «identifier»
 

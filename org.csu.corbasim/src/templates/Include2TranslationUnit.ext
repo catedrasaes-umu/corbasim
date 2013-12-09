@@ -3,5 +3,5 @@ import org::csu::idl::idlmm;
 private Void include2TranslationUnitImpl(TranslationUnit this) :  JAVA org.csu.idl.xtext.transformation.Include2TranslationUnit.convertInclude2TranslationUnit(org.csu.idl.idlmm.TranslationUnit);
 
 Void include2TranslationUnit(List this) :
-	typeSelect(TranslationUnit).include2TranslationUnitImpl()
+    typeSelect(TranslationUnit).include2TranslationUnitImpl()
 ;

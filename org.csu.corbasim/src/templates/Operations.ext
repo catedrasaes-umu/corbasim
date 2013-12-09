@@ -79,10 +79,10 @@ private String _getParameterSignature(List[ParameterDef] this) :
 
 // all operations
 
-List[OperationDef] getAllOperations(TranslationUnit this): 
-	contains.select(e|Container.isInstance(e)).getAllOperations();
-List[OperationDef] getAllOperations(Contained this): 
-	((Container) this).getAllOperations();
-List[OperationDef] getAllOperations(Container this): 
-	contains.select(e|OperationDef.isInstance(e)).
-		addAll(contains.select(e|Container.isInstance(e)).getAllOperations());
+List[OperationDef] getAllOperations(TranslationUnit this):
+    contains.select(e|Container.isInstance(e)).getAllOperations();
+List[OperationDef] getAllOperations(Contained this):
+    ((Container) this).getAllOperations();
+List[OperationDef] getAllOperations(Container this):
+    contains.select(e|OperationDef.isInstance(e)).
+        addAll(contains.select(e|Container.isInstance(e)).getAllOperations());

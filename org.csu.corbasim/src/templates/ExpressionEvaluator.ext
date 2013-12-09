@@ -3,5 +3,5 @@ import org::csu::idl::idlmm;
 private Void evaluateExpressionsImpl(TranslationUnit this) :  JAVA org.csu.idl.xtext.transformation.ExpressionEvaluator.evaluate(org.csu.idl.idlmm.TranslationUnit);
 
 Void evaluateExpressions(List this) :
-	typeSelect(TranslationUnit).evaluateExpressionsImpl()
+    typeSelect(TranslationUnit).evaluateExpressionsImpl()
 ;

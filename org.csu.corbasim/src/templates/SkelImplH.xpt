@@ -41,10 +41,10 @@
 // BEGIN CODE MODULE «identifier»
 namespace «identifier»
 {
-	«PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i" DISABLE»
-	// Please, enable the protected region if you add manually written code.
-	// To do this, add the keyword ENABLED before START.
-	«ENDPROTECT»
+    «PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i" DISABLE»
+    // Please, enable the protected region if you add manually written code.
+    // To do this, add the keyword ENABLED before START.
+    «ENDPROTECT»
 
     «EXPAND code FOREACH contains SEPARATOR "\n\n"-»
 } // «identifier»
@@ -66,13 +66,13 @@ public:
 
     «EXPAND code FOREACH contains SEPARATOR "\n\n"-»
 
-	«EXPAND code FOREACH getAllParentsSet().contains SEPARATOR "\n\n"-»
+    «EXPAND code FOREACH getAllParentsSet().contains SEPARATOR "\n\n"-»
 
-	«PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i" DISABLE»
-	// Please, enable the protected region if you add manually written code.
-	// To do this, add the keyword ENABLED before START.
-	«ENDPROTECT»
-	
+    «PROTECT CSTART '/*' CEND '*/' ID getFQN()+"_i" DISABLE»
+    // Please, enable the protected region if you add manually written code.
+    // To do this, add the keyword ENABLED before START.
+    «ENDPROTECT»
+
 }; // «identifier»_i
 // END CODE INTERFACE «identifier»
 
