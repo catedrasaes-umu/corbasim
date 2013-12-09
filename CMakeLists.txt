@@ -68,6 +68,7 @@ elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
         omnisslTP4
         omnithread)
     set(CORBASIM_ORB_IDL_COMPILER omniidl)
+    set(CORBASIM_ORB_IDL_COMPILER_OPTIONS -bcxx -Wba)
 endif()
 
 #add_definitions(-Wall)
