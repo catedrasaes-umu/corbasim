@@ -26,9 +26,9 @@
 
 #include <corbasim/qwt/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qwt 
+namespace qwt
 {
 
 class CORBASIM_QWT_DECLSPEC SimplePlot : public QWidget

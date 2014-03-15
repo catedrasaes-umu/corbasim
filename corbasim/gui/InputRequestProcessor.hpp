@@ -27,9 +27,9 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 /**
@@ -37,7 +37,7 @@ namespace gui
  *
  * Use moveToThread to process its events in other thread.
  */
-class CORBASIM_GUI_DECLSPEC InputRequestController : 
+class CORBASIM_GUI_DECLSPEC InputRequestController :
     public QObject
 {
     Q_OBJECT
@@ -52,7 +52,7 @@ public slots:
     void registerInstance(Objref_ptr objref);
     void unregisterInstance(ObjectId id);
 
-    void processRequest(ObjectId id, 
+    void processRequest(ObjectId id,
             Request_ptr req,
             Event_ptr res);
 

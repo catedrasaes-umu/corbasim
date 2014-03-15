@@ -32,9 +32,9 @@ FileLoaderProcessor::FileLoaderProcessor(
         const int format,
         const bool repeat) :
     RequestProcessor(object, path),
-    m_files(files), 
-    m_currentFile(currentFile), 
-    m_format(format), 
+    m_files(files),
+    m_currentFile(currentFile),
+    m_format(format),
     m_repeat(repeat)
 {
 }
@@ -43,7 +43,7 @@ FileLoaderProcessor::~FileLoaderProcessor()
 {
 }
 
-void FileLoaderProcessor::process( 
+void FileLoaderProcessor::process(
         Request_ptr request,
         TypeDescriptor_ptr reflective,
         Holder holder)
@@ -55,10 +55,10 @@ void FileLoaderProcessor::process(
     if (m_files.size() == 0)
         throw QString("No files.");
 
-    file_format_factory const * factory = 
+    file_format_factory const * factory =
         file_format_factory::get_instance();
 
-    file_format_helper const * helper = 
+    file_format_helper const * helper =
         factory->get_helper(static_cast< file_format >(m_format));
 
     if (helper)
@@ -70,12 +70,12 @@ void FileLoaderProcessor::process(
 
         bool end = false;
         int i = 0;
-        while (m_currentIStream && !end 
+        while (m_currentIStream && !end
                 && i++ < m_files.size())
         {
             end = helper->load(
-                    *m_currentIStream, 
-                    reflective, 
+                    *m_currentIStream,
+                    reflective,
                     holder);
 
             if (!end) openFile();
@@ -91,14 +91,14 @@ void FileLoaderProcessor::openFile()
 {
     m_currentIStream.reset();
 
-    if (m_files.size() > 0 && 
+    if (m_files.size() > 0 &&
             (m_currentFile < m_files.size() || m_repeat))
     {
         if (m_repeat && m_currentFile == m_files.size())
         {
             m_currentFile = 0;
         }
-    
+
         if (m_currentFile < m_files.size())
         {
             const QString& file = m_files.at(m_currentFile);

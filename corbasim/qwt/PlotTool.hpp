@@ -24,9 +24,9 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qwt 
+namespace qwt
 {
 
 using namespace ::corbasim::gui;
@@ -34,7 +34,7 @@ using namespace ::corbasim::gui;
 class SimplePlot;
 class PlotModel;
 
-class CORBASIM_QWT_DECLSPEC ReflectivePlot : 
+class CORBASIM_QWT_DECLSPEC ReflectivePlot :
     public AbstractInputItem
 {
     Q_OBJECT
@@ -42,13 +42,13 @@ public:
 
     ReflectivePlot(Objref_ptr objref,
             OperationDescriptor_ptr reflective,
-            const QList< int >& path, 
+            const QList< int >& path,
             QWidget * parent = 0);
     virtual ~ReflectivePlot();
 
 public slots:
 
-    void appendValue(Request_ptr, 
+    void appendValue(Request_ptr,
             TypeDescriptor_ptr,
             Holder);
 
@@ -68,7 +68,7 @@ public:
 protected:
 
     AbstractInputItem * createItem(
-            Objref_ptr objref, 
+            Objref_ptr objref,
             OperationDescriptor_ptr reflective,
             const QList< int >& path);
 

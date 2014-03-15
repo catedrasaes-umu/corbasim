@@ -25,9 +25,9 @@
 #include <corbasim/json/writer.hpp>
 #include <corbasim/json/parser.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 void toJson(json::ostream_writer_t& os, const QVariant& var);

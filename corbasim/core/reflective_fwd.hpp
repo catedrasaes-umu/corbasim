@@ -33,9 +33,9 @@
 #include <corbasim/core/reference_validator.hpp>
 #include <corbasim/core/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 struct CORBASIM_CORE_DECLSPEC holder;
@@ -67,7 +67,7 @@ struct CORBASIM_CORE_DECLSPEC holder
 
     template< typename Value >
     Value& to_value();
-    
+
     holder_impl_ptr m_impl;
 };
 
@@ -142,26 +142,26 @@ struct CORBASIM_CORE_DECLSPEC reflective_base
     virtual unsigned int get_length(holder const& value) const;
     virtual void set_length(holder& value, unsigned int length) const;
 
-    virtual holder get_child_value(holder& value, 
+    virtual holder get_child_value(holder& value,
         unsigned int idx) const;
 
-    virtual void set_child_value(holder& value, 
+    virtual void set_child_value(holder& value,
         unsigned int idx, holder& child_value) const;
-    
+
     virtual double to_double(holder const& value) const;
     virtual std::string to_string(holder const& h) const;
     virtual void from_string(holder& h, const std::string& str) const;
     virtual void copy(holder const& src, holder& dst) const;
 
 protected:
-    reflective_base(reflective_base const * parent = NULL, 
+    reflective_base(reflective_base const * parent = NULL,
             unsigned int child_index = 0);
 
     reflective_base const * m_parent;
     unsigned int m_child_index;
 };
 
-struct CORBASIM_CORE_DECLSPEC objrefvar_reflective_base : 
+struct CORBASIM_CORE_DECLSPEC objrefvar_reflective_base :
     public reflective_base
 {
     virtual CORBA::Object_ptr to_object(holder const& h) const = 0;
@@ -169,11 +169,11 @@ struct CORBASIM_CORE_DECLSPEC objrefvar_reflective_base :
 
     // virtual interface_reflective_base const * get_interface() const = 0;
     virtual reference_validator_base * create_validator() const = 0;
-    
+
     virtual ~objrefvar_reflective_base();
 
 protected:
-    objrefvar_reflective_base(reflective_base const * parent = NULL, 
+    objrefvar_reflective_base(reflective_base const * parent = NULL,
             unsigned int child_index = 0);
 };
 
@@ -182,7 +182,7 @@ typedef boost::shared_ptr< reflective_base > reflective_ptr;
 template< typename T >
 struct reflective;
 
-struct CORBASIM_CORE_DECLSPEC operation_reflective_base : 
+struct CORBASIM_CORE_DECLSPEC operation_reflective_base :
     public virtual reflective_base
 {
     virtual const char * get_name() const = 0;
@@ -226,15 +226,15 @@ protected:
         tag_t tag, operation_reflective_base const * reflective);
 
     // Data
-    typedef std::vector< operation_reflective_base const * > 
+    typedef std::vector< operation_reflective_base const * >
         reflectives_t;
     reflectives_t m_reflectives;
 
-    typedef std::map< std::string, operation_reflective_base const * > 
+    typedef std::map< std::string, operation_reflective_base const * >
         reflectives_by_name_t;
     reflectives_by_name_t m_reflectives_by_name;
 
-    typedef std::map< tag_t, operation_reflective_base const * > 
+    typedef std::map< tag_t, operation_reflective_base const * >
         reflectives_by_tag_t;
     reflectives_by_tag_t m_reflectives_by_tag;
 };

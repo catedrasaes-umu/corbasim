@@ -25,9 +25,9 @@
 
 class QWidget;
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC ServerApp
@@ -42,12 +42,12 @@ public:
     void setPluginDirectory(const char * directory);
 
     CORBA::Object_var setClient(
-            const char * fqn, 
+            const char * fqn,
             const char * clientName,
             const CORBA::Object_var& ref);
 
     CORBA::Object_var setClient(
-            const char * fqn, 
+            const char * fqn,
             const char * clientName,
             const char * nsEntry);
 
@@ -62,7 +62,7 @@ public:
     /**
      * @brief Must be executed in application's main thread.
      *
-     * @return 
+     * @return
      */
     int exec();
 

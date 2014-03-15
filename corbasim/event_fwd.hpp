@@ -25,9 +25,9 @@
 #include <corbasim/adapted.hpp>
 #include <corbasim/core/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace event 
+namespace event
 {
 
 enum event_types { EXCEPTION, REQUEST, RESPONSE, MESSAGE};
@@ -78,10 +78,10 @@ typedef boost::shared_ptr< message > message_ptr;
 struct CORBASIM_CORE_DECLSPEC request : public event
 {
     event_types get_type() const;
-    
+
     virtual ~request();
 
-    virtual const char * get_name() const = 0; 
+    virtual const char * get_name() const = 0;
 };
 
 typedef boost::shared_ptr< request > request_ptr;

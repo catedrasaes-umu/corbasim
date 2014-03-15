@@ -16,22 +16,22 @@ struct servant< prueba::Iface >
 	class _type : public virtual POA_prueba::Iface
 	{
 	public:
-	
-		_type(F f) : 
+
+		_type(F f) :
 			__f(f)
 		{
 		}
-	
-		
+
+
 		void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
 		{
 			_corbasim_prueba::Iface::operation _val(a, fs);
-	
-			__f(_val);		
-			
+
+			__f(_val);
+
 		}
-		
-		
+
+
 	protected:
 		F __f;
 	};

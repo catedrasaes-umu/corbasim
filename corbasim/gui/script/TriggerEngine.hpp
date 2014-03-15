@@ -26,12 +26,12 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/script/ReflectiveScriptClass.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC TriggerEngine : 
+class CORBASIM_GUI_DECLSPEC TriggerEngine :
     public QScriptEngine
 {
     Q_OBJECT
@@ -41,12 +41,12 @@ public:
 
 protected:
 
-    static QScriptValue _call(QScriptContext *, 
+    static QScriptValue _call(QScriptContext *,
             QScriptEngine *);
     /*
-    static QScriptValue _createObject(QScriptContext *, 
+    static QScriptValue _createObject(QScriptContext *,
             QScriptEngine *);
-    static QScriptValue _createServant(QScriptContext *, 
+    static QScriptValue _createServant(QScriptContext *,
             QScriptEngine *);
             */
 
@@ -61,7 +61,7 @@ public slots:
     void servantCreated(Objref_ptr object);
     void servantDeleted(ObjectId id);
 
-    void requestReceived(ObjectId id, 
+    void requestReceived(ObjectId id,
             Request_ptr req,
             Event_ptr resp);
 
@@ -70,10 +70,10 @@ signals:
     void error(const QString&);
 
 protected:
-    
+
     ObjrefRepository m_objrefs;
     ObjrefRepository m_servants;
-    
+
     ReflectiveScriptClass m_clazz;
 };
 

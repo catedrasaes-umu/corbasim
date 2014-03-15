@@ -7,7 +7,7 @@
 using namespace corbasim::gui;
 
 InstanceModel::InstanceModel(QObject *parent)
-    : QAbstractItemModel(parent), 
+    : QAbstractItemModel(parent),
     m_instances(this),
     m_maxLevel(std::numeric_limits< int >::max())
 {
@@ -28,7 +28,7 @@ void InstanceModel::registerInstance(Objref_ptr objref)
     // beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
 
     m_nodes.push_back(node);
-        
+
     // endInsertRows();
 
     reset();
@@ -38,7 +38,7 @@ void InstanceModel::unregisterInstance(ObjectId id)
 {
     int i = 0;
     for (Nodes_t::iterator it = m_nodes.begin();
-            it != m_nodes.end(); ++it, i++) 
+            it != m_nodes.end(); ++it, i++)
     {
         if ((*it)->instance->id() == id)
         {
@@ -47,7 +47,7 @@ void InstanceModel::unregisterInstance(ObjectId id)
             m_instances.del(id);
 
             m_nodes.erase(it);
-            
+
             // endRemoveRows();
 
             reset();
@@ -130,7 +130,7 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
     AbstractNode * node = static_cast< AbstractNode * >(
             index.internalPointer());
 
-    InstanceNode * iNode = 
+    InstanceNode * iNode =
         dynamic_cast< InstanceNode *>(node);
 
     if (role == Qt::ToolTipRole)
@@ -149,15 +149,15 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
         {
             iNode->check_for_initialized();
 
-            return iNode->instance->name() + 
+            return iNode->instance->name() +
                 " (" + iNode->reflective->get_fqn() +
                 ")";
         }
         else
         {
-            DescriptorNode * dNode = 
+            DescriptorNode * dNode =
                 static_cast< DescriptorNode *>(node);
-            
+
             dNode->check_for_initialized();
 
             // Operation node
@@ -183,9 +183,9 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
     }
     else if (!iNode && role == Qt::CheckStateRole)
     {
-        DescriptorNode * dNode = 
+        DescriptorNode * dNode =
             static_cast< DescriptorNode *>(node);
-        
+
         dNode->check_for_initialized();
 
         if (isCheckable(dNode->reflective))
@@ -207,9 +207,9 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
         AbstractNode * node = static_cast< AbstractNode * >(
                 index.internalPointer());
 
-        InstanceNode * iNode = 
+        InstanceNode * iNode =
             dynamic_cast< InstanceNode *>(node);
-        DescriptorNode * dNode = 
+        DescriptorNode * dNode =
             static_cast< DescriptorNode *>(node);
 
         InstanceNode * entry = (iNode)? iNode: dNode->instance;
@@ -223,15 +223,15 @@ QVariant InstanceModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-bool InstanceModel::setData(const QModelIndex & index, 
+bool InstanceModel::setData(const QModelIndex & index,
         const QVariant& value, int role)
 {
     if (!index.isValid())
         return false;
 
-    AbstractNode * aNode = 
+    AbstractNode * aNode =
         static_cast< AbstractNode * >(index.internalPointer());
-    DescriptorNode * node = 
+    DescriptorNode * node =
         dynamic_cast< DescriptorNode * >(aNode);
 
     if (role == Qt::CheckStateRole && node && isCheckable(node->reflective))
@@ -247,10 +247,10 @@ bool InstanceModel::setData(const QModelIndex & index,
             path.push_front(cnode->index);
             cnode = cnode->parent;
         }
-        
+
         if (path.size() > 0)
         {
-            Qt::CheckState state = 
+            Qt::CheckState state =
                 static_cast<Qt::CheckState>(value.toUInt());
 
             bool check = (state == Qt::Checked)? true: false;
@@ -293,7 +293,7 @@ Qt::ItemFlags InstanceModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return 0;
-    
+
     Qt::ItemFlags f =  Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 
     if (!isInstanceNode(index))
@@ -310,10 +310,10 @@ Qt::ItemFlags InstanceModel::flags(const QModelIndex &index) const
     return f;
 }
 
-QVariant InstanceModel::headerData(int section, 
+QVariant InstanceModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal 
+    if (orientation == Qt::Horizontal
             && role == Qt::DisplayRole)
     {
         switch (section)
@@ -328,7 +328,7 @@ QVariant InstanceModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex InstanceModel::index(int row, int column, 
+QModelIndex InstanceModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -336,14 +336,14 @@ QModelIndex InstanceModel::index(int row, int column,
 
     if (!parent.isValid())
     {
-        return createIndex(row, column, 
+        return createIndex(row, column,
                 (void *) m_nodes.at(row).get());
     }
 
     AbstractNode * node = static_cast< AbstractNode * >(
             parent.internalPointer());
 
-    InstanceNode * iNode = 
+    InstanceNode * iNode =
         dynamic_cast< InstanceNode *>(node);
 
     if (iNode)
@@ -352,20 +352,20 @@ QModelIndex InstanceModel::index(int row, int column,
 
         if (row < (int) iNode->children.size())
         {
-            return createIndex(row, column, 
+            return createIndex(row, column,
                     (void *) iNode->children[row].get());
         }
     }
     else
     {
-        DescriptorNode * dNode = 
+        DescriptorNode * dNode =
             static_cast< DescriptorNode *>(node);
-        
+
         dNode->check_for_initialized();
 
         if (row < (int) dNode->children.size())
         {
-            return createIndex(row, column, 
+            return createIndex(row, column,
                     (void *) dNode->children[row].get());
         }
     }
@@ -384,7 +384,7 @@ QModelIndex InstanceModel::parent(const QModelIndex &index) const
     if (!node)
         return QModelIndex();
 
-    DescriptorNode * dNode = 
+    DescriptorNode * dNode =
         dynamic_cast< DescriptorNode *>(node);
 
     if (dNode)
@@ -394,7 +394,7 @@ QModelIndex InstanceModel::parent(const QModelIndex &index) const
         // Operation node
         if (!dNode->parent)
             return createIndex(dNode->index, 0, (void *) dNode->instance);
-            
+
         return createIndex(dNode->index, 0, (void *) dNode->parent);
     }
 
@@ -410,11 +410,11 @@ int InstanceModel::rowCount(const QModelIndex &parent) const
         return 0;
 
     if (!parent.isValid())
-        return m_nodes.size(); 
+        return m_nodes.size();
 
     if (!parent.parent().isValid())
     {
-        InstanceNode * node = 
+        InstanceNode * node =
             static_cast< InstanceNode * >(parent.internalPointer());
 
         if (node && displayOperations())
@@ -424,9 +424,9 @@ int InstanceModel::rowCount(const QModelIndex &parent) const
             return node->children.size();
         }
     }
-    else 
+    else
     {
-        DescriptorNode * node = 
+        DescriptorNode * node =
             static_cast< DescriptorNode * >(parent.internalPointer());
 
         if (node && displayParameters())
@@ -446,10 +446,10 @@ bool InstanceModel::isOperationNode(const QModelIndex& index) const
     if (!index.isValid())
         return false;
 
-    AbstractNode * node = 
+    AbstractNode * node =
         static_cast< AbstractNode * >(index.internalPointer());
 
-    DescriptorNode * dNode = 
+    DescriptorNode * dNode =
         dynamic_cast< DescriptorNode * >(node);
 
     return dNode && !dNode->parent;
@@ -485,14 +485,14 @@ Objref_ptr InstanceModel::getInstance(const QModelIndex& index) const
 
     if (!index.parent().isValid())
     {
-        InstanceNode * node = 
+        InstanceNode * node =
             static_cast< InstanceNode * >(index.internalPointer());
 
         return node->instance;
     }
-    else 
+    else
     {
-        DescriptorNode * node = 
+        DescriptorNode * node =
             static_cast< DescriptorNode * >(index.internalPointer());
 
         return node->instance->instance;
@@ -512,18 +512,18 @@ bool InstanceModel::isCheckable(TypeDescriptor_ptr reflective) const
     return false;
 }
 
-void InstanceModel::check(const QString& id, const QList< int >& path) 
+void InstanceModel::check(const QString& id, const QList< int >& path)
 {
     int i = 0;
     for (Nodes_t::iterator it = m_nodes.begin();
-            it != m_nodes.end(); ++it, i++) 
+            it != m_nodes.end(); ++it, i++)
     {
         if ((*it)->instance->name() == id)
         {
             // Instance element
             QModelIndex idx = index(i, 0, QModelIndex());
-            
-            for (int ii = 0; ii < path.size(); ii++) 
+
+            for (int ii = 0; ii < path.size(); ii++)
             {
                 idx = index(path[ii], 0, idx);
             }
@@ -535,18 +535,18 @@ void InstanceModel::check(const QString& id, const QList< int >& path)
     }
 }
 
-void InstanceModel::uncheck(const QString& id, const QList< int >& path) 
+void InstanceModel::uncheck(const QString& id, const QList< int >& path)
 {
     int i = 0;
     for (Nodes_t::iterator it = m_nodes.begin();
-            it != m_nodes.end(); ++it, i++) 
+            it != m_nodes.end(); ++it, i++)
     {
         if ((*it)->instance->name() == id)
         {
             // Instance element
             QModelIndex idx = index(i, 0, QModelIndex());
-            
-            for (int ii = 0; ii < path.size(); ii++) 
+
+            for (int ii = 0; ii < path.size(); ii++)
             {
                 idx = index(path[ii], 0, idx);
             }

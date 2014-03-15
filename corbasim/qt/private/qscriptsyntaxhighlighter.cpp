@@ -44,9 +44,9 @@
 #ifndef QT_NO_SYNTAXHIGHLIGHTER
 
 
-namespace tp 
+namespace tp
 {
-namespace qt 
+namespace qt
 {
 
 enum ScriptIds {

@@ -25,8 +25,8 @@ using namespace corbasim::gui;
 NSManager::NSManager(const CORBA::ORB_var& orb, QObject * parent) :
     QObject(parent), m_orb(orb)
 {
-    QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(refreshNS())); 
-    QObject::connect(this, SIGNAL(started()), this, SLOT(doStart())); 
+    QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(refreshNS()));
+    QObject::connect(this, SIGNAL(started()), this, SLOT(doStart()));
 }
 
 NSManager::~NSManager()
@@ -41,8 +41,8 @@ void NSManager::start()
 void NSManager::doStart()
 {
     try {
-        
-        const CORBA::Object_var obj = 
+
+        const CORBA::Object_var obj =
             m_orb->resolve_initial_references("NameService");
 
         setNSReference(obj);
@@ -70,7 +70,7 @@ void NSManager::resolve(Objref_ptr objref)
     if (!str.empty())
     {
         try {
-            
+
             newRef = m_nameService->resolve_str(str.c_str());
 
             if (!CORBA::is_nil(oldRef))
@@ -140,12 +140,12 @@ void NSManager::resetRegisters()
     }
 }
 
-void NSManager::objrefCreated(Objref_ptr objref) 
+void NSManager::objrefCreated(Objref_ptr objref)
 {
     m_objrefs.add(objref);
 }
 
-void NSManager::objrefDeleted(ObjectId id) 
+void NSManager::objrefDeleted(ObjectId id)
 {
     m_objrefs.del(id);
 }
@@ -188,7 +188,7 @@ void NSManager::registerServant(Objref_ptr servant)
     }
 }
 
-void NSManager::servantCreated(Objref_ptr servant) 
+void NSManager::servantCreated(Objref_ptr servant)
 {
     m_servants.add(servant);
 
@@ -197,7 +197,7 @@ void NSManager::servantCreated(Objref_ptr servant)
     registerServant(servant);
 }
 
-void NSManager::servantDeleted(ObjectId id) 
+void NSManager::servantDeleted(ObjectId id)
 {
     m_servants.del(id);
     m_registers.remove(id);

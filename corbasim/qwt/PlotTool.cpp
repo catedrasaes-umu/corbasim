@@ -32,7 +32,7 @@ using namespace corbasim::qwt;
 
 ReflectivePlot::ReflectivePlot(Objref_ptr objref,
         OperationDescriptor_ptr reflective,
-        const QList< int >& path, 
+        const QList< int >& path,
         QWidget * parent) :
     AbstractInputItem(objref, reflective, path, parent)
 {
@@ -72,7 +72,7 @@ ReflectivePlot::~ReflectivePlot()
 {
 }
 
-void ReflectivePlot::appendValue(Request_ptr req, 
+void ReflectivePlot::appendValue(Request_ptr req,
         TypeDescriptor_ptr reflec,
         Holder hold)
 {
@@ -80,15 +80,15 @@ void ReflectivePlot::appendValue(Request_ptr req,
     {
         m_plot->append(reflec->to_double(hold));
     }
-    else if(reflec->is_repeated() && 
+    else if(reflec->is_repeated() &&
             reflec->get_slice()->is_primitive())
     {
         QVector< double > values;
-        
+
         const unsigned int length = reflec->get_length(hold);
         core::reflective_base const * slice = reflec->get_slice();
 
-        for (unsigned int i = 0; i < length; i++) 
+        for (unsigned int i = 0; i < length; i++)
         {
             const core::holder h = reflec->get_child_value(hold, i);
             values.push_back(slice->to_double(h));
@@ -98,12 +98,12 @@ void ReflectivePlot::appendValue(Request_ptr req,
             m_plot->append(values);
     }
     // N-dimensional types
-    else if(reflec->is_repeated() && 
+    else if(reflec->is_repeated() &&
             reflec->get_slice()->is_repeated())
     {
         unsigned int length = reflec->get_length(hold);
 
-        for (unsigned int i = 0; i < length; i++) 
+        for (unsigned int i = 0; i < length; i++)
         {
             core::holder h = reflec->get_child_value(hold, i);
 
@@ -124,11 +124,11 @@ PlotTool::~PlotTool()
 }
 
 AbstractInputItem * PlotTool::createItem(
-        Objref_ptr objref, 
+        Objref_ptr objref,
         OperationDescriptor_ptr reflective,
         const QList< int >& path)
 {
-    return new ReflectivePlot(objref, reflective, path); 
+    return new ReflectivePlot(objref, reflective, path);
 }
 
 ParametersModel * PlotTool::createModel()
@@ -136,7 +136,7 @@ ParametersModel * PlotTool::createModel()
     return new PlotModel(this);
 }
 
-extern "C" 
+extern "C"
 {
 
     corbasim::gui::AbstractInputTool * createPlotTool(

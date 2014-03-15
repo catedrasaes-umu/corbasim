@@ -27,41 +27,41 @@
 
 #include <corbasim/core/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
-class CORBASIM_CORE_DECLSPEC ns_register 
+class CORBASIM_CORE_DECLSPEC ns_register
 {
-public :
-   
-    ns_register(CORBA::ORB_ptr orb, 
-            const std::string& key, 
-            CORBA::Object_ptr ref, 
+public:
+
+    ns_register(CORBA::ORB_ptr orb,
+            const std::string& key,
+            CORBA::Object_ptr ref,
             bool release_at_exit = true);
 
     ns_register(const CosNaming::NamingContextExt_var& ns,
-            const std::string& key, 
-            CORBA::Object_ptr ref, 
+            const std::string& key,
+            CORBA::Object_ptr ref,
             bool release_at_exit = true);
-    
+
     ~ns_register();
-    
+
     bool error();
 
-protected :
+protected:
 
-    void do_register(const std::string& key, 
+    void do_register(const std::string& key,
             CORBA::Object_ptr ref);
 
     bool m_error;
-    
+
     bool m_release;
-    
-    CosNaming::NamingContextExt_var m_nsObj; 
-    
-    CosNaming::Name_var m_name; 
+
+    CosNaming::NamingContextExt_var m_nsObj;
+
+    CosNaming::Name_var m_name;
 };
 
 typedef boost::shared_ptr< ns_register > ns_register_ptr;

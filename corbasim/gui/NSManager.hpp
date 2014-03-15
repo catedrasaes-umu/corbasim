@@ -28,9 +28,9 @@
 #include <corbasim/cosnaming/CosnamingC.h>
 #include <corbasim/core/ns_register.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC NSManager : public QObject
@@ -67,7 +67,7 @@ public slots:
      * @brief Asynchronous name resolution using signals and slots.
      *
      * @param objref Resolve this object if it has set the nsEntry
-     *        property. 
+     *        property.
      */
     void resolve(Objref_ptr objref);
 

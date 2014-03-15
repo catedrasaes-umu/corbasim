@@ -45,11 +45,11 @@ MultiFileSelectionWidget::MultiFileSelectionWidget(QWidget * parent) :
     layout->addWidget(m_leSelectedFiles);
 
     QPushButton * btn = new QPushButton("Browse");
-    QObject::connect(btn, SIGNAL(clicked()), 
+    QObject::connect(btn, SIGNAL(clicked()),
             this, SLOT(showSelectionDialog()));
     layout->addWidget(btn);
     mainLayout->addLayout(layout, 0, 1);
-    
+
     // Next file
     mainLayout->addWidget(new QLabel("Next file to send"), 1, 0);
     m_leNextFile = new QLineEdit;
@@ -60,7 +60,7 @@ MultiFileSelectionWidget::MultiFileSelectionWidget(QWidget * parent) :
     m_sbCurrentIndex = new QSpinBox;
     mainLayout->addWidget(new QLabel("Current index"), 2, 0);
     mainLayout->addWidget(m_sbCurrentIndex, 2, 1);
-    QObject::connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)), 
+    QObject::connect(m_sbCurrentIndex, SIGNAL(valueChanged(int)),
             this, SLOT(currentIndexChanged(int)));
 
     // Repeat
@@ -72,12 +72,12 @@ MultiFileSelectionWidget::MultiFileSelectionWidget(QWidget * parent) :
     // Restart
     QHBoxLayout * restartLayout = new QHBoxLayout();
     // Spacer
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Expanding);
     restartLayout->addItem(spacer);
 
     QPushButton * btnRestart = new QPushButton("&Restart");
-    QObject::connect(btnRestart, SIGNAL(clicked()), 
+    QObject::connect(btnRestart, SIGNAL(clicked()),
             this, SLOT(restart()));
     restartLayout->addWidget(btnRestart);
     mainLayout->addLayout(restartLayout, 4, 1);
@@ -103,9 +103,9 @@ void MultiFileSelectionWidget::setSelectedFiles(const QStringList& list)
     m_sbCurrentIndex->setRange(0, m_selectedFiles.length());
 }
 
-bool MultiFileSelectionWidget::repeat() const 
-{ 
-    return m_ckRepeat->isChecked(); 
+bool MultiFileSelectionWidget::repeat() const
+{
+    return m_ckRepeat->isChecked();
 }
 
 void MultiFileSelectionWidget::setRepeat(bool r)
@@ -150,7 +150,7 @@ const QString* MultiFileSelectionWidget::getNext()
 
 void MultiFileSelectionWidget::showSelectionDialog()
 {
-    m_selectedFiles = QFileDialog::getOpenFileNames(this, 
+    m_selectedFiles = QFileDialog::getOpenFileNames(this,
             "Select input files...");
 
     m_leSelectedFiles->setText(m_selectedFiles.join(", "));
@@ -163,7 +163,7 @@ void MultiFileSelectionWidget::restart()
     m_sbCurrentIndex->setValue(0);
 
     m_sbCurrentIndex->setRange(0, m_selectedFiles.length());
-    
+
     if (!m_selectedFiles.length())
         m_leNextFile->clear();
     else

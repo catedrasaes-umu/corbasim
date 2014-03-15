@@ -77,13 +77,13 @@ ObjrefWidget::ObjrefWidget(InterfaceDescriptor_ptr iface,
     connect(m_object_selector, SIGNAL(currentIndexChanged(int)),
             this, SLOT(valueChanged()));
 
-    connect(m_ior, SIGNAL(textChanged()), this, 
+    connect(m_ior, SIGNAL(textChanged()), this,
             SLOT(valueChanged()));
 
-    connect(m_resolve_str, SIGNAL(textChanged()), this, 
+    connect(m_resolve_str, SIGNAL(textChanged()), this,
             SLOT(valueChanged()));
 
-    connect(updateBtn, SIGNAL(clicked()), this, 
+    connect(updateBtn, SIGNAL(clicked()), this,
             SLOT(valueChanged()));
 
     connect(this, SIGNAL(resolve(Objref_ptr)),
@@ -159,14 +159,14 @@ void ObjrefWidget::modelChanged()
 void ObjrefWidget::valueChanged()
 {
     CORBA::Object_var ref;
-    core::reference_repository * rr = 
+    core::reference_repository * rr =
         core::reference_repository::get_instance();
-       
-    try 
+
+    try
     {
         switch(m_stack->currentIndex())
         {
-        // NS query 
+        // NS query
         case 1:
             {
                 m_objref->setNsEntry(m_resolve_str->toPlainText());
@@ -181,12 +181,12 @@ void ObjrefWidget::valueChanged()
                 m_objref->setNsEntry(QString());
 
                 int idx = m_object_selector->currentIndex();
-                
+
                 if (m_model && idx != -1)
                 {
                     // We keep the selected item for when model
                     // reset
-                    m_currentModelItem = 
+                    m_currentModelItem =
                         m_object_selector->currentText();
 
                     QVariant v = m_object_selector->itemData(idx);
@@ -212,8 +212,8 @@ void ObjrefWidget::valueChanged()
             }
             break;
         }
-    } 
-    catch (...) 
+    }
+    catch (...)
     {
         // NIL
         setReference(ref);
@@ -246,7 +246,7 @@ void ObjrefWidget::save(QVariant& settings)
     map["index"] = m_selector->currentIndex();
     map["ior"] = m_ior->toPlainText();
     map["ns_entry_string"] = m_resolve_str->toPlainText();
-   
+
     // known object
     map["known_object"] = m_object_selector->currentText();
 
@@ -259,7 +259,7 @@ void ObjrefWidget::load(const QVariant& settings)
 
     m_ior->setPlainText(map["ior"].toString());
     m_resolve_str->setPlainText(map["ns_entry_string"].toString());
-   
+
     // known object
     const QString knownObject = map["known_object"].toString();
     int idx = m_object_selector->findText(knownObject);
@@ -268,7 +268,7 @@ void ObjrefWidget::load(const QVariant& settings)
     {
         m_object_selector->setCurrentIndex(idx);
     }
-    
+
     // At the end...
     m_selector->setCurrentIndex(map["index"].toInt());
 
@@ -286,11 +286,11 @@ void ObjrefWidget::setObjref(Objref_ptr objref)
 {
     if (m_objref)
     {
-        disconnect(m_objref.get(), 
+        disconnect(m_objref.get(),
                 SIGNAL(updatedReference(const CORBA::Object_var&)),
                 this, SIGNAL(valueHasChanged(const CORBA::Object_var&)));
 
-        disconnect(m_objref.get(), 
+        disconnect(m_objref.get(),
                 SIGNAL(updatedReference(const CORBA::Object_var&)),
                 this, SLOT(validatorHasChanged()));
     }
@@ -299,11 +299,11 @@ void ObjrefWidget::setObjref(Objref_ptr objref)
 
     if (m_objref)
     {
-        connect(m_objref.get(), 
+        connect(m_objref.get(),
                 SIGNAL(updatedReference(const CORBA::Object_var&)),
                 this, SIGNAL(valueHasChanged(const CORBA::Object_var&)));
 
-        connect(m_objref.get(), 
+        connect(m_objref.get(),
                 SIGNAL(updatedReference(const CORBA::Object_var&)),
                 this, SLOT(validatorHasChanged()));
     }

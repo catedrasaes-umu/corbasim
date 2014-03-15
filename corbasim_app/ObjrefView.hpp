@@ -29,9 +29,9 @@
 #include <corbasim/gui/client/SimpleClient.hpp>
 #include <corbasim/gui/dialog/UpdateReferenceDialog.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace app 
+namespace app
 {
 
 using namespace corbasim::gui;
@@ -89,7 +89,7 @@ protected:
     // Operation dialogs
     typedef std::vector< RequestDialog * > dialogs_t;
     dialogs_t m_dialogs;
-    
+
     typedef std::vector< QMdiSubWindow * > subwindows_t;
     subwindows_t m_subwindows;
 

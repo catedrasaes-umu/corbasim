@@ -29,7 +29,7 @@
     #endif
 
 #else
-    #define CORBASIM_GUI_DECLSPEC 
+    #define CORBASIM_GUI_DECLSPEC
 #endif
 
 #endif /* CORBASIM_GUI_EXPORT_HPP */

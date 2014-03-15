@@ -25,9 +25,9 @@ using namespace corbasim::app;
 
 namespace po = boost::program_options;
 
-AppConfiguration::AppConfiguration() : 
-    exit(false), enable_scripting(false), 
-    enable_watch_directory(false), 
+AppConfiguration::AppConfiguration() :
+    exit(false), enable_scripting(false),
+    enable_watch_directory(false),
     watch_directory("/tmp/corbasim_app")
 {
 }
@@ -41,20 +41,20 @@ AppConfiguration * AppConfiguration::getInstance()
 void AppConfiguration::processCmdLine(int argc, char** argv)
 {
     po::options_description desc_("corbasim generic application options");
-    
+
     po::options_description generic_("Generic options");
     generic_.add_options()
         ("help,h", "produce help message")
-        ("plugin-directory,d", 
-            po::value< strings_t >(&plugin_directories)->composing(), 
+        ("plugin-directory,d",
+            po::value< strings_t >(&plugin_directories)->composing(),
             "add a directory with corbasim plugins")
-        ("load-scenario,l", 
-            po::value< strings_t >(&load_files)->composing(), 
+        ("load-scenario,l",
+            po::value< strings_t >(&load_files)->composing(),
             "load a scenario configuration file")
-        ("load-configuration,c", 
+        ("load-configuration,c",
             po::value< std::string >(&load_configuration),
             "load a configuration file");
-    
+
     po::options_description scripting_("Scripting options");
     scripting_.add_options()
         ("enable-scripting,s", "enable scripting support");
@@ -62,7 +62,7 @@ void AppConfiguration::processCmdLine(int argc, char** argv)
     po::options_description watch_("Watch directory");
     watch_.add_options()
         ("enable-watch,w", "enable watch directory")
-        ("watch-directory", 
+        ("watch-directory",
             po::value< std::string >(&watch_directory),
             "directory to watch");
 

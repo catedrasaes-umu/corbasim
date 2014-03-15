@@ -77,7 +77,7 @@ void FileWatcher::readFile(const QString& path)
         try {
             const std::string iorStr(ior.toStdString());
 
-            CORBA::Object_var ref = 
+            CORBA::Object_var ref =
                 corbasim::core::reference_repository::get_instance()->string_to_object(iorStr);
 
             // notify the detected reference

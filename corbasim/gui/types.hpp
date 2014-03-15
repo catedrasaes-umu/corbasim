@@ -29,18 +29,18 @@
 #include <corbasim/qt/types.hpp>
 #include <corbasim/gui/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
 namespace gui
 {
 
 CORBASIM_GUI_DECLSPEC void initialize();
 
-typedef ::corbasim::core::interface_reflective_base const * 
+typedef ::corbasim::core::interface_reflective_base const *
     InterfaceDescriptor_ptr;
-typedef ::corbasim::core::operation_reflective_base const * 
+typedef ::corbasim::core::operation_reflective_base const *
     OperationDescriptor_ptr;
-typedef ::corbasim::core::reflective_base const * 
+typedef ::corbasim::core::reflective_base const *
     TypeDescriptor_ptr;
 
 typedef const void * ObjectId;

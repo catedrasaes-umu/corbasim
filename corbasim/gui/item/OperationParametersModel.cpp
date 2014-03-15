@@ -12,7 +12,7 @@ OperationParametersModel::~OperationParametersModel()
 {
 }
 
-bool OperationParametersModel::setData(const QModelIndex & index, 
+bool OperationParametersModel::setData(const QModelIndex & index,
         const QVariant& value, int role)
 {
     if (!index.isValid())
@@ -22,7 +22,7 @@ bool OperationParametersModel::setData(const QModelIndex & index,
     {
         QList< int > path;
 
-        DescriptorNode * node = 
+        DescriptorNode * node =
             static_cast< DescriptorNode * >(index.internalPointer());
         node->check_for_initialized();
 
@@ -37,7 +37,7 @@ bool OperationParametersModel::setData(const QModelIndex & index,
 
         if (path.size() > 0)
         {
-            Qt::CheckState state = 
+            Qt::CheckState state =
                 static_cast<Qt::CheckState>(value.toUInt());
 
             bool check = (state == Qt::Checked)? true: false;
@@ -66,7 +66,7 @@ bool OperationParametersModel::setData(const QModelIndex & index,
     return false;
 }
 
-OperationDescriptor_ptr 
+OperationDescriptor_ptr
 OperationParametersModel::getReflective() const
 {
     return m_reflective;
@@ -92,8 +92,8 @@ void OperationParametersModel::initialize(
 void OperationParametersModel::uncheck(const QList< int >& path)
 {
     QModelIndex idx = index(0, 0);
-    
-    for (int ii = 1; ii < path.size(); ii++) 
+
+    for (int ii = 1; ii < path.size(); ii++)
     {
         idx = index(path[ii], 0, idx);
     }
@@ -104,8 +104,8 @@ void OperationParametersModel::uncheck(const QList< int >& path)
 void OperationParametersModel::check(const QList< int >& path)
 {
     QModelIndex idx = index(0, 0);
-    
-    for (int ii = 1; ii < path.size(); ii++) 
+
+    for (int ii = 1; ii < path.size(); ii++)
     {
         idx = index(path[ii], 0, idx);
     }
@@ -130,7 +130,7 @@ QVariant OperationParametersModel::data(const QModelIndex& index, int role) cons
 
     if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-        DescriptorNode * node = 
+        DescriptorNode * node =
             static_cast< DescriptorNode * >(index.internalPointer());
         node->check_for_initialized();
 
@@ -147,7 +147,7 @@ QVariant OperationParametersModel::data(const QModelIndex& index, int role) cons
     }
     else if (role == Qt::CheckStateRole)
     {
-        DescriptorNode * node = 
+        DescriptorNode * node =
             static_cast< DescriptorNode * >(index.internalPointer());
         node->check_for_initialized();
 
@@ -162,11 +162,11 @@ Qt::ItemFlags OperationParametersModel::flags(const QModelIndex &index) const
     if (!index.isValid())
         return 0;
 
-    DescriptorNode * node = 
+    DescriptorNode * node =
         static_cast< DescriptorNode * >(index.internalPointer());
     node->check_for_initialized();
 
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | 
+    Qt::ItemFlags flags = Qt::ItemIsEnabled |
         Qt::ItemIsSelectable;
 
     if (isCheckable(node->reflective))
@@ -175,7 +175,7 @@ Qt::ItemFlags OperationParametersModel::flags(const QModelIndex &index) const
     return flags;
 }
 
-QVariant OperationParametersModel::headerData(int section, 
+QVariant OperationParametersModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
@@ -192,7 +192,7 @@ QVariant OperationParametersModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex OperationParametersModel::index(int row, int column, 
+QModelIndex OperationParametersModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -204,13 +204,13 @@ QModelIndex OperationParametersModel::index(int row, int column,
         return createIndex(row, column, (void *) m_node.get());
     }
 
-    DescriptorNode * node = 
+    DescriptorNode * node =
         static_cast< DescriptorNode * >(parent.internalPointer());
     node->check_for_initialized();
 
     if (row < (int) node->children.size())
     {
-        return createIndex(row, column, 
+        return createIndex(row, column,
                 (void *) node->children[row].get());
     }
 
@@ -222,7 +222,7 @@ QModelIndex OperationParametersModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    DescriptorNode * node = 
+    DescriptorNode * node =
         static_cast< DescriptorNode * >(index.internalPointer());
     node->check_for_initialized();
 
@@ -241,7 +241,7 @@ QModelIndex OperationParametersModel::parent(const QModelIndex &index) const
 int OperationParametersModel::rowCount(const QModelIndex &parent) const
 {
     // Modelo no inicializado
-    if (!m_node) 
+    if (!m_node)
         return 0;
 
     /**
@@ -253,7 +253,7 @@ int OperationParametersModel::rowCount(const QModelIndex &parent) const
     if (!parent.isValid())
         return 1;
 
-    DescriptorNode * node = 
+    DescriptorNode * node =
         static_cast< DescriptorNode * >(parent.internalPointer());
     node->check_for_initialized();
 
@@ -265,7 +265,7 @@ int OperationParametersModel::columnCount(const QModelIndex &/*parent*/) const
     return 1;
 }
 
-bool OperationParametersModel::removeRows(int row, int count, 
+bool OperationParametersModel::removeRows(int row, int count,
         const QModelIndex& parent)
 {
     // Solo se pueden borrar elementos de primer nivel
@@ -275,7 +275,7 @@ bool OperationParametersModel::removeRows(int row, int count,
 #if 0
     beginRemoveRows(parent, row, row + count - 1);
 
-    for (int i = 0; i < count; i++) 
+    for (int i = 0; i < count; i++)
     {
     }
 

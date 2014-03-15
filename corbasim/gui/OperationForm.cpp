@@ -36,8 +36,8 @@ using namespace corbasim::gui;
 
 OperationForm::OperationForm(
         QWidget * parent) :
-    QWidget(parent), 
-    m_reflective(NULL), 
+    QWidget(parent),
+    m_reflective(NULL),
     m_widget(NULL),
     m_files(NULL),
     m_sizeGrip(NULL)
@@ -70,7 +70,7 @@ void OperationForm::initialize(
     // Script
     m_code = new qt::priv::ScriptEditor();
     tabs->addTab(m_code, "Script");
- 
+
     // Files
     m_files = new ParametersFromFilesTool();
     m_files->initialize(object, factory);
@@ -90,7 +90,7 @@ void OperationForm::initialize(
     ly->addWidget(sizeGrip);
     m_sizeGrip = sizeGrip;
     // End size grip
-    
+
     setLayout(ly);
 }
 
@@ -171,9 +171,9 @@ OperationFormWidget::OperationFormWidget(
 
     m_widgets.resize(count, NULL);
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
-        const core::direction_type type = 
+        const core::direction_type type =
             reflective->get_parameter_direction(i);
 
         if (type == core::DIRECTION_IN || type == core::DIRECTION_INOUT)
@@ -233,7 +233,7 @@ QVariant OperationFormWidget::value()
     return toQVariant(m_reflective, holder);
 }
 
-OperationDescriptor_ptr 
+OperationDescriptor_ptr
 OperationFormWidget::getReflective() const
 {
     return m_reflective;
@@ -246,7 +246,7 @@ Request_ptr OperationFormWidget::createRequest()
 
     const unsigned int count = m_reflective->get_children_count();
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         if (m_widgets[i])
         {
@@ -265,7 +265,7 @@ void OperationFormWidget::setValue(Request_ptr req)
 
     const unsigned int count = m_reflective->get_children_count();
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         if (m_widgets[i])
         {
@@ -276,7 +276,7 @@ void OperationFormWidget::setValue(Request_ptr req)
     }
 }
 
-// 
+//
 //
 // Events
 //
@@ -286,7 +286,7 @@ bool OperationFormWidget::eventFilter(QObject * obj, QEvent * event)
     if (event->type() == QEvent::ChildAdded)
     {
         QChildEvent *cEvent = static_cast< QChildEvent * >(event);
-        
+
         childEvent(cEvent);
     }
     else if (event->type() == QEvent::DragEnter)
@@ -365,12 +365,12 @@ void OperationFormWidget::dropEvent(QDropEvent *event)
 {
     const std::string str = event->mimeData()->text().toStdString();
 
-    try 
+    try
     {
         Request_ptr req = m_reflective->create_request();
         core::holder holder = m_reflective->get_holder(req);
 
-        bool res = json::parse(m_reflective, holder, 
+        bool res = json::parse(m_reflective, holder,
                 str.c_str(), str.size());
 
         if (res)
@@ -378,8 +378,8 @@ void OperationFormWidget::dropEvent(QDropEvent *event)
             setValue(req);
             event->acceptProposedAction();
         }
-    } 
-    catch(...) 
+    }
+    catch(...)
     {
         // parse exception: nothing to do
     }
@@ -405,7 +405,7 @@ void OperationFormWidget::mouseMoveEvent(QMouseEvent *event)
 
     std::ostringstream oss;
     Request_ptr req = createRequest();
-    
+
     core::holder holder = m_reflective->get_holder(req);
 
     json::write(oss, m_reflective, holder);
@@ -431,7 +431,7 @@ void OperationFormWidget::save(QVariant& settings)
     unsigned int count = m_reflective->get_children_count();
 
     QVariantMap value;
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         if (m_widgets[i])
         {
@@ -454,7 +454,7 @@ void OperationFormWidget::load(const QVariant& settings)
 
     unsigned int count = m_reflective->get_children_count();
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         if (m_widgets[i])
         {
@@ -464,7 +464,7 @@ void OperationFormWidget::load(const QVariant& settings)
     }
 }
 
-// 
+//
 //
 // Operation Sender
 //
@@ -473,7 +473,7 @@ void OperationFormWidget::load(const QVariant& settings)
 OperationSender::OperationSender(
         Objref_ptr object,
         QWidget * parent) :
-    QWidget(parent), 
+    QWidget(parent),
     m_object(object), m_reflective(NULL)
 {
     QVBoxLayout * mainLayout = new QVBoxLayout();
@@ -525,7 +525,7 @@ OperationSender::OperationSender(
             this,
             SLOT(playClicked(bool)));
 
-    QObject * senderCtl = 
+    QObject * senderCtl =
         Application::currentApplication()->senderController();
 
     connect(
@@ -558,7 +558,7 @@ void OperationSender::initialize(
     m_form->initialize(m_object, op);
 
     // signals
-    connect(this, 
+    connect(this,
             SIGNAL(updateForm(Request_ptr)),
             m_form->getWidget(),
             SLOT(setValue(Request_ptr)));
@@ -616,7 +616,7 @@ void OperationSender::reset()
                 SLOT(incrementBar()));
 
         disconnect(m_config.get(),
-                SIGNAL(finished()), 
+                SIGNAL(finished()),
                 this,
                 SLOT(finished()));
         emit deleteSender(m_config);
@@ -665,7 +665,7 @@ void OperationSender::playClicked(bool play)
                 SLOT(incrementBar()));
 
         connect(m_config.get(),
-                SIGNAL(finished()), 
+                SIGNAL(finished()),
                 this,
                 SLOT(finished()));
 
@@ -722,7 +722,7 @@ void OperationSender::stop()
 // Read only
 void OperationFormWidget::_setReadOnly(bool readOnly)
 {
-    for (unsigned int i = 0; i < m_widgets.size(); i++) 
+    for (unsigned int i = 0; i < m_widgets.size(); i++)
     {
         if (m_widgets[i])
         {

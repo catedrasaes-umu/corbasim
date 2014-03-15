@@ -20,9 +20,9 @@
 #include "json.hpp"
 #include <fstream>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 struct qvariant_helper : public json::helper::helper_base
@@ -116,7 +116,7 @@ bool fromJsonFile(const char * file, QVariant& var)
         std::ifstream is(file);
 
         if (!is.is_open()) return false;
-   
+
         // get length of file:
         is.seekg (0, std::ios::end);
         length = is.tellg();
@@ -149,8 +149,8 @@ void toJson(json::ostream_writer_t& os, const QVariant& var)
 
             os.object_start();
 
-            for (QVariantMap::const_iterator it = map.begin(); 
-                    it != map.end(); ++it) 
+            for (QVariantMap::const_iterator it = map.begin();
+                    it != map.end(); ++it)
             {
                 os.new_string(it.key().toStdString().c_str());
                 toJson(os, it.value());
@@ -166,7 +166,7 @@ void toJson(json::ostream_writer_t& os, const QVariant& var)
 
             os.array_start();
 
-            for (int i = 0; i < list.size(); i++) 
+            for (int i = 0; i < list.size(); i++)
             {
                 toJson(os, list.at(i));
             }
@@ -174,7 +174,7 @@ void toJson(json::ostream_writer_t& os, const QVariant& var)
             os.array_end();
         }
         break;
-    case QVariant::String:    
+    case QVariant::String:
         {
             os.new_string(var.toString().toStdString().c_str());
         }

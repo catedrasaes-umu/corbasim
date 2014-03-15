@@ -20,11 +20,11 @@
 #ifndef CORBASIM_CORE_INSERTER_HPP
 #define CORBASIM_CORE_INSERTER_HPP
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
-namespace impl 
+namespace impl
 {
 
 template< typename T >
@@ -32,7 +32,7 @@ struct inserter
 {
     T * _this;
 
-    inline inserter(T * __this) : 
+    inline inserter(T * __this) :
         _this(__this)
     {}
 

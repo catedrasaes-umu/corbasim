@@ -9,7 +9,7 @@ namespace corbasim
 namespace qwt
 {
 
-class CORBASIM_QWT_DECLSPEC PlotModel : 
+class CORBASIM_QWT_DECLSPEC PlotModel :
     public ::corbasim::gui::ParametersModel
 {
     Q_OBJECT

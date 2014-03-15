@@ -47,13 +47,13 @@ struct ServerApp::ServerData
     CORBA::ORB_var orb;
     PortableServer::POA_var rootPOA;
 
-    ServerData(ServerApp& this__, int& argc, char ** argv) : 
+    ServerData(ServerApp& this__, int& argc, char ** argv) :
         this_(this__),
         app(argc, argv)
     {
         orb = CORBA::ORB_init(argc, argv);
 
-        CORBA::Object_var rootPOAObj = 
+        CORBA::Object_var rootPOAObj =
             orb->resolve_initial_references ("RootPOA");
 
         rootPOA = PortableServer::POA::_narrow(rootPOAObj.in());
@@ -64,20 +64,20 @@ ServerApp::ServerApp(int& argc, char ** argv) :
     m_impl(new ServerData(*this, argc, argv))
 {
     // connect signals
-    QObject::connect(&m_impl->application, 
-            SIGNAL(loadedInterface(InterfaceDescriptor_ptr)), 
+    QObject::connect(&m_impl->application,
+            SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
             &m_impl->window, SLOT(loadedInterface(InterfaceDescriptor_ptr)));
-    QObject::connect(&m_impl->application, SIGNAL(objrefCreated(Objref_ptr)), 
+    QObject::connect(&m_impl->application, SIGNAL(objrefCreated(Objref_ptr)),
             &m_impl->window, SLOT(objrefCreated(Objref_ptr)));
-    QObject::connect(&m_impl->application, SIGNAL(servantCreated(Objref_ptr)), 
+    QObject::connect(&m_impl->application, SIGNAL(servantCreated(Objref_ptr)),
             &m_impl->window, SLOT(servantCreated(Objref_ptr)));
-    QObject::connect(&m_impl->application, SIGNAL(objrefDeleted(ObjectId)), 
+    QObject::connect(&m_impl->application, SIGNAL(objrefDeleted(ObjectId)),
             &m_impl->window, SLOT(objrefDeleted(ObjectId)));
-    QObject::connect(&m_impl->application, SIGNAL(servantDeleted(ObjectId)), 
+    QObject::connect(&m_impl->application, SIGNAL(servantDeleted(ObjectId)),
             &m_impl->window, SLOT(servantDeleted(ObjectId)));
-    QObject::connect(&m_impl->application, SIGNAL(error(const QString&)), 
+    QObject::connect(&m_impl->application, SIGNAL(error(const QString&)),
             &m_impl->window, SLOT(displayError(const QString&)));
-    QObject::connect(&m_impl->application, SIGNAL(message(const QString&)), 
+    QObject::connect(&m_impl->application, SIGNAL(message(const QString&)),
             &m_impl->window, SLOT(displayMessage(const QString&)));
 
     QObject::connect(&m_impl->window, SIGNAL(loadDirectory(const QString&)),
@@ -89,13 +89,13 @@ ServerApp::ServerApp(int& argc, char ** argv) :
     QObject::connect(&m_impl->window, SIGNAL(clearScenario()),
             &m_impl->application, SLOT(clearScenario()));
 
-    QObject::connect(&m_impl->window, SIGNAL(createObjref(const ObjrefConfig&)), 
+    QObject::connect(&m_impl->window, SIGNAL(createObjref(const ObjrefConfig&)),
             &m_impl->application, SLOT(createObjref(const ObjrefConfig&)));
-    QObject::connect(&m_impl->window, SIGNAL(createServant(const ServantConfig&)), 
+    QObject::connect(&m_impl->window, SIGNAL(createServant(const ServantConfig&)),
             &m_impl->application, SLOT(createServant(const ServantConfig&)));
-    QObject::connect(&m_impl->window, SIGNAL(deleteObjref(ObjectId)), 
+    QObject::connect(&m_impl->window, SIGNAL(deleteObjref(ObjectId)),
             &m_impl->application, SLOT(deleteObjref(ObjectId)));
-    QObject::connect(&m_impl->window, SIGNAL(deleteServant(ObjectId)), 
+    QObject::connect(&m_impl->window, SIGNAL(deleteServant(ObjectId)),
             &m_impl->application, SLOT(deleteServant(ObjectId)));
 }
 
@@ -115,7 +115,7 @@ void ServerApp::setPluginDirectory(const char * directory)
 }
 
 CORBA::Object_var ServerApp::setClient(
-        const char * fqn, 
+        const char * fqn,
         const char * clientName,
         const CORBA::Object_var& ref)
 {
@@ -130,7 +130,7 @@ CORBA::Object_var ServerApp::setClient(
     {
         // if the client exists we return its proxy servant
         // reference
-        Servant * servant = 
+        Servant * servant =
             static_cast< Servant * >(objref.get());
 
         servant->proxy()->setReference(ref);
@@ -146,13 +146,13 @@ CORBA::Object_var ServerApp::setClient(
         scfg.name = nameToFind.toStdString();
         scfg.hide = true;
 
-        Objref_ptr oServant = 
+        Objref_ptr oServant =
             m_impl->application.createServant(scfg);
 
         if (!oServant)
             throw std::runtime_error("Can not create client");
 
-        Servant * servant = 
+        Servant * servant =
             static_cast< Servant * >(oServant.get());
 
         // user must use this reference
@@ -167,7 +167,7 @@ CORBA::Object_var ServerApp::setClient(
         ccfg.fqn = fqn;
         ccfg.reference = ref;
 
-        Objref_ptr proxy = 
+        Objref_ptr proxy =
             m_impl->application.createObjref(ccfg);
 
         if (!proxy)
@@ -182,7 +182,7 @@ CORBA::Object_var ServerApp::setClient(
 }
 
 CORBA::Object_var ServerApp::setClient(
-        const char * fqn, 
+        const char * fqn,
         const char * clientName,
         const char * nsEntry)
 {
@@ -197,7 +197,7 @@ CORBA::Object_var ServerApp::setClient(
     {
         // if the client exists we return its proxy servant
         // reference
-        Servant * servant = 
+        Servant * servant =
             static_cast< Servant * >(objref.get());
 
         servant->proxy()->setNsEntry(nsEntry);
@@ -213,13 +213,13 @@ CORBA::Object_var ServerApp::setClient(
         scfg.name = nameToFind.toStdString();
         scfg.hide = true;
 
-        Objref_ptr oServant = 
+        Objref_ptr oServant =
             m_impl->application.createServant(scfg);
 
         if (!oServant)
             throw std::runtime_error("Can not create client");
 
-        Servant * servant = 
+        Servant * servant =
             static_cast< Servant * >(oServant.get());
 
         // user must use this reference
@@ -234,7 +234,7 @@ CORBA::Object_var ServerApp::setClient(
         ccfg.fqn = fqn;
         ccfg.entry = nsEntry;
 
-        Objref_ptr proxy = 
+        Objref_ptr proxy =
             m_impl->application.createObjref(ccfg);
 
         if (!proxy)
@@ -255,10 +255,10 @@ CORBA::Object_var ServerApp::setServant(
         const char * nsEntry)
 {
     // We activate the real servant
-    PortableServer::ObjectId_var myObjID = 
+    PortableServer::ObjectId_var myObjID =
         m_impl->rootPOA->activate_object(servant);
 
-    CORBA::Object_var realRef =  
+    CORBA::Object_var realRef =
         m_impl->rootPOA->servant_to_reference(servant);
 
     // We use a fake servant
@@ -269,13 +269,13 @@ CORBA::Object_var ServerApp::setServant(
     if (nsEntry)
         scfg.entry = nsEntry;
 
-    Objref_ptr oServant = 
+    Objref_ptr oServant =
         m_impl->application.createServant(scfg);
 
     if (!oServant)
         throw std::runtime_error("Can not create servant");
 
-    Servant * sServant = 
+    Servant * sServant =
         static_cast< Servant * >(oServant.get());
 
     CORBA::Object_var result = sServant->reference();
@@ -289,12 +289,12 @@ CORBA::Object_var ServerApp::setServant(
     ocfg.reference = realRef;
     ocfg.hide = true;
 
-    Objref_ptr realObjref = 
+    Objref_ptr realObjref =
         m_impl->application.createObjref(ocfg);
 
     if (!realObjref)
         throw std::runtime_error("Can not create servant");
-    
+
     sServant->setProxy(realObjref);
     // end create an objref with the real reference
 

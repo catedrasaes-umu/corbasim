@@ -4,7 +4,7 @@
 
 using namespace corbasim::qt;
 
-Status::Status(QWidget *parent) 
+Status::Status(QWidget *parent)
 : QWidget(parent), m_color(Qt::darkRed)
 {
     setFixedSize(20, 20);

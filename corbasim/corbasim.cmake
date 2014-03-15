@@ -1,9 +1,9 @@
 # Fichero version.hpp
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.hpp.in" 
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/version.hpp.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/version.hpp" IMMEDIATE @ONLY)
 
 # Fichero config.hpp
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/core/config.hpp.in" 
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/core/config.hpp.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/core/config.hpp" IMMEDIATE @ONLY)
 
 set(corbasim_EXPORTED_HEADERS
@@ -25,7 +25,6 @@ set(corbasim_EXPORTED_HEADERS
     core/reflective.ipp
     core/reflective_fwd.hpp
     core/reflective_primitive.ipp
-    core/servant.hpp
     cosnaming/CosnamingC.h
     cosnaming/Cosnaming_adapted.hpp
     event.hpp
@@ -53,8 +52,8 @@ set(corbasim_EXPORTED_HEADERS
 
 foreach(_header ${corbasim_EXPORTED_HEADERS})
     get_filename_component(_header_path ${_header} PATH)
-    install(FILES ${_header} 
-        DESTINATION include/corbasim/${_header_path}) 
+    install(FILES ${_header}
+        DESTINATION include/corbasim/${_header_path})
 endforeach(_header ${corbasim_EXPORTED_HEADERS})
 
 set(corbasim_LIBS
@@ -82,8 +81,8 @@ target_link_libraries(corbasim
 # static library
 add_library(corbasim_s STATIC ${corbasim_SRCS})
 
-set_target_properties(corbasim PROPERTIES 
-    VERSION ${${PROJECT_NAME}_VERSION} 
+set_target_properties(corbasim PROPERTIES
+    VERSION ${${PROJECT_NAME}_VERSION}
     SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
 install(TARGETS corbasim corbasim_s DESTINATION lib)

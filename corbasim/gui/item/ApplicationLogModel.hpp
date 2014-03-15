@@ -26,12 +26,12 @@
 
 #include <corbasim/gui/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
 namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC ApplicationLogModel : 
+class CORBASIM_GUI_DECLSPEC ApplicationLogModel :
     public QAbstractItemModel
 {
     Q_OBJECT
@@ -40,8 +40,8 @@ public:
     ApplicationLogModel(QObject * parent = 0);
     virtual ~ApplicationLogModel();
 
-    QVariant data(const QModelIndex& index, 
-            int role = Qt::DisplayRole) const; 
+    QVariant data(const QModelIndex& index,
+            int role = Qt::DisplayRole) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     QVariant headerData(int section, Qt::Orientation orientation,

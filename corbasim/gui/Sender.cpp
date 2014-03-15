@@ -29,7 +29,7 @@
 
 using namespace corbasim::gui;
 
-// 
+//
 //
 // SenderController
 //
@@ -46,10 +46,10 @@ SenderController::~SenderController()
 
 void SenderController::start(unsigned int numberOfThreads)
 {
-    // std::cout << "SenderController::" 
+    // std::cout << "SenderController::"
     //     << __FUNCTION__ << std::endl;
 
-    for (unsigned int i = 0; i < numberOfThreads; i++) 
+    for (unsigned int i = 0; i < numberOfThreads; i++)
     {
         m_threads.create_thread(boost::bind(
                     &boost::asio::io_service::run,
@@ -74,13 +74,13 @@ void SenderController::addSender(SenderConfig_ptr cfg)
     Sender_ptr sender(new Sender(m_ioService, cfg));
 
     // Self-delete
-    connect(sender.get(), 
+    connect(sender.get(),
             SIGNAL(finished(SenderConfig_ptr)),
             this,
             SLOT(deleteSender(SenderConfig_ptr)));
 
     // error notification
-    connect(sender.get(), 
+    connect(sender.get(),
             SIGNAL(error(const QString&)),
             this,
             SIGNAL(error(const QString&)));
@@ -103,7 +103,7 @@ void SenderController::deleteSender(SenderConfig_ptr cfg)
     }
 }
 
-// 
+//
 //
 // Sender
 //
@@ -112,22 +112,22 @@ void SenderController::deleteSender(SenderConfig_ptr cfg)
 
 Sender::Sender(boost::asio::io_service& ioService,
     SenderConfig_ptr config) :
-    m_timer(ioService), 
+    m_timer(ioService),
     m_config(config),
-    m_currentTime(0), 
+    m_currentTime(0),
     m_evaluator(config->operation(), this)
 {
-    connect(this, 
+    connect(this,
             SIGNAL(sendRequest(Request_ptr)),
-            config->object().get(), 
+            config->object().get(),
             SLOT(sendRequest(Request_ptr)));
 }
 
-Sender::~Sender() 
+Sender::~Sender()
 {
 }
 
-void Sender::start(Sender_weak weak) 
+void Sender::start(Sender_weak weak)
 {
     Sender_ptr ptr (weak.lock());
 
@@ -140,15 +140,15 @@ void Sender::start(Sender_weak weak)
         if (!hasErr)
         {
             OperationDescriptor_ptr op =
-                m_config->operation();       
+                m_config->operation();
 
             // Clone the original request
             // We can't modify an emited request
-            ::corbasim::core::holder srcHolder = 
+            ::corbasim::core::holder srcHolder =
                 op->get_holder(m_config->request());
 
             m_request = op->create_request();
-            ::corbasim::core::holder dstHolder = 
+            ::corbasim::core::holder dstHolder =
                 op->get_holder(m_request);
 
             op->copy(srcHolder, dstHolder);
@@ -180,7 +180,7 @@ void Sender::start(Sender_weak weak)
     }
 }
 
-void Sender::cancel() 
+void Sender::cancel()
 {
     m_timer.cancel();
 }
@@ -201,12 +201,12 @@ void Sender::process()
     typedef QList< RequestProcessor_ptr > processors_t;
     const processors_t& processors = m_config->processors();
 
-    for (processors_t::const_iterator it = processors.begin(); 
-            it != processors.end(); ++it) 
+    for (processors_t::const_iterator it = processors.begin();
+            it != processors.end(); ++it)
     {
         applyProcessor(m_request, *it, srcHolder);
     }
-    
+
     // postFunc
     m_evaluator.post(m_request);
     if (m_evaluator.hasError()) throw m_evaluator.error();
@@ -218,7 +218,7 @@ void Sender::process()
         op->create_request();
     ::corbasim::core::holder dstHolder =
         op->get_holder(request);
-    
+
     op->copy(srcHolder, dstHolder);
 
     // emit request
@@ -233,14 +233,14 @@ void Sender::applyProcessor(
 {
     const QList< int >& path = processor->path();
 
-    const OperationDescriptor_ptr op = 
+    const OperationDescriptor_ptr op =
         m_config->operation();
 
     // Results
     TypeDescriptor_ptr descriptor = NULL;
     Holder value;
 
-    bool res = followPath(op, holder, path, 
+    bool res = followPath(op, holder, path,
             // Results
             descriptor, value);
 
@@ -267,10 +267,10 @@ void Sender::handleTimeout(
     if (!err)
     {
         Sender_ptr ptr = weak.lock();
-        
+
         if (ptr)
         {
-            try 
+            try
             {
                 process();
 
@@ -284,7 +284,7 @@ void Sender::handleTimeout(
                 // Last step to ensure thread-safe
                 if (m_currentTime != m_config->times())
                     scheduleTimer(weak);
-            } 
+            }
             catch(const QString& ex)
             {
                 m_config->notifyFinished();
@@ -334,7 +334,7 @@ Objref_ptr SenderConfig::object() const
     return m_object;
 }
 
-OperationDescriptor_ptr 
+OperationDescriptor_ptr
 SenderConfig::operation() const
 {
     return m_operation;
@@ -350,7 +350,7 @@ const QString& SenderConfig::code() const
     return m_code;
 }
 
-const QList< RequestProcessor_ptr >& 
+const QList< RequestProcessor_ptr >&
 SenderConfig::processors() const
 {
     return m_processors;

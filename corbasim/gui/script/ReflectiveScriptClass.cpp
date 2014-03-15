@@ -55,7 +55,7 @@ QScriptClassPropertyIterator *  ReflectiveScriptClass::newIterator(
 
 QScriptValue ReflectiveScriptClass::property(
         const QScriptValue& object,
-        const QScriptString& name, 
+        const QScriptString& name,
         uint id)
 {
     // std::cout << __FUNCTION__ << std::endl;
@@ -66,7 +66,7 @@ QScriptValue ReflectiveScriptClass::property(
     {
         node->check_for_initialized();
 
-        ::corbasim::core::reflective_type type = 
+        ::corbasim::core::reflective_type type =
             node->reflective->get_type();
 
         if (type == ::corbasim::core::TYPE_STRUCT)
@@ -145,7 +145,7 @@ QScriptValue ReflectiveScriptClass::toScriptValue(Node_ptr node)
             }
         case TYPE_OBJREF:
             {
-                objrefvar_reflective_base const * objref = 
+                objrefvar_reflective_base const * objref =
                     static_cast< objrefvar_reflective_base const * >(
                             reflective);
 
@@ -153,12 +153,12 @@ QScriptValue ReflectiveScriptClass::toScriptValue(Node_ptr node)
 
                 if (CORBA::is_nil(obj))
                     return QScriptValue("NIL");
-                
+
                 try {
                     reference_repository * rr =
                         reference_repository::get_instance();
 
-                    CORBA::String_var str = 
+                    CORBA::String_var str =
                         rr->object_to_string(obj);
 
                     return QScriptValue(str.in());
@@ -175,9 +175,9 @@ QScriptValue ReflectiveScriptClass::toScriptValue(Node_ptr node)
                 // Maybe it works...
                 int32_t value = hold.to_value< int32_t >();
 
-                const char * str = "Unknown value"; 
+                const char * str = "Unknown value";
 
-                if (value >= 0 && 
+                if (value >= 0 &&
                         value < reflective->get_children_count())
                 {
                     str = reflective->get_child_name(
@@ -220,11 +220,11 @@ void ReflectiveScriptClass::fromScriptValue(
             {
                 if (value.isObject())
                 {
-                    unsigned int count = 
+                    unsigned int count =
                         node->reflective->get_children_count();
 
                     // Search by name
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
                         const char *childName = reflective->get_child_name(i);
                         QScriptValue childValue = value.property(childName);
@@ -260,7 +260,7 @@ void ReflectiveScriptClass::fromScriptValue(
                     node->check_for_initialized();
                 }
 
-                for (unsigned int i = 0; i < newLength && i < length; i++) 
+                for (unsigned int i = 0; i < newLength && i < length; i++)
                 {
                     fromScriptValue(value.property(i),
                             node->children[i]);
@@ -308,7 +308,7 @@ void ReflectiveScriptClass::fromScriptValue(
         TODO
         case TYPE_OBJREF:
             {
-                objrefvar_reflective_base const * objref = 
+                objrefvar_reflective_base const * objref =
                     static_cast< objrefvar_reflective_base const * >(
                             reflective);
 
@@ -316,12 +316,12 @@ void ReflectiveScriptClass::fromScriptValue(
 
                 if (CORBA::is_nil(obj))
                     return QScriptValue("NIL");
-                
+
                 try {
                     reference_repository * rr =
                         reference_repository::get_instance();
 
-                    CORBA::String_var str = 
+                    CORBA::String_var str =
                         rr->object_to_string(obj);
 
                     return QScriptValue(str.in());
@@ -340,7 +340,7 @@ void ReflectiveScriptClass::fromScriptValue(
 
                 const QString str (value.toString());
 
-                for (unsigned int i = 0; i < count; i++) 
+                for (unsigned int i = 0; i < count; i++)
                 {
                     if (str == reflective->get_child_name(i))
                     {
@@ -362,12 +362,12 @@ void ReflectiveScriptClass::fromScriptValue(
 }
 
 QScriptClass::QueryFlags ReflectiveScriptClass::queryProperty(
-        const QScriptValue& object, 
-        const QScriptString& name, 
-        QScriptClass::QueryFlags flags, 
+        const QScriptValue& object,
+        const QScriptString& name,
+        QScriptClass::QueryFlags flags,
         uint * id)
 {
-    // std::cout << __FUNCTION__ << " " << 
+    // std::cout << __FUNCTION__ << " " <<
     //     name.toString().toStdString() << std::endl;
 
     // Invalid property identifier
@@ -384,7 +384,7 @@ QScriptClass::QueryFlags ReflectiveScriptClass::queryProperty(
 
         node->check_for_initialized();
 
-        ::corbasim::core::reflective_type type = 
+        ::corbasim::core::reflective_type type =
             node->reflective->get_type();
 
         if (type == ::corbasim::core::TYPE_STRUCT)
@@ -392,7 +392,7 @@ QScriptClass::QueryFlags ReflectiveScriptClass::queryProperty(
             unsigned int count = node->reflective->get_children_count();
 
             // Search by name
-            for (unsigned int i = 0; i < count; i++) 
+            for (unsigned int i = 0; i < count; i++)
             {
                 // Maybe better with interned strings
                 if (sName == node->reflective->get_child_name(i))
@@ -440,12 +440,12 @@ QScriptClass::QueryFlags ReflectiveScriptClass::queryProperty(
 }
 
 void ReflectiveScriptClass::setProperty(
-        QScriptValue& object, 
-        const QScriptString & name, 
-        uint id, 
+        QScriptValue& object,
+        const QScriptString & name,
+        uint id,
         const QScriptValue& value)
 {
-    // std::cout << __FUNCTION__ << " " << 
+    // std::cout << __FUNCTION__ << " " <<
     //     name.toString().toStdString() << std::endl;
 
     Node_ptr node = qscriptvalue_cast< Node_ptr >(object.data());
@@ -455,7 +455,7 @@ void ReflectiveScriptClass::setProperty(
         // Ensure it is initialized
         node->check_for_initialized();
 
-        ::corbasim::core::reflective_type type = 
+        ::corbasim::core::reflective_type type =
             node->reflective->get_type();
 
         if (type == ::corbasim::core::TYPE_STRUCT)
@@ -497,7 +497,7 @@ void ReflectiveScriptClass::setProperty(
 //
 
 ReflectivePropertyIterator::ReflectivePropertyIterator(
-    const QScriptValue& object) : 
+    const QScriptValue& object) :
     QScriptClassPropertyIterator(object),
     m_idx(-1)
 {
@@ -509,12 +509,12 @@ ReflectivePropertyIterator::~ReflectivePropertyIterator()
 }
 
 /*
-QScriptValue::PropertyFlags ReflectivePropertyIterator::flags() const 
+QScriptValue::PropertyFlags ReflectivePropertyIterator::flags() const
 {
 }
 */
 
-bool ReflectivePropertyIterator::hasNext() const 
+bool ReflectivePropertyIterator::hasNext() const
 {
     using namespace corbasim::core;
     reflective_base const * reflective = m_node->reflective;
@@ -538,7 +538,7 @@ bool ReflectivePropertyIterator::hasNext() const
     return false;
 }
 
-bool ReflectivePropertyIterator::hasPrevious() const 
+bool ReflectivePropertyIterator::hasPrevious() const
 {
     using namespace corbasim::core;
     reflective_base const * reflective = m_node->reflective;
@@ -551,7 +551,7 @@ bool ReflectivePropertyIterator::hasPrevious() const
 
         case TYPE_ARRAY:
         case TYPE_SEQUENCE:
-            return (reflective->get_length(m_node->holder) > 0 && 
+            return (reflective->get_length(m_node->holder) > 0 &&
                     m_idx - 1 >= 0);
 
         // TODO case TYPE_UNION:
@@ -563,12 +563,12 @@ bool ReflectivePropertyIterator::hasPrevious() const
     return false;
 }
 
-uint ReflectivePropertyIterator::id() const 
+uint ReflectivePropertyIterator::id() const
 {
     return m_idx;
 }
 
-QScriptString ReflectivePropertyIterator::name() const 
+QScriptString ReflectivePropertyIterator::name() const
 {
     using namespace corbasim::core;
     reflective_base const * reflective = m_node->reflective;
@@ -593,7 +593,7 @@ QScriptString ReflectivePropertyIterator::name() const
      return QScriptString();
 }
 
-void ReflectivePropertyIterator::next() 
+void ReflectivePropertyIterator::next()
 {
     using namespace corbasim::core;
     reflective_base const * reflective = m_node->reflective;
@@ -608,13 +608,13 @@ void ReflectivePropertyIterator::next()
             break;
 
         // TODO case TYPE_UNION:
-        
+
         default:
             break;
     }
 }
 
-void ReflectivePropertyIterator::previous() 
+void ReflectivePropertyIterator::previous()
 {
     using namespace corbasim::core;
     reflective_base const * reflective = m_node->reflective;
@@ -629,13 +629,13 @@ void ReflectivePropertyIterator::previous()
             break;
 
         // TODO case TYPE_UNION:
-        
+
         default:
             break;
     }
 }
 
-void ReflectivePropertyIterator::toBack() 
+void ReflectivePropertyIterator::toBack()
 {
     using namespace corbasim::core;
     reflective_base const * reflective = m_node->reflective;
@@ -655,13 +655,13 @@ void ReflectivePropertyIterator::toBack()
             break;
 
         // TODO case TYPE_UNION:
-        
+
         default:
             break;
     }
 }
 
-void ReflectivePropertyIterator::toFront() 
+void ReflectivePropertyIterator::toFront()
 {
     using namespace corbasim::core;
     reflective_base const * reflective = m_node->reflective;
@@ -676,7 +676,7 @@ void ReflectivePropertyIterator::toFront()
             break;
 
         // TODO case TYPE_UNION:
-        
+
         default:
             break;
     }

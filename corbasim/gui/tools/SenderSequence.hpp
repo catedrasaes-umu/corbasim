@@ -23,14 +23,14 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractSequenceTool.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class OperationSender;
 
-class CORBASIM_GUI_DECLSPEC SenderSequenceItem : 
+class CORBASIM_GUI_DECLSPEC SenderSequenceItem :
     public AbstractSequenceItem
 {
     Q_OBJECT
@@ -43,7 +43,7 @@ public:
     OperationSender * sender() const;
 
 public slots:
-    
+
     void showDetails(bool show);
 
 protected:
@@ -54,7 +54,7 @@ protected:
     OperationSender * m_dlg;
 };
 
-class CORBASIM_GUI_DECLSPEC SenderSequenceTool : 
+class CORBASIM_GUI_DECLSPEC SenderSequenceTool :
     public AbstractSequenceTool
 {
     Q_OBJECT
@@ -70,7 +70,7 @@ public slots:
 protected:
 
     AbstractSequenceItem * createAbstractItem(
-            Objref_ptr object, 
+            Objref_ptr object,
             OperationDescriptor_ptr op);
 };
 

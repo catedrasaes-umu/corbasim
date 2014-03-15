@@ -28,7 +28,7 @@ ScriptEditor::ScriptEditor(QWidget * parent) :
     font.setFamily("Courier");
     font.setFixedPitch(true);
     font.setPointSize(10);
-    
+
     setFont(font);
     setTabStopWidth(4 * fontMetrics().width(' '));
 }

@@ -23,12 +23,12 @@
 #include <QtGui>
 #include <corbasim/qt/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 
-class CORBASIM_QT_DECLSPEC FormWidget : 
+class CORBASIM_QT_DECLSPEC FormWidget :
     public QWidget
 {
     Q_OBJECT

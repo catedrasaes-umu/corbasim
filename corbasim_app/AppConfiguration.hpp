@@ -24,9 +24,9 @@
 #include <string>
 #include <vector>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace app 
+namespace app
 {
 
 class AppConfiguration

@@ -21,7 +21,7 @@ struct is_objrefvar< prueba::Iface_var > : public cs_mpl::true_
 } // adapted
 } // corbasim
 
-        
+
 namespace corbasim
 {
 namespace adapted
@@ -41,9 +41,9 @@ struct is_corbaseq< prueba::Iface::FloatSeq > : public cs_mpl::true_
 
 
 
-namespace _corbasim_prueba 
+namespace _corbasim_prueba
 {
-namespace Iface 
+namespace Iface
 {
 
 
@@ -56,12 +56,12 @@ struct __operation
 
 	::CORBA::Long a;
 	prueba::Iface::FloatSeq fs;
-	
-	
+
+
 	__operation();
-	
+
 	__operation(::CORBA::Long _a, const prueba::Iface::FloatSeq& _fs);
-	
+
 	// Copy constructor
 	__operation(const __operation& o);
 };
@@ -83,7 +83,7 @@ template < >
 struct interface < prueba::Iface >
 {
 	typedef cs_mpl::list< _corbasim_prueba::Iface::operation  >   _op_list;
-	
+
 };
 
 } // adapted
@@ -101,13 +101,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_prueba::Iface::operation >
 {
 	typedef _corbasim_prueba::Iface::operation Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {

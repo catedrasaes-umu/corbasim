@@ -21,7 +21,7 @@
 
 using namespace corbasim::qt;
 
-AbstractItemFrame::AbstractItemFrame(QWidget * parent) : 
+AbstractItemFrame::AbstractItemFrame(QWidget * parent) :
     QFrame(parent), m_timer(this), m_currentAlpha(100)
 {
     connect(&m_timer, SIGNAL(timeout()),
@@ -43,7 +43,7 @@ void AbstractItemFrame::paintEvent(QPaintEvent* event)
         QColor semiTransparentColor = Qt::black;
         semiTransparentColor.setAlpha(m_currentAlpha);
         painter.fillRect(rect(), semiTransparentColor);
-        
+
         m_currentAlpha -= 5;
     }
     else if (m_timer.isActive())
@@ -61,7 +61,7 @@ void AbstractItemFrame::paintEvent(QPaintEvent* event)
 }
 
 SortableGroupItem::SortableGroupItem(QWidget * widget,
-        QWidget * parent) : 
+        QWidget * parent) :
     AbstractItemFrame(parent), m_widget(widget)
 {
     QVBoxLayout * layout = new QVBoxLayout();
@@ -71,7 +71,7 @@ SortableGroupItem::SortableGroupItem(QWidget * widget,
     m_title = new QLabel();
     tLayout->addWidget(m_title);
 
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     tLayout->addItem(spacer);
 
@@ -176,7 +176,7 @@ SortableGroup::SortableGroup(QWidget * parent) :
     scrollLayout->addLayout(m_layout);
     scrollLayout->setMargin(0);
 
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Expanding);
     scrollLayout->addItem(spacer);
 
@@ -268,7 +268,7 @@ void SortableGroup::moveDownItem(SortableGroupItem * item)
 
 void SortableGroup::deleteItem()
 {
-    SortableGroupItem * sndObj = 
+    SortableGroupItem * sndObj =
         qobject_cast< SortableGroupItem * >(sender());
 
     if (sndObj)
@@ -283,7 +283,7 @@ void SortableGroup::deleteItem()
 
 void SortableGroup::moveUpItem()
 {
-    SortableGroupItem * sndObj = 
+    SortableGroupItem * sndObj =
         qobject_cast< SortableGroupItem * >(sender());
 
     if (sndObj)
@@ -292,7 +292,7 @@ void SortableGroup::moveUpItem()
 
 void SortableGroup::moveDownItem()
 {
-    SortableGroupItem * sndObj = 
+    SortableGroupItem * sndObj =
         qobject_cast< SortableGroupItem * >(sender());
 
     if (sndObj)

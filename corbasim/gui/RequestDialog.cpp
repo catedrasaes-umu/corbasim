@@ -36,7 +36,7 @@
 using namespace corbasim;
 using namespace corbasim::gui;
 
-RequestDialog::RequestDialog( 
+RequestDialog::RequestDialog(
         OperationDescriptor_ptr reflective,
         QWidget * parent) :
     QDialog(parent), m_dlg(new OperationInputForm(reflective, this))
@@ -50,30 +50,30 @@ RequestDialog::RequestDialog(
     m_scroll->setObjectName("scroll");
     m_scroll->setWidgetResizable(true);
     m_dlg->setObjectName("form");
-    
+
     QWidget * scrollWidget = new QWidget();
     QVBoxLayout * scrollLayout = new QVBoxLayout();
     scrollLayout->setMargin(0);
     scrollWidget->setLayout(scrollLayout);
     scrollLayout->addWidget(m_dlg);
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Expanding);
     scrollLayout->addItem(spacer);
-    scrollWidget->setSizePolicy(QSizePolicy::Preferred, 
+    scrollWidget->setSizePolicy(QSizePolicy::Preferred,
             QSizePolicy::Preferred);
     m_scroll->setWidget(scrollWidget);
-    layout->addWidget(m_scroll); 
+    layout->addWidget(m_scroll);
     m_scroll->setLineWidth(0);
     m_scroll->setFrameStyle(QFrame::NoFrame);
     m_scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    setMinimumWidth(m_scroll->widget()->minimumSizeHint().width() + 
+    setMinimumWidth(m_scroll->widget()->minimumSizeHint().width() +
             m_scroll->verticalScrollBar()->width());
     // End scroll
 
     QHBoxLayout * periodicLayout = new QHBoxLayout;
 
-    spacer = new QSpacerItem(20, 20, 
+    spacer = new QSpacerItem(20, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     periodicLayout->addItem(spacer);
 
@@ -96,46 +96,46 @@ RequestDialog::RequestDialog(
     periodicLayout->addWidget(m_cbUseStored);
 
     layout->addLayout(periodicLayout);
-   
-    // Botones 
+
+    // Botones
     QHBoxLayout * btnsLayout = new QHBoxLayout;
 
-    spacer = new QSpacerItem(20, 20, 
+    spacer = new QSpacerItem(20, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     btnsLayout->addItem(spacer);
 
     // Start stop
     m_pbStartStop = new QPushButton("S&tart/Stop");
     m_pbStartStop->setCheckable(true);
-    QObject::connect(m_pbStartStop, SIGNAL(toggled(bool)), 
+    QObject::connect(m_pbStartStop, SIGNAL(toggled(bool)),
             this, SLOT(startStopChecked(bool)));
     btnsLayout->addWidget(m_pbStartStop);
 
     // Update
     m_pbUpdate = new QPushButton("&Update");
     m_pbUpdate->setObjectName("updateButton");
-    QObject::connect(m_pbUpdate, SIGNAL(clicked()), 
+    QObject::connect(m_pbUpdate, SIGNAL(clicked()),
             this, SLOT(storeRequest()));
     btnsLayout->addWidget(m_pbUpdate);
 
     // Send button
     QPushButton * btn = new QPushButton("&Send");
     btn->setObjectName("sendButton");
-    QObject::connect(btn, SIGNAL(clicked()), 
-            this, SLOT(sendClicked())); 
+    QObject::connect(btn, SIGNAL(clicked()),
+            this, SLOT(sendClicked()));
     btnsLayout->addWidget(btn);
 
     // Close button
     btn = new QPushButton("&Close");
     btn->setObjectName("closeButton");
-    QObject::connect(btn, SIGNAL(clicked()), 
-            this, SLOT(hide())); 
+    QObject::connect(btn, SIGNAL(clicked()),
+            this, SLOT(hide()));
     btnsLayout->addWidget(btn);
 
     layout->addLayout(btnsLayout);
-   
+
     // Timer
-    QObject::connect(&m_timer, SIGNAL(timeout()), 
+    QObject::connect(&m_timer, SIGNAL(timeout()),
             this, SLOT(sendStored()));
 
     setLayout(layout);
@@ -182,7 +182,7 @@ void RequestDialog::sendStored()
         sendClicked();
 
     ++m_currentPeriodicRequest;
-    if (m_sbTimes->value() > 0 && 
+    if (m_sbTimes->value() > 0 &&
             m_currentPeriodicRequest >= m_sbTimes->value())
         m_pbStartStop->setChecked(false);
 }
@@ -199,19 +199,19 @@ void RequestDialog::hideEvent(QHideEvent * event)
 
 void RequestDialog::resizeEvent(QResizeEvent * event)
 {
-    setMinimumWidth(m_scroll->widget()->minimumSizeHint().width() + 
+    setMinimumWidth(m_scroll->widget()->minimumSizeHint().width() +
             m_scroll->verticalScrollBar()->width());
     event->accept();
 }
 
-OperationDescriptor_ptr 
+OperationDescriptor_ptr
 RequestDialog::getReflective() const
 {
     return m_dlg->getReflective();
 }
 
 // Settings
-void RequestDialog::save(QVariant& settings) 
+void RequestDialog::save(QVariant& settings)
 {
     QVariantMap map;
 
@@ -225,7 +225,7 @@ void RequestDialog::save(QVariant& settings)
     settings = map;
 }
 
-void RequestDialog::load(const QVariant& settings) 
+void RequestDialog::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
 

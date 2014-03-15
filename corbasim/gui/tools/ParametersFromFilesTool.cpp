@@ -45,13 +45,13 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
     setLayout(layout);
 
     // widget signals
-    connect(m_group, 
+    connect(m_group,
             SIGNAL(deleteRequested(corbasim::qt::SortableGroupItem *)),
-            this, 
+            this,
             SLOT(deleteRequested(corbasim::qt::SortableGroupItem *)));
 
-    // connect model signals 
-    connect(&m_model, 
+    // connect model signals
+    connect(&m_model,
             SIGNAL(checked(
                     OperationDescriptor_ptr,
                     const QList< int >&)),
@@ -59,7 +59,7 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
             SLOT(createFilesItem(
                     OperationDescriptor_ptr,
                     const QList< int >&)));
-    connect(&m_model, 
+    connect(&m_model,
             SIGNAL(unchecked(
                     OperationDescriptor_ptr,
                     const QList< int >&)),
@@ -67,7 +67,7 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
             SLOT(deleteFilesItem(
                     OperationDescriptor_ptr,
                     const QList< int >&)));
-    
+
     setMinimumSize(650, 400);
 }
 
@@ -83,7 +83,7 @@ void ParametersFromFilesTool::initialize(
 
     int i = 0;
     while (i < iface->operation_count() &&
-            iface->get_reflective_by_index(i) != reflective) 
+            iface->get_reflective_by_index(i) != reflective)
         i++;
 
     m_model.initialize(i, reflective);
@@ -94,19 +94,19 @@ void ParametersFromFilesTool::initialize(
 void ParametersFromFilesTool::createProcessors(
         QList< RequestProcessor_ptr >& processors)
 {
-    const QList< qt::SortableGroupItem * >& items = 
+    const QList< qt::SortableGroupItem * >& items =
         m_group->getItems();
 
-    for (int i = 0; i < items.size(); i++) 
+    for (int i = 0; i < items.size(); i++)
     {
-        FilesItem * item = 
+        FilesItem * item =
             qobject_cast< FilesItem * >(items.at(i)->getWidget());
 
         processors.push_back(item->createProcessor());
     }
 }
 
-FilesItem * ParametersFromFilesTool::createFilesItem( 
+FilesItem * ParametersFromFilesTool::createFilesItem(
         OperationDescriptor_ptr,
         const QList< int >& path)
 {
@@ -114,13 +114,13 @@ FilesItem * ParametersFromFilesTool::createFilesItem(
 
     if (m_operation && m_objref)
     {
-        // FIXME when doing model->check it throws 
+        // FIXME when doing model->check it throws
         // the signal connected to this method, but when
         // loading a configuration file, we call this method
         // first and then we check it in the model. Then
         // we have to protect us for duplicate items.
         // It should be better implemented.
-        for (int i = 0; i < m_items.size(); i++) 
+        for (int i = 0; i < m_items.size(); i++)
         {
             if (m_items.at(i)->path() == path)
             {
@@ -130,7 +130,7 @@ FilesItem * ParametersFromFilesTool::createFilesItem(
 
         plot = new FilesItem(m_objref, m_operation, path);
 
-        qt::SortableGroupItem * item = 
+        qt::SortableGroupItem * item =
             new qt::SortableGroupItem(plot, m_group);
 
         item->showDetails();
@@ -150,7 +150,7 @@ void ParametersFromFilesTool::deleteFilesItem(
         OperationDescriptor_ptr,
         const QList< int >& path)
 {
-    for (int i = 0; i < m_items.size(); i++) 
+    for (int i = 0; i < m_items.size(); i++)
     {
         FilesItem * plot = m_items[i];
         if (plot->path() == path)
@@ -166,7 +166,7 @@ void ParametersFromFilesTool::deleteFilesItem(
 
 void ParametersFromFilesTool::deleteRequested(qt::SortableGroupItem* item)
 {
-    FilesItem * plot = 
+    FilesItem * plot =
         qobject_cast< FilesItem * >(item->getWidget());
 
     if (plot)
@@ -187,16 +187,16 @@ void ParametersFromFilesTool::deleteRequested(qt::SortableGroupItem* item)
 
 void ParametersFromFilesTool::save(QVariant& settings)
 {
-    const QList< qt::SortableGroupItem * >& items = 
+    const QList< qt::SortableGroupItem * >& items =
         m_group->getItems();
 
     QVariantList list;
 
-    for (int i = 0; i < items.size(); i++) 
+    for (int i = 0; i < items.size(); i++)
     {
         QVariant var;
 
-        FilesItem * item = 
+        FilesItem * item =
             qobject_cast< FilesItem * >(items.at(i)->getWidget());
         item->save(var);
 
@@ -212,14 +212,14 @@ void ParametersFromFilesTool::load(const QVariant& settings)
 
     const QVariantList list = settings.toList();
 
-    for (int i = 0; i < list.size(); i++) 
+    for (int i = 0; i < list.size(); i++)
     {
         const QVariant& var = list.at(i);
         const QVariantMap& map = var.toMap();
         const QVariantList rPath = map["path"].toList();
         QList< int > path;
 
-        for (int i = 0; i < rPath.size(); i++) 
+        for (int i = 0; i < rPath.size(); i++)
         {
             path.push_back(rPath.at(i).toInt());
         }
@@ -239,8 +239,8 @@ void ParametersFromFilesTool::load(const QVariant& settings)
 
 void ParametersFromFilesTool::clear()
 {
-    for (items_t::const_iterator it = m_items.begin(); 
-            it != m_items.end(); ++it) 
+    for (items_t::const_iterator it = m_items.begin();
+            it != m_items.end(); ++it)
     {
         // notify to model
         m_model.uncheck((*it)->path());
@@ -258,11 +258,11 @@ void ParametersFromFilesTool::clear()
 FilesItem::FilesItem(
         Objref_ptr objref,
         OperationDescriptor_ptr reflective,
-        const QList< int >& path, 
+        const QList< int >& path,
         QWidget * parent) :
-    QWidget(parent), 
+    QWidget(parent),
     m_objref(objref),
-    m_reflective(reflective), 
+    m_reflective(reflective),
     m_path(path)
 {
     QVBoxLayout * layout = new QVBoxLayout();
@@ -283,7 +283,7 @@ FilesItem::FilesItem(
 
     m_currentFile = new QComboBox();
     form->addField("Next file to send", m_currentFile);
-    
+
     m_format = new QComboBox();
     m_format->addItem("Binary (*.bin)");
     m_format->addItem("Text (*.txt)");
@@ -309,8 +309,8 @@ FilesItem::~FilesItem()
 
 void FilesItem::browse()
 {
-    m_files = QFileDialog::getOpenFileNames(this, 
-            "Select some files...", ".", 
+    m_files = QFileDialog::getOpenFileNames(this,
+            "Select some files...", ".",
             m_format->currentText());
 
     m_filesWidget->setText(m_files.join(", "));
@@ -326,25 +326,25 @@ OperationDescriptor_ptr FilesItem::getReflective() const
 //
 //
 // Properties
-// 
+//
 //
 
-const QStringList& FilesItem::files() const 
+const QStringList& FilesItem::files() const
 {
     return m_files;
 }
 
-int FilesItem::currentFile() const 
+int FilesItem::currentFile() const
 {
     return m_currentFile->currentIndex();
 }
 
-int FilesItem::format() const 
+int FilesItem::format() const
 {
     return m_format->currentIndex();
 }
 
-bool FilesItem::repeat() const 
+bool FilesItem::repeat() const
 {
     return m_repeat->isChecked();
 }
@@ -377,7 +377,7 @@ void FilesItem::save(QVariant& settings)
     map["title"] = getFieldName(m_reflective, m_path);
 
     QVariantList list;
-    for (int i = 0; i < m_path.size(); i++) 
+    for (int i = 0; i < m_path.size(); i++)
     {
         list << m_path.at(i);
     }

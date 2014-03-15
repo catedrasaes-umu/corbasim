@@ -30,9 +30,9 @@
 
 #include <QtGui>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class FilteredLogView;

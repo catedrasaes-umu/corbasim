@@ -38,14 +38,14 @@ struct Objref::Data
 Objref::Objref(const QString& name,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
-    m_name(name), 
+    m_name(name),
     m_interfaceDescriptor(interfaceDescriptor),
     QObject(parent), m_data(new Data)
 {
     if(m_interfaceDescriptor)
     {
         m_caller.reset(m_interfaceDescriptor->create_caller());
-        
+
         m_validator = m_caller;
     }
 }
@@ -53,8 +53,8 @@ Objref::Objref(const QString& name,
 Objref::Objref(const ObjrefConfig& cfg,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
-    m_name(cfg.name.c_str()), 
-    m_nsEntry(cfg.entry.c_str()), 
+    m_name(cfg.name.c_str()),
+    m_nsEntry(cfg.entry.c_str()),
     m_interfaceDescriptor(interfaceDescriptor),
     QObject(parent), m_data(new Data)
 {
@@ -190,7 +190,7 @@ Event_ptr Objref::sendRequestThrow(const Request_ptr& request)
     }
     else
     {
-        try 
+        try
         {
             ev = Event_ptr(m_caller->do_call_throw(request.get()));
         }
@@ -231,8 +231,8 @@ struct Servant::ServantData :
     Servant& m_this;
     PortableServer::ServantBase * m_servant;
 
-    ServantData(Servant& this_) : 
-        m_this(this_), 
+    ServantData(Servant& this_) :
+        m_this(this_),
         m_servant(this_.interface()->create_servant(this))
     {
     }
@@ -257,7 +257,7 @@ struct Servant::ServantData :
                 emit m_this.requestReceived(m_this.id(), req, ev);
 
                 return ev;
-            } 
+            }
             catch (const CORBA::Exception& ex)
             {
                 ::corbasim::event::event_ptr ev (
@@ -277,7 +277,7 @@ struct Servant::ServantData :
 Servant::Servant(const QString& name,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
-    Objref(name, interfaceDescriptor, parent), 
+    Objref(name, interfaceDescriptor, parent),
     m_data(new ServantData(*this))
 {
 }
@@ -460,7 +460,7 @@ InterfaceDescriptor_ptr InterfaceRepository::loadLibrary(const QString& file)
         return NULL;
     }
 
-    get_reflective_t get_reflective = 
+    get_reflective_t get_reflective =
         (get_reflective_t) lib.resolve(str.c_str());
 
     if (!get_reflective)
@@ -470,7 +470,7 @@ InterfaceDescriptor_ptr InterfaceRepository::loadLibrary(const QString& file)
     }
 
     InterfaceDescriptor_ptr factory = get_reflective();
-    
+
     if (!factory)
     {
         lib.unload();
@@ -487,7 +487,7 @@ InterfaceDescriptor_ptr InterfaceRepository::loadLibrary(const QString& file)
 
 InterfaceDescriptor_ptr InterfaceRepository::getInterface(const QString& fqn)
 {
-    interfaces_t::const_iterator it = m_interfaces.find(fqn); 
+    interfaces_t::const_iterator it = m_interfaces.find(fqn);
 
     if (it != m_interfaces.end())
     {
@@ -528,7 +528,7 @@ void InterfaceRepository::loadDirectory(const QString& path)
         const QFileInfoList files = d.entryInfoList(idlFilters, QDir::Files);
         const int count = files.count();
 
-        for (int i = 0; i < count; i++) 
+        for (int i = 0; i < count; i++)
         {
             QLibrary lib(files[i].absoluteFilePath());
             lib.load();
@@ -540,7 +540,7 @@ void InterfaceRepository::loadDirectory(const QString& path)
         const QFileInfoList files = d.entryInfoList(filters, QDir::Files);
         const int count = files.count();
 
-        for (int i = 0; i < count; i++) 
+        for (int i = 0; i < count; i++)
         {
             loadLibrary(files[i].absoluteFilePath());
         }

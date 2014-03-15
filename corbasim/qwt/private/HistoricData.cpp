@@ -32,7 +32,7 @@ void HistoricData::append(double v)
 
 void HistoricData::append(const QVector< double >& v)
 {
-    for (int i = 0; i < v.size(); i++) 
+    for (int i = 0; i < v.size(); i++)
     {
         d_samples.push_back(QPointF(d_samples.size(), v[i]));
     }

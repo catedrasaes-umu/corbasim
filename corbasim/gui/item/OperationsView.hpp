@@ -24,9 +24,9 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC OperationsView : public QTreeView
@@ -43,10 +43,10 @@ protected slots:
 
 signals:
 
-    void selectedOperation(Objref_ptr, 
+    void selectedOperation(Objref_ptr,
             OperationDescriptor_ptr);
 
-    void selectedItem(Objref_ptr, 
+    void selectedItem(Objref_ptr,
             OperationDescriptor_ptr,
             const QList< int >&);
 

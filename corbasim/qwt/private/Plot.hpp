@@ -23,9 +23,9 @@
 #include <qwt_plot.h>
 #include <QWidget>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qwt 
+namespace qwt
 {
 namespace priv
 {

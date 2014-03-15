@@ -30,8 +30,8 @@ using namespace corbasim::gui;
 AbstractSequenceItem::AbstractSequenceItem(
         Objref_ptr object,
         OperationDescriptor_ptr operation,
-        QWidget * parent) : 
-    qt::AbstractItemFrame(parent), m_object(object), 
+        QWidget * parent) :
+    qt::AbstractItemFrame(parent), m_object(object),
     m_operation(operation)
 {
     const QString& id = object->name();
@@ -44,7 +44,7 @@ AbstractSequenceItem::AbstractSequenceItem(
         QString("<b>Object: '%1' Operation: '%2'</b>")
             .arg(id).arg(operation->get_name()));
     tLayout->addWidget(title);
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     tLayout->addItem(spacer);
 
@@ -124,7 +124,7 @@ OperationDescriptor_ptr AbstractSequenceItem::operation() const
     return m_operation;
 }
 
-AbstractSequence::AbstractSequence(const QString& name, 
+AbstractSequence::AbstractSequence(const QString& name,
         QWidget * parent) :
     QWidget(parent), m_name(name)
 {
@@ -137,7 +137,7 @@ AbstractSequence::AbstractSequence(const QString& name,
     scrollWidget->setLayout(scrollLayout);
     scrollLayout->addLayout(m_layout);
 
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Expanding);
     scrollLayout->addItem(spacer);
 
@@ -158,7 +158,7 @@ AbstractSequence::AbstractSequence(const QString& name,
         hLayout->setMargin(5);
 
         // Spacer
-        QSpacerItem * spacer = new QSpacerItem(40, 20, 
+        QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
         hLayout->addItem(spacer);
 
@@ -166,9 +166,9 @@ AbstractSequence::AbstractSequence(const QString& name,
         m_stBtn = new qt::StartStopButton();
         hLayout->addWidget(m_stBtn);
 
-        connect(m_stBtn, SIGNAL(clicked(bool)), 
+        connect(m_stBtn, SIGNAL(clicked(bool)),
                 this, SLOT(startOrStopAll(bool)));
-        connect(m_stBtn, SIGNAL(toggled(bool)), 
+        connect(m_stBtn, SIGNAL(toggled(bool)),
                 this, SLOT(startOrStopAll(bool)));
 
         layout->addLayout(hLayout);
@@ -211,8 +211,8 @@ void AbstractSequence::removeInstance(ObjectId id)
 {
     const items_t old = m_items;
 
-    for (items_t::const_iterator it = old.begin(); 
-            it != old.end(); it++) 
+    for (items_t::const_iterator it = old.begin();
+            it != old.end(); it++)
     {
         AbstractSequenceItem * ptr = *it;
 
@@ -300,7 +300,7 @@ void AbstractSequence::moveDownItem(AbstractSequenceItem * item)
 
 void AbstractSequence::deleteItem()
 {
-    AbstractSequenceItem * sndObj = 
+    AbstractSequenceItem * sndObj =
         qobject_cast< AbstractSequenceItem * >(sender());
 
     if (sndObj)
@@ -309,7 +309,7 @@ void AbstractSequence::deleteItem()
 
 void AbstractSequence::moveUpItem()
 {
-    AbstractSequenceItem * sndObj = 
+    AbstractSequenceItem * sndObj =
         qobject_cast< AbstractSequenceItem * >(sender());
 
     if (sndObj)
@@ -318,7 +318,7 @@ void AbstractSequence::moveUpItem()
 
 void AbstractSequence::moveDownItem()
 {
-    AbstractSequenceItem * sndObj = 
+    AbstractSequenceItem * sndObj =
         qobject_cast< AbstractSequenceItem * >(sender());
 
     if (sndObj)
@@ -357,11 +357,11 @@ AbstractSequenceTool::AbstractSequenceTool(QWidget * parent) :
     setLayout(layout);
 
     // Signals
-    connect(m_view, 
+    connect(m_view,
             SIGNAL(selectedOperation(Objref_ptr,
                     OperationDescriptor_ptr)),
             this,
-            SLOT(appendAbstractItem(Objref_ptr, 
+            SLOT(appendAbstractItem(Objref_ptr,
                     OperationDescriptor_ptr)));
 
     connect(btNewTab, SIGNAL(clicked()),
@@ -391,19 +391,19 @@ AbstractSequenceTool::AbstractSequenceTool(QWidget * parent) :
     // Current item actions
     m_menuCurrentItem = m_menu->addMenu("Current item");
     m_currentItemActions.push_back(
-            m_menuCurrentItem->addAction("Duplicate", 
+            m_menuCurrentItem->addAction("Duplicate",
                 this, SLOT(duplicateCurrentItem())));
     m_currentItemActions.push_back(
-            m_menuCurrentItem->addAction("Delete", 
+            m_menuCurrentItem->addAction("Delete",
                 this, SLOT(deleteCurrentItem())));
     m_menuCurrentItem->addSeparator();
     m_menuCurrentItemMoveTo = m_menuCurrentItem->addMenu("Move to tab");
     m_menuCurrentItem->addSeparator();
     m_currentItemActions.push_back(
-            m_menuCurrentItem->addAction("Load configuration", 
+            m_menuCurrentItem->addAction("Load configuration",
                 this, SLOT(loadCurrentItem())));
     m_currentItemActions.push_back(
-            m_menuCurrentItem->addAction("Save configuration", 
+            m_menuCurrentItem->addAction("Save configuration",
                 this, SLOT(saveCurrentItem())));
 
     createSequence();
@@ -423,16 +423,16 @@ void AbstractSequenceTool::unregisterInstance(ObjectId id)
 {
     m_model.unregisterInstance(id);
 
-    for (sequences_t::iterator it = m_sequences.begin(); 
-            it != m_sequences.end(); ++it) 
+    for (sequences_t::iterator it = m_sequences.begin();
+            it != m_sequences.end(); ++it)
     {
         (*it)->removeInstance(id);
     }
 }
 
-AbstractSequenceItem * 
+AbstractSequenceItem *
 AbstractSequenceTool::appendAbstractItem(
-        Objref_ptr object, 
+        Objref_ptr object,
 		OperationDescriptor_ptr op)
 {
     if (!object || !op)
@@ -444,7 +444,7 @@ AbstractSequenceTool::appendAbstractItem(
     else
         seq = m_sequences[m_tabs->currentIndex()];
 
-    AbstractSequenceItem * item = 
+    AbstractSequenceItem * item =
         createAbstractItem(object, op);
 
     seq->appendItem(item);
@@ -473,14 +473,14 @@ void AbstractSequenceTool::showContextMenu(const QPoint& pos)
         QWidget * w = childAt(pos);
         m_currentItem = NULL;
 
-        while (w && w != this && 
+        while (w && w != this &&
                 !(m_currentItem = dynamic_cast< AbstractSequenceItem * >(w)))
             w = w->parentWidget();
         // End looking for current item
 
         // Actions enabled only when an item is under the cursor
-        for (QList< QAction * >::iterator it = m_currentItemActions.begin(); 
-                it != m_currentItemActions.end(); ++it) 
+        for (QList< QAction * >::iterator it = m_currentItemActions.begin();
+                it != m_currentItemActions.end(); ++it)
         {
             (*it)->setEnabled(m_currentItem != NULL);
         }
@@ -503,9 +503,9 @@ void AbstractSequenceTool::regenerateMoveTo(int idx)
     connect(m_moveToSignalMapper, SIGNAL(mapped(int)),
             this, SLOT(moveCurrentItemTo(int)));
 
-    for (int i = 0; i < m_sequences.size(); i++) 
+    for (int i = 0; i < m_sequences.size(); i++)
     {
-        QAction * action = 
+        QAction * action =
             m_menuCurrentItemMoveTo->addAction(m_sequences[i]->getName());
 
         connect(action, SIGNAL(triggered()),
@@ -567,7 +567,7 @@ void AbstractSequenceTool::saveCurrentItem()
 {
     if (m_currentItem)
     {
-        QString file = QFileDialog::getSaveFileName( 
+        QString file = QFileDialog::getSaveFileName(
                 0, tr("Select a file"), ".");
 
         // User cancels
@@ -588,7 +588,7 @@ void AbstractSequenceTool::loadCurrentItem()
 {
     if (m_currentItem)
     {
-        const QString file = QFileDialog::getOpenFileName( 
+        const QString file = QFileDialog::getOpenFileName(
                 0, tr("Select a file"), ".");
 
         // User cancels
@@ -620,10 +620,10 @@ void AbstractSequenceTool::duplicateCurrentItem()
         AbstractSequence * seq = m_sequences[idx];
 
         // Creates the new item
-        AbstractSequenceItem * item = 
-            createAbstractItem(m_currentItem->object(), 
+        AbstractSequenceItem * item =
+            createAbstractItem(m_currentItem->object(),
                     m_currentItem->operation());
-        
+
         // Save its settings
         QVariant settings;
         m_currentItem->save(settings);
@@ -665,7 +665,7 @@ void AbstractSequenceTool::moveCurrentItemTo(int idx)
 void AbstractSequenceTool::closeSequence(int idx)
 {
     // QT Documentation
-    // Removes the tab at position index from this stack of widgets. 
+    // Removes the tab at position index from this stack of widgets.
     // The page widget itself is not deleted.
     m_tabs->removeTab(idx);
 
@@ -674,7 +674,7 @@ void AbstractSequenceTool::closeSequence(int idx)
 
 void AbstractSequenceTool::sequenceModified()
 {
-    AbstractSequence * sndObj = 
+    AbstractSequence * sndObj =
         qobject_cast< AbstractSequence * >(sender());
 
     int idx = -1;
@@ -712,8 +712,8 @@ void AbstractSequence::stop()
 
 void AbstractSequenceTool::stop()
 {
-    for (sequences_t::iterator it = m_sequences.begin(); 
-            it != m_sequences.end(); ++it) 
+    for (sequences_t::iterator it = m_sequences.begin();
+            it != m_sequences.end(); ++it)
     {
         (*it)->stop();
     }
@@ -750,8 +750,8 @@ void AbstractSequence::save(QVariant& settings)
 {
     QVariantMap map;
     QVariantList list;
-    
-    for (int i = 0; i < m_items.size(); i++) 
+
+    for (int i = 0; i < m_items.size(); i++)
     {
         QVariant v;
         m_items.at(i)->save(v);
@@ -773,13 +773,13 @@ void AbstractSequence::load(const QVariant& settings)
 void AbstractSequenceTool::save(QVariant& settings)
 {
     QVariantList list;
-    
-    for (sequences_t::iterator it = m_sequences.begin(); 
-            it != m_sequences.end(); ++it) 
+
+    for (sequences_t::iterator it = m_sequences.begin();
+            it != m_sequences.end(); ++it)
     {
         QVariant v;
         (*it)->save(v);
-        list << v;       
+        list << v;
     }
 
     settings = list;
@@ -789,8 +789,8 @@ void AbstractSequenceTool::load(const QVariant& settings)
 {
     // Clear its current configuration
     m_tabs->clear();
-    for (sequences_t::iterator it = m_sequences.begin(); 
-            it != m_sequences.end(); ++it) 
+    for (sequences_t::iterator it = m_sequences.begin();
+            it != m_sequences.end(); ++it)
     {
         delete *it;
     }
@@ -808,17 +808,17 @@ void AbstractSequenceTool::load(const QVariant& settings)
         const QVariantList seqList = seqMap["items"].toList();
 
         for (QVariantList::const_iterator lit = seqList.begin();
-                lit != seqList.end(); lit++) 
+                lit != seqList.end(); lit++)
         {
             const QVariantMap map = lit->toMap();
             const QString obj = map.value("object").toString();
-            const std::string operation = 
+            const std::string operation =
                 map.value("operation").toString().toStdString();
 
             Objref_ptr object = m_model.getInstance(obj);
             OperationDescriptor_ptr op = NULL;
 
-            if (object && 
+            if (object &&
                     (op = object->interface()->get_reflective_by_name(operation.c_str())))
             {
                 appendAbstractItem(object, op)->load(*lit);

@@ -23,9 +23,9 @@
 #include <corbasim/adapted.hpp>
 #include <corbasim/event.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 struct request_processor

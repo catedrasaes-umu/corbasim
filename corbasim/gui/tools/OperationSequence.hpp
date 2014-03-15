@@ -23,14 +23,14 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractSequenceTool.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class OperationInputForm;
 
-class CORBASIM_GUI_DECLSPEC OperationSequenceItem : 
+class CORBASIM_GUI_DECLSPEC OperationSequenceItem :
     public AbstractSequenceItem
 {
     Q_OBJECT
@@ -41,13 +41,13 @@ public:
     virtual ~OperationSequenceItem();
 
 public slots:
-    
+
     void showDetails(bool show);
 
 signals:
 
     /**
-     * @brief Used for sending a request. 
+     * @brief Used for sending a request.
      *
      * Will be connected to an object reference.
      *
@@ -60,8 +60,8 @@ private slots:
 
     void sendClicked();
 
-    void sendStored(); 
-	void startStopChecked(bool = true); 
+    void sendStored();
+	void startStopChecked(bool = true);
     void storeRequest();
     void stopTimer();
 
@@ -86,7 +86,7 @@ protected:
     // End periodic
 };
 
-class CORBASIM_GUI_DECLSPEC OperationSequenceTool : 
+class CORBASIM_GUI_DECLSPEC OperationSequenceTool :
     public AbstractSequenceTool
 {
     Q_OBJECT
@@ -97,7 +97,7 @@ public:
 protected:
 
     AbstractSequenceItem * createAbstractItem(
-            Objref_ptr object, 
+            Objref_ptr object,
             OperationDescriptor_ptr op);
 };
 

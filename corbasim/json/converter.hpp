@@ -25,9 +25,9 @@
 
 #include <sstream>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace json 
+namespace json
 {
 
 /**

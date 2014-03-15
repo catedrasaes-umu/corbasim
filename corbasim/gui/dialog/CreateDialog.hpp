@@ -24,9 +24,9 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ObjrefWidget.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class ObjrefCreateDialog : public QDialog
@@ -43,7 +43,7 @@ public slots:
     void createClicked();
 
 protected slots:
-    
+
     void browse();
 
 signals:
@@ -51,7 +51,7 @@ signals:
     void createObjref(ObjrefConfig);
 
 protected:
-    
+
     void hideEvent(QHideEvent* event);
 
     QLineEdit * m_name;
@@ -68,7 +68,7 @@ class ServantCreateDialog : public QDialog
 public:
     ServantCreateDialog(QWidget * parent = 0);
     virtual ~ServantCreateDialog();
-    
+
     void setFQNModel(QAbstractItemModel * model);
 
 public slots:
@@ -76,7 +76,7 @@ public slots:
     void createClicked();
 
 protected slots:
-    
+
     void browse();
 
 signals:

@@ -51,7 +51,7 @@ Plot::Plot(QWidget *parent):
     setAxisTitle(xBottom, "Sample");
     setAxisTitle(yLeft, "Value");
 
-    setAxisScale(yLeft, std::numeric_limits< short >::min(), 
+    setAxisScale(yLeft, std::numeric_limits< short >::min(),
             std::numeric_limits< short >::max());
 
     // canvas
@@ -60,7 +60,7 @@ Plot::Plot(QWidget *parent):
     canvas()->setBorderRadius(15);
 
     QPalette canvasPalette(Qt::white);
-    canvasPalette.setColor( 
+    canvasPalette.setColor(
             QPalette::Foreground, QColor(133, 190, 232));
     canvas()->setPalette(canvasPalette);
 
@@ -77,7 +77,7 @@ void Plot::populate()
     curve->setLegendAttribute(QwtPlotCurve::LegendShowLine, true);
     curve->setPen(QPen(Qt::red));
     curve->attach(this);
-    
+
     setAxisScale(xBottom,
         m_interval.minValue(), m_interval.maxValue());
 

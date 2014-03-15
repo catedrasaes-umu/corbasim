@@ -23,9 +23,9 @@
 #include <corbasim/gui/tools/AbstractTool.hpp>
 #include <corbasim/gui/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC RecorderTool : public AbstractTool

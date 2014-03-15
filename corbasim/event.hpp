@@ -23,9 +23,9 @@
 #include <corbasim/event_fwd.hpp>
 #include <corbasim/adapted.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace event 
+namespace event
 {
 
 template< typename Value >
@@ -46,7 +46,7 @@ struct request_impl : public request
     {
         return tag< Value >::value();
     }
-    
+
     const char * get_name() const
     {
         return adapted::name< Value >::call();
@@ -66,7 +66,7 @@ struct response_impl : public response
         m_values(values)
     {
     }
-    
+
     tag_t get_tag() const
     {
         return tag< Value >::value();

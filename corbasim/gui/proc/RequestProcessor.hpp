@@ -25,9 +25,9 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class RequestProcessor;
@@ -40,7 +40,7 @@ public:
 
     virtual ~RequestProcessor();
 
-    virtual void process(Request_ptr req, 
+    virtual void process(Request_ptr req,
             TypeDescriptor_ptr ref,
             Holder hold) = 0;
 

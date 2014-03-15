@@ -85,7 +85,7 @@ class json_writer
     std::deque<state_struct> state_stack;
 
 public:
-    json_writer (Ostream& o, bool indent = false) : 
+    json_writer (Ostream& o, bool indent = false) :
         o_ (o), indent_(indent), level_(0)
     {
         state_struct ss = { BEGIN, false };

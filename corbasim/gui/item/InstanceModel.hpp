@@ -14,31 +14,31 @@ namespace corbasim
 namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC InstanceModel : 
+class CORBASIM_GUI_DECLSPEC InstanceModel :
     public QAbstractItemModel
 {
     Q_OBJECT
 /*
-    Q_PROPERTY(bool checkable 
+    Q_PROPERTY(bool checkable
             READ isCheckable
             WRITE setCheckable)
  */
-    Q_PROPERTY(bool displayOperations 
+    Q_PROPERTY(bool displayOperations
             READ displayOperations
             WRITE setDisplayOperations)
-    Q_PROPERTY(bool displayParameters 
+    Q_PROPERTY(bool displayParameters
             READ displayParameters
             WRITE setDisplayParameters)
-    Q_PROPERTY(bool maxLevel 
+    Q_PROPERTY(bool maxLevel
             READ maxLevel
             WRITE setMaxLevel)
 public:
     InstanceModel(QObject *parent = 0);
     virtual ~InstanceModel();
 
-    QVariant data(const QModelIndex& index, 
-            int role) const; 
-    bool setData(const QModelIndex & index, 
+    QVariant data(const QModelIndex& index,
+            int role) const;
+    bool setData(const QModelIndex & index,
             const QVariant& value, int role);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -80,11 +80,11 @@ public slots:
 
 signals:
 
-    void checked(const QString& id, 
+    void checked(const QString& id,
             InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 
-    void unchecked(const QString& id, 
+    void unchecked(const QString& id,
             InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 

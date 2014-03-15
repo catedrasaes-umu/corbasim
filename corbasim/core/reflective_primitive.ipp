@@ -20,15 +20,15 @@
 #include "reflective.hpp"
 
 // Boolean
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
-namespace detail 
+namespace detail
 {
 
 template< typename T >
-bool_reflective< T >::bool_reflective(reflective_base const * parent, 
+bool_reflective< T >::bool_reflective(reflective_base const * parent,
         unsigned int idx) :
     reflective_base(parent, idx)
 {
@@ -65,16 +65,16 @@ holder primitive_reflective< T >::create_holder() const
 
 template< typename T >
 primitive_reflective< T >::primitive_reflective(
-        reflective_base const * parent, 
+        reflective_base const * parent,
         unsigned int idx) :
     reflective_base(parent, idx)
 {
 }
 
 template< typename T >
-bool primitive_reflective< T >::is_primitive() const 
-{ 
-    return true; 
+bool primitive_reflective< T >::is_primitive() const
+{
+    return true;
 }
 
 template< typename T >

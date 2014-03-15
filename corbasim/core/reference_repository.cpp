@@ -26,7 +26,7 @@ using namespace corbasim::core;
 
 reference_repository * reference_repository::get_instance()
 {
-    static boost::shared_ptr< reference_repository > 
+    static boost::shared_ptr< reference_repository >
         _instance(new reference_repository);
     return _instance.get();
 }
@@ -38,7 +38,7 @@ void reference_repository::load_file(const std::string& file)
 
     try {
         std::ifstream is(file.c_str());
-   
+
         // get length of file:
         is.seekg (0, std::ios::end);
         length = is.tellg();
@@ -59,14 +59,14 @@ void reference_repository::load_file(const std::string& file)
 void reference_repository::update()
 {
     entries_t::const_iterator end;
-    for (entries_t::const_iterator it = m_entries.begin(); 
-            it != end; ++it) 
+    for (entries_t::const_iterator it = m_entries.begin();
+            it != end; ++it)
     {
         CORBA::Object_var obj = update_entry(it->first);
     }
 }
 
-CORBA::Object_ptr 
+CORBA::Object_ptr
 reference_repository::get_reference(const std::string& name)
 {
     entries_t::const_iterator it = m_entries.find(name);
@@ -90,7 +90,7 @@ CosNaming::NamingContextExt_ptr reference_repository::get_name_service()
     {
         try {
             // get the name service reference
-            CORBA::Object_var obj = 
+            CORBA::Object_var obj =
                 m_orb->resolve_initial_references("NameService");
 
             m_nc = CosNaming::NamingContextExt::_narrow(obj);
@@ -103,13 +103,13 @@ CosNaming::NamingContextExt_ptr reference_repository::get_name_service()
     return m_nc;
 }
 
-CORBA::Object_ptr 
+CORBA::Object_ptr
 reference_repository::update_entry(const std::string& name)
 {
     if (CORBA::is_nil(get_name_service()))
         return CORBA::Object::_nil();
 
-    loaded_entries_t::const_iterator it = 
+    loaded_entries_t::const_iterator it =
         m_loaded_entries.find(name);
 
     if (it != m_loaded_entries.end())
@@ -120,7 +120,7 @@ reference_repository::update_entry(const std::string& name)
            m_entries.insert(std::make_pair(name, obj));
 
             return CORBA::Object::_duplicate(obj);
-        } catch (...) 
+        } catch (...)
         {
         }
     }
@@ -128,7 +128,7 @@ reference_repository::update_entry(const std::string& name)
     return CORBA::Object::_nil();
 }
 
-CORBA::Object_ptr 
+CORBA::Object_ptr
 reference_repository::resolve(const CosNaming::Name& name)
 {
     if (!CORBA::is_nil(get_name_service()))
@@ -137,7 +137,7 @@ reference_repository::resolve(const CosNaming::Name& name)
     return CORBA::Object::_nil();
 }
 
-CORBA::Object_ptr 
+CORBA::Object_ptr
 reference_repository::resolve_str(const std::string& name)
 {
     if (!CORBA::is_nil(get_name_service()))
@@ -146,7 +146,7 @@ reference_repository::resolve_str(const std::string& name)
     return CORBA::Object::_nil();
 }
 
-CORBA::Object_ptr 
+CORBA::Object_ptr
 reference_repository::string_to_object(const std::string& str)
 {
     return m_orb->string_to_object(str.c_str());

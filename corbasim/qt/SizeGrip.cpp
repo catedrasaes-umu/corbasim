@@ -73,7 +73,7 @@ void SizeGrip::paintEvent(QPaintEvent * paintEvent)
     painter.setBrush(Qt::red);
     painter.drawRect(0, 0, width(), height());
     */
-   
+
     QStyleOption opt;
     opt.rect = QRect(0, 0, width(), height());
     style()->drawControl(QStyle::CE_Splitter, &opt, &painter);

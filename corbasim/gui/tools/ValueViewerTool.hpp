@@ -25,9 +25,9 @@
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC ValueViewer : public AbstractInputItem
@@ -37,7 +37,7 @@ public:
 
     ValueViewer(Objref_ptr objref,
             OperationDescriptor_ptr reflective,
-            const QList< int >& path, 
+            const QList< int >& path,
             QWidget * parent = 0);
     virtual ~ValueViewer();
 
@@ -48,7 +48,7 @@ public:
 
 public slots:
 
-    void appendValue(Request_ptr, 
+    void appendValue(Request_ptr,
             TypeDescriptor_ptr,
             Holder);
 
@@ -69,7 +69,7 @@ public:
 protected:
 
     AbstractInputItem * createItem(
-            Objref_ptr objref, 
+            Objref_ptr objref,
             OperationDescriptor_ptr reflective,
             const QList< int >& path);
 

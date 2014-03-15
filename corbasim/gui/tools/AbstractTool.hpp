@@ -24,9 +24,9 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 /**
@@ -81,14 +81,14 @@ public slots:
     virtual void registerInstance(Objref_ptr object) = 0;
 
     /**
-     * @brief Unregister an instance from this tool. 
+     * @brief Unregister an instance from this tool.
      *
      * @param id The instance identifier.
      */
     virtual void unregisterInstance(ObjectId id) = 0;
 
     /**
-     * @brief Stop the tool. Reimplement if required. 
+     * @brief Stop the tool. Reimplement if required.
      */
     virtual void stop();
 };

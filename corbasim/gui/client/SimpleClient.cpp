@@ -45,7 +45,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     // Menu
     m_menu = new QMenuBar;
     setMenuBar(m_menu);
-   
+
     // Menu File
     QMenu * menuFile = m_menu->addMenu("&File");
     QMenu * editMenu = m_menu->addMenu("&Edit");
@@ -85,7 +85,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
     opsLayout->addWidget(m_tab);
     gb->setLayout(opsLayout);
     m_mainSplitter->addWidget(gb);
-    
+
     // Events
     gb = new QGroupBox("Events");
     act = menuWindow->addAction("&Events");
@@ -116,7 +116,7 @@ SimpleClient::SimpleClient(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load configuration", this);
     loadAction->setShortcut(QKeySequence::Open);
-    connect(loadAction, SIGNAL(triggered()), 
+    connect(loadAction, SIGNAL(triggered()),
             this, SLOT(doLoad()));
 
     // Save
@@ -124,41 +124,41 @@ SimpleClient::SimpleClient(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save configuration", this);
     saveAction->setShortcut(QKeySequence::SaveAs);
-    connect(saveAction, SIGNAL(triggered()), 
+    connect(saveAction, SIGNAL(triggered()),
             this, SLOT(doSave()));
 
     menuFile->addAction(loadAction);
     menuFile->addAction(saveAction);
     menuFile->addSeparator();
     menuFile->addAction("&Script editor", this, SLOT(showScriptEditor()));
-    menuFile->addAction("&Operation sequence", this, 
+    menuFile->addAction("&Operation sequence", this,
             SLOT(showOperationSequenceTool()));
     menuFile->addAction("&Filtered log", filteredLogDlg, SLOT(show()));
     menuFile->addSeparator();
     menuFile->addAction("&Close", this, SLOT(close()));
 
     // Actions
-    QAction * pasteAction = new QAction("Paste &IOR from clipboard", 
+    QAction * pasteAction = new QAction("Paste &IOR from clipboard",
             this);
     pasteAction->setShortcut(QKeySequence::Paste);
-    connect(pasteAction, SIGNAL(triggered()), 
+    connect(pasteAction, SIGNAL(triggered()),
             this, SLOT(pasteIOR()));
 
     QAction * clearAction = new QAction("&Clear",
             this);
     clearAction->setShortcut(QKeySequence::Cut);
-    connect(clearAction, SIGNAL(triggered()), 
+    connect(clearAction, SIGNAL(triggered()),
             this, SLOT(clearAll()));
 
     QAction * clearLogAction = new QAction("&Clear log",
             this);
-    connect(clearLogAction, SIGNAL(triggered()), 
+    connect(clearLogAction, SIGNAL(triggered()),
             &m_log_model, SLOT(clearLog()));
 
     QAction * stopAction = new QAction("&Stop all timers",
             this);
     // stopAction->setShortcut(QKeySequence::Cut);
-    connect(stopAction, SIGNAL(triggered()), 
+    connect(stopAction, SIGNAL(triggered()),
             this, SLOT(stopAllTimers()));
 
     editMenu->addAction(pasteAction);
@@ -169,10 +169,10 @@ SimpleClient::SimpleClient(QWidget * parent) :
     central->setLayout(layout);
     setCentralWidget(central);
 
-    connect(&m_buttons, SIGNAL(buttonClicked(int)), 
+    connect(&m_buttons, SIGNAL(buttonClicked(int)),
             this, SLOT(showDialog(int)));
 
-    connect(&m_actions, SIGNAL(triggered(QAction *)), 
+    connect(&m_actions, SIGNAL(triggered(QAction *)),
             this, SLOT(showDialog(QAction *)));
 
     setWindowIcon(QIcon(":/resources/images/csu.png"));
@@ -189,7 +189,7 @@ void SimpleClient::pasteIOR()
 
 void SimpleClient::stopAllTimers()
 {
-    for (size_t i = 0; i < m_dialogs.size(); i++) 
+    for (size_t i = 0; i < m_dialogs.size(); i++)
         if (m_dialogs[i])
             m_dialogs[i]->stopTimer();
 }
@@ -209,9 +209,9 @@ void SimpleClient::initialize(Objref_ptr objref)
 
     m_log_model.registerInstance(m_objref);
 
-    connect(m_objref.get(), 
+    connect(m_objref.get(),
             SIGNAL(requestSent(ObjectId, const Request_ptr&, const Event_ptr&)),
-            &m_log_model, 
+            &m_log_model,
             SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 
     m_filteredLog->registerInstance(m_objref);
@@ -226,11 +226,11 @@ void SimpleClient::initialize(Objref_ptr objref)
     // Inicializa los dialogos a nulo
     m_dialogs.resize(count, NULL);
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         const unsigned int idx = i % _max_btns_per_page;
 
-        OperationDescriptor_ptr op = 
+        OperationDescriptor_ptr op =
             factory->get_reflective_by_index(i);
 
         const char * name = op->get_name();
@@ -243,7 +243,7 @@ void SimpleClient::initialize(Objref_ptr objref)
 
             // TODO Page + number or from... to...
             QString page("From ");
-            page += name; 
+            page += name;
             m_tab->addTab(w, page);
         }
 
@@ -280,7 +280,7 @@ corbasim::gui::RequestDialog * SimpleClient::getRequestDialog(int idx)
 
     if (!dlg)
     {
-        OperationDescriptor_ptr op = 
+        OperationDescriptor_ptr op =
             m_objref->interface()->get_reflective_by_index(idx);
         const char * name = op->get_name();
 
@@ -289,7 +289,7 @@ corbasim::gui::RequestDialog * SimpleClient::getRequestDialog(int idx)
 
         connect(dlg,
             SIGNAL(sendRequest(Request_ptr)),
-            this, 
+            this,
             SIGNAL(sendRequest(Request_ptr)));
 
         m_dialogs[idx] = dlg;
@@ -308,7 +308,7 @@ void SimpleClient::showScriptEditor()
         // Send Request
         connect(m_script_editor,
                 SIGNAL(sendRequest(Request_ptr)),
-                this, 
+                this,
                 SIGNAL(sendRequest(Request_ptr)));
     }
     m_script_editor->show();
@@ -322,8 +322,8 @@ void SimpleClient::load(const QVariant& settings)
     {
         const QVariantList list = map.value("dialogs").toList();
 
-        for (QVariantList::const_iterator it = list.begin(); 
-                it != list.end(); ++it) 
+        for (QVariantList::const_iterator it = list.begin();
+                it != list.end(); ++it)
         {
             const QVariantMap map = it->toMap();
             const QString operation = map["operation"].toString();
@@ -332,12 +332,12 @@ void SimpleClient::load(const QVariant& settings)
             {
                 // find the index
                 unsigned int i = 0;
-                const unsigned int count = 
-                    m_objref->interface()->operation_count(); 
+                const unsigned int count =
+                    m_objref->interface()->operation_count();
 
-                for (; i < count; i++) 
+                for (; i < count; i++)
                 {
-                    const char * current = 
+                    const char * current =
                             m_objref->interface()->get_reflective_by_index(
                                     i)->get_name();
 
@@ -372,7 +372,7 @@ void SimpleClient::save(QVariant& settings)
     QVariantMap map;
     QVariantList list;
 
-    for (unsigned int i = 0; i < m_dialogs.size(); i++) 
+    for (unsigned int i = 0; i < m_dialogs.size(); i++)
     {
         if (m_dialogs[i])
         {
@@ -396,7 +396,7 @@ void SimpleClient::save(QVariant& settings)
 }
 
 // Settings
-void SimpleClient::doLoad() 
+void SimpleClient::doLoad()
 {
     const QString file = QFileDialog::getOpenFileName( 0, tr(
                 "Select some files"), ".");
@@ -408,7 +408,7 @@ void SimpleClient::doLoad()
     QVariant var;
 
     // Try to Read a JSON file
-    bool res = 
+    bool res =
         gui::fromJsonFile(file.toStdString().c_str(), var);
 
     if (res)
@@ -421,7 +421,7 @@ void SimpleClient::doLoad()
     }
 }
 
-void SimpleClient::doSave() 
+void SimpleClient::doSave()
 {
     QString file = QFileDialog::getSaveFileName( 0, tr(
                 "Select a file"), ".");
@@ -453,7 +453,7 @@ void SimpleClient::resizeEvent(QResizeEvent * event)
         {
             int min = m_mainSplitter->widget(i)->sizeHint().height();
             // int min = m_mainSplitter->widget(i)->minimumHeight();
-            available -= min; 
+            available -= min;
             sizes.replace(i, min);
         }
 
@@ -470,7 +470,7 @@ void SimpleClient::showOperationSequenceTool()
         layout->setMargin(0);
         m_dlgSeqTool = new QDialog(this);
         m_seqTool = new gui::OperationSequenceTool();
-        
+
         layout->addWidget(m_seqTool);
         m_dlgSeqTool->setLayout(layout);
 

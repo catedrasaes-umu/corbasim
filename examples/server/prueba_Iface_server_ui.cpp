@@ -17,23 +17,23 @@ public:
 	{
 	}
 
-	
+
 	void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
 	{
 		_corbasim_prueba::Iface::operation _val(a, fs);
-		
+
 		/*PROTECTED REGION ID(prueba_Iface_server_ui::prueba_Iface_operation) ENABLED START*/
         std::cout << __FUNCTION__  << std::endl;
 		/*PROTECTED REGION END*/
 
 	}
-	
+
 
     /*PROTECTED REGION ID(prueba_Iface_server_ui::___body) ENABLED START*/
     /*PROTECTED REGION END*/
 
 protected:
-	
+
 	::corbasim::gui::ServerApp& m_app;
 };
 
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
     app.setClient("prueba::Iface", "prueba9", myRef);
     app.setClient("prueba::Iface", "prueba10", myRef);
     /*PROTECTED REGION END*/
-   
+
     return app.exec();
 }
 

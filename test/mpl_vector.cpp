@@ -2,7 +2,7 @@
 #include <corbasim/mpl/vector.hpp>
 #include <corbasim/mpl/for_each.hpp>
 
-struct tmp 
+struct tmp
 {
     template< typename Val >
     void operator()(const Val& v)
@@ -31,4 +31,4 @@ int main(int argc, const char *argv[])
     tmp t;
     corbasim::cs_mpl::for_each< v6_type >(tmp());
     return 0;
-} 
+}

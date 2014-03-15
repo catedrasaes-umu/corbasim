@@ -24,9 +24,9 @@
 #include <istream>
 #include <corbasim/core/reflective_fwd.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 enum file_format
@@ -60,13 +60,13 @@ public:
 
     virtual ~file_format_helper();
 
-    virtual bool load(std::istream& is, 
-            reflective_base const * reflective, 
-            holder h) const = 0; 
+    virtual bool load(std::istream& is,
+            reflective_base const * reflective,
+            holder h) const = 0;
 
-    virtual bool save(std::ostream& os, 
-            reflective_base const * reflective, 
-            holder h) const = 0; 
+    virtual bool save(std::ostream& os,
+            reflective_base const * reflective,
+            holder h) const = 0;
 
 protected:
 
@@ -79,13 +79,13 @@ public:
 
     virtual ~json_file_format_helper();
 
-    bool load(std::istream& is, 
-            reflective_base const * reflective, 
-            holder h) const; 
+    bool load(std::istream& is,
+            reflective_base const * reflective,
+            holder h) const;
 
-    bool save(std::ostream& os, 
-            reflective_base const * reflective, 
-            holder h) const; 
+    bool save(std::ostream& os,
+            reflective_base const * reflective,
+            holder h) const;
 
     static const json_file_format_helper* get_instance();
 
@@ -100,13 +100,13 @@ public:
 
     virtual ~text_file_format_helper();
 
-    bool load(std::istream& is, 
-            reflective_base const * reflective, 
-            holder h) const; 
+    bool load(std::istream& is,
+            reflective_base const * reflective,
+            holder h) const;
 
-    bool save(std::ostream& os, 
-            reflective_base const * reflective, 
-            holder h) const; 
+    bool save(std::ostream& os,
+            reflective_base const * reflective,
+            holder h) const;
 
     static const text_file_format_helper* get_instance();
 
@@ -115,33 +115,33 @@ protected:
     text_file_format_helper();
 };
 
-class binary_file_format_helper : public file_format_helper  
+class binary_file_format_helper : public file_format_helper
 {
 public:
 
     virtual ~binary_file_format_helper();
 
-    bool load(std::istream& is, 
-            reflective_base const * reflective, 
-            holder h) const; 
+    bool load(std::istream& is,
+            reflective_base const * reflective,
+            holder h) const;
 
-    bool save(std::ostream& os, 
-            reflective_base const * reflective, 
-            holder h) const; 
+    bool save(std::ostream& os,
+            reflective_base const * reflective,
+            holder h) const;
 
     static const binary_file_format_helper* get_instance();
 
 protected:
 
-    bool load(std::istream& is, 
-            reflective_base const * reflective, 
+    bool load(std::istream& is,
+            reflective_base const * reflective,
             holder h,
-            unsigned int level) const; 
+            unsigned int level) const;
 
-    bool save(std::ostream& os, 
-            reflective_base const * reflective, 
-            holder h, 
-            unsigned int level) const; 
+    bool save(std::ostream& os,
+            reflective_base const * reflective,
+            holder h,
+            unsigned int level) const;
 
     binary_file_format_helper();
 };

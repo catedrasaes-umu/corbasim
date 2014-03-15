@@ -28,20 +28,20 @@ RequestProcessor::RequestProcessor(Objref_ptr object,
     m_object(object), m_path(path)
 {
     // Operation index
-    const unsigned int idx = 
+    const unsigned int idx =
         (unsigned int) m_path.front();
 
     const InterfaceDescriptor_ptr iface =
         m_object->interface();
 
-    m_operation = 
+    m_operation =
         iface->get_reflective_by_index(idx);
 
     m_descriptor =
         followPath(m_operation, m_path);
 }
 
-RequestProcessor::~RequestProcessor() 
+RequestProcessor::~RequestProcessor()
 {
 }
 

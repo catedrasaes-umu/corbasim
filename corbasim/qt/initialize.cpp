@@ -27,7 +27,7 @@
 
 #include <cassert>
 
-namespace  
+namespace
 {
 
 class Initializer
@@ -47,10 +47,10 @@ public:
         {
             using namespace ::corbasim::core;
 
-            file_format_factory const * fff = 
+            file_format_factory const * fff =
                 file_format_factory::get_instance();
 
-            for (int i = 0; i < FILE_FORMAT_MAX; ++i) 
+            for (int i = 0; i < FILE_FORMAT_MAX; ++i)
             {
                 fff->get_helper(static_cast< file_format >(i));
             }

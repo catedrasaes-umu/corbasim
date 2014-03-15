@@ -22,11 +22,11 @@
 
 #include <QtGui>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
-namespace priv 
+namespace priv
 {
 
 class MultiScriptEditor : public QMainWindow

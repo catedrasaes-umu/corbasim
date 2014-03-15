@@ -23,9 +23,9 @@
 #include <QtGui>
 #include <corbasim/qt/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 
 class CORBASIM_QT_DECLSPEC SizeGrip : public QWidget
@@ -42,7 +42,7 @@ protected:
     void mouseMoveEvent(QMouseEvent * event);
     void mousePressEvent(QMouseEvent * event);
     void mouseReleaseEvent(QMouseEvent * mouseEvent);
-    
+
     void paintEvent(QPaintEvent * paintEvent);
 
     bool m_resizing;

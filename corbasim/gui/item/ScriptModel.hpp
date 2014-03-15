@@ -28,12 +28,12 @@
 #include <corbasim/gui/item/ModelNode.hpp>
 #include <corbasim/gui/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
 namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC ScriptModel : 
+class CORBASIM_GUI_DECLSPEC ScriptModel :
     public QAbstractItemModel
 {
     Q_OBJECT
@@ -41,9 +41,9 @@ public:
     ScriptModel(QObject * parent = 0);
     virtual ~ScriptModel();
 
-    QVariant data(const QModelIndex& index, 
-            int role = Qt::DisplayRole) const; 
-    bool setData(const QModelIndex & index, 
+    QVariant data(const QModelIndex& index,
+            int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex & index,
             const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;

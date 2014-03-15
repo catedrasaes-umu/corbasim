@@ -25,14 +25,14 @@
 #include <corbasim/gui/Model.hpp>
 #include <QtGui>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 class Status;
 } // namespace qt
 
-namespace gui 
+namespace gui
 {
 
 class StatusViewItem : public QWidget
@@ -67,7 +67,7 @@ public slots:
 protected:
 
     void reallocate(int width);
-    
+
     void resizeEvent(QResizeEvent * event);
 
     typedef QMap< ObjectId, StatusViewItem * > items_t;

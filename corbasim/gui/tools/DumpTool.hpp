@@ -25,9 +25,9 @@
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC Dumper : public AbstractInputItem
@@ -37,7 +37,7 @@ public:
 
     Dumper(Objref_ptr objref,
             OperationDescriptor_ptr reflective,
-            const QList< int >& path, 
+            const QList< int >& path,
             QWidget * parent = 0);
     virtual ~Dumper();
 
@@ -74,7 +74,7 @@ public:
 protected:
 
     AbstractInputItem * createItem(
-            Objref_ptr objref, 
+            Objref_ptr objref,
             OperationDescriptor_ptr reflective,
             const QList< int >& path);
 

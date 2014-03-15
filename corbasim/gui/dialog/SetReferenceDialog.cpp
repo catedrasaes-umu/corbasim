@@ -38,7 +38,7 @@ SetReferenceDialog::SetReferenceDialog(QWidget * parent) :
         m_reference->setObjectName("reference");
         groupLayout->addWidget(m_reference);
         group->setLayout(groupLayout);
-        
+
         grid->addWidget(group, 1, 0, 1, 2);
     }
 
@@ -46,11 +46,11 @@ SetReferenceDialog::SetReferenceDialog(QWidget * parent) :
 
     // Buttons
     QDialogButtonBox * btns = new QDialogButtonBox();
-    QPushButton * pasteButton = 
+    QPushButton * pasteButton =
         btns->addButton("&Paste IOR from clipboard", QDialogButtonBox::ActionRole);
-    QPushButton * createButton = 
+    QPushButton * createButton =
         btns->addButton("&Apply", QDialogButtonBox::AcceptRole);
-    QPushButton * cancelButton = 
+    QPushButton * cancelButton =
         btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
     layout->addWidget(btns);
 

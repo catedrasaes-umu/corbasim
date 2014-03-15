@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 {
     if (argc < 2)
     {
-        std::cerr << "You must specify an interface full qualified name" 
+        std::cerr << "You must specify an interface full qualified name"
             << std::endl;
         return -1;
     }
@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     // Required by evaluator
     corbasim::gui::Application application;
 
-    corbasim::core::interface_reflective_base const * reflective = 
+    corbasim::core::interface_reflective_base const * reflective =
         corbasim::gui::getReflectiveByFQN(argv[1]);
 
     if (!reflective)

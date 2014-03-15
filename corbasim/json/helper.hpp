@@ -30,11 +30,11 @@
 #include <corbasim/adapted.hpp>
 #include <corbasim/core/reference_repository.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace json 
+namespace json
 {
-namespace helper 
+namespace helper
 {
 
 struct helper_base;
@@ -88,7 +88,7 @@ struct helper_base
     }
 };
 
-namespace detail 
+namespace detail
 {
 
 template< typename T >
@@ -161,7 +161,7 @@ struct helper_factory_impl : public helper_factory< S >
     }
 };
 
-namespace iterator 
+namespace iterator
 {
 // Iteracion sobre una estructura
 template < typename S, typename N >
@@ -179,7 +179,7 @@ struct StructImpl
         // Helper factory del campo actual
         typedef helper_factory_impl< S, N > factory_t;
 
-        map.insert(std::make_pair(name_t::call(), 
+        map.insert(std::make_pair(name_t::call(),
                     factory_t::get_instance()));
 
         // Siguiente iteracion
@@ -191,7 +191,7 @@ struct StructImpl
     {
         w.new_string(name_t::call());
         helper_write(w, boost::fusion::at< N >(t));
-        
+
         // Siguiente iteracion
         StructImpl < S, next_t >::write(w, t);
     }
@@ -328,13 +328,13 @@ struct array_helper : public helper_base
 
         return create_helper(_t[_index++]);
     }
-    
+
     template< typename Writer >
     static inline void write(Writer& w, const T& t)
     {
         w.array_start();
 
-        for (size_t i = 0; i < size; i++) 
+        for (size_t i = 0; i < size; i++)
             helper_write(w, t[i]);
 
         w.array_end();
@@ -365,7 +365,7 @@ struct corbaseq_helper : public helper_base
         w.array_start();
 
         size_t size = t.length();
-        for (size_t i = 0; i < size; i++) 
+        for (size_t i = 0; i < size; i++)
             helper_write(w, t[i]);
 
         w.array_end();
@@ -390,7 +390,7 @@ struct corbaseq_string_helper : public helper_base
     {
         _t.length(0);
     }
-    
+
     ~corbaseq_string_helper()
     {
         if (!(_index == 0))
@@ -412,7 +412,7 @@ struct corbaseq_string_helper : public helper_base
         w.array_start();
 
         size_t size = t.length();
-        for (size_t i = 0; i < size; i++) 
+        for (size_t i = 0; i < size; i++)
         {
             // TODO try to avoid this copy
             slice_type sl = t[i].in();
@@ -449,17 +449,17 @@ struct corba_objrefvar_helper : public helper_base
 {
     T& _t;
 
-    typedef typename 
+    typedef typename
         corbasim::adapted::is_objrefvar< T >::interface interface;
 
     corba_objrefvar_helper(T& t) :
         _t(t)
     {
     }
-    
+
     void new_string(const std::string& d)
     {
-        corbasim::core::reference_repository * rr = 
+        corbasim::core::reference_repository * rr =
             corbasim::core::reference_repository::get_instance();
         try {
             _t = interface::_narrow(rr->string_to_object(d));
@@ -478,7 +478,7 @@ struct corba_objrefvar_helper : public helper_base
     {
         if (t.in())
         {
-            corbasim::core::reference_repository * rr = 
+            corbasim::core::reference_repository * rr =
                 corbasim::core::reference_repository::get_instance();
 
             CORBA::String_var str = rr->object_to_string(t.in());
@@ -539,7 +539,7 @@ struct stl_map_helper : public helper_base
         w.object_start();
 
         iterator_t end = t.end();
-        for (iterator_t it = t.begin(); it != end; it++) 
+        for (iterator_t it = t.begin(); it != end; it++)
         {
             w.new_string(it->first.c_str());
             helper_write(w, it->second);
@@ -565,7 +565,7 @@ struct stl_pushbackable_helper : public helper_base
         _t.push_back(value_type());
         return create_helper(_t.back());
     }
-    
+
     template< typename Writer >
     static inline void write(Writer& w, const T& t)
     {
@@ -573,7 +573,7 @@ struct stl_pushbackable_helper : public helper_base
 
         typedef typename T::const_iterator iterator_t;
         iterator_t end = t.end();
-        for (iterator_t it = t.begin(); it != end; it++) 
+        for (iterator_t it = t.begin(); it != end; it++)
         {
             helper_write(w, *it);
         }
@@ -585,35 +585,35 @@ struct stl_pushbackable_helper : public helper_base
 template< typename T >
 struct calculate_helper
 {
-    typedef typename 
+    typedef typename
         // if
         cs_mpl::eval_if_identity< cs_mpl::is_bool< T >, bool_helper,
         // else if
-        cs_mpl::eval_if_identity< boost::is_arithmetic< T >, 
+        cs_mpl::eval_if_identity< boost::is_arithmetic< T >,
             arithmetic_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< boost::is_array< T >, 
+        cs_mpl::eval_if_identity< boost::is_array< T >,
             array_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< boost::is_enum< T >, 
+        cs_mpl::eval_if_identity< boost::is_enum< T >,
             enum_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< cs_mpl::is_string< T >, 
+        cs_mpl::eval_if_identity< cs_mpl::is_string< T >,
             string_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< adapted::is_corbaseq_string< T >, 
+        cs_mpl::eval_if_identity< adapted::is_corbaseq_string< T >,
             corbaseq_string_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< adapted::is_corbaseq< T >, 
+        cs_mpl::eval_if_identity< adapted::is_corbaseq< T >,
             corbaseq_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< adapted::is_union< T >, 
+        cs_mpl::eval_if_identity< adapted::is_union< T >,
             unsupported_type_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< cs_mpl::is_struct< T >, 
+        cs_mpl::eval_if_identity< cs_mpl::is_struct< T >,
             struct_helper< T >,
         // else if
-        cs_mpl::eval_if_identity< adapted::is_objrefvar< T >, 
+        cs_mpl::eval_if_identity< adapted::is_objrefvar< T >,
             corba_objrefvar_helper< T >,
         // else
             boost::mpl::identity< unsupported_type_helper< T > >

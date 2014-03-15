@@ -20,9 +20,9 @@
 #include "reflective.hpp"
 #include "reflective_primitive.ipp"
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 template CORBASIM_CORE_DECLSPEC CORBA::Boolean& holder::to_value< CORBA::Boolean >();
@@ -43,7 +43,7 @@ template CORBASIM_CORE_DECLSPEC CORBA::ULongLong& holder::to_value< CORBA::ULong
 template CORBASIM_CORE_DECLSPEC CORBA::Float& holder::to_value< CORBA::Float >();
 template CORBASIM_CORE_DECLSPEC CORBA::Double& holder::to_value< CORBA::Double >();
 
-namespace detail 
+namespace detail
 {
 
 template class CORBASIM_CORE_DECLSPEC bool_reflective< CORBA::Boolean >;
@@ -98,7 +98,7 @@ holder& holder::operator=(const holder& o)
 // Reflective base
 
 reflective_base::reflective_base(reflective_base const * parent,
-        unsigned int child_index) : 
+        unsigned int child_index) :
     m_parent(parent), m_child_index(child_index)
 {
 }
@@ -112,23 +112,23 @@ const char * reflective_base::get_type_name() const
     return "undefined";
 }
 
-reflective_base const * reflective_base::get_parent() const 
-{ 
-    return m_parent; 
+reflective_base const * reflective_base::get_parent() const
+{
+    return m_parent;
 }
 
-unsigned int reflective_base::get_child_index() const 
-{ 
-    return m_child_index; 
+unsigned int reflective_base::get_child_index() const
+{
+    return m_child_index;
 }
 
-unsigned int reflective_base::get_children_count() const 
-{ 
-    return 0; 
+unsigned int reflective_base::get_children_count() const
+{
+    return 0;
 }
 
-const char * reflective_base::get_child_name(unsigned int idx) const 
-{ 
+const char * reflective_base::get_child_name(unsigned int idx) const
+{
     return 0;
 }
 
@@ -168,13 +168,13 @@ void reflective_base::set_length(holder& value, unsigned int length) const
 {
 }
 
-holder reflective_base::get_child_value(holder& value, 
+holder reflective_base::get_child_value(holder& value,
     unsigned int idx) const
 {
     return holder();
 }
 
-void reflective_base::set_child_value(holder& value, 
+void reflective_base::set_child_value(holder& value,
     unsigned int idx, holder& child_value) const
 {
     // Default implementation
@@ -198,7 +198,7 @@ std::string reflective_base::to_string(holder const& value) const
     return std::string();
 }
 
-void reflective_base::from_string(holder& value, 
+void reflective_base::from_string(holder& value,
         const std::string& str) const
 {
 }
@@ -229,14 +229,14 @@ unsigned int interface_reflective_base::operation_count() const
     return m_reflectives.size();
 }
 
-operation_reflective_base const * 
+operation_reflective_base const *
 interface_reflective_base::get_reflective_by_index(
         unsigned int idx) const
 {
     return m_reflectives[idx];
 }
 
-operation_reflective_base const * 
+operation_reflective_base const *
 interface_reflective_base::get_reflective_by_name(
         const std::string& name) const
 {
@@ -249,7 +249,7 @@ interface_reflective_base::get_reflective_by_name(
     return NULL;
 }
 
-operation_reflective_base const * 
+operation_reflective_base const *
 interface_reflective_base::get_reflective_by_tag(
         corbasim::tag_t tag) const
 {
@@ -272,7 +272,7 @@ objrefvar_reflective_base::~objrefvar_reflective_base()
 }
 
 objrefvar_reflective_base::objrefvar_reflective_base(
-        reflective_base const * parent, 
+        reflective_base const * parent,
             unsigned int child_index) :
     reflective_base(parent, child_index)
 {

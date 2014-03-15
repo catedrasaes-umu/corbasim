@@ -46,10 +46,10 @@ void ReferenceFinder::run()
 
         std::size_t beg = tk.find("IOR:");
 
-        if (beg == std::string::npos || beg + 5 > tk.size()) 
+        if (beg == std::string::npos || beg + 5 > tk.size())
             continue;
 
-        std::size_t end = 
+        std::size_t end =
             tk.find_first_not_of("0123456789abcdef", beg + 4);
 
         // Size
@@ -58,16 +58,16 @@ void ReferenceFinder::run()
 
         const std::string ior = tk.substr(beg, end);
 
-        try 
+        try
         {
-            CORBA::Object_var obj = 
+            CORBA::Object_var obj =
                 orb->string_to_object(ior.c_str());
 
             if (!CORBA::is_nil(obj))
             {
                 emit found(obj);
             }
-        } 
+        }
         catch(...)
         {
         }

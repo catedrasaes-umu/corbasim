@@ -56,13 +56,13 @@ SimplePlot::SimplePlot(QWidget * parent) :
     mainLayout->addWidget(m_data->plot);
 
     setMinimumSize(600, 350);
-    
+
     QPushButton * bt = new QPushButton();
     bt->setCheckable(true);
     bt->setMaximumWidth(15);
     bt->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
     mainLayout->addWidget(bt);
-    
+
     // Options
     QWidget * gw = new QWidget();
     QGridLayout * gridLayout = new QGridLayout();
@@ -105,7 +105,7 @@ SimplePlot::SimplePlot(QWidget * parent) :
             this, SLOT(updateY()));
 
     // Spacer
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Minimum, QSizePolicy::Expanding);
     gridLayout->addItem(spacer, 3, 0, 1);
 
@@ -118,9 +118,9 @@ SimplePlot::SimplePlot(QWidget * parent) :
     spXMin->setRange(0, std::numeric_limits< int >::max());
     spXMax->setRange(10, std::numeric_limits< int >::max());
 #endif
-    spYMin->setRange(std::numeric_limits< int >::min(), 
+    spYMin->setRange(std::numeric_limits< int >::min(),
             std::numeric_limits< int >::max());
-    spYMax->setRange(std::numeric_limits< int >::min(), 
+    spYMax->setRange(std::numeric_limits< int >::min(),
             std::numeric_limits< int >::max());
 
     // Signals
@@ -147,7 +147,7 @@ void SimplePlot::append(const QVector< double >& v)
     m_data->plot->append(v);
 }
 
-void SimplePlot::append(double v) 
+void SimplePlot::append(double v)
 {
     m_data->plot->append(v);
 }
@@ -158,7 +158,7 @@ void SimplePlot::updateY()
     m_data->spYMax->setMinimum(m_data->spYMin->value());
 
     m_data->plot->setAxisScale(QwtPlot::yLeft,
-        m_data->spYMin->value(), 
+        m_data->spYMin->value(),
         m_data->spYMax->value());
 
     m_data->plot->replot();

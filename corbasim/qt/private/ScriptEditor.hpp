@@ -24,9 +24,9 @@
 #include "qscriptsyntaxhighlighter_p.h"
 #include <corbasim/qt/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 namespace priv
 {

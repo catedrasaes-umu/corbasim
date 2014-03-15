@@ -43,7 +43,7 @@ StatusViewItem::StatusViewItem(Objref_ptr objref, QWidget * parent) :
     setLayout(l);
     setMaximumSize(MAX_WIDTH, 80);
 
-    connect(objref.get(), 
+    connect(objref.get(),
             SIGNAL(updatedReference(const CORBA::Object_var&)),
             this,
             SLOT(update()));
@@ -57,9 +57,9 @@ StatusViewItem::~StatusViewItem()
 
 void StatusViewItem::update()
 {
-    if(m_objref->isNil()) 
+    if(m_objref->isNil())
         m_status->setRedLight();
-    else 
+    else
         m_status->setGreenLight();
 }
 
@@ -96,7 +96,7 @@ void StatusView::registerInstance(Objref_ptr objref)
     {
         StatusViewItem * item = new StatusViewItem(objref, this);
 
-        m_layout->addWidget(item, 
+        m_layout->addWidget(item,
                 m_items.size() / columns, m_items.size() % columns);
 
         m_items.insert(objref->id(), item);
@@ -118,7 +118,7 @@ void StatusView::unregisterInstance(ObjectId id)
 
 void StatusView::resizeEvent(QResizeEvent * event)
 {
-    if (event->size().width() / MAX_WIDTH != 
+    if (event->size().width() / MAX_WIDTH !=
             event->oldSize().width() != MAX_WIDTH)
     {
         reallocate(event->size().width());
@@ -132,14 +132,14 @@ void StatusView::reallocate(int width)
 
     QGridLayout * l = m_layout;
 
-    for (int i = l->count() - 1; i >= 0; i--) 
+    for (int i = l->count() - 1; i >= 0; i--)
     {
         l->takeAt(i);
     }
-    
+
     int i = 0;
-    for (items_t::iterator it = m_items.begin(); 
-            it != m_items.end(); ++it, ++i) 
+    for (items_t::iterator it = m_items.begin();
+            it != m_items.end(); ++it, ++i)
     {
         l->addWidget(it.value(), i / columns, i % columns);
     }

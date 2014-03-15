@@ -24,9 +24,9 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC Objref : public QObject
@@ -34,10 +34,10 @@ class CORBASIM_GUI_DECLSPEC Objref : public QObject
     Q_OBJECT
     Q_PROPERTY(ObjectId id READ id)
     Q_PROPERTY(QString name READ name)
-    Q_PROPERTY(InterfaceDescriptor_ptr interface 
+    Q_PROPERTY(InterfaceDescriptor_ptr interface
             READ interface)
-    Q_PROPERTY(CORBA::Object_var reference 
-            READ reference 
+    Q_PROPERTY(CORBA::Object_var reference
+            READ reference
             WRITE setReference)
     Q_PROPERTY(QString nsEntry
             READ nsEntry
@@ -55,7 +55,7 @@ public:
     virtual ~Objref();
 
     // Properties
-    
+
     ObjectId id() const;
 
     InterfaceDescriptor_ptr interface() const;
@@ -75,7 +75,7 @@ public:
 public slots:
 
     // Properties
-    
+
     void setReference(const CORBA::Object_var& reference);
 
     Event_ptr sendRequest(const Request_ptr& request);
@@ -86,12 +86,12 @@ public slots:
     // void updateConfig(const ObjrefConfig& cfg);
 
 signals:
-    
+
     void updatedConfig(const ObjrefConfig& cfg);
 
     void updatedReference(const CORBA::Object_var& reference);
 
-    void requestSent(ObjectId id, 
+    void requestSent(ObjectId id,
             const Request_ptr& request,
             const Event_ptr& event);
 
@@ -130,22 +130,22 @@ public:
     ~Servant();
 
     PortableServer::ServantBase * getServant() const;
-    
+
     Objref_ptr proxy() const;
-    
+
     bool isServant() const;
 
 public slots:
 
     void setProxy(Objref_ptr proxy);
-    
+
     // void updateConfig(const ServantConfig& cfg);
 
 signals:
-    
+
     void updatedConfig(const ServantConfig& cfg);
 
-    void requestReceived(ObjectId id, 
+    void requestReceived(ObjectId id,
             const Request_ptr& request,
             const Event_ptr& event);
 
@@ -215,7 +215,7 @@ public:
     ~InterfaceRepository();
 
     InterfaceDescriptor_ptr getInterface(const QString& fqn);
-    
+
     InterfaceDescriptor_ptr loadLibrary(const QString& file);
 
 public slots:

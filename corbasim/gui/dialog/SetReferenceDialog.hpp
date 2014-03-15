@@ -24,9 +24,9 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ObjrefWidget.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class SetReferenceDialog : public QDialog
@@ -51,7 +51,7 @@ protected slots:
     void update();
 
 protected:
-    
+
     void hideEvent(QHideEvent* event);
 
     ObjrefWidget * m_reference;

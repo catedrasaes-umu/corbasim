@@ -22,9 +22,9 @@
 
 #include <corbasim/core/reflective_fwd.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 namespace detail
 {
@@ -33,30 +33,30 @@ template< typename T >
 struct bool_reflective : public reflective_base
 {
     bool_reflective(reflective_base const * parent, unsigned int idx);
-    
+
     bool is_primitive() const;
-    
+
     holder create_holder() const;
 
     reflective_type get_type() const;
-    
+
     void copy(holder const& src, holder& dst) const;
 };
 
 template< typename T >
 struct primitive_reflective : public reflective_base
 {
-    primitive_reflective(reflective_base const * parent, 
+    primitive_reflective(reflective_base const * parent,
             unsigned int idx);
 
     bool is_primitive() const;
 
     reflective_type get_type() const;
-    
+
     holder create_holder() const;
 
     double to_double(holder const& value) const;
-    
+
     void copy(holder const& src, holder& dst) const;
 };
 
@@ -110,7 +110,7 @@ struct string_reflective : public reflective_base
     std::string to_string(holder const& h) const;
 
     void from_string(holder& h, const std::string& str) const;
-    
+
     void copy(holder const& src, holder& dst) const;
 };
 
@@ -122,14 +122,14 @@ struct sequence_reflective : public reflective_base
 
     sequence_reflective(reflective_base const * parent = NULL,
             unsigned int idx = 0);
-    
+
     ~sequence_reflective();
 
     reflective_base const * get_child(unsigned int idx) const;
 
     bool is_repeated() const;
     bool is_variable_length() const;
-    
+
     reflective_type get_type() const;
 
     reflective_base const * get_slice() const;
@@ -141,7 +141,7 @@ struct sequence_reflective : public reflective_base
 
     void set_length(holder& value, unsigned int length) const;
 
-    holder get_child_value(holder& value, 
+    holder get_child_value(holder& value,
         unsigned int idx) const;
 
     void copy(holder const& src, holder& dst) const;
@@ -163,18 +163,18 @@ typedef boost::shared_ptr< accessor_base > accessor_ptr;
 template< typename T >
 struct struct_reflective : public reflective_base
 {
-    static const std::size_t members_count = 
+    static const std::size_t members_count =
         boost::fusion::result_of::size< T >::value;
-    typedef boost::mpl::range_c< size_t, 0, members_count > 
+    typedef boost::mpl::range_c< size_t, 0, members_count >
         members_range_t;
 
-    struct_reflective(reflective_base const * parent = NULL, 
+    struct_reflective(reflective_base const * parent = NULL,
             unsigned int idx = 0);
 
     unsigned int get_children_count() const;
 
     const char * get_child_name(unsigned int idx) const;
-    
+
     reflective_base const * get_child(unsigned int idx) const;
 
     reflective_type get_type() const;
@@ -182,7 +182,7 @@ struct struct_reflective : public reflective_base
     // Dynamic information
     holder create_holder() const;
 
-    holder get_child_value(holder& value, 
+    holder get_child_value(holder& value,
         unsigned int idx) const;
 
     void copy(holder const& src, holder& dst) const;
@@ -201,12 +201,12 @@ struct union_reflective : public reflective_base
     typedef adapted::is_union< T > adapted_t;
     typedef typename adapted_t::discriminator_t discriminator_t;
 
-    static const std::size_t members_count = 
+    static const std::size_t members_count =
         boost::fusion::result_of::size< T >::value;
-    typedef boost::mpl::range_c< size_t, 0, members_count > 
+    typedef boost::mpl::range_c< size_t, 0, members_count >
         members_range_t;
 
-    union_reflective(reflective_base const * parent = NULL, 
+    union_reflective(reflective_base const * parent = NULL,
             unsigned int idx = 0);
 
     reflective_type get_type() const;
@@ -214,7 +214,7 @@ struct union_reflective : public reflective_base
     unsigned int get_children_count() const;
 
     const char * get_child_name(unsigned int idx) const;
-    
+
     reflective_base const * get_child(unsigned int idx) const;
 
     holder create_holder() const;
@@ -227,13 +227,13 @@ struct union_reflective : public reflective_base
 
     holder get_child_value(holder& value, unsigned int idx) const;
 
-    void set_child_value(holder& value, 
+    void set_child_value(holder& value,
         unsigned int idx, holder& child_value) const;
 
     void copy(holder const& src, holder& dst) const;
-  
+
     static union_reflective const * get_instance();
-    
+
     reflective_children m_children;
     std::vector< const char * > m_child_names;
     std::vector< accessor_ptr > m_accessors;
@@ -244,7 +244,7 @@ struct enum_reflective : public reflective_base
 {
     typedef adapted::enumeration< T > adapted_t;
 
-    enum_reflective(reflective_base const * parent = NULL, 
+    enum_reflective(reflective_base const * parent = NULL,
             unsigned int idx = 0);
 
     bool is_enum() const;
@@ -269,16 +269,16 @@ struct objrefvar_reflective : public objrefvar_reflective_base
     reflective_type get_type() const;
 
     /**
-     * @brief You can't use this method when in a sequence slice. 
+     * @brief You can't use this method when in a sequence slice.
      *
      * Y must be the same type than T.
      *
      * @return A new holder o a null holder.
      */
     holder create_holder() const;
-    
+
     void copy(holder const& src, holder& dst) const;
-    
+
     // objrefvar_reflective_base
     CORBA::Object_ptr to_object(holder const& h) const;
 
@@ -292,7 +292,7 @@ struct objrefvar_reflective : public objrefvar_reflective_base
 template< typename T >
 struct unsupported_type : public reflective_base
 {
-    unsupported_type(reflective_base const * parent = NULL, 
+    unsupported_type(reflective_base const * parent = NULL,
             unsigned int idx = 0);
 };
 
@@ -306,33 +306,33 @@ struct unsupported_type : public reflective_base
 template< typename T, typename Y = T >
 struct calculate_reflective
 {
-    typedef typename 
+    typedef typename
         // if
-        cs_mpl::eval_if_identity< cs_mpl::is_bool< T >, 
+        cs_mpl::eval_if_identity< cs_mpl::is_bool< T >,
             bool_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< boost::is_arithmetic< T >, 
+        cs_mpl::eval_if_identity< boost::is_arithmetic< T >,
             primitive_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< boost::is_array< T >, 
+        cs_mpl::eval_if_identity< boost::is_array< T >,
             array_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< boost::is_enum< T >, 
+        cs_mpl::eval_if_identity< boost::is_enum< T >,
             enum_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< cs_mpl::is_string< T >, 
+        cs_mpl::eval_if_identity< cs_mpl::is_string< T >,
             string_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< adapted::is_corbaseq< T >, 
+        cs_mpl::eval_if_identity< adapted::is_corbaseq< T >,
             sequence_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< adapted::is_union< T >, 
+        cs_mpl::eval_if_identity< adapted::is_union< T >,
             union_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< cs_mpl::is_struct< T >, 
+        cs_mpl::eval_if_identity< cs_mpl::is_struct< T >,
             struct_reflective< Y >,
         // else if
-        cs_mpl::eval_if_identity< adapted::is_objrefvar< T >, 
+        cs_mpl::eval_if_identity< adapted::is_objrefvar< T >,
             objrefvar_reflective< T, Y >,
         // else
             boost::mpl::identity< unsupported_type< Y > >
@@ -343,7 +343,7 @@ struct calculate_reflective
 
 
 template < typename T, typename Y >
-reflective_base * create_reflective(const T& t_, const Y& y_, 
+reflective_base * create_reflective(const T& t_, const Y& y_,
         reflective_base const * parent, unsigned int idx)
 {
     return new typename detail::calculate_reflective< T, Y >::type (parent, idx);
@@ -355,12 +355,12 @@ struct reflective : public detail::calculate_reflective< T >::type
     typedef typename detail::calculate_reflective< T >::type base_t;
 
     reflective(reflective_base const * parent = NULL,
-            unsigned int idx = 0) : base_t(parent, idx) 
+            unsigned int idx = 0) : base_t(parent, idx)
     {}
 };
 
 template< typename Value >
-struct operation_reflective : 
+struct operation_reflective :
     public virtual operation_reflective_base,
     public detail::struct_reflective< Value >
 {
@@ -371,17 +371,17 @@ struct operation_reflective :
     std::vector< direction_type > m_param_direction;
 
     operation_reflective();
-    
+
     unsigned int get_children_count() const;
 
     const char * get_child_name(unsigned int idx) const;
-    
+
     reflective_base const * get_child(unsigned int idx) const;
 
     reflective_type get_type() const;
 
     // Dynamic information
-    holder get_child_value(holder& value, 
+    holder get_child_value(holder& value,
         unsigned int idx) const;
 
     void copy(holder const& src, holder& dst) const;
@@ -389,7 +389,7 @@ struct operation_reflective :
     const char * get_name() const;
 
     tag_t get_tag() const;
-    
+
     event::request_ptr create_request() const;
 
     direction_type get_parameter_direction(
@@ -413,7 +413,7 @@ struct interface_reflective : public interface_reflective_base
     // Servant
     PortableServer::ServantBase * create_servant(
             request_processor * proc) const;
-   
+
     const char * get_name() const;
 
     const char * get_fqn() const;

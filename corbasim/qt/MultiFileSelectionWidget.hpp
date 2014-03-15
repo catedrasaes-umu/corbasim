@@ -28,19 +28,19 @@ class QLineEdit;
 class QCheckBox;
 class QSpinBox;
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 
 class CORBASIM_QT_DECLSPEC MultiFileSelectionWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QStringList selectedFiles 
+    Q_PROPERTY(QStringList selectedFiles
             READ selectedFiles WRITE setSelectedFiles)
-    Q_PROPERTY(bool repeat 
+    Q_PROPERTY(bool repeat
             READ repeat WRITE setRepeat)
-    Q_PROPERTY(int currentIndex 
+    Q_PROPERTY(int currentIndex
             READ currentIndex WRITE setCurrentIndex)
 
 public:

@@ -30,7 +30,7 @@ class QStackedWidget;
 class QTextEdit;
 class QAbstractItemModel;
 
-namespace corbasim 
+namespace corbasim
 {
 namespace qt
 {
@@ -68,7 +68,7 @@ public slots:
     void pasteIOR();
 
     void setModel(QAbstractItemModel * model);
-    
+
     void setInterface(InterfaceDescriptor_ptr iface);
 
     void setReference(const CORBA::Object_var& ref);

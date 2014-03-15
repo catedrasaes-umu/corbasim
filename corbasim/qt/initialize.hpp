@@ -24,9 +24,9 @@
 
 class QAbstractItemModel;
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 
 CORBASIM_QT_DECLSPEC void initialize();

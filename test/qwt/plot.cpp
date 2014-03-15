@@ -15,7 +15,7 @@ int main( int argc, char **argv )
     DataProducer producer;
     producer.show();
 
-    QObject::connect(&producer, SIGNAL(produced(double)), 
+    QObject::connect(&producer, SIGNAL(produced(double)),
             &plot, SLOT(append(double)));
 
     return a.exec();

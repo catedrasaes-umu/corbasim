@@ -24,9 +24,9 @@
 #include <corbasim/gui/types.hpp>
 
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 struct DescriptorNode;
@@ -79,7 +79,7 @@ struct DescriptorNode : public AbstractNode
 
     DescriptorNode(TypeDescriptor_ptr r,
             InstanceNode * i = 0,
-            DescriptorNode * p = 0, 
+            DescriptorNode * p = 0,
             unsigned int idx = 0);
 
     void initialize();
@@ -101,7 +101,7 @@ struct Node
     std::vector< Node_ptr > children;
 
     Node(TypeDescriptor_ptr r,
-            core::holder h, Node * p = 0, 
+            core::holder h, Node * p = 0,
             unsigned int idx = 0);
 
     void initialize();
@@ -123,7 +123,7 @@ struct MetaNode
     std::vector< Node_ptr > brothers;
 
     MetaNode(TypeDescriptor_ptr r,
-            MetaNode * p = 0, 
+            MetaNode * p = 0,
             unsigned int idx = 0);
 
     void initialize();

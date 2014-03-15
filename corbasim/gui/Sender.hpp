@@ -31,9 +31,9 @@
 #include <corbasim/gui/proc/RequestProcessor.hpp>
 #include <corbasim/gui/script/ScriptEvaluator.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class SenderConfig;

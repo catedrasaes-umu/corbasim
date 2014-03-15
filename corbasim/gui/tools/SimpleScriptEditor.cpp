@@ -29,7 +29,7 @@ using namespace corbasim;
 using namespace corbasim::gui;
 
 SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
-    QMainWindow(parent), m_timer(this), m_current_request(0), 
+    QMainWindow(parent), m_timer(this), m_current_request(0),
     m_factory(NULL)
 {
     QWidget * central = new QWidget();
@@ -74,10 +74,10 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
 
     central->setLayout(mainLayout);
 
-    QObject::connect(m_selector, SIGNAL(currentIndexChanged(int)), 
+    QObject::connect(m_selector, SIGNAL(currentIndexChanged(int)),
             m_multi, SLOT(setCurrentIndex(int)));
 
-    QObject::connect(&m_timer, SIGNAL(timeout()), 
+    QObject::connect(&m_timer, SIGNAL(timeout()),
             this, SLOT(sendNextRequest()));
 
     setWindowTitle("Script editor");
@@ -88,7 +88,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load", this);
     loadAction->setShortcut(QKeySequence::Open);
-    QObject::connect(loadAction, SIGNAL(triggered()), 
+    QObject::connect(loadAction, SIGNAL(triggered()),
             this, SLOT(doLoad()));
 
     // Save
@@ -96,7 +96,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save as...", this);
     saveAction->setShortcut(QKeySequence::SaveAs);
-    QObject::connect(saveAction, SIGNAL(triggered()), 
+    QObject::connect(saveAction, SIGNAL(triggered()),
             this, SLOT(doSave()));
 
     // Append
@@ -104,14 +104,14 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogApplyButton),
             "&Append request", this);
     appendAction->setShortcut(QKeySequence::Redo);
-    QObject::connect(appendAction, SIGNAL(triggered()), 
+    QObject::connect(appendAction, SIGNAL(triggered()),
             this, SLOT(appendRequest()));
 
     QAction * appendOneAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogApplyButton),
             "Append &just a request", this);
     appendOneAction->setShortcut(QKeySequence::New);
-    QObject::connect(appendOneAction, SIGNAL(triggered()), 
+    QObject::connect(appendOneAction, SIGNAL(triggered()),
             this, SLOT(appendOneRequest()));
 
     // Copy selected item
@@ -119,7 +119,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogApplyButton),
             "&Copy selected item", this);
     copyAction->setShortcut(QKeySequence::Copy);
-    QObject::connect(copyAction, SIGNAL(triggered()), 
+    QObject::connect(copyAction, SIGNAL(triggered()),
             this, SLOT(copySelected()));
 
     // Replace selected item
@@ -127,7 +127,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileDialogDetailedView),
             "&Replace selected item", this);
     replaceAction->setShortcut(QKeySequence::Paste);
-    QObject::connect(replaceAction, SIGNAL(triggered()), 
+    QObject::connect(replaceAction, SIGNAL(triggered()),
             this, SLOT(replaceSelected()));
 
     // Delete selected item
@@ -135,7 +135,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Delete selected item", this);
     deleteAction->setShortcut(QKeySequence::Delete);
-    QObject::connect(deleteAction, SIGNAL(triggered()), 
+    QObject::connect(deleteAction, SIGNAL(triggered()),
             this, SLOT(deleteSelected()));
 
     // Clear script
@@ -143,7 +143,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear script", this);
     clearAction->setShortcut(QKeySequence::Cut);
-    QObject::connect(clearAction, SIGNAL(triggered()), 
+    QObject::connect(clearAction, SIGNAL(triggered()),
             this, SLOT(clearClicked()));
 
     // Move up
@@ -151,7 +151,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_ArrowUp),
             "Move &up", this);
     moveUpAction->setShortcut(QKeySequence::MoveToPreviousPage);
-    QObject::connect(moveUpAction, SIGNAL(triggered()), 
+    QObject::connect(moveUpAction, SIGNAL(triggered()),
             this, SLOT(moveUp()));
 
     // Move down
@@ -159,7 +159,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_ArrowDown),
             "Move &down", this);
     moveDownAction->setShortcut(QKeySequence::MoveToNextPage);
-    QObject::connect(moveDownAction, SIGNAL(triggered()), 
+    QObject::connect(moveDownAction, SIGNAL(triggered()),
             this, SLOT(moveDown()));
 
     // Play
@@ -167,7 +167,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_MediaPlay),
             "&Play", this);
     playAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
-    QObject::connect(playAction, SIGNAL(triggered()), 
+    QObject::connect(playAction, SIGNAL(triggered()),
             this, SLOT(playClicked()));
 
     QAction * playSelectedAction = new QAction(
@@ -175,7 +175,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             "Play &from selected item", this);
     playSelectedAction->setShortcut(
             QKeySequence(Qt::CTRL + Qt::Key_Space));
-    QObject::connect(playSelectedAction, SIGNAL(triggered()), 
+    QObject::connect(playSelectedAction, SIGNAL(triggered()),
             this, SLOT(playFromSelected()));
 
     // Stop
@@ -183,7 +183,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_MediaStop),
             "&Stop", this);
     // stopAction->setShortcut(QKeySequence::Cut);
-    QObject::connect(stopAction, SIGNAL(triggered()), 
+    QObject::connect(stopAction, SIGNAL(triggered()),
             this, SLOT(stopClicked()));
 
     // Send current
@@ -191,7 +191,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_MediaPlay),
             "Send &current value", this);
     sendCurrentAction->setShortcut(QKeySequence::Save);
-    QObject::connect(sendCurrentAction, SIGNAL(triggered()), 
+    QObject::connect(sendCurrentAction, SIGNAL(triggered()),
             this, SLOT(sendCurrent()));
 
     // Menu
@@ -199,7 +199,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     fileMenu->addAction(loadAction);
     fileMenu->addAction(saveAction);
     fileMenu->addSeparator();
-    QAction * closeAction = 
+    QAction * closeAction =
         fileMenu->addAction("&Close", this, SLOT(hide()));
 
     closeAction->setShortcut(QKeySequence::Close);
@@ -214,7 +214,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     scriptMenu->addSeparator();
     scriptMenu->addAction(moveUpAction);
     scriptMenu->addAction(moveDownAction);
-    
+
     QMenu * playerMenu = menuBar()->addMenu("&Player");
     playerMenu->addAction(playAction);
     playerMenu->addAction(playSelectedAction);
@@ -246,7 +246,7 @@ SimpleScriptEditor::SimpleScriptEditor(QWidget * parent) :
     toolBar->addSeparator();
     toolBar->addAction(moveUpAction);
     toolBar->addAction(moveDownAction);
-    
+
     setWindowIcon(QIcon(":/resources/images/csu.png"));
 }
 
@@ -261,7 +261,7 @@ void SimpleScriptEditor::initialize(InterfaceDescriptor_ptr factory)
 
     m_model.initialize(factory);
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         OperationDescriptor_ptr op = factory->get_reflective_by_index(i);
 
@@ -325,7 +325,7 @@ void SimpleScriptEditor::replaceSelected()
 
     // Elimina el actual
     deleteSelected();
-    
+
     m_tree->setCurrentIndex(m_model.index(pos, 0));
 }
 
@@ -359,7 +359,7 @@ void SimpleScriptEditor::appendRequest()
 
     if (idx == -1) return;
 
-    for (int i = 0; i < m_how_many->value(); i++) 
+    for (int i = 0; i < m_how_many->value(); i++)
     {
         event::request_ptr req = m_forms[idx]->createRequest();
 
@@ -379,7 +379,7 @@ void SimpleScriptEditor::appendOneRequest()
 }
 
 void SimpleScriptEditor::playClicked()
-{   
+{
     m_current_request = 0;
 
     if (m_timer.isActive())
@@ -419,7 +419,7 @@ void SimpleScriptEditor::doSave()
 
     writer.array_start();
 
-    for (int i = 0; i < m_model.rowCount(); i++) 
+    for (int i = 0; i < m_model.rowCount(); i++)
     {
         writer.object_start();
 
@@ -428,7 +428,7 @@ void SimpleScriptEditor::doSave()
         if (!req) continue; // Not possible!
 
         op_ptr op (m_factory->get_reflective_by_tag(req->get_tag()));
-        
+
         if (!op)  continue; // Not possible!
 
         writer.new_string(op->get_name());
@@ -443,7 +443,7 @@ void SimpleScriptEditor::doSave()
     writer.array_end();
 }
 
-namespace 
+namespace
 {
 
 typedef corbasim::gui::ScriptModel ScriptModel;
@@ -460,7 +460,7 @@ struct operation_helper : public corbasim::json::helper::helper_base
     corbasim::json::helper::helper_base *  m_helper;
     Request_ptr m_request;
 
-    operation_helper(ScriptModel& model, op_ptr op) : 
+    operation_helper(ScriptModel& model, op_ptr op) :
         m_model(model)
     {
         m_request = op->create_request();
@@ -487,7 +487,7 @@ struct script_helper : public corbasim::json::helper::helper_base
     ScriptModel& m_model;
     interface_ptr m_factory;
 
-    script_helper(ScriptModel& model, interface_ptr factory) : 
+    script_helper(ScriptModel& model, interface_ptr factory) :
         m_model(model), m_factory(factory)
     {}
 
@@ -527,14 +527,14 @@ void SimpleScriptEditor::doLoad()
 
     std::vector< char > buf;
 
-    for (int i = 0; i < script_files.length(); i++) 
+    for (int i = 0; i < script_files.length(); i++)
     {
         try {
 
             std::ifstream is(script_files.at(i).toStdString().c_str());
-            
+
             if (!is.is_open()) continue;
-   
+
             // get length of file:
             is.seekg (0, std::ios::end);
             std::size_t length = is.tellg();
@@ -551,11 +551,11 @@ void SimpleScriptEditor::doLoad()
                 new script_helper(m_model, m_factory),
                 &(*buf.begin()), length);
 
-        } catch (...) 
+        } catch (...)
         {
             std::cerr << "Error loading file!" << std::endl;
 
-            QMessageBox::critical(this, "Error", 
+            QMessageBox::critical(this, "Error",
                     QString("Error loading file %1").arg(script_files.at(i)));
         }
     }
@@ -588,7 +588,7 @@ void SimpleScriptEditor::copySelected()
     }
 }
 
-void SimpleScriptEditor::doAppendRequest(event::request_ptr _request, 
+void SimpleScriptEditor::doAppendRequest(event::request_ptr _request,
         bool beforeSelected)
 {
     int pos = getSelected();

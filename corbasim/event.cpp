@@ -29,7 +29,7 @@ exception::exception(const char * msg) :
 {
 }
 
-event_types exception::get_type() const 
+event_types exception::get_type() const
 {
     return EXCEPTION;
 }
@@ -51,7 +51,7 @@ message::message(const char * msg) :
 {
 }
 
-event_types message::get_type() const 
+event_types message::get_type() const
 {
     return MESSAGE;
 }
@@ -68,7 +68,7 @@ const char * message::get_message() const
 
 // Request
 
-event_types request::get_type() const 
+event_types request::get_type() const
 {
     return REQUEST;
 }
@@ -77,7 +77,7 @@ request::~request() {}
 
 // Response
 
-event_types response::get_type() const 
+event_types response::get_type() const
 {
     return RESPONSE;
 }

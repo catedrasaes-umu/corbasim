@@ -27,7 +27,7 @@
 using namespace corbasim::gui;
 
 FilteredLogView::FilteredLogView(QWidget * parent) :
-    AbstractTool(parent), 
+    AbstractTool(parent),
     m_filterModel(this), m_model(this),
     m_sourceModel(NULL)
 {
@@ -56,7 +56,7 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
     splitter->addWidget(m_viewer);
 
     layout->addWidget(splitter);
-    
+
     setLayout(layout);
 
     // Size
@@ -75,7 +75,7 @@ FilteredLogView::FilteredLogView(QWidget * parent) :
             this, SLOT(selected(const QModelIndex&)));
     */
 
-    connect(logView->selectionModel(), 
+    connect(logView->selectionModel(),
             SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
             this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
 }
@@ -182,7 +182,7 @@ void EntryViewer::show(
         m_stack->addWidget(w);
     }
 
-    ReflectiveWidgetBase * r = 
+    ReflectiveWidgetBase * r =
         dynamic_cast< ReflectiveWidgetBase * >(w->widget());
 
     if (r)

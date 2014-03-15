@@ -37,13 +37,13 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     m_name = new QLineEdit();
     m_name->setObjectName("name");
     grid->addWidget(m_name, 0, 1);
- 
+
     // Interface
     grid->addWidget(new QLabel("Interface"), 1, 0);
     m_fqn = new QComboBox();
     m_fqn->setEditable(true);
     m_fqn->setObjectName("fqn");
-    grid->addWidget(m_fqn, 1, 1); 
+    grid->addWidget(m_fqn, 1, 1);
 
     // Reference
     QGroupBox * group = new QGroupBox("Object reference");
@@ -55,7 +55,7 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     m_reference->setObjectName("reference");
     groupLayout->addWidget(m_reference);
     group->setLayout(groupLayout);
-    
+
     grid->addWidget(group, 2, 0, 1, 2);
     // End reference
 
@@ -70,7 +70,7 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
     watchFileLayout->addWidget(browseButton);
     grid->addLayout(watchFileLayout, 3, 1);
 
-    connect(browseButton, SIGNAL(clicked()), 
+    connect(browseButton, SIGNAL(clicked()),
             this, SLOT(browse()));
     // End watch file
 
@@ -79,9 +79,9 @@ ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :
 
     // Buttons
     QDialogButtonBox * btns = new QDialogButtonBox();
-    QPushButton * createButton = 
+    QPushButton * createButton =
         btns->addButton("&Create", QDialogButtonBox::AcceptRole);
-    QPushButton * cancelButton = 
+    QPushButton * cancelButton =
         btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
     layout->addWidget(btns);
 
@@ -126,8 +126,8 @@ void ObjrefCreateDialog::createClicked()
 
 void ObjrefCreateDialog::browse()
 {
-    const QString file = 
-        QFileDialog::getOpenFileName(0, 
+    const QString file =
+        QFileDialog::getOpenFileName(0,
                 "Select a file", ".");
 
     m_watchFile->setText(file);
@@ -157,13 +157,13 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     m_name = new QLineEdit();
     m_name->setObjectName("name");
     grid->addWidget(m_name, 0, 1);
- 
+
     // Interface
     grid->addWidget(new QLabel("Interface"), 1, 0);
     m_fqn = new QComboBox();
     m_fqn->setObjectName("fqn");
     m_fqn->setEditable(true);
-    grid->addWidget(m_fqn, 1, 1); 
+    grid->addWidget(m_fqn, 1, 1);
 
     // Name service
     grid->addWidget(new QLabel("Name service key"), 2, 0);
@@ -181,7 +181,7 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     saveFileLayout->addWidget(browseButton);
     grid->addLayout(saveFileLayout, 3, 1);
 
-    connect(browseButton, SIGNAL(clicked()), 
+    connect(browseButton, SIGNAL(clicked()),
             this, SLOT(browse()));
 
     layout->addLayout(grid);
@@ -203,9 +203,9 @@ ServantCreateDialog::ServantCreateDialog(QWidget * parent) :
     // Buttons
     QDialogButtonBox * btns = new QDialogButtonBox();
 
-    QPushButton * createButton = 
+    QPushButton * createButton =
         btns->addButton("&Create", QDialogButtonBox::AcceptRole);
-    QPushButton * cancelButton = 
+    QPushButton * cancelButton =
         btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
 
     layout->addWidget(btns);
@@ -244,8 +244,8 @@ void ServantCreateDialog::createClicked()
 
 void ServantCreateDialog::browse()
 {
-    const QString file = 
-        QFileDialog::getSaveFileName(0, 
+    const QString file =
+        QFileDialog::getSaveFileName(0,
                 "Select a file", ".");
 
     m_saveFile->setText(file);

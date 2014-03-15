@@ -20,9 +20,9 @@
 #include "utils.hpp"
 #include <QLibrary>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 QString getFieldName(OperationDescriptor_ptr operation,
@@ -34,9 +34,9 @@ QString getFieldName(OperationDescriptor_ptr operation,
 
     reflective_base const * reflective = operation;
 
-    for (int i = 1; i < path.size(); i++) 
+    for (int i = 1; i < path.size(); i++)
     {
-        if (reflective->get_type() == TYPE_STRUCT || 
+        if (reflective->get_type() == TYPE_STRUCT ||
                 reflective->get_type() == TYPE_UNION)
         {
             res += QString(".") + reflective->get_child_name(path[i]);
@@ -46,7 +46,7 @@ QString getFieldName(OperationDescriptor_ptr operation,
         else if (reflective->is_repeated())
         {
             res += QString("[%1]").arg(path[i]);
-            
+
             reflective = reflective->get_slice();
         }
         else break;
@@ -67,7 +67,7 @@ TypeDescriptor_ptr followPath(
     // Ignore operation index
     ++it;
 
-    for (;it != path.end() && res; ++it) 
+    for (;it != path.end() && res; ++it)
     {
         res = res->get_child(*it);
     }
@@ -90,7 +90,7 @@ bool followPath(
     // Ignore operation index
     ++it;
 
-    for (;it != path.end() && descriptor; ++it) 
+    for (;it != path.end() && descriptor; ++it)
     {
         if (descriptor->is_variable_length())
             return false;
@@ -116,8 +116,8 @@ getReflectiveByFQN(const char * fqn)
 
     QLibrary lib(symbol);
 
-    if (lib.load() && 
-            (get_reflective = (get_reflective_t) 
+    if (lib.load() &&
+            (get_reflective = (get_reflective_t)
                  lib.resolve(symbol.toStdString().c_str())) != NULL)
     {
         return get_reflective();

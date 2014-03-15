@@ -29,14 +29,14 @@
 #include <corbasim/gui/tools/AbstractTool.hpp>
 #include <corbasim/qt/SortableGroup.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class OperationsView;
 
-class CORBASIM_GUI_DECLSPEC AbstractSequenceItem : 
+class CORBASIM_GUI_DECLSPEC AbstractSequenceItem :
     public qt::AbstractItemFrame
 {
     Q_OBJECT
@@ -123,7 +123,7 @@ signals:
 protected:
 
     /**
-     * @brief The sequence name. 
+     * @brief The sequence name.
      */
     QString m_name;
 
@@ -144,7 +144,7 @@ protected:
  * Every sequence consists in an ordered set of AbstratSequenceItem
  * instances.
  */
-class CORBASIM_GUI_DECLSPEC AbstractSequenceTool : 
+class CORBASIM_GUI_DECLSPEC AbstractSequenceTool :
     public AbstractTool
 {
     Q_OBJECT
@@ -221,7 +221,7 @@ protected:
      * @return The created instance or NULL if invalid object or operation.
      */
     virtual AbstractSequenceItem * createAbstractItem(
-            Objref_ptr object, 
+            Objref_ptr object,
             OperationDescriptor_ptr op) = 0;
 
     void regenerateMoveTo(int idx);

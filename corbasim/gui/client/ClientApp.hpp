@@ -24,9 +24,9 @@
 
 class QWidget;
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class ClientApp

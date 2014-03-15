@@ -32,9 +32,9 @@ using namespace corbasim::gui;
 
 AbstractInputItem::AbstractInputItem(Objref_ptr objref,
         OperationDescriptor_ptr reflective,
-        const QList< int >& path, 
+        const QList< int >& path,
         QWidget * parent) :
-    QWidget(parent), m_objref(objref), 
+    QWidget(parent), m_objref(objref),
     m_reflective(reflective), m_path(path)
 {
 }
@@ -51,14 +51,14 @@ OperationDescriptor_ptr AbstractInputItem::getReflective() const
 void AbstractInputItem::start()
 {
     if (m_processor)
-        emit addProcessor(m_processor); 
+        emit addProcessor(m_processor);
 }
 
 void AbstractInputItem::reset()
 {
     if (m_processor)
     {
-        emit removeProcessor(m_processor); 
+        emit removeProcessor(m_processor);
         m_processor.reset();
     }
 }
@@ -88,11 +88,11 @@ AbstractInputTool::AbstractInputTool(QWidget * parent) :
     setLayout(layout);
 
     // widget signals
-    connect(m_group, 
+    connect(m_group,
             SIGNAL(deleteRequested(corbasim::qt::SortableGroupItem *)),
-            this, 
+            this,
             SLOT(deleteRequested(corbasim::qt::SortableGroupItem *)));
-    
+
     setMinimumSize(650, 400);
 
     setModel(createModel());
@@ -116,8 +116,8 @@ void AbstractInputTool::setModel(ParametersModel * model)
     {
         m_view->setModel(m_model);
 
-        // connect model signals 
-        connect(m_model, 
+        // connect model signals
+        connect(m_model,
                 SIGNAL(checked(const QString&,
                         InterfaceDescriptor_ptr,
                         const QList< int >&)),
@@ -125,7 +125,7 @@ void AbstractInputTool::setModel(ParametersModel * model)
                 SLOT(createAbstractInputItem(const QString&,
                         InterfaceDescriptor_ptr,
                         const QList< int >&)));
-        connect(m_model, 
+        connect(m_model,
                 SIGNAL(unchecked(const QString&,
                         InterfaceDescriptor_ptr,
                         const QList< int >&)),
@@ -136,7 +136,7 @@ void AbstractInputTool::setModel(ParametersModel * model)
     }
 }
 
-ParametersModel * AbstractInputTool::createModel() 
+ParametersModel * AbstractInputTool::createModel()
 {
     return new ParametersModel(this);
 }
@@ -160,7 +160,7 @@ void AbstractInputTool::unregisterInstance(ObjectId id)
     {
         if (objref->name() == it->first.first)
         {
-            for (int i = 0; i < it->second.size(); i++) 
+            for (int i = 0; i < it->second.size(); i++)
             {
                 AbstractInputItem * item = it->second[i];
 
@@ -191,7 +191,7 @@ void AbstractInputTool::unregisterInstance(ObjectId id)
     m_instances.del(id);
 }
 
-AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id, 
+AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id,
         InterfaceDescriptor_ptr reflective,
         const QList< int >& path)
 {
@@ -207,19 +207,19 @@ AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id
         const key_t key(id, op->get_tag());
         QList< AbstractInputItem * >& list = m_map[key];
 
-        for (int i = 0; i < list.size(); i++) 
+        for (int i = 0; i < list.size(); i++)
         {
             if (list.at(i)->getPath() == path)
             {
                 return NULL;
             }
         }
-        
+
         item = createItem(objref, op, path);
         list.push_back(item);
         m_inverse_map[item] = key;
 
-        qt::SortableGroupItem * sitem = 
+        qt::SortableGroupItem * sitem =
             new qt::SortableGroupItem(item, m_group);
 
         sitem->showDetails();
@@ -230,13 +230,13 @@ AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id
         m_group->appendItem(sitem);
 
         // connect with the processor
-        QObject * inputRequestController = 
+        QObject * inputRequestController =
             Application::currentApplication()->inputRequestController();
-        connect(item, 
+        connect(item,
                 SIGNAL(addProcessor(RequestProcessor_ptr)),
                 inputRequestController,
                 SLOT(addProcessor(RequestProcessor_ptr)));
-        connect(item, 
+        connect(item,
                 SIGNAL(removeProcessor(RequestProcessor_ptr)),
                 inputRequestController,
                 SLOT(removeProcessor(RequestProcessor_ptr)));
@@ -247,7 +247,7 @@ AbstractInputItem * AbstractInputTool::createAbstractInputItem(const QString& id
     return item;
 }
 
-void AbstractInputTool::deleteAbstractInputItem(const QString& id, 
+void AbstractInputTool::deleteAbstractInputItem(const QString& id,
         InterfaceDescriptor_ptr reflective,
         const QList< int >& path)
 {
@@ -257,7 +257,7 @@ void AbstractInputTool::deleteAbstractInputItem(const QString& id,
     const key_t key(id, op->get_tag());
     QList< AbstractInputItem * >& list = m_map[key];
 
-    for (int i = 0; i < list.size(); i++) 
+    for (int i = 0; i < list.size(); i++)
     {
         AbstractInputItem * item = list[i];
         if (item->getPath() == path)
@@ -280,7 +280,7 @@ void AbstractInputTool::deleteAbstractInputItem(const QString& id,
 
 void AbstractInputTool::deleteRequested(qt::SortableGroupItem* item)
 {
-    AbstractInputItem * aItem = 
+    AbstractInputItem * aItem =
         qobject_cast< AbstractInputItem * >(item->getWidget());
 
     if (aItem)
@@ -303,7 +303,7 @@ void AbstractInputTool::deleteRequested(qt::SortableGroupItem* item)
     m_group->deleteItem(item);
 }
 
-// 
+//
 //
 // Load and Save
 //
@@ -325,17 +325,17 @@ void AbstractInputTool::save(QVariant& settings)
 {
     QVariantList list;
 
-    for (map_t::iterator it = m_map.begin(); 
-            it != m_map.end(); ++it) 
+    for (map_t::iterator it = m_map.begin();
+            it != m_map.end(); ++it)
     {
-        for (int i = 0; i < it->second.size(); i++) 
+        for (int i = 0; i < it->second.size(); i++)
         {
             QVariantMap map;
             QVariantList vpath;
 
             const QList< int >& path = it->second.at(i)->getPath();
 
-            for (int j = 0; j < path.size(); j++) 
+            for (int j = 0; j < path.size(); j++)
             {
                 vpath << path.at(j);
             }
@@ -358,7 +358,7 @@ void AbstractInputTool::load(const QVariant& settings)
 
     const QVariantList list = settings.toList();
 
-    for (int i = 0; i < list.size(); i++) 
+    for (int i = 0; i < list.size(); i++)
     {
         const QVariantMap map = list.at(i).toMap();
 
@@ -366,7 +366,7 @@ void AbstractInputTool::load(const QVariant& settings)
 
         const QVariantList vpath = map["path"].toList();
         QList< int > path;
-        for (int j = 0; j < vpath.size(); j++) 
+        for (int j = 0; j < vpath.size(); j++)
         {
             path << vpath.at(j).toInt();
         }
@@ -376,7 +376,7 @@ void AbstractInputTool::load(const QVariant& settings)
 
         if (ref)
         {
-            AbstractInputItem * item = 
+            AbstractInputItem * item =
                 createAbstractInputItem(id, ref, path);
 
             if (item)
@@ -391,8 +391,8 @@ void AbstractInputTool::load(const QVariant& settings)
 
 void AbstractInputTool::clear()
 {
-    for (inverse_map_t::const_iterator it = m_inverse_map.begin(); 
-            it != m_inverse_map.end(); ++it) 
+    for (inverse_map_t::const_iterator it = m_inverse_map.begin();
+            it != m_inverse_map.end(); ++it)
     {
         AbstractInputItem * item = it->first;
 

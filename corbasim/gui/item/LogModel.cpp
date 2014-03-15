@@ -64,7 +64,7 @@ const LogModel::LogEntry * LogModel::getEntry(const QModelIndex& index) const
     return NULL;
 }
 
-namespace 
+namespace
 {
 
 QString getNodeName(MetaNode const * node)
@@ -88,7 +88,7 @@ QString getNodeName(MetaNode const * node)
     return "Error!";
 }
 
-} // namespace 
+} // namespace
 
 
 QVariant LogModel::data(const QModelIndex& index, int role) const
@@ -113,7 +113,7 @@ QVariant LogModel::data(const QModelIndex& index, int role) const
     }
     else if (role == Qt::DisplayRole || role == Qt::EditRole)
     {
-        MetaNode * node = 
+        MetaNode * node =
             static_cast< MetaNode * >(index.internalPointer());
         node->check_for_initialized();
 
@@ -153,11 +153,11 @@ QVariant LogModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-bool LogModel::setData(const QModelIndex & index, 
+bool LogModel::setData(const QModelIndex & index,
         const QVariant& value, int role)
 {
     MetaNode * node = static_cast< MetaNode * >(index.internalPointer());
-    
+
     if (!node) return false;
 
     node->check_for_initialized();
@@ -172,7 +172,7 @@ bool LogModel::setData(const QModelIndex & index,
     if (res)
     {
         // Temporal
-        if (node->parent && 
+        if (node->parent &&
                 node->parent->reflective->get_type() == core::TYPE_UNION)
         {
             bool _d = (node->reflective->get_child_index() == 0);
@@ -185,7 +185,7 @@ bool LogModel::setData(const QModelIndex & index,
             }
 
             // No es una referencia
-            node->parent->reflective->set_child_value(node->parent->brothers[col]->holder, 
+            node->parent->reflective->set_child_value(node->parent->brothers[col]->holder,
                     node->reflective->get_child_index(), node->brothers[col]->holder);
 
             if (_d)
@@ -220,14 +220,14 @@ Qt::ItemFlags LogModel::flags(const QModelIndex &index) const
 
     // Value is editable by default
     if (index.column())
-        return Qt::ItemIsEnabled 
-            | Qt::ItemIsSelectable 
+        return Qt::ItemIsEnabled
+            | Qt::ItemIsSelectable
             | Qt::ItemIsEditable;
 
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QVariant LogModel::headerData(int section, 
+QVariant LogModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
@@ -248,7 +248,7 @@ QVariant LogModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex LogModel::index(int row, int column, 
+QModelIndex LogModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -256,7 +256,7 @@ QModelIndex LogModel::index(int row, int column,
 
     if (!parent.isValid())
     {
-        return createIndex(row, column, 
+        return createIndex(row, column,
                 (void *) m_nodes[row].get());
     }
 
@@ -266,7 +266,7 @@ QModelIndex LogModel::index(int row, int column,
 
     if (row < (int) node->children.size())
     {
-        return createIndex(row, column, 
+        return createIndex(row, column,
                 (void *) node->children[row].get());
     }
 
@@ -289,7 +289,7 @@ QModelIndex LogModel::parent(const QModelIndex &index) const
     {
         // index could be changed
         int row = 0;
-        for (; row < m_nodes.size(); row++) 
+        for (; row < m_nodes.size(); row++)
             if (m_nodes.at(row).get() == node->parent)
                 return createIndex(row, 0, (void *) node->parent);
 
@@ -353,27 +353,27 @@ void LogModel::unregisterInstance(ObjectId id)
     m_instances.del(id);
 }
 
-void LogModel::inputRequest(ObjectId id, 
+void LogModel::inputRequest(ObjectId id,
         Request_ptr req,
         Event_ptr resp)
 {
     append(id, req, resp, true);
 }
 
-void LogModel::outputRequest(ObjectId id, 
+void LogModel::outputRequest(ObjectId id,
         Request_ptr req,
         Event_ptr resp)
 {
     append(id, req, resp, false);
 }
 
-void LogModel::append(ObjectId id, 
+void LogModel::append(ObjectId id,
         Request_ptr req,
         Event_ptr resp,
         bool is_in)
 {
     Objref_ptr obj = m_instances.find(id);
-    
+
     if (obj)
     {
         LogEntry entry;
@@ -393,7 +393,7 @@ void LogModel::append(ObjectId id,
         {
             beginRemoveRows(QModelIndex(), 0, nRowsToBeRemoved - 1);
 
-            for (int i = 0; i < nRowsToBeRemoved; i++) 
+            for (int i = 0; i < nRowsToBeRemoved; i++)
             {
                 // Elimina la primera
                 m_entries.pop_front();
@@ -406,12 +406,12 @@ void LogModel::append(ObjectId id,
         beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
 
         MetaNode_ptr metaNode(new MetaNode(op));
-        
+
         // Request
         core::holder hold = op->get_holder(req);
         Node_ptr node(new Node(op, hold));
         metaNode->brothers.push_back(node);
-        
+
         // Response
         if (resp && (resp->get_type() == event::RESPONSE))
         {
@@ -437,12 +437,12 @@ void LogModel::append(ObjectId id,
 
         if (is_in)
         {
-            entry.text = QString("Incoming call ") + obj->name() + "." 
+            entry.text = QString("Incoming call ") + obj->name() + "."
                 + op->get_name();
             entry.icon = &m_inputIcon;
-            
+
             // Background color
-            if (resp && (resp->get_type() == event::EXCEPTION || 
+            if (resp && (resp->get_type() == event::EXCEPTION ||
                     resp->get_type() == event::MESSAGE))
             {
                 entry.text += " (Exception!)";
@@ -453,12 +453,12 @@ void LogModel::append(ObjectId id,
         }
         else
         {
-            entry.text = QString("Outgoing call ") + obj->name() + "." 
+            entry.text = QString("Outgoing call ") + obj->name() + "."
                 + op->get_name();
             entry.icon = &m_outputIcon;
 
             // Background Color
-            if (resp && (resp->get_type() == event::EXCEPTION || 
+            if (resp && (resp->get_type() == event::EXCEPTION ||
                     resp->get_type() == event::MESSAGE))
             {
                 entry.text += " (Exception!)";
@@ -474,7 +474,7 @@ void LogModel::append(ObjectId id,
     }
 }
 
-FilteredLogModel::FilteredLogModel(QObject * parent) : 
+FilteredLogModel::FilteredLogModel(QObject * parent) :
     QSortFilterProxyModel(parent), m_filter(NULL)
 {
 }

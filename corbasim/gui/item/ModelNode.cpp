@@ -33,7 +33,7 @@ AbstractNode::~AbstractNode()
 
 InstanceNode::InstanceNode(Objref_ptr o) :
     instance(o),
-    reflective(o->interface()), 
+    reflective(o->interface()),
     initialized(false)
 {
 }
@@ -45,14 +45,14 @@ void InstanceNode::reset()
 
 void InstanceNode::initialize()
 {
-    const unsigned int count = 
+    const unsigned int count =
         reflective->operation_count();
     children.reserve(count);
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         DescriptorNode_ptr child(new DescriptorNode(
-                    reflective->get_reflective_by_index(i), 
+                    reflective->get_reflective_by_index(i),
                     this, 0, i));
 
         children.push_back(child);
@@ -90,7 +90,7 @@ void DescriptorNode::initialize()
     if (reflective->is_repeated())
     {
         core::holder dummy;
-        const unsigned int count = 
+        const unsigned int count =
             (reflective->is_variable_length())? 0:
                 reflective->get_length(dummy);
         children.reserve(count);
@@ -98,25 +98,25 @@ void DescriptorNode::initialize()
         TypeDescriptor_ptr slice =
             reflective->get_slice();
 
-        for (unsigned int i = 0; i < count; i++) 
+        for (unsigned int i = 0; i < count; i++)
         {
-            DescriptorNode_ptr child(new DescriptorNode(slice, 
+            DescriptorNode_ptr child(new DescriptorNode(slice,
                         instance, this, i));
 
             children.push_back(child);
         }
     }
-    else if(reflective->get_type() == core::TYPE_STRUCT || 
+    else if(reflective->get_type() == core::TYPE_STRUCT ||
             reflective->get_type() == core::TYPE_UNION)
     {
-        const unsigned int count = 
+        const unsigned int count =
             reflective->get_children_count();
         children.reserve(count);
 
-        for (unsigned int i = 0; i < count; i++) 
+        for (unsigned int i = 0; i < count; i++)
         {
             DescriptorNode_ptr child(new DescriptorNode(
-                        reflective->get_child(i), 
+                        reflective->get_child(i),
                         instance, this, i));
 
             children.push_back(child);
@@ -132,7 +132,7 @@ void DescriptorNode::check_for_initialized()
         initialize();
 }
 
-// 
+//
 //
 // Node
 //
@@ -158,9 +158,9 @@ void Node::initialize()
         TypeDescriptor_ptr slice =
             reflective->get_slice();
 
-        for (unsigned int i = 0; i < count; i++) 
+        for (unsigned int i = 0; i < count; i++)
         {
-            Node_ptr child(new Node(slice, 
+            Node_ptr child(new Node(slice,
                     reflective->get_child_value(holder, i), this, i));
 
             children.push_back(child);
@@ -171,9 +171,9 @@ void Node::initialize()
         const unsigned int count = reflective->get_children_count();
         children.reserve(count);
 
-        for (unsigned int i = 0; i < count; i++) 
+        for (unsigned int i = 0; i < count; i++)
         {
-            Node_ptr child(new Node(reflective->get_child(i), 
+            Node_ptr child(new Node(reflective->get_child(i),
                     reflective->get_child_value(holder, i), this, i));
 
             children.push_back(child);
@@ -184,14 +184,14 @@ void Node::initialize()
         children.clear();
 
         // discriminator
-        Node_ptr child(new Node(reflective->get_child(0), 
+        Node_ptr child(new Node(reflective->get_child(0),
                 reflective->get_child_value(holder, 0), this, 0));
         children.push_back(child);
 
         unsigned int idx = 0;
         if ((idx = reflective->get_length(holder)) > 0)
         {
-            Node_ptr child(new Node(reflective->get_child(idx), 
+            Node_ptr child(new Node(reflective->get_child(idx),
                     reflective->get_child_value(holder, idx), this, idx));
 
             children.push_back(child);
@@ -217,8 +217,8 @@ MetaNode::MetaNode(TypeDescriptor_ptr r,
 void MetaNode::reset()
 {
     initialized = false;
-    
-    for (unsigned int j = 0; j < brothers.size(); j++) 
+
+    for (unsigned int j = 0; j < brothers.size(); j++)
     {
         if (brothers[j]) brothers[j]->reset();
     }
@@ -227,9 +227,9 @@ void MetaNode::reset()
 void MetaNode::initialize()
 {
     unsigned int max_childs = 0;
-    for (unsigned int j = 0; j < brothers.size(); j++) 
+    for (unsigned int j = 0; j < brothers.size(); j++)
     {
-        if (brothers[j]) 
+        if (brothers[j])
         {
             brothers[j]->check_for_initialized();
 
@@ -244,11 +244,11 @@ void MetaNode::initialize()
 
         TypeDescriptor_ptr slice =reflective->get_slice();
 
-        for (unsigned int i = 0; i < max_childs; i++) 
+        for (unsigned int i = 0; i < max_childs; i++)
         {
             MetaNode_ptr child(new MetaNode(slice, this, i));
 
-            for (unsigned int j = 0; j < brothers.size(); j++) 
+            for (unsigned int j = 0; j < brothers.size(); j++)
             {
                 if (brothers[j] && i < brothers[j]->children.size())
                     child->brothers.push_back(brothers[j]->children[i]);
@@ -264,12 +264,12 @@ void MetaNode::initialize()
         const unsigned int count = reflective->get_children_count();
         children.reserve(count);
 
-        for (unsigned int i = 0; i < count; i++) 
+        for (unsigned int i = 0; i < count; i++)
         {
             MetaNode_ptr child(new MetaNode(
                         reflective->get_child(i),  this, i));
 
-            for (unsigned int j = 0; j < brothers.size(); j++) 
+            for (unsigned int j = 0; j < brothers.size(); j++)
             {
                 if (brothers[j])
                     child->brothers.push_back(brothers[j]->children[i]);
@@ -290,11 +290,11 @@ void MetaNode::initialize()
         typedef std::set< unsigned int > idxs_t;
         idxs_t idxs;
 
-        for (unsigned int j = 0; j < brothers.size(); j++) 
+        for (unsigned int j = 0; j < brothers.size(); j++)
         {
-            if (brothers[j]) 
+            if (brothers[j])
             {
-                for (unsigned int i = 0; i < brothers[j]->children.size(); i++) 
+                for (unsigned int i = 0; i < brothers[j]->children.size(); i++)
                 {
                     idxs.insert(brothers[j]->children[i]->reflective->get_child_index());
                 }
@@ -303,13 +303,13 @@ void MetaNode::initialize()
 
         std::vector< unsigned int > tmp(brothers.size(), 0);
 
-        for (idxs_t::const_iterator it = idxs.begin(); it != idxs.end(); ++it) 
+        for (idxs_t::const_iterator it = idxs.begin(); it != idxs.end(); ++it)
         {
             MetaNode_ptr child(new MetaNode(reflective->get_child(*it), this, *it));
 
-            for (unsigned int i = 0; i < brothers.size(); i++) 
+            for (unsigned int i = 0; i < brothers.size(); i++)
             {
-                if (brothers[i] && tmp[i] < brothers[i]->children.size() 
+                if (brothers[i] && tmp[i] < brothers[i]->children.size()
                         && brothers[i]->children[tmp[i]]->reflective->get_child_index() == *it)
                 {
                     child->brothers.push_back(brothers[i]->children[tmp[i]]);

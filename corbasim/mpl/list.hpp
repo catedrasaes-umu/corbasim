@@ -22,9 +22,9 @@
 
 #include <boost/utility/value_init.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace cs_mpl 
+namespace cs_mpl
 {
 
 struct null_type {};
@@ -36,9 +36,9 @@ struct list
     typedef Tail tail_type;
 };
 
-namespace detail 
+namespace detail
 {
-namespace list_iterator 
+namespace list_iterator
 {
 
 template < typename S >

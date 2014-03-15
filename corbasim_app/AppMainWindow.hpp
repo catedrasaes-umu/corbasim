@@ -33,9 +33,9 @@
 #include "ServantView.hpp"
 #include "ui_AppMainWindow.h"
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
     class ObjrefCreateDialog;
     class ServantCreateDialog;
@@ -45,7 +45,7 @@ namespace gui
     class StatusView;
 } // namespace gui
 
-namespace app 
+namespace app
 {
 
 using namespace corbasim::gui;
@@ -120,7 +120,7 @@ signals:
 
     void createObjref(const ObjrefConfig&);
     void deleteObjref(ObjectId);
-    
+
     void createServant(const ServantConfig&);
     void deleteServant(ObjectId);
 

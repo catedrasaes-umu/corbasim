@@ -23,9 +23,9 @@
 #include <corbasim/impl.hpp>
 #include <QThread>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 
 class ReferenceFinder : public QThread

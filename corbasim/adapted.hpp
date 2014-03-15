@@ -15,28 +15,28 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CORBASIM_ADAPTED_HPP
 #define CORBASIM_ADAPTED_HPP
 
 #include <corbasim/mpl.hpp>
 
-namespace CORBA 
+namespace CORBA
 {
 class TypeCode;
 } // namespace CORBA
 
-namespace corbasim 
+namespace corbasim
 {
 
-namespace core 
+namespace core
 {
 
 struct reflective_base;
 
 template < typename T, typename Y >
-reflective_base * create_reflective(const T& t_, const Y& y_, 
+reflective_base * create_reflective(const T& t_, const Y& y_,
         reflective_base const * parent, unsigned int idx);
 
 } // namespace core
@@ -45,7 +45,7 @@ reflective_base * create_reflective(const T& t_, const Y& y_,
  * @brief Espacio de nombres con el código necesario para adaptar el código
  * generado para el uso de las distintas metafunciones.
  */
-namespace adapted 
+namespace adapted
 {
 
 template< typename T >
@@ -123,22 +123,22 @@ struct member
     typedef T type;
     static const unsigned int index = N;
     typedef boost::mpl::int_< N > index_type;
-}; 
+};
 
 template< typename M >
 struct member_type
 {
-    typedef typename cs_mpl::type_of_member< typename M::type, 
+    typedef typename cs_mpl::type_of_member< typename M::type,
         typename M::index_type >::type type;
 };
 
-namespace detail 
+namespace detail
 {
 template< typename T >
 struct is_string_slice_impl
 {
-    typedef typename 
-        cs_mpl::eval_if< cs_mpl::is_string< 
+    typedef typename
+        cs_mpl::eval_if< cs_mpl::is_string<
                     typename is_corbaseq< T >::slice_type >,
                 boost::mpl::identity< cs_mpl::true_ >,
                 boost::mpl::identity< cs_mpl::false_ >

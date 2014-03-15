@@ -20,9 +20,9 @@
 #ifndef CORBASIM_CORE_COPY_HPP
 #define CORBASIM_CORE_COPY_HPP
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 template< typename T >
@@ -41,7 +41,7 @@ struct copy< T[N] >
 
     static inline void invoke(const type src, type dst)
     {
-        for (unsigned int i = 0; i < N; i++) 
+        for (unsigned int i = 0; i < N; i++)
             copy< T >::invoke(src[i], dst[i]);
     }
 };

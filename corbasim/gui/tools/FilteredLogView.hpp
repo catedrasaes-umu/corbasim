@@ -32,9 +32,9 @@
 #include <corbasim/gui/item/FilterModel.hpp>
 #include <corbasim/gui/tools/AbstractTool.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class LogModel;
@@ -56,7 +56,7 @@ public slots:
 
 protected:
 
-    typedef std::map< 
+    typedef std::map<
         OperationDescriptor_ptr,
         QScrollArea * > viewers_t;
 
@@ -81,11 +81,11 @@ public slots:
     void registerInstance(Objref_ptr object);
 
     void unregisterInstance(ObjectId id);
-  
+
     void setLogModel(QAbstractItemModel * model);
 
 protected slots:
-    
+
     void selected(const QModelIndex& index);
     void currentChanged(const QModelIndex& current, const QModelIndex& previous);
 

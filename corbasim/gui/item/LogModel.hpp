@@ -30,7 +30,7 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/item/ModelNode.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
 namespace gui
 {
@@ -38,7 +38,7 @@ namespace gui
 class FilterModel;
 class FilteredLogModel;
 
-class CORBASIM_GUI_DECLSPEC LogModel : 
+class CORBASIM_GUI_DECLSPEC LogModel :
     public QAbstractItemModel
 {
     Q_OBJECT
@@ -47,9 +47,9 @@ public:
     LogModel(QObject * parent = 0);
     virtual ~LogModel();
 
-    QVariant data(const QModelIndex& index, 
-            int role = Qt::DisplayRole) const; 
-    bool setData(const QModelIndex & index, 
+    QVariant data(const QModelIndex& index,
+            int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex & index,
             const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -87,10 +87,10 @@ public slots:
     void registerInstance(Objref_ptr objref);
     void unregisterInstance(ObjectId id);
 
-    void inputRequest(ObjectId id, 
+    void inputRequest(ObjectId id,
             Request_ptr req,
             Event_ptr resp);
-    void outputRequest(ObjectId id, 
+    void outputRequest(ObjectId id,
             Request_ptr req,
             Event_ptr resp);
 
@@ -100,7 +100,7 @@ private slots:
 
 protected:
 
-    void append(ObjectId id, 
+    void append(ObjectId id,
             Request_ptr req,
             Event_ptr resp,
             bool is_in);
@@ -120,7 +120,7 @@ protected:
     friend class FilteredLogModel;
 };
 
-class CORBASIM_GUI_DECLSPEC FilteredLogModel : 
+class CORBASIM_GUI_DECLSPEC FilteredLogModel :
     public QSortFilterProxyModel
 {
     Q_OBJECT

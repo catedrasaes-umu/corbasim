@@ -25,9 +25,9 @@
 #include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/qt/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 
 class CORBASIM_QT_DECLSPEC AbstractItemFrame : public QFrame
@@ -113,7 +113,7 @@ private slots:
 
 signals:
 
-    void deleteRequested(corbasim::qt::SortableGroupItem *); 
+    void deleteRequested(corbasim::qt::SortableGroupItem *);
 
 protected:
 

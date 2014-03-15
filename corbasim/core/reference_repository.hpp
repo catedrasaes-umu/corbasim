@@ -26,9 +26,9 @@
 #include <corbasim/cosnaming/CosnamingC.h>
 #include <corbasim/core/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
 
 class CORBASIM_CORE_DECLSPEC reference_repository

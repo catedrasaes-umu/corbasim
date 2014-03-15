@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 {
     if (argc < 2)
     {
-        std::cerr << "You must specify an interface full qualified name" 
+        std::cerr << "You must specify an interface full qualified name"
             << std::endl;
         return -1;
     }

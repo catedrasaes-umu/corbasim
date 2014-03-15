@@ -42,7 +42,7 @@ void FormWidget::resizeEvent(QResizeEvent * event)
 void FormWidget::addField(const QString& text, QWidget * widget)
 {
     Item item;
-    
+
     item.label = new QLabel(text);
     item.widget = widget;
 
@@ -50,27 +50,27 @@ void FormWidget::addField(const QString& text, QWidget * widget)
     m_minWidth = std::max(m_minWidth, item.widget->minimumWidth());
 
     m_items.push_back(item);
-    
+
     reallocate(width());
 }
 
 void FormWidget::addMediumField(const QString& text, QWidget * widget)
 {
     Item item;
-    
+
     item.label = new QLabel(text);
     item.widget = widget;
     item.medium = true;
 
     m_items.push_back(item);
-    
+
     reallocate(width());
 }
 
 void FormWidget::addBigField(const QString& text, QWidget * widget)
 {
     Item item;
-    
+
     QGroupBox * gb = new QGroupBox(text, this);
     QHBoxLayout * cLayout = new QHBoxLayout(gb);
     cLayout->addWidget(widget);
@@ -80,13 +80,13 @@ void FormWidget::addBigField(const QString& text, QWidget * widget)
     item.group = gb;
 
     m_items.push_back(item);
-    
+
     reallocate(width());
 }
 
 void FormWidget::reallocate(int width)
 {
-    for (int i = m_layout->count() - 1; i >= 0; i--) 
+    for (int i = m_layout->count() - 1; i >= 0; i--)
     {
         m_layout->takeAt(i);
     }
@@ -100,13 +100,13 @@ void FormWidget::reallocate(int width)
     int column = 0;
 
     /*
-    for (int i = 0; i < rowWidth; i++) 
+    for (int i = 0; i < rowWidth; i++)
     {
         m_layout->setColumnMinimumWidth(i, columnWidth);
     }
     */
 
-    for (unsigned int i = 0; i < m_items.size(); i++) 
+    for (unsigned int i = 0; i < m_items.size(); i++)
     {
         if (m_items[i].label && !m_items[i].medium)
         {

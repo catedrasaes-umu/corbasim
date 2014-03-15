@@ -29,9 +29,9 @@
 
 #include <corbasim/gui/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 class SortableGroup;
 class SortableGroupItem;
@@ -47,7 +47,7 @@ protected:
 
     AbstractInputItem(Objref_ptr objref,
             OperationDescriptor_ptr reflective,
-            const QList< int >& path, 
+            const QList< int >& path,
             QWidget * parent = 0);
 
 public:
@@ -100,9 +100,9 @@ public:
     void setModel(ParametersModel * model);
 
 protected:
-    
+
     virtual AbstractInputItem * createItem(
-            Objref_ptr objref, 
+            Objref_ptr objref,
             OperationDescriptor_ptr reflective,
             const QList< int >& path) = 0;
 
@@ -116,11 +116,11 @@ public slots:
 
     void unregisterInstance(ObjectId id);
 
-    AbstractInputItem * createAbstractInputItem(const QString& id, 
+    AbstractInputItem * createAbstractInputItem(const QString& id,
             InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 
-    void deleteAbstractInputItem(const QString& id, 
+    void deleteAbstractInputItem(const QString& id,
             InterfaceDescriptor_ptr reflective,
             const QList< int >& path);
 

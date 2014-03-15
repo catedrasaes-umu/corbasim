@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CORBASIM_MPL_FOR_EACH_HPP
 #define CORBASIM_MPL_FOR_EACH_HPP
@@ -23,9 +23,9 @@
 #include <corbasim/mpl/vector.hpp>
 #include <boost/utility/value_init.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace cs_mpl 
+namespace cs_mpl
 {
 
 template< typename Sequence >
@@ -34,9 +34,9 @@ struct size
     typedef typename Sequence::size_type type;
 };
 
-namespace detail 
+namespace detail
 {
-namespace iterator 
+namespace iterator
 {
 
 template < typename T >

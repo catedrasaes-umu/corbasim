@@ -32,7 +32,7 @@ HolderEmitter::~HolderEmitter()
 {
 }
 
-void HolderEmitter::process(Request_ptr req, 
+void HolderEmitter::process(Request_ptr req,
         TypeDescriptor_ptr ref,
         Holder hold)
 {

@@ -23,9 +23,9 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC DumpProcessor : public QObject,
@@ -55,7 +55,7 @@ public:
             const Config& config);
     ~DumpProcessor();
 
-    void process(Request_ptr req, 
+    void process(Request_ptr req,
             TypeDescriptor_ptr ref,
             Holder hold);
 

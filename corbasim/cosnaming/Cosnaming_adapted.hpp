@@ -16,11 +16,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 	( ::corbasim::orbimpl::String_Manager, kind)
      )
 
-	
 
 
 
-        
+
+
 namespace corbasim
 {
 namespace adapted
@@ -46,7 +46,7 @@ template< >
 struct enumeration< CosNaming::BindingType >
 {
 	static const unsigned int size = 2;
-	
+
 	static inline const char** values()
 	{
 		static const char* _data[] = {"nobject", "ncontext", 0};
@@ -66,11 +66,11 @@ BOOST_FUSION_ADAPT_STRUCT(
 	( CosNaming::BindingType, binding_type)
      )
 
-	
 
 
 
-        
+
+
 namespace corbasim
 {
 namespace adapted
@@ -112,7 +112,7 @@ template< >
 struct enumeration< CosNaming::NamingContext::NotFoundReason >
 {
 	static const unsigned int size = 3;
-	
+
 	static inline const char** values()
 	{
 		static const char* _data[] = {"missing_node", "not_context", "not_object", 0};
@@ -209,7 +209,7 @@ struct is_objrefvar< CosNaming::NamingContextExt_var > : public cs_mpl::true_
 
 
 
-namespace _corbasim_CosNaming 
+namespace _corbasim_CosNaming
 {
 
 
@@ -217,7 +217,7 @@ struct NameComponent
 {
 	typedef corbasim::adapted::member< ::CosNaming::NameComponent, 0 > id_corbasim_member;
 	typedef corbasim::adapted::member< ::CosNaming::NameComponent, 1 > kind_corbasim_member;
-	
+
 };
 
 
@@ -229,7 +229,7 @@ struct Binding
 {
 	typedef corbasim::adapted::member< ::CosNaming::Binding, 0 > binding_name_corbasim_member;
 	typedef corbasim::adapted::member< ::CosNaming::Binding, 1 > binding_type_corbasim_member;
-	
+
 };
 
 
@@ -237,7 +237,7 @@ struct Binding
 
 
 
-namespace NamingContext 
+namespace NamingContext
 {
 
 
@@ -260,12 +260,12 @@ struct __bind
 
 	CosNaming::Name n;
 	::CORBA::Object_var obj;
-	
-	
+
+
 	__bind();
-	
+
 	__bind(const CosNaming::Name& _n, ::CORBA::Object_ptr _obj);
-	
+
 	// Copy constructor
 	__bind(const __bind& o);
 };
@@ -282,12 +282,12 @@ struct __rebind
 
 	CosNaming::Name n;
 	::CORBA::Object_var obj;
-	
-	
+
+
 	__rebind();
-	
+
 	__rebind(const CosNaming::Name& _n, ::CORBA::Object_ptr _obj);
-	
+
 	// Copy constructor
 	__rebind(const __rebind& o);
 };
@@ -304,12 +304,12 @@ struct __bind_context
 
 	CosNaming::Name n;
 	CosNaming::NamingContext_var nc;
-	
-	
+
+
 	__bind_context();
-	
+
 	__bind_context(const CosNaming::Name& _n, CosNaming::NamingContext_ptr _nc);
-	
+
 	// Copy constructor
 	__bind_context(const __bind_context& o);
 };
@@ -326,12 +326,12 @@ struct __rebind_context
 
 	CosNaming::Name n;
 	CosNaming::NamingContext_var nc;
-	
-	
+
+
 	__rebind_context();
-	
+
 	__rebind_context(const CosNaming::Name& _n, CosNaming::NamingContext_ptr _nc);
-	
+
 	// Copy constructor
 	__rebind_context(const __rebind_context& o);
 };
@@ -346,13 +346,13 @@ struct __resolve
 	typedef corbasim::adapted::member< __resolve, 0 > n_corbasim_member;
 
 	CosNaming::Name n;
-	
+
 	::CORBA::Object_var _return;
-	
+
 	__resolve();
-	
+
 	__resolve(const CosNaming::Name& _n);
-	
+
 	// Copy constructor
 	__resolve(const __resolve& o);
 };
@@ -367,12 +367,12 @@ struct __unbind
 	typedef corbasim::adapted::member< __unbind, 0 > n_corbasim_member;
 
 	CosNaming::Name n;
-	
-	
+
+
 	__unbind();
-	
+
 	__unbind(const CosNaming::Name& _n);
-	
+
 	// Copy constructor
 	__unbind(const __unbind& o);
 };
@@ -385,12 +385,12 @@ struct __new_context
 	typedef boost::mpl::vector<  > _arg_list;
 
 
-	
+
 	CosNaming::NamingContext_var _return;
-	
+
 	__new_context();
-	
-	
+
+
 	// Copy constructor
 	__new_context(const __new_context& o);
 };
@@ -405,13 +405,13 @@ struct __bind_new_context
 	typedef corbasim::adapted::member< __bind_new_context, 0 > n_corbasim_member;
 
 	CosNaming::Name n;
-	
+
 	CosNaming::NamingContext_var _return;
-	
+
 	__bind_new_context();
-	
+
 	__bind_new_context(const CosNaming::Name& _n);
-	
+
 	// Copy constructor
 	__bind_new_context(const __bind_new_context& o);
 };
@@ -424,11 +424,11 @@ struct __destroy
 	typedef boost::mpl::vector<  > _arg_list;
 
 
-	
-	
+
+
 	__destroy();
-	
-	
+
+
 	// Copy constructor
 	__destroy(const __destroy& o);
 };
@@ -447,12 +447,12 @@ struct __list
 	::CORBA::ULong how_many;
 	CosNaming::BindingList_var bl;
 	CosNaming::BindingIterator_var bi;
-	
-	
+
+
 	__list();
-	
+
 	__list(::CORBA::ULong _how_many, CosNaming::BindingList_out _bl, CosNaming::BindingIterator_out _bi);
-	
+
 	// Copy constructor
 	__list(const __list& o);
 };
@@ -462,7 +462,7 @@ typedef __list list;
 } // NamingContext
 
 
-namespace BindingIterator 
+namespace BindingIterator
 {
 struct __next_one
 {
@@ -471,13 +471,13 @@ struct __next_one
 	typedef corbasim::adapted::member< __next_one, 0 > b_corbasim_member;
 
 	CosNaming::Binding_var b;
-	
+
 	::CORBA::Boolean _return;
-	
+
 	__next_one();
-	
+
 	__next_one(CosNaming::Binding_out _b);
-	
+
 	// Copy constructor
 	__next_one(const __next_one& o);
 };
@@ -494,13 +494,13 @@ struct __next_n
 
 	::CORBA::ULong how_many;
 	CosNaming::BindingList_var bl;
-	
+
 	::CORBA::Boolean _return;
-	
+
 	__next_n();
-	
+
 	__next_n(::CORBA::ULong _how_many, CosNaming::BindingList_out _bl);
-	
+
 	// Copy constructor
 	__next_n(const __next_n& o);
 };
@@ -513,11 +513,11 @@ struct __destroy
 	typedef boost::mpl::vector<  > _arg_list;
 
 
-	
-	
+
+
 	__destroy();
-	
-	
+
+
 	// Copy constructor
 	__destroy(const __destroy& o);
 };
@@ -527,7 +527,7 @@ typedef __destroy destroy;
 } // BindingIterator
 
 
-namespace NamingContextExt 
+namespace NamingContextExt
 {
 
 
@@ -542,13 +542,13 @@ struct __to_string
 	typedef corbasim::adapted::member< __to_string, 0 > n_corbasim_member;
 
 	CosNaming::Name n;
-	
+
 	::corbasim::orbimpl::String_Manager _return;
-	
+
 	__to_string();
-	
+
 	__to_string(const CosNaming::Name& _n);
-	
+
 	// Copy constructor
 	__to_string(const __to_string& o);
 };
@@ -563,13 +563,13 @@ struct __to_name
 	typedef corbasim::adapted::member< __to_name, 0 > sn_corbasim_member;
 
 	::corbasim::orbimpl::String_Manager sn;
-	
+
 	CosNaming::Name_var _return;
-	
+
 	__to_name();
-	
+
 	__to_name(const char* _sn);
-	
+
 	// Copy constructor
 	__to_name(const __to_name& o);
 };
@@ -588,13 +588,13 @@ struct __to_url
 
 	::corbasim::orbimpl::String_Manager addr;
 	::corbasim::orbimpl::String_Manager sn;
-	
+
 	::corbasim::orbimpl::String_Manager _return;
-	
+
 	__to_url();
-	
+
 	__to_url(const char* _addr, const char* _sn);
-	
+
 	// Copy constructor
 	__to_url(const __to_url& o);
 };
@@ -609,13 +609,13 @@ struct __resolve_str
 	typedef corbasim::adapted::member< __resolve_str, 0 > n_corbasim_member;
 
 	::corbasim::orbimpl::String_Manager n;
-	
+
 	::CORBA::Object_var _return;
-	
+
 	__resolve_str();
-	
+
 	__resolve_str(const char* _n);
-	
+
 	// Copy constructor
 	__resolve_str(const __resolve_str& o);
 };
@@ -651,7 +651,7 @@ template < >
 struct interface < CosNaming::NamingContext >
 {
 	typedef cs_mpl::list< _corbasim_CosNaming::NamingContext::bind, cs_mpl::list< _corbasim_CosNaming::NamingContext::rebind, cs_mpl::list< _corbasim_CosNaming::NamingContext::bind_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::rebind_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::resolve, cs_mpl::list< _corbasim_CosNaming::NamingContext::unbind, cs_mpl::list< _corbasim_CosNaming::NamingContext::new_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::bind_new_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::destroy, cs_mpl::list< _corbasim_CosNaming::NamingContext::list  >  >  >  >  >  >  >  >  >  >   _op_list;
-	
+
 };
 
 } // adapted
@@ -679,13 +679,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::bind >
 {
 	typedef _corbasim_CosNaming::NamingContext::bind Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -707,13 +707,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::rebind >
 {
 	typedef _corbasim_CosNaming::NamingContext::rebind Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -735,13 +735,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::bind_context >
 {
 	typedef _corbasim_CosNaming::NamingContext::bind_context Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -763,13 +763,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::rebind_context >
 {
 	typedef _corbasim_CosNaming::NamingContext::rebind_context Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -791,13 +791,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::resolve >
 {
 	typedef _corbasim_CosNaming::NamingContext::resolve Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -818,13 +818,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::unbind >
 {
 	typedef _corbasim_CosNaming::NamingContext::unbind Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -845,13 +845,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::new_context >
 {
 	typedef _corbasim_CosNaming::NamingContext::new_context Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -873,13 +873,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::bind_new_context >
 {
 	typedef _corbasim_CosNaming::NamingContext::bind_new_context Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -899,13 +899,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::destroy >
 {
 	typedef _corbasim_CosNaming::NamingContext::destroy Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -928,13 +928,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContext::list >
 {
 	typedef _corbasim_CosNaming::NamingContext::list Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -957,7 +957,7 @@ template < >
 struct interface < CosNaming::BindingIterator >
 {
 	typedef cs_mpl::list< _corbasim_CosNaming::BindingIterator::next_one, cs_mpl::list< _corbasim_CosNaming::BindingIterator::next_n, cs_mpl::list< _corbasim_CosNaming::BindingIterator::destroy  >  >  >   _op_list;
-	
+
 };
 
 } // adapted
@@ -973,13 +973,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::BindingIterator::next_one >
 {
 	typedef _corbasim_CosNaming::BindingIterator::next_one Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -1002,13 +1002,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::BindingIterator::next_n >
 {
 	typedef _corbasim_CosNaming::BindingIterator::next_n Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -1028,13 +1028,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::BindingIterator::destroy >
 {
 	typedef _corbasim_CosNaming::BindingIterator::destroy Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -1057,7 +1057,7 @@ template < >
 struct interface < CosNaming::NamingContextExt >
 {
 	typedef cs_mpl::list< _corbasim_CosNaming::NamingContextExt::to_string, cs_mpl::list< _corbasim_CosNaming::NamingContextExt::to_name, cs_mpl::list< _corbasim_CosNaming::NamingContextExt::to_url, cs_mpl::list< _corbasim_CosNaming::NamingContextExt::resolve_str, cs_mpl::list< _corbasim_CosNaming::NamingContext::bind, cs_mpl::list< _corbasim_CosNaming::NamingContext::rebind, cs_mpl::list< _corbasim_CosNaming::NamingContext::bind_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::rebind_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::resolve, cs_mpl::list< _corbasim_CosNaming::NamingContext::unbind, cs_mpl::list< _corbasim_CosNaming::NamingContext::new_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::bind_new_context, cs_mpl::list< _corbasim_CosNaming::NamingContext::destroy, cs_mpl::list< _corbasim_CosNaming::NamingContext::list  >  >  >  >  >  >  >  >  >  >  >  >  >  >   _op_list;
-	
+
 };
 
 } // adapted
@@ -1079,13 +1079,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContextExt::to_string >
 {
 	typedef _corbasim_CosNaming::NamingContextExt::to_string Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -1107,13 +1107,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContextExt::to_name >
 {
 	typedef _corbasim_CosNaming::NamingContextExt::to_name Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -1138,13 +1138,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContextExt::to_url >
 {
 	typedef _corbasim_CosNaming::NamingContextExt::to_url Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {
@@ -1166,13 +1166,13 @@ BOOST_FUSION_ADAPT_STRUCT(
 namespace corbasim
 {
 namespace adapted
-{     
+{
 
 template< >
 struct call< _corbasim_CosNaming::NamingContextExt::resolve_str >
 {
 	typedef _corbasim_CosNaming::NamingContextExt::resolve_str Value;
-	
+
     template < typename Interface >
     static inline void invoke(Interface * ref, Value& value)
     {

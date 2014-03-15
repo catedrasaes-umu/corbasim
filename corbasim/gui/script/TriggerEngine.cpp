@@ -23,7 +23,7 @@
 
 using namespace corbasim::gui;
 
-QScriptValue TriggerEngine::_call(QScriptContext * ctx, 
+QScriptValue TriggerEngine::_call(QScriptContext * ctx,
         QScriptEngine * eng)
 {
     TriggerEngine * _this = static_cast< TriggerEngine * >(eng);
@@ -33,7 +33,7 @@ QScriptValue TriggerEngine::_call(QScriptContext * ctx,
     QScriptValue fun = ctx->callee();
 
     const QString id = ctx->thisObject().prototype().property("id").toString();
-    const std::string method = 
+    const std::string method =
         fun.property("prototype").property("name").toString().toStdString();
 
     /*
@@ -63,7 +63,7 @@ QScriptValue TriggerEngine::_call(QScriptContext * ctx,
 
                 // Request
                 /*
-                QScriptValue reqObject = 
+                QScriptValue reqObject =
                     _this->newObject(&_this->m_clazz,
                         _this->newVariant(
                             qVariantFromValue(node)));
@@ -79,16 +79,16 @@ QScriptValue TriggerEngine::_call(QScriptContext * ctx,
 }
 
 TriggerEngine::TriggerEngine(QObject * parent) :
-    QScriptEngine(parent), 
-    m_objrefs(this), 
+    QScriptEngine(parent),
+    m_objrefs(this),
     m_servants(this),
     m_clazz(this)
 {
     // add createServant and createObjref methods
 /*
-    globalObject().setProperty("createObject", 
+    globalObject().setProperty("createObject",
             newFunction(ScriptEngine::_createObject));
-    globalObject().setProperty("createServant", 
+    globalObject().setProperty("createServant",
             newFunction(ScriptEngine::_createServant));
 */
 }
@@ -108,12 +108,12 @@ void TriggerEngine::objrefCreated(Objref_ptr object)
 
     globalObject().setProperty(object->name(), obj);
 
-    const InterfaceDescriptor_ptr iface = 
+    const InterfaceDescriptor_ptr iface =
         object->interface();
 
     unsigned int count = iface->operation_count();
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
         const OperationDescriptor_ptr op =
             iface->get_reflective_by_index(i);
@@ -155,7 +155,7 @@ void TriggerEngine::servantCreated(Objref_ptr servant)
             "}").arg(servant->name()));
 
 
-    connect(servant.get(), 
+    connect(servant.get(),
             SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
             this,
             SLOT(requestReceived(ObjectId, Request_ptr, Event_ptr)));
@@ -167,7 +167,7 @@ void TriggerEngine::servantDeleted(ObjectId id)
 
     if (servant)
     {
-        disconnect(servant.get(), 
+        disconnect(servant.get(),
                 SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
                 this,
                 SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)));
@@ -176,7 +176,7 @@ void TriggerEngine::servantDeleted(ObjectId id)
     objrefDeleted(id);
 }
 
-void TriggerEngine::requestReceived(ObjectId id, 
+void TriggerEngine::requestReceived(ObjectId id,
         Request_ptr req,
         Event_ptr resp)
 {
@@ -184,7 +184,7 @@ void TriggerEngine::requestReceived(ObjectId id,
 
     if (servant)
     {
-        const QScriptValue thisObject = 
+        const QScriptValue thisObject =
             globalObject().property(servant->name());
         QScriptValue meth = thisObject.property(
                 QString("_dispatch_%1").arg(req->get_name()));
@@ -212,7 +212,7 @@ void TriggerEngine::runFile(const QString& file)
 
     if (!scriptFile.open(QIODevice::ReadOnly))
     {
-        const QString err = 
+        const QString err =
             QString("Can not read file %1!").arg(file);
 
         emit error(err);

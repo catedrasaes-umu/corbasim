@@ -80,7 +80,7 @@ void ServantView::showSelfStimulator()
 
         QObject::connect(m_script,
             SIGNAL(sendRequest(Request_ptr)),
-            m_servant.get(), 
+            m_servant.get(),
             SLOT(sendRequest(Request_ptr)));
     }
     m_sub_script->showNormal();
@@ -89,7 +89,7 @@ void ServantView::showSelfStimulator()
 }
 
 // Settings
-void ServantView::save(QVariant& settings) 
+void ServantView::save(QVariant& settings)
 {
     QVariantMap map;
 
@@ -98,7 +98,7 @@ void ServantView::save(QVariant& settings)
     settings = map;
 }
 
-void ServantView::load(const QVariant& settings) 
+void ServantView::load(const QVariant& settings)
 {
 }
 

@@ -22,15 +22,15 @@
 
 #include <QTreeView>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class TreeView : public QTreeView
 {
     Q_OBJECT
-    Q_PROPERTY(bool autoScrollToItem 
+    Q_PROPERTY(bool autoScrollToItem
             READ autoScrollToItem
             WRITE setAutoScrollToItem)
 public:
@@ -42,7 +42,7 @@ public:
     virtual void setModel(QAbstractItemModel * model);
 
 public slots:
-    
+
     void setAutoScrollToItem(bool value);
 
 protected slots:

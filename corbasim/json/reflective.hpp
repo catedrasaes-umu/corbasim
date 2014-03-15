@@ -26,9 +26,9 @@
 #include <corbasim/json/writer.hpp>
 #include <corbasim/core/export.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace json 
+namespace json
 {
 
 struct CORBASIM_CORE_DECLSPEC reflective_helper : public helper::helper_base
@@ -57,21 +57,21 @@ struct CORBASIM_CORE_DECLSPEC reflective_helper : public helper::helper_base
     unsigned int m_currentIndex;
 };
 
-typedef csu::corbasim::json::writer::json_writer< std::ostream > 
+typedef csu::corbasim::json::writer::json_writer< std::ostream >
     std_writer_t;
 
-CORBASIM_CORE_DECLSPEC void write(std_writer_t& w, 
-        corbasim::core::reflective_base const * reflective, 
+CORBASIM_CORE_DECLSPEC void write(std_writer_t& w,
+        corbasim::core::reflective_base const * reflective,
         corbasim::core::holder holder);
 
-CORBASIM_CORE_DECLSPEC bool parse(core::reflective_base const * reflective, 
+CORBASIM_CORE_DECLSPEC bool parse(core::reflective_base const * reflective,
         core::holder& holder, const char * str, size_t size);
 
-CORBASIM_CORE_DECLSPEC bool parse(core::reflective_base const * reflective, 
+CORBASIM_CORE_DECLSPEC bool parse(core::reflective_base const * reflective,
         core::holder& holder, std::istream& in);
 
-CORBASIM_CORE_DECLSPEC void write(std::ostream& os, 
-        core::reflective_base const * reflective, 
+CORBASIM_CORE_DECLSPEC void write(std::ostream& os,
+        core::reflective_base const * reflective,
         core::holder& holder, bool indent = false);
 
 } // namespace json

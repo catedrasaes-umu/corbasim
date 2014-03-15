@@ -27,10 +27,10 @@ using namespace corbasim::gui;
 OperationSequenceItem::OperationSequenceItem(
         Objref_ptr object,
         OperationDescriptor_ptr operation,
-        QWidget * parent) : 
+        QWidget * parent) :
     AbstractSequenceItem(object, operation, parent)
 {
-    QVBoxLayout * layout = 
+    QVBoxLayout * layout =
         qobject_cast< QVBoxLayout * >(QWidget::layout());
 
     // Editor
@@ -42,7 +42,7 @@ OperationSequenceItem::OperationSequenceItem(
     QHBoxLayout * bLayout = new QHBoxLayout();
 
     // Horizontal spacer
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     bLayout->addItem(spacer);
 
@@ -69,7 +69,7 @@ OperationSequenceItem::OperationSequenceItem(
     bLayout = new QHBoxLayout();
 
     // Horizontal spacer
-    spacer = new QSpacerItem(40, 20, 
+    spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     bLayout->addItem(spacer);
 
@@ -88,14 +88,14 @@ OperationSequenceItem::OperationSequenceItem(
 
     bLayout->addWidget(m_buttonBox);
     // bLayout->addWidget(btSendNext);
-   
+
     connect(btSend, SIGNAL(clicked()),
             this, SLOT(sendClicked()));
-    connect(m_pbUpdate, SIGNAL(clicked()), 
+    connect(m_pbUpdate, SIGNAL(clicked()),
             this, SLOT(storeRequest()));
-    connect(m_pbStartStop, SIGNAL(toggled(bool)), 
+    connect(m_pbStartStop, SIGNAL(toggled(bool)),
             this, SLOT(startStopChecked(bool)));
-    connect(&m_timer, SIGNAL(timeout()), 
+    connect(&m_timer, SIGNAL(timeout()),
             this, SLOT(sendStored()));
 
     layout->addLayout(bLayout);
@@ -143,7 +143,7 @@ void OperationSequenceItem::sendStored()
         sendClicked();
 
     ++m_currentPeriodicRequest;
-    if (m_sbTimes->value() >= 0 && 
+    if (m_sbTimes->value() >= 0 &&
             m_currentPeriodicRequest >= m_sbTimes->value())
         m_pbStartStop->setChecked(false);
 }
@@ -165,12 +165,12 @@ OperationSequenceTool::~OperationSequenceTool()
 {
 }
 
-AbstractSequenceItem * 
+AbstractSequenceItem *
 OperationSequenceTool::createAbstractItem(
-        Objref_ptr object, 
+        Objref_ptr object,
         OperationDescriptor_ptr op)
 {
-    OperationSequenceItem * item = 
+    OperationSequenceItem * item =
         new OperationSequenceItem(object, op);
 
     connect(item, SIGNAL(sendRequest(Request_ptr)),

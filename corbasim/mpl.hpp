@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CORBASIM_MPL_HPP
 #define CORBASIM_MPL_HPP
@@ -40,7 +40,7 @@
 //#include <corbasim/mpl/for_each.hpp>
 #include <corbasim/impl.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
 
 /**
@@ -80,7 +80,7 @@ struct Arg_OUT
  * @brief Espacio de nombres que contiene las metafunciones necesarias la
  *        implementación de los simuladores CORBASIM.
  */
-namespace cs_mpl 
+namespace cs_mpl
 {
 
 typedef boost::mpl::true_ true_;
@@ -93,19 +93,19 @@ struct is_string :
 };
 
 template< >
-struct is_string< orbimpl::String_Manager > : 
+struct is_string< orbimpl::String_Manager > :
     public true_
 {
 };
 
 template< >
-struct is_string< orbimpl::string_for_seq > : 
+struct is_string< orbimpl::string_for_seq > :
     public true_
 {
 };
 
 template< >
-struct is_string< CORBA::String_var > : 
+struct is_string< CORBA::String_var > :
     public true_
 {
 };
@@ -123,28 +123,28 @@ struct is_bool< bool > :
 };
 
 template< typename T >
-struct is_struct : 
-    public boost::mpl::and_< 
+struct is_struct :
+    public boost::mpl::and_<
         boost::is_class< T >,
         boost::mpl::is_sequence< T > >
 {
 };
 
 template< typename Cond, typename Result, typename Else >
-struct eval_if : 
+struct eval_if :
     public boost::mpl::eval_if< Cond, Result, Else >
 {
 };
 
 template< typename Cond, typename Result, typename Else >
-struct eval_if_identity : 
-    public boost::mpl::eval_if< Cond, 
+struct eval_if_identity :
+    public boost::mpl::eval_if< Cond,
         boost::mpl::identity< Result >, Else >
 {
 };
 
 template< typename T, typename N >
-struct type_of_member : 
+struct type_of_member :
     public boost::fusion::result_of::value_at< T, N >
 {
 };
@@ -156,7 +156,7 @@ struct name_of_member :
 };
 
 template< typename T >
-struct number_of_members : 
+struct number_of_members :
     public boost::fusion::result_of::size < T >
 {
 };

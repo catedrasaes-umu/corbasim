@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CORBASIM_TAO_HPP
 #define CORBASIM_TAO_HPP
@@ -32,10 +32,10 @@
 #include <tao/PortableServer/Servant_Base.h>
 #include <tao/PortableServer/PortableServer.h>
 
-namespace corbasim 
+namespace corbasim
 {
 
-struct tao 
+struct tao
 {
     typedef ::TAO::unbounded_basic_string_sequence< char >::element_type
         string_for_seq;

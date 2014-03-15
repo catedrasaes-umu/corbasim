@@ -30,12 +30,12 @@ struct ClientApp::ClientData
     SimpleClient m_window;
 };
 
-ClientApp::ClientApp(const char * fqn) : 
+ClientApp::ClientApp(const char * fqn) :
     m_data(new ClientData)
 {
-    QObject::connect(&(m_data->m_application), 
-            SIGNAL(objrefCreated(Objref_ptr)), 
-            &(m_data->m_window), 
+    QObject::connect(&(m_data->m_application),
+            SIGNAL(objrefCreated(Objref_ptr)),
+            &(m_data->m_window),
             SLOT(initialize(Objref_ptr)));
 
     // Create the object

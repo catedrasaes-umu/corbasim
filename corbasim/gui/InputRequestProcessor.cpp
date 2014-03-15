@@ -43,14 +43,14 @@ void InputRequestController::registerInstance(Objref_ptr objref)
     {
         connect(objref.get(),
                 SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
-                this, 
+                this,
                 SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
     }
     else
     {
         connect(objref.get(),
                 SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
-                this, 
+                this,
                 SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
     }
 
@@ -67,14 +67,14 @@ void InputRequestController::unregisterInstance(ObjectId id)
         {
             disconnect(objref.get(),
                     SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
-                    this, 
+                    this,
                     SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
         }
         else
         {
             disconnect(objref.get(),
                     SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
-                    this, 
+                    this,
                     SLOT(processRequest(ObjectId, Request_ptr, Event_ptr)));
         }
 
@@ -90,11 +90,11 @@ void InputRequestController::unregisterInstance(ObjectId id)
             if (old->first.first == id)
             {
                 // Notify deletion of all its processors
-                for (processors_t::const_iterator pit = 
-                        old->second.begin(); 
-                        pit != old->second.end(); ++pit) 
+                for (processors_t::const_iterator pit =
+                        old->second.begin();
+                        pit != old->second.end(); ++pit)
                 {
-                    emit removedProcessor(*pit);    
+                    emit removedProcessor(*pit);
                 }
 
                 m_processors.erase(old);
@@ -103,7 +103,7 @@ void InputRequestController::unregisterInstance(ObjectId id)
     }
 }
 
-void InputRequestController::processRequest(ObjectId id, 
+void InputRequestController::processRequest(ObjectId id,
         Request_ptr req,
         Event_ptr res)
 {
@@ -111,17 +111,17 @@ void InputRequestController::processRequest(ObjectId id,
     map_t::iterator it = m_processors.find(
             std::make_pair(id, req->get_tag()));
 
-    if (it != m_processors.end() && 
+    if (it != m_processors.end() &&
             !it->second.empty())
     {
         // Iterates over its associated processors
-        processors_t::const_iterator pit = it->second.begin(); 
+        processors_t::const_iterator pit = it->second.begin();
 
-        for (; pit != it->second.end(); ++pit) 
+        for (; pit != it->second.end(); ++pit)
         {
             const RequestProcessor_ptr processor = *pit;
             const ReflectivePath_t& path = processor->path();
-            const OperationDescriptor_ptr op = 
+            const OperationDescriptor_ptr op =
                 processor->operation();
 
             Holder holder = op->get_holder(req);
@@ -130,7 +130,7 @@ void InputRequestController::processRequest(ObjectId id,
             TypeDescriptor_ptr descriptor = NULL;
             Holder value;
 
-            bool res = followPath(op, holder, path, 
+            bool res = followPath(op, holder, path,
                     // Results
                     descriptor, value);
 
@@ -148,7 +148,7 @@ void InputRequestController::addProcessor(
     // Inserts the processor
     key_t key (p->id(), op->get_tag());
     m_processors[key].push_back(p);
-    
+
     emit addedProcessor(p);
 }
 

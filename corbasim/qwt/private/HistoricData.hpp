@@ -22,9 +22,9 @@
 
 #include <qwt_series_data.h>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qwt 
+namespace qwt
 {
 namespace priv
 {

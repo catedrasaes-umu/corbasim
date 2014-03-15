@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CORBASIM_CORBA_ADAPTED_HPP
 #define CORBASIM_CORBA_ADAPTED_HPP
@@ -23,9 +23,9 @@
 #include <corbasim/impl.hpp>
 #include <corbasim/adapted.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace adapted 
+namespace adapted
 {
 
 template< >

@@ -32,7 +32,7 @@ using namespace corbasim::gui;
 
 Dumper::Dumper(Objref_ptr objref,
         OperationDescriptor_ptr reflective,
-        const QList< int >& path, 
+        const QList< int >& path,
         QWidget * parent) :
     AbstractInputItem(objref, reflective, path, parent)
 {
@@ -52,9 +52,9 @@ Dumper::Dumper(Objref_ptr objref,
     prefixLayout->addWidget(m_browse);
     prefixLayout->setMargin(0);
     form->addMediumField("File prefix", prefixLayout);
-    
+
     m_suffixLength = new QSpinBox();
-    m_suffixLength->setRange(1, 10); 
+    m_suffixLength->setRange(1, 10);
     m_suffixLength->setValue(4);
     form->addField("Suffix length", m_suffixLength);
 
@@ -72,7 +72,7 @@ Dumper::Dumper(Objref_ptr objref,
     m_startStopButton = new qt::StartStopButton();
     m_startStopButton->setObjectName("start-stop");
     QHBoxLayout * startStopLayout = new QHBoxLayout();
-    QSpacerItem * spacer = new QSpacerItem(40, 20, 
+    QSpacerItem * spacer = new QSpacerItem(40, 20,
             QSizePolicy::Expanding, QSizePolicy::Minimum);
     startStopLayout->addItem(spacer);
     startStopLayout->addWidget(m_startStopButton);
@@ -104,7 +104,7 @@ Dumper::~Dumper()
 
 void Dumper::browse()
 {
-    const QString file = QFileDialog::getSaveFileName(this, 
+    const QString file = QFileDialog::getSaveFileName(this,
             "Select a file...", ".");
 
     m_filePrefix->setText(file);
@@ -139,7 +139,7 @@ void Dumper::doStart(bool start)
                 static_cast< DumpProcessor::Format >(m_format->currentIndex()),
                 m_suffixLength->value()
             };
-            
+
             DumpProcessor * processor =
                 new DumpProcessor(m_objref, m_path, config);
 
@@ -166,7 +166,7 @@ DumpTool::~DumpTool()
 }
 
 AbstractInputItem * DumpTool::createItem(
-        Objref_ptr objref, 
+        Objref_ptr objref,
         OperationDescriptor_ptr reflective,
         const QList< int >& path)
 {

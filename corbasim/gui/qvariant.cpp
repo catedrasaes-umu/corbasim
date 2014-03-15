@@ -30,9 +30,9 @@ using boost::uint64_t;
 using boost::int64_t;
 #endif
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
     QVariant toQVariant(
@@ -49,12 +49,12 @@ namespace gui
                 {
                     QVariantMap res;
 
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        core::holder child = 
+                        core::holder child =
                             reflective->get_child_value(hold, i);
 
                         res.insert(reflective->get_child_name(i),
@@ -70,12 +70,12 @@ namespace gui
                     QVariantList res;
 
                     const unsigned int length = reflective->get_length(hold);
-                    core::reflective_base const * slice = 
+                    core::reflective_base const * slice =
                         reflective->get_slice();
 
-                    for (unsigned int i = 0; i < length; i++) 
+                    for (unsigned int i = 0; i < length; i++)
                     {
-                        core::holder child = 
+                        core::holder child =
                             reflective->get_child_value(hold, i);
 
                         res.push_back(toQVariant(slice, child));
@@ -110,7 +110,7 @@ namespace gui
                 }
             case TYPE_OBJREF:
                 {
-                    objrefvar_reflective_base const * objref = 
+                    objrefvar_reflective_base const * objref =
                         static_cast< objrefvar_reflective_base const * >(
                                 reflective);
 
@@ -118,12 +118,12 @@ namespace gui
 
                     if (CORBA::is_nil(obj))
                         return QVariant("NIL");
-                    
+
                     try {
                         reference_repository * rr =
                             reference_repository::get_instance();
 
-                        CORBA::String_var str = 
+                        CORBA::String_var str =
                             rr->object_to_string(obj);
 
                         return QVariant(str.in());
@@ -140,9 +140,9 @@ namespace gui
                     // Maybe it works...
                     int32_t value = hold.to_value< int32_t >();
 
-                    const char * str = "Unknown value"; 
+                    const char * str = "Unknown value";
 
-                    if (value >= 0 && 
+                    if (value >= 0 &&
                             value < reflective->get_children_count())
                     {
                         str = reflective->get_child_name(
@@ -159,7 +159,7 @@ namespace gui
             default:
                 break;
         }
-       
+
         return QVariant();
     }
 
@@ -182,20 +182,20 @@ namespace gui
 
                     QVariantMap map = var.toMap();
 
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        QVariantMap::const_iterator it = 
+                        QVariantMap::const_iterator it =
                             map.find(reflective->get_child_name(i));
 
                         if (it != map.end())
                         {
-                            core::holder child = 
+                            core::holder child =
                                 reflective->get_child_value(hold, i);
-                            
-                            if (!fromQVariant(reflective->get_child(i), 
+
+                            if (!fromQVariant(reflective->get_child(i),
                                         child, it.value()))
                                 return false;
                         }
@@ -224,14 +224,14 @@ namespace gui
                         return false;
                     }
 
-                    core::reflective_base const * slice = 
+                    core::reflective_base const * slice =
                         reflective->get_slice();
 
-                    for (unsigned int i = 0; i < length; i++) 
+                    for (unsigned int i = 0; i < length; i++)
                     {
-                        core::holder child = 
+                        core::holder child =
                             reflective->get_child_value(hold, i);
-                        
+
                         if (!fromQVariant(slice, child, list.at(i)))
                             return false;
                     }
@@ -252,7 +252,7 @@ namespace gui
                 {
                     if (!var.canConvert< unsigned char >()) return false;
 
-                    hold.to_value< unsigned char >() = 
+                    hold.to_value< unsigned char >() =
                         var.value< unsigned char >();
 
                     return true;
@@ -277,7 +277,7 @@ namespace gui
                 {
                     if (!var.canConvert< unsigned short >()) return false;
 
-                    hold.to_value< unsigned short >() = 
+                    hold.to_value< unsigned short >() =
                         var.value< unsigned short >();
 
                     return true;
@@ -320,7 +320,7 @@ namespace gui
                     bool canConvert = var.canConvert(QVariant::String);
 
                     if (canConvert)
-                        reflective->from_string(hold, 
+                        reflective->from_string(hold,
                                 var.toString().toStdString());
 
                     return canConvert;
@@ -329,7 +329,7 @@ namespace gui
 #if 0
             case TYPE_OBJREF:
                 {
-                    objrefvar_reflective_base const * objref = 
+                    objrefvar_reflective_base const * objref =
                         static_cast< objrefvar_reflective_base const * >(
                                 reflective);
 
@@ -337,12 +337,12 @@ namespace gui
 
                     if (CORBA::is_nil(obj))
                         return QVariant("NIL");
-                    
+
                     try {
                         reference_repository * rr =
                             reference_repository::get_instance();
 
-                        CORBA::String_var str = 
+                        CORBA::String_var str =
                             rr->object_to_string(obj);
 
                         return QVariant(str.in());
@@ -368,7 +368,7 @@ namespace gui
                         const unsigned int count =
                             reflective->get_children_count();
 
-                        for (int32_t i = 0; i < (int32_t) count; i++) 
+                        for (int32_t i = 0; i < (int32_t) count; i++)
                         {
                             if (val == reflective->get_child_name(i))
                             {
@@ -426,12 +426,12 @@ namespace gui
                 {
                     QScriptValue res = engine->newObject();
 
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        core::holder child = 
+                        core::holder child =
                             reflective->get_child_value(hold, i);
 
                         res.setProperty(reflective->get_child_name(i),
@@ -446,20 +446,20 @@ namespace gui
             case TYPE_ARRAY:
             case TYPE_SEQUENCE:
                 {
-                    const unsigned int length = 
+                    const unsigned int length =
                         reflective->get_length(hold);
 
                     QScriptValue res = engine->newArray(length);
 
-                    core::reflective_base const * slice = 
+                    core::reflective_base const * slice =
                         reflective->get_slice();
 
-                    for (unsigned int i = 0; i < length; i++) 
+                    for (unsigned int i = 0; i < length; i++)
                     {
                         core::holder child =
                             reflective->get_child_value(hold, i);
 
-                        res.setProperty(i, 
+                        res.setProperty(i,
                                 toQScriptValue(engine, slice, child));
                     }
 
@@ -481,10 +481,10 @@ namespace gui
                 return QScriptValue(hold.to_value< uint32_t >());
                 // No soporta 64 bits
             case TYPE_LONGLONG:
-                return QScriptValue((int32_t) 
+                return QScriptValue((int32_t)
                         hold.to_value< int64_t >());
             case TYPE_ULONGLONG:
-                return QScriptValue((uint32_t) 
+                return QScriptValue((uint32_t)
                         hold.to_value< uint64_t >());
 
             case TYPE_STRING:
@@ -495,7 +495,7 @@ namespace gui
                 }
             case TYPE_OBJREF:
                 {
-                    objrefvar_reflective_base const * objref = 
+                    objrefvar_reflective_base const * objref =
                         static_cast< objrefvar_reflective_base const * >(
                                 reflective);
 
@@ -503,12 +503,12 @@ namespace gui
 
                     if (CORBA::is_nil(obj))
                         return QScriptValue("NIL");
-                    
+
                     try {
                         reference_repository * rr =
                             reference_repository::get_instance();
 
-                        CORBA::String_var str = 
+                        CORBA::String_var str =
                             rr->object_to_string(obj);
 
                         return QScriptValue(str.in());
@@ -525,9 +525,9 @@ namespace gui
                     // Maybe it works...
                     int32_t value = hold.to_value< int32_t >();
 
-                    const char * str = "Unknown value"; 
+                    const char * str = "Unknown value";
 
-                    if (value >= 0 && 
+                    if (value >= 0 &&
                             value < reflective->get_children_count())
                     {
                         str = reflective->get_child_name(
@@ -544,7 +544,7 @@ namespace gui
             default:
                 break;
         }
-       
+
         return QScriptValue();
     }
 
@@ -569,20 +569,20 @@ namespace gui
 
                     QVariantMap map = var.toMap();
 
-                    const unsigned int count = 
+                    const unsigned int count =
                         reflective->get_children_count();
 
-                    for (unsigned int i = 0; i < count; i++) 
+                    for (unsigned int i = 0; i < count; i++)
                     {
-                        QVariantMap::const_iterator it = 
+                        QVariantMap::const_iterator it =
                             map.find(reflective->get_child_name(i));
 
                         if (it != map.end())
                         {
-                            core::holder child = 
+                            core::holder child =
                                 reflective->get_child_value(hold, i);
-                            
-                            if (!fromQVariant(reflective->get_child(i), 
+
+                            if (!fromQVariant(reflective->get_child(i),
                                         child, it.value()))
                                 return false;
                         }
@@ -611,14 +611,14 @@ namespace gui
                         return false;
                     }
 
-                    core::reflective_base const * slice = 
+                    core::reflective_base const * slice =
                         reflective->get_slice();
 
-                    for (unsigned int i = 0; i < length; i++) 
+                    for (unsigned int i = 0; i < length; i++)
                     {
-                        core::holder child = 
+                        core::holder child =
                             reflective->get_child_value(hold, i);
-                        
+
                         if (!fromQVariant(slice, child, list.at(i)))
                             return false;
                     }
@@ -655,7 +655,7 @@ namespace gui
                     bool canConvert = var.canConvert(QVariant::String);
 
                     if (canConvert)
-                        reflective->from_string(hold, 
+                        reflective->from_string(hold,
                                 var.toString().toStdString());
 
                     return canConvert;
@@ -664,7 +664,7 @@ namespace gui
 #if 0
             case TYPE_OBJREF:
                 {
-                    objrefvar_reflective_base const * objref = 
+                    objrefvar_reflective_base const * objref =
                         static_cast< objrefvar_reflective_base const * >(
                                 reflective);
 
@@ -672,12 +672,12 @@ namespace gui
 
                     if (CORBA::is_nil(obj))
                         return QVariant("NIL");
-                    
+
                     try {
                         reference_repository * rr =
                             reference_repository::get_instance();
 
-                        CORBA::String_var str = 
+                        CORBA::String_var str =
                             rr->object_to_string(obj);
 
                         return QVariant(str.in());
@@ -694,9 +694,9 @@ namespace gui
                     // Maybe it works...
                     int32_t value = hold.to_value< int32_t >();
 
-                    const char * str = "Unknown value"; 
+                    const char * str = "Unknown value";
 
-                    if (value >= 0 && 
+                    if (value >= 0 &&
                             value < reflective->get_children_count())
                         str = reflective->get_child_name(
                                 (unsigned int) value);

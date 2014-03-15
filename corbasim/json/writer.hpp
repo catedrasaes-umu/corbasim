@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CORBASIM_JSON_WRITER_HPP
 #define CORBASIM_JSON_WRITER_HPP
@@ -24,9 +24,9 @@
 #include <corbasim/json/detail/json_writer.hpp>
 #include <ostream>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace json 
+namespace json
 {
 
 template< typename Ostream, typename T >

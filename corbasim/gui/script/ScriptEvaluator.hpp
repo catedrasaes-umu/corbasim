@@ -28,9 +28,9 @@
 #include <corbasim/gui/script/ReflectiveScriptClass.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class OperationSender;
@@ -39,7 +39,7 @@ class OperationEvaluator;
 
 typedef boost::shared_ptr< OperationEvaluator > OperationEvaluator_ptr;
 
-class CORBASIM_GUI_DECLSPEC OperationEvaluator : 
+class CORBASIM_GUI_DECLSPEC OperationEvaluator :
     public QObject
 {
     Q_OBJECT
@@ -78,14 +78,14 @@ protected:
 //
 //
 
-class CORBASIM_GUI_DECLSPEC OperationEvaluatorWidget : 
+class CORBASIM_GUI_DECLSPEC OperationEvaluatorWidget :
     public QWidget
 {
     Q_OBJECT
 public:
     OperationEvaluatorWidget(Objref_ptr object, QWidget * parent = 0);
     virtual ~OperationEvaluatorWidget();
-    
+
     void initialize(OperationDescriptor_ptr);
 
 public slots:
@@ -113,7 +113,7 @@ class ScriptEvaluatorWidget : public QWidget
 public:
     ScriptEvaluatorWidget(QWidget * parent = 0);
     virtual ~ScriptEvaluatorWidget();
-    
+
     void initialize(InterfaceDescriptor_ptr);
 };
 

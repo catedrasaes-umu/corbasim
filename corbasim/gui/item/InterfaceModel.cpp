@@ -5,7 +5,7 @@
 using namespace corbasim::gui;
 
 InterfaceModel::InterfaceModel(QObject *parent)
-    : QAbstractItemModel(parent) 
+    : QAbstractItemModel(parent)
 {
 }
 
@@ -36,7 +36,7 @@ QVariant InterfaceModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-bool InterfaceModel::setData(const QModelIndex & index, 
+bool InterfaceModel::setData(const QModelIndex & index,
         const QVariant& value, int role)
 {
     return false;
@@ -50,10 +50,10 @@ Qt::ItemFlags InterfaceModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QVariant InterfaceModel::headerData(int section, 
+QVariant InterfaceModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal 
+    if (orientation == Qt::Horizontal
             && role == Qt::DisplayRole)
     {
         switch (section)
@@ -68,7 +68,7 @@ QVariant InterfaceModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex InterfaceModel::index(int row, int column, 
+QModelIndex InterfaceModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -76,7 +76,7 @@ QModelIndex InterfaceModel::index(int row, int column,
 
     if (!parent.isValid())
     {
-        return createIndex(row, column, 
+        return createIndex(row, column,
                 (void *) m_nodes.at(row));
     }
 
@@ -95,7 +95,7 @@ int InterfaceModel::rowCount(const QModelIndex &parent) const
      */
     if (!parent.isValid())
     {
-        return m_nodes.size(); 
+        return m_nodes.size();
     }
 
     return 0;
@@ -106,7 +106,7 @@ void InterfaceModel::addInterface(InterfaceDescriptor_ptr interface)
     beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
 
     m_nodes.push_back(interface);
-        
+
     endInsertRows();
 }
 

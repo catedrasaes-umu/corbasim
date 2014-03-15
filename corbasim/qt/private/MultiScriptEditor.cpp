@@ -36,7 +36,7 @@ MultiScriptEditor::MultiScriptEditor(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileIcon),
             "&Load", this);
     newAction->setShortcut(QKeySequence::New);
-    QObject::connect(newAction, SIGNAL(triggered()), 
+    QObject::connect(newAction, SIGNAL(triggered()),
             this, SLOT(new_()));
 
     // Tool bars

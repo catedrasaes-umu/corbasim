@@ -11,7 +11,7 @@ namespace corbasim
 namespace gui
 {
 
-class OperationParametersModel : 
+class OperationParametersModel :
     public QAbstractItemModel
 {
     Q_OBJECT
@@ -21,9 +21,9 @@ public:
     virtual ~OperationParametersModel();
 
     // QAbstractItemModel
-    QVariant data(const QModelIndex& index, 
-            int role = Qt::DisplayRole) const; 
-    virtual bool setData(const QModelIndex & index, 
+    QVariant data(const QModelIndex& index,
+            int role = Qt::DisplayRole) const;
+    virtual bool setData(const QModelIndex & index,
             const QVariant& value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -43,7 +43,7 @@ public:
             int idx,
             OperationDescriptor_ptr reflective);
 
-    OperationDescriptor_ptr 
+    OperationDescriptor_ptr
     getReflective() const;
 
 public slots:

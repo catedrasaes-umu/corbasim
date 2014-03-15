@@ -51,7 +51,7 @@ void OperationsView::clicked(const QModelIndex& index)
             QList< int > list;
             list << index.row();
 
-            OperationDescriptor_ptr op = 
+            OperationDescriptor_ptr op =
                 instance->interface()->get_reflective_by_index(index.row());
 
             emit selectedItem(instance, op, list);
@@ -69,7 +69,7 @@ void OperationsView::clicked(const QModelIndex& index)
                 current = current.parent();
             }
 
-            OperationDescriptor_ptr op = 
+            OperationDescriptor_ptr op =
                 instance->interface()->get_reflective_by_index(list.front());
 
             emit selectedItem(instance, op, list);

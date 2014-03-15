@@ -56,7 +56,7 @@ QMimeData *	ScriptModel::mimeData(const QModelIndexList& indexes) const
 
         const LogEntry& entry = m_entries.at(pos);
 
-        OperationDescriptor_ptr reflective = 
+        OperationDescriptor_ptr reflective =
             entry.reflective;
 
         core::holder holder = reflective->get_holder(entry.req);
@@ -100,7 +100,7 @@ void ScriptModel::deletePosition(int pos)
     endRemoveRows();
 }
 
-namespace  
+namespace
 {
     QString getNodeName(Node const * node)
     {
@@ -117,7 +117,7 @@ namespace
 
         return "Error!";
     }
-} // namespace 
+} // namespace
 
 QVariant ScriptModel::data(const QModelIndex& index, int role) const
 {
@@ -173,11 +173,11 @@ QVariant ScriptModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-bool ScriptModel::setData(const QModelIndex & index, 
+bool ScriptModel::setData(const QModelIndex & index,
         const QVariant& value, int role)
 {
     Node * node = static_cast< Node * >(index.internalPointer());
-    
+
     if (!node) return false;
 
     node->check_for_initialized();
@@ -199,17 +199,17 @@ Qt::ItemFlags ScriptModel::flags(const QModelIndex &index) const
 
     // Value is editable by default
     if (index.column())
-        return Qt::ItemIsEnabled 
-            | Qt::ItemIsSelectable 
+        return Qt::ItemIsEnabled
+            | Qt::ItemIsSelectable
             | Qt::ItemIsEditable
             | Qt::ItemIsDragEnabled;
 
-    return Qt::ItemIsEnabled | 
-        Qt::ItemIsSelectable | 
+    return Qt::ItemIsEnabled |
+        Qt::ItemIsSelectable |
         Qt::ItemIsDragEnabled;
 }
 
-QVariant ScriptModel::headerData(int section, 
+QVariant ScriptModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
@@ -228,7 +228,7 @@ QVariant ScriptModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex ScriptModel::index(int row, int column, 
+QModelIndex ScriptModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -244,7 +244,7 @@ QModelIndex ScriptModel::index(int row, int column,
 
     if (row < (int) node->children.size())
     {
-        return createIndex(row, column, 
+        return createIndex(row, column,
                 (void *) node->children[row].get());
     }
 
@@ -267,7 +267,7 @@ QModelIndex ScriptModel::parent(const QModelIndex &index) const
         // index could be changed
         int row = 0;
 
-        for (; row < m_nodes.size(); row++) 
+        for (; row < m_nodes.size(); row++)
             if (m_nodes.at(row).get() == node->parent)
                 return createIndex(row, 0, (void *) node->parent);
 

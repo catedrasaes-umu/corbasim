@@ -13,7 +13,7 @@ namespace corbasim
 namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC InterfaceModel : 
+class CORBASIM_GUI_DECLSPEC InterfaceModel :
     public QAbstractItemModel
 {
     Q_OBJECT
@@ -21,9 +21,9 @@ public:
     InterfaceModel(QObject *parent = 0);
     virtual ~InterfaceModel();
 
-    QVariant data(const QModelIndex& index, 
-            int role) const; 
-    bool setData(const QModelIndex & index, 
+    QVariant data(const QModelIndex& index,
+            int role) const;
+    bool setData(const QModelIndex & index,
             const QVariant& value, int role);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;

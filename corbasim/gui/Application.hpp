@@ -25,9 +25,9 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC Application : public QObject
@@ -55,7 +55,7 @@ public slots:
 
     void loadScenario(const QString& file);
     void saveScenario(const QString& file);
-    
+
     void loadDirectory(const QString& directory);
 
     void loadInterface(const QString& fqn);
@@ -79,10 +79,10 @@ signals:
     void error(const QString& msg);
     void message(const QString& msg);
 
-    void requestSent(ObjectId id, 
+    void requestSent(ObjectId id,
             Request_ptr req, Event_ptr res);
 
-    void requestReceived(ObjectId id, 
+    void requestReceived(ObjectId id,
             Request_ptr req, Event_ptr res);
 
 protected slots:

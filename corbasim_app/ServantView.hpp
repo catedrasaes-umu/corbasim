@@ -26,9 +26,9 @@
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/tools/SimpleScriptEditor.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace app 
+namespace app
 {
 
 using namespace corbasim::gui;
@@ -60,7 +60,7 @@ public slots:
 signals:
 
     void deleteServant(ObjectId);
-            
+
 protected:
     QMdiArea * m_mdi_area;
 

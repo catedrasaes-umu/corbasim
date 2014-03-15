@@ -25,7 +25,7 @@ ObjrefView::ObjrefView(QMdiArea * area,
         Objref_ptr objref,
         QObject * parent) :
     QObject(parent), m_mdi_area(area), m_objref(objref),
-    m_sub_script(NULL), 
+    m_sub_script(NULL),
     m_script(NULL),
 
     m_subUpdateReference(NULL),
@@ -51,9 +51,9 @@ ObjrefView::ObjrefView(QMdiArea * area,
     m_subwindows.resize(count, NULL);
     m_subwindows_senders.resize(count, NULL);
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
-        OperationDescriptor_ptr op = 
+        OperationDescriptor_ptr op =
             factory->get_reflective_by_index(i);
 
         const char * name = op->get_name();
@@ -83,13 +83,13 @@ ObjrefView::~ObjrefView()
 {
     m_menu->deleteLater();
 
-    for (unsigned int i = 0; i < m_dialogs.size(); i++) 
+    for (unsigned int i = 0; i < m_dialogs.size(); i++)
     {
         delete m_dialogs[i];
         delete m_subwindows[i];
     }
 
-    for (unsigned int i = 0; i < m_senders.size(); i++) 
+    for (unsigned int i = 0; i < m_senders.size(); i++)
     {
         delete m_senders[i];
         delete m_subwindows_senders[i];
@@ -123,7 +123,7 @@ void ObjrefView::showRequestDialog(OperationDescriptor_ptr op)
 {
     InterfaceDescriptor_ptr iface = m_objref->interface();
 
-    for (int i = 0; i < (int) iface->operation_count(); i++) 
+    for (int i = 0; i < (int) iface->operation_count(); i++)
     {
         if (op == iface->get_reflective_by_index(i))
         {
@@ -169,7 +169,7 @@ QMdiSubWindow * ObjrefView::getRequestWindow(int idx)
         m_subwindows[idx] = new QMdiSubWindow();
         m_subwindows[idx]->setWidget(widget);
         m_mdi_area->addSubWindow(m_subwindows[idx]);
-        
+
         // Window title
         const QString title = QString("%1: %2").arg(m_objref->name()).arg(
             m_objref->interface()->get_reflective_by_index(idx)->get_name());
@@ -187,7 +187,7 @@ RequestDialog * ObjrefView::getRequestDialog(int idx)
 
     if (!dlg)
     {
-        OperationDescriptor_ptr op = 
+        OperationDescriptor_ptr op =
             m_objref->interface()->get_reflective_by_index(idx);
 
         const char * name = op->get_name();
@@ -197,7 +197,7 @@ RequestDialog * ObjrefView::getRequestDialog(int idx)
 
         connect(dlg,
             SIGNAL(sendRequest(Request_ptr)),
-            m_objref.get(), 
+            m_objref.get(),
             SLOT(sendRequest(Request_ptr)));
 
         m_dialogs[idx] = dlg;
@@ -216,7 +216,7 @@ QMdiSubWindow * ObjrefView::getSenderWindow(int idx)
         m_subwindows_senders[idx] = new QMdiSubWindow();
         m_subwindows_senders[idx]->setWidget(widget);
         m_mdi_area->addSubWindow(m_subwindows_senders[idx]);
-        
+
         // Window title
         const QString title = QString("%1: %2").arg(m_objref->name()).arg(
             m_objref->interface()->get_reflective_by_index(idx)->get_name());
@@ -234,7 +234,7 @@ OperationSender * ObjrefView::getSenderDialog(int idx)
 
     if (!dlg)
     {
-        OperationDescriptor_ptr op = 
+        OperationDescriptor_ptr op =
             m_objref->interface()->get_reflective_by_index(idx);
 
         const char * name = op->get_name();
@@ -265,7 +265,7 @@ void ObjrefView::showScriptEditor()
 
         connect(m_script,
             SIGNAL(sendRequest(Request_ptr)),
-            m_objref.get(), 
+            m_objref.get(),
             SLOT(sendRequest(Request_ptr)));
     }
 
@@ -296,16 +296,16 @@ void ObjrefView::showSetReference()
 }
 
 // Settings
-void ObjrefView::save(QVariant& settings) 
+void ObjrefView::save(QVariant& settings)
 {
     QVariantMap map;
-    
+
     map["fqn"] = m_objref->interface()->get_fqn();
 
     {
         QVariantList list;
 
-        for (unsigned int i = 0; i < m_dialogs.size(); i++) 
+        for (unsigned int i = 0; i < m_dialogs.size(); i++)
         {
             if (m_dialogs[i])
             {
@@ -321,7 +321,7 @@ void ObjrefView::save(QVariant& settings)
     {
         QVariantList list;
 
-        for (unsigned int i = 0; i < m_senders.size(); i++) 
+        for (unsigned int i = 0; i < m_senders.size(); i++)
         {
             if (m_senders[i])
             {
@@ -338,7 +338,7 @@ void ObjrefView::save(QVariant& settings)
     settings = map;
 }
 
-void ObjrefView::load(const QVariant& settings) 
+void ObjrefView::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
 
@@ -346,8 +346,8 @@ void ObjrefView::load(const QVariant& settings)
     {
         const QVariantList list = map.value("dialogs").toList();
 
-        for (QVariantList::const_iterator it = list.begin(); 
-                it != list.end(); ++it) 
+        for (QVariantList::const_iterator it = list.begin();
+                it != list.end(); ++it)
         {
             const QVariantMap map = it->toMap();
             const QString operation = map["operation"].toString();
@@ -356,12 +356,12 @@ void ObjrefView::load(const QVariant& settings)
             {
                 // find the index
                 unsigned int i = 0;
-                const unsigned int count = 
-                    m_objref->interface()->operation_count(); 
+                const unsigned int count =
+                    m_objref->interface()->operation_count();
 
-                for (; i < count; i++) 
+                for (; i < count; i++)
                 {
-                    const char * current = 
+                    const char * current =
                             m_objref->interface()->get_reflective_by_index(
                                     i)->get_name();
 
@@ -381,8 +381,8 @@ void ObjrefView::load(const QVariant& settings)
     {
         const QVariantList list = map.value("senders").toList();
 
-        for (QVariantList::const_iterator it = list.begin(); 
-                it != list.end(); ++it) 
+        for (QVariantList::const_iterator it = list.begin();
+                it != list.end(); ++it)
         {
             const QVariantMap map = it->toMap();
             const QString operation = map["operation"].toString();
@@ -391,12 +391,12 @@ void ObjrefView::load(const QVariant& settings)
             {
                 // find the index
                 unsigned int i = 0;
-                const unsigned int count = 
-                    m_objref->interface()->operation_count(); 
+                const unsigned int count =
+                    m_objref->interface()->operation_count();
 
-                for (; i < count; i++) 
+                for (; i < count; i++)
                 {
-                    const char * current = 
+                    const char * current =
                             m_objref->interface()->get_reflective_by_index(
                                     i)->get_name();
 
@@ -421,14 +421,14 @@ void ObjrefView::showClient()
         m_client->initialize(m_objref);
         m_client->setWindowTitle(m_objref->name());
     }
-    
+
     m_client->show();
 }
 
 void ObjrefView::stopAll()
 {
-    for (dialogs_t::iterator it = m_dialogs.begin(); 
-            it != m_dialogs.end(); ++it) 
+    for (dialogs_t::iterator it = m_dialogs.begin();
+            it != m_dialogs.end(); ++it)
     {
         if (*it)
         {
@@ -436,8 +436,8 @@ void ObjrefView::stopAll()
         }
     }
 
-    for (senders_t::iterator it = m_senders.begin(); 
-            it != m_senders.end(); ++it) 
+    for (senders_t::iterator it = m_senders.begin();
+            it != m_senders.end(); ++it)
     {
         if (*it)
         {

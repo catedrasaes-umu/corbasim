@@ -42,7 +42,7 @@ UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :
         m_status->setObjectName("status");
         groupLayout->addWidget(m_status);
         group->setLayout(groupLayout);
-        
+
         grid->addWidget(group, 0, 0, 1, 2);
     }
     {
@@ -54,7 +54,7 @@ UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :
         m_reference->setObjectName("reference");
         groupLayout->addWidget(m_reference);
         group->setLayout(groupLayout);
-        
+
         grid->addWidget(group, 1, 0, 1, 2);
     }
 
@@ -62,11 +62,11 @@ UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :
 
     // Buttons
     QDialogButtonBox * btns = new QDialogButtonBox();
-    QPushButton * pasteButton = 
+    QPushButton * pasteButton =
         btns->addButton("&Paste IOR from clipboard", QDialogButtonBox::ActionRole);
-    QPushButton * createButton = 
+    QPushButton * createButton =
         btns->addButton("&Apply", QDialogButtonBox::AcceptRole);
-    QPushButton * cancelButton = 
+    QPushButton * cancelButton =
         btns->addButton("C&ancel", QDialogButtonBox::RejectRole);
     layout->addWidget(btns);
 
@@ -106,7 +106,7 @@ void UpdateReferenceDialog::setObjref(Objref_ptr objref)
                 m_objref.get(),
                 SLOT(setReference(const CORBA::Object_var&)));
 
-        disconnect(m_objref.get(), 
+        disconnect(m_objref.get(),
                 SIGNAL(updatedReference(const CORBA::Object_var&)),
                 m_status,
                 SLOT(setReference(const CORBA::Object_var&)));
@@ -121,12 +121,12 @@ void UpdateReferenceDialog::setObjref(Objref_ptr objref)
 
         m_status->setReference(objref->reference());
 
-        connect(this, 
+        connect(this,
                 SIGNAL(updateReference(const CORBA::Object_var&)),
                 m_objref.get(),
                 SLOT(setReference(const CORBA::Object_var&)));
 
-        connect(m_objref.get(), 
+        connect(m_objref.get(),
                 SIGNAL(updatedReference(const CORBA::Object_var&)),
                 m_status,
                 SLOT(setReference(const CORBA::Object_var&)));

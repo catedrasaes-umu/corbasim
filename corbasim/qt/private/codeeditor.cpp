@@ -80,7 +80,7 @@ int CodeEditor::lineNumberAreaWidth()
 //![slotUpdateExtraAreaWidth]
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
-{ 
+{
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
@@ -121,7 +121,7 @@ void CodeEditor::highlightCurrentLine()
 
     if (!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
-        
+
         QColor lineColor = QColor(Qt::yellow).lighter(160);
 
         selection.format.setBackground(lineColor);

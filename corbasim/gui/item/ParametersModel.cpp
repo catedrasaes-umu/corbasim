@@ -11,7 +11,7 @@ ParametersModel::~ParametersModel()
 {
 }
 
-InterfaceDescriptor_ptr 
+InterfaceDescriptor_ptr
 ParametersModel::getReflective(const QString& id) const
 {
     Objref_ptr obj = getInstance(id);

@@ -28,7 +28,7 @@
 using namespace corbasim::gui;
 
 DumpProcessor::DumpProcessor(Objref_ptr object,
-        const ReflectivePath_t path, 
+        const ReflectivePath_t path,
         const Config& config) :
     RequestProcessor(object, path), m_config(config),
     m_currentIndex(0)
@@ -50,7 +50,7 @@ DumpProcessor::DumpProcessor(Objref_ptr object,
     default:
         break;
     }
-    
+
     nextFile();
 }
 
@@ -62,7 +62,7 @@ void DumpProcessor::nextFile()
 {
     std::ostringstream oss;
 
-    oss << m_config.filePrefix 
+    oss << m_config.filePrefix
         << std::setfill('0')
         << std::setw(m_config.suffixLength)
         << m_currentIndex
@@ -71,7 +71,7 @@ void DumpProcessor::nextFile()
     m_nextFile = oss.str();
 }
 
-void DumpProcessor::process(Request_ptr req, 
+void DumpProcessor::process(Request_ptr req,
         TypeDescriptor_ptr ref,
         Holder hold)
 {
@@ -79,7 +79,7 @@ void DumpProcessor::process(Request_ptr req,
 
     std::ios_base::openmode flags = std::ios_base::out;
 
-    const file_format_factory * factory = 
+    const file_format_factory * factory =
         file_format_factory::get_instance();
 
     if (!m_config.multipleFiles)
@@ -87,7 +87,7 @@ void DumpProcessor::process(Request_ptr req,
         flags = flags | std::ios_base::app;
     }
 
-    try 
+    try
     {
         switch(m_config.format)
         {
@@ -96,7 +96,7 @@ void DumpProcessor::process(Request_ptr req,
                 std::ofstream out(m_nextFile.c_str(), flags);
 
                 factory->get_helper(FILE_FORMAT_JSON)->save(out, ref, hold);
-                
+
                 out.close();
             }
             break;
@@ -126,8 +126,8 @@ void DumpProcessor::process(Request_ptr req,
         default:
             break;
         }
-    } 
-    catch(...) 
+    }
+    catch(...)
     {
     }
 

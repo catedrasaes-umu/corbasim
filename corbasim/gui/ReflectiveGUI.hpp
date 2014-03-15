@@ -36,9 +36,9 @@
 #include <QtScript>
 #endif /* CORBASIM_USE_QTSCRIPT*/
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 typedef boost::function< QWidget * (
@@ -54,7 +54,7 @@ QWidget * CORBASIM_GUI_DECLSPEC createSimpleWidget(
     QWidget * parent);
 
 /**
- * @brief This is the base class of all widget abstraction 
+ * @brief This is the base class of all widget abstraction
  * associated to a type descriptor.
  */
 class CORBASIM_GUI_DECLSPEC ReflectiveWidgetBase
@@ -85,18 +85,18 @@ protected:
 /**
  * @brief Will be deprecated.
  */
-class CORBASIM_GUI_DECLSPEC AlternativesWidget : 
+class CORBASIM_GUI_DECLSPEC AlternativesWidget :
     public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
-    Q_PROPERTY(int selectionIndex 
-            READ selectionIndex 
+    Q_PROPERTY(int selectionIndex
+            READ selectionIndex
             WRITE setSelectionIndex)
 public:
     AlternativesWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~AlternativesWidget();
- 
+
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
 
@@ -125,7 +125,7 @@ protected:
     std::vector< ReflectiveWidgetBase * > m_widgets;
 };
 
-class CORBASIM_GUI_DECLSPEC FloatWidget : 
+class CORBASIM_GUI_DECLSPEC FloatWidget :
     public QDoubleSpinBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -133,17 +133,17 @@ public:
     FloatWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~FloatWidget();
- 
+
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
-   
+
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
     void _setReadOnly(bool readOnly);
 };
 
-class CORBASIM_GUI_DECLSPEC IntegerWidget : 
+class CORBASIM_GUI_DECLSPEC IntegerWidget :
     public QSpinBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -154,14 +154,14 @@ public:
 
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
-    
+
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
     void _setReadOnly(bool readOnly);
 };
 
-class CORBASIM_GUI_DECLSPEC StringWidget : 
+class CORBASIM_GUI_DECLSPEC StringWidget :
     public QLineEdit, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -179,11 +179,11 @@ public:
 
     QString value() const;
     void setValue(const QString& value);
-    
+
     void _setReadOnly(bool readOnly);
 };
 
-class CORBASIM_GUI_DECLSPEC EnumWidget : 
+class CORBASIM_GUI_DECLSPEC EnumWidget :
     public QComboBox, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -209,17 +209,17 @@ public:
     BoolWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~BoolWidget();
- 
+
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
-   
+
     void save(QVariant& settings);
     void load(const QVariant& settings);
 
     void _setReadOnly(bool readOnly);
 };
 
-class CORBASIM_GUI_DECLSPEC StructWidget : 
+class CORBASIM_GUI_DECLSPEC StructWidget :
     public qt::FormWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -229,7 +229,7 @@ public:
             WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~StructWidget();
- 
+
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
 
@@ -238,7 +238,7 @@ public:
 
     void setValue(const QVariant& var);
     QVariant value();
-    
+
     void _setReadOnly(bool readOnly);
 
 protected:
@@ -246,7 +246,7 @@ protected:
     std::vector< ReflectiveWidgetBase * > m_widgets;
 };
 
-class CORBASIM_GUI_DECLSPEC UnionWidget : 
+class CORBASIM_GUI_DECLSPEC UnionWidget :
     public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -255,7 +255,7 @@ public:
             WidgetFactory_t factory = createWidget,
             QWidget * parent = 0);
     virtual ~UnionWidget();
- 
+
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
 
@@ -275,7 +275,7 @@ protected:
     QStackedWidget * m_stack;
 };
 
-class CORBASIM_GUI_DECLSPEC SequenceWidget : 
+class CORBASIM_GUI_DECLSPEC SequenceWidget :
     public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -293,7 +293,7 @@ public:
 
     void setValue(const QVariant& var);
     QVariant value() const;
-    
+
     void _setReadOnly(bool readOnly);
 
 protected slots:
@@ -313,7 +313,7 @@ protected:
     Holder m_holder;
 };
 
-class CORBASIM_GUI_DECLSPEC ComplexSequenceWidget : 
+class CORBASIM_GUI_DECLSPEC ComplexSequenceWidget :
     public QWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -328,7 +328,7 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
-    
+
     void _setReadOnly(bool readOnly);
 
 protected slots:
@@ -344,7 +344,7 @@ protected:
     QSpinBox * m_sbCurrentIndex;
 };
 
-class CORBASIM_GUI_DECLSPEC ObjrefvarWidget : 
+class CORBASIM_GUI_DECLSPEC ObjrefvarWidget :
     public ObjrefWidget, public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -352,18 +352,18 @@ public:
     ObjrefvarWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~ObjrefvarWidget();
- 
+
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
-    
+
     void _setReadOnly(bool readOnly);
 };
 
-class CORBASIM_GUI_DECLSPEC FilesWidget : 
-    public qt::MultiFileSelectionWidget, 
+class CORBASIM_GUI_DECLSPEC FilesWidget :
+    public qt::MultiFileSelectionWidget,
     public ReflectiveWidgetBase
 {
     Q_OBJECT
@@ -371,7 +371,7 @@ public:
     FilesWidget(TypeDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~FilesWidget();
- 
+
     virtual void toHolder(Holder& holder);
     virtual void fromHolder(Holder& holder);
 
@@ -380,7 +380,7 @@ public:
 
 };
 
-class CORBASIM_GUI_DECLSPEC OperationInputForm : 
+class CORBASIM_GUI_DECLSPEC OperationInputForm :
     public QWidget
 {
     Q_OBJECT
@@ -401,7 +401,7 @@ public:
     void setValue(Request_ptr req);
 
     void dragEnterEvent(QDragEnterEvent *event);
-    
+
     void dragLeaveEvent(QDragLeaveEvent *event);
 
     void dropEvent(QDropEvent *event);
@@ -417,7 +417,7 @@ public:
 
     void _setReadOnly(bool readOnly);
 
-public slots:    
+public slots:
 
 #ifdef CORBASIM_USE_QTSCRIPT
     void reloadScript();

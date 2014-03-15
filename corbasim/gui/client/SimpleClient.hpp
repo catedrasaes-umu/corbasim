@@ -32,7 +32,7 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
 namespace gui
 {

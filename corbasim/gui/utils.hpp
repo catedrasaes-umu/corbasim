@@ -25,9 +25,9 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 typedef QList< int > ReflectivePath_t;

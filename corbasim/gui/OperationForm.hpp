@@ -27,14 +27,14 @@
 #include <corbasim/gui/Sender.hpp>
 #include <corbasim/qt/FormWidget.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class ParametersFromFilesTool;
 
-class CORBASIM_GUI_DECLSPEC OperationFormWidget : 
+class CORBASIM_GUI_DECLSPEC OperationFormWidget :
     public qt::FormWidget
 {
     Q_OBJECT
@@ -54,7 +54,7 @@ public:
     Request_ptr createRequest();
 
     void dragEnterEvent(QDragEnterEvent *event);
-    
+
     void dragLeaveEvent(QDragLeaveEvent *event);
 
     void dropEvent(QDropEvent *event);
@@ -65,7 +65,7 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
-    
+
     void _setReadOnly(bool readOnly);
 
 public slots:
@@ -89,7 +89,7 @@ protected:
 };
 
 
-class CORBASIM_GUI_DECLSPEC OperationForm : 
+class CORBASIM_GUI_DECLSPEC OperationForm :
     public QWidget
 {
     Q_OBJECT
@@ -97,7 +97,7 @@ class CORBASIM_GUI_DECLSPEC OperationForm :
 public:
     OperationForm(QWidget * parent = 0);
     virtual ~OperationForm();
-    
+
     void initialize(Objref_ptr, OperationDescriptor_ptr);
 
     void showSizeGrip(bool show);
@@ -105,7 +105,7 @@ public:
     // Property code
     void setCode(const QString& code);
     QString code() const;
-    
+
     Request_ptr createRequest();
 
     OperationFormWidget * getWidget();
@@ -113,7 +113,7 @@ public:
 
     void save(QVariant& settings);
     void load(const QVariant& settings);
-    
+
     void _setReadOnly(bool readOnly);
 
 protected:
@@ -127,7 +127,7 @@ protected:
     QWidget * m_sizeGrip;
 };
 
-class CORBASIM_GUI_DECLSPEC OperationSender : 
+class CORBASIM_GUI_DECLSPEC OperationSender :
     public QWidget
 {
     Q_OBJECT
@@ -171,7 +171,7 @@ protected slots:
     void playClicked(bool play);
     void finished();
     void activeUpdateForm(bool update);
-    
+
     void incrementBar();
 
 protected:

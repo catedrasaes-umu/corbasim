@@ -28,14 +28,14 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/item/ScriptModel.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class OperationInputForm;
 
-class CORBASIM_GUI_DECLSPEC SimpleScriptEditor : 
+class CORBASIM_GUI_DECLSPEC SimpleScriptEditor :
     public QMainWindow
 {
     Q_OBJECT
@@ -57,12 +57,12 @@ public slots:
     void clearClicked();
     void stopClicked();
     void deleteSelected();
-    
+
     void copySelected();
     void replaceSelected();
     void doSave();
     void doLoad();
-    
+
     void moveUp();
     void moveDown();
 
@@ -74,7 +74,7 @@ protected:
 
     typedef std::vector< OperationInputForm * > forms_t;
 
-    void doAppendRequest(Request_ptr, 
+    void doAppendRequest(Request_ptr,
             bool beforeSelected = false);
     int getSelected();
 
@@ -83,12 +83,12 @@ protected:
 
     QComboBox * m_selector;
     QStackedWidget * m_multi;
-    QSpinBox * m_diff; 
-    QSpinBox * m_how_many; 
+    QSpinBox * m_diff;
+    QSpinBox * m_how_many;
     QTreeView * m_tree;
     QCheckBox * m_cbInsertAtEnd;
     ScriptModel m_model;
-    
+
     forms_t m_forms;
 
     InterfaceDescriptor_ptr m_factory;

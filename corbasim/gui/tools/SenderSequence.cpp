@@ -27,11 +27,11 @@ using namespace corbasim::gui;
 
 SenderSequenceItem::SenderSequenceItem(Objref_ptr object,
         OperationDescriptor_ptr operation,
-        QWidget * parent) : 
-    AbstractSequenceItem(object, operation, parent), 
+        QWidget * parent) :
+    AbstractSequenceItem(object, operation, parent),
     m_dlg(NULL)
 {
-    QVBoxLayout * layout = 
+    QVBoxLayout * layout =
         qobject_cast< QVBoxLayout * >(QWidget::layout());
 
     m_dlg = new OperationSender(object);
@@ -69,10 +69,10 @@ SenderSequenceTool::SenderSequenceTool(QWidget * parent) :
     // Additional actions
     m_menuCurrentItem->addSeparator();
     m_currentItemActions.push_back(
-            m_menuCurrentItem->addAction("Load form value", 
+            m_menuCurrentItem->addAction("Load form value",
                 this, SLOT(loadCurrentItemFormValue())));
     m_currentItemActions.push_back(
-            m_menuCurrentItem->addAction("Save form value", 
+            m_menuCurrentItem->addAction("Save form value",
                 this, SLOT(saveCurrentItemFormValue())));
 }
 
@@ -80,12 +80,12 @@ SenderSequenceTool::~SenderSequenceTool()
 {
 }
 
-AbstractSequenceItem * 
+AbstractSequenceItem *
 SenderSequenceTool::createAbstractItem(
-        Objref_ptr object, 
+        Objref_ptr object,
 		OperationDescriptor_ptr op)
 {
-    SenderSequenceItem * item = 
+    SenderSequenceItem * item =
         new SenderSequenceItem(object, op);
 
     return item;
@@ -95,10 +95,10 @@ void SenderSequenceTool::saveCurrentItemFormValue()
 {
     if (m_currentItem)
     {
-        SenderSequenceItem * sender = 
+        SenderSequenceItem * sender =
             static_cast< SenderSequenceItem * >(m_currentItem);
 
-        QString file = QFileDialog::getSaveFileName( 
+        QString file = QFileDialog::getSaveFileName(
                 0, tr("Select a file"), ".");
 
         // User cancels
@@ -119,7 +119,7 @@ void SenderSequenceTool::loadCurrentItemFormValue()
 {
     if (m_currentItem)
     {
-        SenderSequenceItem * sender = 
+        SenderSequenceItem * sender =
             static_cast< SenderSequenceItem * >(m_currentItem);
 
         const QString file = QFileDialog::getOpenFileName(

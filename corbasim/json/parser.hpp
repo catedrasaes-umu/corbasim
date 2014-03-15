@@ -212,7 +212,7 @@ struct semantic_state
 typedef csu::corbasim::json::parser::State< semantic_state > state;
 typedef csu::corbasim::json::parser::IStreamState< semantic_state > istream_state;
 
-inline bool parse(helper::helper_base * initial_helper, 
+inline bool parse(helper::helper_base * initial_helper,
         const char * str, size_t size)
 {
     semantic_state _ss(initial_helper);

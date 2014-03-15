@@ -43,7 +43,7 @@ struct Application::ApplicationData
 
     CORBA::ORB_var m_orb;
     PortableServer::POA_var m_rootPOA;
-    PortableServer::POAManager_var m_manager; 
+    PortableServer::POAManager_var m_manager;
 
     // Services
     InputRequestController * m_inputReqCtl;
@@ -62,16 +62,16 @@ struct Application::ApplicationData
     boost::shared_mutex m_objrefsMutex;
     boost::shared_mutex m_servantsMutex;
 
-    ApplicationData(Application& this_) : 
-        m_this(this_) 
+    ApplicationData(Application& this_) :
+        m_this(this_)
     {
         int argc = 0;
         m_orb = CORBA::ORB_init(argc, NULL);
 
-        CORBA::Object_var rootPOAObj = 
+        CORBA::Object_var rootPOAObj =
             m_orb->resolve_initial_references ("RootPOA");
 
-        m_rootPOA = 
+        m_rootPOA =
             PortableServer::POA::_narrow(rootPOAObj.in());
 
         m_manager = m_rootPOA->the_POAManager();
@@ -90,7 +90,7 @@ struct Application::ApplicationData
 //
 //
 
-namespace  
+namespace
 {
     using corbasim::gui::Application;
 
@@ -107,8 +107,8 @@ Application * Application::currentApplication()
 }
 
 Application::Application(QObject * parent) :
-    QObject(parent), 
-    m_interfaces(this), 
+    QObject(parent),
+    m_interfaces(this),
     m_objrefs(this),
     m_servants(this),
     m_data(new ApplicationData(*this))
@@ -119,21 +119,21 @@ Application::Application(QObject * parent) :
 
     ::currentApplication() = this;
 
-    connect(&m_interfaces, 
+    connect(&m_interfaces,
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
-            this, 
+            this,
             SLOT(sLoadedInterface(InterfaceDescriptor_ptr)));
-    connect(&m_interfaces, 
+    connect(&m_interfaces,
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)),
-            this, 
+            this,
             SIGNAL(loadedInterface(InterfaceDescriptor_ptr)));
-    connect(&m_objrefs, 
+    connect(&m_objrefs,
             SIGNAL(deleted(ObjectId)),
-            this, 
+            this,
             SIGNAL(objrefDeleted(ObjectId)));
-    connect(&m_servants, 
+    connect(&m_servants,
             SIGNAL(deleted(ObjectId)),
-            this, 
+            this,
             SIGNAL(servantDeleted(ObjectId)));
 
     // Services
@@ -144,79 +144,79 @@ Application::Application(QObject * parent) :
     m_data->m_nameServiceManager = new NSManager(m_data->m_orb);
 
     // Input request controller
-    connect(this, 
-            SIGNAL(servantCreated(Objref_ptr)), 
-            m_data->m_inputReqCtl, 
+    connect(this,
+            SIGNAL(servantCreated(Objref_ptr)),
+            m_data->m_inputReqCtl,
             SLOT(registerInstance(Objref_ptr)));
-    connect(this, 
-            SIGNAL(servantDeleted(ObjectId)), 
-            m_data->m_inputReqCtl, 
+    connect(this,
+            SIGNAL(servantDeleted(ObjectId)),
+            m_data->m_inputReqCtl,
             SLOT(unregisterInstance(ObjectId)));
-    connect(this, 
-            SIGNAL(objrefCreated(Objref_ptr)), 
-            m_data->m_inputReqCtl, 
+    connect(this,
+            SIGNAL(objrefCreated(Objref_ptr)),
+            m_data->m_inputReqCtl,
             SLOT(registerInstance(Objref_ptr)));
-    connect(this, 
-            SIGNAL(objrefDeleted(ObjectId)), 
-            m_data->m_inputReqCtl, 
+    connect(this,
+            SIGNAL(objrefDeleted(ObjectId)),
+            m_data->m_inputReqCtl,
             SLOT(unregisterInstance(ObjectId)));
 
     // Signals application <-> script engine
-    connect(this, 
-            SIGNAL(servantCreated(Objref_ptr)), 
-            m_data->m_scriptEngine, 
+    connect(this,
+            SIGNAL(servantCreated(Objref_ptr)),
+            m_data->m_scriptEngine,
             SLOT(servantCreated(Objref_ptr)));
-    connect(this, 
-            SIGNAL(servantDeleted(ObjectId)), 
-            m_data->m_scriptEngine, 
+    connect(this,
+            SIGNAL(servantDeleted(ObjectId)),
+            m_data->m_scriptEngine,
             SLOT(servantDeleted(ObjectId)));
-    connect(this, 
-            SIGNAL(objrefCreated(Objref_ptr)), 
-            m_data->m_scriptEngine, 
+    connect(this,
+            SIGNAL(objrefCreated(Objref_ptr)),
+            m_data->m_scriptEngine,
             SLOT(objrefCreated(Objref_ptr)));
-    connect(this, SIGNAL(objrefDeleted(ObjectId)), 
-            m_data->m_scriptEngine, 
+    connect(this, SIGNAL(objrefDeleted(ObjectId)),
+            m_data->m_scriptEngine,
             SLOT(objrefDeleted(ObjectId)));
 
     // Error notification
-    connect(m_data->m_scriptEngine, 
-            SIGNAL(error(const QString&)), 
-            this, 
+    connect(m_data->m_scriptEngine,
+            SIGNAL(error(const QString&)),
+            this,
             SIGNAL(error(const QString&)));
     // End signals application <-> script engine
 
     // Signals application <-> name service
-    connect(this, 
-            SIGNAL(servantCreated(Objref_ptr)), 
-            m_data->m_nameServiceManager, 
+    connect(this,
+            SIGNAL(servantCreated(Objref_ptr)),
+            m_data->m_nameServiceManager,
             SLOT(servantCreated(Objref_ptr)));
-    connect(this, 
-            SIGNAL(servantDeleted(ObjectId)), 
-            m_data->m_nameServiceManager, 
+    connect(this,
+            SIGNAL(servantDeleted(ObjectId)),
+            m_data->m_nameServiceManager,
             SLOT(servantDeleted(ObjectId)));
-    connect(this, 
-            SIGNAL(objrefCreated(Objref_ptr)), 
-            m_data->m_nameServiceManager, 
+    connect(this,
+            SIGNAL(objrefCreated(Objref_ptr)),
+            m_data->m_nameServiceManager,
             SLOT(objrefCreated(Objref_ptr)));
-    connect(this, SIGNAL(objrefDeleted(ObjectId)), 
-            m_data->m_nameServiceManager, 
+    connect(this, SIGNAL(objrefDeleted(ObjectId)),
+            m_data->m_nameServiceManager,
             SLOT(objrefDeleted(ObjectId)));
     // Error notification
-    connect(m_data->m_nameServiceManager, 
-            SIGNAL(error(const QString&)), 
-            this, 
+    connect(m_data->m_nameServiceManager,
+            SIGNAL(error(const QString&)),
+            this,
             SIGNAL(error(const QString&)));
-    connect(m_data->m_nameServiceManager, 
-            SIGNAL(message(const QString&)), 
-            this, 
+    connect(m_data->m_nameServiceManager,
+            SIGNAL(message(const QString&)),
+            this,
             SIGNAL(message(const QString&)));
     // End signals application <-> name service
 
     // Sender Controller
     // Error notification
-    connect(m_data->m_senderCtl, 
-            SIGNAL(error(const QString&)), 
-            this, 
+    connect(m_data->m_senderCtl,
+            SIGNAL(error(const QString&)),
+            this,
             SIGNAL(error(const QString&)));
 
     // Services dedicated threads
@@ -232,10 +232,10 @@ Application::Application(QObject * parent) :
     m_data->m_nameServiceManager->start();
 
     m_data->m_inputReqCtlThread.start();
-    
+
     m_data->m_senderCtl->start(); // its thread pool
     m_data->m_senderCtlThread.start();
-    
+
     m_data->m_scriptEngineThread.start();
     m_data->m_nameServiceManagerThread.start();
 }
@@ -390,8 +390,8 @@ void Application::save(QVariant& settings) const
 
             value["name"] = (*it)->name();
             value["fqn"] = (*it)->interface()->get_fqn();
-            
-            CORBA::String_var ref = 
+
+            CORBA::String_var ref =
                 m_data->m_orb->object_to_string((*it)->reference());
 
             value["reference"] = ref.in();
@@ -409,9 +409,9 @@ void Application::save(QVariant& settings) const
 
         QVariantList list;
 
-        ObjrefRepository::const_iterator it = 
+        ObjrefRepository::const_iterator it =
             m_servants.begin();
-        ObjrefRepository::const_iterator end = 
+        ObjrefRepository::const_iterator end =
             m_servants.end();
 
         for (; it != end; it++)
@@ -454,14 +454,14 @@ void Application::loadScenario(const QString& file)
 {
     clearScenario();
     QVariant settings;
-    
+
     bool res =
         fromJsonFile(file.toStdString().c_str(), settings);
 
     if (res)
     {
         load(settings);
-        
+
         emit message(QString("Loaded scenario from %1").arg(file));
     }
     else
@@ -521,7 +521,7 @@ Objref_ptr Application::createObjref(const ObjrefConfig& cfg)
         return Objref_ptr();
     }
 
-    InterfaceDescriptor_ptr factory = 
+    InterfaceDescriptor_ptr factory =
         m_interfaces.getInterface(cfg.fqn.c_str());
 
     if (factory)
@@ -533,7 +533,7 @@ Objref_ptr Application::createObjref(const ObjrefConfig& cfg)
         if (!cfg.hide)
         {
             const char * signal =
-                SIGNAL(requestSent(ObjectId, Request_ptr, 
+                SIGNAL(requestSent(ObjectId, Request_ptr,
                             Event_ptr));
 
             connect(obj.get(), signal, this, signal);
@@ -574,23 +574,23 @@ Objref_ptr Application::createServant(const ServantConfig& cfg)
         return Objref_ptr();
     }
 
-    InterfaceDescriptor_ptr factory = 
+    InterfaceDescriptor_ptr factory =
         m_interfaces.getInterface(cfg.fqn.c_str());
 
     if (factory)
     {
         Servant_ptr obj(new Servant(cfg, factory, this));
-        
-        PortableServer::ObjectId_var myObjID = 
+
+        PortableServer::ObjectId_var myObjID =
             m_data->m_rootPOA->activate_object(
                     obj->getServant());
-    
-        CORBA::Object_var objSrv = 
+
+        CORBA::Object_var objSrv =
             m_data->m_rootPOA->servant_to_reference(
                     obj->getServant());
 
         // Displaying reference
-        CORBA::String_var ref = 
+        CORBA::String_var ref =
             m_data->m_orb->object_to_string (objSrv);
 
         obj->setReference(objSrv);
@@ -602,7 +602,7 @@ Objref_ptr Application::createServant(const ServantConfig& cfg)
             std::cout << cfg.name << ": " << ref.in() << std::endl;
 
             const char * signal =
-                SIGNAL(requestReceived(ObjectId, Request_ptr, 
+                SIGNAL(requestReceived(ObjectId, Request_ptr,
                             Event_ptr));
 
             connect(obj.get(), signal, this, signal);
@@ -621,7 +621,7 @@ Objref_ptr Application::createServant(const ServantConfig& cfg)
 
         return obj;
     }
-    
+
     return Objref_ptr();
 }
 
@@ -634,7 +634,7 @@ void Application::deleteObjref(ObjectId id)
     if (obj)
     {
         m_objrefs.del(id);
-        
+
         emit message(QString("Deleted object reference: %1").arg(obj->name()));
     }
     else
@@ -653,8 +653,8 @@ void Application::deleteServant(ObjectId id)
     {
         Servant_ptr servant = boost::static_pointer_cast< Servant >(obj);
 
-        PortableServer::ObjectId_var myObjID = 
-            m_data->m_rootPOA->servant_to_id(servant->getServant()); 
+        PortableServer::ObjectId_var myObjID =
+            m_data->m_rootPOA->servant_to_id(servant->getServant());
 
         m_data->m_rootPOA->deactivate_object (myObjID);
 

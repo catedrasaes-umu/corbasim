@@ -47,7 +47,7 @@
 
 using namespace corbasim::app;
 
-namespace  
+namespace
 {
     enum SubWindows
     {
@@ -119,8 +119,8 @@ namespace
 } // namespace
 
 AppMainWindow::AppMainWindow(QWidget * parent) :
-    QMainWindow(parent), 
-    m_objrefs(this), 
+    QMainWindow(parent),
+    m_objrefs(this),
     m_servants(this),
     m_logModel(this),
     m_appLogModel(this),
@@ -141,7 +141,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     corbasim::qt::setDefaultInstanceModel(&m_instanceModel);
 
     setupUi(this);
-    
+
     // TODO
     centralWidget()->layout()->setMargin(0);
 
@@ -156,7 +156,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
 
     // Column Width
     int columnCount = m_logModel.columnCount();
-    for (int i = 0; i < columnCount; i++) 
+    for (int i = 0; i < columnCount; i++)
     {
         m_logView->setColumnWidth(i, width() / columnCount);
     }
@@ -171,7 +171,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     // Column Width
     m_appLogView->setColumnWidth(0, 350);
 
-    // Moves second dock widget on top of first dock widget, 
+    // Moves second dock widget on top of first dock widget,
     // creating a tabbed docked area in the main window.
     tabifyDockWidget(appLogViewDock, logViewDock);
 
@@ -184,7 +184,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     instanceViewDock->setWidget(instanceView);
     addDockWidget(Qt::LeftDockWidgetArea, instanceViewDock);
 
-    connect(instanceView, 
+    connect(instanceView,
             SIGNAL(selectedOperation(Objref_ptr, OperationDescriptor_ptr)),
             this,
             SLOT(selectedOperation(Objref_ptr, OperationDescriptor_ptr)));
@@ -198,7 +198,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     addDockWidget(Qt::LeftDockWidgetArea, interfaceViewDock);
 
     // No more window
-    
+
     connect(menuBar(), SIGNAL(hovered(QAction *)),
             this, SLOT(actionHovered(QAction *)));
 
@@ -207,7 +207,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileIcon),
             "&New object reference", this);
     newObjAction->setShortcut(QKeySequence::New);
-    connect(newObjAction, SIGNAL(triggered()), 
+    connect(newObjAction, SIGNAL(triggered()),
             this, SLOT(showCreateObjrefDialog()));
 
     // New servant
@@ -215,7 +215,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileIcon),
             "N&ew servant", this);
     newSrvAction->setShortcut(QKeySequence::Save);
-    connect(newSrvAction, SIGNAL(triggered()), 
+    connect(newSrvAction, SIGNAL(triggered()),
             this, SLOT(showCreateServantDialog()));
 
     // Set name service reference
@@ -223,7 +223,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileIcon),
             "Set Name Service reference", this);
     // setNSAction->setShortcut(QKeySequence::Save);
-    connect(setNSAction, SIGNAL(triggered()), 
+    connect(setNSAction, SIGNAL(triggered()),
             this, SLOT(showSetNameServiceDialog()));
 
     // Clear log
@@ -231,14 +231,14 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear log", this);
     // clearAction->setShortcut(QKeySequence::Save);
-    connect(clearAction, SIGNAL(triggered()), 
+    connect(clearAction, SIGNAL(triggered()),
             &m_logModel, SLOT(clearLog()));
 
     // Clear application log
     QAction * clearAppLogAction = new QAction(
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear application log", this);
-    connect(clearAppLogAction, SIGNAL(triggered()), 
+    connect(clearAppLogAction, SIGNAL(triggered()),
             &m_appLogModel, SLOT(clearLog()));
 
     // Load scenario
@@ -246,7 +246,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load scenario", this);
     loadScenarioAction->setShortcut(QKeySequence::Open);
-    connect(loadScenarioAction, SIGNAL(triggered()), 
+    connect(loadScenarioAction, SIGNAL(triggered()),
             this, SLOT(showLoadScenario()));
 
     // Save scenario
@@ -254,7 +254,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save scenario", this);
     saveScenarioAction->setShortcut(QKeySequence::SaveAs);
-    connect(saveScenarioAction, SIGNAL(triggered()), 
+    connect(saveScenarioAction, SIGNAL(triggered()),
             this, SLOT(showSaveScenario()));
 
     // Clear scenario
@@ -262,7 +262,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear scenario", this);
     // clearScenarioAction->setShortcut(QKeySequence::SaveAs);
-    connect(clearScenarioAction, SIGNAL(triggered()), 
+    connect(clearScenarioAction, SIGNAL(triggered()),
             this, SIGNAL(clearScenario()));
 
     // Load directory
@@ -270,44 +270,44 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileDialogNewFolder),
             "&Load plug-in directory", this);
     loadDirectoryAction->setShortcut(QKeySequence::SelectAll);
-    connect(loadDirectoryAction, SIGNAL(triggered()), 
+    connect(loadDirectoryAction, SIGNAL(triggered()),
             this, SLOT(showLoadDirectory()));
 
     // Load configuration
     QAction * loadConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load configuration", this);
-    connect(loadConfigurationAction, SIGNAL(triggered()), 
+    connect(loadConfigurationAction, SIGNAL(triggered()),
             this, SLOT(doLoadConfiguration()));
 
     // Save configuration
     QAction * saveConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save configuration", this);
-    connect(saveConfigurationAction, SIGNAL(triggered()), 
+    connect(saveConfigurationAction, SIGNAL(triggered()),
             this, SLOT(doSaveConfiguration()));
 
     // Show log
     QAction * showLogAction = new QAction(
             "Show &log", this);
-    connect(showLogAction, SIGNAL(triggered()), 
+    connect(showLogAction, SIGNAL(triggered()),
             logViewDock, SLOT(show()));
 
     QAction * showAppLogAction = new QAction(
             "Show app&lication log", this);
-    connect(showAppLogAction, SIGNAL(triggered()), 
+    connect(showAppLogAction, SIGNAL(triggered()),
             appLogViewDock, SLOT(show()));
 
     // Show instances
     QAction * showInstancesAction = new QAction(
             "Show &instances", this);
-    connect(showInstancesAction, SIGNAL(triggered()), 
+    connect(showInstancesAction, SIGNAL(triggered()),
             instanceViewDock, SLOT(show()));
 
     // Show interfaces
     QAction * showInterfacesAction = new QAction(
             "Show i&nterfaces", this);
-    connect(showInterfacesAction, SIGNAL(triggered()), 
+    connect(showInterfacesAction, SIGNAL(triggered()),
             interfaceViewDock, SLOT(show()));
 
     // Stop
@@ -315,19 +315,19 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
             style()->standardIcon(QStyle::SP_MediaStop),
             "&Stop all", this);
     // stopAction->setShortcut(QKeySequence::Cut);
-    connect(stopAction, SIGNAL(triggered()), 
+    connect(stopAction, SIGNAL(triggered()),
             this, SLOT(stopAll()));
 
     // About
     QAction * setMaxLogSizeAction = new QAction(
             "Set &max log size", this);
-    connect(setMaxLogSizeAction, SIGNAL(triggered()), 
+    connect(setMaxLogSizeAction, SIGNAL(triggered()),
             this, SLOT(showSetMaxLogSize()));
 
     // About
     QAction * aboutAction = new QAction(
             "&About corbasim", this);
-    connect(aboutAction, SIGNAL(triggered()), 
+    connect(aboutAction, SIGNAL(triggered()),
             this, SLOT(showAbout()));
 
     // Tool bar
@@ -343,7 +343,7 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     toolBar->addSeparator();
     toolBar->addAction(newObjAction);
     toolBar->addAction(newSrvAction);
-    
+
     toolBar = addToolBar("Window");
     toolBar->addAction(clearAction);
     toolBar->addAction(stopAction);
@@ -361,30 +361,30 @@ AppMainWindow::AppMainWindow(QWidget * parent) :
     menuFile->addSeparator();
     menuFile->addAction(loadDirectoryAction);
     menuFile->addSeparator();
-    QAction * closeAction = 
+    QAction * closeAction =
         menuFile->addAction("&Exit", this, SLOT(close()));
     closeAction->setShortcut(QKeySequence::Close);
 
-    menuTool->addAction("&Operation sequences", 
+    menuTool->addAction("&Operation sequences",
             this, SLOT(showOperationSequenceTool()));
-    menuTool->addAction("&Sender sequences", 
+    menuTool->addAction("&Sender sequences",
             this, SLOT(showSenderSequenceTool()));
     menuTool->addSeparator();
-    menuTool->addAction("&Status", 
+    menuTool->addAction("&Status",
             this, SLOT(showStatusView()));
-    menuTool->addAction("&Dump tool", 
+    menuTool->addAction("&Dump tool",
             this, SLOT(showDumpTool()));
-    menuTool->addAction("&Plot tool", 
+    menuTool->addAction("&Plot tool",
             this, SLOT(showPlotTool()));
-    menuTool->addAction("&Value viewer", 
+    menuTool->addAction("&Value viewer",
             this, SLOT(showValueViewerTool()));
     menuTool->addSeparator();
-    menuTool->addAction("&Filtered log", 
+    menuTool->addAction("&Filtered log",
             this, SLOT(showFilteredLogView()));
     menuTool->addSeparator();
-    menuTool->addAction("&Run file", 
+    menuTool->addAction("&Run file",
             this, SLOT(showRunFile()));
-    menuTool->addAction("&Debugger", 
+    menuTool->addAction("&Debugger",
             this, SLOT(showDebugger()));
 
     menuWindow->addAction(setNSAction);
@@ -428,8 +428,8 @@ void AppMainWindow::save(QVariant& settings)
     {
         QVariantList objects;
 
-        for (ObjrefViews_t::iterator it = m_objrefViews.begin(); 
-                it != m_objrefViews.end(); ++it) 
+        for (ObjrefViews_t::iterator it = m_objrefViews.begin();
+                it != m_objrefViews.end(); ++it)
         {
             QVariantMap value;
             value["name"] = (*it)->objref()->name();
@@ -445,8 +445,8 @@ void AppMainWindow::save(QVariant& settings)
     {
         QVariantList servants;
 
-        for (ServantViews_t::iterator it = m_servantViews.begin(); 
-                it != m_servantViews.end(); ++it) 
+        for (ServantViews_t::iterator it = m_servantViews.begin();
+                it != m_servantViews.end(); ++it)
         {
             QVariantMap value;
             value["name"] = (*it)->servant()->name();
@@ -459,7 +459,7 @@ void AppMainWindow::save(QVariant& settings)
     }
 
     // Tools
-    for (int i = 0; i < tToolsMax; i++) 
+    for (int i = 0; i < tToolsMax; i++)
     {
         if (m_tools[i])
             m_tools[i]->save(map[ToolNames[i]]);
@@ -476,12 +476,12 @@ void AppMainWindow::load(const QVariant& settings)
     {
         const QVariantList list = map["objects"].toList();
 
-        for (QVariantList::const_iterator it = list.begin(); 
-                it != list.end(); ++it) 
+        for (QVariantList::const_iterator it = list.begin();
+                it != list.end(); ++it)
         {
             const QVariantMap value = it->toMap();
             const QString name = value["name"].toString();
-            
+
             Objref_ptr objref = m_objrefs.find(name);
 
             if (objref)
@@ -495,12 +495,12 @@ void AppMainWindow::load(const QVariant& settings)
     {
         const QVariantList list = map["servants"].toList();
 
-        for (QVariantList::const_iterator it = list.begin(); 
-                it != list.end(); ++it) 
+        for (QVariantList::const_iterator it = list.begin();
+                it != list.end(); ++it)
         {
             const QVariantMap value = it->toMap();
             const QString name = value["name"].toString();
-            
+
             Objref_ptr servant = m_servants.find(name);
 
             if (servant)
@@ -509,9 +509,9 @@ void AppMainWindow::load(const QVariant& settings)
             }
         }
     }
-    
+
     // Tools
-    for (int i = 0; i < tToolsMax; i++) 
+    for (int i = 0; i < tToolsMax; i++)
     {
         if (map.contains(ToolNames[i]))
         {
@@ -544,13 +544,13 @@ void AppMainWindow::objrefCreated(Objref_ptr objref)
             this, SIGNAL(deleteObjref(ObjectId)));
 
     // connect signals
-    connect(objref.get(), 
+    connect(objref.get(),
             SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
-            &m_logModel, 
+            &m_logModel,
             SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 
     // Tools
-    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++) 
+    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++)
     {
         if (m_tools[i])
             m_tools[i]->registerInstance(objref);
@@ -569,7 +569,7 @@ void AppMainWindow::objrefDeleted(ObjectId id)
     m_objrefViews.remove(id);
 
     // Tools
-    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++) 
+    for (int i = tObjrefToolMin; i <= tObjrefToolMax; i++)
     {
         if (m_tools[i])
             m_tools[i]->unregisterInstance(id);
@@ -587,7 +587,7 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
     m_servants.add(servant);
     m_logModel.registerInstance(servant);
     m_instanceModel.registerInstance(servant);
-    
+
     ServantView_ptr view(new ServantView(mdiArea, servant, this));
     m_servantViews.insert(servant->id(), view);
     menuServants->addMenu(view->getMenu());
@@ -596,12 +596,12 @@ void AppMainWindow::servantCreated(Objref_ptr servant)
             this, SIGNAL(deleteServant(ObjectId)));
 
     // connect signals
-    connect(servant.get(), 
+    connect(servant.get(),
             SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
-            &m_logModel, 
+            &m_logModel,
             SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
 
-    for (int i = tServantToolMin; i <= tServantToolMax; i++) 
+    for (int i = tServantToolMin; i <= tServantToolMax; i++)
     {
         if (m_tools[i])
             m_tools[i]->registerInstance(servant);
@@ -613,11 +613,11 @@ void AppMainWindow::servantDeleted(ObjectId id)
     m_servants.del(id);
     m_logModel.unregisterInstance(id);
     m_instanceModel.unregisterInstance(id);
-    
+
     m_servantViews.remove(id);
 
     // Tools
-    for (int i = tServantToolMin; i <= tServantToolMax; i++) 
+    for (int i = tServantToolMin; i <= tServantToolMax; i++)
     {
         if (m_tools[i])
             m_tools[i]->unregisterInstance(id);
@@ -636,7 +636,7 @@ void AppMainWindow::displayError(const QString& err)
 void AppMainWindow::displayMessage(const QString& msg)
 {
     statusBar()->showMessage(msg, 5000);
-    
+
     m_appLogModel.message(msg);
 }
 
@@ -654,9 +654,9 @@ void AppMainWindow::showCreateObjrefDialog()
 
         createToolSubWindow(kCreateObjrefDialog, m_createObjrefDialog);
 
-        connect(m_createObjrefDialog, 
+        connect(m_createObjrefDialog,
                 SIGNAL(createObjref(const ObjrefConfig&)),
-                this, 
+                this,
                 SIGNAL(createObjref(const ObjrefConfig&)));
     }
 
@@ -672,9 +672,9 @@ void AppMainWindow::showCreateServantDialog()
 
         createToolSubWindow(kCreateServantDialog, m_createServantDialog);
 
-        connect(m_createServantDialog, 
+        connect(m_createServantDialog,
                 SIGNAL(createServant(const ServantConfig&)),
-                this, 
+                this,
                 SIGNAL(createServant(const ServantConfig&)));
     }
 
@@ -691,16 +691,16 @@ void AppMainWindow::showSetNameServiceDialog()
 
         createToolSubWindow(kSetNameServiceDialog, m_setNameServiceDialog);
 
-        connect(m_setNameServiceDialog, 
+        connect(m_setNameServiceDialog,
                 SIGNAL(setReference(const CORBA::Object_var&)),
-                this, 
+                this,
                 SIGNAL(setNameService(const CORBA::Object_var&)));
     }
 
     showToolSubWindow(kSetNameServiceDialog);
 }
 
-// 
+//
 //
 // Tools
 //
@@ -760,7 +760,7 @@ void AppMainWindow::createOperationSequenceTool()
         static_cast< AbstractSequenceTool * >(
                 m_tools[tOperationSequenceTool])->setTreeVisible(false);
 
-        createToolSubWindow(kOperationSequenceTool, 
+        createToolSubWindow(kOperationSequenceTool,
                 m_tools[tOperationSequenceTool]);
 
         // Initilizes the tool
@@ -783,7 +783,7 @@ void AppMainWindow::createSenderSequenceTool()
         static_cast< AbstractSequenceTool * >(
             m_tools[tSenderSequenceTool])->setTreeVisible(false);
 
-        createToolSubWindow(kSenderSequenceTool, 
+        createToolSubWindow(kSenderSequenceTool,
                 m_tools[tSenderSequenceTool]);
 
         // Initilizes the tool
@@ -843,7 +843,7 @@ void AppMainWindow::createPlotTool()
         }
         else
         {
-            QMessageBox::critical(this, "Error initializing plot tool", 
+            QMessageBox::critical(this, "Error initializing plot tool",
                     "Unable to load corbasim_qwt. "
                     "Ensure you have built corbasim with qwt.");
         }
@@ -909,8 +909,8 @@ void AppMainWindow::showStatusView()
 
 void AppMainWindow::showLoadDirectory()
 {
-    const QString directory = 
-        QFileDialog::getExistingDirectory(0, 
+    const QString directory =
+        QFileDialog::getExistingDirectory(0,
                 "Select a directory", ".");
 
     if (!directory.isEmpty())
@@ -921,7 +921,7 @@ void AppMainWindow::showLoadDirectory()
 
 void AppMainWindow::showLoadScenario()
 {
-    const QString file = 
+    const QString file =
         QFileDialog::getOpenFileName(0,
                 "Select a file", ".",
                 tr("CORBASIM scenario (*.sce)"));
@@ -934,9 +934,9 @@ void AppMainWindow::showLoadScenario()
 
 void AppMainWindow::showSaveScenario()
 {
-    QString file = 
-        QFileDialog::getSaveFileName(0, 
-                "Select a file", ".", 
+    QString file =
+        QFileDialog::getSaveFileName(0,
+                "Select a file", ".",
                 tr("CORBASIM scenario (*.sce)"));
 
     if (!file.isEmpty())
@@ -950,7 +950,7 @@ void AppMainWindow::showSaveScenario()
 
 void AppMainWindow::doLoadConfiguration()
 {
-    const QString file = 
+    const QString file =
         QFileDialog::getOpenFileName(0,
                 "Select a file", ".",
                 tr("CORBASIM generic application configuration (*.cfg)"));
@@ -960,7 +960,7 @@ void AppMainWindow::doLoadConfiguration()
         QVariant var;
 
         // Try to Read a JSON file
-        bool res = 
+        bool res =
             gui::fromJsonFile(file.toStdString().c_str(), var);
 
         if (res)
@@ -969,8 +969,8 @@ void AppMainWindow::doLoadConfiguration()
         }
         else
         {
-            QMessageBox::critical(this, 
-                    "Error loading configuration", 
+            QMessageBox::critical(this,
+                    "Error loading configuration",
                     QString("Unable to load file ") +
                     file);
         }
@@ -979,8 +979,8 @@ void AppMainWindow::doLoadConfiguration()
 
 void AppMainWindow::doSaveConfiguration()
 {
-    QString file = 
-        QFileDialog::getSaveFileName(0, 
+    QString file =
+        QFileDialog::getSaveFileName(0,
                 "Select a file", ".",
                 tr("CORBASIM generic application configuration (*.cfg)"));
 
@@ -1002,7 +1002,7 @@ void AppMainWindow::doSaveConfiguration()
 void AppMainWindow::actionHovered(QAction * action)
 {
     /*
-    if (action && !action->text().isEmpty() && 
+    if (action && !action->text().isEmpty() &&
             action->text() != statusBar()->currentMessage())
      */
     {
@@ -1012,19 +1012,19 @@ void AppMainWindow::actionHovered(QAction * action)
 
 void AppMainWindow::stopAll()
 {
-    for (ObjrefViews_t::iterator it = m_objrefViews.begin(); 
-            it != m_objrefViews.end(); ++it) 
+    for (ObjrefViews_t::iterator it = m_objrefViews.begin();
+            it != m_objrefViews.end(); ++it)
     {
         (*it)->stopAll();
     }
 
-    for (int i = 0; i < tToolsMax; i++) 
+    for (int i = 0; i < tToolsMax; i++)
     {
         if (m_tools[i]) m_tools[i]->stop();
     }
 }
 
-void AppMainWindow::selectedOperation(Objref_ptr object, 
+void AppMainWindow::selectedOperation(Objref_ptr object,
         OperationDescriptor_ptr op)
 {
     QMdiSubWindow * sub = mdiArea->activeSubWindow();
@@ -1037,7 +1037,7 @@ void AppMainWindow::selectedOperation(Objref_ptr object,
                 m_tools[tOperationSequenceTool])->appendAbstractItem(
                         object, op);
         }
-        else if (sub && 
+        else if (sub &&
                 m_subWindows[kSenderSequenceTool] == sub)
         {
             static_cast< AbstractSequenceTool * >(
@@ -1046,7 +1046,7 @@ void AppMainWindow::selectedOperation(Objref_ptr object,
         }
         else
         {
-            ObjrefViews_t::iterator it = 
+            ObjrefViews_t::iterator it =
                 m_objrefViews.find(object->id());
 
             if (it != m_objrefViews.end())
@@ -1059,20 +1059,20 @@ void AppMainWindow::selectedOperation(Objref_ptr object,
 
 void AppMainWindow::showAbout()
 {
-    static const char * aboutText = 
+    static const char * aboutText =
         "corbasim version " CORBASIM_VERSION "\n"
         "Build " __DATE__ "\n"
         "Developed by: Andres Senac <andres@senac.es>";
 
-    QMessageBox::about(this, "About corbasim", 
+    QMessageBox::about(this, "About corbasim",
             aboutText);
 }
 
 void AppMainWindow::showSetMaxLogSize()
-{   
+{
     bool ok = false;
     int res = QInputDialog::getInt(this, "Max log size",
-            "Insert the log maximum size", 
+            "Insert the log maximum size",
             m_logModel.maxEntries(),
             1, 10000, 1, &ok);
 
@@ -1084,7 +1084,7 @@ void AppMainWindow::showSetMaxLogSize()
 
 void AppMainWindow::showRunFile()
 {
-    const QString file = 
+    const QString file =
         QFileDialog::getOpenFileName(0,
                 "Select a file", ".");
 

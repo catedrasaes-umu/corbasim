@@ -28,11 +28,11 @@ using namespace corbasim::gui;
 
 ValueViewer::ValueViewer(Objref_ptr objref,
         OperationDescriptor_ptr reflective,
-        const QList< int >& path, 
+        const QList< int >& path,
         QWidget * parent) :
     AbstractInputItem(objref, reflective, path, parent)
 {
-    TypeDescriptor_ptr descriptor = 
+    TypeDescriptor_ptr descriptor =
         followPath(reflective, path);
 
     QGridLayout * grid = new QGridLayout();
@@ -48,7 +48,7 @@ ValueViewer::ValueViewer(Objref_ptr objref,
     QVBoxLayout * boxLayout = new QVBoxLayout();
 
     m_widget = createSimpleWidget(descriptor, NULL);
-    ReflectiveWidgetBase * refWidget = 
+    ReflectiveWidgetBase * refWidget =
         dynamic_cast< ReflectiveWidgetBase * >(m_widget);
 
     if (refWidget)
@@ -88,13 +88,13 @@ void ValueViewer::start()
     emit addProcessor(m_processor);
 }
 
-void ValueViewer::appendValue(Request_ptr req, 
+void ValueViewer::appendValue(Request_ptr req,
         TypeDescriptor_ptr reflec,
         Holder hold)
 {
     m_date->setDateTime(QDateTime::currentDateTime());
 
-    ReflectiveWidgetBase * w = 
+    ReflectiveWidgetBase * w =
         dynamic_cast< ReflectiveWidgetBase * >(m_widget);
 
     if (w)
@@ -117,7 +117,7 @@ ValueViewerTool::~ValueViewerTool()
 }
 
 AbstractInputItem * ValueViewerTool::createItem(
-        Objref_ptr objref, 
+        Objref_ptr objref,
         OperationDescriptor_ptr reflective,
         const QList< int >& path)
 {

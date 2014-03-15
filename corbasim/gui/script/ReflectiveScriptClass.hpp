@@ -25,9 +25,9 @@
 
 Q_DECLARE_METATYPE(corbasim::gui::Node_ptr)
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class ReflectiveScriptClass : public QScriptClass
@@ -47,7 +47,7 @@ public:
 
     QScriptValue property(
             const QScriptValue& object,
-            const QScriptString& name, 
+            const QScriptString& name,
             uint id);
 
     /*
@@ -56,15 +56,15 @@ public:
     */
 
     QScriptClass::QueryFlags queryProperty(
-            const QScriptValue& object, 
-            const QScriptString& name, 
-            QScriptClass::QueryFlags flags, 
+            const QScriptValue& object,
+            const QScriptString& name,
+            QScriptClass::QueryFlags flags,
             uint * id);
 
     void setProperty(
-            QScriptValue& object, 
-            const QScriptString & name, 
-            uint id, 
+            QScriptValue& object,
+            const QScriptString & name,
+            uint id,
             const QScriptValue& value);
 
     /*
@@ -76,11 +76,11 @@ public:
     QScriptValue toScriptValue(Node_ptr node);
 
     void fromScriptValue(
-            const QScriptValue& value, 
+            const QScriptValue& value,
             Node_ptr node);
 };
 
-class ReflectivePropertyIterator : 
+class ReflectivePropertyIterator :
     public QScriptClassPropertyIterator
 {
 public:
@@ -89,7 +89,7 @@ public:
     virtual ~ReflectivePropertyIterator();
 
     // QScriptValue::PropertyFlags flags() const;
-    
+
     bool hasNext() const;
     bool hasPrevious() const;
     uint id() const;

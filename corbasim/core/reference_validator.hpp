@@ -15,18 +15,18 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef CORBASIM_CORE_REFERENCE_VALIDATOR_HPP
 #define CORBASIM_CORE_REFERENCE_VALIDATOR_HPP
 
 #include <corbasim/core/caller_fwd.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace core 
+namespace core
 {
-namespace detail 
+namespace detail
 {
 
 template < typename Interface >

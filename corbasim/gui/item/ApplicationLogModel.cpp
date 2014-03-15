@@ -108,7 +108,7 @@ Qt::ItemFlags ApplicationLogModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QVariant ApplicationLogModel::headerData(int section, 
+QVariant ApplicationLogModel::headerData(int section,
         Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
@@ -127,7 +127,7 @@ QVariant ApplicationLogModel::headerData(int section,
     return QVariant();
 }
 
-QModelIndex ApplicationLogModel::index(int row, int column, 
+QModelIndex ApplicationLogModel::index(int row, int column,
         const QModelIndex &parent) const
 {
     if (!hasIndex(row, column, parent))
@@ -197,7 +197,7 @@ void ApplicationLogModel::append(const QString& text, bool is_error)
     {
         beginRemoveRows(QModelIndex(), 0, nRowsToBeRemoved - 1);
 
-        for (int i = 0; i < nRowsToBeRemoved; i++) 
+        for (int i = 0; i < nRowsToBeRemoved; i++)
         {
             // Elimina la primera
             m_entries.pop_front();

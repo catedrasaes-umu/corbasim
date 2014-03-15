@@ -20,8 +20,8 @@ public:
     FilterModel(QObject *parent = 0);
     virtual ~FilterModel();
 
-    virtual bool setData(const QModelIndex & index, 
-            const QVariant& value, 
+    virtual bool setData(const QModelIndex & index,
+            const QVariant& value,
             int role = Qt::EditRole);
 
     bool visibleOperation(ObjectId id, tag_t tag) const;

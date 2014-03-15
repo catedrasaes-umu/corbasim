@@ -24,7 +24,7 @@
 
 #define CORBASIM_CORBA_CHAR_IS_UNSIGNED_CHAR
 
-namespace corbasim 
+namespace corbasim
 {
 
 struct omniorb4

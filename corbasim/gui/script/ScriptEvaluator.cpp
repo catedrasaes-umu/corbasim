@@ -35,7 +35,7 @@ using namespace corbasim::gui;
 OperationEvaluator::OperationEvaluator(
         ::corbasim::core::operation_reflective_base const * reflective,
         QObject * parent) :
-    QObject(parent), m_reflective(reflective), 
+    QObject(parent), m_reflective(reflective),
     m_clazz(&m_engine)
 {
 }
@@ -64,7 +64,7 @@ void OperationEvaluator::evaluate(const QString& code)
 }
 
 void OperationEvaluator::init(Request_ptr req)
-{   
+{
     call(m_initFunc, req);
 }
 
@@ -78,7 +78,7 @@ void OperationEvaluator::post(Request_ptr req)
     call(m_postFunc, req);
 }
 
-void OperationEvaluator::call(QScriptValue& func, 
+void OperationEvaluator::call(QScriptValue& func,
         Request_ptr req)
 {
     if (func.isFunction())
@@ -111,7 +111,7 @@ QString OperationEvaluator::error() const
 //
 
 OperationEvaluatorWidget::OperationEvaluatorWidget(Objref_ptr object, QWidget * parent) :
-    QWidget(parent), m_reflective(NULL), 
+    QWidget(parent), m_reflective(NULL),
     m_widget(new OperationSender(object))
 {
     QVBoxLayout * ly = new QVBoxLayout();
@@ -136,17 +136,17 @@ OperationEvaluatorWidget::OperationEvaluatorWidget(Objref_ptr object, QWidget * 
     ly->addWidget(m_widget);
 
     // Signals
-    QObject::connect(btnEv, SIGNAL(clicked()), 
+    QObject::connect(btnEv, SIGNAL(clicked()),
             this, SLOT(evaluate()));
-    QObject::connect(btnEx, SIGNAL(clicked()), 
+    QObject::connect(btnEx, SIGNAL(clicked()),
             this, SLOT(execute()));
-    QObject::connect(btnSave, SIGNAL(clicked()), 
+    QObject::connect(btnSave, SIGNAL(clicked()),
             this, SLOT(save()));
-    QObject::connect(btnLoad, SIGNAL(clicked()), 
+    QObject::connect(btnLoad, SIGNAL(clicked()),
             this, SLOT(load()));
-    QObject::connect(btnSaveForm, SIGNAL(clicked()), 
+    QObject::connect(btnSaveForm, SIGNAL(clicked()),
             this, SLOT(saveForm()));
-    QObject::connect(btnLoadForm, SIGNAL(clicked()), 
+    QObject::connect(btnLoadForm, SIGNAL(clicked()),
             this, SLOT(loadForm()));
 
     setLayout(ly);
@@ -174,10 +174,10 @@ void OperationEvaluatorWidget::evaluate()
     const QString strProgram (m_widget->getForm()->code());
 
     m_evaluator->evaluate(strProgram);
- 
+
     // This object
     m_request = m_widget->getForm()->createRequest();
-   
+
     m_evaluator->init(m_request);
 }
 
@@ -219,7 +219,7 @@ void OperationEvaluatorWidget::load()
     QVariant var;
 
     // Try to Read a JSON file
-    bool res = 
+    bool res =
         gui::fromJsonFile(file.toStdString().c_str(), var);
 
     if (res)
@@ -228,7 +228,7 @@ void OperationEvaluatorWidget::load()
     }
     else
     {
-        QMessageBox::critical(this, "Error", 
+        QMessageBox::critical(this, "Error",
                 QString("Error parsing file: %1").arg(file));
     }
 }
@@ -241,7 +241,7 @@ void OperationEvaluatorWidget::saveForm()
     if (file.isEmpty())
         return;
 
-    event::request_ptr request = 
+    event::request_ptr request =
         m_widget->getForm()->createRequest();
     core::holder holder(m_reflective->get_holder(request));
 
@@ -258,7 +258,7 @@ void OperationEvaluatorWidget::loadForm()
     if (file.isEmpty())
         return;
 
-    event::request_ptr request = 
+    event::request_ptr request =
         m_reflective->create_request();
     core::holder holder(m_reflective->get_holder(request));
 
@@ -270,7 +270,7 @@ void OperationEvaluatorWidget::loadForm()
     }
     else
     {
-         QMessageBox::critical(this, "Error", 
+         QMessageBox::critical(this, "Error",
                 QString("Error parsing file: %1").arg(file));
     }
 }
@@ -303,13 +303,13 @@ void ScriptEvaluatorWidget::initialize(
 
     const unsigned int count = factory->operation_count();
 
-    for (unsigned int i = 0; i < count; i++) 
+    for (unsigned int i = 0; i < count; i++)
     {
-        const core::operation_reflective_base * op = 
+        const core::operation_reflective_base * op =
             factory->get_reflective_by_index(i);
         const char * name = op->get_name();
 
-        OperationEvaluatorWidget * ev = 
+        OperationEvaluatorWidget * ev =
             new OperationEvaluatorWidget(object);
         ev->initialize(op);
 

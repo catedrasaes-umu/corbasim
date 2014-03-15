@@ -24,14 +24,14 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
 class FileLoaderProcessor;
 
-typedef boost::shared_ptr< FileLoaderProcessor > 
+typedef boost::shared_ptr< FileLoaderProcessor >
     FileLoaderProcessor_ptr;
 
 class CORBASIM_GUI_DECLSPEC FileLoaderProcessor :
@@ -49,8 +49,8 @@ public:
         const bool repeat);
 
     virtual ~FileLoaderProcessor();
-    
-    void process( 
+
+    void process(
             Request_ptr request,
             TypeDescriptor_ptr reflective,
             Holder holder);

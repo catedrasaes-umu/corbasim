@@ -36,9 +36,9 @@
 
 using namespace corbasim::gui;
 
-Server::Server(QWidget * parent) : 
-    QMainWindow(parent), 
-    m_logModel(this), 
+Server::Server(QWidget * parent) :
+    QMainWindow(parent),
+    m_logModel(this),
     m_appLogModel(this),
     m_instanceModel(this),
     m_interfaceModel(this),
@@ -70,13 +70,13 @@ Server::Server(QWidget * parent) :
 
     // Column Width
     int columnCount = m_logModel.columnCount();
-    for (int i = 0; i < columnCount; i++) 
+    for (int i = 0; i < columnCount; i++)
     {
         logView->setColumnWidth(i, width() / columnCount);
     }
 
     // Application log view
-    QDockWidget * appLogViewDock = 
+    QDockWidget * appLogViewDock =
         new QDockWidget("Application log", this);
     QTreeView * appLogView = new TreeView();
     appLogView->setModel(&m_appLogModel);
@@ -86,7 +86,7 @@ Server::Server(QWidget * parent) :
     // Column Width
     appLogView->setColumnWidth(0, 350);
 
-    // Moves second dock widget on top of first dock widget, 
+    // Moves second dock widget on top of first dock widget,
     // creating a tabbed docked area in the main window.
     tabifyDockWidget(appLogViewDock, logViewDock);
 
@@ -99,7 +99,7 @@ Server::Server(QWidget * parent) :
     instanceViewDock->setWidget(instanceView);
     addDockWidget(Qt::LeftDockWidgetArea, instanceViewDock);
 
-    connect(instanceView, 
+    connect(instanceView,
             SIGNAL(selectedOperation(Objref_ptr, OperationDescriptor_ptr)),
             this,
             SLOT(selectedOperation(Objref_ptr, OperationDescriptor_ptr)));
@@ -121,7 +121,7 @@ Server::Server(QWidget * parent) :
     // Dump
     m_dumpTool = new DumpTool();
     m_tabs->addTab(m_dumpTool, "Dump");
-    
+
     // Plot input
     QLabel * plotLabel = new QLabel("No corbasim_qwt library available");
     plotLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -143,7 +143,7 @@ Server::Server(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileIcon),
             "&New object reference", this);
     newObjAction->setShortcut(QKeySequence::New);
-    connect(newObjAction, SIGNAL(triggered()), 
+    connect(newObjAction, SIGNAL(triggered()),
             this, SLOT(showObjrefCreateDialog()));
 
     // New servant
@@ -151,7 +151,7 @@ Server::Server(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileIcon),
             "N&ew servant", this);
     newSrvAction->setShortcut(QKeySequence::Save);
-    connect(newSrvAction, SIGNAL(triggered()), 
+    connect(newSrvAction, SIGNAL(triggered()),
             this, SLOT(showServantCreateDialog()));
 
     // Load scenario
@@ -159,7 +159,7 @@ Server::Server(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load scenario", this);
     loadScenarioAction->setShortcut(QKeySequence::Open);
-    connect(loadScenarioAction, SIGNAL(triggered()), 
+    connect(loadScenarioAction, SIGNAL(triggered()),
             this, SLOT(showLoadScenario()));
 
     // Save scenario
@@ -167,7 +167,7 @@ Server::Server(QWidget * parent) :
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save scenario", this);
     saveScenarioAction->setShortcut(QKeySequence::SaveAs);
-    connect(saveScenarioAction, SIGNAL(triggered()), 
+    connect(saveScenarioAction, SIGNAL(triggered()),
             this, SLOT(showSaveScenario()));
 
     // Clear scenario
@@ -175,7 +175,7 @@ Server::Server(QWidget * parent) :
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear scenario", this);
     // clearScenarioAction->setShortcut(QKeySequence::SaveAs);
-    connect(clearScenarioAction, SIGNAL(triggered()), 
+    connect(clearScenarioAction, SIGNAL(triggered()),
             this, SIGNAL(clearScenario()));
 
     // Load directory
@@ -183,53 +183,53 @@ Server::Server(QWidget * parent) :
             style()->standardIcon(QStyle::SP_FileDialogNewFolder),
             "&Load plug-in directory", this);
     loadDirectoryAction->setShortcut(QKeySequence::SelectAll);
-    connect(loadDirectoryAction, SIGNAL(triggered()), 
+    connect(loadDirectoryAction, SIGNAL(triggered()),
             this, SLOT(showLoadDirectory()));
-    
+
     // Load configuration
     QAction * loadConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogOpenButton),
             "&Load configuration", this);
-    connect(loadConfigurationAction, SIGNAL(triggered()), 
+    connect(loadConfigurationAction, SIGNAL(triggered()),
             this, SLOT(doLoadConfiguration()));
 
     // Save configuration
     QAction * saveConfigurationAction = new QAction(
             style()->standardIcon(QStyle::SP_DialogSaveButton),
             "&Save configuration", this);
-    connect(saveConfigurationAction, SIGNAL(triggered()), 
+    connect(saveConfigurationAction, SIGNAL(triggered()),
             this, SLOT(doSaveConfiguration()));
 
     // Show log
     QAction * showLogAction = new QAction(
             "Show &log", this);
-    connect(showLogAction, SIGNAL(triggered()), 
+    connect(showLogAction, SIGNAL(triggered()),
             logViewDock, SLOT(show()));
 
     // Show application log
     QAction * showAppLogAction = new QAction(
             "Show app&lication log", this);
-    connect(showAppLogAction, SIGNAL(triggered()), 
+    connect(showAppLogAction, SIGNAL(triggered()),
             appLogViewDock, SLOT(show()));
 
     // Clear log
     QAction * clearAction = new QAction(
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear log", this);
-    connect(clearAction, SIGNAL(triggered()), 
+    connect(clearAction, SIGNAL(triggered()),
             &m_logModel, SLOT(clearLog()));
 
     // Clear application log
     QAction * clearAppLogAction = new QAction(
             style()->standardIcon(QStyle::SP_TrashIcon),
             "&Clear application log", this);
-    connect(clearAppLogAction, SIGNAL(triggered()), 
+    connect(clearAppLogAction, SIGNAL(triggered()),
             &m_appLogModel, SLOT(clearLog()));
 
     // About
     QAction * aboutAction = new QAction(
             "&About corbasim", this);
-    connect(aboutAction, SIGNAL(triggered()), 
+    connect(aboutAction, SIGNAL(triggered()),
             this, SLOT(showAbout()));
 
     // Menu bar
@@ -248,7 +248,7 @@ Server::Server(QWidget * parent) :
     menuFile->addSeparator();
     menuFile->addAction(loadDirectoryAction);
     menuFile->addSeparator();
-    QAction * closeAction = 
+    QAction * closeAction =
         menuFile->addAction("&Exit", this, SLOT(close()));
     closeAction->setShortcut(QKeySequence::Close);
 
@@ -281,11 +281,11 @@ Server::Server(QWidget * parent) :
             this, SLOT(currentIndexChanged(int)));
 }
 
-Server::~Server() 
+Server::~Server()
 {
 }
 
-void Server::selectedOperation(Objref_ptr object, 
+void Server::selectedOperation(Objref_ptr object,
         OperationDescriptor_ptr op)
 {
     QWidget * w = m_tabs->currentWidget();
@@ -345,7 +345,7 @@ void Server::loadPlotTool()
         }
         else
         {
-            QMessageBox::critical(this, "Error initializing plot tool", 
+            QMessageBox::critical(this, "Error initializing plot tool",
                     "Unable to load corbasim_qwt. "
                     "Ensure you have built corbasim with qwt.");
         }
@@ -370,9 +370,9 @@ void Server::objrefCreated(Objref_ptr objref)
     if (m_plotTool)
         m_plotTool->registerInstance(objref);
 
-    connect(objref.get(), 
+    connect(objref.get(),
             SIGNAL(requestSent(ObjectId, Request_ptr, Event_ptr)),
-            &m_logModel, 
+            &m_logModel,
             SLOT(outputRequest(ObjectId, Request_ptr, Event_ptr)));
 }
 
@@ -411,9 +411,9 @@ void Server::servantCreated(Objref_ptr servant)
     if (m_plotTool)
         m_plotTool->registerInstance(servant);
 
-    connect(servant.get(), 
+    connect(servant.get(),
             SIGNAL(requestReceived(ObjectId, Request_ptr, Event_ptr)),
-            &m_logModel, 
+            &m_logModel,
             SLOT(inputRequest(ObjectId, Request_ptr, Event_ptr)));
 }
 
@@ -449,12 +449,12 @@ void Server::displayMessage(const QString& msg)
 
 void Server::showAbout()
 {
-    static const char * aboutText = 
+    static const char * aboutText =
         "corbasim version " CORBASIM_VERSION "\n"
         "Build " __DATE__ "\n"
         "Developed by: Andres Senac <andres@senac.es>";
 
-    QMessageBox::about(this, "About corbasim", 
+    QMessageBox::about(this, "About corbasim",
             aboutText);
 }
 
@@ -521,7 +521,7 @@ void Server::load(const QVariant& settings)
 
 void Server::doLoadConfiguration()
 {
-    const QString file = 
+    const QString file =
         QFileDialog::getOpenFileName(0,
                 "Select a file", ".",
                 tr("CORBASIM generic application configuration (*.cfg)"));
@@ -531,7 +531,7 @@ void Server::doLoadConfiguration()
         QVariant var;
 
         // Try to Read a JSON file
-        bool res = 
+        bool res =
             gui::fromJsonFile(file.toStdString().c_str(), var);
 
         if (res)
@@ -540,8 +540,8 @@ void Server::doLoadConfiguration()
         }
         else
         {
-            QMessageBox::critical(this, 
-                    "Error loading configuration", 
+            QMessageBox::critical(this,
+                    "Error loading configuration",
                     QString("Unable to load file ") +
                     file);
         }
@@ -550,8 +550,8 @@ void Server::doLoadConfiguration()
 
 void Server::doSaveConfiguration()
 {
-    QString file = 
-        QFileDialog::getSaveFileName(0, 
+    QString file =
+        QFileDialog::getSaveFileName(0,
                 "Select a file", ".",
                 tr("CORBASIM generic application configuration (*.cfg)"));
 
@@ -572,8 +572,8 @@ void Server::doSaveConfiguration()
 
 void Server::showLoadDirectory()
 {
-    const QString directory = 
-        QFileDialog::getExistingDirectory(0, 
+    const QString directory =
+        QFileDialog::getExistingDirectory(0,
                 "Select a directory", ".");
 
     if (!directory.isEmpty())
@@ -584,7 +584,7 @@ void Server::showLoadDirectory()
 
 void Server::showLoadScenario()
 {
-    const QString file = 
+    const QString file =
         QFileDialog::getOpenFileName(0,
                 "Select a file", ".",
                 tr("CORBASIM scenario (*.sce)"));
@@ -597,9 +597,9 @@ void Server::showLoadScenario()
 
 void Server::showSaveScenario()
 {
-    QString file = 
-        QFileDialog::getSaveFileName(0, 
-                "Select a file", ".", 
+    QString file =
+        QFileDialog::getSaveFileName(0,
+                "Select a file", ".",
                 tr("CORBASIM scenario (*.sce)"));
 
     if (!file.isEmpty())
@@ -611,32 +611,32 @@ void Server::showSaveScenario()
     }
 }
 
-void Server::showObjrefCreateDialog() 
+void Server::showObjrefCreateDialog()
 {
     if (!m_createObjrefDialog)
     {
         m_createObjrefDialog = new ObjrefCreateDialog(this);
         m_createObjrefDialog->setFQNModel(&m_interfaceModel);
 
-        connect(m_createObjrefDialog, 
+        connect(m_createObjrefDialog,
                 SIGNAL(createObjref(const ObjrefConfig&)),
-                this, 
+                this,
                 SIGNAL(createObjref(const ObjrefConfig&)));
     }
 
     m_createObjrefDialog->show();
 }
 
-void Server::showServantCreateDialog() 
+void Server::showServantCreateDialog()
 {
     if (!m_createServantDialog)
     {
         m_createServantDialog = new ServantCreateDialog(this);
         m_createServantDialog->setFQNModel(&m_interfaceModel);
 
-        connect(m_createServantDialog, 
+        connect(m_createServantDialog,
                 SIGNAL(createServant(const ServantConfig&)),
-                this, 
+                this,
                 SIGNAL(createServant(const ServantConfig&)));
     }
 

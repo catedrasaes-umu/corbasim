@@ -33,22 +33,22 @@ class QPushButton;
 class QTabWidget;
 class QPlainTextEdit;
 
-namespace corbasim 
+namespace corbasim
 {
-namespace gui 
+namespace gui
 {
 
-class CORBASIM_GUI_DECLSPEC RequestDialog : 
+class CORBASIM_GUI_DECLSPEC RequestDialog :
     public QDialog
 {
     Q_OBJECT
 public:
-        
+
     RequestDialog(
             OperationDescriptor_ptr reflective,
             QWidget * parent = 0);
     virtual ~RequestDialog();
-            
+
     OperationDescriptor_ptr getReflective() const;
 
     void save(QVariant& settings);
@@ -56,9 +56,9 @@ public:
 
 public slots:
 
-	void sendClicked(); 
-	void sendStored(); 
-	void startStopChecked(bool = true); 
+	void sendClicked();
+	void sendStored();
+	void startStopChecked(bool = true);
     void storeRequest();
     void stopTimer();
 

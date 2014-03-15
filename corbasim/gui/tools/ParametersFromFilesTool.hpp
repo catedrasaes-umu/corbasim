@@ -28,15 +28,15 @@
 #include <corbasim/gui/item/OperationParametersModel.hpp>
 #include <corbasim/gui/proc/FileLoaderProcessor.hpp>
 
-namespace corbasim 
+namespace corbasim
 {
-namespace qt 
+namespace qt
 {
 class SortableGroup;
 class SortableGroupItem;
 } // namespace qt
 
-namespace gui 
+namespace gui
 {
 
 class CORBASIM_GUI_DECLSPEC FilesItem : public QWidget
@@ -51,7 +51,7 @@ public:
     FilesItem(
             Objref_ptr objref,
             OperationDescriptor_ptr reflective,
-            const QList< int >& path, 
+            const QList< int >& path,
             QWidget * parent = 0);
     virtual ~FilesItem();
 
@@ -94,7 +94,7 @@ protected:
     QCheckBox * m_repeat;
 };
 
-class CORBASIM_GUI_DECLSPEC ParametersFromFilesTool : 
+class CORBASIM_GUI_DECLSPEC ParametersFromFilesTool :
     public QWidget
 {
     Q_OBJECT
@@ -134,7 +134,7 @@ protected:
 
     typedef QList< FilesItem * > items_t;
     items_t m_items;
-    
+
     Objref_ptr m_objref;
     OperationDescriptor_ptr m_operation;
 };

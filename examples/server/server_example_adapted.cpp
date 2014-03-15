@@ -35,9 +35,9 @@ const char * name< _corbasim_prueba::Iface::operation >::call()
 } // namespace adapted
 } // namespace corbasim
 
-namespace _corbasim_prueba 
+namespace _corbasim_prueba
 {
-namespace Iface 
+namespace Iface
 {
 
 
@@ -49,14 +49,14 @@ __operation::__operation()
 __operation::__operation(::CORBA::Long _a, const prueba::Iface::FloatSeq& _fs):
 	a(_a), fs(_fs)
 {
-	
+
 }
 
 // Copy constructor
 __operation::__operation(const __operation& o) :
 	a(o.a), fs(o.fs)
 {
-	
+
 }
 
 
