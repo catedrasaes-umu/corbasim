@@ -98,6 +98,7 @@ public slots:
 private slots:
 
     void resetInternalData();
+    void processPendingEntries();
 
 protected:
 
@@ -106,6 +107,16 @@ protected:
             Event_ptr resp,
             bool is_in);
 
+    bool fillLogEntry(ObjectId id,
+            Request_ptr req,
+            Event_ptr resp,
+            bool is_in,
+            LogEntry& entry);
+
+    const LogEntry& getLogEntry(int row) const { return m_entries.at(row); };
+
+    void removeEntries(int requiredFreeEntries);
+
     ObjrefRepository m_instances;
 
     int m_maxEntries;
@@ -113,10 +124,12 @@ protected:
     QIcon m_inputIcon;
     QIcon m_outputIcon;
 
-    const LogEntry& getLogEntry(int row) const { return m_entries.at(row); };
-
     boost::circular_buffer< LogEntry > m_entries;
+    boost::circular_buffer< LogEntry > m_pendingEntries;
     boost::circular_buffer< MetaNode_ptr > m_nodes;
+
+    QTime m_delayDiff;
+    QTimer m_pendingTimer;
 
     friend class FilteredLogModel;
 };

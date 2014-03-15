@@ -37,10 +37,18 @@ LogModel::LogModel(QObject * parent) :
     m_instances(this),
     m_maxEntries(100),
     m_entries(m_maxEntries),
-    m_nodes(m_maxEntries),
+    m_pendingEntries(m_maxEntries),
+    m_nodes(2 * m_maxEntries),
+    m_pendingTimer(this)
 {
     m_inputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
     m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
+
+    // Timer
+    m_pendingTimer.setSingleShot(true);
+    m_pendingTimer.setInterval(1000);
+    connect(&m_pendingTimer, SIGNAL(timeout()),
+            this, SLOT(processPendingEntries()));
 }
 
 LogModel::~LogModel()
@@ -330,6 +338,7 @@ void LogModel::clearLog()
 void LogModel::resetInternalData()
 {
     m_entries.clear();
+    m_pendingEntries.clear();
     m_nodes.clear();
 }
 
@@ -341,9 +350,11 @@ int LogModel::maxEntries() const
 void LogModel::setMaxEntries(int max)
 {
     m_maxEntries = max;
-    // TODO remove
+    removeEntries(0);
+
     m_entries.set_capacity(max);
-    m_nodes.set_capacity(max);
+    m_pendingEntries.set_capacity(max);
+    m_nodes.set_capacity(2 * max);
 }
 
 void LogModel::registerInstance(Objref_ptr objref)
@@ -375,106 +386,157 @@ void LogModel::append(ObjectId id,
         Event_ptr resp,
         bool is_in)
 {
+    LogEntry entry;
+    if (!fillLogEntry(id, req, resp, is_in, entry))
+        return;
+
+    m_pendingEntries.push_back(entry);
+
+    if (m_delayDiff.elapsed() < 500)
+    {
+        if (!m_pendingTimer.isActive())
+            m_pendingTimer.start();
+    }
+    else
+    {
+        processPendingEntries();
+    }
+}
+
+bool LogModel::fillLogEntry(ObjectId id,
+        Request_ptr req,
+        Event_ptr resp,
+        bool is_in,
+        LogEntry& entry)
+{
     Objref_ptr obj = m_instances.find(id);
 
-    if (obj)
+    if (!obj)
+        return false;
+
+    entry.dateTime = QDateTime::currentDateTime();
+
+    OperationDescriptor_ptr op =
+        obj->interface()->get_reflective_by_tag(req->get_tag());
+
+    if (!op) return false;
+
+    entry.object = obj;
+    entry.reflective = op;
+
+    MetaNode_ptr metaNode(new MetaNode(op));
+
+    // Request
+    core::holder hold = op->get_holder(req);
+    Node_ptr node(new Node(op, hold));
+    metaNode->brothers.push_back(node);
+
+    // Response
+    if (resp && (resp->get_type() == event::RESPONSE))
     {
-        LogEntry entry;
-        entry.dateTime = QDateTime::currentDateTime();
+        event::response_ptr response(
+                boost::static_pointer_cast< event::response >(resp));
 
-        OperationDescriptor_ptr op =
-            obj->interface()->get_reflective_by_tag(req->get_tag());
-
-        if (!op) return;
-
-        entry.object = obj;
-        entry.reflective = op;
-
-        // Deja espacio
-        int nRowsToBeRemoved = m_entries.size() - m_maxEntries + 1;
-        if (nRowsToBeRemoved > 0)
-        {
-            beginRemoveRows(QModelIndex(), 0, nRowsToBeRemoved - 1);
-
-            for (int i = 0; i < nRowsToBeRemoved; i++)
-            {
-                // Elimina la primera
-                m_entries.pop_front();
-                m_nodes.pop_front();
-            }
-
-            endRemoveRows();
-        }
-
-        beginInsertRows(QModelIndex(), m_nodes.size(), m_nodes.size());
-
-        MetaNode_ptr metaNode(new MetaNode(op));
-
-        // Request
-        core::holder hold = op->get_holder(req);
+        core::holder hold = op->get_holder(response);
         Node_ptr node(new Node(op, hold));
         metaNode->brothers.push_back(node);
-
-        // Response
-        if (resp && (resp->get_type() == event::RESPONSE))
-        {
-            event::response_ptr response(
-                    boost::static_pointer_cast< event::response >(resp));
-
-            core::holder hold = op->get_holder(response);
-            Node_ptr node(new Node(op, hold));
-            metaNode->brothers.push_back(node);
-        }
-        else
-        {
-            // Null node
-            metaNode->brothers.push_back(Node_ptr());
-        }
-
-        m_nodes.push_back(metaNode);
-
-        // List
-        entry.is_in_entry = is_in;
-        entry.req = req;
-        entry.resp = resp;
-
-        if (is_in)
-        {
-            entry.text = QString("Incoming call ") + obj->name() + "."
-                + op->get_name();
-            entry.icon = &m_inputIcon;
-
-            // Background color
-            if (resp && (resp->get_type() == event::EXCEPTION ||
-                    resp->get_type() == event::MESSAGE))
-            {
-                entry.text += " (Exception!)";
-                entry.color = QColor(Qt::red);
-            }
-            else
-                entry.color = QColor(Qt::green);
-        }
-        else
-        {
-            entry.text = QString("Outgoing call ") + obj->name() + "."
-                + op->get_name();
-            entry.icon = &m_outputIcon;
-
-            // Background Color
-            if (resp && (resp->get_type() == event::EXCEPTION ||
-                    resp->get_type() == event::MESSAGE))
-            {
-                entry.text += " (Exception!)";
-                entry.color = QColor(Qt::red);
-            }
-            else
-                entry.color = QColor(Qt::yellow);
-        }
-
-        m_entries.push_back(entry);
-
-        endInsertRows();
     }
+    else
+    {
+        // Null node
+        metaNode->brothers.push_back(Node_ptr());
+    }
+
+    m_nodes.push_back(metaNode);
+
+    // List
+    entry.is_in_entry = is_in;
+    entry.req = req;
+    entry.resp = resp;
+
+    if (is_in)
+    {
+        entry.text = QString("Incoming call ") + obj->name() + "."
+            + op->get_name();
+        entry.icon = &m_inputIcon;
+
+        // Background color
+        if (resp && (resp->get_type() == event::EXCEPTION ||
+                resp->get_type() == event::MESSAGE))
+        {
+            entry.text += " (Exception!)";
+            entry.color = QColor(Qt::red);
+        }
+        else
+            entry.color = QColor(Qt::green);
+    }
+    else
+    {
+        entry.text = QString("Outgoing call ") + obj->name() + "."
+            + op->get_name();
+        entry.icon = &m_outputIcon;
+
+        // Background Color
+        if (resp && (resp->get_type() == event::EXCEPTION ||
+                resp->get_type() == event::MESSAGE))
+        {
+            entry.text += " (Exception!)";
+            entry.color = QColor(Qt::red);
+        }
+        else
+            entry.color = QColor(Qt::yellow);
+    }
+
+    return true;
+}
+
+void LogModel::removeEntries(int requiredFreeEntries)
+{
+    int nRowsToBeRemoved =
+        m_entries.size() - m_maxEntries + requiredFreeEntries;
+    nRowsToBeRemoved = std::min((int) m_entries.size(), nRowsToBeRemoved);
+
+    if (nRowsToBeRemoved > 0)
+    {
+        beginRemoveRows(QModelIndex(), 0, nRowsToBeRemoved - 1);
+
+        m_entries.erase(m_entries.begin(),
+                m_entries.begin() + nRowsToBeRemoved);
+        m_nodes.erase(m_nodes.begin(), m_nodes.begin() + nRowsToBeRemoved);
+
+        endRemoveRows();
+    }
+}
+
+void LogModel::processPendingEntries()
+{
+    if (m_pendingEntries.empty())
+        return;
+
+    size_t size = std::min(m_pendingEntries.size(), (size_t) m_maxEntries);
+
+    removeEntries(size);
+
+    boost::circular_buffer< LogEntry >::iterator begin =
+        m_pendingEntries.begin();
+
+    // No inserta más de las maximas permitidas
+    if (m_pendingEntries.size() > size)
+    {
+        const size_t diff = m_pendingEntries.size() - size;
+        begin += diff;
+    }
+
+    beginInsertRows(QModelIndex(), m_entries.size(),
+            m_entries.size() + size - 1);
+
+    // Hace accesibles las entradas pendientes
+    m_entries.insert(m_entries.end(), begin, begin + size);
+    m_pendingEntries.clear();
+
+    m_delayDiff.start();
+
+    endInsertRows();
 }
 
 FilteredLogModel::FilteredLogModel(QObject * parent) :
@@ -498,7 +560,8 @@ bool FilteredLogModel::filterAcceptsRow(int sourceRow, const QModelIndex& source
     {
         const LogModel::LogEntry& entry(model->getLogEntry(sourceRow));
 
-        return m_filter->visibleOperation(entry.object->id(), entry.reflective->get_tag());
+        return m_filter->visibleOperation(entry.object->id(),
+                entry.reflective->get_tag());
     }
 
     return false;
@@ -508,14 +571,16 @@ void FilteredLogModel::setFilterModel(FilterModel * filter)
 {
     if (m_filter)
     {
-        QObject::disconnect(m_filter, SIGNAL(filterChanged()), this, SLOT(resetModel()));
+        disconnect(m_filter, SIGNAL(filterChanged()),
+                this, SLOT(resetModel()));
     }
 
     m_filter = filter;
 
     if (m_filter)
     {
-        QObject::connect(m_filter, SIGNAL(filterChanged()), this, SLOT(resetModel()));
+        connect(m_filter, SIGNAL(filterChanged()),
+                this, SLOT(resetModel()));
     }
 }
 
