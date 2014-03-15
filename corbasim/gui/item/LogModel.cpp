@@ -33,12 +33,14 @@
 using namespace corbasim::gui;
 
 LogModel::LogModel(QObject * parent) :
-    QAbstractItemModel(parent), m_instances(this), m_maxEntries(100)
+    QAbstractItemModel(parent),
+    m_instances(this),
+    m_maxEntries(100),
+    m_entries(m_maxEntries),
+    m_nodes(m_maxEntries),
 {
     m_inputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
     m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
-
-    m_entries.reserve(2 * m_maxEntries);
 }
 
 LogModel::~LogModel()
@@ -339,8 +341,9 @@ int LogModel::maxEntries() const
 void LogModel::setMaxEntries(int max)
 {
     m_maxEntries = max;
-    m_entries.reserve(2 * m_maxEntries);
     // TODO remove
+    m_entries.set_capacity(max);
+    m_nodes.set_capacity(max);
 }
 
 void LogModel::registerInstance(Objref_ptr objref)
