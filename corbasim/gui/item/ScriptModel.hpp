@@ -55,7 +55,7 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    QMimeData *	mimeData(const QModelIndexList& indexes) const;
+    QMimeData *    mimeData(const QModelIndexList& indexes) const;
 
     corbasim::event::request_ptr getRequest(int pos);
 

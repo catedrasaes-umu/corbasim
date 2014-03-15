@@ -56,9 +56,9 @@ public:
 
 public slots:
 
-	void sendClicked();
-	void sendStored();
-	void startStopChecked(bool = true);
+    void sendClicked();
+    void sendStored();
+    void startStopChecked(bool = true);
     void storeRequest();
     void stopTimer();
 

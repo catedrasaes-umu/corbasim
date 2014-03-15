@@ -46,7 +46,7 @@ ScriptModel::~ScriptModel()
 {
 }
 
-QMimeData *	ScriptModel::mimeData(const QModelIndexList& indexes) const
+QMimeData *    ScriptModel::mimeData(const QModelIndexList& indexes) const
 {
     if (indexes.size() == 2) // both columns
     {
@@ -300,7 +300,7 @@ corbasim::event::request_ptr ScriptModel::getRequest(int pos)
 }
 
 void ScriptModel::initialize(
-		InterfaceDescriptor_ptr instance)
+        InterfaceDescriptor_ptr instance)
 {
     m_instance = instance;
 }

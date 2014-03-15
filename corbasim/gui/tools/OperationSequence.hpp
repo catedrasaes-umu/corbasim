@@ -61,7 +61,7 @@ private slots:
     void sendClicked();
 
     void sendStored();
-	void startStopChecked(bool = true);
+    void startStopChecked(bool = true);
     void storeRequest();
     void stopTimer();
 

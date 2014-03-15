@@ -40,13 +40,13 @@ inline void encode(std::string& data)
     // Fast check for the most common case
     size_t pos;
     if (std::string::npos == (pos = data.find_first_of("\\\"")))
-	return;
+    return;
 
     std::string buffer;
     buffer.reserve(data.size());
     // Copy the first part, if it exists
     if (pos)
-    	buffer.append(&data[0], pos);
+        buffer.append(&data[0], pos);
     for(; pos != data.size(); ++pos)
     {
         switch(data[pos])

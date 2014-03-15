@@ -6,6 +6,6 @@
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_CosNaming_NamingContextExt()
 {
-	return corbasim::core::interface_reflective< CosNaming::NamingContextExt >::get_instance();
+    return corbasim::core::interface_reflective< CosNaming::NamingContextExt >::get_instance();
 }
 

@@ -83,7 +83,7 @@ SenderSequenceTool::~SenderSequenceTool()
 AbstractSequenceItem *
 SenderSequenceTool::createAbstractItem(
         Objref_ptr object,
-		OperationDescriptor_ptr op)
+        OperationDescriptor_ptr op)
 {
     SenderSequenceItem * item =
         new SenderSequenceItem(object, op);

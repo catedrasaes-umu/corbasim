@@ -6,6 +6,6 @@
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_HelloApp_Hello()
 {
-	return corbasim::core::interface_reflective< HelloApp::Hello >::get_instance();
+    return corbasim::core::interface_reflective< HelloApp::Hello >::get_instance();
 }
 

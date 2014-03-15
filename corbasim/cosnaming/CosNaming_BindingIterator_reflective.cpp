@@ -6,6 +6,6 @@
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_CosNaming_BindingIterator()
 {
-	return corbasim::core::interface_reflective< CosNaming::BindingIterator >::get_instance();
+    return corbasim::core::interface_reflective< CosNaming::BindingIterator >::get_instance();
 }
 

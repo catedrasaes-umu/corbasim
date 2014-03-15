@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     }
 
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
-	QApplication app(argc, argv);
+    QApplication app(argc, argv);
     ClientApp client(argv[1]);
 
     return app.exec();

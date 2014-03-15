@@ -211,7 +211,7 @@ void reflective_base::copy(holder const & src, holder& dst) const
 
 void interface_reflective_base::insert_reflective(
         const std::string& name,
-		corbasim::tag_t tag, operation_reflective_base const * reflective)
+        corbasim::tag_t tag, operation_reflective_base const * reflective)
 {
     m_reflectives.push_back(reflective);
 

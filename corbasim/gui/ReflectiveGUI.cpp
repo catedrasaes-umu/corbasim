@@ -183,7 +183,7 @@ QWidget * ::corbasim::gui::createSimpleWidget(
 // Widget base
 
 ReflectiveWidgetBase::ReflectiveWidgetBase(
-	TypeDescriptor_ptr reflective) :
+    TypeDescriptor_ptr reflective) :
     m_reflective(reflective)
 {
 }

@@ -12,21 +12,21 @@ class prueba_Iface_impl : virtual public POA_prueba::Iface
 {
 public:
 
-	prueba_Iface_impl( ::corbasim::gui::ServerApp& app) :
-		m_app(app)
-	{
-	}
+    prueba_Iface_impl( ::corbasim::gui::ServerApp& app) :
+        m_app(app)
+    {
+    }
 
 
-	void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
-	{
-		_corbasim_prueba::Iface::operation _val(a, fs);
+    void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
+    {
+        _corbasim_prueba::Iface::operation _val(a, fs);
 
-		/*PROTECTED REGION ID(prueba_Iface_server_ui::prueba_Iface_operation) ENABLED START*/
+        /*PROTECTED REGION ID(prueba_Iface_server_ui::prueba_Iface_operation) ENABLED START*/
         std::cout << __FUNCTION__  << std::endl;
-		/*PROTECTED REGION END*/
+        /*PROTECTED REGION END*/
 
-	}
+    }
 
 
     /*PROTECTED REGION ID(prueba_Iface_server_ui::___body) ENABLED START*/
@@ -34,14 +34,14 @@ public:
 
 protected:
 
-	::corbasim::gui::ServerApp& m_app;
+    ::corbasim::gui::ServerApp& m_app;
 };
 
 int main(int argc, char **argv)
 {
     corbasim::gui::ServerApp app(argc, argv);
 
-	// Servant
+    // Servant
     prueba_Iface_impl _impl(app);
 
     CORBA::Object_var myRef = app.setServant("prueba::Iface", "this", &_impl);

@@ -433,7 +433,7 @@ void AbstractSequenceTool::unregisterInstance(ObjectId id)
 AbstractSequenceItem *
 AbstractSequenceTool::appendAbstractItem(
         Objref_ptr object,
-		OperationDescriptor_ptr op)
+        OperationDescriptor_ptr op)
 {
     if (!object || !op)
         return NULL;

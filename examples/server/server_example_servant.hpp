@@ -12,29 +12,29 @@ namespace adapted
 template< >
 struct servant< prueba::Iface >
 {
-	template < typename F >
-	class _type : public virtual POA_prueba::Iface
-	{
-	public:
+    template < typename F >
+    class _type : public virtual POA_prueba::Iface
+    {
+    public:
 
-		_type(F f) :
-			__f(f)
-		{
-		}
-
-
-		void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
-		{
-			_corbasim_prueba::Iface::operation _val(a, fs);
-
-			__f(_val);
-
-		}
+        _type(F f) :
+            __f(f)
+        {
+        }
 
 
-	protected:
-		F __f;
-	};
+        void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
+        {
+            _corbasim_prueba::Iface::operation _val(a, fs);
+
+            __f(_val);
+
+        }
+
+
+    protected:
+        F __f;
+    };
 };
 
 } // adapted

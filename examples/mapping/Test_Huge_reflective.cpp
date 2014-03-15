@@ -6,6 +6,6 @@
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_Test_Huge()
 {
-	return corbasim::core::interface_reflective< Test::Huge >::get_instance();
+    return corbasim::core::interface_reflective< Test::Huge >::get_instance();
 }
 

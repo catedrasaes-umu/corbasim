@@ -79,7 +79,7 @@ bool OperationParametersModel::isCheckable(TypeDescriptor_ptr reflective) const
 
 void OperationParametersModel::initialize(
         int idx,
-		OperationDescriptor_ptr reflective)
+        OperationDescriptor_ptr reflective)
 {
     m_idx = idx;
     m_name = reflective->get_name();

@@ -6,6 +6,6 @@
 
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_AAAAAAAAA_IIIIIIIIII()
 {
-	return corbasim::core::interface_reflective< AAAAAAAAA::IIIIIIIIII >::get_instance();
+    return corbasim::core::interface_reflective< AAAAAAAAA::IIIIIIIIII >::get_instance();
 }
 
