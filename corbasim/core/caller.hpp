@@ -93,9 +93,8 @@ struct operation_caller_impl : public operation_caller_base< Interface >
 
     static inline operation_caller_impl * get_instance()
     {
-        typedef boost::shared_ptr< operation_caller_impl > ptr_t;
-        static ptr_t ptr_(new operation_caller_impl);
-        return ptr_.get();
+        static operation_caller_impl _instance;
+        return &_instance;
     }
 };
 

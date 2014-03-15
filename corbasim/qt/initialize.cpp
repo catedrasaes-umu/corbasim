@@ -61,8 +61,8 @@ public:
 
     static Initializer* getInstance()
     {
-        static boost::shared_ptr< Initializer > instance(new Initializer);
-        return instance.get();
+        static Initializer instance;
+        return &instance;
     }
 };
 

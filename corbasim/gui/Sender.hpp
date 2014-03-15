@@ -118,8 +118,7 @@ signals:
 
 protected:
 
-    void scheduleTimer(
-            Sender_weak weak);
+    void scheduleTimer(Sender_weak weak);
 
     void handleTimeout(
             Sender_weak weak,

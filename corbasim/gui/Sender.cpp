@@ -46,9 +46,6 @@ SenderController::~SenderController()
 
 void SenderController::start(unsigned int numberOfThreads)
 {
-    // std::cout << "SenderController::"
-    //     << __FUNCTION__ << std::endl;
-
     for (unsigned int i = 0; i < numberOfThreads; i++)
     {
         m_threads.create_thread(boost::bind(
@@ -98,7 +95,6 @@ void SenderController::deleteSender(SenderConfig_ptr cfg)
     if (it != m_map.end())
     {
         it.value()->cancel();
-
         m_map.erase(it);
     }
 }
@@ -131,52 +127,49 @@ void Sender::start(Sender_weak weak)
 {
     Sender_ptr ptr (weak.lock());
 
-    if (ptr)
+    if (!ptr)
+        return;
+
+    m_evaluator.evaluate(m_config->code());
+
+    bool hasErr = m_evaluator.hasError();
+
+    if (!hasErr)
     {
-        m_evaluator.evaluate(m_config->code());
+        OperationDescriptor_ptr op = m_config->operation();
 
-        bool hasErr = m_evaluator.hasError();
+        // Clone the original request
+        // We can't modify an emited request
+        Holder srcHolder = op->get_holder(m_config->request());
 
-        if (!hasErr)
-        {
-            OperationDescriptor_ptr op =
-                m_config->operation();
+        m_request = op->create_request();
+        Holder dstHolder = op->get_holder(m_request);
 
-            // Clone the original request
-            // We can't modify an emited request
-            ::corbasim::core::holder srcHolder =
-                op->get_holder(m_config->request());
+        op->copy(srcHolder, dstHolder);
 
-            m_request = op->create_request();
-            ::corbasim::core::holder dstHolder =
-                op->get_holder(m_request);
+        // m_request is the working request
+        m_evaluator.init(m_request);
 
-            op->copy(srcHolder, dstHolder);
+        hasErr = m_evaluator.hasError();
+    }
 
-            // m_request is the working request
-            m_evaluator.init(m_request);
+    if (!hasErr)
+    {
+        m_timer.expires_from_now(
+                boost::posix_time::milliseconds(
+                    m_config->initDelay()));
 
-            hasErr = m_evaluator.hasError();
-        }
+        m_timer.async_wait(
+                boost::bind(&Sender::handleTimeout,
+                    this, weak, _1));
+    }
+    else
+    {
+        m_config->notifyFinished();
 
-        if (!hasErr)
-        {
-            m_timer.expires_from_now(
-                    boost::posix_time::milliseconds(
-                        m_config->initDelay()));
+        emit finished(m_config);
 
-            m_timer.async_wait(
-                    boost::bind(&Sender::handleTimeout,
-                        this, weak, _1));
-        }
-        else
-        {
-            m_config->notifyFinished();
-
-            emit finished(m_config);
-
-            emit error(m_evaluator.error());
-        }
+        emit error(m_evaluator.error());
     }
 }
 
@@ -187,11 +180,9 @@ void Sender::cancel()
 
 void Sender::process()
 {
-    OperationDescriptor_ptr op =
-        m_config->operation();
+    OperationDescriptor_ptr op = m_config->operation();
 
-    ::corbasim::core::holder srcHolder =
-        op->get_holder(m_request);
+    Holder srcHolder = op->get_holder(m_request);
 
     // preFunc
     m_evaluator.pre(m_request);
@@ -211,13 +202,10 @@ void Sender::process()
     m_evaluator.post(m_request);
     if (m_evaluator.hasError()) throw m_evaluator.error();
 
-    // clone request
-    // we can't emit a request we're going to modify
-
-    Request_ptr request =
-        op->create_request();
-    ::corbasim::core::holder dstHolder =
-        op->get_holder(request);
+    // Clone request
+    // We can't emit a request we're going to modify
+    Request_ptr request = op->create_request();
+    Holder dstHolder = op->get_holder(request);
 
     op->copy(srcHolder, dstHolder);
 
@@ -229,12 +217,11 @@ void Sender::process()
 void Sender::applyProcessor(
         Request_ptr request,
         RequestProcessor_ptr processor,
-        corbasim::core::holder holder)
+        Holder holder)
 {
     const QList< int >& path = processor->path();
 
-    const OperationDescriptor_ptr op =
-        m_config->operation();
+    OperationDescriptor_ptr op = m_config->operation();
 
     // Results
     TypeDescriptor_ptr descriptor = NULL;
@@ -264,40 +251,32 @@ void Sender::handleTimeout(
         Sender_weak weak,
         const boost::system::error_code& err)
 {
-    if (!err)
-    {
-        Sender_ptr ptr = weak.lock();
+    if (err)
+        return;
 
-        if (ptr)
+    Sender_ptr ptr = weak.lock();
+    if (!ptr)
+        return;
+
+    try
+    {
+        process();
+
+        if (++m_currentTime == m_config->times())
         {
-            try
-            {
-                process();
-
-                if (++m_currentTime == m_config->times())
-                {
-                    m_config->notifyFinished();
-
-                    emit finished(m_config);
-                }
-
-                // Last step to ensure thread-safe
-                if (m_currentTime != m_config->times())
-                    scheduleTimer(weak);
-            }
-            catch(const QString& ex)
-            {
-                m_config->notifyFinished();
-
-                emit finished(m_config);
-
-                emit error(ex);
-            }
+            m_config->notifyFinished();
+            emit finished(m_config);
         }
+
+        // Last step to ensure thread-safe
+        if (m_currentTime != m_config->times())
+            scheduleTimer(weak);
     }
-    else
+    catch(const QString& ex)
     {
-        // Cancel
+        m_config->notifyFinished();
+        emit finished(m_config);
+        emit error(ex);
     }
 }
 

@@ -219,6 +219,12 @@ Application::Application(QObject * parent) :
             this,
             SIGNAL(error(const QString&)));
 
+    // Thread names
+    m_data->m_inputReqCtlThread.setObjectName("Input Requests");
+    m_data->m_senderCtlThread.setObjectName("Output Requests");
+    m_data->m_scriptEngineThread.setObjectName("Script Engine");
+    m_data->m_nameServiceManagerThread.setObjectName("Name Service");
+
     // Services dedicated threads
     m_data->m_inputReqCtl->moveToThread(
             &m_data->m_inputReqCtlThread);
@@ -229,13 +235,11 @@ Application::Application(QObject * parent) :
     m_data->m_nameServiceManager->moveToThread(
             &m_data->m_nameServiceManagerThread);
 
+    // Start services
     m_data->m_nameServiceManager->start();
-
     m_data->m_inputReqCtlThread.start();
-
     m_data->m_senderCtl->start(); // its thread pool
     m_data->m_senderCtlThread.start();
-
     m_data->m_scriptEngineThread.start();
     m_data->m_nameServiceManagerThread.start();
 }

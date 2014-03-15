@@ -32,10 +32,9 @@ namespace app
 class AppConfiguration
 {
 public:
+    static AppConfiguration * getInstance();
 
     void processCmdLine(int argc, char** argv);
-
-    static AppConfiguration * getInstance();
 
     // Data
     bool exit;
@@ -52,9 +51,7 @@ public:
     std::string load_configuration;
 
 protected:
-
     AppConfiguration();
-
 };
 
 } // namespace app

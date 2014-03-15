@@ -130,6 +130,7 @@ int main(int argc, char **argv)
         }
 
         application.moveToThread(&threadApplication);
+        threadApplication.setObjectName("Application");
         threadApplication.start();
 
         // ORB worker

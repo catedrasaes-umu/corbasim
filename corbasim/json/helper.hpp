@@ -155,9 +155,8 @@ struct helper_factory_impl : public helper_factory< S >
 
     static inline helper_factory_impl const * get_instance()
     {
-        typedef boost::shared_ptr< helper_factory_impl > ptr_t;
-        static ptr_t _ptr(new helper_factory_impl);
-        return _ptr.get();
+        static helper_factory_impl _instance;
+        return &_instance;
     }
 };
 
@@ -241,9 +240,8 @@ struct helper_factories
 
     static inline helper_factories const * get_instance()
     {
-        typedef boost::shared_ptr< helper_factories > ptr_t;
-        static ptr_t _ptr(new helper_factories);
-        return _ptr.get();
+        static helper_factories _instance;
+        return &_instance;
     }
 };
 
@@ -288,11 +286,13 @@ struct enum_helper : public helper_base
         const char ** values = adapted_t::values();
 
         for(int idx = 0; *values; values++, idx++)
+        {
             if (id == *values)
             {
                 _t = static_cast< T >(idx);
                 return;
             }
+        }
 
         throw "Error!";
     }
@@ -461,9 +461,12 @@ struct corba_objrefvar_helper : public helper_base
     {
         corbasim::core::reference_repository * rr =
             corbasim::core::reference_repository::get_instance();
-        try {
+        try
+        {
             _t = interface::_narrow(rr->string_to_object(d));
-        } catch (...) {
+        }
+        catch (...)
+        {
             _t = interface::_nil();
         }
     }
@@ -488,7 +491,6 @@ struct corba_objrefvar_helper : public helper_base
             w.new_null();
     }
 };
-
 
 //
 //
@@ -515,7 +517,6 @@ struct stl_string_helper : public helper_base
         w.new_string(t.c_str());
     }
 };
-
 
 template< typename T >
 struct stl_map_helper : public helper_base
