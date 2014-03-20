@@ -83,10 +83,10 @@ class CORBASIM_GUI_DECLSPEC OperationEvaluatorWidget :
 {
     Q_OBJECT
 public:
-    OperationEvaluatorWidget(Objref_ptr object, QWidget * parent = 0);
+    OperationEvaluatorWidget(Objref_ptr object,
+            OperationDescriptor_ptr op,
+            QWidget * parent = 0);
     virtual ~OperationEvaluatorWidget();
-
-    void initialize(OperationDescriptor_ptr);
 
 public slots:
 

@@ -113,7 +113,6 @@ public slots:
     void clear();
 
     void registerInstance(Objref_ptr objref);
-
     void unregisterInstance(ObjectId id);
 
     AbstractInputItem * createAbstractInputItem(const QString& id,

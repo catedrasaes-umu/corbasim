@@ -239,8 +239,7 @@ OperationSender * ObjrefView::getSenderDialog(int idx)
 
         const char * name = op->get_name();
 
-        dlg = new OperationSender(m_objref);
-        dlg->initialize(op);
+        dlg = new OperationSender(m_objref, op);
         dlg->setWindowTitle(name);
 
         m_senders[idx] = dlg;

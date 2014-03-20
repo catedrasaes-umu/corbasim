@@ -95,10 +95,9 @@ class CORBASIM_GUI_DECLSPEC OperationForm :
     Q_OBJECT
     Q_PROPERTY(QString code READ code WRITE setCode)
 public:
-    OperationForm(QWidget * parent = 0);
+    OperationForm(Objref_ptr, OperationDescriptor_ptr,
+            QWidget * parent = 0);
     virtual ~OperationForm();
-
-    void initialize(Objref_ptr, OperationDescriptor_ptr);
 
     void showSizeGrip(bool show);
 
@@ -119,11 +118,9 @@ public:
 protected:
 
     OperationDescriptor_ptr m_reflective;
-
     QPlainTextEdit * m_code;
     OperationFormWidget * m_widget;
     ParametersFromFilesTool * m_files;
-
     QWidget * m_sizeGrip;
 };
 
@@ -134,10 +131,9 @@ class CORBASIM_GUI_DECLSPEC OperationSender :
     Q_PROPERTY(Objref_ptr object READ object)
 public:
     OperationSender(Objref_ptr object,
+            OperationDescriptor_ptr op,
             QWidget * parent = 0);
     virtual ~OperationSender();
-
-    void initialize(OperationDescriptor_ptr);
 
     Objref_ptr object() const;
 

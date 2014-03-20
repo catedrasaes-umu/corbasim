@@ -303,6 +303,20 @@ SenderConfig::SenderConfig(
 {
 }
 
+SenderConfig::SenderConfig(
+        Objref_ptr object,
+        OperationDescriptor_ptr operation,
+        Request_ptr request,
+        int times,
+        unsigned int period,
+        unsigned int initDelay) :
+    m_object(object), m_operation(operation),
+    m_request(request),
+    m_times(times), m_period(period),
+    m_initDelay(initDelay)
+{
+}
+
 SenderConfig::~SenderConfig()
 {
 }

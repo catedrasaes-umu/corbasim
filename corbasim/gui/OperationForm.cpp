@@ -35,25 +35,15 @@
 using namespace corbasim::gui;
 
 OperationForm::OperationForm(
+        Objref_ptr object,
+        OperationDescriptor_ptr factory,
         QWidget * parent) :
     QWidget(parent),
-    m_reflective(NULL),
+    m_reflective(factory),
     m_widget(NULL),
     m_files(NULL),
     m_sizeGrip(NULL)
 {
-}
-
-OperationForm::~OperationForm()
-{
-}
-
-void OperationForm::initialize(
-        Objref_ptr object,
-        OperationDescriptor_ptr factory)
-{
-    m_reflective = factory;
-
     QVBoxLayout * ly = new QVBoxLayout();
     QTabWidget * tabs = new QTabWidget();
 
@@ -92,6 +82,10 @@ void OperationForm::initialize(
     // End size grip
 
     setLayout(ly);
+}
+
+OperationForm::~OperationForm()
+{
 }
 
 void OperationForm::showSizeGrip(bool show)
@@ -217,7 +211,7 @@ OperationFormWidget::~OperationFormWidget()
 void OperationFormWidget::setValue(const QVariant& var)
 {
     Request_ptr req = m_reflective->create_request();
-    core::holder h = m_reflective->get_holder(req);
+    Holder h = m_reflective->get_holder(req);
 
     if (fromQVariant(m_reflective, h, var))
     {
@@ -228,7 +222,7 @@ void OperationFormWidget::setValue(const QVariant& var)
 QVariant OperationFormWidget::value()
 {
     Request_ptr req (createRequest());
-    core::holder holder(m_reflective->get_holder(req));
+    Holder holder(m_reflective->get_holder(req));
 
     return toQVariant(m_reflective, holder);
 }
@@ -242,7 +236,7 @@ OperationFormWidget::getReflective() const
 Request_ptr OperationFormWidget::createRequest()
 {
     Request_ptr req (m_reflective->create_request());
-    core::holder holder(m_reflective->get_holder(req));
+    Holder holder(m_reflective->get_holder(req));
 
     const unsigned int count = m_reflective->get_children_count();
 
@@ -250,8 +244,7 @@ Request_ptr OperationFormWidget::createRequest()
     {
         if (m_widgets[i])
         {
-            core::holder child_holder(
-                    m_reflective->get_child_value(holder, i));
+            Holder child_holder(m_reflective->get_child_value(holder, i));
             m_widgets[i]->toHolder(child_holder);
         }
     }
@@ -261,7 +254,7 @@ Request_ptr OperationFormWidget::createRequest()
 
 void OperationFormWidget::setValue(Request_ptr req)
 {
-    core::holder holder(m_reflective->get_holder(req));
+    Holder holder(m_reflective->get_holder(req));
 
     const unsigned int count = m_reflective->get_children_count();
 
@@ -269,7 +262,7 @@ void OperationFormWidget::setValue(Request_ptr req)
     {
         if (m_widgets[i])
         {
-            core::holder child_holder(
+            Holder child_holder(
                     m_reflective->get_child_value(holder, i));
             m_widgets[i]->fromHolder(child_holder);
         }
@@ -368,7 +361,7 @@ void OperationFormWidget::dropEvent(QDropEvent *event)
     try
     {
         Request_ptr req = m_reflective->create_request();
-        core::holder holder = m_reflective->get_holder(req);
+        Holder holder = m_reflective->get_holder(req);
 
         bool res = json::parse(m_reflective, holder,
                 str.c_str(), str.size());
@@ -405,9 +398,7 @@ void OperationFormWidget::mouseMoveEvent(QMouseEvent *event)
 
     std::ostringstream oss;
     Request_ptr req = createRequest();
-
-    core::holder holder = m_reflective->get_holder(req);
-
+    Holder holder = m_reflective->get_holder(req);
     json::write(oss, m_reflective, holder);
 
     mimeData->setText(oss.str().c_str());
@@ -436,9 +427,7 @@ void OperationFormWidget::save(QVariant& settings)
         if (m_widgets[i])
         {
             QVariant child;
-
             m_widgets[i]->save(child);
-
             value[m_reflective->get_child_name(i)] = child;
         }
     }
@@ -472,14 +461,16 @@ void OperationFormWidget::load(const QVariant& settings)
 
 OperationSender::OperationSender(
         Objref_ptr object,
+        OperationDescriptor_ptr op,
         QWidget * parent) :
     QWidget(parent),
-    m_object(object), m_reflective(NULL)
+    m_object(object), m_reflective(op),
+    m_updateForm(NULL)
 {
     QVBoxLayout * mainLayout = new QVBoxLayout();
 
     // Form
-    m_form = new OperationForm();
+    m_form = new OperationForm(object, op);
     mainLayout->addWidget(m_form);
 
     // Configuration
@@ -494,7 +485,6 @@ OperationSender::OperationSender(
     m_delay = new QSpinBox();
     m_delay->setRange(0, std::numeric_limits< int >::max());
     m_delay->setValue(0);
-    m_updateForm = new QCheckBox();
 
     m_progressBar = new QProgressBar();
     m_progressBar->setFixedSize(150, 15);
@@ -510,8 +500,14 @@ OperationSender::OperationSender(
     cfgLayout->addWidget(m_period);
     cfgLayout->addWidget(new QLabel("Delay (ms)"));
     cfgLayout->addWidget(m_delay);
-    cfgLayout->addWidget(new QLabel("Update form"));
-    cfgLayout->addWidget(m_updateForm);
+
+    if (m_reflective->get_children_count())
+    {
+        cfgLayout->addWidget(new QLabel("Update form"));
+        m_updateForm = new QCheckBox();
+        cfgLayout->addWidget(m_updateForm);
+    }
+
     cfgLayout->addWidget(m_progressBar);
     cfgLayout->addWidget(m_playButton);
 
@@ -539,29 +535,23 @@ OperationSender::OperationSender(
             senderCtl,
             SLOT(deleteSender(SenderConfig_ptr)));
 
-    connect(m_updateForm,
-            SIGNAL(toggled(bool)),
-            this,
-            SLOT(activeUpdateForm(bool)));
+    if (m_reflective->get_children_count())
+    {
+        connect(m_updateForm,
+                SIGNAL(toggled(bool)),
+                this,
+                SLOT(activeUpdateForm(bool)));
+
+        connect(this,
+                SIGNAL(updateForm(Request_ptr)),
+                m_form->getWidget(),
+                SLOT(setValue(Request_ptr)));
+    }
 }
 
 OperationSender::~OperationSender()
 {
     reset();
-}
-
-void OperationSender::initialize(
-        OperationDescriptor_ptr op)
-{
-    m_reflective = op;
-
-    m_form->initialize(m_object, op);
-
-    // signals
-    connect(this,
-            SIGNAL(updateForm(Request_ptr)),
-            m_form->getWidget(),
-            SLOT(setValue(Request_ptr)));
 }
 
 Objref_ptr OperationSender::object() const
@@ -573,12 +563,13 @@ void OperationSender::save(QVariant& settings)
 {
     QVariantMap map;
 
-    m_form->save(map["form"]);
-
+    if (m_form)
+        m_form->save(map["form"]);
     map["times"] = m_times->value();
     map["period"] = m_period->value();
     map["delay"] = m_delay->value();
-    map["update_form"] = m_updateForm->isChecked();
+    if (m_updateForm)
+        map["update_form"] = m_updateForm->isChecked();
 
     settings = map;
 }
@@ -587,12 +578,13 @@ void OperationSender::load(const QVariant& settings)
 {
     const QVariantMap map = settings.toMap();
 
-    m_form->load(map["form"]);
-
+    if (m_form)
+        m_form->load(map["form"]);
     m_times->setValue(map["times"].toInt());
     m_period->setValue(map["period"].toInt());
     m_delay->setValue(map["delay"].toInt());
-    m_updateForm->setChecked(map["update_form"].toBool());
+    if (m_updateForm)
+        m_updateForm->setChecked(map["update_form"].toBool());
 }
 
 OperationForm * OperationSender::getForm() const
@@ -639,25 +631,37 @@ void OperationSender::playClicked(bool play)
         m_progressBar->setRange(0, m_times->value());
         m_progressBar->setValue(0);
 
-        // m_form->setEnabled(false);
         _setReadOnly(true);
 
-        // Create processors
-        QList< RequestProcessor_ptr > processors;
-        m_form->getFiles()->createProcessors(processors);
+        if (m_reflective->get_children_count())
+        {
+            // Create processors
+            QList< RequestProcessor_ptr > processors;
+            m_form->getFiles()->createProcessors(processors);
 
-        m_config.reset(new SenderConfig(
-                    object(),
-                    m_reflective,
-                    m_form->createRequest(),
-                    m_form->code(),
-                    processors,
-                    m_times->value(),
-                    m_period->value(),
-                    m_delay->value()));
+            m_config.reset(new SenderConfig(
+                        object(),
+                        m_reflective,
+                        m_form->createRequest(),
+                        m_form->code(),
+                        processors,
+                        m_times->value(),
+                        m_period->value(),
+                        m_delay->value()));
 
-        // connect signals
-        activeUpdateForm(m_updateForm->isChecked());
+            // connect signals
+            activeUpdateForm(m_updateForm->isChecked());
+        }
+        else
+        {
+            m_config.reset(new SenderConfig(
+                        object(),
+                        m_reflective,
+                        m_reflective->create_request(),
+                        m_times->value(),
+                        m_period->value(),
+                        m_delay->value()));
+        }
 
         connect(m_config.get(),
                 SIGNAL(requestSent(Request_ptr)),
@@ -673,7 +677,6 @@ void OperationSender::playClicked(bool play)
     }
     else
     {
-        // m_form->setEnabled(true);
         _setReadOnly(false);
 
         if (!m_times->value())
@@ -688,7 +691,6 @@ void OperationSender::playClicked(bool play)
 void OperationSender::finished()
 {
     m_playButton->setChecked(false);
-    // m_form->setEnabled(true);
     _setReadOnly(false);
 }
 

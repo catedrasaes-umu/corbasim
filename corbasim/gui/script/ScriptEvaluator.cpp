@@ -110,9 +110,11 @@ QString OperationEvaluator::error() const
 //
 //
 
-OperationEvaluatorWidget::OperationEvaluatorWidget(Objref_ptr object, QWidget * parent) :
-    QWidget(parent), m_reflective(NULL),
-    m_widget(new OperationSender(object))
+OperationEvaluatorWidget::OperationEvaluatorWidget(Objref_ptr object,
+        OperationDescriptor_ptr op,
+        QWidget * parent) :
+    QWidget(parent), m_reflective(op),
+    m_widget(new OperationSender(object, op))
 {
     QVBoxLayout * ly = new QVBoxLayout();
     QGridLayout * btnLy = new QGridLayout();
@@ -150,20 +152,12 @@ OperationEvaluatorWidget::OperationEvaluatorWidget(Objref_ptr object, QWidget * 
             this, SLOT(loadForm()));
 
     setLayout(ly);
+
+    m_evaluator.reset(new OperationEvaluator(op, this));
 }
 
 OperationEvaluatorWidget::~OperationEvaluatorWidget()
 {
-}
-
-void OperationEvaluatorWidget::initialize(
-    ::corbasim::core::operation_reflective_base const * factory)
-{
-    m_reflective = factory;
-
-    m_widget->initialize(m_reflective);
-
-    m_evaluator.reset(new OperationEvaluator(factory, this));
 }
 
 void OperationEvaluatorWidget::evaluate()
@@ -310,8 +304,7 @@ void ScriptEvaluatorWidget::initialize(
         const char * name = op->get_name();
 
         OperationEvaluatorWidget * ev =
-            new OperationEvaluatorWidget(object);
-        ev->initialize(op);
+            new OperationEvaluatorWidget(object, op);
 
         tabs->addTab(ev, name);
     }

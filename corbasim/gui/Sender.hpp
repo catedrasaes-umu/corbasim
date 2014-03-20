@@ -61,6 +61,13 @@ public:
         int times,
         unsigned int period,
         unsigned int initDelay = 0);
+    SenderConfig(
+        Objref_ptr object,
+        OperationDescriptor_ptr operation,
+        Request_ptr request,
+        int times,
+        unsigned int period,
+        unsigned int initDelay = 0);
     ~SenderConfig();
 
     // Accessors

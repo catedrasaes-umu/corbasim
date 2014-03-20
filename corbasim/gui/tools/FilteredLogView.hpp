@@ -43,25 +43,20 @@ class CORBASIM_GUI_DECLSPEC EntryViewer : public QWidget
 {
     Q_OBJECT
 public:
-
     EntryViewer(QWidget * parent = 0);
     virtual ~EntryViewer();
 
 public slots:
 
-    void show(
-            const QString& text,
+    void show(const QString& text,
             OperationDescriptor_ptr op,
             Request_ptr req);
 
 protected:
-
-    typedef std::map<
-        OperationDescriptor_ptr,
+    typedef std::map< OperationDescriptor_ptr,
         QScrollArea * > viewers_t;
 
     viewers_t m_viewers;
-
     QLabel * m_label;
     QStackedWidget * m_stack;
 };
@@ -79,25 +74,20 @@ public:
 public slots:
 
     void registerInstance(Objref_ptr object);
-
     void unregisterInstance(ObjectId id);
-
     void setLogModel(QAbstractItemModel * model);
 
 protected slots:
 
     void selected(const QModelIndex& index);
-    void currentChanged(const QModelIndex& current, const QModelIndex& previous);
+    void currentChanged(const QModelIndex& current,
+            const QModelIndex& previous);
 
 protected:
-
     FilterModel m_filterModel;
     FilteredLogModel m_model;
-
     EntryViewer * m_viewer;
-
     LogModel * m_sourceModel;
-
 };
 
 } // namespace gui

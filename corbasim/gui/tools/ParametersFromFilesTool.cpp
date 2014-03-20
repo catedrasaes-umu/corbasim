@@ -68,7 +68,7 @@ ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
                     OperationDescriptor_ptr,
                     const QList< int >&)));
 
-    setMinimumSize(650, 400);
+    setMinimumSize(450, 300);
 }
 
 ParametersFromFilesTool::~ParametersFromFilesTool()
