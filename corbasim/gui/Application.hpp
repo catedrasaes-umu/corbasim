@@ -97,7 +97,7 @@ protected:
     ObjrefRepository m_servants;
 
     struct ApplicationData;
-    friend class ApplicationData;
+    friend struct ApplicationData;
     ApplicationData * m_data;
 };
 

@@ -38,9 +38,10 @@ struct Objref::Data
 Objref::Objref(const QString& name,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
+    QObject(parent),
     m_name(name),
     m_interfaceDescriptor(interfaceDescriptor),
-    QObject(parent), m_data(new Data)
+    m_data(new Data)
 {
     if(m_interfaceDescriptor)
     {
@@ -53,10 +54,11 @@ Objref::Objref(const QString& name,
 Objref::Objref(const ObjrefConfig& cfg,
        InterfaceDescriptor_ptr interfaceDescriptor,
        QObject * parent) :
+    QObject(parent),
     m_name(cfg.name.c_str()),
     m_nsEntry(cfg.entry.c_str()),
     m_interfaceDescriptor(interfaceDescriptor),
-    QObject(parent), m_data(new Data)
+    m_data(new Data)
 {
     if(m_interfaceDescriptor)
     {
