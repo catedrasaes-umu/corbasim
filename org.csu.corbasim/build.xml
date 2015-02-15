@@ -6,46 +6,52 @@
     <property name="source" value="1.6"/>
     <path id="Plug-in Dependencies.libraryclasspath">
         <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/anarres-cpp.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/com.google.collect_0.8.0.v201102150722.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/com.google.inject_2.0.0.v201003051000.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/com.ibm.icu_4.2.1.v20100412.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/com.google.guava_15.0.0.v201403281430.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/com.google.inject_3.0.0.v201312141243.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/com.ibm.icu_52.1.0.v201404241930.jar"/>
         <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/gnu.getopt.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.antlr.runtime_3.0.0.v200803061811.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.apache.commons.cli_1.0.0.v20080604-1500.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.apache.commons.logging_1.1.1.v201005080502.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.apache.log4j_1.2.15.v201005080500.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.csu.idl.idlmm_1.0.0.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.csu.idl.xtext_1.0.0.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.cdt.core_5.2.1.201102110609.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.contenttype_3.4.100.v20100505-1235.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.jobs_3.5.1.R36x_v20100824.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.resources_3.6.1.R36x_v20110131-1630.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.runtime_3.6.0.v20100505.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.codegen_2.6.0.v20100914-1218.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.codegen.ecore_2.6.1.v20100914-1218.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.common_2.6.0.v20100914-1218.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.ecore_2.6.1.v20100914-1218.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.ecore.xmi_2.5.0.v20100521-1846.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe2.language_1.0.2.v201102151014.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe2.launch_1.0.2.v201102151014.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe2.runtime_1.0.2.v201102150556.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe.core_1.0.2.v201102150556.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe.utils_1.0.2.v201102150556.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.app_1.3.1.R36x_v20100803.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.common_3.6.0.v20100503.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.preferences_3.3.0.v20100503.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.registry_3.5.0.v20100503.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.jface.text_3.6.1.r361_v20100825-0800.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.osgi_3.6.2.R36x_v20110210.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.text_3.5.0.v20100601-1300.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xpand_1.0.1.v201008251147.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtend_1.0.1.v201008251147.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtend.typesystem.emf_1.0.1.v201008251147.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext_1.0.2.v201102150722.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.common.types_1.0.2.v201102150722.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.generator_1.0.2.v201102150722.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.util_1.0.2.v201102150722.jar"/>
-        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.xtend_1.0.2.v201102150722.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/javax.annotation_1.2.0.v201401042248.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/javax.inject_1.0.0.v20091030.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.antlr.runtime_3.2.0.v201101311130.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.apache.commons.cli_1.2.0.v201404270220.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.apache.commons.logging_1.1.1.v201101211721.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.apache.log4j_1.2.15.v201012070815.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.csu.idl.idlmm_1.1.0.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.csu.idl.xtext_1.1.1.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.cdt.core.native_5.7.0.201409172108.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.cdt.core_5.8.0.201409172108.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.jobs_3.6.0.v20140424-0053.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.resources_3.9.1.v20140825-1431.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.core.runtime_3.10.0.v20140318-2214.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.codegen.ecore_2.10.2.v20150123-0452.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.codegen_2.10.0.v20150123-0452.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.common_2.10.1.v20150123-0348.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.ecore.xmi_2.10.2.v20150123-0348.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.ecore_2.10.2.v20150123-0348.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe.core_1.3.4.v201409021027.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe.utils_1.3.4.v201409021027.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe2.language_2.7.0.v201409021051.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe2.launch_2.7.0.v201409021051.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe2.lib_2.7.0.v201409021027.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.emf.mwe2.runtime_2.7.0.v201409021027.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.app_1.3.200.v20130910-1609.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.preferences_3.5.200.v20140224-1527.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.jface.text_3.9.1.v20140827-1810.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.osgi.compatibility.state_1.0.1.v20140709-1414.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.osgi_3.10.1.v20140909-1633.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.text_3.5.300.v20130515-1451.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xpand_2.0.0.v201406030414.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtend.typesystem.emf_2.0.0.v201406030414.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtend_2.0.0.v201406030414.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.common.types_2.7.2.v201409160908.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.generator_2.7.2.v201409160908.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.util_2.7.2.v201409160908.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext.xbase.lib_2.7.2.v201409160908.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.eclipse.xtext_2.7.2.v201409160908.jar"/>
+        <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/org.objectweb.asm_5.0.1.v201404251740.jar"/>
         <pathelement location="../corbasim_idl/share/corbasim/corbasim_idl_lib/runtime_registry_compatibility.jar"/>
     </path>
     <path id="org.csu.corbasim.classpath">
@@ -61,12 +67,6 @@
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src-gen">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
     </target>
     <target name="clean">
         <delete dir="bin"/>
@@ -78,10 +78,6 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="org.csu.corbasim.classpath"/>
-        </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
-            <src path="src-gen"/>
             <classpath refid="org.csu.corbasim.classpath"/>
         </javac>
     </target>

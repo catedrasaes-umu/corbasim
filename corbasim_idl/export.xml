@@ -6,40 +6,58 @@
         <jar destfile="share/corbasim/corbasim_idl.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.csu.corbasim.Generator"/>
-                <attribute name="Class-Path" value=". corbasim_idl_lib/org.csu.idl.xtext_1.0.0.jar corbasim_idl_lib/org.csu.idl.idlmm_1.0.0.jar corbasim_idl_lib/org.eclipse.emf.ecore_2.6.1.v20100914-1218.jar corbasim_idl_lib/org.eclipse.emf.common_2.6.0.v20100914-1218.jar corbasim_idl_lib/org.eclipse.xpand_1.0.1.v201008251147.jar corbasim_idl_lib/org.eclipse.xtend_1.0.1.v201008251147.jar corbasim_idl_lib/org.eclipse.emf.mwe.core_1.0.2.v201102150556.jar corbasim_idl_lib/org.apache.commons.cli_1.0.0.v20080604-1500.jar corbasim_idl_lib/org.eclipse.emf.mwe2.runtime_1.0.2.v201102150556.jar corbasim_idl_lib/com.ibm.icu_4.2.1.v20100412.jar corbasim_idl_lib/org.eclipse.xtext_1.0.2.v201102150722.jar corbasim_idl_lib/org.eclipse.emf.ecore.xmi_2.5.0.v20100521-1846.jar corbasim_idl_lib/org.eclipse.xtext.util_1.0.2.v201102150722.jar corbasim_idl_lib/com.google.collect_0.8.0.v201102150722.jar corbasim_idl_lib/com.google.inject_2.0.0.v201003051000.jar corbasim_idl_lib/org.antlr.runtime_3.0.0.v200803061811.jar corbasim_idl_lib/org.eclipse.emf.mwe.utils_1.0.2.v201102150556.jar corbasim_idl_lib/org.eclipse.emf.mwe2.launch_1.0.2.v201102151014.jar corbasim_idl_lib/org.eclipse.emf.mwe2.language_1.0.2.v201102151014.jar corbasim_idl_lib/org.eclipse.xtext.common.types_1.0.2.v201102150722.jar corbasim_idl_lib/org.eclipse.xtend.typesystem.emf_1.0.1.v201008251147.jar corbasim_idl_lib/org.eclipse.core.resources_3.6.1.R36x_v20110131-1630.jar corbasim_idl_lib/org.apache.commons.logging_1.1.1.v201005080502.jar corbasim_idl_lib/org.apache.log4j_1.2.15.v201005080500.jar corbasim_idl_lib/gnu.getopt.jar corbasim_idl_lib/anarres-cpp.jar"/>
+                <attribute name="Class-Path" value=".
+                    corbasim_idl_lib/anarres-cpp.jar
+                    corbasim_idl_lib/com.google.guava_15.0.0.v201403281430.jar
+                    corbasim_idl_lib/com.google.inject_3.0.0.v201312141243.jar
+                    corbasim_idl_lib/com.ibm.icu_52.1.0.v201404241930.jar
+                    corbasim_idl_lib/gnu.getopt.jar
+                    corbasim_idl_lib/javax.annotation_1.2.0.v201401042248.jar
+                    corbasim_idl_lib/javax.inject_1.0.0.v20091030.jar
+                    corbasim_idl_lib/org.antlr.runtime_3.2.0.v201101311130.jar
+                    corbasim_idl_lib/org.apache.commons.cli_1.2.0.v201404270220.jar
+                    corbasim_idl_lib/org.apache.commons.logging_1.1.1.v201101211721.jar
+                    corbasim_idl_lib/org.apache.log4j_1.2.15.v201012070815.jar
+                    corbasim_idl_lib/org.csu.idl.idlmm_1.1.0.jar
+                    corbasim_idl_lib/org.csu.idl.xtext_1.1.1.jar
+                    corbasim_idl_lib/org.eclipse.cdt.core.native_5.7.0.201409172108.jar
+                    corbasim_idl_lib/org.eclipse.cdt.core_5.8.0.201409172108.jar
+                    corbasim_idl_lib/org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar
+                    corbasim_idl_lib/org.eclipse.core.jobs_3.6.0.v20140424-0053.jar
+                    corbasim_idl_lib/org.eclipse.core.resources_3.9.1.v20140825-1431.jar
+                    corbasim_idl_lib/org.eclipse.core.runtime_3.10.0.v20140318-2214.jar
+                    corbasim_idl_lib/org.eclipse.emf.codegen.ecore_2.10.2.v20150123-0452.jar
+                    corbasim_idl_lib/org.eclipse.emf.codegen_2.10.0.v20150123-0452.jar
+                    corbasim_idl_lib/org.eclipse.emf.common_2.10.1.v20150123-0348.jar
+                    corbasim_idl_lib/org.eclipse.emf.ecore.xmi_2.10.2.v20150123-0348.jar
+                    corbasim_idl_lib/org.eclipse.emf.ecore_2.10.2.v20150123-0348.jar
+                    corbasim_idl_lib/org.eclipse.emf.mwe.core_1.3.4.v201409021027.jar
+                    corbasim_idl_lib/org.eclipse.emf.mwe.utils_1.3.4.v201409021027.jar
+                    corbasim_idl_lib/org.eclipse.emf.mwe2.language_2.7.0.v201409021051.jar
+                    corbasim_idl_lib/org.eclipse.emf.mwe2.launch_2.7.0.v201409021051.jar
+                    corbasim_idl_lib/org.eclipse.emf.mwe2.lib_2.7.0.v201409021027.jar
+                    corbasim_idl_lib/org.eclipse.emf.mwe2.runtime_2.7.0.v201409021027.jar
+                    corbasim_idl_lib/org.eclipse.equinox.app_1.3.200.v20130910-1609.jar
+                    corbasim_idl_lib/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar
+                    corbasim_idl_lib/org.eclipse.equinox.preferences_3.5.200.v20140224-1527.jar
+                    corbasim_idl_lib/org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar
+                    corbasim_idl_lib/org.eclipse.jface.text_3.9.1.v20140827-1810.jar
+                    corbasim_idl_lib/org.eclipse.osgi.compatibility.state_1.0.1.v20140709-1414.jar
+                    corbasim_idl_lib/org.eclipse.osgi_3.10.1.v20140909-1633.jar
+                    corbasim_idl_lib/org.eclipse.text_3.5.300.v20130515-1451.jar
+                    corbasim_idl_lib/org.eclipse.xpand_2.0.0.v201406030414.jar
+                    corbasim_idl_lib/org.eclipse.xtend.typesystem.emf_2.0.0.v201406030414.jar
+                    corbasim_idl_lib/org.eclipse.xtend_2.0.0.v201406030414.jar
+                    corbasim_idl_lib/org.eclipse.xtext.common.types_2.7.2.v201409160908.jar
+                    corbasim_idl_lib/org.eclipse.xtext.generator_2.7.2.v201409160908.jar
+                    corbasim_idl_lib/org.eclipse.xtext.util_2.7.2.v201409160908.jar
+                    corbasim_idl_lib/org.eclipse.xtext.xbase.lib_2.7.2.v201409160908.jar
+                    corbasim_idl_lib/org.eclipse.xtext_2.7.2.v201409160908.jar
+                    corbasim_idl_lib/org.objectweb.asm_5.0.1.v201404251740.jar
+                    corbasim_idl_lib/runtime_registry_compatibility.jar
+                    "/>
             </manifest>
             <fileset dir="../org.csu.corbasim/bin"/>
         </jar>
-    <!--
-        <delete dir="share/corbasim/corbasim_idl_lib"/>
-        <mkdir dir="share/corbasim/corbasim_idl_lib"/>
-
-        <copy file="../org.csu.corbasim/plugins/org.csu.idl.xtext_1.0.0.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="../org.csu.corbasim/plugins/org.csu.idl.idlmm_1.0.0.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.ecore_2.6.1.v20100914-1218.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.common_2.6.0.v20100914-1218.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.xpand_1.0.1.v201008251147.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.xtend_1.0.1.v201008251147.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.mwe.core_1.0.2.v201102150556.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.apache.commons.cli_1.0.0.v20080604-1500.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.mwe2.runtime_1.0.2.v201102150556.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/com.ibm.icu_4.2.1.v20100412.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.xtext_1.0.2.v201102150722.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.ecore.xmi_2.5.0.v20100521-1846.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.xtext.util_1.0.2.v201102150722.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/com.google.collect_0.8.0.v201102150722.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/com.google.inject_2.0.0.v201003051000.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.antlr.runtime_3.0.0.v200803061811.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.mwe.utils_1.0.2.v201102150556.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.mwe2.launch_1.0.2.v201102151014.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.emf.mwe2.language_1.0.2.v201102151014.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.xtext.common.types_1.0.2.v201102150722.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.xtend.typesystem.emf_1.0.1.v201008251147.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.eclipse.core.resources_3.6.1.R36x_v20110131-1630.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.apache.commons.logging_1.1.1.v201005080502.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="${ECLIPSE_HOME}/plugins/org.apache.log4j_1.2.15.v201005080500.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="../org.csu.corbasim/lib/gnu.getopt.jar" todir="share/corbasim/corbasim_idl_lib"/>
-        <copy file="../org.csu.corbasim/lib/anarres-cpp.jar" todir="share/corbasim/corbasim_idl_lib"/>
-    -->
     </target>
 </project>
