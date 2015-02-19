@@ -42,3 +42,9 @@ TranslationUnit getTranslationUnit(Container this) :
 
 TranslationUnit getTranslationUnit(OperationDef this) :
     definedIn.getTranslationUnit();
+    
+getDefaultMemberIndex(UnionDef this):
+	if unionMembers.isDefault.isEmpty then
+	    0
+	else
+        (unionMembers.indexOf(unionMembers.select(e|e.isDefault).first()) + 1);

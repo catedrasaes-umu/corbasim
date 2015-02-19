@@ -253,6 +253,7 @@ struct is_union< «getFQN()» > : public cs_mpl::true_
     typedef «discrim.getIN_CPPType()» discriminator_t;
 
     static const size_t size = «unionMembers.label.size»;
+    static const size_t default_member = «getDefaultMemberIndex()»;
 
     static inline discriminator_t* discriminators()
     {

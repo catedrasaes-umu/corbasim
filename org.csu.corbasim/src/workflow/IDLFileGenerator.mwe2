@@ -3,10 +3,10 @@ module workflow.IDLFileGenerator
 import org.eclipse.emf.mwe.utils.*
 
 var fileEncoding = "UTF-8"
-var modelFile = "/tmp/prueba.idl"
+var modelFile = "/Users/asenac1/dev/corbasim/tmp/union.idl"
 
 // Parameters
-var targetDir = "src-gen"
+var targetDir = "/Users/asenac1/dev/corbasim/tmp"
 var genClient = true
 var genServer = true
 var genInjector = true
@@ -54,13 +54,13 @@ Workflow {
 	}
 
 	component = org.eclipse.xpand2.Generator {
+		fileEncoding = fileEncoding
 		expand = "templates::corbasim::Main::main FOREACH model"
 		metaModel = org.eclipse.xtend.type.impl.java.JavaBeansMetaModel {}
 		outlet = {
 			path = targetDir
-			postprocessor = org.csu.cpp.output.CppBeautifier {}
+			//postprocessor = org.csu.cpp.output.CppBeautifier {}
 		}
-		fileEncoding = fileEncoding
 
 		// Regiones protegidas
 		prSrcPaths = "${targetDir}"
@@ -72,6 +72,10 @@ Workflow {
 		}
 		globalVarDef = {
 			name = "genServer"
+			value = "${genServer}"
+		}
+		globalVarDef = {
+			name = "genServerUI"
 			value = "${genServer}"
 		}
 		globalVarDef = {

@@ -579,9 +579,7 @@ unsigned int union_reflective< T >::get_length(
         }
     }
 
-    // TODO default
-
-    return 0; // invalid
+    return adapted_t::default_member;
 }
 
 // Enum reflective

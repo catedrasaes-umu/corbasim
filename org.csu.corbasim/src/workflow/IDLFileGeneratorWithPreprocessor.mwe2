@@ -28,13 +28,13 @@ Workflow {
 	}
 	
 	component = org.eclipse.xpand2.Generator {
+		fileEncoding = fileEncoding
 		expand = "templates::corbasim::Main::main FOREACH model"
 		metaModel = org.eclipse.xtend.type.impl.java.JavaBeansMetaModel {}
 		outlet = {
 			path = targetDir
-			postprocessor = org.csu.cpp.output.CppBeautifier {}
+			// postprocessor = org.csu.cpp.output.CppBeautifier {}
 		}
-		fileEncoding = fileEncoding
 
 		// Regiones protegidas
 		prSrcPaths = "${targetDir}"
