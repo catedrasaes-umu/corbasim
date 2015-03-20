@@ -21,6 +21,14 @@
 #include "«getTranslationUnit().getAdaptedServantFile()»"
 #include <corbasim/core/reflective.hpp>
 
+namespace corbasim
+{
+    namespace core
+    {
+        template struct interface_reflective< «getFQN()» >;
+    }
+}
+
 extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_«fqn»()
 {
     return corbasim::core::interface_reflective< «getFQN()» >::get_instance();
