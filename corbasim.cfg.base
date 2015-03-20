@@ -1,3 +1,5 @@
+# -*- mode: sh; -*-
+
 ## CMake command
 # CMAKE=cmake
 
@@ -19,8 +21,8 @@
 # CORBASIM_ORB_IDL_COMPILER_OPTIONS=
 
 ## Path to find dependencies 
-# TAO_ROOT=/usr
 # ACE_ROOT=/usr
+# TAO_ROOT=/usr
 # QWT_ROOT=/usr
 # BOOST_ROOT=/usr
 
