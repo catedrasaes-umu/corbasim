@@ -15,6 +15,13 @@ Example
 Compilation and installation
 ----------------------------
 
+```
+$ cp corbasim.cfg.base corbasim.cfg
+$ vim corbasim.cfg
+$ ./configure -n corbasim.cfg
+$ cd build && make && make install
+```
+
 ORB support
 -----------
 
