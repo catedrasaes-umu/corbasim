@@ -25,6 +25,8 @@
 #include <corbasim/json/reflective.hpp>
 #include <corbasim/json/parser.hpp> // for parse
 
+#include <QAction>
+
 using namespace corbasim;
 using namespace corbasim::gui;
 
