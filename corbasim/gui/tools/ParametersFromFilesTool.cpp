@@ -23,6 +23,10 @@
 #include <corbasim/gui/utils.hpp>
 #include <iostream>
 
+#include <QPushButton>
+#include <QTreeView>
+#include <QFileDialog>
+
 using namespace corbasim::gui;
 
 ParametersFromFilesTool::ParametersFromFilesTool(QWidget * parent) :
