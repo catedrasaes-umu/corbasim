@@ -22,6 +22,12 @@
 #include <fstream>
 #include <algorithm>
 
+#include <QFileDialog>
+#include <QToolBar>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QDockWidget>
+
 // Tools
 #include <corbasim/gui/tools/FilteredLogView.hpp>
 #include <corbasim/gui/tools/OperationSequence.hpp>
