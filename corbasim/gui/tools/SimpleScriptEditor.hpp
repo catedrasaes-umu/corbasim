@@ -28,6 +28,13 @@
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/item/ScriptModel.hpp>
 
+#include <QComboBox>
+#include <QSpinBox>
+#include <QStackedWidget>
+#include <QCheckBox>
+#include <QTreeView>
+#include <QMainWindow>
+
 namespace corbasim
 {
 namespace gui
