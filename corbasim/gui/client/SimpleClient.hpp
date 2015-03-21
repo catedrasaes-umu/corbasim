@@ -29,6 +29,7 @@
 #include <QActionGroup>
 #include <QButtonGroup>
 #include <QMenuBar>
+#include <QMainWindow>
 
 #include <corbasim/core/caller_fwd.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
