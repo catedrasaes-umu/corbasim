@@ -103,7 +103,9 @@ message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(Qt5 COMPONENTS Widgets Script ScriptTools)
+if (NOT DEFINED USE_QT4 OR NOT USE_QT4)
+    find_package(Qt5 COMPONENTS Widgets Script ScriptTools)
+endif()
 if (Qt5Widgets_FOUND)
     message(STATUS "Qt5 found!")
     set(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5Script_LIBRARIES} ${Qt5ScriptTools_LIBRARIES})
