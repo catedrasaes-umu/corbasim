@@ -13,6 +13,13 @@
 #include <corbasim/gui/NSManager.hpp>
 
 #include <QtGui>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QStackedWidget>
+#include <QTextEdit>
 
 using namespace corbasim;
 using namespace corbasim::gui;

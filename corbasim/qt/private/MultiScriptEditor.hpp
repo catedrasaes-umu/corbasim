@@ -20,7 +20,8 @@
 #ifndef CORBASIM_QT_PRIVATE_MULTISCRIPTEDITOR_HPP
 #define CORBASIM_QT_PRIVATE_MULTISCRIPTEDITOR_HPP
 
-#include <QtGui>
+#include <QTabWidget>
+#include <QMainWindow>
 
 namespace corbasim
 {

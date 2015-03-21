@@ -10,19 +10,19 @@ link_directories(/usr/lib/x86_64-linux-gnu)
 
 # ORB
 set(CORBASIM_ORBIMPL
-    OMNIORB4)
+    TAO)
 
 set(CORBASIM_ORB_LIBS
-    omniCodeSets4;omniConnectionMgmt4;omniDynamic4;omniORB4;omnisslTP4;omnithread)
+    /home/asenac/local/ACE+TAO-6.3.1/lib/libACE.so;/home/asenac/local/ACE+TAO-6.3.1/lib/libTAO.so;/home/asenac/local/ACE+TAO-6.3.1/lib/libTAO_PortableServer.so;/home/asenac/local/ACE+TAO-6.3.1/lib/libTAO_AnyTypeCode.so;/home/asenac/local/ACE+TAO-6.3.1/lib/libTAO_CosNaming.so;/home/asenac/local/ACE+TAO-6.3.1/lib/libTAO_CosNaming_Skel.so;/home/asenac/local/ACE+TAO-6.3.1/lib/libTAO_ObjRefTemplate.so)
 
-include_directories()
-link_directories()
+include_directories(/home/asenac/local/ACE+TAO-6.3.1/include;/home/asenac/local/ACE+TAO-6.3.1/include;/home/asenac/local/ACE+TAO-6.3.1/include/orbsvcs)
+link_directories(/home/asenac/local/ACE+TAO-6.3.1/lib)
 
 set(CORBASIM_ORB_IDL_COMPILER
-    omniidl)
+    /home/asenac/local/ACE+TAO-6.3.1/bin/tao_idl)
 
 set(CORBASIM_ORB_IDL_COMPILER_OPTIONS
-    -bcxx;-Wba)
+    )
 
 # Libraries for clients
 set(CORBASIM_CLIENT_LIBS 

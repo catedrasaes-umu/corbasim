@@ -21,6 +21,7 @@
 #define CORBASIM_QT_SIZEGRIP_HPP
 
 #include <QtGui>
+#include <QWidget>
 #include <corbasim/qt/export.hpp>
 
 namespace corbasim

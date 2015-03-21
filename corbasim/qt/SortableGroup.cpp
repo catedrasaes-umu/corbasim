@@ -18,6 +18,7 @@
  */
 
 #include "SortableGroup.hpp"
+#include <QStyle>
 
 using namespace corbasim::qt;
 

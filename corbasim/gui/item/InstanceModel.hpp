@@ -90,6 +90,12 @@ signals:
 
 protected:
 
+    void doReset()
+    {
+        beginResetModel();
+        endResetModel();
+    }
+
     virtual bool isCheckable(TypeDescriptor_ptr reflective) const;
 
     typedef QList< InstanceNode_ptr > Nodes_t;

@@ -19,6 +19,9 @@
 
 #include "MultiScriptEditor.hpp"
 #include "ScriptEditor.hpp"
+#include <QStyle>
+#include <QAction>
+#include <QToolBar>
 
 using namespace corbasim::qt::priv;
 

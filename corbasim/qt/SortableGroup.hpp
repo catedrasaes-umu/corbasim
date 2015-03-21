@@ -21,6 +21,9 @@
 #define CORBASIM_QT_SORTABLEGROUP_HPP
 
 #include <QtGui>
+#include <QLabel>
+#include <QToolButton>
+#include <QScrollArea>
 #include <corbasim/qt/types.hpp>
 #include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/qt/export.hpp>

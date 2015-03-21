@@ -308,7 +308,6 @@ void ScriptModel::initialize(
 void ScriptModel::clearLog()
 {
     beginResetModel();
-    reset();
     resetInternalData();
     endResetModel();
 }
