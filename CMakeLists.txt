@@ -96,7 +96,7 @@ else(NOT Boost_FOUND)
     message(STATUS "Boost libraries directory: ${Boost_LIBRARY_DIRS}")
 endif(NOT Boost_FOUND)
 
-find_package(Qt5 COMPONENTS Widgets)
+find_package(Qt4)
 find_package(Qwt6)
 find_package(Boost 1.45.0
     COMPONENTS system thread program_options)
