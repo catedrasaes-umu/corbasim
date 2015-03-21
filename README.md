@@ -15,6 +15,21 @@ GitHub mirror for https://code.google.com/p/corbasim/
 Example
 -------
 
+Generate a plug-in from your CORBA interfaces.
+
+```
+$ corbasim_make -n test_plugin test.idl
+$ cmake .
+$ make
+```
+
+Launch corbasim_app loading your plug-ins:
+
+```
+$ corbasim_app -d /path/tp/your/plug-ins/directory
+```
+
+
 Compilation and installation
 ----------------------------
 
