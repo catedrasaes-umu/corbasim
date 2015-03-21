@@ -9,6 +9,9 @@ These plug-ins may be used with the CORBASIM generic application (corbasim_app).
 
 GitHub mirror for https://code.google.com/p/corbasim/
 
+
+![corbasim_app](https://raw.githubusercontent.com/catedrasaes-umu/corbasim/images/corbasim.png)
+
 Example
 -------
 
