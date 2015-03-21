@@ -30,6 +30,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QScrollBar>
 
 #include <iostream>
 
