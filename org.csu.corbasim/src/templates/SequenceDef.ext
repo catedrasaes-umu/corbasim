@@ -1,8 +1,0 @@
-import org::csu::idl::idlmm;
-
-String getTypeCodeImplParameters(SequenceDef this) :
-    if bound != null then
-        ", false, " + bound
-    else
-        ""
-;

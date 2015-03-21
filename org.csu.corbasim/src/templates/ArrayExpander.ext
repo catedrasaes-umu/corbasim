@@ -1,7 +1,0 @@
-import org::csu::idl::idlmm;
-
-private Void expandArrayDefsImpl(TranslationUnit this) :  JAVA org.csu.idl.xtext.transformation.ArrayExpander.expand(org.csu.idl.idlmm.TranslationUnit);
-
-Void expandArrayDefs(List this) :
-    typeSelect(TranslationUnit).expandArrayDefsImpl()
-;
