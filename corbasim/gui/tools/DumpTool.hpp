@@ -24,6 +24,8 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QCheckBox>
+#include <QLineEdit>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
