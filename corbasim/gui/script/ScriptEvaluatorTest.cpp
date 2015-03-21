@@ -2,6 +2,7 @@
 #include <corbasim/gui/script/ScriptEvaluator.hpp>
 #include <corbasim/gui/utils.hpp>
 #include <iostream>
+#include <QApplication>
 
 int main(int argc, char **argv)
 {
