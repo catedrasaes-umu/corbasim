@@ -20,6 +20,12 @@
 #include "StatusView.hpp"
 #include <corbasim/qt/Status.hpp>
 
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QLabel>
+#include <QScrollArea>
+
 using namespace corbasim::gui;
 
 const int MAX_WIDTH = 300;
