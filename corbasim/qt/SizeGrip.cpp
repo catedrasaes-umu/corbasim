@@ -18,6 +18,8 @@
  */
 
 #include "SizeGrip.hpp"
+#include <QStyle>
+#include <QStyleOption>
 
 using namespace corbasim::qt;
 

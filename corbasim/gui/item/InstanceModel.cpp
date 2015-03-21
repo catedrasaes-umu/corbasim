@@ -1,6 +1,7 @@
 #include "InstanceModel.hpp"
 #include <QtGui>
 #include <QStyle>
+#include <QApplication>
 #include <iostream>
 #include <limits>
 
@@ -31,7 +32,7 @@ void InstanceModel::registerInstance(Objref_ptr objref)
 
     // endInsertRows();
 
-    reset();
+    doReset();
 }
 
 void InstanceModel::unregisterInstance(ObjectId id)
@@ -50,7 +51,7 @@ void InstanceModel::unregisterInstance(ObjectId id)
 
             // endRemoveRows();
 
-            reset();
+            doReset();
             break;
         }
     }
@@ -75,14 +76,14 @@ void InstanceModel::setDisplayOperations(bool value)
 {
     m_maxLevel = (value)? 1: 0;
 
-    reset();
+    doReset();
 }
 
 void InstanceModel::setDisplayParameters(bool value)
 {
     m_maxLevel = (value)? std::numeric_limits< int >::max(): 1;
 
-    reset();
+    doReset();
 }
 
 void InstanceModel::setMaxLevel(int value)

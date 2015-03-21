@@ -21,6 +21,7 @@
 #define CORBASIM_GUI_ABSTRACTINPUTTOOL_HPP
 
 #include <QtGui>
+#include <QTreeView>
 #include <corbasim/gui/tools/AbstractTool.hpp>
 #include <corbasim/gui/item/ParametersModel.hpp>
 #include <corbasim/gui/Model.hpp>

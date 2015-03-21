@@ -21,6 +21,9 @@
 #define CORBASIM_APP_VIEW_SERVANT_HPP
 
 #include <QtGui>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+#include <QMenu>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>

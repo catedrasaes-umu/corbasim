@@ -86,7 +86,8 @@ void OperationParametersModel::initialize(
     m_reflective = reflective;
     m_node.reset(new DescriptorNode(reflective, NULL, NULL, idx));
 
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 void OperationParametersModel::uncheck(const QList< int >& path)

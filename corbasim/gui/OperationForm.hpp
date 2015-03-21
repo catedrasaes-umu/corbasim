@@ -21,6 +21,8 @@
 #define CORBASIM_GUI_OPERATIONFORM_HPP
 
 #include <QtGui>
+#include <QProgressBar>
+#include <QPushButton>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>

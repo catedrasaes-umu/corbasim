@@ -22,6 +22,7 @@
 
 #include <QDialog>
 #include <QTimer>
+#include <QScrollArea>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/ReflectiveGUI.hpp>

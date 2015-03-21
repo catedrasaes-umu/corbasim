@@ -21,6 +21,10 @@
 #define CORBASIM_QT_FORMWIDGET_HPP
 
 #include <QtGui>
+#include <QWidget>
+#include <QLayout>
+#include <QGroupBox>
+#include <QLabel>
 #include <corbasim/qt/export.hpp>
 
 namespace corbasim

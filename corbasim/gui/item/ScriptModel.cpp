@@ -38,8 +38,9 @@ ScriptModel::ScriptModel(QObject * parent) :
     QAbstractItemModel(parent), m_instance(NULL)
 {
     m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
-
+#if QT_VERSION < 0x50000
     setSupportedDragActions(Qt::CopyAction);
+#endif
 }
 
 ScriptModel::~ScriptModel()
@@ -308,7 +309,6 @@ void ScriptModel::initialize(
 void ScriptModel::clearLog()
 {
     beginResetModel();
-    reset();
     resetInternalData();
     endResetModel();
 }

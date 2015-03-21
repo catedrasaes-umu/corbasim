@@ -65,6 +65,13 @@ public:
 
     void deletePosition(int pos);
 
+#if QT_VERSION < 0x50000
+    Qt::DragActions supportedDragActions() const
+    {
+        return Qt::CopyAction;
+    }
+#endif
+
 public slots:
 
     void clearLog();

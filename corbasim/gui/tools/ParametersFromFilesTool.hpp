@@ -22,6 +22,11 @@
 
 #include <QtGui>
 #include <QList>
+#include <QWidget>
+
+#include <QLineEdit>
+#include <QCheckBox>
+#include <QComboBox>
 #include <fstream>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>

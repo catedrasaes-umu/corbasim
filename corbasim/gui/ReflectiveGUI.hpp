@@ -21,6 +21,13 @@
 #define CORBASIM_GUI_REFLECTIVEGUI_HPP
 
 #include <QtGui>
+#include <QButtonGroup>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QPlainTextEdit>
 
 #include <corbasim/gui/ObjrefWidget.hpp>
 #include <corbasim/qt/MultiFileSelectionWidget.hpp>

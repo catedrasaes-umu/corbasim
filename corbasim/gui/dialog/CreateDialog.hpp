@@ -21,6 +21,9 @@
 #define CORBASIM_GUI_CREATEDIALOG_HPP
 
 #include <QtGui>
+#include <QDialog>
+#include <QLineEdit>
+#include <QComboBox>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ObjrefWidget.hpp>
 

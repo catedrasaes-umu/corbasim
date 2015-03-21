@@ -25,6 +25,16 @@
 #include <corbasim/json/reflective.hpp>
 #include <corbasim/json/parser.hpp> // for parse
 
+#include <QAction>
+#include <QMenu>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QScrollArea>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QMdiSubWindow>
+#include <QGridLayout>
+
 using namespace corbasim;
 using namespace corbasim::gui;
 
