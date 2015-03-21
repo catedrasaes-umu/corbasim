@@ -25,6 +25,7 @@
 #include <corbasim/qt/SizeGrip.hpp>
 
 #include <iostream>
+#include <QVBoxLayout>
 
 using namespace corbasim::qwt;
 
