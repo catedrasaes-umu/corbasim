@@ -8,7 +8,7 @@ namespace corbasim
 {
     namespace core
     {
-        template struct interface_reflective< CosNaming::NameContextExt >;
+        template struct interface_reflective< CosNaming::NamingContextExt >;
     }
 }
 
