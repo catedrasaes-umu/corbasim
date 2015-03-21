@@ -31,6 +31,7 @@
 #include <QStackedWidget>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QApplication>
 
 #include <iostream>
 #include <sstream>
