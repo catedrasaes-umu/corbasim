@@ -28,6 +28,10 @@
 #include <corbasim/gui/qvariant.hpp>
 #endif
 
+#include <QStackedWidget>
+#include <QPushButton>
+#include <QMessageBox>
+
 #include <iostream>
 #include <sstream>
 #include <fstream>
