@@ -131,10 +131,14 @@ else()
     endif()
 endif()
 
-if(NOT Qwt6_FOUND)
-    message(STATUS "Qwt6 not found! Disabling plotting support!")
-else()
-    message(STATUS "Qwt6 available at: ${Qwt6_INCLUDE_DIR}")
+
+if(QT_FOUND)
+    find_package(Qwt6)
+    if(NOT Qwt6_FOUND)
+        message(STATUS "Qwt6 not found! Disabling plotting support!")
+    else()
+        message(STATUS "Qwt6 available at: ${Qwt6_INCLUDE_DIR}")
+    endif()
 endif()
 
 # Libraries for clients

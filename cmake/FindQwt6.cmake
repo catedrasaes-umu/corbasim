@@ -37,7 +37,7 @@ else()
     set(QWT_DIR $ENV{QWT_ROOT} CACHE STRING "QWT directory")
 endif()
 
-IF( QT4_FOUND )
+#IF( QT4_FOUND )
 	# Is Qwt6 installed? Look for header files
 	FIND_PATH( Qwt6_INCLUDE_DIR qwt.h 
                PATHS ${QT_INCLUDE_DIR}
@@ -145,4 +145,4 @@ IF( QT4_FOUND )
       		MESSAGE(FATAL_ERROR "Could not find Qwt 6.x")
    	ENDIF (NOT Qwt6_FOUND AND Qwt6_FIND_REQUIRED)
 
-ENDIF( QT4_FOUND )
+#ENDIF( QT4_FOUND )
