@@ -21,6 +21,9 @@
 #define CORBASIM_APP_VIEW_OBJREF_HPP
 
 #include <QtGui>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+#include <QMenu>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/Model.hpp>
 #include <corbasim/gui/RequestDialog.hpp>
