@@ -23,6 +23,7 @@
 #include <QtGui>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QTabWidget>
 #include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>

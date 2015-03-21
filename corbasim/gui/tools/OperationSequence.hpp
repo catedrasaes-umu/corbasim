@@ -26,6 +26,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QCheckBox>
+#include <QMenu>
 #include <QDialogButtonBox>
 
 namespace corbasim

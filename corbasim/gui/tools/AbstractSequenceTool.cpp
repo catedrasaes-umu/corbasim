@@ -22,6 +22,7 @@
 #include <corbasim/gui/item/OperationsView.hpp>
 #include <corbasim/qt/StartStopButton.hpp>
 
+#include <QSplitter>
 #include <fstream>
 #include <iostream>
 

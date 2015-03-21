@@ -21,6 +21,7 @@
 #define CORBASIM_GUI_ABSTRACTTOOL_HPP
 
 #include <QtGui>
+#include <QWidget>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/Model.hpp>
 
