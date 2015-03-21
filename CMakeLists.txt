@@ -1,3 +1,4 @@
+# -*- mode: cmake; -*-
 cmake_minimum_required(VERSION 2.6)
 project(corbasim C CXX)
 
@@ -8,7 +9,7 @@ set(${PROJECT_NAME}_PATCH_LEVEL 0)
 set(${PROJECT_NAME}_VERSION
         "${${PROJECT_NAME}_MAJOR_VERSION}.${${PROJECT_NAME}_MINOR_VERSION}.${${PROJECT_NAME}_PATCH_LEVEL}")
 
-# set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE) 
+# set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
@@ -46,17 +47,17 @@ if("${CORBASIM_ORBIMPL}" STREQUAL "TAO")
     set(CORBASIM_ORB_IDL_COMPILER ${TAO_IDL_COMPILER})
     set(CORBASIM_COSNAMING_LIBS
         ${CORBASIM_ORB_LIBS}
-        ${TAO_CosNaming_Serv_LIB} 
-        ${TAO_ImR_Client_LIB} 
+        ${TAO_CosNaming_Serv_LIB}
+        ${TAO_ImR_Client_LIB}
         ${TAO_Svc_Utils_LIB}
-        ${TAO_Messaging_LIB} ${TAO_PI_LIB} 
-        ${TAO_CodecFactory_LIB} 
-        ${TAO_Valuetype_LIB} 
+        ${TAO_Messaging_LIB} ${TAO_PI_LIB}
+        ${TAO_CodecFactory_LIB}
+        ${TAO_Valuetype_LIB}
         ${TAO_IORTable_LIB}
     )
 
     if (TAO_FOUND)
-        include_directories(${ACE_INCLUDE_DIR} ${TAO_INCLUDE_DIR})
+         include_directories(${CORBASIM_ORB_INCLUDE_DIRS})
     endif()
 elseif("${CORBASIM_ORBIMPL}" STREQUAL "OMNIORB4")
     # TODO check omni
@@ -95,9 +96,9 @@ else(NOT Boost_FOUND)
     message(STATUS "Boost libraries directory: ${Boost_LIBRARY_DIRS}")
 endif(NOT Boost_FOUND)
 
-find_package(Qt4)
+find_package(Qt5 COMPONENTS Widgets)
 find_package(Qwt6)
-find_package(Boost 1.45.0 
+find_package(Boost 1.45.0
     COMPONENTS system thread program_options)
 
 message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
@@ -117,12 +118,12 @@ else()
 endif()
 
 # Libraries for clients
-set(CORBASIM_CLIENT_LIBS 
+set(CORBASIM_CLIENT_LIBS
     corbasim corbasim_qt corbasim_gui ${Boost_PROGRAM_OPTIONS_LIBRARY})
-set(CORBASIM_CLIENT_STATIC_LIBS 
+set(CORBASIM_CLIENT_STATIC_LIBS
     corbasim_gui_s corbasim_qt_s corbasim_s ${Boost_PROGRAM_OPTIONS_LIBRARY})
 # Libraries for servers
-set(CORBASIM_SERVER_LIBS 
+set(CORBASIM_SERVER_LIBS
     corbasim ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
 add_subdirectory(corbasim)
@@ -135,7 +136,7 @@ endif()
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 add_subdirectory(test EXCLUDE_FROM_ALL)
 
-if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/private 
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/private
         AND IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/private)
     add_subdirectory(private EXCLUDE_FROM_ALL)
 endif()
@@ -149,4 +150,3 @@ set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_PACKAGE_FILE_NAME
     ${PROJECT_NAME}-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CMAKE_SYSTEM_NAME}-${CORBASIM_ORBIMPL}-${CMAKE_BUILD_TYPE})
 include(CPack)
-
