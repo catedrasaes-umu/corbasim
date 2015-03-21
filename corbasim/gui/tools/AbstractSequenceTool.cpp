@@ -23,6 +23,9 @@
 #include <corbasim/qt/StartStopButton.hpp>
 
 #include <QSplitter>
+#include <QMenu>
+#include <QFileDialog>
+#include <QInputDialog>
 #include <fstream>
 #include <iostream>
 
