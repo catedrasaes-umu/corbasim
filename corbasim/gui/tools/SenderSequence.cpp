@@ -21,6 +21,8 @@
 #include <corbasim/gui/OperationForm.hpp>
 #include <corbasim/gui/json.hpp>
 
+#include <QMenu>
+#include <QFileDialog>
 #include <fstream>
 
 using namespace corbasim::gui;
