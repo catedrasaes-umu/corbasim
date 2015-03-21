@@ -25,6 +25,7 @@
 #include <corbasim/gui/Model.hpp>
 #include <QtGui>
 #include <QWidget>
+#include <QGridLayout>
 
 namespace corbasim
 {

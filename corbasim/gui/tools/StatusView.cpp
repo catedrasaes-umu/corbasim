@@ -25,6 +25,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QScrollArea>
+#include <QGridLayout>
 
 using namespace corbasim::gui;
 
