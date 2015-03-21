@@ -28,6 +28,9 @@
 #include <corbasim/qt/StartStopButton.hpp>
 #include <corbasim/qt/SizeGrip.hpp>
 
+#include <QScrollArea>
+#include <QApplication>
+
 // JSON
 #include <sstream>
 #include <corbasim/json/reflective.hpp>
