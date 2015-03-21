@@ -23,6 +23,17 @@
 #define CORBASIM_NO_IMPL
 #include <corbasim/core/reflective.hpp>
 
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QLineEdit>
+#include <QGroupBox>
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QMdiSubWindow>
+
 using namespace corbasim::gui;
 
 ObjrefCreateDialog::ObjrefCreateDialog(QWidget * parent) :

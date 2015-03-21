@@ -24,6 +24,14 @@
 #include <corbasim/core/reflective.hpp>
 #include <corbasim/gui/Model.hpp>
 
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QGroupBox>
+#include <QDialogButtonBox>
+#include <QMdiSubWindow>
+
 using namespace corbasim::gui;
 
 UpdateReferenceDialog::UpdateReferenceDialog(QWidget * parent) :

@@ -29,6 +29,8 @@
 #include <corbasim/gui/item/InterfaceModel.hpp>
 
 #include <QtGui>
+#include <QTabWidget>
+#include <QMainWindow>
 
 namespace corbasim
 {

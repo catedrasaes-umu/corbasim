@@ -20,6 +20,16 @@
 #include "SetReferenceDialog.hpp"
 #include <cassert>
 
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QLineEdit>
+#include <QGroupBox>
+#include <QDialogButtonBox>
+#include <QMdiSubWindow>
+
 using namespace corbasim::gui;
 
 SetReferenceDialog::SetReferenceDialog(QWidget * parent) :

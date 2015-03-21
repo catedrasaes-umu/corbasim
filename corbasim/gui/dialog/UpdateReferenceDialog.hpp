@@ -21,6 +21,7 @@
 #define CORBASIM_GUI_UPDATEREFERENCEDIALOG_HPP
 
 #include <QtGui>
+#include <QDialog>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/ObjrefWidget.hpp>
 
