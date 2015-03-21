@@ -25,6 +25,8 @@
 #include <cassert>
 #include <exception>
 
+#include <QApplication>
+
 using namespace corbasim::gui;
 
 

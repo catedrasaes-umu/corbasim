@@ -21,6 +21,9 @@
 #define CORBASIM_GUI_DUMPTOOL_HPP
 
 #include <QtGui>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QComboBox>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>

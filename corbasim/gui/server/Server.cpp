@@ -31,6 +31,14 @@
 
 #include <corbasim/version.hpp>
 
+#include <QDockWidget>
+#include <QMenuBar>
+#include <QStatusBar>
+#include <QToolBar>
+#include <QAction>
+#include <QMessageBox>
+#include <QFileDialog>
+
 #include <fstream>
 #include <cassert>
 

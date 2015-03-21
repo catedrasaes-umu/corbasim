@@ -21,6 +21,8 @@
 #define CORBASIM_GUI_ABSTACTSEQUENCETOOL_HPP
 
 #include <QtGui>
+#include <QLineEdit>
+#include <QPushButton>
 #include <corbasim/qt/CustomLayouts.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>

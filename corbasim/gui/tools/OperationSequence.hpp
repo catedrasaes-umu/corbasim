@@ -23,6 +23,11 @@
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractSequenceTool.hpp>
 
+#include <QPushButton>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QDialogButtonBox>
+
 namespace corbasim
 {
 namespace gui

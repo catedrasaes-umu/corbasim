@@ -21,6 +21,7 @@
 #define CORBASIM_GUI_VALUEVIEWERTOOL_HPP
 
 #include <QtGui>
+#include <QDateTimeEdit>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/tools/AbstractInputTool.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
