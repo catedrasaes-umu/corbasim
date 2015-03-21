@@ -28,6 +28,7 @@
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/item/TreeView.hpp>
 #include <fstream>
+#include <QFileDialog>
 
 using namespace corbasim;
 using namespace corbasim::gui;
