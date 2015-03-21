@@ -26,6 +26,10 @@
 #include <corbasim/gui/json.hpp>
 #include <corbasim/gui/OperationForm.hpp>
 
+#include <QPushButton>
+#include <QFileDialog>
+#include <QMessageBox>
+
 // Debug
 #include <iostream>
 #include <fstream>
