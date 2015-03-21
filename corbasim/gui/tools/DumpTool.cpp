@@ -22,6 +22,7 @@
 #include <corbasim/gui/proc/DumpProcessor.hpp>
 #include <QHBoxLayout>
 #include <QTreeView>
+#include <QFileDialog>
 
 #include <corbasim/qt/StartStopButton.hpp>
 #include <corbasim/qt/FormWidget.hpp>
