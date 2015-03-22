@@ -26,7 +26,7 @@ $ make
 Launch corbasim_app loading your plug-ins:
 
 ```
-$ corbasim_app -d /path/tp/your/plug-ins/directory
+$ corbasim_app -d /path/to/your/plug-ins/directory
 ```
 
 
