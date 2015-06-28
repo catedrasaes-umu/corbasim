@@ -60,13 +60,13 @@ macro(TAO_IDL)
 
     # Comando para la generacion de stubs y skels
     ADD_CUSTOM_COMMAND(
-      OUTPUT ${${_out_FILE}_STUB} ${${_out_FILE}_SKEL} ${${_out_FILE}_INL}
+      OUTPUT ${${_out_FILE}_GENERATED}
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_in_FILE}
       COMMAND ${TAO_IDL_COMPILER} ${TAO_IDL_OPTIONS_IMPL} ${CMAKE_CURRENT_SOURCE_DIR}/${_in_FILE}
       )
 
     SET_SOURCE_FILES_PROPERTIES(
-     ${${_out_FILE}_STUB} ${${_out_FILE}_SKEL} ${${_out_FILE}_INL}
+     ${${_out_FILE}_GENERATED}
      PROPERTIES
      GENERATED TRUE
      )
