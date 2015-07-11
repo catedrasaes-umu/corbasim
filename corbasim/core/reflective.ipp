@@ -476,9 +476,8 @@ holder struct_reflective< T >::get_child_value(holder& value,
 template< typename T >
 struct_reflective< T > const * struct_reflective< T >::get_instance()
 {
-    static boost::shared_ptr< struct_reflective > _instance(
-            new struct_reflective);
-    return _instance.get();
+    static struct_reflective _instance;
+    return &_instance;
 }
 
 // Union reflective
@@ -539,9 +538,8 @@ reflective_base const * union_reflective< T >::get_slice() const
 template< typename T >
 union_reflective< T > const * union_reflective< T >::get_instance()
 {
-    static boost::shared_ptr< union_reflective > _instance(
-            new union_reflective);
-    return _instance.get();
+    static union_reflective _instance;
+    return &_instance;
 }
 
 template< typename T >
@@ -897,9 +895,8 @@ template < typename Interface >
 interface_reflective< Interface > const *
 interface_reflective< Interface >::get_instance()
 {
-    static boost::shared_ptr< interface_reflective > _instance(
-            new interface_reflective);
-    return _instance.get();
+    static interface_reflective _instance;
+    return &_instance;
 }
 
 } // namespace core
