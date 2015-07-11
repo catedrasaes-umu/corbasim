@@ -78,12 +78,15 @@ add_library(corbasim SHARED ${corbasim_SRCS})
 target_link_libraries(corbasim
     ${corbasim_LIBS})
 
-# static library
-add_library(corbasim_s STATIC ${corbasim_SRCS})
-
 set_target_properties(corbasim PROPERTIES
     VERSION ${${PROJECT_NAME}_VERSION}
     SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
-install(TARGETS corbasim corbasim_s DESTINATION lib)
+install(TARGETS corbasim DESTINATION lib)
+
+if (${CORBASIM_STATIC_LIBS})
+    # static library
+    add_library(corbasim_s STATIC ${corbasim_SRCS})
+    install(TARGETS corbasim_s DESTINATION lib)
+endif()
 

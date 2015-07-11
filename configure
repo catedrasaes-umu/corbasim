@@ -45,6 +45,7 @@ ACE_ROOT=/usr
 QWT_ROOT=/usr
 BOOST_ROOT=/usr
 QMAKE_DIR=
+COMPILE_STATIC_LIBS=0
 
 CORBASIM_ORBIMPL=TAO
 CORBASIM_ORB_IDL_COMPILER_OPTIONS=
@@ -79,6 +80,7 @@ $CMAKE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}                                \
        -DCMAKE_C_COMPILER=${C_COMPILER}                                        \
        -DCMAKE_CXX_COMPILER=${CXX_COMPILER}                                    \
        -DCORBASIM_ORBIMPL=${CORBASIM_ORBIMPL}                                  \
+       -DCORBASIM_STATIC_LIBS=${COMPILE_STATIC_LIBS}                           \
        -DCORBASIM_ORB_IDL_COMPILER_OPTIONS=${CORBASIM_ORB_IDL_COMPILER_OPTIONS}\
        $BASEDIR
 

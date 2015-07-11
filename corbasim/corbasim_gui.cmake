@@ -217,10 +217,7 @@ set_target_properties(corbasim_gui PROPERTIES
     VERSION ${${PROJECT_NAME}_VERSION}
     SOVERSION ${${PROJECT_NAME}_MAJOR_VERSION})
 
-add_library(corbasim_gui_s STATIC ${corbasim_gui_SRCS}
-    ${corbasim_gui_MOC_SRCS})
-
-install(TARGETS corbasim_gui corbasim_gui_s DESTINATION lib)
+install(TARGETS corbasim_gui DESTINATION lib)
 
 add_executable(corbasim_script_evaluator_test 
     gui/script/ScriptEvaluatorTest.cpp)
@@ -239,3 +236,9 @@ target_link_libraries(corbasim_client
     ${QT_LIBRARIES})
 install(TARGETS corbasim_client corbasim_client.real DESTINATION bin)
 
+if (${CORBASIM_STATIC_LIBS})
+    add_library(corbasim_gui_s STATIC ${corbasim_gui_SRCS}
+        ${corbasim_gui_MOC_SRCS})
+
+    install(TARGETS corbasim_gui_s DESTINATION lib)
+endif()
