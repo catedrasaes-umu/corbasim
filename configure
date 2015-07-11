@@ -79,6 +79,7 @@ $CMAKE -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX}                                \
        -DCMAKE_BUILD_TYPE=${BUILD_TYPE}                                        \
        -DCMAKE_C_COMPILER=${C_COMPILER}                                        \
        -DCMAKE_CXX_COMPILER=${CXX_COMPILER}                                    \
+       -DCMAKE_EXPORT_COMPILE_COMMANDS=1                                       \
        -DCORBASIM_ORBIMPL=${CORBASIM_ORBIMPL}                                  \
        -DCORBASIM_STATIC_LIBS=${COMPILE_STATIC_LIBS}                           \
        -DCORBASIM_ORB_IDL_COMPILER_OPTIONS=${CORBASIM_ORB_IDL_COMPILER_OPTIONS}\

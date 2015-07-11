@@ -101,7 +101,7 @@ else(NOT Boost_FOUND)
 endif(NOT Boost_FOUND)
 
 find_package(Boost 1.45.0
-    COMPONENTS system thread program_options)
+    COMPONENTS system thread program_options unit_test_framework)
 
 message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 
