@@ -20,6 +20,7 @@
 #define CORBASIM_CORE_REFLECTIVE_IPP
 
 #include <corbasim/core/copy.hpp>
+#include <boost/make_shared.hpp>
 
 namespace corbasim
 {
@@ -345,7 +346,7 @@ struct create_iterator
         typedef cs_mpl::name_of_member< S, N > name_t;
 
         reflective_ptr ptr_(helper_t::create_reflective(m_this));
-        accessor_ptr ac_(new accessor< S, N >());
+        accessor_ptr ac_(boost::make_shared<accessor<S, N> >());
 
         m_this->m_children.push_back(ptr_);
         m_this->m_child_names.push_back(name_t::call());
@@ -394,8 +395,8 @@ struct union_create_iterator
 
         typedef reflective< current_t > reflective_t;
 
-        reflective_ptr ptr_(new reflective_t(m_this, N::value));
-        accessor_ptr ac_(new union_accessor< S, N >());
+        reflective_ptr ptr_(boost::make_shared<reflective_t>(m_this, N::value));
+        accessor_ptr ac_(boost::make_shared<union_accessor< S, N > >());
 
         m_this->m_children.push_back(ptr_);
         m_this->m_child_names.push_back(name_t::call());

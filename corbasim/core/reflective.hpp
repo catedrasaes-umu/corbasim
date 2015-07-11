@@ -21,6 +21,7 @@
 #define CORBASIM_CORE_REFLECTIVE_HPP
 
 #include <corbasim/core/reflective_fwd.hpp>
+#include <boost/make_shared.hpp>
 
 namespace corbasim
 {
