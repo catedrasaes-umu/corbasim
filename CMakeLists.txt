@@ -154,6 +154,8 @@ set(CORBASIM_CLIENT_STATIC_LIBS
 set(CORBASIM_SERVER_LIBS
     corbasim ${Boost_PROGRAM_OPTIONS_LIBRARY})
 
+enable_testing()
+
 add_subdirectory(corbasim)
 add_subdirectory(corbasim_idl)
 

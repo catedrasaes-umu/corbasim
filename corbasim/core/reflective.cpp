@@ -107,10 +107,10 @@ reflective_base::~reflective_base()
 {
 }
 
-const char * reflective_base::get_type_name() const
-{
-    return "undefined";
-}
+//const char * reflective_base::get_type_name() const
+//{
+    //return "undefined";
+//}
 
 reflective_base const * reflective_base::get_parent() const
 {
@@ -233,7 +233,9 @@ operation_reflective_base const *
 interface_reflective_base::get_reflective_by_index(
         unsigned int idx) const
 {
-    return m_reflectives[idx];
+    if (idx < m_reflectives.size())
+        return m_reflectives[idx];
+    return NULL;
 }
 
 operation_reflective_base const *
