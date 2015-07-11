@@ -21,7 +21,7 @@ struct is_objrefvar< prueba::Iface_var > : public cs_mpl::true_
 } // adapted
 } // corbasim
 
-
+        
 namespace corbasim
 {
 namespace adapted
@@ -35,10 +35,6 @@ struct is_corbaseq< prueba::Iface::FloatSeq > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
-
-
 
 
 namespace _corbasim_prueba
@@ -68,10 +64,11 @@ struct __operation
 
 typedef __operation operation;
 
+
 } // Iface
 
-} // _corbasim_prueba
 
+} // _corbasim_prueba
 
 
 namespace corbasim
@@ -83,13 +80,11 @@ template < >
 struct interface < prueba::Iface >
 {
     typedef cs_mpl::list< _corbasim_prueba::Iface::operation  >   _op_list;
-
+    
 };
 
 } // adapted
 } // corbasim
-
-
 
 // OperationDef: prueba::Iface::operation
 BOOST_FUSION_ADAPT_STRUCT(
@@ -117,8 +112,6 @@ struct call< _corbasim_prueba::Iface::operation >
 
 } // adapted
 } // corbasim
-
-
 
 
 #endif // SERVER_EXAMPLE_ADAPTED_HPP

@@ -4,8 +4,6 @@ namespace corbasim
 {
 namespace adapted
 {
-
-
 template< >
 const char * full_qualified_name< HelloApp::Hello >::call()
 {
@@ -30,22 +28,17 @@ const char * name< _corbasim_HelloApp::Hello::sayHello >::call()
     return "sayHello";
 }
 
-
 template< >
 const char * name< _corbasim_HelloApp::Hello::sayHelloTo >::call()
 {
     return "sayHelloTo";
 }
 
-
 template< >
 const char * name< _corbasim_HelloApp::Hello::shutdown >::call()
 {
     return "shutdown";
 }
-
-
-
 
 template< >
 const char * full_qualified_name< Test::Huge >::call()
@@ -71,13 +64,11 @@ const char * name< _corbasim_Test::Huge::operation1 >::call()
     return "operation1";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation2 >::call()
 {
     return "operation2";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation3 >::call()
@@ -85,13 +76,11 @@ const char * name< _corbasim_Test::Huge::operation3 >::call()
     return "operation3";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation4 >::call()
 {
     return "operation4";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation5 >::call()
@@ -99,13 +88,11 @@ const char * name< _corbasim_Test::Huge::operation5 >::call()
     return "operation5";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation6 >::call()
 {
     return "operation6";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation7 >::call()
@@ -113,13 +100,11 @@ const char * name< _corbasim_Test::Huge::operation7 >::call()
     return "operation7";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation8 >::call()
 {
     return "operation8";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation9 >::call()
@@ -127,13 +112,11 @@ const char * name< _corbasim_Test::Huge::operation9 >::call()
     return "operation9";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation10 >::call()
 {
     return "operation10";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation11 >::call()
@@ -141,13 +124,11 @@ const char * name< _corbasim_Test::Huge::operation11 >::call()
     return "operation11";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation12 >::call()
 {
     return "operation12";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation13 >::call()
@@ -155,13 +136,11 @@ const char * name< _corbasim_Test::Huge::operation13 >::call()
     return "operation13";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation14 >::call()
 {
     return "operation14";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation15 >::call()
@@ -169,13 +148,11 @@ const char * name< _corbasim_Test::Huge::operation15 >::call()
     return "operation15";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation16 >::call()
 {
     return "operation16";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation17 >::call()
@@ -183,13 +160,11 @@ const char * name< _corbasim_Test::Huge::operation17 >::call()
     return "operation17";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation18 >::call()
 {
     return "operation18";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation19 >::call()
@@ -197,13 +172,11 @@ const char * name< _corbasim_Test::Huge::operation19 >::call()
     return "operation19";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation20 >::call()
 {
     return "operation20";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation21 >::call()
@@ -211,13 +184,11 @@ const char * name< _corbasim_Test::Huge::operation21 >::call()
     return "operation21";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation22 >::call()
 {
     return "operation22";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation23 >::call()
@@ -225,13 +196,11 @@ const char * name< _corbasim_Test::Huge::operation23 >::call()
     return "operation23";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation24 >::call()
 {
     return "operation24";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation25 >::call()
@@ -239,13 +208,11 @@ const char * name< _corbasim_Test::Huge::operation25 >::call()
     return "operation25";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation26 >::call()
 {
     return "operation26";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation27 >::call()
@@ -253,13 +220,11 @@ const char * name< _corbasim_Test::Huge::operation27 >::call()
     return "operation27";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation28 >::call()
 {
     return "operation28";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation29 >::call()
@@ -267,13 +232,11 @@ const char * name< _corbasim_Test::Huge::operation29 >::call()
     return "operation29";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation30 >::call()
 {
     return "operation30";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation31 >::call()
@@ -281,13 +244,11 @@ const char * name< _corbasim_Test::Huge::operation31 >::call()
     return "operation31";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation32 >::call()
 {
     return "operation32";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation33 >::call()
@@ -295,13 +256,11 @@ const char * name< _corbasim_Test::Huge::operation33 >::call()
     return "operation33";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation34 >::call()
 {
     return "operation34";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation35 >::call()
@@ -309,13 +268,11 @@ const char * name< _corbasim_Test::Huge::operation35 >::call()
     return "operation35";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation36 >::call()
 {
     return "operation36";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation37 >::call()
@@ -323,13 +280,11 @@ const char * name< _corbasim_Test::Huge::operation37 >::call()
     return "operation37";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation38 >::call()
 {
     return "operation38";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation39 >::call()
@@ -337,13 +292,11 @@ const char * name< _corbasim_Test::Huge::operation39 >::call()
     return "operation39";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation40 >::call()
 {
     return "operation40";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation41 >::call()
@@ -351,13 +304,11 @@ const char * name< _corbasim_Test::Huge::operation41 >::call()
     return "operation41";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation42 >::call()
 {
     return "operation42";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation43 >::call()
@@ -365,13 +316,11 @@ const char * name< _corbasim_Test::Huge::operation43 >::call()
     return "operation43";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation44 >::call()
 {
     return "operation44";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation45 >::call()
@@ -379,13 +328,11 @@ const char * name< _corbasim_Test::Huge::operation45 >::call()
     return "operation45";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation46 >::call()
 {
     return "operation46";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation47 >::call()
@@ -393,13 +340,11 @@ const char * name< _corbasim_Test::Huge::operation47 >::call()
     return "operation47";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation48 >::call()
 {
     return "operation48";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation49 >::call()
@@ -407,13 +352,11 @@ const char * name< _corbasim_Test::Huge::operation49 >::call()
     return "operation49";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation50 >::call()
 {
     return "operation50";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation51 >::call()
@@ -421,13 +364,11 @@ const char * name< _corbasim_Test::Huge::operation51 >::call()
     return "operation51";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation52 >::call()
 {
     return "operation52";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation53 >::call()
@@ -435,13 +376,11 @@ const char * name< _corbasim_Test::Huge::operation53 >::call()
     return "operation53";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation54 >::call()
 {
     return "operation54";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation55 >::call()
@@ -449,13 +388,11 @@ const char * name< _corbasim_Test::Huge::operation55 >::call()
     return "operation55";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation56 >::call()
 {
     return "operation56";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation57 >::call()
@@ -463,13 +400,11 @@ const char * name< _corbasim_Test::Huge::operation57 >::call()
     return "operation57";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation58 >::call()
 {
     return "operation58";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation59 >::call()
@@ -477,13 +412,11 @@ const char * name< _corbasim_Test::Huge::operation59 >::call()
     return "operation59";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation60 >::call()
 {
     return "operation60";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation61 >::call()
@@ -491,13 +424,11 @@ const char * name< _corbasim_Test::Huge::operation61 >::call()
     return "operation61";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation62 >::call()
 {
     return "operation62";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation63 >::call()
@@ -505,13 +436,11 @@ const char * name< _corbasim_Test::Huge::operation63 >::call()
     return "operation63";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation64 >::call()
 {
     return "operation64";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation65 >::call()
@@ -519,13 +448,11 @@ const char * name< _corbasim_Test::Huge::operation65 >::call()
     return "operation65";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation66 >::call()
 {
     return "operation66";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation67 >::call()
@@ -533,13 +460,11 @@ const char * name< _corbasim_Test::Huge::operation67 >::call()
     return "operation67";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation68 >::call()
 {
     return "operation68";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation69 >::call()
@@ -547,13 +472,11 @@ const char * name< _corbasim_Test::Huge::operation69 >::call()
     return "operation69";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation70 >::call()
 {
     return "operation70";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation71 >::call()
@@ -561,13 +484,11 @@ const char * name< _corbasim_Test::Huge::operation71 >::call()
     return "operation71";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation72 >::call()
 {
     return "operation72";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation73 >::call()
@@ -575,13 +496,11 @@ const char * name< _corbasim_Test::Huge::operation73 >::call()
     return "operation73";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation74 >::call()
 {
     return "operation74";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation75 >::call()
@@ -589,13 +508,11 @@ const char * name< _corbasim_Test::Huge::operation75 >::call()
     return "operation75";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation76 >::call()
 {
     return "operation76";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation77 >::call()
@@ -603,13 +520,11 @@ const char * name< _corbasim_Test::Huge::operation77 >::call()
     return "operation77";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation78 >::call()
 {
     return "operation78";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation79 >::call()
@@ -617,13 +532,11 @@ const char * name< _corbasim_Test::Huge::operation79 >::call()
     return "operation79";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation80 >::call()
 {
     return "operation80";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation81 >::call()
@@ -631,13 +544,11 @@ const char * name< _corbasim_Test::Huge::operation81 >::call()
     return "operation81";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation82 >::call()
 {
     return "operation82";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation83 >::call()
@@ -645,13 +556,11 @@ const char * name< _corbasim_Test::Huge::operation83 >::call()
     return "operation83";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation84 >::call()
 {
     return "operation84";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation85 >::call()
@@ -659,13 +568,11 @@ const char * name< _corbasim_Test::Huge::operation85 >::call()
     return "operation85";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation86 >::call()
 {
     return "operation86";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation87 >::call()
@@ -673,13 +580,11 @@ const char * name< _corbasim_Test::Huge::operation87 >::call()
     return "operation87";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation88 >::call()
 {
     return "operation88";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation89 >::call()
@@ -687,13 +592,11 @@ const char * name< _corbasim_Test::Huge::operation89 >::call()
     return "operation89";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation90 >::call()
 {
     return "operation90";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation91 >::call()
@@ -701,13 +604,11 @@ const char * name< _corbasim_Test::Huge::operation91 >::call()
     return "operation91";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation92 >::call()
 {
     return "operation92";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation93 >::call()
@@ -715,13 +616,11 @@ const char * name< _corbasim_Test::Huge::operation93 >::call()
     return "operation93";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation94 >::call()
 {
     return "operation94";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation95 >::call()
@@ -729,13 +628,11 @@ const char * name< _corbasim_Test::Huge::operation95 >::call()
     return "operation95";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation96 >::call()
 {
     return "operation96";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation97 >::call()
@@ -743,13 +640,11 @@ const char * name< _corbasim_Test::Huge::operation97 >::call()
     return "operation97";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation98 >::call()
 {
     return "operation98";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation99 >::call()
@@ -757,13 +652,11 @@ const char * name< _corbasim_Test::Huge::operation99 >::call()
     return "operation99";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation100 >::call()
 {
     return "operation100";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation101 >::call()
@@ -771,13 +664,11 @@ const char * name< _corbasim_Test::Huge::operation101 >::call()
     return "operation101";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation102 >::call()
 {
     return "operation102";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation103 >::call()
@@ -785,13 +676,11 @@ const char * name< _corbasim_Test::Huge::operation103 >::call()
     return "operation103";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation104 >::call()
 {
     return "operation104";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation105 >::call()
@@ -799,13 +688,11 @@ const char * name< _corbasim_Test::Huge::operation105 >::call()
     return "operation105";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation106 >::call()
 {
     return "operation106";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation107 >::call()
@@ -813,13 +700,11 @@ const char * name< _corbasim_Test::Huge::operation107 >::call()
     return "operation107";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation108 >::call()
 {
     return "operation108";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation109 >::call()
@@ -827,13 +712,11 @@ const char * name< _corbasim_Test::Huge::operation109 >::call()
     return "operation109";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation110 >::call()
 {
     return "operation110";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation111 >::call()
@@ -841,13 +724,11 @@ const char * name< _corbasim_Test::Huge::operation111 >::call()
     return "operation111";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation112 >::call()
 {
     return "operation112";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation113 >::call()
@@ -855,13 +736,11 @@ const char * name< _corbasim_Test::Huge::operation113 >::call()
     return "operation113";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation114 >::call()
 {
     return "operation114";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation115 >::call()
@@ -869,13 +748,11 @@ const char * name< _corbasim_Test::Huge::operation115 >::call()
     return "operation115";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation116 >::call()
 {
     return "operation116";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation117 >::call()
@@ -883,13 +760,11 @@ const char * name< _corbasim_Test::Huge::operation117 >::call()
     return "operation117";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation118 >::call()
 {
     return "operation118";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation119 >::call()
@@ -897,13 +772,11 @@ const char * name< _corbasim_Test::Huge::operation119 >::call()
     return "operation119";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation120 >::call()
 {
     return "operation120";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation121 >::call()
@@ -911,13 +784,11 @@ const char * name< _corbasim_Test::Huge::operation121 >::call()
     return "operation121";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation122 >::call()
 {
     return "operation122";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation123 >::call()
@@ -925,13 +796,11 @@ const char * name< _corbasim_Test::Huge::operation123 >::call()
     return "operation123";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation124 >::call()
 {
     return "operation124";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation125 >::call()
@@ -939,13 +808,11 @@ const char * name< _corbasim_Test::Huge::operation125 >::call()
     return "operation125";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation126 >::call()
 {
     return "operation126";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation127 >::call()
@@ -953,13 +820,11 @@ const char * name< _corbasim_Test::Huge::operation127 >::call()
     return "operation127";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation128 >::call()
 {
     return "operation128";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation129 >::call()
@@ -967,13 +832,11 @@ const char * name< _corbasim_Test::Huge::operation129 >::call()
     return "operation129";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation130 >::call()
 {
     return "operation130";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation131 >::call()
@@ -981,13 +844,11 @@ const char * name< _corbasim_Test::Huge::operation131 >::call()
     return "operation131";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation132 >::call()
 {
     return "operation132";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation133 >::call()
@@ -995,13 +856,11 @@ const char * name< _corbasim_Test::Huge::operation133 >::call()
     return "operation133";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation134 >::call()
 {
     return "operation134";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation135 >::call()
@@ -1009,13 +868,11 @@ const char * name< _corbasim_Test::Huge::operation135 >::call()
     return "operation135";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation136 >::call()
 {
     return "operation136";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation137 >::call()
@@ -1023,13 +880,11 @@ const char * name< _corbasim_Test::Huge::operation137 >::call()
     return "operation137";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation138 >::call()
 {
     return "operation138";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation139 >::call()
@@ -1037,13 +892,11 @@ const char * name< _corbasim_Test::Huge::operation139 >::call()
     return "operation139";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation140 >::call()
 {
     return "operation140";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation141 >::call()
@@ -1051,13 +904,11 @@ const char * name< _corbasim_Test::Huge::operation141 >::call()
     return "operation141";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation142 >::call()
 {
     return "operation142";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation143 >::call()
@@ -1065,13 +916,11 @@ const char * name< _corbasim_Test::Huge::operation143 >::call()
     return "operation143";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation144 >::call()
 {
     return "operation144";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation145 >::call()
@@ -1079,13 +928,11 @@ const char * name< _corbasim_Test::Huge::operation145 >::call()
     return "operation145";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation146 >::call()
 {
     return "operation146";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation147 >::call()
@@ -1093,13 +940,11 @@ const char * name< _corbasim_Test::Huge::operation147 >::call()
     return "operation147";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation148 >::call()
 {
     return "operation148";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation149 >::call()
@@ -1107,13 +952,11 @@ const char * name< _corbasim_Test::Huge::operation149 >::call()
     return "operation149";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation150 >::call()
 {
     return "operation150";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation151 >::call()
@@ -1121,13 +964,11 @@ const char * name< _corbasim_Test::Huge::operation151 >::call()
     return "operation151";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation152 >::call()
 {
     return "operation152";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation153 >::call()
@@ -1135,13 +976,11 @@ const char * name< _corbasim_Test::Huge::operation153 >::call()
     return "operation153";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation154 >::call()
 {
     return "operation154";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation155 >::call()
@@ -1149,13 +988,11 @@ const char * name< _corbasim_Test::Huge::operation155 >::call()
     return "operation155";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation156 >::call()
 {
     return "operation156";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation157 >::call()
@@ -1163,13 +1000,11 @@ const char * name< _corbasim_Test::Huge::operation157 >::call()
     return "operation157";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation158 >::call()
 {
     return "operation158";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation159 >::call()
@@ -1177,13 +1012,11 @@ const char * name< _corbasim_Test::Huge::operation159 >::call()
     return "operation159";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation160 >::call()
 {
     return "operation160";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation161 >::call()
@@ -1191,13 +1024,11 @@ const char * name< _corbasim_Test::Huge::operation161 >::call()
     return "operation161";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation162 >::call()
 {
     return "operation162";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation163 >::call()
@@ -1205,13 +1036,11 @@ const char * name< _corbasim_Test::Huge::operation163 >::call()
     return "operation163";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation164 >::call()
 {
     return "operation164";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation165 >::call()
@@ -1219,13 +1048,11 @@ const char * name< _corbasim_Test::Huge::operation165 >::call()
     return "operation165";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation166 >::call()
 {
     return "operation166";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation167 >::call()
@@ -1233,13 +1060,11 @@ const char * name< _corbasim_Test::Huge::operation167 >::call()
     return "operation167";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation168 >::call()
 {
     return "operation168";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation169 >::call()
@@ -1247,13 +1072,11 @@ const char * name< _corbasim_Test::Huge::operation169 >::call()
     return "operation169";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation170 >::call()
 {
     return "operation170";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation171 >::call()
@@ -1261,13 +1084,11 @@ const char * name< _corbasim_Test::Huge::operation171 >::call()
     return "operation171";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation172 >::call()
 {
     return "operation172";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation173 >::call()
@@ -1275,13 +1096,11 @@ const char * name< _corbasim_Test::Huge::operation173 >::call()
     return "operation173";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation174 >::call()
 {
     return "operation174";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation175 >::call()
@@ -1289,13 +1108,11 @@ const char * name< _corbasim_Test::Huge::operation175 >::call()
     return "operation175";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation176 >::call()
 {
     return "operation176";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation177 >::call()
@@ -1303,13 +1120,11 @@ const char * name< _corbasim_Test::Huge::operation177 >::call()
     return "operation177";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation178 >::call()
 {
     return "operation178";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation179 >::call()
@@ -1317,13 +1132,11 @@ const char * name< _corbasim_Test::Huge::operation179 >::call()
     return "operation179";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation180 >::call()
 {
     return "operation180";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation181 >::call()
@@ -1331,13 +1144,11 @@ const char * name< _corbasim_Test::Huge::operation181 >::call()
     return "operation181";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation182 >::call()
 {
     return "operation182";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation183 >::call()
@@ -1345,13 +1156,11 @@ const char * name< _corbasim_Test::Huge::operation183 >::call()
     return "operation183";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation184 >::call()
 {
     return "operation184";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation185 >::call()
@@ -1359,13 +1168,11 @@ const char * name< _corbasim_Test::Huge::operation185 >::call()
     return "operation185";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation186 >::call()
 {
     return "operation186";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation187 >::call()
@@ -1373,13 +1180,11 @@ const char * name< _corbasim_Test::Huge::operation187 >::call()
     return "operation187";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation188 >::call()
 {
     return "operation188";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation189 >::call()
@@ -1387,13 +1192,11 @@ const char * name< _corbasim_Test::Huge::operation189 >::call()
     return "operation189";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation190 >::call()
 {
     return "operation190";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation191 >::call()
@@ -1401,13 +1204,11 @@ const char * name< _corbasim_Test::Huge::operation191 >::call()
     return "operation191";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation192 >::call()
 {
     return "operation192";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation193 >::call()
@@ -1415,13 +1216,11 @@ const char * name< _corbasim_Test::Huge::operation193 >::call()
     return "operation193";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation194 >::call()
 {
     return "operation194";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation195 >::call()
@@ -1429,13 +1228,11 @@ const char * name< _corbasim_Test::Huge::operation195 >::call()
     return "operation195";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation196 >::call()
 {
     return "operation196";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Huge::operation197 >::call()
@@ -1443,22 +1240,17 @@ const char * name< _corbasim_Test::Huge::operation197 >::call()
     return "operation197";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation198 >::call()
 {
     return "operation198";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Huge::operation199 >::call()
 {
     return "operation199";
 }
-
-
-
 
 template< >
 const char * full_qualified_name< AAAAAAAAA::ESS >::call()
@@ -1471,12 +1263,6 @@ const char * name< AAAAAAAAA::ESS >::call()
 {
     return "ESS";
 }
-
-
-
-
-
-
 
 template< >
 const char * full_qualified_name< AAAAAAAAA::IIIIIIIIII >::call()
@@ -1502,15 +1288,11 @@ const char * name< _corbasim_AAAAAAAAA::IIIIIIIIII::op1 >::call()
     return "op1";
 }
 
-
 template< >
 const char * name< _corbasim_AAAAAAAAA::IIIIIIIIII::op2 >::call()
 {
     return "op2";
 }
-
-
-
 
 template< >
 const char * full_qualified_name< SimpleExample::MyUnion >::call()
@@ -1524,7 +1306,6 @@ const char * name< SimpleExample::MyUnion >::call()
     return "MyUnion";
 }
 
-
 template< >
 const char * full_qualified_name< SimpleExample::St >::call()
 {
@@ -1536,8 +1317,6 @@ const char * name< SimpleExample::St >::call()
 {
     return "St";
 }
-
-
 
 template< >
 const char * full_qualified_name< SimpleExample::Test >::call()
@@ -1563,16 +1342,11 @@ const char * name< _corbasim_SimpleExample::Test::operation1 >::call()
     return "operation1";
 }
 
-
-
-
 template< >
 const char * name< _corbasim_SimpleExample::Test::operation4 >::call()
 {
     return "operation4";
 }
-
-
 
 template< >
 const char * full_qualified_name< SimpleExample::Hijo >::call()
@@ -1586,8 +1360,6 @@ const char * name< SimpleExample::Hijo >::call()
     return "Hijo";
 }
 
-
-
 template< >
 const char * full_qualified_name< SimpleExample::Padre >::call()
 {
@@ -1599,10 +1371,6 @@ const char * name< SimpleExample::Padre >::call()
 {
     return "Padre";
 }
-
-
-
-
 
 template< >
 const char * full_qualified_name< SimpleExample::Abuelo >::call()
@@ -1616,19 +1384,6 @@ const char * name< SimpleExample::Abuelo >::call()
     return "Abuelo";
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 template< >
 const char * full_qualified_name< StringTest::StructWithStrings >::call()
 {
@@ -1640,8 +1395,6 @@ const char * name< StringTest::StructWithStrings >::call()
 {
     return "StructWithStrings";
 }
-
-
 
 template< >
 const char * full_qualified_name< StringTest::InterfaceString >::call()
@@ -1667,13 +1420,11 @@ const char * name< _corbasim_StringTest::InterfaceString::operation1 >::call()
     return "operation1";
 }
 
-
 template< >
 const char * name< _corbasim_StringTest::InterfaceString::operation2 >::call()
 {
     return "operation2";
 }
-
 
 template< >
 const char * name< _corbasim_StringTest::InterfaceString::operation3 >::call()
@@ -1681,13 +1432,11 @@ const char * name< _corbasim_StringTest::InterfaceString::operation3 >::call()
     return "operation3";
 }
 
-
 template< >
 const char * name< _corbasim_StringTest::InterfaceString::operation4 >::call()
 {
     return "operation4";
 }
-
 
 template< >
 const char * name< _corbasim_StringTest::InterfaceString::operation5 >::call()
@@ -1695,24 +1444,17 @@ const char * name< _corbasim_StringTest::InterfaceString::operation5 >::call()
     return "operation5";
 }
 
-
 template< >
 const char * name< _corbasim_StringTest::InterfaceString::operation6 >::call()
 {
     return "operation6";
 }
 
-
 template< >
 const char * name< _corbasim_StringTest::InterfaceString::operation7 >::call()
 {
     return "operation7";
 }
-
-
-
-
-
 
 template< >
 const char * full_qualified_name< MyModule::MyUnion >::call()
@@ -1726,7 +1468,6 @@ const char * name< MyModule::MyUnion >::call()
     return "MyUnion";
 }
 
-
 template< >
 const char * full_qualified_name< MyModule::MyUnion2 >::call()
 {
@@ -1738,7 +1479,6 @@ const char * name< MyModule::MyUnion2 >::call()
 {
     return "MyUnion2";
 }
-
 
 template< >
 const char * full_qualified_name< MyModule::MyUnion3 >::call()
@@ -1752,7 +1492,6 @@ const char * name< MyModule::MyUnion3 >::call()
     return "MyUnion3";
 }
 
-
 template< >
 const char * full_qualified_name< MyModule::MyStruct >::call()
 {
@@ -1764,8 +1503,6 @@ const char * name< MyModule::MyStruct >::call()
 {
     return "MyStruct";
 }
-
-
 
 template< >
 const char * full_qualified_name< MyModule::MyInterface >::call()
@@ -1791,13 +1528,11 @@ const char * name< _corbasim_MyModule::MyInterface::operation >::call()
     return "operation";
 }
 
-
 template< >
 const char * name< _corbasim_MyModule::MyInterface::operation1 >::call()
 {
     return "operation1";
 }
-
 
 template< >
 const char * name< _corbasim_MyModule::MyInterface::operation2 >::call()
@@ -1805,17 +1540,11 @@ const char * name< _corbasim_MyModule::MyInterface::operation2 >::call()
     return "operation2";
 }
 
-
 template< >
 const char * name< _corbasim_MyModule::MyInterface::operation3 >::call()
 {
     return "operation3";
 }
-
-
-
-
-
 
 template< >
 const char * full_qualified_name< Test::St >::call()
@@ -1829,8 +1558,6 @@ const char * name< Test::St >::call()
     return "St";
 }
 
-
-
 template< >
 const char * full_qualified_name< Test::St2 >::call()
 {
@@ -1842,8 +1569,6 @@ const char * name< Test::St2 >::call()
 {
     return "St2";
 }
-
-
 
 template< >
 const char * full_qualified_name< Test::Prueba >::call()
@@ -1869,13 +1594,11 @@ const char * name< _corbasim_Test::Prueba::operacion1 >::call()
     return "operacion1";
 }
 
-
 template< >
 const char * name< _corbasim_Test::Prueba::operacion2 >::call()
 {
     return "operacion2";
 }
-
 
 template< >
 const char * name< _corbasim_Test::Prueba::operacion3 >::call()
@@ -1883,15 +1606,11 @@ const char * name< _corbasim_Test::Prueba::operacion3 >::call()
     return "operacion3";
 }
 
-
-
 } // namespace adapted
 } // namespace corbasim
 
 namespace _corbasim_HelloApp
 {
-
-
 namespace Hello
 {
 
@@ -1902,11 +1621,10 @@ __sayHello::__sayHello()
 
 // Copy constructor
 __sayHello::__sayHello(const __sayHello& o) :
-
+    
 _return(o._return){
 
 }
-
 
 
 
@@ -1929,7 +1647,6 @@ __sayHelloTo::__sayHelloTo(const __sayHelloTo& o) :
 
 
 
-
 __shutdown::__shutdown()
 {
 }
@@ -1943,10 +1660,7 @@ __shutdown::__shutdown(const __shutdown& o)
 
 
 } // Hello
-
 } // _corbasim_HelloApp
-
-
 namespace _corbasim_Test
 {
 namespace Huge
@@ -1971,7 +1685,6 @@ __operation1::__operation1(const __operation1& o) :
 
 
 
-
 __operation2::__operation2()
 {
 }
@@ -1988,7 +1701,6 @@ __operation2::__operation2(const __operation2& o) :
 {
 
 }
-
 
 
 
@@ -2011,7 +1723,6 @@ __operation3::__operation3(const __operation3& o) :
 
 
 
-
 __operation4::__operation4()
 {
 }
@@ -2028,7 +1739,6 @@ __operation4::__operation4(const __operation4& o) :
 {
 
 }
-
 
 
 
@@ -2051,7 +1761,6 @@ __operation5::__operation5(const __operation5& o) :
 
 
 
-
 __operation6::__operation6()
 {
 }
@@ -2068,7 +1777,6 @@ __operation6::__operation6(const __operation6& o) :
 {
 
 }
-
 
 
 
@@ -2091,7 +1799,6 @@ __operation7::__operation7(const __operation7& o) :
 
 
 
-
 __operation8::__operation8()
 {
 }
@@ -2108,7 +1815,6 @@ __operation8::__operation8(const __operation8& o) :
 {
 
 }
-
 
 
 
@@ -2131,7 +1837,6 @@ __operation9::__operation9(const __operation9& o) :
 
 
 
-
 __operation10::__operation10()
 {
 }
@@ -2148,7 +1853,6 @@ __operation10::__operation10(const __operation10& o) :
 {
 
 }
-
 
 
 
@@ -2171,7 +1875,6 @@ __operation11::__operation11(const __operation11& o) :
 
 
 
-
 __operation12::__operation12()
 {
 }
@@ -2188,7 +1891,6 @@ __operation12::__operation12(const __operation12& o) :
 {
 
 }
-
 
 
 
@@ -2211,7 +1913,6 @@ __operation13::__operation13(const __operation13& o) :
 
 
 
-
 __operation14::__operation14()
 {
 }
@@ -2228,7 +1929,6 @@ __operation14::__operation14(const __operation14& o) :
 {
 
 }
-
 
 
 
@@ -2251,7 +1951,6 @@ __operation15::__operation15(const __operation15& o) :
 
 
 
-
 __operation16::__operation16()
 {
 }
@@ -2268,7 +1967,6 @@ __operation16::__operation16(const __operation16& o) :
 {
 
 }
-
 
 
 
@@ -2291,7 +1989,6 @@ __operation17::__operation17(const __operation17& o) :
 
 
 
-
 __operation18::__operation18()
 {
 }
@@ -2308,7 +2005,6 @@ __operation18::__operation18(const __operation18& o) :
 {
 
 }
-
 
 
 
@@ -2331,7 +2027,6 @@ __operation19::__operation19(const __operation19& o) :
 
 
 
-
 __operation20::__operation20()
 {
 }
@@ -2348,7 +2043,6 @@ __operation20::__operation20(const __operation20& o) :
 {
 
 }
-
 
 
 
@@ -2371,7 +2065,6 @@ __operation21::__operation21(const __operation21& o) :
 
 
 
-
 __operation22::__operation22()
 {
 }
@@ -2388,7 +2081,6 @@ __operation22::__operation22(const __operation22& o) :
 {
 
 }
-
 
 
 
@@ -2411,7 +2103,6 @@ __operation23::__operation23(const __operation23& o) :
 
 
 
-
 __operation24::__operation24()
 {
 }
@@ -2428,7 +2119,6 @@ __operation24::__operation24(const __operation24& o) :
 {
 
 }
-
 
 
 
@@ -2451,7 +2141,6 @@ __operation25::__operation25(const __operation25& o) :
 
 
 
-
 __operation26::__operation26()
 {
 }
@@ -2468,7 +2157,6 @@ __operation26::__operation26(const __operation26& o) :
 {
 
 }
-
 
 
 
@@ -2491,7 +2179,6 @@ __operation27::__operation27(const __operation27& o) :
 
 
 
-
 __operation28::__operation28()
 {
 }
@@ -2508,7 +2195,6 @@ __operation28::__operation28(const __operation28& o) :
 {
 
 }
-
 
 
 
@@ -2531,7 +2217,6 @@ __operation29::__operation29(const __operation29& o) :
 
 
 
-
 __operation30::__operation30()
 {
 }
@@ -2548,7 +2233,6 @@ __operation30::__operation30(const __operation30& o) :
 {
 
 }
-
 
 
 
@@ -2571,7 +2255,6 @@ __operation31::__operation31(const __operation31& o) :
 
 
 
-
 __operation32::__operation32()
 {
 }
@@ -2588,7 +2271,6 @@ __operation32::__operation32(const __operation32& o) :
 {
 
 }
-
 
 
 
@@ -2611,7 +2293,6 @@ __operation33::__operation33(const __operation33& o) :
 
 
 
-
 __operation34::__operation34()
 {
 }
@@ -2628,7 +2309,6 @@ __operation34::__operation34(const __operation34& o) :
 {
 
 }
-
 
 
 
@@ -2651,7 +2331,6 @@ __operation35::__operation35(const __operation35& o) :
 
 
 
-
 __operation36::__operation36()
 {
 }
@@ -2668,7 +2347,6 @@ __operation36::__operation36(const __operation36& o) :
 {
 
 }
-
 
 
 
@@ -2691,7 +2369,6 @@ __operation37::__operation37(const __operation37& o) :
 
 
 
-
 __operation38::__operation38()
 {
 }
@@ -2708,7 +2385,6 @@ __operation38::__operation38(const __operation38& o) :
 {
 
 }
-
 
 
 
@@ -2731,7 +2407,6 @@ __operation39::__operation39(const __operation39& o) :
 
 
 
-
 __operation40::__operation40()
 {
 }
@@ -2748,7 +2423,6 @@ __operation40::__operation40(const __operation40& o) :
 {
 
 }
-
 
 
 
@@ -2771,7 +2445,6 @@ __operation41::__operation41(const __operation41& o) :
 
 
 
-
 __operation42::__operation42()
 {
 }
@@ -2788,7 +2461,6 @@ __operation42::__operation42(const __operation42& o) :
 {
 
 }
-
 
 
 
@@ -2811,7 +2483,6 @@ __operation43::__operation43(const __operation43& o) :
 
 
 
-
 __operation44::__operation44()
 {
 }
@@ -2828,7 +2499,6 @@ __operation44::__operation44(const __operation44& o) :
 {
 
 }
-
 
 
 
@@ -2851,7 +2521,6 @@ __operation45::__operation45(const __operation45& o) :
 
 
 
-
 __operation46::__operation46()
 {
 }
@@ -2868,7 +2537,6 @@ __operation46::__operation46(const __operation46& o) :
 {
 
 }
-
 
 
 
@@ -2891,7 +2559,6 @@ __operation47::__operation47(const __operation47& o) :
 
 
 
-
 __operation48::__operation48()
 {
 }
@@ -2908,7 +2575,6 @@ __operation48::__operation48(const __operation48& o) :
 {
 
 }
-
 
 
 
@@ -2931,7 +2597,6 @@ __operation49::__operation49(const __operation49& o) :
 
 
 
-
 __operation50::__operation50()
 {
 }
@@ -2948,7 +2613,6 @@ __operation50::__operation50(const __operation50& o) :
 {
 
 }
-
 
 
 
@@ -2971,7 +2635,6 @@ __operation51::__operation51(const __operation51& o) :
 
 
 
-
 __operation52::__operation52()
 {
 }
@@ -2988,7 +2651,6 @@ __operation52::__operation52(const __operation52& o) :
 {
 
 }
-
 
 
 
@@ -3011,7 +2673,6 @@ __operation53::__operation53(const __operation53& o) :
 
 
 
-
 __operation54::__operation54()
 {
 }
@@ -3028,7 +2689,6 @@ __operation54::__operation54(const __operation54& o) :
 {
 
 }
-
 
 
 
@@ -3051,7 +2711,6 @@ __operation55::__operation55(const __operation55& o) :
 
 
 
-
 __operation56::__operation56()
 {
 }
@@ -3068,7 +2727,6 @@ __operation56::__operation56(const __operation56& o) :
 {
 
 }
-
 
 
 
@@ -3091,7 +2749,6 @@ __operation57::__operation57(const __operation57& o) :
 
 
 
-
 __operation58::__operation58()
 {
 }
@@ -3108,7 +2765,6 @@ __operation58::__operation58(const __operation58& o) :
 {
 
 }
-
 
 
 
@@ -3131,7 +2787,6 @@ __operation59::__operation59(const __operation59& o) :
 
 
 
-
 __operation60::__operation60()
 {
 }
@@ -3148,7 +2803,6 @@ __operation60::__operation60(const __operation60& o) :
 {
 
 }
-
 
 
 
@@ -3171,7 +2825,6 @@ __operation61::__operation61(const __operation61& o) :
 
 
 
-
 __operation62::__operation62()
 {
 }
@@ -3188,7 +2841,6 @@ __operation62::__operation62(const __operation62& o) :
 {
 
 }
-
 
 
 
@@ -3211,7 +2863,6 @@ __operation63::__operation63(const __operation63& o) :
 
 
 
-
 __operation64::__operation64()
 {
 }
@@ -3228,7 +2879,6 @@ __operation64::__operation64(const __operation64& o) :
 {
 
 }
-
 
 
 
@@ -3251,7 +2901,6 @@ __operation65::__operation65(const __operation65& o) :
 
 
 
-
 __operation66::__operation66()
 {
 }
@@ -3268,7 +2917,6 @@ __operation66::__operation66(const __operation66& o) :
 {
 
 }
-
 
 
 
@@ -3291,7 +2939,6 @@ __operation67::__operation67(const __operation67& o) :
 
 
 
-
 __operation68::__operation68()
 {
 }
@@ -3308,7 +2955,6 @@ __operation68::__operation68(const __operation68& o) :
 {
 
 }
-
 
 
 
@@ -3331,7 +2977,6 @@ __operation69::__operation69(const __operation69& o) :
 
 
 
-
 __operation70::__operation70()
 {
 }
@@ -3348,7 +2993,6 @@ __operation70::__operation70(const __operation70& o) :
 {
 
 }
-
 
 
 
@@ -3371,7 +3015,6 @@ __operation71::__operation71(const __operation71& o) :
 
 
 
-
 __operation72::__operation72()
 {
 }
@@ -3388,7 +3031,6 @@ __operation72::__operation72(const __operation72& o) :
 {
 
 }
-
 
 
 
@@ -3411,7 +3053,6 @@ __operation73::__operation73(const __operation73& o) :
 
 
 
-
 __operation74::__operation74()
 {
 }
@@ -3428,7 +3069,6 @@ __operation74::__operation74(const __operation74& o) :
 {
 
 }
-
 
 
 
@@ -3451,7 +3091,6 @@ __operation75::__operation75(const __operation75& o) :
 
 
 
-
 __operation76::__operation76()
 {
 }
@@ -3468,7 +3107,6 @@ __operation76::__operation76(const __operation76& o) :
 {
 
 }
-
 
 
 
@@ -3491,7 +3129,6 @@ __operation77::__operation77(const __operation77& o) :
 
 
 
-
 __operation78::__operation78()
 {
 }
@@ -3508,7 +3145,6 @@ __operation78::__operation78(const __operation78& o) :
 {
 
 }
-
 
 
 
@@ -3531,7 +3167,6 @@ __operation79::__operation79(const __operation79& o) :
 
 
 
-
 __operation80::__operation80()
 {
 }
@@ -3548,7 +3183,6 @@ __operation80::__operation80(const __operation80& o) :
 {
 
 }
-
 
 
 
@@ -3571,7 +3205,6 @@ __operation81::__operation81(const __operation81& o) :
 
 
 
-
 __operation82::__operation82()
 {
 }
@@ -3588,7 +3221,6 @@ __operation82::__operation82(const __operation82& o) :
 {
 
 }
-
 
 
 
@@ -3611,7 +3243,6 @@ __operation83::__operation83(const __operation83& o) :
 
 
 
-
 __operation84::__operation84()
 {
 }
@@ -3628,7 +3259,6 @@ __operation84::__operation84(const __operation84& o) :
 {
 
 }
-
 
 
 
@@ -3651,7 +3281,6 @@ __operation85::__operation85(const __operation85& o) :
 
 
 
-
 __operation86::__operation86()
 {
 }
@@ -3668,7 +3297,6 @@ __operation86::__operation86(const __operation86& o) :
 {
 
 }
-
 
 
 
@@ -3691,7 +3319,6 @@ __operation87::__operation87(const __operation87& o) :
 
 
 
-
 __operation88::__operation88()
 {
 }
@@ -3708,7 +3335,6 @@ __operation88::__operation88(const __operation88& o) :
 {
 
 }
-
 
 
 
@@ -3731,7 +3357,6 @@ __operation89::__operation89(const __operation89& o) :
 
 
 
-
 __operation90::__operation90()
 {
 }
@@ -3748,7 +3373,6 @@ __operation90::__operation90(const __operation90& o) :
 {
 
 }
-
 
 
 
@@ -3771,7 +3395,6 @@ __operation91::__operation91(const __operation91& o) :
 
 
 
-
 __operation92::__operation92()
 {
 }
@@ -3788,7 +3411,6 @@ __operation92::__operation92(const __operation92& o) :
 {
 
 }
-
 
 
 
@@ -3811,7 +3433,6 @@ __operation93::__operation93(const __operation93& o) :
 
 
 
-
 __operation94::__operation94()
 {
 }
@@ -3828,7 +3449,6 @@ __operation94::__operation94(const __operation94& o) :
 {
 
 }
-
 
 
 
@@ -3851,7 +3471,6 @@ __operation95::__operation95(const __operation95& o) :
 
 
 
-
 __operation96::__operation96()
 {
 }
@@ -3868,7 +3487,6 @@ __operation96::__operation96(const __operation96& o) :
 {
 
 }
-
 
 
 
@@ -3891,7 +3509,6 @@ __operation97::__operation97(const __operation97& o) :
 
 
 
-
 __operation98::__operation98()
 {
 }
@@ -3908,7 +3525,6 @@ __operation98::__operation98(const __operation98& o) :
 {
 
 }
-
 
 
 
@@ -3931,7 +3547,6 @@ __operation99::__operation99(const __operation99& o) :
 
 
 
-
 __operation100::__operation100()
 {
 }
@@ -3948,7 +3563,6 @@ __operation100::__operation100(const __operation100& o) :
 {
 
 }
-
 
 
 
@@ -3971,7 +3585,6 @@ __operation101::__operation101(const __operation101& o) :
 
 
 
-
 __operation102::__operation102()
 {
 }
@@ -3988,7 +3601,6 @@ __operation102::__operation102(const __operation102& o) :
 {
 
 }
-
 
 
 
@@ -4011,7 +3623,6 @@ __operation103::__operation103(const __operation103& o) :
 
 
 
-
 __operation104::__operation104()
 {
 }
@@ -4028,7 +3639,6 @@ __operation104::__operation104(const __operation104& o) :
 {
 
 }
-
 
 
 
@@ -4051,7 +3661,6 @@ __operation105::__operation105(const __operation105& o) :
 
 
 
-
 __operation106::__operation106()
 {
 }
@@ -4068,7 +3677,6 @@ __operation106::__operation106(const __operation106& o) :
 {
 
 }
-
 
 
 
@@ -4091,7 +3699,6 @@ __operation107::__operation107(const __operation107& o) :
 
 
 
-
 __operation108::__operation108()
 {
 }
@@ -4108,7 +3715,6 @@ __operation108::__operation108(const __operation108& o) :
 {
 
 }
-
 
 
 
@@ -4131,7 +3737,6 @@ __operation109::__operation109(const __operation109& o) :
 
 
 
-
 __operation110::__operation110()
 {
 }
@@ -4148,7 +3753,6 @@ __operation110::__operation110(const __operation110& o) :
 {
 
 }
-
 
 
 
@@ -4171,7 +3775,6 @@ __operation111::__operation111(const __operation111& o) :
 
 
 
-
 __operation112::__operation112()
 {
 }
@@ -4188,7 +3791,6 @@ __operation112::__operation112(const __operation112& o) :
 {
 
 }
-
 
 
 
@@ -4211,7 +3813,6 @@ __operation113::__operation113(const __operation113& o) :
 
 
 
-
 __operation114::__operation114()
 {
 }
@@ -4228,7 +3829,6 @@ __operation114::__operation114(const __operation114& o) :
 {
 
 }
-
 
 
 
@@ -4251,7 +3851,6 @@ __operation115::__operation115(const __operation115& o) :
 
 
 
-
 __operation116::__operation116()
 {
 }
@@ -4268,7 +3867,6 @@ __operation116::__operation116(const __operation116& o) :
 {
 
 }
-
 
 
 
@@ -4291,7 +3889,6 @@ __operation117::__operation117(const __operation117& o) :
 
 
 
-
 __operation118::__operation118()
 {
 }
@@ -4308,7 +3905,6 @@ __operation118::__operation118(const __operation118& o) :
 {
 
 }
-
 
 
 
@@ -4331,7 +3927,6 @@ __operation119::__operation119(const __operation119& o) :
 
 
 
-
 __operation120::__operation120()
 {
 }
@@ -4348,7 +3943,6 @@ __operation120::__operation120(const __operation120& o) :
 {
 
 }
-
 
 
 
@@ -4371,7 +3965,6 @@ __operation121::__operation121(const __operation121& o) :
 
 
 
-
 __operation122::__operation122()
 {
 }
@@ -4388,7 +3981,6 @@ __operation122::__operation122(const __operation122& o) :
 {
 
 }
-
 
 
 
@@ -4411,7 +4003,6 @@ __operation123::__operation123(const __operation123& o) :
 
 
 
-
 __operation124::__operation124()
 {
 }
@@ -4428,7 +4019,6 @@ __operation124::__operation124(const __operation124& o) :
 {
 
 }
-
 
 
 
@@ -4451,7 +4041,6 @@ __operation125::__operation125(const __operation125& o) :
 
 
 
-
 __operation126::__operation126()
 {
 }
@@ -4468,7 +4057,6 @@ __operation126::__operation126(const __operation126& o) :
 {
 
 }
-
 
 
 
@@ -4491,7 +4079,6 @@ __operation127::__operation127(const __operation127& o) :
 
 
 
-
 __operation128::__operation128()
 {
 }
@@ -4508,7 +4095,6 @@ __operation128::__operation128(const __operation128& o) :
 {
 
 }
-
 
 
 
@@ -4531,7 +4117,6 @@ __operation129::__operation129(const __operation129& o) :
 
 
 
-
 __operation130::__operation130()
 {
 }
@@ -4548,7 +4133,6 @@ __operation130::__operation130(const __operation130& o) :
 {
 
 }
-
 
 
 
@@ -4571,7 +4155,6 @@ __operation131::__operation131(const __operation131& o) :
 
 
 
-
 __operation132::__operation132()
 {
 }
@@ -4588,7 +4171,6 @@ __operation132::__operation132(const __operation132& o) :
 {
 
 }
-
 
 
 
@@ -4611,7 +4193,6 @@ __operation133::__operation133(const __operation133& o) :
 
 
 
-
 __operation134::__operation134()
 {
 }
@@ -4628,7 +4209,6 @@ __operation134::__operation134(const __operation134& o) :
 {
 
 }
-
 
 
 
@@ -4651,7 +4231,6 @@ __operation135::__operation135(const __operation135& o) :
 
 
 
-
 __operation136::__operation136()
 {
 }
@@ -4668,7 +4247,6 @@ __operation136::__operation136(const __operation136& o) :
 {
 
 }
-
 
 
 
@@ -4691,7 +4269,6 @@ __operation137::__operation137(const __operation137& o) :
 
 
 
-
 __operation138::__operation138()
 {
 }
@@ -4708,7 +4285,6 @@ __operation138::__operation138(const __operation138& o) :
 {
 
 }
-
 
 
 
@@ -4731,7 +4307,6 @@ __operation139::__operation139(const __operation139& o) :
 
 
 
-
 __operation140::__operation140()
 {
 }
@@ -4748,7 +4323,6 @@ __operation140::__operation140(const __operation140& o) :
 {
 
 }
-
 
 
 
@@ -4771,7 +4345,6 @@ __operation141::__operation141(const __operation141& o) :
 
 
 
-
 __operation142::__operation142()
 {
 }
@@ -4788,7 +4361,6 @@ __operation142::__operation142(const __operation142& o) :
 {
 
 }
-
 
 
 
@@ -4811,7 +4383,6 @@ __operation143::__operation143(const __operation143& o) :
 
 
 
-
 __operation144::__operation144()
 {
 }
@@ -4828,7 +4399,6 @@ __operation144::__operation144(const __operation144& o) :
 {
 
 }
-
 
 
 
@@ -4851,7 +4421,6 @@ __operation145::__operation145(const __operation145& o) :
 
 
 
-
 __operation146::__operation146()
 {
 }
@@ -4868,7 +4437,6 @@ __operation146::__operation146(const __operation146& o) :
 {
 
 }
-
 
 
 
@@ -4891,7 +4459,6 @@ __operation147::__operation147(const __operation147& o) :
 
 
 
-
 __operation148::__operation148()
 {
 }
@@ -4908,7 +4475,6 @@ __operation148::__operation148(const __operation148& o) :
 {
 
 }
-
 
 
 
@@ -4931,7 +4497,6 @@ __operation149::__operation149(const __operation149& o) :
 
 
 
-
 __operation150::__operation150()
 {
 }
@@ -4948,7 +4513,6 @@ __operation150::__operation150(const __operation150& o) :
 {
 
 }
-
 
 
 
@@ -4971,7 +4535,6 @@ __operation151::__operation151(const __operation151& o) :
 
 
 
-
 __operation152::__operation152()
 {
 }
@@ -4988,7 +4551,6 @@ __operation152::__operation152(const __operation152& o) :
 {
 
 }
-
 
 
 
@@ -5011,7 +4573,6 @@ __operation153::__operation153(const __operation153& o) :
 
 
 
-
 __operation154::__operation154()
 {
 }
@@ -5028,7 +4589,6 @@ __operation154::__operation154(const __operation154& o) :
 {
 
 }
-
 
 
 
@@ -5051,7 +4611,6 @@ __operation155::__operation155(const __operation155& o) :
 
 
 
-
 __operation156::__operation156()
 {
 }
@@ -5068,7 +4627,6 @@ __operation156::__operation156(const __operation156& o) :
 {
 
 }
-
 
 
 
@@ -5091,7 +4649,6 @@ __operation157::__operation157(const __operation157& o) :
 
 
 
-
 __operation158::__operation158()
 {
 }
@@ -5108,7 +4665,6 @@ __operation158::__operation158(const __operation158& o) :
 {
 
 }
-
 
 
 
@@ -5131,7 +4687,6 @@ __operation159::__operation159(const __operation159& o) :
 
 
 
-
 __operation160::__operation160()
 {
 }
@@ -5148,7 +4703,6 @@ __operation160::__operation160(const __operation160& o) :
 {
 
 }
-
 
 
 
@@ -5171,7 +4725,6 @@ __operation161::__operation161(const __operation161& o) :
 
 
 
-
 __operation162::__operation162()
 {
 }
@@ -5188,7 +4741,6 @@ __operation162::__operation162(const __operation162& o) :
 {
 
 }
-
 
 
 
@@ -5211,7 +4763,6 @@ __operation163::__operation163(const __operation163& o) :
 
 
 
-
 __operation164::__operation164()
 {
 }
@@ -5228,7 +4779,6 @@ __operation164::__operation164(const __operation164& o) :
 {
 
 }
-
 
 
 
@@ -5251,7 +4801,6 @@ __operation165::__operation165(const __operation165& o) :
 
 
 
-
 __operation166::__operation166()
 {
 }
@@ -5268,7 +4817,6 @@ __operation166::__operation166(const __operation166& o) :
 {
 
 }
-
 
 
 
@@ -5291,7 +4839,6 @@ __operation167::__operation167(const __operation167& o) :
 
 
 
-
 __operation168::__operation168()
 {
 }
@@ -5308,7 +4855,6 @@ __operation168::__operation168(const __operation168& o) :
 {
 
 }
-
 
 
 
@@ -5331,7 +4877,6 @@ __operation169::__operation169(const __operation169& o) :
 
 
 
-
 __operation170::__operation170()
 {
 }
@@ -5348,7 +4893,6 @@ __operation170::__operation170(const __operation170& o) :
 {
 
 }
-
 
 
 
@@ -5371,7 +4915,6 @@ __operation171::__operation171(const __operation171& o) :
 
 
 
-
 __operation172::__operation172()
 {
 }
@@ -5388,7 +4931,6 @@ __operation172::__operation172(const __operation172& o) :
 {
 
 }
-
 
 
 
@@ -5411,7 +4953,6 @@ __operation173::__operation173(const __operation173& o) :
 
 
 
-
 __operation174::__operation174()
 {
 }
@@ -5428,7 +4969,6 @@ __operation174::__operation174(const __operation174& o) :
 {
 
 }
-
 
 
 
@@ -5451,7 +4991,6 @@ __operation175::__operation175(const __operation175& o) :
 
 
 
-
 __operation176::__operation176()
 {
 }
@@ -5468,7 +5007,6 @@ __operation176::__operation176(const __operation176& o) :
 {
 
 }
-
 
 
 
@@ -5491,7 +5029,6 @@ __operation177::__operation177(const __operation177& o) :
 
 
 
-
 __operation178::__operation178()
 {
 }
@@ -5508,7 +5045,6 @@ __operation178::__operation178(const __operation178& o) :
 {
 
 }
-
 
 
 
@@ -5531,7 +5067,6 @@ __operation179::__operation179(const __operation179& o) :
 
 
 
-
 __operation180::__operation180()
 {
 }
@@ -5548,7 +5083,6 @@ __operation180::__operation180(const __operation180& o) :
 {
 
 }
-
 
 
 
@@ -5571,7 +5105,6 @@ __operation181::__operation181(const __operation181& o) :
 
 
 
-
 __operation182::__operation182()
 {
 }
@@ -5588,7 +5121,6 @@ __operation182::__operation182(const __operation182& o) :
 {
 
 }
-
 
 
 
@@ -5611,7 +5143,6 @@ __operation183::__operation183(const __operation183& o) :
 
 
 
-
 __operation184::__operation184()
 {
 }
@@ -5628,7 +5159,6 @@ __operation184::__operation184(const __operation184& o) :
 {
 
 }
-
 
 
 
@@ -5651,7 +5181,6 @@ __operation185::__operation185(const __operation185& o) :
 
 
 
-
 __operation186::__operation186()
 {
 }
@@ -5668,7 +5197,6 @@ __operation186::__operation186(const __operation186& o) :
 {
 
 }
-
 
 
 
@@ -5691,7 +5219,6 @@ __operation187::__operation187(const __operation187& o) :
 
 
 
-
 __operation188::__operation188()
 {
 }
@@ -5708,7 +5235,6 @@ __operation188::__operation188(const __operation188& o) :
 {
 
 }
-
 
 
 
@@ -5731,7 +5257,6 @@ __operation189::__operation189(const __operation189& o) :
 
 
 
-
 __operation190::__operation190()
 {
 }
@@ -5748,7 +5273,6 @@ __operation190::__operation190(const __operation190& o) :
 {
 
 }
-
 
 
 
@@ -5771,7 +5295,6 @@ __operation191::__operation191(const __operation191& o) :
 
 
 
-
 __operation192::__operation192()
 {
 }
@@ -5788,7 +5311,6 @@ __operation192::__operation192(const __operation192& o) :
 {
 
 }
-
 
 
 
@@ -5811,7 +5333,6 @@ __operation193::__operation193(const __operation193& o) :
 
 
 
-
 __operation194::__operation194()
 {
 }
@@ -5828,7 +5349,6 @@ __operation194::__operation194(const __operation194& o) :
 {
 
 }
-
 
 
 
@@ -5851,7 +5371,6 @@ __operation195::__operation195(const __operation195& o) :
 
 
 
-
 __operation196::__operation196()
 {
 }
@@ -5868,7 +5387,6 @@ __operation196::__operation196(const __operation196& o) :
 {
 
 }
-
 
 
 
@@ -5891,7 +5409,6 @@ __operation197::__operation197(const __operation197& o) :
 
 
 
-
 __operation198::__operation198()
 {
 }
@@ -5908,7 +5425,6 @@ __operation198::__operation198(const __operation198& o) :
 {
 
 }
-
 
 
 
@@ -5931,18 +5447,9 @@ __operation199::__operation199(const __operation199& o) :
 
 
 } // Huge
-
 } // _corbasim_Test
-
-
 namespace _corbasim_AAAAAAAAA
 {
-
-
-
-
-
-
 namespace IIIIIIIIII
 {
 
@@ -5953,11 +5460,10 @@ __op1::__op1()
 
 // Copy constructor
 __op1::__op1(const __op1& o) :
-
+    
 _return(o._return){
 
 }
-
 
 
 
@@ -5968,23 +5474,16 @@ __op2::__op2()
 
 // Copy constructor
 __op2::__op2(const __op2& o) :
-
+    
 _return(o._return){
 
 }
 
 
 } // IIIIIIIIII
-
 } // _corbasim_AAAAAAAAA
-
-
 namespace _corbasim_SimpleExample
 {
-
-
-
-
 namespace Test
 {
 
@@ -6007,9 +5506,6 @@ __operation1::__operation1(const __operation1& o) :
 
 
 
-
-
-
 __operation4::__operation4()
 {
 }
@@ -6029,32 +5525,9 @@ __operation4::__operation4(const __operation4& o)
 
 
 } // Test
-
-
-
-
-
-
-
-
-
 } // _corbasim_SimpleExample
-
-
 namespace _corbasim_StringTest
 {
-
-
-
-
-
-
-
-
-
-
-
-
 namespace InterfaceString
 {
 
@@ -6077,7 +5550,6 @@ __operation1::__operation1(const __operation1& o) :
 
 
 
-
 __operation2::__operation2()
 {
 }
@@ -6094,7 +5566,6 @@ __operation2::__operation2(const __operation2& o) :
 {
 
 }
-
 
 
 
@@ -6117,7 +5588,6 @@ __operation3::__operation3(const __operation3& o) :
 
 
 
-
 __operation4::__operation4()
 {
 }
@@ -6134,7 +5604,6 @@ __operation4::__operation4(const __operation4& o) :
 {
 
 }
-
 
 
 
@@ -6157,7 +5626,6 @@ __operation5::__operation5(const __operation5& o) :
 
 
 
-
 __operation6::__operation6()
 {
 }
@@ -6174,7 +5642,6 @@ __operation6::__operation6(const __operation6& o) :
 {
 
 }
-
 
 
 
@@ -6197,22 +5664,9 @@ __operation7::__operation7(const __operation7& o) :
 
 
 } // InterfaceString
-
 } // _corbasim_StringTest
-
-
 namespace _corbasim_MyModule
 {
-
-
-
-
-
-
-
-
-
-
 namespace MyInterface
 {
 
@@ -6235,7 +5689,6 @@ __operation::__operation(const __operation& o) :
 
 
 
-
 __operation1::__operation1()
 {
 }
@@ -6252,7 +5705,6 @@ __operation1::__operation1(const __operation1& o) :
 {
 
 }
-
 
 
 
@@ -6275,7 +5727,6 @@ __operation2::__operation2(const __operation2& o) :
 
 
 
-
 __operation3::__operation3()
 {
 }
@@ -6295,18 +5746,9 @@ __operation3::__operation3(const __operation3& o) :
 
 
 } // MyInterface
-
 } // _corbasim_MyModule
-
-
 namespace _corbasim_Test
 {
-
-
-
-
-
-
 namespace Prueba
 {
 
@@ -6329,7 +5771,6 @@ __operacion1::__operacion1(const __operacion1& o) :
 
 
 
-
 __operacion2::__operacion2()
 {
 }
@@ -6349,7 +5790,6 @@ __operacion2::__operacion2(const __operacion2& o)
 
 
 
-
 __operacion3::__operacion3()
 {
 }
@@ -6363,7 +5803,5 @@ __operacion3::__operacion3(const __operacion3& o)
 
 
 } // Prueba
-
 } // _corbasim_Test
-
 

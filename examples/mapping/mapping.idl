@@ -247,8 +247,8 @@ module SimpleExample
     struct St
     {
 
-        sequence< long > l;
-        sequence< string > ss;
+        //sequence< long > l;
+        //sequence< string > ss;
         long b;
         MyUnion uniii;
     };
@@ -355,7 +355,8 @@ module MyModule
 
     struct MyStruct
     {
-        long a[11];
+        //long a[11];
+        long b;
     };
 
     interface MyInterface

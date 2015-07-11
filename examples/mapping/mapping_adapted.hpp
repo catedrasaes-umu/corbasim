@@ -7,7 +7,7 @@
 
 
 
-
+        
 namespace corbasim
 {
 namespace adapted
@@ -37,14 +37,6 @@ struct is_objrefvar< HelloApp::Hello_var > : public cs_mpl::true_
 } // adapted
 } // corbasim
 
-
-
-
-
-
-
-
-
 namespace corbasim
 {
 namespace adapted
@@ -58,406 +50,6 @@ struct is_objrefvar< Test::Huge_var > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // StructDef: AAAAAAAAA::ESS
 BOOST_FUSION_ADAPT_STRUCT(
@@ -496,8 +88,7 @@ namespace adapted
 } // adapted
 } // corbasim
 
-
-
+        
 namespace corbasim
 {
 namespace adapted
@@ -514,7 +105,6 @@ struct is_corbaseq< AAAAAAAAA::EEESeq > : public cs_mpl::true_
 
 
 
-
 namespace corbasim
 {
 namespace adapted
@@ -528,12 +118,6 @@ struct is_objrefvar< AAAAAAAAA::IIIIIIIIII_var > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
-
-
-
-
 
 // UnionDef: SimpleExample::MyUnion
 BOOST_FUSION_ADAPT_ADT(
@@ -591,6 +175,7 @@ struct is_union< SimpleExample::MyUnion > : public cs_mpl::true_
     typedef ::CORBA::Long discriminator_t;
 
     static const size_t size = 2;
+    static const size_t default_member = 0;
 
     static inline discriminator_t* discriminators()
     {
@@ -614,45 +199,13 @@ struct is_union< SimpleExample::MyUnion > : public cs_mpl::true_
 } // adapted
 } // corbasim
 
-
-
 // StructDef: SimpleExample::St
 BOOST_FUSION_ADAPT_STRUCT(
     SimpleExample::St,
-    ( SimpleExample::St::_l_seq, l)
-    ( SimpleExample::St::_ss_seq, ss)
     ( ::CORBA::Long, b)
     ( SimpleExample::MyUnion, uniii)
      )
 
-
-namespace corbasim
-{
-namespace adapted
-{
-
-template < >
-struct is_corbaseq< SimpleExample::St::_l_seq > : public cs_mpl::true_
-{
-    typedef ::CORBA::Long slice_type;
-};
-
-} // adapted
-} // corbasim
-
-namespace corbasim
-{
-namespace adapted
-{
-
-template < >
-struct is_corbaseq< SimpleExample::St::_ss_seq > : public cs_mpl::true_
-{
-    typedef ::CORBA::String_var slice_type;
-};
-
-} // adapted
-} // corbasim
 
 
 namespace corbasim
@@ -665,52 +218,8 @@ namespace adapted
             ::corbasim::core::reflective_base const * parent)
         {
             SimpleExample::St s_;
-            SimpleExample::St::_l_seq t_;
-            return ::corbasim::core::create_reflective(t_, s_.l, parent, 0);
-        }
-
-        template< typename T >
-        static inline void set(SimpleExample::St& s_, const T& t_)
-        {
-            s_.l = t_;
-        }
-
-        template< typename T >
-        static inline void get(const SimpleExample::St& s_, T& t_)
-        {
-            t_ = s_.l;
-        }
-    };
-    template< > struct member_helper < SimpleExample::St, 1 >
-    {
-        static inline ::corbasim::core::reflective_base * create_reflective(
-            ::corbasim::core::reflective_base const * parent)
-        {
-            SimpleExample::St s_;
-            SimpleExample::St::_ss_seq t_;
-            return ::corbasim::core::create_reflective(t_, s_.ss, parent, 1);
-        }
-
-        template< typename T >
-        static inline void set(SimpleExample::St& s_, const T& t_)
-        {
-            s_.ss = t_;
-        }
-
-        template< typename T >
-        static inline void get(const SimpleExample::St& s_, T& t_)
-        {
-            t_ = s_.ss;
-        }
-    };
-    template< > struct member_helper < SimpleExample::St, 2 >
-    {
-        static inline ::corbasim::core::reflective_base * create_reflective(
-            ::corbasim::core::reflective_base const * parent)
-        {
-            SimpleExample::St s_;
             ::CORBA::Long t_;
-            return ::corbasim::core::create_reflective(t_, s_.b, parent, 2);
+            return ::corbasim::core::create_reflective(t_, s_.b, parent, 0);
         }
 
         template< typename T >
@@ -725,14 +234,14 @@ namespace adapted
             t_ = s_.b;
         }
     };
-    template< > struct member_helper < SimpleExample::St, 3 >
+    template< > struct member_helper < SimpleExample::St, 1 >
     {
         static inline ::corbasim::core::reflective_base * create_reflective(
             ::corbasim::core::reflective_base const * parent)
         {
             SimpleExample::St s_;
             SimpleExample::MyUnion t_;
-            return ::corbasim::core::create_reflective(t_, s_.uniii, parent, 3);
+            return ::corbasim::core::create_reflective(t_, s_.uniii, parent, 1);
         }
 
         template< typename T >
@@ -750,7 +259,6 @@ namespace adapted
 } // adapted
 } // corbasim
 
-
 namespace corbasim
 {
 namespace adapted
@@ -764,12 +272,6 @@ struct is_objrefvar< SimpleExample::Test_var > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
-
-
-
-
 
 
 // StructDef: SimpleExample::Hijo
@@ -855,7 +357,6 @@ namespace adapted
 } // adapted
 } // corbasim
 
-
 // StructDef: SimpleExample::Padre
 BOOST_FUSION_ADAPT_STRUCT(
     SimpleExample::Padre,
@@ -892,8 +393,6 @@ namespace adapted
     };
 } // adapted
 } // corbasim
-
-
 
 
 // StructDef: SimpleExample::Abuelo
@@ -957,10 +456,7 @@ namespace adapted
 } // corbasim
 
 
-
-
-
-
+        
 namespace corbasim
 {
 namespace adapted
@@ -976,7 +472,7 @@ struct is_corbaseq< StringTest::NameSeq > : public cs_mpl::true_
 } // corbasim
 
 
-
+        
 namespace corbasim
 {
 namespace adapted
@@ -993,8 +489,7 @@ struct is_corbaseq< StringTest::StringSeq > : public cs_mpl::true_
 
 
 
-
-
+        
 namespace corbasim
 {
 namespace adapted
@@ -1093,7 +588,6 @@ namespace adapted
 } // adapted
 } // corbasim
 
-
 namespace corbasim
 {
 namespace adapted
@@ -1107,22 +601,6 @@ struct is_objrefvar< StringTest::InterfaceString_var > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Enum: MyModule::MyEnum
 namespace corbasim
@@ -1144,8 +622,6 @@ struct enumeration< MyModule::MyEnum >
 
 } // adapted
 } // corbasim
-
-
 
 // UnionDef: MyModule::MyUnion
 BOOST_FUSION_ADAPT_ADT(
@@ -1203,6 +679,7 @@ struct is_union< MyModule::MyUnion > : public cs_mpl::true_
     typedef MyModule::MyEnum discriminator_t;
 
     static const size_t size = 3;
+    static const size_t default_member = 0;
 
     static inline discriminator_t* discriminators()
     {
@@ -1227,8 +704,6 @@ struct is_union< MyModule::MyUnion > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
 
 // UnionDef: MyModule::MyUnion2
 BOOST_FUSION_ADAPT_ADT(
@@ -1286,6 +761,7 @@ struct is_union< MyModule::MyUnion2 > : public cs_mpl::true_
     typedef ::CORBA::Long discriminator_t;
 
     static const size_t size = 2;
+    static const size_t default_member = 0;
 
     static inline discriminator_t* discriminators()
     {
@@ -1308,8 +784,6 @@ struct is_union< MyModule::MyUnion2 > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
 
 // UnionDef: MyModule::MyUnion3
 BOOST_FUSION_ADAPT_ADT(
@@ -1367,6 +841,7 @@ struct is_union< MyModule::MyUnion3 > : public cs_mpl::true_
     typedef ::CORBA::Boolean discriminator_t;
 
     static const size_t size = 2;
+    static const size_t default_member = 0;
 
     static inline discriminator_t* discriminators()
     {
@@ -1390,12 +865,10 @@ struct is_union< MyModule::MyUnion3 > : public cs_mpl::true_
 } // adapted
 } // corbasim
 
-
-
 // StructDef: MyModule::MyStruct
 BOOST_FUSION_ADAPT_STRUCT(
     MyModule::MyStruct,
-    ( MyModule::MyStruct::_a, a)
+    ( ::CORBA::Long, b)
      )
 
 
@@ -1410,25 +883,24 @@ namespace adapted
             ::corbasim::core::reflective_base const * parent)
         {
             MyModule::MyStruct s_;
-            MyModule::MyStruct::_a t_;
-            return ::corbasim::core::create_reflective(t_, s_.a, parent, 0);
+            ::CORBA::Long t_;
+            return ::corbasim::core::create_reflective(t_, s_.b, parent, 0);
         }
 
         template< typename T >
         static inline void set(MyModule::MyStruct& s_, const T& t_)
         {
-            s_.a = t_;
+            s_.b = t_;
         }
 
         template< typename T >
         static inline void get(const MyModule::MyStruct& s_, T& t_)
         {
-            t_ = s_.a;
+            t_ = s_.b;
         }
     };
 } // adapted
 } // corbasim
-
 
 namespace corbasim
 {
@@ -1443,18 +915,6 @@ struct is_objrefvar< MyModule::MyInterface_var > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
-
-
-
-
-
-
-
-
-
-
 
 // StructDef: Test::St
 BOOST_FUSION_ADAPT_STRUCT(
@@ -1538,7 +998,6 @@ namespace adapted
     };
 } // adapted
 } // corbasim
-
 
 // StructDef: Test::St2
 BOOST_FUSION_ADAPT_STRUCT(
@@ -1646,7 +1105,6 @@ namespace adapted
 } // adapted
 } // corbasim
 
-
 namespace corbasim
 {
 namespace adapted
@@ -1660,14 +1118,6 @@ struct is_objrefvar< Test::Prueba_var > : public cs_mpl::true_
 
 } // adapted
 } // corbasim
-
-
-
-
-
-
-
-
 
 namespace _corbasim_HelloApp
 {
@@ -1693,6 +1143,7 @@ struct __sayHello
 typedef __sayHello sayHello;
 
 
+
 struct __sayHelloTo
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< const HelloApp::Names& > > _arg_list;
@@ -1714,6 +1165,7 @@ struct __sayHelloTo
 typedef __sayHelloTo sayHelloTo;
 
 
+
 struct __shutdown
 {
     typedef boost::mpl::vector<  > _arg_list;
@@ -1730,10 +1182,11 @@ struct __shutdown
 
 typedef __shutdown shutdown;
 
+
 } // Hello
 
-} // _corbasim_HelloApp
 
+} // _corbasim_HelloApp
 
 namespace _corbasim_Test
 {
@@ -1759,6 +1212,7 @@ struct __operation1
 typedef __operation1 operation1;
 
 
+
 struct __operation2
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -1777,6 +1231,7 @@ struct __operation2
 };
 
 typedef __operation2 operation2;
+
 
 
 struct __operation3
@@ -1799,6 +1254,7 @@ struct __operation3
 typedef __operation3 operation3;
 
 
+
 struct __operation4
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -1817,6 +1273,7 @@ struct __operation4
 };
 
 typedef __operation4 operation4;
+
 
 
 struct __operation5
@@ -1839,6 +1296,7 @@ struct __operation5
 typedef __operation5 operation5;
 
 
+
 struct __operation6
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -1857,6 +1315,7 @@ struct __operation6
 };
 
 typedef __operation6 operation6;
+
 
 
 struct __operation7
@@ -1879,6 +1338,7 @@ struct __operation7
 typedef __operation7 operation7;
 
 
+
 struct __operation8
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -1897,6 +1357,7 @@ struct __operation8
 };
 
 typedef __operation8 operation8;
+
 
 
 struct __operation9
@@ -1919,6 +1380,7 @@ struct __operation9
 typedef __operation9 operation9;
 
 
+
 struct __operation10
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -1937,6 +1399,7 @@ struct __operation10
 };
 
 typedef __operation10 operation10;
+
 
 
 struct __operation11
@@ -1959,6 +1422,7 @@ struct __operation11
 typedef __operation11 operation11;
 
 
+
 struct __operation12
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -1977,6 +1441,7 @@ struct __operation12
 };
 
 typedef __operation12 operation12;
+
 
 
 struct __operation13
@@ -1999,6 +1464,7 @@ struct __operation13
 typedef __operation13 operation13;
 
 
+
 struct __operation14
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2017,6 +1483,7 @@ struct __operation14
 };
 
 typedef __operation14 operation14;
+
 
 
 struct __operation15
@@ -2039,6 +1506,7 @@ struct __operation15
 typedef __operation15 operation15;
 
 
+
 struct __operation16
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2057,6 +1525,7 @@ struct __operation16
 };
 
 typedef __operation16 operation16;
+
 
 
 struct __operation17
@@ -2079,6 +1548,7 @@ struct __operation17
 typedef __operation17 operation17;
 
 
+
 struct __operation18
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2097,6 +1567,7 @@ struct __operation18
 };
 
 typedef __operation18 operation18;
+
 
 
 struct __operation19
@@ -2119,6 +1590,7 @@ struct __operation19
 typedef __operation19 operation19;
 
 
+
 struct __operation20
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2137,6 +1609,7 @@ struct __operation20
 };
 
 typedef __operation20 operation20;
+
 
 
 struct __operation21
@@ -2159,6 +1632,7 @@ struct __operation21
 typedef __operation21 operation21;
 
 
+
 struct __operation22
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2177,6 +1651,7 @@ struct __operation22
 };
 
 typedef __operation22 operation22;
+
 
 
 struct __operation23
@@ -2199,6 +1674,7 @@ struct __operation23
 typedef __operation23 operation23;
 
 
+
 struct __operation24
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2217,6 +1693,7 @@ struct __operation24
 };
 
 typedef __operation24 operation24;
+
 
 
 struct __operation25
@@ -2239,6 +1716,7 @@ struct __operation25
 typedef __operation25 operation25;
 
 
+
 struct __operation26
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2257,6 +1735,7 @@ struct __operation26
 };
 
 typedef __operation26 operation26;
+
 
 
 struct __operation27
@@ -2279,6 +1758,7 @@ struct __operation27
 typedef __operation27 operation27;
 
 
+
 struct __operation28
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2297,6 +1777,7 @@ struct __operation28
 };
 
 typedef __operation28 operation28;
+
 
 
 struct __operation29
@@ -2319,6 +1800,7 @@ struct __operation29
 typedef __operation29 operation29;
 
 
+
 struct __operation30
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2337,6 +1819,7 @@ struct __operation30
 };
 
 typedef __operation30 operation30;
+
 
 
 struct __operation31
@@ -2359,6 +1842,7 @@ struct __operation31
 typedef __operation31 operation31;
 
 
+
 struct __operation32
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2377,6 +1861,7 @@ struct __operation32
 };
 
 typedef __operation32 operation32;
+
 
 
 struct __operation33
@@ -2399,6 +1884,7 @@ struct __operation33
 typedef __operation33 operation33;
 
 
+
 struct __operation34
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2417,6 +1903,7 @@ struct __operation34
 };
 
 typedef __operation34 operation34;
+
 
 
 struct __operation35
@@ -2439,6 +1926,7 @@ struct __operation35
 typedef __operation35 operation35;
 
 
+
 struct __operation36
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2457,6 +1945,7 @@ struct __operation36
 };
 
 typedef __operation36 operation36;
+
 
 
 struct __operation37
@@ -2479,6 +1968,7 @@ struct __operation37
 typedef __operation37 operation37;
 
 
+
 struct __operation38
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2497,6 +1987,7 @@ struct __operation38
 };
 
 typedef __operation38 operation38;
+
 
 
 struct __operation39
@@ -2519,6 +2010,7 @@ struct __operation39
 typedef __operation39 operation39;
 
 
+
 struct __operation40
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2537,6 +2029,7 @@ struct __operation40
 };
 
 typedef __operation40 operation40;
+
 
 
 struct __operation41
@@ -2559,6 +2052,7 @@ struct __operation41
 typedef __operation41 operation41;
 
 
+
 struct __operation42
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2577,6 +2071,7 @@ struct __operation42
 };
 
 typedef __operation42 operation42;
+
 
 
 struct __operation43
@@ -2599,6 +2094,7 @@ struct __operation43
 typedef __operation43 operation43;
 
 
+
 struct __operation44
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2617,6 +2113,7 @@ struct __operation44
 };
 
 typedef __operation44 operation44;
+
 
 
 struct __operation45
@@ -2639,6 +2136,7 @@ struct __operation45
 typedef __operation45 operation45;
 
 
+
 struct __operation46
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2657,6 +2155,7 @@ struct __operation46
 };
 
 typedef __operation46 operation46;
+
 
 
 struct __operation47
@@ -2679,6 +2178,7 @@ struct __operation47
 typedef __operation47 operation47;
 
 
+
 struct __operation48
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2697,6 +2197,7 @@ struct __operation48
 };
 
 typedef __operation48 operation48;
+
 
 
 struct __operation49
@@ -2719,6 +2220,7 @@ struct __operation49
 typedef __operation49 operation49;
 
 
+
 struct __operation50
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2737,6 +2239,7 @@ struct __operation50
 };
 
 typedef __operation50 operation50;
+
 
 
 struct __operation51
@@ -2759,6 +2262,7 @@ struct __operation51
 typedef __operation51 operation51;
 
 
+
 struct __operation52
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2777,6 +2281,7 @@ struct __operation52
 };
 
 typedef __operation52 operation52;
+
 
 
 struct __operation53
@@ -2799,6 +2304,7 @@ struct __operation53
 typedef __operation53 operation53;
 
 
+
 struct __operation54
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2817,6 +2323,7 @@ struct __operation54
 };
 
 typedef __operation54 operation54;
+
 
 
 struct __operation55
@@ -2839,6 +2346,7 @@ struct __operation55
 typedef __operation55 operation55;
 
 
+
 struct __operation56
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2857,6 +2365,7 @@ struct __operation56
 };
 
 typedef __operation56 operation56;
+
 
 
 struct __operation57
@@ -2879,6 +2388,7 @@ struct __operation57
 typedef __operation57 operation57;
 
 
+
 struct __operation58
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2897,6 +2407,7 @@ struct __operation58
 };
 
 typedef __operation58 operation58;
+
 
 
 struct __operation59
@@ -2919,6 +2430,7 @@ struct __operation59
 typedef __operation59 operation59;
 
 
+
 struct __operation60
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2937,6 +2449,7 @@ struct __operation60
 };
 
 typedef __operation60 operation60;
+
 
 
 struct __operation61
@@ -2959,6 +2472,7 @@ struct __operation61
 typedef __operation61 operation61;
 
 
+
 struct __operation62
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -2977,6 +2491,7 @@ struct __operation62
 };
 
 typedef __operation62 operation62;
+
 
 
 struct __operation63
@@ -2999,6 +2514,7 @@ struct __operation63
 typedef __operation63 operation63;
 
 
+
 struct __operation64
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3017,6 +2533,7 @@ struct __operation64
 };
 
 typedef __operation64 operation64;
+
 
 
 struct __operation65
@@ -3039,6 +2556,7 @@ struct __operation65
 typedef __operation65 operation65;
 
 
+
 struct __operation66
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3057,6 +2575,7 @@ struct __operation66
 };
 
 typedef __operation66 operation66;
+
 
 
 struct __operation67
@@ -3079,6 +2598,7 @@ struct __operation67
 typedef __operation67 operation67;
 
 
+
 struct __operation68
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3097,6 +2617,7 @@ struct __operation68
 };
 
 typedef __operation68 operation68;
+
 
 
 struct __operation69
@@ -3119,6 +2640,7 @@ struct __operation69
 typedef __operation69 operation69;
 
 
+
 struct __operation70
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3137,6 +2659,7 @@ struct __operation70
 };
 
 typedef __operation70 operation70;
+
 
 
 struct __operation71
@@ -3159,6 +2682,7 @@ struct __operation71
 typedef __operation71 operation71;
 
 
+
 struct __operation72
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3177,6 +2701,7 @@ struct __operation72
 };
 
 typedef __operation72 operation72;
+
 
 
 struct __operation73
@@ -3199,6 +2724,7 @@ struct __operation73
 typedef __operation73 operation73;
 
 
+
 struct __operation74
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3217,6 +2743,7 @@ struct __operation74
 };
 
 typedef __operation74 operation74;
+
 
 
 struct __operation75
@@ -3239,6 +2766,7 @@ struct __operation75
 typedef __operation75 operation75;
 
 
+
 struct __operation76
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3257,6 +2785,7 @@ struct __operation76
 };
 
 typedef __operation76 operation76;
+
 
 
 struct __operation77
@@ -3279,6 +2808,7 @@ struct __operation77
 typedef __operation77 operation77;
 
 
+
 struct __operation78
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3297,6 +2827,7 @@ struct __operation78
 };
 
 typedef __operation78 operation78;
+
 
 
 struct __operation79
@@ -3319,6 +2850,7 @@ struct __operation79
 typedef __operation79 operation79;
 
 
+
 struct __operation80
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3337,6 +2869,7 @@ struct __operation80
 };
 
 typedef __operation80 operation80;
+
 
 
 struct __operation81
@@ -3359,6 +2892,7 @@ struct __operation81
 typedef __operation81 operation81;
 
 
+
 struct __operation82
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3377,6 +2911,7 @@ struct __operation82
 };
 
 typedef __operation82 operation82;
+
 
 
 struct __operation83
@@ -3399,6 +2934,7 @@ struct __operation83
 typedef __operation83 operation83;
 
 
+
 struct __operation84
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3417,6 +2953,7 @@ struct __operation84
 };
 
 typedef __operation84 operation84;
+
 
 
 struct __operation85
@@ -3439,6 +2976,7 @@ struct __operation85
 typedef __operation85 operation85;
 
 
+
 struct __operation86
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3457,6 +2995,7 @@ struct __operation86
 };
 
 typedef __operation86 operation86;
+
 
 
 struct __operation87
@@ -3479,6 +3018,7 @@ struct __operation87
 typedef __operation87 operation87;
 
 
+
 struct __operation88
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3497,6 +3037,7 @@ struct __operation88
 };
 
 typedef __operation88 operation88;
+
 
 
 struct __operation89
@@ -3519,6 +3060,7 @@ struct __operation89
 typedef __operation89 operation89;
 
 
+
 struct __operation90
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3537,6 +3079,7 @@ struct __operation90
 };
 
 typedef __operation90 operation90;
+
 
 
 struct __operation91
@@ -3559,6 +3102,7 @@ struct __operation91
 typedef __operation91 operation91;
 
 
+
 struct __operation92
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3577,6 +3121,7 @@ struct __operation92
 };
 
 typedef __operation92 operation92;
+
 
 
 struct __operation93
@@ -3599,6 +3144,7 @@ struct __operation93
 typedef __operation93 operation93;
 
 
+
 struct __operation94
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3617,6 +3163,7 @@ struct __operation94
 };
 
 typedef __operation94 operation94;
+
 
 
 struct __operation95
@@ -3639,6 +3186,7 @@ struct __operation95
 typedef __operation95 operation95;
 
 
+
 struct __operation96
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3657,6 +3205,7 @@ struct __operation96
 };
 
 typedef __operation96 operation96;
+
 
 
 struct __operation97
@@ -3679,6 +3228,7 @@ struct __operation97
 typedef __operation97 operation97;
 
 
+
 struct __operation98
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3697,6 +3247,7 @@ struct __operation98
 };
 
 typedef __operation98 operation98;
+
 
 
 struct __operation99
@@ -3719,6 +3270,7 @@ struct __operation99
 typedef __operation99 operation99;
 
 
+
 struct __operation100
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3737,6 +3289,7 @@ struct __operation100
 };
 
 typedef __operation100 operation100;
+
 
 
 struct __operation101
@@ -3759,6 +3312,7 @@ struct __operation101
 typedef __operation101 operation101;
 
 
+
 struct __operation102
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3777,6 +3331,7 @@ struct __operation102
 };
 
 typedef __operation102 operation102;
+
 
 
 struct __operation103
@@ -3799,6 +3354,7 @@ struct __operation103
 typedef __operation103 operation103;
 
 
+
 struct __operation104
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3817,6 +3373,7 @@ struct __operation104
 };
 
 typedef __operation104 operation104;
+
 
 
 struct __operation105
@@ -3839,6 +3396,7 @@ struct __operation105
 typedef __operation105 operation105;
 
 
+
 struct __operation106
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3857,6 +3415,7 @@ struct __operation106
 };
 
 typedef __operation106 operation106;
+
 
 
 struct __operation107
@@ -3879,6 +3438,7 @@ struct __operation107
 typedef __operation107 operation107;
 
 
+
 struct __operation108
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3897,6 +3457,7 @@ struct __operation108
 };
 
 typedef __operation108 operation108;
+
 
 
 struct __operation109
@@ -3919,6 +3480,7 @@ struct __operation109
 typedef __operation109 operation109;
 
 
+
 struct __operation110
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3937,6 +3499,7 @@ struct __operation110
 };
 
 typedef __operation110 operation110;
+
 
 
 struct __operation111
@@ -3959,6 +3522,7 @@ struct __operation111
 typedef __operation111 operation111;
 
 
+
 struct __operation112
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -3977,6 +3541,7 @@ struct __operation112
 };
 
 typedef __operation112 operation112;
+
 
 
 struct __operation113
@@ -3999,6 +3564,7 @@ struct __operation113
 typedef __operation113 operation113;
 
 
+
 struct __operation114
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4017,6 +3583,7 @@ struct __operation114
 };
 
 typedef __operation114 operation114;
+
 
 
 struct __operation115
@@ -4039,6 +3606,7 @@ struct __operation115
 typedef __operation115 operation115;
 
 
+
 struct __operation116
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4057,6 +3625,7 @@ struct __operation116
 };
 
 typedef __operation116 operation116;
+
 
 
 struct __operation117
@@ -4079,6 +3648,7 @@ struct __operation117
 typedef __operation117 operation117;
 
 
+
 struct __operation118
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4097,6 +3667,7 @@ struct __operation118
 };
 
 typedef __operation118 operation118;
+
 
 
 struct __operation119
@@ -4119,6 +3690,7 @@ struct __operation119
 typedef __operation119 operation119;
 
 
+
 struct __operation120
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4137,6 +3709,7 @@ struct __operation120
 };
 
 typedef __operation120 operation120;
+
 
 
 struct __operation121
@@ -4159,6 +3732,7 @@ struct __operation121
 typedef __operation121 operation121;
 
 
+
 struct __operation122
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4177,6 +3751,7 @@ struct __operation122
 };
 
 typedef __operation122 operation122;
+
 
 
 struct __operation123
@@ -4199,6 +3774,7 @@ struct __operation123
 typedef __operation123 operation123;
 
 
+
 struct __operation124
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4217,6 +3793,7 @@ struct __operation124
 };
 
 typedef __operation124 operation124;
+
 
 
 struct __operation125
@@ -4239,6 +3816,7 @@ struct __operation125
 typedef __operation125 operation125;
 
 
+
 struct __operation126
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4257,6 +3835,7 @@ struct __operation126
 };
 
 typedef __operation126 operation126;
+
 
 
 struct __operation127
@@ -4279,6 +3858,7 @@ struct __operation127
 typedef __operation127 operation127;
 
 
+
 struct __operation128
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4297,6 +3877,7 @@ struct __operation128
 };
 
 typedef __operation128 operation128;
+
 
 
 struct __operation129
@@ -4319,6 +3900,7 @@ struct __operation129
 typedef __operation129 operation129;
 
 
+
 struct __operation130
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4337,6 +3919,7 @@ struct __operation130
 };
 
 typedef __operation130 operation130;
+
 
 
 struct __operation131
@@ -4359,6 +3942,7 @@ struct __operation131
 typedef __operation131 operation131;
 
 
+
 struct __operation132
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4377,6 +3961,7 @@ struct __operation132
 };
 
 typedef __operation132 operation132;
+
 
 
 struct __operation133
@@ -4399,6 +3984,7 @@ struct __operation133
 typedef __operation133 operation133;
 
 
+
 struct __operation134
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4417,6 +4003,7 @@ struct __operation134
 };
 
 typedef __operation134 operation134;
+
 
 
 struct __operation135
@@ -4439,6 +4026,7 @@ struct __operation135
 typedef __operation135 operation135;
 
 
+
 struct __operation136
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4457,6 +4045,7 @@ struct __operation136
 };
 
 typedef __operation136 operation136;
+
 
 
 struct __operation137
@@ -4479,6 +4068,7 @@ struct __operation137
 typedef __operation137 operation137;
 
 
+
 struct __operation138
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4497,6 +4087,7 @@ struct __operation138
 };
 
 typedef __operation138 operation138;
+
 
 
 struct __operation139
@@ -4519,6 +4110,7 @@ struct __operation139
 typedef __operation139 operation139;
 
 
+
 struct __operation140
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4537,6 +4129,7 @@ struct __operation140
 };
 
 typedef __operation140 operation140;
+
 
 
 struct __operation141
@@ -4559,6 +4152,7 @@ struct __operation141
 typedef __operation141 operation141;
 
 
+
 struct __operation142
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4577,6 +4171,7 @@ struct __operation142
 };
 
 typedef __operation142 operation142;
+
 
 
 struct __operation143
@@ -4599,6 +4194,7 @@ struct __operation143
 typedef __operation143 operation143;
 
 
+
 struct __operation144
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4617,6 +4213,7 @@ struct __operation144
 };
 
 typedef __operation144 operation144;
+
 
 
 struct __operation145
@@ -4639,6 +4236,7 @@ struct __operation145
 typedef __operation145 operation145;
 
 
+
 struct __operation146
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4657,6 +4255,7 @@ struct __operation146
 };
 
 typedef __operation146 operation146;
+
 
 
 struct __operation147
@@ -4679,6 +4278,7 @@ struct __operation147
 typedef __operation147 operation147;
 
 
+
 struct __operation148
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4697,6 +4297,7 @@ struct __operation148
 };
 
 typedef __operation148 operation148;
+
 
 
 struct __operation149
@@ -4719,6 +4320,7 @@ struct __operation149
 typedef __operation149 operation149;
 
 
+
 struct __operation150
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4737,6 +4339,7 @@ struct __operation150
 };
 
 typedef __operation150 operation150;
+
 
 
 struct __operation151
@@ -4759,6 +4362,7 @@ struct __operation151
 typedef __operation151 operation151;
 
 
+
 struct __operation152
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4777,6 +4381,7 @@ struct __operation152
 };
 
 typedef __operation152 operation152;
+
 
 
 struct __operation153
@@ -4799,6 +4404,7 @@ struct __operation153
 typedef __operation153 operation153;
 
 
+
 struct __operation154
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4817,6 +4423,7 @@ struct __operation154
 };
 
 typedef __operation154 operation154;
+
 
 
 struct __operation155
@@ -4839,6 +4446,7 @@ struct __operation155
 typedef __operation155 operation155;
 
 
+
 struct __operation156
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4857,6 +4465,7 @@ struct __operation156
 };
 
 typedef __operation156 operation156;
+
 
 
 struct __operation157
@@ -4879,6 +4488,7 @@ struct __operation157
 typedef __operation157 operation157;
 
 
+
 struct __operation158
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4897,6 +4507,7 @@ struct __operation158
 };
 
 typedef __operation158 operation158;
+
 
 
 struct __operation159
@@ -4919,6 +4530,7 @@ struct __operation159
 typedef __operation159 operation159;
 
 
+
 struct __operation160
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4937,6 +4549,7 @@ struct __operation160
 };
 
 typedef __operation160 operation160;
+
 
 
 struct __operation161
@@ -4959,6 +4572,7 @@ struct __operation161
 typedef __operation161 operation161;
 
 
+
 struct __operation162
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -4977,6 +4591,7 @@ struct __operation162
 };
 
 typedef __operation162 operation162;
+
 
 
 struct __operation163
@@ -4999,6 +4614,7 @@ struct __operation163
 typedef __operation163 operation163;
 
 
+
 struct __operation164
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5017,6 +4633,7 @@ struct __operation164
 };
 
 typedef __operation164 operation164;
+
 
 
 struct __operation165
@@ -5039,6 +4656,7 @@ struct __operation165
 typedef __operation165 operation165;
 
 
+
 struct __operation166
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5057,6 +4675,7 @@ struct __operation166
 };
 
 typedef __operation166 operation166;
+
 
 
 struct __operation167
@@ -5079,6 +4698,7 @@ struct __operation167
 typedef __operation167 operation167;
 
 
+
 struct __operation168
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5097,6 +4717,7 @@ struct __operation168
 };
 
 typedef __operation168 operation168;
+
 
 
 struct __operation169
@@ -5119,6 +4740,7 @@ struct __operation169
 typedef __operation169 operation169;
 
 
+
 struct __operation170
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5137,6 +4759,7 @@ struct __operation170
 };
 
 typedef __operation170 operation170;
+
 
 
 struct __operation171
@@ -5159,6 +4782,7 @@ struct __operation171
 typedef __operation171 operation171;
 
 
+
 struct __operation172
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5177,6 +4801,7 @@ struct __operation172
 };
 
 typedef __operation172 operation172;
+
 
 
 struct __operation173
@@ -5199,6 +4824,7 @@ struct __operation173
 typedef __operation173 operation173;
 
 
+
 struct __operation174
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5217,6 +4843,7 @@ struct __operation174
 };
 
 typedef __operation174 operation174;
+
 
 
 struct __operation175
@@ -5239,6 +4866,7 @@ struct __operation175
 typedef __operation175 operation175;
 
 
+
 struct __operation176
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5257,6 +4885,7 @@ struct __operation176
 };
 
 typedef __operation176 operation176;
+
 
 
 struct __operation177
@@ -5279,6 +4908,7 @@ struct __operation177
 typedef __operation177 operation177;
 
 
+
 struct __operation178
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5297,6 +4927,7 @@ struct __operation178
 };
 
 typedef __operation178 operation178;
+
 
 
 struct __operation179
@@ -5319,6 +4950,7 @@ struct __operation179
 typedef __operation179 operation179;
 
 
+
 struct __operation180
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5337,6 +4969,7 @@ struct __operation180
 };
 
 typedef __operation180 operation180;
+
 
 
 struct __operation181
@@ -5359,6 +4992,7 @@ struct __operation181
 typedef __operation181 operation181;
 
 
+
 struct __operation182
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5377,6 +5011,7 @@ struct __operation182
 };
 
 typedef __operation182 operation182;
+
 
 
 struct __operation183
@@ -5399,6 +5034,7 @@ struct __operation183
 typedef __operation183 operation183;
 
 
+
 struct __operation184
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5417,6 +5053,7 @@ struct __operation184
 };
 
 typedef __operation184 operation184;
+
 
 
 struct __operation185
@@ -5439,6 +5076,7 @@ struct __operation185
 typedef __operation185 operation185;
 
 
+
 struct __operation186
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5457,6 +5095,7 @@ struct __operation186
 };
 
 typedef __operation186 operation186;
+
 
 
 struct __operation187
@@ -5479,6 +5118,7 @@ struct __operation187
 typedef __operation187 operation187;
 
 
+
 struct __operation188
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5497,6 +5137,7 @@ struct __operation188
 };
 
 typedef __operation188 operation188;
+
 
 
 struct __operation189
@@ -5519,6 +5160,7 @@ struct __operation189
 typedef __operation189 operation189;
 
 
+
 struct __operation190
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5537,6 +5179,7 @@ struct __operation190
 };
 
 typedef __operation190 operation190;
+
 
 
 struct __operation191
@@ -5559,6 +5202,7 @@ struct __operation191
 typedef __operation191 operation191;
 
 
+
 struct __operation192
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5577,6 +5221,7 @@ struct __operation192
 };
 
 typedef __operation192 operation192;
+
 
 
 struct __operation193
@@ -5599,6 +5244,7 @@ struct __operation193
 typedef __operation193 operation193;
 
 
+
 struct __operation194
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5617,6 +5263,7 @@ struct __operation194
 };
 
 typedef __operation194 operation194;
+
 
 
 struct __operation195
@@ -5639,6 +5286,7 @@ struct __operation195
 typedef __operation195 operation195;
 
 
+
 struct __operation196
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5657,6 +5305,7 @@ struct __operation196
 };
 
 typedef __operation196 operation196;
+
 
 
 struct __operation197
@@ -5679,6 +5328,7 @@ struct __operation197
 typedef __operation197 operation197;
 
 
+
 struct __operation198
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< ::CORBA::Long > > _arg_list;
@@ -5697,6 +5347,7 @@ struct __operation198
 };
 
 typedef __operation198 operation198;
+
 
 
 struct __operation199
@@ -5718,10 +5369,11 @@ struct __operation199
 
 typedef __operation199 operation199;
 
+
 } // Huge
 
-} // _corbasim_Test
 
+} // _corbasim_Test
 
 namespace _corbasim_AAAAAAAAA
 {
@@ -5730,6 +5382,7 @@ struct ESS
     typedef corbasim::adapted::member< ::AAAAAAAAA::ESS, 0 > a_corbasim_member;
 
 };
+
 
 
 
@@ -5756,6 +5409,7 @@ struct __op1
 typedef __op1 op1;
 
 
+
 struct __op2
 {
     typedef boost::mpl::vector<  > _arg_list;
@@ -5773,10 +5427,11 @@ struct __op2
 
 typedef __op2 op2;
 
+
 } // IIIIIIIIII
 
-} // _corbasim_AAAAAAAAA
 
+} // _corbasim_AAAAAAAAA
 
 namespace _corbasim_SimpleExample
 {
@@ -5784,12 +5439,11 @@ namespace _corbasim_SimpleExample
 
 struct St
 {
-    typedef corbasim::adapted::member< ::SimpleExample::St, 0 > l_corbasim_member;
-    typedef corbasim::adapted::member< ::SimpleExample::St, 1 > ss_corbasim_member;
-    typedef corbasim::adapted::member< ::SimpleExample::St, 2 > b_corbasim_member;
-    typedef corbasim::adapted::member< ::SimpleExample::St, 3 > uniii_corbasim_member;
+    typedef corbasim::adapted::member< ::SimpleExample::St, 0 > b_corbasim_member;
+    typedef corbasim::adapted::member< ::SimpleExample::St, 1 > uniii_corbasim_member;
 
 };
+
 
 
 namespace Test
@@ -5820,6 +5474,7 @@ typedef __operation1 operation1;
 
 
 
+
 struct __operation4
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< SimpleExample::Test_ptr > > _arg_list;
@@ -5839,7 +5494,9 @@ struct __operation4
 
 typedef __operation4 operation4;
 
+
 } // Test
+
 
 
 struct Hijo
@@ -5851,11 +5508,13 @@ struct Hijo
 };
 
 
+
 struct Padre
 {
     typedef corbasim::adapted::member< ::SimpleExample::Padre, 0 > h_corbasim_member;
 
 };
+
 
 
 
@@ -5867,8 +5526,8 @@ struct Abuelo
 
 };
 
-} // _corbasim_SimpleExample
 
+} // _corbasim_SimpleExample
 
 namespace _corbasim_StringTest
 {
@@ -5889,6 +5548,7 @@ struct StructWithStrings
     typedef corbasim::adapted::member< ::StringTest::StructWithStrings, 2 > id_corbasim_member;
 
 };
+
 
 
 namespace InterfaceString
@@ -5913,6 +5573,7 @@ struct __operation1
 typedef __operation1 operation1;
 
 
+
 struct __operation2
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< const char* > > _arg_list;
@@ -5931,6 +5592,7 @@ struct __operation2
 };
 
 typedef __operation2 operation2;
+
 
 
 struct __operation3
@@ -5953,6 +5615,7 @@ struct __operation3
 typedef __operation3 operation3;
 
 
+
 struct __operation4
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< const StringTest::StructWithStrings& > > _arg_list;
@@ -5971,6 +5634,7 @@ struct __operation4
 };
 
 typedef __operation4 operation4;
+
 
 
 struct __operation5
@@ -5993,6 +5657,7 @@ struct __operation5
 typedef __operation5 operation5;
 
 
+
 struct __operation6
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< const StringTest::NameIDSeq& > > _arg_list;
@@ -6011,6 +5676,7 @@ struct __operation6
 };
 
 typedef __operation6 operation6;
+
 
 
 struct __operation7
@@ -6032,10 +5698,11 @@ struct __operation7
 
 typedef __operation7 operation7;
 
+
 } // InterfaceString
 
-} // _corbasim_StringTest
 
+} // _corbasim_StringTest
 
 namespace _corbasim_MyModule
 {
@@ -6049,9 +5716,10 @@ namespace _corbasim_MyModule
 
 struct MyStruct
 {
-    typedef corbasim::adapted::member< ::MyModule::MyStruct, 0 > a_corbasim_member;
+    typedef corbasim::adapted::member< ::MyModule::MyStruct, 0 > b_corbasim_member;
 
 };
+
 
 
 namespace MyInterface
@@ -6076,6 +5744,7 @@ struct __operation
 typedef __operation operation;
 
 
+
 struct __operation1
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< const MyModule::MyUnion2& > > _arg_list;
@@ -6094,6 +5763,7 @@ struct __operation1
 };
 
 typedef __operation1 operation1;
+
 
 
 struct __operation2
@@ -6116,6 +5786,7 @@ struct __operation2
 typedef __operation2 operation2;
 
 
+
 struct __operation3
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< const MyModule::MyUnion3& > > _arg_list;
@@ -6135,10 +5806,11 @@ struct __operation3
 
 typedef __operation3 operation3;
 
+
 } // MyInterface
 
-} // _corbasim_MyModule
 
+} // _corbasim_MyModule
 
 namespace _corbasim_Test
 {
@@ -6153,6 +5825,7 @@ struct St
 };
 
 
+
 struct St2
 {
     typedef corbasim::adapted::member< ::Test::St2, 0 > a_corbasim_member;
@@ -6161,6 +5834,7 @@ struct St2
     typedef corbasim::adapted::member< ::Test::St2, 3 > unsupported_corbasim_member;
 
 };
+
 
 
 namespace Prueba
@@ -6187,6 +5861,7 @@ struct __operacion1
 typedef __operacion1 operacion1;
 
 
+
 struct __operacion2
 {
     typedef boost::mpl::vector< corbasim::Arg_IN< Test::Prueba_ptr > > _arg_list;
@@ -6207,6 +5882,7 @@ struct __operacion2
 typedef __operacion2 operacion2;
 
 
+
 struct __operacion3
 {
     typedef boost::mpl::vector<  > _arg_list;
@@ -6223,12 +5899,11 @@ struct __operacion3
 
 typedef __operacion3 operacion3;
 
+
 } // Prueba
 
+
 } // _corbasim_Test
-
-
-
 
 
 namespace corbasim
@@ -6240,7 +5915,7 @@ template < >
 struct interface < HelloApp::Hello >
 {
     typedef cs_mpl::list< _corbasim_HelloApp::Hello::sayHello, cs_mpl::list< _corbasim_HelloApp::Hello::sayHelloTo, cs_mpl::list< _corbasim_HelloApp::Hello::shutdown  >  >  >   _op_list;
-
+    
 };
 
 } // adapted
@@ -6272,7 +5947,6 @@ value._return = ref->sayHello();
 } // adapted
 } // corbasim
 
-
 // OperationDef: HelloApp::Hello::sayHelloTo
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_HelloApp::Hello::sayHelloTo,
@@ -6299,7 +5973,6 @@ value._return = ref->sayHelloTo(value.people);
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: HelloApp::Hello::shutdown
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6331,9 +6004,6 @@ struct call< _corbasim_HelloApp::Hello::shutdown >
 } // corbasim
 
 
-
-
-
 namespace corbasim
 {
 namespace adapted
@@ -6343,7 +6013,7 @@ template < >
 struct interface < Test::Huge >
 {
     typedef cs_mpl::list< _corbasim_Test::Huge::operation1, cs_mpl::list< _corbasim_Test::Huge::operation2, cs_mpl::list< _corbasim_Test::Huge::operation3, cs_mpl::list< _corbasim_Test::Huge::operation4, cs_mpl::list< _corbasim_Test::Huge::operation5, cs_mpl::list< _corbasim_Test::Huge::operation6, cs_mpl::list< _corbasim_Test::Huge::operation7, cs_mpl::list< _corbasim_Test::Huge::operation8, cs_mpl::list< _corbasim_Test::Huge::operation9, cs_mpl::list< _corbasim_Test::Huge::operation10, cs_mpl::list< _corbasim_Test::Huge::operation11, cs_mpl::list< _corbasim_Test::Huge::operation12, cs_mpl::list< _corbasim_Test::Huge::operation13, cs_mpl::list< _corbasim_Test::Huge::operation14, cs_mpl::list< _corbasim_Test::Huge::operation15, cs_mpl::list< _corbasim_Test::Huge::operation16, cs_mpl::list< _corbasim_Test::Huge::operation17, cs_mpl::list< _corbasim_Test::Huge::operation18, cs_mpl::list< _corbasim_Test::Huge::operation19, cs_mpl::list< _corbasim_Test::Huge::operation20, cs_mpl::list< _corbasim_Test::Huge::operation21, cs_mpl::list< _corbasim_Test::Huge::operation22, cs_mpl::list< _corbasim_Test::Huge::operation23, cs_mpl::list< _corbasim_Test::Huge::operation24, cs_mpl::list< _corbasim_Test::Huge::operation25, cs_mpl::list< _corbasim_Test::Huge::operation26, cs_mpl::list< _corbasim_Test::Huge::operation27, cs_mpl::list< _corbasim_Test::Huge::operation28, cs_mpl::list< _corbasim_Test::Huge::operation29, cs_mpl::list< _corbasim_Test::Huge::operation30, cs_mpl::list< _corbasim_Test::Huge::operation31, cs_mpl::list< _corbasim_Test::Huge::operation32, cs_mpl::list< _corbasim_Test::Huge::operation33, cs_mpl::list< _corbasim_Test::Huge::operation34, cs_mpl::list< _corbasim_Test::Huge::operation35, cs_mpl::list< _corbasim_Test::Huge::operation36, cs_mpl::list< _corbasim_Test::Huge::operation37, cs_mpl::list< _corbasim_Test::Huge::operation38, cs_mpl::list< _corbasim_Test::Huge::operation39, cs_mpl::list< _corbasim_Test::Huge::operation40, cs_mpl::list< _corbasim_Test::Huge::operation41, cs_mpl::list< _corbasim_Test::Huge::operation42, cs_mpl::list< _corbasim_Test::Huge::operation43, cs_mpl::list< _corbasim_Test::Huge::operation44, cs_mpl::list< _corbasim_Test::Huge::operation45, cs_mpl::list< _corbasim_Test::Huge::operation46, cs_mpl::list< _corbasim_Test::Huge::operation47, cs_mpl::list< _corbasim_Test::Huge::operation48, cs_mpl::list< _corbasim_Test::Huge::operation49, cs_mpl::list< _corbasim_Test::Huge::operation50, cs_mpl::list< _corbasim_Test::Huge::operation51, cs_mpl::list< _corbasim_Test::Huge::operation52, cs_mpl::list< _corbasim_Test::Huge::operation53, cs_mpl::list< _corbasim_Test::Huge::operation54, cs_mpl::list< _corbasim_Test::Huge::operation55, cs_mpl::list< _corbasim_Test::Huge::operation56, cs_mpl::list< _corbasim_Test::Huge::operation57, cs_mpl::list< _corbasim_Test::Huge::operation58, cs_mpl::list< _corbasim_Test::Huge::operation59, cs_mpl::list< _corbasim_Test::Huge::operation60, cs_mpl::list< _corbasim_Test::Huge::operation61, cs_mpl::list< _corbasim_Test::Huge::operation62, cs_mpl::list< _corbasim_Test::Huge::operation63, cs_mpl::list< _corbasim_Test::Huge::operation64, cs_mpl::list< _corbasim_Test::Huge::operation65, cs_mpl::list< _corbasim_Test::Huge::operation66, cs_mpl::list< _corbasim_Test::Huge::operation67, cs_mpl::list< _corbasim_Test::Huge::operation68, cs_mpl::list< _corbasim_Test::Huge::operation69, cs_mpl::list< _corbasim_Test::Huge::operation70, cs_mpl::list< _corbasim_Test::Huge::operation71, cs_mpl::list< _corbasim_Test::Huge::operation72, cs_mpl::list< _corbasim_Test::Huge::operation73, cs_mpl::list< _corbasim_Test::Huge::operation74, cs_mpl::list< _corbasim_Test::Huge::operation75, cs_mpl::list< _corbasim_Test::Huge::operation76, cs_mpl::list< _corbasim_Test::Huge::operation77, cs_mpl::list< _corbasim_Test::Huge::operation78, cs_mpl::list< _corbasim_Test::Huge::operation79, cs_mpl::list< _corbasim_Test::Huge::operation80, cs_mpl::list< _corbasim_Test::Huge::operation81, cs_mpl::list< _corbasim_Test::Huge::operation82, cs_mpl::list< _corbasim_Test::Huge::operation83, cs_mpl::list< _corbasim_Test::Huge::operation84, cs_mpl::list< _corbasim_Test::Huge::operation85, cs_mpl::list< _corbasim_Test::Huge::operation86, cs_mpl::list< _corbasim_Test::Huge::operation87, cs_mpl::list< _corbasim_Test::Huge::operation88, cs_mpl::list< _corbasim_Test::Huge::operation89, cs_mpl::list< _corbasim_Test::Huge::operation90, cs_mpl::list< _corbasim_Test::Huge::operation91, cs_mpl::list< _corbasim_Test::Huge::operation92, cs_mpl::list< _corbasim_Test::Huge::operation93, cs_mpl::list< _corbasim_Test::Huge::operation94, cs_mpl::list< _corbasim_Test::Huge::operation95, cs_mpl::list< _corbasim_Test::Huge::operation96, cs_mpl::list< _corbasim_Test::Huge::operation97, cs_mpl::list< _corbasim_Test::Huge::operation98, cs_mpl::list< _corbasim_Test::Huge::operation99, cs_mpl::list< _corbasim_Test::Huge::operation100, cs_mpl::list< _corbasim_Test::Huge::operation101, cs_mpl::list< _corbasim_Test::Huge::operation102, cs_mpl::list< _corbasim_Test::Huge::operation103, cs_mpl::list< _corbasim_Test::Huge::operation104, cs_mpl::list< _corbasim_Test::Huge::operation105, cs_mpl::list< _corbasim_Test::Huge::operation106, cs_mpl::list< _corbasim_Test::Huge::operation107, cs_mpl::list< _corbasim_Test::Huge::operation108, cs_mpl::list< _corbasim_Test::Huge::operation109, cs_mpl::list< _corbasim_Test::Huge::operation110, cs_mpl::list< _corbasim_Test::Huge::operation111, cs_mpl::list< _corbasim_Test::Huge::operation112, cs_mpl::list< _corbasim_Test::Huge::operation113, cs_mpl::list< _corbasim_Test::Huge::operation114, cs_mpl::list< _corbasim_Test::Huge::operation115, cs_mpl::list< _corbasim_Test::Huge::operation116, cs_mpl::list< _corbasim_Test::Huge::operation117, cs_mpl::list< _corbasim_Test::Huge::operation118, cs_mpl::list< _corbasim_Test::Huge::operation119, cs_mpl::list< _corbasim_Test::Huge::operation120, cs_mpl::list< _corbasim_Test::Huge::operation121, cs_mpl::list< _corbasim_Test::Huge::operation122, cs_mpl::list< _corbasim_Test::Huge::operation123, cs_mpl::list< _corbasim_Test::Huge::operation124, cs_mpl::list< _corbasim_Test::Huge::operation125, cs_mpl::list< _corbasim_Test::Huge::operation126, cs_mpl::list< _corbasim_Test::Huge::operation127, cs_mpl::list< _corbasim_Test::Huge::operation128, cs_mpl::list< _corbasim_Test::Huge::operation129, cs_mpl::list< _corbasim_Test::Huge::operation130, cs_mpl::list< _corbasim_Test::Huge::operation131, cs_mpl::list< _corbasim_Test::Huge::operation132, cs_mpl::list< _corbasim_Test::Huge::operation133, cs_mpl::list< _corbasim_Test::Huge::operation134, cs_mpl::list< _corbasim_Test::Huge::operation135, cs_mpl::list< _corbasim_Test::Huge::operation136, cs_mpl::list< _corbasim_Test::Huge::operation137, cs_mpl::list< _corbasim_Test::Huge::operation138, cs_mpl::list< _corbasim_Test::Huge::operation139, cs_mpl::list< _corbasim_Test::Huge::operation140, cs_mpl::list< _corbasim_Test::Huge::operation141, cs_mpl::list< _corbasim_Test::Huge::operation142, cs_mpl::list< _corbasim_Test::Huge::operation143, cs_mpl::list< _corbasim_Test::Huge::operation144, cs_mpl::list< _corbasim_Test::Huge::operation145, cs_mpl::list< _corbasim_Test::Huge::operation146, cs_mpl::list< _corbasim_Test::Huge::operation147, cs_mpl::list< _corbasim_Test::Huge::operation148, cs_mpl::list< _corbasim_Test::Huge::operation149, cs_mpl::list< _corbasim_Test::Huge::operation150, cs_mpl::list< _corbasim_Test::Huge::operation151, cs_mpl::list< _corbasim_Test::Huge::operation152, cs_mpl::list< _corbasim_Test::Huge::operation153, cs_mpl::list< _corbasim_Test::Huge::operation154, cs_mpl::list< _corbasim_Test::Huge::operation155, cs_mpl::list< _corbasim_Test::Huge::operation156, cs_mpl::list< _corbasim_Test::Huge::operation157, cs_mpl::list< _corbasim_Test::Huge::operation158, cs_mpl::list< _corbasim_Test::Huge::operation159, cs_mpl::list< _corbasim_Test::Huge::operation160, cs_mpl::list< _corbasim_Test::Huge::operation161, cs_mpl::list< _corbasim_Test::Huge::operation162, cs_mpl::list< _corbasim_Test::Huge::operation163, cs_mpl::list< _corbasim_Test::Huge::operation164, cs_mpl::list< _corbasim_Test::Huge::operation165, cs_mpl::list< _corbasim_Test::Huge::operation166, cs_mpl::list< _corbasim_Test::Huge::operation167, cs_mpl::list< _corbasim_Test::Huge::operation168, cs_mpl::list< _corbasim_Test::Huge::operation169, cs_mpl::list< _corbasim_Test::Huge::operation170, cs_mpl::list< _corbasim_Test::Huge::operation171, cs_mpl::list< _corbasim_Test::Huge::operation172, cs_mpl::list< _corbasim_Test::Huge::operation173, cs_mpl::list< _corbasim_Test::Huge::operation174, cs_mpl::list< _corbasim_Test::Huge::operation175, cs_mpl::list< _corbasim_Test::Huge::operation176, cs_mpl::list< _corbasim_Test::Huge::operation177, cs_mpl::list< _corbasim_Test::Huge::operation178, cs_mpl::list< _corbasim_Test::Huge::operation179, cs_mpl::list< _corbasim_Test::Huge::operation180, cs_mpl::list< _corbasim_Test::Huge::operation181, cs_mpl::list< _corbasim_Test::Huge::operation182, cs_mpl::list< _corbasim_Test::Huge::operation183, cs_mpl::list< _corbasim_Test::Huge::operation184, cs_mpl::list< _corbasim_Test::Huge::operation185, cs_mpl::list< _corbasim_Test::Huge::operation186, cs_mpl::list< _corbasim_Test::Huge::operation187, cs_mpl::list< _corbasim_Test::Huge::operation188, cs_mpl::list< _corbasim_Test::Huge::operation189, cs_mpl::list< _corbasim_Test::Huge::operation190, cs_mpl::list< _corbasim_Test::Huge::operation191, cs_mpl::list< _corbasim_Test::Huge::operation192, cs_mpl::list< _corbasim_Test::Huge::operation193, cs_mpl::list< _corbasim_Test::Huge::operation194, cs_mpl::list< _corbasim_Test::Huge::operation195, cs_mpl::list< _corbasim_Test::Huge::operation196, cs_mpl::list< _corbasim_Test::Huge::operation197, cs_mpl::list< _corbasim_Test::Huge::operation198, cs_mpl::list< _corbasim_Test::Huge::operation199  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >   _op_list;
-
+    
 };
 
 } // adapted
@@ -6379,7 +6049,6 @@ struct call< _corbasim_Test::Huge::operation1 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation2
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation2,
@@ -6409,7 +6078,6 @@ struct call< _corbasim_Test::Huge::operation2 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation3
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6441,7 +6109,6 @@ struct call< _corbasim_Test::Huge::operation3 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation4
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation4,
@@ -6471,7 +6138,6 @@ struct call< _corbasim_Test::Huge::operation4 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation5
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6503,7 +6169,6 @@ struct call< _corbasim_Test::Huge::operation5 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation6
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation6,
@@ -6533,7 +6198,6 @@ struct call< _corbasim_Test::Huge::operation6 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation7
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6565,7 +6229,6 @@ struct call< _corbasim_Test::Huge::operation7 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation8
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation8,
@@ -6595,7 +6258,6 @@ struct call< _corbasim_Test::Huge::operation8 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation9
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6627,7 +6289,6 @@ struct call< _corbasim_Test::Huge::operation9 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation10
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation10,
@@ -6657,7 +6318,6 @@ struct call< _corbasim_Test::Huge::operation10 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation11
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6689,7 +6349,6 @@ struct call< _corbasim_Test::Huge::operation11 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation12
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation12,
@@ -6719,7 +6378,6 @@ struct call< _corbasim_Test::Huge::operation12 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation13
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6751,7 +6409,6 @@ struct call< _corbasim_Test::Huge::operation13 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation14
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation14,
@@ -6781,7 +6438,6 @@ struct call< _corbasim_Test::Huge::operation14 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation15
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6813,7 +6469,6 @@ struct call< _corbasim_Test::Huge::operation15 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation16
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation16,
@@ -6843,7 +6498,6 @@ struct call< _corbasim_Test::Huge::operation16 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation17
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6875,7 +6529,6 @@ struct call< _corbasim_Test::Huge::operation17 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation18
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation18,
@@ -6905,7 +6558,6 @@ struct call< _corbasim_Test::Huge::operation18 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation19
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6937,7 +6589,6 @@ struct call< _corbasim_Test::Huge::operation19 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation20
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation20,
@@ -6967,7 +6618,6 @@ struct call< _corbasim_Test::Huge::operation20 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation21
 BOOST_FUSION_ADAPT_STRUCT(
@@ -6999,7 +6649,6 @@ struct call< _corbasim_Test::Huge::operation21 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation22
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation22,
@@ -7029,7 +6678,6 @@ struct call< _corbasim_Test::Huge::operation22 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation23
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7061,7 +6709,6 @@ struct call< _corbasim_Test::Huge::operation23 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation24
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation24,
@@ -7091,7 +6738,6 @@ struct call< _corbasim_Test::Huge::operation24 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation25
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7123,7 +6769,6 @@ struct call< _corbasim_Test::Huge::operation25 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation26
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation26,
@@ -7153,7 +6798,6 @@ struct call< _corbasim_Test::Huge::operation26 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation27
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7185,7 +6829,6 @@ struct call< _corbasim_Test::Huge::operation27 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation28
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation28,
@@ -7215,7 +6858,6 @@ struct call< _corbasim_Test::Huge::operation28 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation29
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7247,7 +6889,6 @@ struct call< _corbasim_Test::Huge::operation29 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation30
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation30,
@@ -7277,7 +6918,6 @@ struct call< _corbasim_Test::Huge::operation30 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation31
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7309,7 +6949,6 @@ struct call< _corbasim_Test::Huge::operation31 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation32
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation32,
@@ -7339,7 +6978,6 @@ struct call< _corbasim_Test::Huge::operation32 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation33
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7371,7 +7009,6 @@ struct call< _corbasim_Test::Huge::operation33 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation34
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation34,
@@ -7401,7 +7038,6 @@ struct call< _corbasim_Test::Huge::operation34 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation35
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7433,7 +7069,6 @@ struct call< _corbasim_Test::Huge::operation35 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation36
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation36,
@@ -7463,7 +7098,6 @@ struct call< _corbasim_Test::Huge::operation36 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation37
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7495,7 +7129,6 @@ struct call< _corbasim_Test::Huge::operation37 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation38
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation38,
@@ -7525,7 +7158,6 @@ struct call< _corbasim_Test::Huge::operation38 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation39
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7557,7 +7189,6 @@ struct call< _corbasim_Test::Huge::operation39 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation40
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation40,
@@ -7587,7 +7218,6 @@ struct call< _corbasim_Test::Huge::operation40 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation41
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7619,7 +7249,6 @@ struct call< _corbasim_Test::Huge::operation41 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation42
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation42,
@@ -7649,7 +7278,6 @@ struct call< _corbasim_Test::Huge::operation42 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation43
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7681,7 +7309,6 @@ struct call< _corbasim_Test::Huge::operation43 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation44
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation44,
@@ -7711,7 +7338,6 @@ struct call< _corbasim_Test::Huge::operation44 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation45
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7743,7 +7369,6 @@ struct call< _corbasim_Test::Huge::operation45 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation46
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation46,
@@ -7773,7 +7398,6 @@ struct call< _corbasim_Test::Huge::operation46 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation47
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7805,7 +7429,6 @@ struct call< _corbasim_Test::Huge::operation47 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation48
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation48,
@@ -7835,7 +7458,6 @@ struct call< _corbasim_Test::Huge::operation48 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation49
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7867,7 +7489,6 @@ struct call< _corbasim_Test::Huge::operation49 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation50
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation50,
@@ -7897,7 +7518,6 @@ struct call< _corbasim_Test::Huge::operation50 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation51
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7929,7 +7549,6 @@ struct call< _corbasim_Test::Huge::operation51 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation52
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation52,
@@ -7959,7 +7578,6 @@ struct call< _corbasim_Test::Huge::operation52 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation53
 BOOST_FUSION_ADAPT_STRUCT(
@@ -7991,7 +7609,6 @@ struct call< _corbasim_Test::Huge::operation53 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation54
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation54,
@@ -8021,7 +7638,6 @@ struct call< _corbasim_Test::Huge::operation54 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation55
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8053,7 +7669,6 @@ struct call< _corbasim_Test::Huge::operation55 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation56
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation56,
@@ -8083,7 +7698,6 @@ struct call< _corbasim_Test::Huge::operation56 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation57
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8115,7 +7729,6 @@ struct call< _corbasim_Test::Huge::operation57 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation58
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation58,
@@ -8145,7 +7758,6 @@ struct call< _corbasim_Test::Huge::operation58 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation59
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8177,7 +7789,6 @@ struct call< _corbasim_Test::Huge::operation59 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation60
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation60,
@@ -8207,7 +7818,6 @@ struct call< _corbasim_Test::Huge::operation60 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation61
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8239,7 +7849,6 @@ struct call< _corbasim_Test::Huge::operation61 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation62
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation62,
@@ -8269,7 +7878,6 @@ struct call< _corbasim_Test::Huge::operation62 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation63
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8301,7 +7909,6 @@ struct call< _corbasim_Test::Huge::operation63 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation64
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation64,
@@ -8331,7 +7938,6 @@ struct call< _corbasim_Test::Huge::operation64 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation65
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8363,7 +7969,6 @@ struct call< _corbasim_Test::Huge::operation65 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation66
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation66,
@@ -8393,7 +7998,6 @@ struct call< _corbasim_Test::Huge::operation66 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation67
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8425,7 +8029,6 @@ struct call< _corbasim_Test::Huge::operation67 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation68
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation68,
@@ -8455,7 +8058,6 @@ struct call< _corbasim_Test::Huge::operation68 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation69
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8487,7 +8089,6 @@ struct call< _corbasim_Test::Huge::operation69 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation70
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation70,
@@ -8517,7 +8118,6 @@ struct call< _corbasim_Test::Huge::operation70 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation71
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8549,7 +8149,6 @@ struct call< _corbasim_Test::Huge::operation71 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation72
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation72,
@@ -8579,7 +8178,6 @@ struct call< _corbasim_Test::Huge::operation72 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation73
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8611,7 +8209,6 @@ struct call< _corbasim_Test::Huge::operation73 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation74
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation74,
@@ -8641,7 +8238,6 @@ struct call< _corbasim_Test::Huge::operation74 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation75
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8673,7 +8269,6 @@ struct call< _corbasim_Test::Huge::operation75 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation76
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation76,
@@ -8703,7 +8298,6 @@ struct call< _corbasim_Test::Huge::operation76 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation77
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8735,7 +8329,6 @@ struct call< _corbasim_Test::Huge::operation77 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation78
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation78,
@@ -8765,7 +8358,6 @@ struct call< _corbasim_Test::Huge::operation78 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation79
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8797,7 +8389,6 @@ struct call< _corbasim_Test::Huge::operation79 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation80
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation80,
@@ -8827,7 +8418,6 @@ struct call< _corbasim_Test::Huge::operation80 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation81
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8859,7 +8449,6 @@ struct call< _corbasim_Test::Huge::operation81 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation82
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation82,
@@ -8889,7 +8478,6 @@ struct call< _corbasim_Test::Huge::operation82 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation83
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8921,7 +8509,6 @@ struct call< _corbasim_Test::Huge::operation83 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation84
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation84,
@@ -8951,7 +8538,6 @@ struct call< _corbasim_Test::Huge::operation84 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation85
 BOOST_FUSION_ADAPT_STRUCT(
@@ -8983,7 +8569,6 @@ struct call< _corbasim_Test::Huge::operation85 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation86
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation86,
@@ -9013,7 +8598,6 @@ struct call< _corbasim_Test::Huge::operation86 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation87
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9045,7 +8629,6 @@ struct call< _corbasim_Test::Huge::operation87 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation88
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation88,
@@ -9075,7 +8658,6 @@ struct call< _corbasim_Test::Huge::operation88 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation89
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9107,7 +8689,6 @@ struct call< _corbasim_Test::Huge::operation89 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation90
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation90,
@@ -9137,7 +8718,6 @@ struct call< _corbasim_Test::Huge::operation90 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation91
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9169,7 +8749,6 @@ struct call< _corbasim_Test::Huge::operation91 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation92
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation92,
@@ -9199,7 +8778,6 @@ struct call< _corbasim_Test::Huge::operation92 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation93
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9231,7 +8809,6 @@ struct call< _corbasim_Test::Huge::operation93 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation94
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation94,
@@ -9261,7 +8838,6 @@ struct call< _corbasim_Test::Huge::operation94 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation95
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9293,7 +8869,6 @@ struct call< _corbasim_Test::Huge::operation95 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation96
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation96,
@@ -9323,7 +8898,6 @@ struct call< _corbasim_Test::Huge::operation96 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation97
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9355,7 +8929,6 @@ struct call< _corbasim_Test::Huge::operation97 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation98
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation98,
@@ -9385,7 +8958,6 @@ struct call< _corbasim_Test::Huge::operation98 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation99
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9417,7 +8989,6 @@ struct call< _corbasim_Test::Huge::operation99 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation100
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation100,
@@ -9447,7 +9018,6 @@ struct call< _corbasim_Test::Huge::operation100 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation101
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9479,7 +9049,6 @@ struct call< _corbasim_Test::Huge::operation101 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation102
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation102,
@@ -9509,7 +9078,6 @@ struct call< _corbasim_Test::Huge::operation102 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation103
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9541,7 +9109,6 @@ struct call< _corbasim_Test::Huge::operation103 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation104
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation104,
@@ -9571,7 +9138,6 @@ struct call< _corbasim_Test::Huge::operation104 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation105
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9603,7 +9169,6 @@ struct call< _corbasim_Test::Huge::operation105 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation106
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation106,
@@ -9633,7 +9198,6 @@ struct call< _corbasim_Test::Huge::operation106 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation107
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9665,7 +9229,6 @@ struct call< _corbasim_Test::Huge::operation107 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation108
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation108,
@@ -9695,7 +9258,6 @@ struct call< _corbasim_Test::Huge::operation108 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation109
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9727,7 +9289,6 @@ struct call< _corbasim_Test::Huge::operation109 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation110
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation110,
@@ -9757,7 +9318,6 @@ struct call< _corbasim_Test::Huge::operation110 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation111
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9789,7 +9349,6 @@ struct call< _corbasim_Test::Huge::operation111 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation112
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation112,
@@ -9819,7 +9378,6 @@ struct call< _corbasim_Test::Huge::operation112 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation113
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9851,7 +9409,6 @@ struct call< _corbasim_Test::Huge::operation113 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation114
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation114,
@@ -9881,7 +9438,6 @@ struct call< _corbasim_Test::Huge::operation114 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation115
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9913,7 +9469,6 @@ struct call< _corbasim_Test::Huge::operation115 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation116
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation116,
@@ -9943,7 +9498,6 @@ struct call< _corbasim_Test::Huge::operation116 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation117
 BOOST_FUSION_ADAPT_STRUCT(
@@ -9975,7 +9529,6 @@ struct call< _corbasim_Test::Huge::operation117 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation118
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation118,
@@ -10005,7 +9558,6 @@ struct call< _corbasim_Test::Huge::operation118 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation119
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10037,7 +9589,6 @@ struct call< _corbasim_Test::Huge::operation119 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation120
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation120,
@@ -10067,7 +9618,6 @@ struct call< _corbasim_Test::Huge::operation120 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation121
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10099,7 +9649,6 @@ struct call< _corbasim_Test::Huge::operation121 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation122
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation122,
@@ -10129,7 +9678,6 @@ struct call< _corbasim_Test::Huge::operation122 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation123
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10161,7 +9709,6 @@ struct call< _corbasim_Test::Huge::operation123 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation124
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation124,
@@ -10191,7 +9738,6 @@ struct call< _corbasim_Test::Huge::operation124 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation125
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10223,7 +9769,6 @@ struct call< _corbasim_Test::Huge::operation125 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation126
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation126,
@@ -10253,7 +9798,6 @@ struct call< _corbasim_Test::Huge::operation126 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation127
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10285,7 +9829,6 @@ struct call< _corbasim_Test::Huge::operation127 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation128
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation128,
@@ -10315,7 +9858,6 @@ struct call< _corbasim_Test::Huge::operation128 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation129
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10347,7 +9889,6 @@ struct call< _corbasim_Test::Huge::operation129 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation130
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation130,
@@ -10377,7 +9918,6 @@ struct call< _corbasim_Test::Huge::operation130 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation131
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10409,7 +9949,6 @@ struct call< _corbasim_Test::Huge::operation131 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation132
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation132,
@@ -10439,7 +9978,6 @@ struct call< _corbasim_Test::Huge::operation132 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation133
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10471,7 +10009,6 @@ struct call< _corbasim_Test::Huge::operation133 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation134
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation134,
@@ -10501,7 +10038,6 @@ struct call< _corbasim_Test::Huge::operation134 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation135
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10533,7 +10069,6 @@ struct call< _corbasim_Test::Huge::operation135 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation136
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation136,
@@ -10563,7 +10098,6 @@ struct call< _corbasim_Test::Huge::operation136 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation137
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10595,7 +10129,6 @@ struct call< _corbasim_Test::Huge::operation137 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation138
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation138,
@@ -10625,7 +10158,6 @@ struct call< _corbasim_Test::Huge::operation138 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation139
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10657,7 +10189,6 @@ struct call< _corbasim_Test::Huge::operation139 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation140
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation140,
@@ -10687,7 +10218,6 @@ struct call< _corbasim_Test::Huge::operation140 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation141
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10719,7 +10249,6 @@ struct call< _corbasim_Test::Huge::operation141 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation142
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation142,
@@ -10749,7 +10278,6 @@ struct call< _corbasim_Test::Huge::operation142 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation143
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10781,7 +10309,6 @@ struct call< _corbasim_Test::Huge::operation143 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation144
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation144,
@@ -10811,7 +10338,6 @@ struct call< _corbasim_Test::Huge::operation144 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation145
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10843,7 +10369,6 @@ struct call< _corbasim_Test::Huge::operation145 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation146
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation146,
@@ -10873,7 +10398,6 @@ struct call< _corbasim_Test::Huge::operation146 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation147
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10905,7 +10429,6 @@ struct call< _corbasim_Test::Huge::operation147 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation148
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation148,
@@ -10935,7 +10458,6 @@ struct call< _corbasim_Test::Huge::operation148 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation149
 BOOST_FUSION_ADAPT_STRUCT(
@@ -10967,7 +10489,6 @@ struct call< _corbasim_Test::Huge::operation149 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation150
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation150,
@@ -10997,7 +10518,6 @@ struct call< _corbasim_Test::Huge::operation150 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation151
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11029,7 +10549,6 @@ struct call< _corbasim_Test::Huge::operation151 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation152
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation152,
@@ -11059,7 +10578,6 @@ struct call< _corbasim_Test::Huge::operation152 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation153
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11091,7 +10609,6 @@ struct call< _corbasim_Test::Huge::operation153 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation154
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation154,
@@ -11121,7 +10638,6 @@ struct call< _corbasim_Test::Huge::operation154 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation155
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11153,7 +10669,6 @@ struct call< _corbasim_Test::Huge::operation155 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation156
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation156,
@@ -11183,7 +10698,6 @@ struct call< _corbasim_Test::Huge::operation156 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation157
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11215,7 +10729,6 @@ struct call< _corbasim_Test::Huge::operation157 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation158
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation158,
@@ -11245,7 +10758,6 @@ struct call< _corbasim_Test::Huge::operation158 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation159
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11277,7 +10789,6 @@ struct call< _corbasim_Test::Huge::operation159 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation160
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation160,
@@ -11307,7 +10818,6 @@ struct call< _corbasim_Test::Huge::operation160 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation161
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11339,7 +10849,6 @@ struct call< _corbasim_Test::Huge::operation161 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation162
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation162,
@@ -11369,7 +10878,6 @@ struct call< _corbasim_Test::Huge::operation162 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation163
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11401,7 +10909,6 @@ struct call< _corbasim_Test::Huge::operation163 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation164
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation164,
@@ -11431,7 +10938,6 @@ struct call< _corbasim_Test::Huge::operation164 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation165
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11463,7 +10969,6 @@ struct call< _corbasim_Test::Huge::operation165 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation166
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation166,
@@ -11493,7 +10998,6 @@ struct call< _corbasim_Test::Huge::operation166 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation167
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11525,7 +11029,6 @@ struct call< _corbasim_Test::Huge::operation167 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation168
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation168,
@@ -11555,7 +11058,6 @@ struct call< _corbasim_Test::Huge::operation168 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation169
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11587,7 +11089,6 @@ struct call< _corbasim_Test::Huge::operation169 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation170
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation170,
@@ -11617,7 +11118,6 @@ struct call< _corbasim_Test::Huge::operation170 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation171
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11649,7 +11149,6 @@ struct call< _corbasim_Test::Huge::operation171 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation172
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation172,
@@ -11679,7 +11178,6 @@ struct call< _corbasim_Test::Huge::operation172 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation173
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11711,7 +11209,6 @@ struct call< _corbasim_Test::Huge::operation173 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation174
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation174,
@@ -11741,7 +11238,6 @@ struct call< _corbasim_Test::Huge::operation174 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation175
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11773,7 +11269,6 @@ struct call< _corbasim_Test::Huge::operation175 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation176
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation176,
@@ -11803,7 +11298,6 @@ struct call< _corbasim_Test::Huge::operation176 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation177
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11835,7 +11329,6 @@ struct call< _corbasim_Test::Huge::operation177 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation178
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation178,
@@ -11865,7 +11358,6 @@ struct call< _corbasim_Test::Huge::operation178 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation179
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11897,7 +11389,6 @@ struct call< _corbasim_Test::Huge::operation179 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation180
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation180,
@@ -11927,7 +11418,6 @@ struct call< _corbasim_Test::Huge::operation180 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation181
 BOOST_FUSION_ADAPT_STRUCT(
@@ -11959,7 +11449,6 @@ struct call< _corbasim_Test::Huge::operation181 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation182
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation182,
@@ -11989,7 +11478,6 @@ struct call< _corbasim_Test::Huge::operation182 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation183
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12021,7 +11509,6 @@ struct call< _corbasim_Test::Huge::operation183 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation184
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation184,
@@ -12051,7 +11538,6 @@ struct call< _corbasim_Test::Huge::operation184 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation185
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12083,7 +11569,6 @@ struct call< _corbasim_Test::Huge::operation185 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation186
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation186,
@@ -12113,7 +11598,6 @@ struct call< _corbasim_Test::Huge::operation186 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation187
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12145,7 +11629,6 @@ struct call< _corbasim_Test::Huge::operation187 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation188
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation188,
@@ -12175,7 +11658,6 @@ struct call< _corbasim_Test::Huge::operation188 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation189
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12207,7 +11689,6 @@ struct call< _corbasim_Test::Huge::operation189 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation190
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation190,
@@ -12237,7 +11718,6 @@ struct call< _corbasim_Test::Huge::operation190 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation191
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12269,7 +11749,6 @@ struct call< _corbasim_Test::Huge::operation191 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation192
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation192,
@@ -12299,7 +11778,6 @@ struct call< _corbasim_Test::Huge::operation192 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation193
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12331,7 +11809,6 @@ struct call< _corbasim_Test::Huge::operation193 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation194
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation194,
@@ -12361,7 +11838,6 @@ struct call< _corbasim_Test::Huge::operation194 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation195
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12393,7 +11869,6 @@ struct call< _corbasim_Test::Huge::operation195 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation196
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation196,
@@ -12423,7 +11898,6 @@ struct call< _corbasim_Test::Huge::operation196 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation197
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12455,7 +11929,6 @@ struct call< _corbasim_Test::Huge::operation197 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Huge::operation198
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Huge::operation198,
@@ -12485,7 +11958,6 @@ struct call< _corbasim_Test::Huge::operation198 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: Test::Huge::operation199
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12518,15 +11990,6 @@ struct call< _corbasim_Test::Huge::operation199 >
 } // corbasim
 
 
-
-
-
-
-
-
-
-
-
 namespace corbasim
 {
 namespace adapted
@@ -12536,7 +11999,7 @@ template < >
 struct interface < AAAAAAAAA::IIIIIIIIII >
 {
     typedef cs_mpl::list< _corbasim_AAAAAAAAA::IIIIIIIIII::op1, cs_mpl::list< _corbasim_AAAAAAAAA::IIIIIIIIII::op2  >  >   _op_list;
-
+    
 };
 
 } // adapted
@@ -12568,7 +12031,6 @@ value._return = ref->op1();
 } // adapted
 } // corbasim
 
-
 // OperationDef: AAAAAAAAA::IIIIIIIIII::op2
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_AAAAAAAAA::IIIIIIIIII::op2,
@@ -12596,13 +12058,6 @@ value._return = ref->op2();
 } // corbasim
 
 
-
-
-
-
-
-
-
 namespace corbasim
 {
 namespace adapted
@@ -12612,7 +12067,7 @@ template < >
 struct interface < SimpleExample::Test >
 {
     typedef cs_mpl::list< _corbasim_SimpleExample::Test::operation1, cs_mpl::list< _corbasim_SimpleExample::Test::operation4  >  >   _op_list;
-
+    
 };
 
 } // adapted
@@ -12650,9 +12105,6 @@ struct call< _corbasim_SimpleExample::Test::operation1 >
 } // adapted
 } // corbasim
 
-
-
-
 // OperationDef: SimpleExample::Test::operation4
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_SimpleExample::Test::operation4,
@@ -12680,29 +12132,6 @@ struct call< _corbasim_SimpleExample::Test::operation4 >
 } // corbasim
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 namespace corbasim
 {
 namespace adapted
@@ -12712,7 +12141,7 @@ template < >
 struct interface < StringTest::InterfaceString >
 {
     typedef cs_mpl::list< _corbasim_StringTest::InterfaceString::operation1, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation2, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation3, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation4, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation5, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation6, cs_mpl::list< _corbasim_StringTest::InterfaceString::operation7  >  >  >  >  >  >  >   _op_list;
-
+    
 };
 
 } // adapted
@@ -12744,7 +12173,6 @@ struct call< _corbasim_StringTest::InterfaceString::operation1 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: StringTest::InterfaceString::operation2
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_StringTest::InterfaceString::operation2,
@@ -12770,7 +12198,6 @@ struct call< _corbasim_StringTest::InterfaceString::operation2 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: StringTest::InterfaceString::operation3
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12798,7 +12225,6 @@ struct call< _corbasim_StringTest::InterfaceString::operation3 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: StringTest::InterfaceString::operation4
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_StringTest::InterfaceString::operation4,
@@ -12824,7 +12250,6 @@ struct call< _corbasim_StringTest::InterfaceString::operation4 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: StringTest::InterfaceString::operation5
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12852,7 +12277,6 @@ struct call< _corbasim_StringTest::InterfaceString::operation5 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: StringTest::InterfaceString::operation6
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_StringTest::InterfaceString::operation6,
@@ -12878,7 +12302,6 @@ struct call< _corbasim_StringTest::InterfaceString::operation6 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: StringTest::InterfaceString::operation7
 BOOST_FUSION_ADAPT_STRUCT(
@@ -12907,19 +12330,6 @@ struct call< _corbasim_StringTest::InterfaceString::operation7 >
 } // corbasim
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 namespace corbasim
 {
 namespace adapted
@@ -12929,7 +12339,7 @@ template < >
 struct interface < MyModule::MyInterface >
 {
     typedef cs_mpl::list< _corbasim_MyModule::MyInterface::operation, cs_mpl::list< _corbasim_MyModule::MyInterface::operation1, cs_mpl::list< _corbasim_MyModule::MyInterface::operation2, cs_mpl::list< _corbasim_MyModule::MyInterface::operation3  >  >  >  >   _op_list;
-
+    
 };
 
 } // adapted
@@ -12961,7 +12371,6 @@ struct call< _corbasim_MyModule::MyInterface::operation >
 } // adapted
 } // corbasim
 
-
 // OperationDef: MyModule::MyInterface::operation1
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_MyModule::MyInterface::operation1,
@@ -12988,7 +12397,6 @@ struct call< _corbasim_MyModule::MyInterface::operation1 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: MyModule::MyInterface::operation2
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_MyModule::MyInterface::operation2,
@@ -13014,7 +12422,6 @@ struct call< _corbasim_MyModule::MyInterface::operation2 >
 
 } // adapted
 } // corbasim
-
 
 // OperationDef: MyModule::MyInterface::operation3
 BOOST_FUSION_ADAPT_STRUCT(
@@ -13043,15 +12450,6 @@ struct call< _corbasim_MyModule::MyInterface::operation3 >
 } // corbasim
 
 
-
-
-
-
-
-
-
-
-
 namespace corbasim
 {
 namespace adapted
@@ -13061,7 +12459,7 @@ template < >
 struct interface < Test::Prueba >
 {
     typedef cs_mpl::list< _corbasim_Test::Prueba::operacion1, cs_mpl::list< _corbasim_Test::Prueba::operacion2, cs_mpl::list< _corbasim_Test::Prueba::operacion3  >  >  >   _op_list;
-
+    
 };
 
 } // adapted
@@ -13098,7 +12496,6 @@ struct call< _corbasim_Test::Prueba::operacion1 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Prueba::operacion2
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Prueba::operacion2,
@@ -13129,7 +12526,6 @@ struct call< _corbasim_Test::Prueba::operacion2 >
 } // adapted
 } // corbasim
 
-
 // OperationDef: Test::Prueba::operacion3
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_Test::Prueba::operacion3,
@@ -13158,8 +12554,6 @@ struct call< _corbasim_Test::Prueba::operacion3 >
 
 } // adapted
 } // corbasim
-
-
 
 
 #endif // MAPPING_ADAPTED_HPP

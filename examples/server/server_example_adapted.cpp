@@ -22,15 +22,11 @@ CORBA::TypeCode const *  typecode< prueba::Iface >::call()
     return prueba::_tc_Iface;
 }
 
-
-
 template< >
 const char * name< _corbasim_prueba::Iface::operation >::call()
 {
     return "operation";
 }
-
-
 
 } // namespace adapted
 } // namespace corbasim
@@ -39,8 +35,6 @@ namespace _corbasim_prueba
 {
 namespace Iface
 {
-
-
 
 __operation::__operation()
 {
@@ -61,7 +55,5 @@ __operation::__operation(const __operation& o) :
 
 
 } // Iface
-
 } // _corbasim_prueba
-
 
