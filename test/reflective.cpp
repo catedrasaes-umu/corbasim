@@ -68,4 +68,9 @@ BOOST_AUTO_TEST_CASE(holderUsage)
 
     holder v = r->get_child_value(p, 3);
     BOOST_CHECK_EQUAL(v.to_value<Long>(), 1234321);
+
+    // Holder contains a reference for struct's members
+    v.to_value<Long>() = 9876543;
+    h = r->get_child_value(p, 3);
+    BOOST_CHECK_EQUAL(h.to_value<Long>(), 9876543);
 }
