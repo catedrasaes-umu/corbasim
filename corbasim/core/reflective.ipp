@@ -831,9 +831,8 @@ template < typename Value >
 operation_reflective< Value > const *
 operation_reflective< Value >::get_instance()
 {
-    static boost::shared_ptr< operation_reflective > _instance(
-            new operation_reflective);
-    return _instance.get();
+    static operation_reflective _instance;
+    return &_instance;
 }
 
 // Interface
