@@ -82,6 +82,11 @@ holder::holder(holder_impl_base * impl) :
 {
 }
 
+holder::holder(holder_impl_ptr impl) :
+    m_impl(holder_impl_ptr(impl))
+{
+}
+
 holder::holder(const holder& o) :
     m_impl(o.m_impl)
 {

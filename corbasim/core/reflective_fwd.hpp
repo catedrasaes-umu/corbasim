@@ -58,6 +58,8 @@ struct CORBASIM_CORE_DECLSPEC holder
      */
     holder(holder_impl_base * impl);
 
+    holder(holder_impl_ptr impl);
+
     holder(const holder& o);
 
     holder& operator=(const holder& o);

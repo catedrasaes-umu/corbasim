@@ -68,15 +68,15 @@ struct holder_ref_impl : public holder_impl_base
 };
 
 template < typename T >
-holder_impl_base * create_holder(T& t)
+holder_impl_ptr create_holder(T& t)
 {
-    return new holder_ref_impl< T >(t);
+    return boost::make_shared<holder_ref_impl<T> >(boost::ref(t));
 }
 
 template < typename T >
-holder_impl_base * create_holder(const T& t)
+holder_impl_ptr create_holder(const T& t)
 {
-    return new holder_ref_impl< T >(t);
+    return boost::make_shared<holder_ref_impl<T> >(t);
 }
 
 namespace detail
@@ -117,7 +117,7 @@ reflective_type array_reflective< T >::get_type() const
 template< typename T >
 holder array_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T >
@@ -252,7 +252,7 @@ reflective_base const * sequence_reflective< T >::get_slice() const
 template< typename T >
 holder sequence_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T >
@@ -464,7 +464,7 @@ void struct_reflective< T >::copy(holder const& src, holder& dst) const
 template< typename T >
 holder struct_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T >
@@ -527,7 +527,7 @@ reflective_type union_reflective< T >::get_type() const
 template< typename T >
 holder union_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T >
@@ -616,7 +616,7 @@ const char * enum_reflective< T >::get_child_name(unsigned int idx) const
 template< typename T >
 holder enum_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T >
@@ -660,7 +660,7 @@ template< typename T, typename Y >
 holder objrefvar_reflective< T, Y >::create_holder() const
 {
     // Just when Y == T
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T, typename Y >
@@ -800,7 +800,7 @@ tag_t operation_reflective< Value >::get_tag() const
 template < typename Value >
 event::request_ptr operation_reflective< Value >::create_request() const
 {
-    return event::request_ptr(new request_t);
+    return boost::make_shared<request_t>();
 }
 
 template < typename Value >

@@ -22,6 +22,7 @@
 
 #include <corbasim/adapted.hpp>
 #include <corbasim/event.hpp>
+#include <boost/make_shared.hpp>
 
 namespace corbasim
 {
@@ -50,10 +51,10 @@ struct callable
         typedef request_impl< Value > request_t;
         typedef response_impl< Value > response_t;
 
-        request_ptr _req (new request_t(val));
+        request_ptr _req = boost::make_shared<request_t>(val);
 
         // Proposed response
-        response_ptr _resp (new response_t(val));
+        response_ptr _resp = boost::make_shared<response_t>(val);
 
         // Call to the request processor
         event_ptr _ev ((*m_proc)(_req, _resp));

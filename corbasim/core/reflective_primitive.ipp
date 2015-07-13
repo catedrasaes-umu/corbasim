@@ -46,7 +46,7 @@ reflective_type bool_reflective< T >::get_type() const
 template< typename T >
 holder bool_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T >
@@ -60,7 +60,7 @@ void bool_reflective< T >::copy(holder const& src, holder& dst) const
 template< typename T >
 holder primitive_reflective< T >::create_holder() const
 {
-    return new holder_ref_impl< T >();
+    return holder_impl_ptr(boost::make_shared<holder_ref_impl<T> >());
 }
 
 template< typename T >
