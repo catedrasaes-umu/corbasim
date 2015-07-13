@@ -107,3 +107,24 @@ BOOST_AUTO_TEST_CASE(unionReflective)
     r->set_child_value(u, 0, hd);
     BOOST_CHECK_EQUAL(r->get_length(u), 2);
 }
+
+BOOST_AUTO_TEST_CASE(enumReflective)
+{
+    const interface_reflective_base* i = corbasim_reflective_MyModule_MyInterface();
+    BOOST_REQUIRE(i);
+    const operation_reflective_base* o = i->get_reflective_by_index(0); // operation
+    BOOST_REQUIRE(o);
+    const reflective_base* r = o->get_child(0);
+    BOOST_REQUIRE(r);
+    BOOST_CHECK_EQUAL(r->get_type(), TYPE_UNION);
+    BOOST_CHECK_EQUAL(r->get_children_count(), 3);
+
+    const reflective_base* d = r->get_child(0);
+    BOOST_CHECK_EQUAL(d->get_type(), TYPE_ENUM);
+
+    unsigned int count = d->get_children_count();
+    BOOST_CHECK_EQUAL(count, 3);
+    BOOST_CHECK_EQUAL(d->get_child_name(0), string("AAA"));
+    BOOST_CHECK_EQUAL(d->get_child_name(1), string("BBB"));
+    BOOST_CHECK_EQUAL(d->get_child_name(2), string("CCC"));
+}
