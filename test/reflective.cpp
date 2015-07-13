@@ -13,6 +13,7 @@ using namespace std;
 using namespace CORBA;
 
 extern "C" const corbasim::core::interface_reflective_base* corbasim_reflective_Test_Prueba();
+extern "C" const corbasim::core::interface_reflective_base * corbasim_reflective_MyModule_MyInterface();
 
 BOOST_AUTO_TEST_CASE(interfaceRelective)
 {
@@ -73,4 +74,36 @@ BOOST_AUTO_TEST_CASE(holderUsage)
     v.to_value<Long>() = 9876543;
     h = r->get_child_value(p, 3);
     BOOST_CHECK_EQUAL(h.to_value<Long>(), 9876543);
+}
+
+BOOST_AUTO_TEST_CASE(unionReflective)
+{
+    const interface_reflective_base* i = corbasim_reflective_MyModule_MyInterface();
+    BOOST_REQUIRE(i);
+    const operation_reflective_base* o = i->get_reflective_by_index(1); // operation1
+    BOOST_REQUIRE(o);
+    const reflective_base* r = o->get_child(0);
+    BOOST_REQUIRE(r);
+    BOOST_CHECK_EQUAL(r->get_type(), TYPE_UNION);
+    BOOST_CHECK_EQUAL(r->get_children_count(), 3);
+
+    holder u = r->create_holder();
+    BOOST_CHECK_EQUAL(r->get_length(u), 0);
+
+    const reflective_base* d = r->get_child(0);
+    BOOST_CHECK_EQUAL(d->get_type(), TYPE_LONG);
+    holder hd = r->get_child_value(u, 0);
+    hd.to_value<Long>() = 100;
+    BOOST_CHECK_EQUAL(r->get_length(u), 0);
+
+    r->set_child_value(u, 0, hd);
+    BOOST_CHECK_EQUAL(r->get_length(u), 1);
+
+    hd.to_value<Long>() = 101;
+    r->set_child_value(u, 0, hd);
+    BOOST_CHECK_EQUAL(r->get_length(u), 0);
+
+    hd.to_value<Long>() = 200;
+    r->set_child_value(u, 0, hd);
+    BOOST_CHECK_EQUAL(r->get_length(u), 2);
 }
