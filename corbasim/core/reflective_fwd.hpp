@@ -47,9 +47,6 @@ typedef boost::shared_ptr< holder_impl_base > holder_impl_ptr;
 template< typename T >
 struct holder_ref_impl;
 
-template < typename T >
-holder_impl_base * create_holder(T& t);
-
 struct CORBASIM_CORE_DECLSPEC holder
 {
     holder();
