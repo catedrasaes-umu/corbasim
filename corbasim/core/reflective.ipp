@@ -845,6 +845,8 @@ interface_reflective< Interface >::interface_reflective()
 
     typedef core::impl::inserter< interface_reflective > inserter_t;
     cs_mpl::for_each_list< operations_t >(inserter_t(this));
+
+    core::interface_caller<Interface>::callers::get_instance();
 }
 
 template < typename Interface >

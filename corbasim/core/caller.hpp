@@ -104,13 +104,11 @@ struct interface_caller : public interface_caller_base
     interface_caller(typename Interface::_ptr_type ref)
         : m_ref(Interface::_duplicate(ref))
     {
-        _init();
     }
 
     interface_caller()
         : m_ref(Interface::_nil())
     {
-        _init();
     }
 
     ~interface_caller()
@@ -136,17 +134,7 @@ struct interface_caller : public interface_caller_base
         return CORBA::Object::_duplicate(m_ref);
     }
 
-    template < typename Value >
-    inline void append()
-    {
-        typedef operation_caller_impl< Interface, Value > caller_t;
-        m_callers.insert(std::make_pair(tag< Value >::value(),
-                caller_t::get_instance()));
-    }
-
-    typedef impl::inserter< interface_caller > inserter_t;
     typedef operation_caller_base< Interface > caller_base_t;
-    typedef std::map< tag_t, caller_base_t* > callers_t;
 
     event::event * do_call(event::request * req) const
     {
@@ -172,12 +160,12 @@ struct interface_caller : public interface_caller_base
     {
         if (m_ref)
         {
-            typename callers_t::const_iterator it =
-                m_callers.find(req->get_tag());
+            const caller_base_t * caller =
+                callers::get_instance()->get_caller(req->get_tag());
 
-            if (it != m_callers.end())
+            if (caller)
             {
-                return it->second->call(m_ref, req);
+                return caller->call(m_ref, req);
             }
         }
 
@@ -190,16 +178,52 @@ struct interface_caller : public interface_caller_base
     }
 
     typename Interface::_ptr_type m_ref;
-    callers_t m_callers;
 
-private:
-
-    void _init()
+    struct callers
     {
-        typedef adapted::interface< Interface > adapted_t;
-        typedef typename adapted_t::_op_list operations_t;
-        cs_mpl::for_each_list< operations_t >(inserter_t(this));
-    }
+        static const callers * get_instance()
+        {
+            static callers _instance;
+            return &_instance;
+        }
+
+        caller_base_t * get_caller(tag_t tag) const
+        {
+            typename callers_t::const_iterator it =
+                m_callers.find(tag);
+
+            return it != m_callers.end()? it->second : NULL;
+        }
+
+    protected:
+
+        callers()
+        {
+            _init();
+        }
+
+        template < typename Value >
+        inline void append()
+        {
+            typedef operation_caller_impl< Interface, Value > caller_t;
+            m_callers.insert(std::make_pair(tag< Value >::value(),
+                    caller_t::get_instance()));
+        }
+
+        typedef impl::inserter<callers> inserter_t;
+        friend class impl::inserter<callers>;
+        typedef std::map< tag_t, caller_base_t* > callers_t;
+
+        callers_t m_callers;
+
+        void _init()
+        {
+            typedef adapted::interface< Interface > adapted_t;
+            typedef typename adapted_t::_op_list operations_t;
+            cs_mpl::for_each_list< operations_t >(inserter_t(this));
+        }
+    };
+
 };
 
 } // namespace core
