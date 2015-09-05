@@ -165,12 +165,12 @@ Event_ptr Objref::sendRequest(const Request_ptr& request)
 
     if (!m_caller || m_caller->is_nil())
     {
-        ev = Event_ptr(
-            new corbasim::core::message("Invalid reference!"));
+        ev = boost::make_shared<corbasim::core::message>(
+                "Invalid reference!");
     }
     else
     {
-        ev = Event_ptr(m_caller->do_call(request.get()));
+        ev = m_caller->do_call(request.get());
     }
 
     emit requestSent(id(), request, ev);
@@ -187,19 +187,19 @@ Event_ptr Objref::sendRequestThrow(const Request_ptr& request)
     if (!m_caller || m_caller->is_nil())
     {
         // TODO throw exception?
-        ev = Event_ptr(
-                new corbasim::core::message("Invalid reference!"));
+        ev = boost::make_shared<corbasim::core::message>(
+                "Invalid reference!");
     }
     else
     {
         try
         {
-            ev = Event_ptr(m_caller->do_call_throw(request.get()));
+            ev = m_caller->do_call_throw(request.get());
         }
         catch(const CORBA::Exception& ex)
         {
             // Exception forwarding
-            ev = Event_ptr(new corbasim::core::exception(ex._name()));
+            ev = boost::make_shared<corbasim::core::exception>(ex._name());
 
             emit requestSent(id(), request, ev);
 
@@ -262,8 +262,8 @@ struct Servant::ServantData :
             }
             catch (const CORBA::Exception& ex)
             {
-                ::corbasim::core::event_ptr ev (
-                        new ::corbasim::core::exception(ex._name()));
+                ::corbasim::core::event_ptr ev =
+                    boost::make_shared<corbasim::core::exception>(ex._name());
 
                 emit m_this.requestReceived(m_this.id(), req, ev);
 
