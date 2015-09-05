@@ -27,7 +27,7 @@
 
 namespace corbasim
 {
-namespace event
+namespace core
 {
 
 enum event_types { EXCEPTION, REQUEST, RESPONSE, MESSAGE};
@@ -96,7 +96,7 @@ struct CORBASIM_CORE_DECLSPEC response : public event
 typedef boost::shared_ptr< response > response_ptr;
 
 
-} // namespace event
+} // namespace core
 } // namespace corbasim
 
 #endif /* CORBASIM_EVENT_FWD_HPP */

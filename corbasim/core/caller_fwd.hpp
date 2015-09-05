@@ -22,7 +22,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <corbasim/impl.hpp>
-#include <corbasim/event_fwd.hpp>
+#include <corbasim/core/event_fwd.hpp>
 #include <corbasim/core/export.hpp>
 
 namespace corbasim
@@ -44,8 +44,8 @@ typedef boost::shared_ptr< reference_validator_base >
 struct CORBASIM_CORE_DECLSPEC interface_caller_base :
     public reference_validator_base
 {
-    virtual event::event * do_call(event::request * req) const = 0;
-    virtual event::event * do_call_throw(event::request * req) const = 0;
+    virtual event * do_call(request * req) const = 0;
+    virtual event * do_call_throw(request * req) const = 0;
 
     virtual ~interface_caller_base();
 };

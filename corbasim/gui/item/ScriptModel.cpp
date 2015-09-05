@@ -295,7 +295,7 @@ int ScriptModel::rowCount(const QModelIndex &parent) const
     return node->children.size();
 }
 
-corbasim::event::request_ptr ScriptModel::getRequest(int pos)
+corbasim::core::request_ptr ScriptModel::getRequest(int pos)
 {
     return m_entries.at(pos).req;
 }
@@ -319,7 +319,7 @@ void ScriptModel::resetInternalData()
     m_nodes.clear();
 }
 
-void ScriptModel::addRequest(corbasim::event::request_ptr req,
+void ScriptModel::addRequest(corbasim::core::request_ptr req,
         int pos)
 {
     if (pos == -1)
@@ -328,7 +328,7 @@ void ScriptModel::addRequest(corbasim::event::request_ptr req,
         append(req, pos);
 }
 
-void ScriptModel::append(corbasim::event::request_ptr req,
+void ScriptModel::append(corbasim::core::request_ptr req,
         int pos)
 {
     LogEntry entry;

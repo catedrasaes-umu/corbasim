@@ -239,7 +239,7 @@ void OperationEvaluatorWidget::saveForm()
     if (file.isEmpty())
         return;
 
-    event::request_ptr request =
+    core::request_ptr request =
         m_widget->getForm()->createRequest();
     core::holder holder(m_reflective->get_holder(request));
 
@@ -256,7 +256,7 @@ void OperationEvaluatorWidget::loadForm()
     if (file.isEmpty())
         return;
 
-    event::request_ptr request =
+    core::request_ptr request =
         m_reflective->create_request();
     core::holder holder(m_reflective->get_holder(request));
 

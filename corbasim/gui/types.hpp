@@ -23,7 +23,7 @@
 #include <QtCore>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/impl.hpp>
-#include <corbasim/event_fwd.hpp>
+#include <corbasim/core/event_fwd.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/core/caller_fwd.hpp>
 #include <corbasim/qt/types.hpp>
@@ -45,8 +45,8 @@ typedef ::corbasim::core::reflective_base const *
 
 typedef const void * ObjectId;
 
-typedef ::corbasim::event::event_ptr Event_ptr;
-typedef ::corbasim::event::request_ptr Request_ptr;
+typedef ::corbasim::core::event_ptr Event_ptr;
+typedef ::corbasim::core::request_ptr Request_ptr;
 typedef ::corbasim::core::holder Holder;
 
 typedef ::corbasim::core::interface_caller_ptr Caller_ptr;

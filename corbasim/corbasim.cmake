@@ -27,8 +27,8 @@ set(corbasim_EXPORTED_HEADERS
     core/reflective_primitive.ipp
     cosnaming/CosnamingC.h
     cosnaming/Cosnaming_adapted.hpp
-    event.hpp
-    event_fwd.hpp
+    core/event.hpp
+    core/event_fwd.hpp
     impl.hpp
     json/converter.hpp
     json/detail/json.hpp
@@ -69,7 +69,7 @@ set(corbasim_SRCS
     core/reference_repository.cpp
     core/reference_validator.cpp
     core/reflective.cpp
-    event.cpp
+    core/event.cpp
 
     # JSON
     json/reflective.cpp

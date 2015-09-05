@@ -21,7 +21,7 @@
 #define CORBASIM_CORE_CALLABLE_HPP
 
 #include <corbasim/adapted.hpp>
-#include <corbasim/event.hpp>
+#include <corbasim/core/event.hpp>
 #include <boost/make_shared.hpp>
 
 namespace corbasim
@@ -31,8 +31,8 @@ namespace core
 
 struct request_processor
 {
-    virtual event::event_ptr operator()(event::request_ptr,
-            event::response_ptr) = 0;
+    virtual event_ptr operator()(request_ptr,
+            response_ptr) = 0;
     virtual ~request_processor() {}
 };
 
@@ -46,8 +46,6 @@ struct callable
     template< typename Value >
     void operator()(Value& val)
     {
-        using namespace ::corbasim::event;
-
         typedef request_impl< Value > request_t;
         typedef response_impl< Value > response_t;
 

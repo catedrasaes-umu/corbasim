@@ -19,7 +19,7 @@
 
 #include "Model.hpp"
 #include <cassert>
-#include <corbasim/event.hpp>
+#include <corbasim/core/event.hpp>
 #include <QLibrary>
 #include <iostream>
 #include <boost/thread/shared_mutex.hpp>
@@ -166,7 +166,7 @@ Event_ptr Objref::sendRequest(const Request_ptr& request)
     if (!m_caller || m_caller->is_nil())
     {
         ev = Event_ptr(
-            new corbasim::event::message("Invalid reference!"));
+            new corbasim::core::message("Invalid reference!"));
     }
     else
     {
@@ -188,7 +188,7 @@ Event_ptr Objref::sendRequestThrow(const Request_ptr& request)
     {
         // TODO throw exception?
         ev = Event_ptr(
-                new corbasim::event::message("Invalid reference!"));
+                new corbasim::core::message("Invalid reference!"));
     }
     else
     {
@@ -199,7 +199,7 @@ Event_ptr Objref::sendRequestThrow(const Request_ptr& request)
         catch(const CORBA::Exception& ex)
         {
             // Exception forwarding
-            ev = Event_ptr(new corbasim::event::exception(ex._name()));
+            ev = Event_ptr(new corbasim::core::exception(ex._name()));
 
             emit requestSent(id(), request, ev);
 
@@ -244,16 +244,16 @@ struct Servant::ServantData :
         delete m_servant;
     }
 
-    ::corbasim::event::event_ptr operator()(
-            ::corbasim::event::request_ptr req,
-            ::corbasim::event::response_ptr resp)
+    ::corbasim::core::event_ptr operator()(
+            ::corbasim::core::request_ptr req,
+            ::corbasim::core::response_ptr resp)
     {
         if (m_this.proxy())
         {
             // Proxy and servant must be in the same thread
             try
             {
-                ::corbasim::event::event_ptr ev =
+                ::corbasim::core::event_ptr ev =
                     m_this.proxy()->sendRequestThrow(req);
 
                 emit m_this.requestReceived(m_this.id(), req, ev);
@@ -262,8 +262,8 @@ struct Servant::ServantData :
             }
             catch (const CORBA::Exception& ex)
             {
-                ::corbasim::event::event_ptr ev (
-                        new ::corbasim::event::exception(ex._name()));
+                ::corbasim::core::event_ptr ev (
+                        new ::corbasim::core::exception(ex._name()));
 
                 emit m_this.requestReceived(m_this.id(), req, ev);
 

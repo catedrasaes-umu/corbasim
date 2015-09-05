@@ -431,10 +431,10 @@ bool LogModel::fillLogEntry(ObjectId id,
     metaNode->brothers.push_back(node);
 
     // Response
-    if (resp && (resp->get_type() == event::RESPONSE))
+    if (resp && (resp->get_type() == core::RESPONSE))
     {
-        event::response_ptr response(
-                boost::static_pointer_cast< event::response >(resp));
+        core::response_ptr response(
+                boost::static_pointer_cast< core::response >(resp));
 
         core::holder hold = op->get_holder(response);
         Node_ptr node(new Node(op, hold));
@@ -460,8 +460,8 @@ bool LogModel::fillLogEntry(ObjectId id,
         entry.icon = &m_inputIcon;
 
         // Background color
-        if (resp && (resp->get_type() == event::EXCEPTION ||
-                resp->get_type() == event::MESSAGE))
+        if (resp && (resp->get_type() == core::EXCEPTION ||
+                resp->get_type() == core::MESSAGE))
         {
             entry.text += " (Exception!)";
             entry.color = QColor(Qt::red);
@@ -476,8 +476,8 @@ bool LogModel::fillLogEntry(ObjectId id,
         entry.icon = &m_outputIcon;
 
         // Background Color
-        if (resp && (resp->get_type() == event::EXCEPTION ||
-                resp->get_type() == event::MESSAGE))
+        if (resp && (resp->get_type() == core::EXCEPTION ||
+                resp->get_type() == core::MESSAGE))
         {
             entry.text += " (Exception!)";
             entry.color = QColor(Qt::red);

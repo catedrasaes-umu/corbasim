@@ -88,7 +88,7 @@ protected:
 
     QTimer m_timer;
     int m_currentPeriodicRequest;
-    event::request_ptr m_storedRequest;
+    core::request_ptr m_storedRequest;
     // End periodic
 };
 

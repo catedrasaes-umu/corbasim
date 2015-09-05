@@ -26,7 +26,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <corbasim/impl.hpp>
 #include <corbasim/adapted.hpp>
-#include <corbasim/event.hpp>
+#include <corbasim/core/event.hpp>
 #include <corbasim/core/inserter.hpp>
 #include <corbasim/core/caller.hpp>
 #include <corbasim/core/callable.hpp>
@@ -187,10 +187,10 @@ struct CORBASIM_CORE_DECLSPEC operation_reflective_base :
     virtual const char * get_name() const = 0;
     virtual tag_t get_tag() const = 0;
 
-    virtual event::request_ptr create_request() const = 0;
+    virtual request_ptr create_request() const = 0;
 
-    virtual holder get_holder(event::request_ptr req) const = 0;
-    virtual holder get_holder(event::response_ptr req) const = 0;
+    virtual holder get_holder(request_ptr req) const = 0;
+    virtual holder get_holder(response_ptr req) const = 0;
 
     virtual direction_type get_parameter_direction(
             unsigned int idx) const = 0;

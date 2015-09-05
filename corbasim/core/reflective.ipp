@@ -800,7 +800,7 @@ tag_t operation_reflective< Value >::get_tag() const
 }
 
 template < typename Value >
-event::request_ptr operation_reflective< Value >::create_request() const
+request_ptr operation_reflective< Value >::create_request() const
 {
     return boost::make_shared<request_t>();
 }
@@ -816,14 +816,14 @@ direction_type operation_reflective< Value >::get_parameter_direction(
 }
 
 template < typename Value >
-holder operation_reflective< Value >::get_holder(event::request_ptr req) const
+holder operation_reflective< Value >::get_holder(request_ptr req) const
 {
     request_t * r = reinterpret_cast< request_t* >(req.get());
     return ::corbasim::core::create_holder(r->m_values);
 }
 
 template < typename Value >
-holder operation_reflective< Value >::get_holder(event::response_ptr req) const
+holder operation_reflective< Value >::get_holder(response_ptr req) const
 {
     response_t * r = reinterpret_cast< response_t* >(req.get());
     return ::corbasim::core::create_holder(r->m_values);

@@ -57,7 +57,7 @@ public:
 
     QMimeData *    mimeData(const QModelIndexList& indexes) const;
 
-    corbasim::event::request_ptr getRequest(int pos);
+    corbasim::core::request_ptr getRequest(int pos);
 
     void initialize(InterfaceDescriptor_ptr instance);
 
@@ -76,7 +76,7 @@ public slots:
 
     void clearLog();
 
-    void addRequest(corbasim::event::request_ptr req,
+    void addRequest(corbasim::core::request_ptr req,
             int pos = -1);
 
 private slots:
@@ -85,7 +85,7 @@ private slots:
 
 protected:
 
-    void append(corbasim::event::request_ptr req, int pos);
+    void append(corbasim::core::request_ptr req, int pos);
 
     InterfaceDescriptor_ptr m_instance;
 
@@ -95,7 +95,7 @@ protected:
     {
         QString text;
         OperationDescriptor_ptr reflective;
-        corbasim::event::request_ptr req;
+        corbasim::core::request_ptr req;
         QDateTime dateTime;
         QIcon * icon;
         QColor color;

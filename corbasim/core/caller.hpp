@@ -22,7 +22,7 @@
 
 #include <map>
 #include <corbasim/adapted.hpp>
-#include <corbasim/event.hpp>
+#include <corbasim/core/event.hpp>
 #include <corbasim/core/inserter.hpp>
 #include <corbasim/core/caller_fwd.hpp>
 
@@ -35,10 +35,10 @@ template < typename Value >
 struct oneway_caller
 {
     template < typename Interface >
-        static inline event::event* invoke(typename Interface::_ptr_type ref,
-            event::request * req)
+        static inline event* invoke(typename Interface::_ptr_type ref,
+            request * req)
     {
-        typedef event::request_impl< Value > request_t;
+        typedef request_impl< Value > request_t;
         typedef adapted::call< Value > caller_t;
 
         request_t * reqi = static_cast< request_t * >(req);
@@ -51,11 +51,11 @@ template < typename Value >
 struct default_caller
 {
     template < typename Interface >
-    static inline event::event* invoke(typename Interface::_ptr_type ref,
-            event::request * req)
+    static inline event* invoke(typename Interface::_ptr_type ref,
+            request * req)
     {
-        typedef event::request_impl< Value > request_t;
-        typedef event::response_impl< Value > response_t;
+        typedef request_impl< Value > request_t;
+        typedef response_impl< Value > response_t;
         typedef adapted::call< Value > caller_t;
 
         request_t * reqi = static_cast< request_t * >(req);
@@ -78,7 +78,7 @@ struct do_call : public cs_mpl::eval_if< adapted::is_oneway< Value >,
 template< typename Interface >
 struct operation_caller_base
 {
-    virtual event::event* call(typename Interface::_ptr_type, event::request*) const = 0;
+    virtual event* call(typename Interface::_ptr_type, request*) const = 0;
 
     virtual ~operation_caller_base() {}
 };
@@ -86,7 +86,7 @@ struct operation_caller_base
 template< typename Interface, typename Value >
 struct operation_caller_impl : public operation_caller_base< Interface >
 {
-    event::event* call(typename Interface::_ptr_type _this, event::request* req) const
+    event* call(typename Interface::_ptr_type _this, request* req) const
     {
         return do_call< Value >::template invoke< Interface >(_this, req);
     }
@@ -136,9 +136,9 @@ struct interface_caller : public interface_caller_base
 
     typedef operation_caller_base< Interface > caller_base_t;
 
-    event::event * do_call(event::request * req) const
+    event * do_call(request * req) const
     {
-        event::event * ev = NULL;
+        event * ev = NULL;
 
         try
         {
@@ -146,17 +146,17 @@ struct interface_caller : public interface_caller_base
         }
         catch (const CORBA::Exception& ex)
         {
-            ev = new event::exception(ex._name());
+            ev = new exception(ex._name());
         }
         catch (...)
         {
-            ev = new event::exception();
+            ev = new exception();
         }
 
         return ev;
     }
 
-    event::event * do_call_throw(event::request * req) const
+    event * do_call_throw(request * req) const
     {
         if (m_ref)
         {

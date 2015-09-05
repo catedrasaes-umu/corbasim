@@ -19,7 +19,7 @@
 
 #include "event.hpp"
 
-using namespace corbasim::event;
+using namespace corbasim::core;
 
 event::~event() {}
 

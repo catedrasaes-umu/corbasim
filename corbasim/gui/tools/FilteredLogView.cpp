@@ -162,7 +162,7 @@ EntryViewer::~EntryViewer()
 void EntryViewer::show(
         const QString& text,
         corbasim::core::operation_reflective_base const * op,
-        corbasim::event::request_ptr req)
+        corbasim::core::request_ptr req)
 {
     m_label->setText(text);
 

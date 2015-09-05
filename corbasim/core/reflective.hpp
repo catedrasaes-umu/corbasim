@@ -365,8 +365,8 @@ struct operation_reflective :
     public virtual operation_reflective_base,
     public detail::struct_reflective< Value >
 {
-    typedef event::request_impl< Value > request_t;
-    typedef event::response_impl< Value > response_t;
+    typedef request_impl< Value > request_t;
+    typedef response_impl< Value > response_t;
     typedef detail::struct_reflective< Value > base_t;
 
     std::vector< direction_type > m_param_direction;
@@ -391,13 +391,13 @@ struct operation_reflective :
 
     tag_t get_tag() const;
 
-    event::request_ptr create_request() const;
+    request_ptr create_request() const;
 
     direction_type get_parameter_direction(
             unsigned int idx) const;
 
-    holder get_holder(event::request_ptr req) const;
-    holder get_holder(event::response_ptr req) const;
+    holder get_holder(request_ptr req) const;
+    holder get_holder(response_ptr req) const;
 
     static operation_reflective const * get_instance();
 };

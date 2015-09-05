@@ -365,7 +365,7 @@ unsigned int SenderConfig::initDelay() const
 }
 
 void SenderConfig::notifyRequestSent(
-        corbasim::event::request_ptr request)
+        corbasim::core::request_ptr request)
 {
     emit requestSent(request);
 }

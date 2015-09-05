@@ -329,7 +329,7 @@ void SimpleScriptEditor::replaceSelected()
 
     if (form == -1) return;
 
-    event::request_ptr req(m_forms[form]->createRequest());
+    core::request_ptr req(m_forms[form]->createRequest());
 
     doAppendRequest(req, true);
 
@@ -358,7 +358,7 @@ void SimpleScriptEditor::sendCurrent()
 
     if (idx == -1) return;
 
-    event::request_ptr req = m_forms[idx]->createRequest();
+    core::request_ptr req = m_forms[idx]->createRequest();
 
     emit sendRequest(req);
 }
@@ -371,7 +371,7 @@ void SimpleScriptEditor::appendRequest()
 
     for (int i = 0; i < m_how_many->value(); i++)
     {
-        event::request_ptr req = m_forms[idx]->createRequest();
+        core::request_ptr req = m_forms[idx]->createRequest();
 
         doAppendRequest(req, m_cbInsertAtEnd->isChecked());
     }
@@ -383,7 +383,7 @@ void SimpleScriptEditor::appendOneRequest()
 
     if (idx == -1) return;
 
-    event::request_ptr req = m_forms[idx]->createRequest();
+    core::request_ptr req = m_forms[idx]->createRequest();
 
     doAppendRequest(req, m_cbInsertAtEnd->isChecked());
 }
@@ -582,7 +582,7 @@ void SimpleScriptEditor::copySelected()
 
     if (pos >= 0)
     {
-        event::request_ptr selected = m_model.getRequest(pos);
+        core::request_ptr selected = m_model.getRequest(pos);
 
         OperationDescriptor_ptr op = m_factory->get_reflective_by_tag(selected->get_tag());
 
@@ -598,7 +598,7 @@ void SimpleScriptEditor::copySelected()
     }
 }
 
-void SimpleScriptEditor::doAppendRequest(event::request_ptr _request,
+void SimpleScriptEditor::doAppendRequest(core::request_ptr _request,
         bool beforeSelected)
 {
     int pos = getSelected();

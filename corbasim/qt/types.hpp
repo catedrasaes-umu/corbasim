@@ -22,11 +22,11 @@
 
 #include <QMetaType>
 #include <corbasim/impl.hpp>
-#include <corbasim/event_fwd.hpp>
+#include <corbasim/core/event_fwd.hpp>
 
 Q_DECLARE_METATYPE(CORBA::Object_var);
-Q_DECLARE_METATYPE(corbasim::event::event_ptr)
-Q_DECLARE_METATYPE(corbasim::event::request_ptr)
+Q_DECLARE_METATYPE(corbasim::core::event_ptr)
+Q_DECLARE_METATYPE(corbasim::core::request_ptr)
 
 #endif /* CORBASIM_QT_TYPES_HPP */
 

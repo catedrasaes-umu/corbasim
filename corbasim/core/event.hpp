@@ -20,12 +20,12 @@
 #ifndef CORBASIM_EVENT_HPP
 #define CORBASIM_EVENT_HPP
 
-#include <corbasim/event_fwd.hpp>
+#include <corbasim/core/event_fwd.hpp>
 #include <corbasim/adapted.hpp>
 
 namespace corbasim
 {
-namespace event
+namespace core
 {
 
 template< typename Value >
@@ -73,7 +73,7 @@ struct response_impl : public response
     }
 };
 
-} // namespace event
+} // namespace core
 } // namespace corbasim
 
 #endif /* CORBASIM_EVENT_HPP */
