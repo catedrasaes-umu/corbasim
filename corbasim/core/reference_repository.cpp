@@ -26,9 +26,8 @@ using namespace corbasim::core;
 
 reference_repository * reference_repository::get_instance()
 {
-    static boost::shared_ptr< reference_repository >
-        _instance(new reference_repository);
-    return _instance.get();
+    static reference_repository _instance;
+    return &_instance;
 }
 
 void reference_repository::load_file(const std::string& file)
