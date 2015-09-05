@@ -44,8 +44,8 @@ typedef boost::shared_ptr< reference_validator_base >
 struct CORBASIM_CORE_DECLSPEC interface_caller_base :
     public reference_validator_base
 {
-    virtual event * do_call(request * req) const = 0;
-    virtual event * do_call_throw(request * req) const = 0;
+    virtual event_ptr do_call(request * req) const = 0;
+    virtual event_ptr do_call_throw(request * req) const = 0;
 
     virtual ~interface_caller_base();
 };

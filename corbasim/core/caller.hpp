@@ -25,33 +25,18 @@
 #include <corbasim/core/event.hpp>
 #include <corbasim/core/inserter.hpp>
 #include <corbasim/core/caller_fwd.hpp>
+#include <boost/make_shared.hpp>
 
 namespace corbasim
 {
 namespace core
 {
 
-template < typename Value >
-struct oneway_caller
+template< typename Value >
+struct do_call
 {
     template < typename Interface >
-        static inline event* invoke(typename Interface::_ptr_type ref,
-            request * req)
-    {
-        typedef request_impl< Value > request_t;
-        typedef adapted::call< Value > caller_t;
-
-        request_t * reqi = static_cast< request_t * >(req);
-        caller_t::invoke(ref, reqi->m_values);
-        return NULL;
-    }
-};
-
-template < typename Value >
-struct default_caller
-{
-    template < typename Interface >
-    static inline event* invoke(typename Interface::_ptr_type ref,
+    static inline event_ptr invoke(typename Interface::_ptr_type ref,
             request * req)
     {
         typedef request_impl< Value > request_t;
@@ -59,26 +44,27 @@ struct default_caller
         typedef adapted::call< Value > caller_t;
 
         request_t * reqi = static_cast< request_t * >(req);
-        response_t * resp = new response_t(reqi->m_values);
+        Value * values = &reqi->m_values;
 
-        caller_t::invoke(ref, resp->m_values);
-        return resp;
+        event_ptr res;
+
+        if (!adapted::is_oneway< Value >::value)
+        {
+            boost::shared_ptr<response_t> resp =
+                    boost::make_shared<response_t>(reqi->m_values);
+            values = &resp->m_values;
+            res = resp;
+        }
+
+        caller_t::invoke(ref, *values);
+        return res;
     }
-};
-
-template< typename Value >
-struct do_call : public cs_mpl::eval_if< adapted::is_oneway< Value >,
-                        boost::mpl::identity< oneway_caller< Value > >,
-                 // else
-                        boost::mpl::identity< default_caller< Value > >
-                >::type
-{
 };
 
 template< typename Interface >
 struct operation_caller_base
 {
-    virtual event* call(typename Interface::_ptr_type, request*) const = 0;
+    virtual event_ptr call(typename Interface::_ptr_type, request*) const = 0;
 
     virtual ~operation_caller_base() {}
 };
@@ -86,7 +72,7 @@ struct operation_caller_base
 template< typename Interface, typename Value >
 struct operation_caller_impl : public operation_caller_base< Interface >
 {
-    event* call(typename Interface::_ptr_type _this, request* req) const
+    event_ptr call(typename Interface::_ptr_type _this, request* req) const
     {
         return do_call< Value >::template invoke< Interface >(_this, req);
     }
@@ -136,9 +122,9 @@ struct interface_caller : public interface_caller_base
 
     typedef operation_caller_base< Interface > caller_base_t;
 
-    event * do_call(request * req) const
+    event_ptr do_call(request * req) const
     {
-        event * ev = NULL;
+        event_ptr ev;
 
         try
         {
@@ -146,18 +132,20 @@ struct interface_caller : public interface_caller_base
         }
         catch (const CORBA::Exception& ex)
         {
-            ev = new exception(ex._name());
+            ev = boost::make_shared<exception>(ex._name());
         }
         catch (...)
         {
-            ev = new exception();
+            ev = boost::make_shared<exception>();
         }
 
         return ev;
     }
 
-    event * do_call_throw(request * req) const
+    event_ptr do_call_throw(request * req) const
     {
+        event_ptr ev;
+
         if (m_ref)
         {
             const caller_base_t * caller =
@@ -165,11 +153,11 @@ struct interface_caller : public interface_caller_base
 
             if (caller)
             {
-                return caller->call(m_ref, req);
+                ev = caller->call(m_ref, req);
             }
         }
 
-        return NULL;
+        return ev;
     }
 
     bool is_nil() const
