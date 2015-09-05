@@ -39,12 +39,7 @@ set(corbasim_EXPORTED_HEADERS
     json/reflective.hpp
     json/writer.hpp
     mpl.hpp
-    mpl/for_each.hpp
     mpl/list.hpp
-    mpl/vector.hpp
-    mpl/vector100.hpp
-    mpl/vector200.hpp
-    mpl/vector50.hpp
     omniorb4.hpp
     tao.hpp
     version.hpp

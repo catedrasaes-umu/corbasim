@@ -35,9 +35,7 @@
 #include <boost/mpl/range_c.hpp>
 #include <boost/fusion/sequence/intrinsic.hpp>
 
-//#include <corbasim/mpl/vector.hpp>
 #include <corbasim/mpl/list.hpp>
-//#include <corbasim/mpl/for_each.hpp>
 #include <corbasim/impl.hpp>
 
 namespace corbasim
