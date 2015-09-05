@@ -180,7 +180,9 @@ holder string_reflective< T >::create_holder() const
 {
     // Note: you can not use this method for slice member
     // of a sequence.
-    return new holder_ref_impl< orbimpl::String_Manager >();
+    holder_impl_ptr ptr_ =
+        boost::make_shared<holder_ref_impl<orbimpl::String_Manager> >();
+    return ptr_;
 }
 
 template< typename T >
