@@ -23,14 +23,6 @@
 #include <iostream>
 #include <corbasim/core/reference_repository.hpp>
 
-#include <boost/cstdint.hpp>
-#ifdef _MSC_VER
-using boost::uint32_t;
-using boost::int32_t;
-using boost::uint64_t;
-using boost::int64_t;
-#endif
-
 using namespace corbasim::gui;
 
 ReflectiveScriptClass::ReflectiveScriptClass(QScriptEngine * engine) :
@@ -129,13 +121,13 @@ QScriptValue ReflectiveScriptClass::toScriptValue(Node_ptr node)
         case TYPE_USHORT:
             return QScriptValue(hold.to_value< unsigned short >());
         case TYPE_LONG:
-            return QScriptValue(hold.to_value< int32_t >());
+            return QScriptValue(hold.to_value< CORBA::Long >());
         case TYPE_ULONG:
-            return QScriptValue(hold.to_value< uint32_t >());
+            return QScriptValue(hold.to_value< CORBA::ULong >());
         case TYPE_LONGLONG:
-            return QScriptValue((qsreal) hold.to_value< int64_t >());
+            return QScriptValue((qsreal) hold.to_value< CORBA::LongLong >());
         case TYPE_ULONGLONG:
-            return QScriptValue((qsreal) hold.to_value< uint64_t >());
+            return QScriptValue((qsreal) hold.to_value< CORBA::ULongLong >());
 
         case TYPE_STRING:
         case TYPE_WSTRING:
@@ -173,7 +165,7 @@ QScriptValue ReflectiveScriptClass::toScriptValue(Node_ptr node)
         case TYPE_ENUM:
             {
                 // Maybe it works...
-                int32_t value = hold.to_value< int32_t >();
+                CORBA::Long value = hold.to_value< CORBA::Long >();
 
                 const char * str = "Unknown value";
 
@@ -284,16 +276,16 @@ void ReflectiveScriptClass::fromScriptValue(
             hold.to_value< unsigned short >() = value.toUInt16();
             break;
         case TYPE_LONG:
-            hold.to_value< int32_t >() = value.toInteger();
+            hold.to_value< CORBA::Long >() = value.toInteger();
             break;
         case TYPE_ULONG:
-            hold.to_value< uint32_t >() = value.toUInt32();
+            hold.to_value< CORBA::ULong >() = value.toUInt32();
             break;
         case TYPE_LONGLONG:
-            hold.to_value< int64_t >() = value.toInteger();
+            hold.to_value< CORBA::LongLong >() = value.toInteger();
             break;
         case TYPE_ULONGLONG:
-            hold.to_value< uint64_t >() = value.toInteger();
+            hold.to_value< CORBA::ULongLong >() = value.toInteger();
             break;
 
         case TYPE_STRING:
@@ -344,7 +336,7 @@ void ReflectiveScriptClass::fromScriptValue(
                 {
                     if (str == reflective->get_child_name(i))
                     {
-                        hold.to_value< int32_t >() = (int32_t) i;
+                        hold.to_value< CORBA::Long >() = (CORBA::Long) i;
                         break;
                     }
                 }

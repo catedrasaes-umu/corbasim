@@ -22,14 +22,6 @@
 #include <corbasim/core/reference_repository.hpp>
 #include <iostream>
 
-#include <boost/cstdint.hpp>
-#ifdef _MSC_VER
-using boost::uint32_t;
-using boost::int32_t;
-using boost::uint64_t;
-using boost::int64_t;
-#endif
-
 namespace corbasim
 {
 namespace gui
@@ -94,13 +86,13 @@ namespace gui
             case TYPE_USHORT:
                 return QVariant(hold.to_value< unsigned short >());
             case TYPE_LONG:
-                return QVariant(hold.to_value< int32_t >());
+                return QVariant(hold.to_value< CORBA::Long >());
             case TYPE_ULONG:
-                return QVariant(hold.to_value< uint32_t >());
+                return QVariant(hold.to_value< CORBA::ULong >());
             case TYPE_LONGLONG:
-                return QVariant((qint64) hold.to_value< int64_t >());
+                return QVariant((qint64) hold.to_value< CORBA::LongLong >());
             case TYPE_ULONGLONG:
-                return QVariant((quint64) hold.to_value< uint64_t >());
+                return QVariant((quint64) hold.to_value< CORBA::ULongLong >());
 
             case TYPE_STRING:
             case TYPE_WSTRING:
@@ -138,7 +130,7 @@ namespace gui
             case TYPE_ENUM:
                 {
                     // Maybe it works...
-                    int32_t value = hold.to_value< int32_t >();
+                    CORBA::Long value = hold.to_value< CORBA::Long >();
 
                     const char * str = "Unknown value";
 
@@ -284,33 +276,33 @@ namespace gui
                 }
             case TYPE_LONG:
                 {
-                    if (!var.canConvert< int32_t >()) return false;
+                    if (!var.canConvert< CORBA::Long >()) return false;
 
-                    hold.to_value< int32_t >() = var.value< int32_t >();
+                    hold.to_value< CORBA::Long >() = var.value< CORBA::Long >();
 
                     return true;
                 }
             case TYPE_ULONG:
                 {
-                    if (!var.canConvert< uint32_t >()) return false;
+                    if (!var.canConvert< CORBA::ULong >()) return false;
 
-                    hold.to_value< uint32_t >() = var.value< uint32_t >();
+                    hold.to_value< CORBA::ULong >() = var.value< CORBA::ULong >();
 
                     return true;
                 }
             case TYPE_LONGLONG:
                 {
-                    if (!var.canConvert< int64_t >()) return false;
+                    if (!var.canConvert< CORBA::LongLong >()) return false;
 
-                    hold.to_value< int64_t >() = var.value< int64_t >();
+                    hold.to_value< CORBA::LongLong >() = var.value< CORBA::LongLong >();
 
                     return true;
                 }
             case TYPE_ULONGLONG:
                 {
-                    if (!var.canConvert< uint64_t >()) return false;
+                    if (!var.canConvert< CORBA::ULongLong >()) return false;
 
-                    hold.to_value< uint64_t >() = var.value< uint64_t >();
+                    hold.to_value< CORBA::ULongLong >() = var.value< CORBA::ULongLong >();
 
                     return true;
                 }
@@ -358,7 +350,7 @@ namespace gui
             case TYPE_ENUM:
                 {
                     // Maybe it works...
-                    int32_t& value = hold.to_value< int32_t >();
+                    CORBA::Long& value = hold.to_value< CORBA::Long >();
 
                     bool canConvert = var.canConvert(QVariant::String);
 
@@ -368,7 +360,7 @@ namespace gui
                         const unsigned int count =
                             reflective->get_children_count();
 
-                        for (int32_t i = 0; i < (int32_t) count; i++)
+                        for (CORBA::Long i = 0; i < (CORBA::Long) count; i++)
                         {
                             if (val == reflective->get_child_name(i))
                             {
@@ -476,16 +468,16 @@ namespace gui
             case TYPE_USHORT:
                 return QScriptValue(hold.to_value< unsigned short >());
             case TYPE_LONG:
-                return QScriptValue(hold.to_value< int32_t >());
+                return QScriptValue(hold.to_value< CORBA::Long >());
             case TYPE_ULONG:
-                return QScriptValue(hold.to_value< uint32_t >());
+                return QScriptValue(hold.to_value< CORBA::ULong >());
                 // No soporta 64 bits
             case TYPE_LONGLONG:
-                return QScriptValue((int32_t)
-                        hold.to_value< int64_t >());
+                return QScriptValue((CORBA::Long)
+                        hold.to_value< CORBA::LongLong >());
             case TYPE_ULONGLONG:
-                return QScriptValue((uint32_t)
-                        hold.to_value< uint64_t >());
+                return QScriptValue((CORBA::ULong)
+                        hold.to_value< CORBA::ULongLong >());
 
             case TYPE_STRING:
             case TYPE_WSTRING:
@@ -523,7 +515,7 @@ namespace gui
             case TYPE_ENUM:
                 {
                     // Maybe it works...
-                    int32_t value = hold.to_value< int32_t >();
+                    CORBA::Long value = hold.to_value< CORBA::Long >();
 
                     const char * str = "Unknown value";
 
@@ -640,13 +632,13 @@ namespace gui
             case TYPE_USHORT:
                 return QVariant(hold.to_value< unsigned short >());
             case TYPE_LONG:
-                return QVariant(hold.to_value< int32_t >());
+                return QVariant(hold.to_value< CORBA::Long >());
             case TYPE_ULONG:
-                return QVariant(hold.to_value< uint32_t >());
+                return QVariant(hold.to_value< CORBA::ULong >());
             case TYPE_LONGLONG:
-                return QVariant((qint64) hold.to_value< int64_t >());
+                return QVariant((qint64) hold.to_value< CORBA::LongLong >());
             case TYPE_ULONGLONG:
-                return QVariant((quint64) hold.to_value< uint64_t >());
+                return QVariant((quint64) hold.to_value< CORBA::ULongLong >());
 #endif
 
             case TYPE_STRING:
@@ -692,7 +684,7 @@ namespace gui
             case TYPE_ENUM:
                 {
                     // Maybe it works...
-                    int32_t value = hold.to_value< int32_t >();
+                    CORBA::Long value = hold.to_value< CORBA::Long >();
 
                     const char * str = "Unknown value";
 

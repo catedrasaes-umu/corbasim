@@ -45,8 +45,8 @@ using namespace corbasim::gui;
 #ifdef _MSC_VER
 using boost::uint32_t;
 using boost::int32_t;
-using boost::uint64_t;
-using boost::int64_t;
+using boost::CORBA::ULongLong;
+using boost::CORBA::LongLong;
 #endif
 
 // should be a singleton instance of a factory
@@ -438,10 +438,10 @@ void IntegerWidget::toHolder(Holder& holder)
             holder.to_value< uint32_t >() = (uint32_t) value_;
             break;
         case TYPE_LONGLONG:
-            holder.to_value< int64_t >() = (int64_t) value_;
+            holder.to_value< CORBA::LongLong >() = (CORBA::LongLong) value_;
             break;
         case TYPE_ULONGLONG:
-            holder.to_value< uint64_t >() = (uint64_t) value_;
+            holder.to_value< CORBA::ULongLong >() = (CORBA::ULongLong) value_;
             break;
         default:
             break;
@@ -475,10 +475,10 @@ void IntegerWidget::fromHolder(Holder& holder)
             setValue(holder.to_value< uint32_t >());
             break;
         case TYPE_LONGLONG:
-            setValue(holder.to_value< int64_t >());
+            setValue(holder.to_value< CORBA::LongLong >());
             break;
         case TYPE_ULONGLONG:
-            setValue(holder.to_value< uint64_t >());
+            setValue(holder.to_value< CORBA::ULongLong >());
             break;
         default:
             break;

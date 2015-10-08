@@ -20,12 +20,6 @@
 #include "file_format_helper.hpp"
 #include <corbasim/json/reflective.hpp>
 
-#include <boost/cstdint.hpp>
-using boost::uint32_t;
-using boost::int32_t;
-using boost::uint64_t;
-using boost::int64_t;
-
 using namespace corbasim::core;
 
 file_format_factory::file_format_factory()
@@ -149,10 +143,10 @@ bool text_file_format_helper::load(
             DUMP_TYPE(CHAR, char);
             DUMP_TYPE(SHORT, short);
             DUMP_TYPE(USHORT, unsigned short);
-            DUMP_TYPE(LONG, int32_t);
-            DUMP_TYPE(ULONG, uint32_t);
-            DUMP_TYPE(LONGLONG, int64_t);
-            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(LONG, CORBA::Long);
+            DUMP_TYPE(ULONG, CORBA::ULong);
+            DUMP_TYPE(LONGLONG, CORBA::LongLong);
+            DUMP_TYPE(ULONGLONG, CORBA::ULongLong);
             DUMP_TYPE(FLOAT, float);
             DUMP_TYPE(DOUBLE, double);
 
@@ -229,10 +223,10 @@ bool text_file_format_helper::save(
             DUMP_TYPE(CHAR, char);
             DUMP_TYPE(SHORT, short);
             DUMP_TYPE(USHORT, unsigned short);
-            DUMP_TYPE(LONG, int32_t);
-            DUMP_TYPE(ULONG, uint32_t);
-            DUMP_TYPE(LONGLONG, int64_t);
-            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(LONG, CORBA::Long);
+            DUMP_TYPE(ULONG, CORBA::ULong);
+            DUMP_TYPE(LONGLONG, CORBA::LongLong);
+            DUMP_TYPE(ULONGLONG, CORBA::ULongLong);
             DUMP_TYPE(FLOAT, float);
             DUMP_TYPE(DOUBLE, double);
 
@@ -339,10 +333,10 @@ bool binary_file_format_helper::load(
             DUMP_TYPE(CHAR, char);
             DUMP_TYPE(SHORT, short);
             DUMP_TYPE(USHORT, unsigned short);
-            DUMP_TYPE(LONG, int32_t);
-            DUMP_TYPE(ULONG, uint32_t);
-            DUMP_TYPE(LONGLONG, int64_t);
-            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(LONG, CORBA::Long);
+            DUMP_TYPE(ULONG, CORBA::ULong);
+            DUMP_TYPE(LONGLONG, CORBA::LongLong);
+            DUMP_TYPE(ULONGLONG, CORBA::ULongLong);
             DUMP_TYPE(FLOAT, float);
             DUMP_TYPE(DOUBLE, double);
 
@@ -461,10 +455,10 @@ bool binary_file_format_helper::save(
             DUMP_TYPE(CHAR, char);
             DUMP_TYPE(SHORT, short);
             DUMP_TYPE(USHORT, unsigned short);
-            DUMP_TYPE(LONG, int32_t);
-            DUMP_TYPE(ULONG, uint32_t);
-            DUMP_TYPE(LONGLONG, int64_t);
-            DUMP_TYPE(ULONGLONG, uint64_t);
+            DUMP_TYPE(LONG, CORBA::Long);
+            DUMP_TYPE(ULONG, CORBA::ULong);
+            DUMP_TYPE(LONGLONG, CORBA::LongLong);
+            DUMP_TYPE(ULONGLONG, CORBA::ULongLong);
             DUMP_TYPE(FLOAT, float);
             DUMP_TYPE(DOUBLE, double);
 

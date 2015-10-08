@@ -26,12 +26,6 @@
 
 #include <corbasim/core/reference_repository.hpp>
 
-#include <boost/cstdint.hpp>
-using boost::uint32_t;
-using boost::int32_t;
-using boost::uint64_t;
-using boost::int64_t;
-
 using namespace corbasim::json;
 using namespace corbasim::core;
 
@@ -72,16 +66,16 @@ void reflective_helper::new_double(double value_)
                 (unsigned short) value_;
             break;
         case TYPE_LONG:
-            m_holder.to_value< int32_t >() = (int32_t) value_;
+            m_holder.to_value< CORBA::Long >() = (CORBA::Long) value_;
             break;
         case TYPE_ULONG:
-            m_holder.to_value< uint32_t >() = (uint32_t) value_;
+            m_holder.to_value< CORBA::ULong >() = (CORBA::ULong) value_;
             break;
         case TYPE_LONGLONG:
-            m_holder.to_value< int64_t >() = (int64_t) value_;
+            m_holder.to_value< CORBA::LongLong >() = (CORBA::LongLong) value_;
             break;
         case TYPE_ULONGLONG:
-            m_holder.to_value< uint64_t >() = (uint64_t) value_;
+            m_holder.to_value< CORBA::ULongLong >() = (CORBA::ULongLong) value_;
             break;
         default:
             throw "Error!";
@@ -107,7 +101,7 @@ void reflective_helper::new_string(const std::string& d)
                 {
                     if (d == m_reflective->get_child_name(i))
                     {
-                        m_holder.to_value< int32_t >() = i;
+                        m_holder.to_value< CORBA::Long >() = i;
                         break;
                     }
                 }
@@ -287,7 +281,7 @@ void corbasim::json::write(std_writer_t& w,
             {
                 const int count = (int) reflective->get_children_count();
 
-                int32_t idx = holder.to_value< int32_t >();
+                CORBA::Long idx = holder.to_value< CORBA::Long >();
 
                 if (idx >= 0 && idx < count)
                 {
@@ -323,16 +317,16 @@ void corbasim::json::write(std_writer_t& w,
             w.new_double((double) holder.to_value< unsigned short >());
             break;
         case TYPE_LONG:
-            w.new_double((double) holder.to_value< int32_t >());
+            w.new_double((double) holder.to_value< CORBA::Long >());
             break;
         case TYPE_ULONG:
-            w.new_double((double) holder.to_value< uint32_t >());
+            w.new_double((double) holder.to_value< CORBA::ULong >());
             break;
         case TYPE_LONGLONG:
-            w.new_double((double) holder.to_value< int64_t >());
+            w.new_double((double) holder.to_value< CORBA::LongLong >());
             break;
         case TYPE_ULONGLONG:
-            w.new_double((double) holder.to_value< uint64_t >());
+            w.new_double((double) holder.to_value< CORBA::ULongLong >());
             break;
 
         case TYPE_ARRAY:
