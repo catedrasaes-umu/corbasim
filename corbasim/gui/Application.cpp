@@ -251,7 +251,7 @@ Application::~Application()
     m_data->m_senderCtl->stop(); // its thread pool
     m_data->m_senderCtlThread.quit();
     m_data->m_scriptEngineThread.quit();
-    m_data->m_nameServiceManagerThread.quit();
+    m_data->m_nameServiceManager->stop();
 
     m_data->m_inputReqCtlThread.wait();
     m_data->m_senderCtl->join(); // its thread pool

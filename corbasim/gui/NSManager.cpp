@@ -27,6 +27,7 @@ NSManager::NSManager(const CORBA::ORB_var& orb, QObject * parent) :
 {
     QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(refreshNS()));
     QObject::connect(this, SIGNAL(started()), this, SLOT(doStart()));
+    QObject::connect(this, SIGNAL(stopped()), this, SLOT(doStop()));
 }
 
 NSManager::~NSManager()
@@ -36,6 +37,17 @@ NSManager::~NSManager()
 void NSManager::start()
 {
     emit started();
+}
+
+void NSManager::stop()
+{
+    emit stopped();
+}
+
+void NSManager::doStop()
+{
+    m_timer.stop();
+    QThread::currentThread()->quit();
 }
 
 void NSManager::doStart()

@@ -54,10 +54,13 @@ public:
      */
     void start();
 
+    void stop();
+
 protected slots:
 
     void refreshNS();
     void doStart();
+    void doStop();
 
 public slots:
 
@@ -80,6 +83,7 @@ public slots:
 signals:
 
     void started();
+    void stopped();
 
     void error(const QString& msg);
     void message(const QString& msg);
