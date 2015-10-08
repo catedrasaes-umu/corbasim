@@ -24,7 +24,6 @@
 #include <QSortFilterProxyModel>
 #include <QDateTime>
 #include <QIcon>
-#include <boost/circular_buffer.hpp>
 
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/types.hpp>
@@ -113,23 +112,12 @@ protected:
             bool is_in,
             LogEntry& entry);
 
-    const LogEntry& getLogEntry(int row) const { return m_entries.at(row); };
+    const LogEntry& getLogEntry(int row) const;
 
     void removeEntries(int requiredFreeEntries);
 
-    ObjrefRepository m_instances;
-
-    int m_maxEntries;
-
-    QIcon m_inputIcon;
-    QIcon m_outputIcon;
-
-    boost::circular_buffer< LogEntry > m_entries;
-    boost::circular_buffer< LogEntry > m_pendingEntries;
-    boost::circular_buffer< MetaNode_ptr > m_nodes;
-
-    QTime m_delayDiff;
-    QTimer m_pendingTimer;
+    struct Data;
+    Data * m_data;
 
     friend class FilteredLogModel;
 };

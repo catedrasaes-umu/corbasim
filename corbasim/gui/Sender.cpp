@@ -1,6 +1,6 @@
 // -*- mode: c++; c-basic-style: "bsd"; c-basic-offset: 4; -*-
 /*
- * Sender.cpp
+ * SenderImpl.cpp
  * Copyright (C) Cátedra SAES-UMU 2011 <catedra-saes-umu@listas.um.es>
  *
  * CORBASIM is free software: you can redistribute it and/or modify it
@@ -23,11 +23,54 @@
 #include <corbasim/gui/utils.hpp>
 #include <corbasim/gui/item/ModelNode.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/asio.hpp>
+#include <boost/thread.hpp>
+#include <boost/weak_ptr.hpp>
 #include <memory>
 #include <iostream>
 #include <exception>
 
 using namespace corbasim::gui;
+
+class SenderImpl;
+
+typedef boost::shared_ptr< SenderImpl > Sender_ptr;
+typedef boost::weak_ptr< SenderImpl > Sender_weak;
+
+class SenderImpl : public Sender
+{
+public:
+
+    SenderImpl(boost::asio::io_service& ioService,
+        SenderConfig_ptr config);
+    ~SenderImpl();
+
+    void start(Sender_weak weak);
+
+    void cancel();
+
+    void process();
+
+protected:
+
+    void scheduleTimer(Sender_weak weak);
+
+    void handleTimeout(
+            Sender_weak weak,
+            const boost::system::error_code& error);
+
+    void applyProcessor(
+            Request_ptr request,
+            RequestProcessor_ptr processor,
+            Holder holder);
+
+    boost::asio::deadline_timer m_timer;
+    SenderConfig_ptr m_config;
+    int m_currentTime;
+
+    OperationEvaluator m_evaluator;
+    Request_ptr m_request;
+};
 
 //
 //
@@ -35,40 +78,56 @@ using namespace corbasim::gui;
 //
 //
 
+typedef QMap< SenderConfig_ptr, Sender_ptr > map_t;
+
+struct SenderController::Data
+{
+    boost::thread_group threads;
+    boost::asio::io_service ioService;
+    boost::asio::io_service::work work;
+
+    map_t map;
+
+    Data() :
+        work(ioService)
+    {}
+};
+
 SenderController::SenderController() :
-    m_work(m_ioService)
+    m_data(new Data)
 {
 }
 
 SenderController::~SenderController()
 {
+    delete m_data;
 }
 
 void SenderController::start(unsigned int numberOfThreads)
 {
     for (unsigned int i = 0; i < numberOfThreads; i++)
     {
-        m_threads.create_thread(boost::bind(
+        m_data->threads.create_thread(boost::bind(
                     &boost::asio::io_service::run,
-                    &m_ioService));
+                    &m_data->ioService));
     }
 }
 
 void SenderController::join()
 {
-    m_threads.join_all();
+    m_data->threads.join_all();
 }
 
 void SenderController::stop()
 {
-    m_ioService.stop();
+    m_data->ioService.stop();
 }
 
 // slots
 
 void SenderController::addSender(SenderConfig_ptr cfg)
 {
-    Sender_ptr sender(new Sender(m_ioService, cfg));
+    Sender_ptr sender(new SenderImpl(m_data->ioService, cfg));
 
     // Self-delete
     connect(sender.get(),
@@ -82,31 +141,33 @@ void SenderController::addSender(SenderConfig_ptr cfg)
             this,
             SIGNAL(error(const QString&)));
 
-    m_ioService.post(
-            boost::bind(&Sender::start, sender, sender));
+    m_data->ioService.post(
+            boost::bind(&SenderImpl::start, sender, sender));
 
-    m_map.insert(cfg, sender);
+    m_data->map.insert(cfg, sender);
 }
 
 void SenderController::deleteSender(SenderConfig_ptr cfg)
 {
-    map_t::iterator it = m_map.find(cfg);
+    map_t::iterator it = m_data->map.find(cfg);
 
-    if (it != m_map.end())
+    if (it != m_data->map.end())
     {
         it.value()->cancel();
-        m_map.erase(it);
+        m_data->map.erase(it);
     }
 }
 
 //
 //
-// Sender
+// SenderImpl
 //
 //
 
+Sender::Sender() {}
+Sender::~Sender() {}
 
-Sender::Sender(boost::asio::io_service& ioService,
+SenderImpl::SenderImpl(boost::asio::io_service& ioService,
     SenderConfig_ptr config) :
     m_timer(ioService),
     m_config(config),
@@ -119,11 +180,11 @@ Sender::Sender(boost::asio::io_service& ioService,
             SLOT(sendRequest(Request_ptr)));
 }
 
-Sender::~Sender()
+SenderImpl::~SenderImpl()
 {
 }
 
-void Sender::start(Sender_weak weak)
+void SenderImpl::start(Sender_weak weak)
 {
     Sender_ptr ptr (weak.lock());
 
@@ -160,7 +221,7 @@ void Sender::start(Sender_weak weak)
                     m_config->initDelay()));
 
         m_timer.async_wait(
-                boost::bind(&Sender::handleTimeout,
+                boost::bind(&SenderImpl::handleTimeout,
                     this, weak, _1));
     }
     else
@@ -173,12 +234,12 @@ void Sender::start(Sender_weak weak)
     }
 }
 
-void Sender::cancel()
+void SenderImpl::cancel()
 {
     m_timer.cancel();
 }
 
-void Sender::process()
+void SenderImpl::process()
 {
     OperationDescriptor_ptr op = m_config->operation();
 
@@ -214,7 +275,7 @@ void Sender::process()
     m_config->notifyRequestSent(request);
 }
 
-void Sender::applyProcessor(
+void SenderImpl::applyProcessor(
         Request_ptr request,
         RequestProcessor_ptr processor,
         Holder holder)
@@ -235,7 +296,7 @@ void Sender::applyProcessor(
         processor->process(request, descriptor, value);
 }
 
-void Sender::scheduleTimer(Sender_weak weak)
+void SenderImpl::scheduleTimer(Sender_weak weak)
 {
     namespace ptime = boost::posix_time;
 
@@ -243,11 +304,11 @@ void Sender::scheduleTimer(Sender_weak weak)
             ptime::milliseconds(m_config->period()));
 
     m_timer.async_wait(
-            boost::bind(&Sender::handleTimeout,
+            boost::bind(&SenderImpl::handleTimeout,
                 this, weak, _1));
 }
 
-void Sender::handleTimeout(
+void SenderImpl::handleTimeout(
         Sender_weak weak,
         const boost::system::error_code& err)
 {
@@ -282,7 +343,7 @@ void Sender::handleTimeout(
 
 //
 //
-// Sender Config
+// SenderConfig
 //
 //
 

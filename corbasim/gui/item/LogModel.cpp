@@ -20,6 +20,7 @@
 #include "LogModel.hpp"
 #include <QStyle>
 #include <QApplication>
+#include <boost/circular_buffer.hpp>
 
 #include <corbasim/gui/qvariant.hpp>
 
@@ -32,27 +33,50 @@
 
 using namespace corbasim::gui;
 
+struct LogModel::Data
+{
+    ObjrefRepository instances;
+
+    int maxEntries;
+
+    QIcon inputIcon;
+    QIcon outputIcon;
+
+    boost::circular_buffer< LogEntry > entries;
+    boost::circular_buffer< LogEntry > pendingEntries;
+    boost::circular_buffer< MetaNode_ptr > nodes;
+
+    QTime delayDiff;
+    QTimer pendingTimer;
+
+    Data(LogModel * this_) :
+        instances(this_),
+        maxEntries(100),
+        entries(maxEntries),
+        pendingEntries(maxEntries),
+        nodes(2 * maxEntries),
+        pendingTimer(this_)
+    {
+    }
+};
+
 LogModel::LogModel(QObject * parent) :
     QAbstractItemModel(parent),
-    m_instances(this),
-    m_maxEntries(100),
-    m_entries(m_maxEntries),
-    m_pendingEntries(m_maxEntries),
-    m_nodes(2 * m_maxEntries),
-    m_pendingTimer(this)
+    m_data(new Data(this))
 {
-    m_inputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
-    m_outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
+    m_data->inputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowRight);
+    m_data->outputIcon = qApp->style()->standardIcon(QStyle::SP_ArrowLeft);
 
     // Timer
-    m_pendingTimer.setSingleShot(true);
-    m_pendingTimer.setInterval(1000);
-    connect(&m_pendingTimer, SIGNAL(timeout()),
+    m_data->pendingTimer.setSingleShot(true);
+    m_data->pendingTimer.setInterval(1000);
+    connect(&m_data->pendingTimer, SIGNAL(timeout()),
             this, SLOT(processPendingEntries()));
 }
 
 LogModel::~LogModel()
 {
+    delete m_data;
 }
 
 int LogModel::columnCount(const QModelIndex &/*parent*/) const
@@ -66,9 +90,9 @@ const LogModel::LogEntry * LogModel::getEntry(const QModelIndex& index) const
 
     while(idx.parent().isValid()) idx = idx.parent();
 
-    if (idx.isValid() && idx.row() < m_entries.size())
+    if (idx.isValid() && idx.row() < m_data->entries.size())
     {
-        return &(m_entries.at(idx.row()));
+        return &(m_data->entries.at(idx.row()));
     }
 
     return NULL;
@@ -116,7 +140,7 @@ QVariant LogModel::data(const QModelIndex& index, int role) const
         }
 
         // std::cout << parent.row() << std::endl;
-        const LogEntry& entry = m_entries.at(parent.row());
+        const LogEntry& entry = m_data->entries.at(parent.row());
 
         // return QVariant();
         return entry.color;
@@ -132,9 +156,9 @@ QVariant LogModel::data(const QModelIndex& index, int role) const
         {
             // Value
             if (index.column())
-                return m_entries[index.row()].dateTime;
+                return m_data->entries[index.row()].dateTime;
 
-            return m_entries[index.row()].text;
+            return m_data->entries[index.row()].text;
         }
         else
         {
@@ -156,7 +180,7 @@ QVariant LogModel::data(const QModelIndex& index, int role) const
     else if (!index.parent().isValid() && index.column() == 0
             && role == Qt::DecorationRole)
     {
-        const LogEntry& entry = m_entries.at(index.row());
+        const LogEntry& entry = m_data->entries.at(index.row());
         return *(entry.icon);
     }
 
@@ -267,7 +291,7 @@ QModelIndex LogModel::index(int row, int column,
     if (!parent.isValid())
     {
         return createIndex(row, column,
-                (void *) m_nodes[row].get());
+                (void *) m_data->nodes[row].get());
     }
 
     MetaNode * node = static_cast< MetaNode * >(
@@ -299,8 +323,8 @@ QModelIndex LogModel::parent(const QModelIndex &index) const
     {
         // index could be changed
         int row = 0;
-        for (; row < m_nodes.size(); row++)
-            if (m_nodes.at(row).get() == node->parent)
+        for (; row < m_data->nodes.size(); row++)
+            if (m_data->nodes.at(row).get() == node->parent)
                 return createIndex(row, 0, (void *) node->parent);
 
         return QModelIndex();
@@ -318,7 +342,7 @@ int LogModel::rowCount(const QModelIndex &parent) const
         return 0;
 
     if (!parent.isValid())
-        return m_entries.size();
+        return m_data->entries.size();
 
     MetaNode * node = static_cast< MetaNode * >(
             parent.internalPointer());
@@ -336,34 +360,34 @@ void LogModel::clearLog()
 
 void LogModel::resetInternalData()
 {
-    m_entries.clear();
-    m_pendingEntries.clear();
-    m_nodes.clear();
+    m_data->entries.clear();
+    m_data->pendingEntries.clear();
+    m_data->nodes.clear();
 }
 
 int LogModel::maxEntries() const
 {
-    return m_maxEntries;
+    return m_data->maxEntries;
 }
 
 void LogModel::setMaxEntries(int max)
 {
-    m_maxEntries = max;
+    m_data->maxEntries = max;
     removeEntries(0);
 
-    m_entries.set_capacity(max);
-    m_pendingEntries.set_capacity(max);
-    m_nodes.set_capacity(2 * max);
+    m_data->entries.set_capacity(max);
+    m_data->pendingEntries.set_capacity(max);
+    m_data->nodes.set_capacity(2 * max);
 }
 
 void LogModel::registerInstance(Objref_ptr objref)
 {
-    m_instances.add(objref);
+    m_data->instances.add(objref);
 }
 
 void LogModel::unregisterInstance(ObjectId id)
 {
-    m_instances.del(id);
+    m_data->instances.del(id);
 }
 
 void LogModel::inputRequest(ObjectId id,
@@ -389,12 +413,12 @@ void LogModel::append(ObjectId id,
     if (!fillLogEntry(id, req, resp, is_in, entry))
         return;
 
-    m_pendingEntries.push_back(entry);
+    m_data->pendingEntries.push_back(entry);
 
-    if (m_delayDiff.elapsed() < 500)
+    if (m_data->delayDiff.elapsed() < 500)
     {
-        if (!m_pendingTimer.isActive())
-            m_pendingTimer.start();
+        if (!m_data->pendingTimer.isActive())
+            m_data->pendingTimer.start();
     }
     else
     {
@@ -408,7 +432,7 @@ bool LogModel::fillLogEntry(ObjectId id,
         bool is_in,
         LogEntry& entry)
 {
-    Objref_ptr obj = m_instances.find(id);
+    Objref_ptr obj = m_data->instances.find(id);
 
     if (!obj)
         return false;
@@ -446,7 +470,7 @@ bool LogModel::fillLogEntry(ObjectId id,
         metaNode->brothers.push_back(Node_ptr());
     }
 
-    m_nodes.push_back(metaNode);
+    m_data->nodes.push_back(metaNode);
 
     // List
     entry.is_in_entry = is_in;
@@ -457,7 +481,7 @@ bool LogModel::fillLogEntry(ObjectId id,
     {
         entry.text = QString("Incoming call ") + obj->name() + "."
             + op->get_name();
-        entry.icon = &m_inputIcon;
+        entry.icon = &m_data->inputIcon;
 
         // Background color
         if (resp && (resp->get_type() == core::EXCEPTION ||
@@ -473,7 +497,7 @@ bool LogModel::fillLogEntry(ObjectId id,
     {
         entry.text = QString("Outgoing call ") + obj->name() + "."
             + op->get_name();
-        entry.icon = &m_outputIcon;
+        entry.icon = &m_data->outputIcon;
 
         // Background Color
         if (resp && (resp->get_type() == core::EXCEPTION ||
@@ -489,19 +513,24 @@ bool LogModel::fillLogEntry(ObjectId id,
     return true;
 }
 
+const LogModel::LogEntry &LogModel::getLogEntry(int row) const
+{ 
+    return m_data->entries.at(row);
+}
+
 void LogModel::removeEntries(int requiredFreeEntries)
 {
     int nRowsToBeRemoved =
-        m_entries.size() - m_maxEntries + requiredFreeEntries;
-    nRowsToBeRemoved = std::min((int) m_entries.size(), nRowsToBeRemoved);
+        m_data->entries.size() - m_data->maxEntries + requiredFreeEntries;
+    nRowsToBeRemoved = std::min((int) m_data->entries.size(), nRowsToBeRemoved);
 
     if (nRowsToBeRemoved > 0)
     {
         beginRemoveRows(QModelIndex(), 0, nRowsToBeRemoved - 1);
 
-        m_entries.erase(m_entries.begin(),
-                m_entries.begin() + nRowsToBeRemoved);
-        m_nodes.erase(m_nodes.begin(), m_nodes.begin() + nRowsToBeRemoved);
+        m_data->entries.erase(m_data->entries.begin(),
+                m_data->entries.begin() + nRowsToBeRemoved);
+        m_data->nodes.erase(m_data->nodes.begin(), m_data->nodes.begin() + nRowsToBeRemoved);
 
         endRemoveRows();
     }
@@ -509,31 +538,31 @@ void LogModel::removeEntries(int requiredFreeEntries)
 
 void LogModel::processPendingEntries()
 {
-    if (m_pendingEntries.empty())
+    if (m_data->pendingEntries.empty())
         return;
 
-    size_t size = std::min(m_pendingEntries.size(), (size_t) m_maxEntries);
+    size_t size = std::min(m_data->pendingEntries.size(), (size_t) m_data->maxEntries);
 
     removeEntries(size);
 
     boost::circular_buffer< LogEntry >::iterator begin =
-        m_pendingEntries.begin();
+        m_data->pendingEntries.begin();
 
     // No inserta más de las maximas permitidas
-    if (m_pendingEntries.size() > size)
+    if (m_data->pendingEntries.size() > size)
     {
-        const size_t diff = m_pendingEntries.size() - size;
+        const size_t diff = m_data->pendingEntries.size() - size;
         begin += diff;
     }
 
-    beginInsertRows(QModelIndex(), m_entries.size(),
-            m_entries.size() + size - 1);
+    beginInsertRows(QModelIndex(), m_data->entries.size(),
+            m_data->entries.size() + size - 1);
 
     // Hace accesibles las entradas pendientes
-    m_entries.insert(m_entries.end(), begin, begin + size);
-    m_pendingEntries.clear();
+    m_data->entries.insert(m_data->entries.end(), begin, begin + size);
+    m_data->pendingEntries.clear();
 
-    m_delayDiff.start();
+    m_data->delayDiff.start();
 
     endInsertRows();
 }
@@ -587,4 +616,3 @@ void FilteredLogModel::resetModel()
 {
     invalidateFilter();
 }
-

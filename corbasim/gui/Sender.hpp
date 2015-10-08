@@ -22,10 +22,7 @@
 
 #include <QtCore>
 #include <QtScript>
-#include <boost/asio.hpp>
-#include <boost/thread.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
 #include <corbasim/gui/types.hpp>
 #include <corbasim/gui/export.hpp>
 #include <corbasim/gui/proc/RequestProcessor.hpp>
@@ -41,9 +38,6 @@ class SenderConfig;
 typedef boost::shared_ptr< SenderConfig > SenderConfig_ptr;
 
 class Sender;
-
-typedef boost::shared_ptr< Sender > Sender_ptr;
-typedef boost::weak_ptr< Sender > Sender_weak;
 
 class SenderController;
 
@@ -106,17 +100,7 @@ class CORBASIM_GUI_DECLSPEC Sender : public QObject
 {
     Q_OBJECT
 public:
-
-    Sender(boost::asio::io_service& ioService,
-        SenderConfig_ptr config);
     ~Sender();
-
-    void start(Sender_weak weak);
-
-    void cancel();
-
-    void process();
-
 signals:
 
     void finished(SenderConfig_ptr);
@@ -124,24 +108,7 @@ signals:
     void error(const QString& err);
 
 protected:
-
-    void scheduleTimer(Sender_weak weak);
-
-    void handleTimeout(
-            Sender_weak weak,
-            const boost::system::error_code& error);
-
-    void applyProcessor(
-            Request_ptr request,
-            RequestProcessor_ptr processor,
-            Holder holder);
-
-    boost::asio::deadline_timer m_timer;
-    SenderConfig_ptr m_config;
-    int m_currentTime;
-
-    OperationEvaluator m_evaluator;
-    Request_ptr m_request;
+    Sender();
 };
 
 class CORBASIM_GUI_DECLSPEC SenderController : public QObject
@@ -167,12 +134,8 @@ signals:
 
 protected:
 
-    boost::thread_group m_threads;
-    boost::asio::io_service m_ioService;
-    boost::asio::io_service::work m_work;
-
-    typedef QMap< SenderConfig_ptr, Sender_ptr > map_t;
-    map_t m_map;
+    struct Data;
+    Data  *m_data;
 };
 
 } // namespace gui
