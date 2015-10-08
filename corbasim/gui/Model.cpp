@@ -449,6 +449,7 @@ InterfaceDescriptor_ptr InterfaceRepository::loadLibrary(const QString& file)
 
     symbol.remove(".so");
     symbol.remove(".dll");
+    symbol.remove(".dylib");
     symbol.replace("libcorbasim_", "corbasim_");
 
     const std::string str(symbol.toStdString());
@@ -521,8 +522,13 @@ void InterfaceRepository::loadDirectory(const QString& path)
     filters << "corbasim_reflective_*.dll";
     idlFilters << "*_idl.dll";
 #else
+#ifdef Q_OS_DARWIN
+    filters << "libcorbasim_reflective_*.dylib";
+    idlFilters << "lib*_idl.dylib";
+#else
     filters << "libcorbasim_reflective_*.so";
     idlFilters << "lib*_idl.so";
+#endif
 #endif
 
     // Required idl libraries
