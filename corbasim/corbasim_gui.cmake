@@ -201,6 +201,8 @@ set(corbasim_gui_SRCS
 )
 
 set(corbasim_gui_LIBS
+    ${Boost_THREAD_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
     ${QT_LIBRARIES}
     corbasim
     corbasim_qt)
