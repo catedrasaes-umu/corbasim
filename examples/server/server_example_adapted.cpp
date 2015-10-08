@@ -40,7 +40,7 @@ __operation::__operation()
 {
 }
 
-__operation::__operation(::CORBA::Long _a, const prueba::Iface::FloatSeq& _fs):
+__operation::__operation(CORBA::Long _a, const prueba::Iface::FloatSeq& _fs):
     a(_a), fs(_fs)
 {
 

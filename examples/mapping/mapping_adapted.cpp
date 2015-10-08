@@ -1670,7 +1670,7 @@ __operation1::__operation1()
 {
 }
 
-__operation1::__operation1(::CORBA::Long _a):
+__operation1::__operation1(CORBA::Long _a):
     a(_a)
 {
 
@@ -1689,7 +1689,7 @@ __operation2::__operation2()
 {
 }
 
-__operation2::__operation2(::CORBA::Long _a):
+__operation2::__operation2(CORBA::Long _a):
     a(_a)
 {
 
@@ -1708,7 +1708,7 @@ __operation3::__operation3()
 {
 }
 
-__operation3::__operation3(::CORBA::Long _a):
+__operation3::__operation3(CORBA::Long _a):
     a(_a)
 {
 
@@ -1727,7 +1727,7 @@ __operation4::__operation4()
 {
 }
 
-__operation4::__operation4(::CORBA::Long _a):
+__operation4::__operation4(CORBA::Long _a):
     a(_a)
 {
 
@@ -1746,7 +1746,7 @@ __operation5::__operation5()
 {
 }
 
-__operation5::__operation5(::CORBA::Long _a):
+__operation5::__operation5(CORBA::Long _a):
     a(_a)
 {
 
@@ -1765,7 +1765,7 @@ __operation6::__operation6()
 {
 }
 
-__operation6::__operation6(::CORBA::Long _a):
+__operation6::__operation6(CORBA::Long _a):
     a(_a)
 {
 
@@ -1784,7 +1784,7 @@ __operation7::__operation7()
 {
 }
 
-__operation7::__operation7(::CORBA::Long _a):
+__operation7::__operation7(CORBA::Long _a):
     a(_a)
 {
 
@@ -1803,7 +1803,7 @@ __operation8::__operation8()
 {
 }
 
-__operation8::__operation8(::CORBA::Long _a):
+__operation8::__operation8(CORBA::Long _a):
     a(_a)
 {
 
@@ -1822,7 +1822,7 @@ __operation9::__operation9()
 {
 }
 
-__operation9::__operation9(::CORBA::Long _a):
+__operation9::__operation9(CORBA::Long _a):
     a(_a)
 {
 
@@ -1841,7 +1841,7 @@ __operation10::__operation10()
 {
 }
 
-__operation10::__operation10(::CORBA::Long _a):
+__operation10::__operation10(CORBA::Long _a):
     a(_a)
 {
 
@@ -1860,7 +1860,7 @@ __operation11::__operation11()
 {
 }
 
-__operation11::__operation11(::CORBA::Long _a):
+__operation11::__operation11(CORBA::Long _a):
     a(_a)
 {
 
@@ -1879,7 +1879,7 @@ __operation12::__operation12()
 {
 }
 
-__operation12::__operation12(::CORBA::Long _a):
+__operation12::__operation12(CORBA::Long _a):
     a(_a)
 {
 
@@ -1898,7 +1898,7 @@ __operation13::__operation13()
 {
 }
 
-__operation13::__operation13(::CORBA::Long _a):
+__operation13::__operation13(CORBA::Long _a):
     a(_a)
 {
 
@@ -1917,7 +1917,7 @@ __operation14::__operation14()
 {
 }
 
-__operation14::__operation14(::CORBA::Long _a):
+__operation14::__operation14(CORBA::Long _a):
     a(_a)
 {
 
@@ -1936,7 +1936,7 @@ __operation15::__operation15()
 {
 }
 
-__operation15::__operation15(::CORBA::Long _a):
+__operation15::__operation15(CORBA::Long _a):
     a(_a)
 {
 
@@ -1955,7 +1955,7 @@ __operation16::__operation16()
 {
 }
 
-__operation16::__operation16(::CORBA::Long _a):
+__operation16::__operation16(CORBA::Long _a):
     a(_a)
 {
 
@@ -1974,7 +1974,7 @@ __operation17::__operation17()
 {
 }
 
-__operation17::__operation17(::CORBA::Long _a):
+__operation17::__operation17(CORBA::Long _a):
     a(_a)
 {
 
@@ -1993,7 +1993,7 @@ __operation18::__operation18()
 {
 }
 
-__operation18::__operation18(::CORBA::Long _a):
+__operation18::__operation18(CORBA::Long _a):
     a(_a)
 {
 
@@ -2012,7 +2012,7 @@ __operation19::__operation19()
 {
 }
 
-__operation19::__operation19(::CORBA::Long _a):
+__operation19::__operation19(CORBA::Long _a):
     a(_a)
 {
 
@@ -2031,7 +2031,7 @@ __operation20::__operation20()
 {
 }
 
-__operation20::__operation20(::CORBA::Long _a):
+__operation20::__operation20(CORBA::Long _a):
     a(_a)
 {
 
@@ -2050,7 +2050,7 @@ __operation21::__operation21()
 {
 }
 
-__operation21::__operation21(::CORBA::Long _a):
+__operation21::__operation21(CORBA::Long _a):
     a(_a)
 {
 
@@ -2069,7 +2069,7 @@ __operation22::__operation22()
 {
 }
 
-__operation22::__operation22(::CORBA::Long _a):
+__operation22::__operation22(CORBA::Long _a):
     a(_a)
 {
 
@@ -2088,7 +2088,7 @@ __operation23::__operation23()
 {
 }
 
-__operation23::__operation23(::CORBA::Long _a):
+__operation23::__operation23(CORBA::Long _a):
     a(_a)
 {
 
@@ -2107,7 +2107,7 @@ __operation24::__operation24()
 {
 }
 
-__operation24::__operation24(::CORBA::Long _a):
+__operation24::__operation24(CORBA::Long _a):
     a(_a)
 {
 
@@ -2126,7 +2126,7 @@ __operation25::__operation25()
 {
 }
 
-__operation25::__operation25(::CORBA::Long _a):
+__operation25::__operation25(CORBA::Long _a):
     a(_a)
 {
 
@@ -2145,7 +2145,7 @@ __operation26::__operation26()
 {
 }
 
-__operation26::__operation26(::CORBA::Long _a):
+__operation26::__operation26(CORBA::Long _a):
     a(_a)
 {
 
@@ -2164,7 +2164,7 @@ __operation27::__operation27()
 {
 }
 
-__operation27::__operation27(::CORBA::Long _a):
+__operation27::__operation27(CORBA::Long _a):
     a(_a)
 {
 
@@ -2183,7 +2183,7 @@ __operation28::__operation28()
 {
 }
 
-__operation28::__operation28(::CORBA::Long _a):
+__operation28::__operation28(CORBA::Long _a):
     a(_a)
 {
 
@@ -2202,7 +2202,7 @@ __operation29::__operation29()
 {
 }
 
-__operation29::__operation29(::CORBA::Long _a):
+__operation29::__operation29(CORBA::Long _a):
     a(_a)
 {
 
@@ -2221,7 +2221,7 @@ __operation30::__operation30()
 {
 }
 
-__operation30::__operation30(::CORBA::Long _a):
+__operation30::__operation30(CORBA::Long _a):
     a(_a)
 {
 
@@ -2240,7 +2240,7 @@ __operation31::__operation31()
 {
 }
 
-__operation31::__operation31(::CORBA::Long _a):
+__operation31::__operation31(CORBA::Long _a):
     a(_a)
 {
 
@@ -2259,7 +2259,7 @@ __operation32::__operation32()
 {
 }
 
-__operation32::__operation32(::CORBA::Long _a):
+__operation32::__operation32(CORBA::Long _a):
     a(_a)
 {
 
@@ -2278,7 +2278,7 @@ __operation33::__operation33()
 {
 }
 
-__operation33::__operation33(::CORBA::Long _a):
+__operation33::__operation33(CORBA::Long _a):
     a(_a)
 {
 
@@ -2297,7 +2297,7 @@ __operation34::__operation34()
 {
 }
 
-__operation34::__operation34(::CORBA::Long _a):
+__operation34::__operation34(CORBA::Long _a):
     a(_a)
 {
 
@@ -2316,7 +2316,7 @@ __operation35::__operation35()
 {
 }
 
-__operation35::__operation35(::CORBA::Long _a):
+__operation35::__operation35(CORBA::Long _a):
     a(_a)
 {
 
@@ -2335,7 +2335,7 @@ __operation36::__operation36()
 {
 }
 
-__operation36::__operation36(::CORBA::Long _a):
+__operation36::__operation36(CORBA::Long _a):
     a(_a)
 {
 
@@ -2354,7 +2354,7 @@ __operation37::__operation37()
 {
 }
 
-__operation37::__operation37(::CORBA::Long _a):
+__operation37::__operation37(CORBA::Long _a):
     a(_a)
 {
 
@@ -2373,7 +2373,7 @@ __operation38::__operation38()
 {
 }
 
-__operation38::__operation38(::CORBA::Long _a):
+__operation38::__operation38(CORBA::Long _a):
     a(_a)
 {
 
@@ -2392,7 +2392,7 @@ __operation39::__operation39()
 {
 }
 
-__operation39::__operation39(::CORBA::Long _a):
+__operation39::__operation39(CORBA::Long _a):
     a(_a)
 {
 
@@ -2411,7 +2411,7 @@ __operation40::__operation40()
 {
 }
 
-__operation40::__operation40(::CORBA::Long _a):
+__operation40::__operation40(CORBA::Long _a):
     a(_a)
 {
 
@@ -2430,7 +2430,7 @@ __operation41::__operation41()
 {
 }
 
-__operation41::__operation41(::CORBA::Long _a):
+__operation41::__operation41(CORBA::Long _a):
     a(_a)
 {
 
@@ -2449,7 +2449,7 @@ __operation42::__operation42()
 {
 }
 
-__operation42::__operation42(::CORBA::Long _a):
+__operation42::__operation42(CORBA::Long _a):
     a(_a)
 {
 
@@ -2468,7 +2468,7 @@ __operation43::__operation43()
 {
 }
 
-__operation43::__operation43(::CORBA::Long _a):
+__operation43::__operation43(CORBA::Long _a):
     a(_a)
 {
 
@@ -2487,7 +2487,7 @@ __operation44::__operation44()
 {
 }
 
-__operation44::__operation44(::CORBA::Long _a):
+__operation44::__operation44(CORBA::Long _a):
     a(_a)
 {
 
@@ -2506,7 +2506,7 @@ __operation45::__operation45()
 {
 }
 
-__operation45::__operation45(::CORBA::Long _a):
+__operation45::__operation45(CORBA::Long _a):
     a(_a)
 {
 
@@ -2525,7 +2525,7 @@ __operation46::__operation46()
 {
 }
 
-__operation46::__operation46(::CORBA::Long _a):
+__operation46::__operation46(CORBA::Long _a):
     a(_a)
 {
 
@@ -2544,7 +2544,7 @@ __operation47::__operation47()
 {
 }
 
-__operation47::__operation47(::CORBA::Long _a):
+__operation47::__operation47(CORBA::Long _a):
     a(_a)
 {
 
@@ -2563,7 +2563,7 @@ __operation48::__operation48()
 {
 }
 
-__operation48::__operation48(::CORBA::Long _a):
+__operation48::__operation48(CORBA::Long _a):
     a(_a)
 {
 
@@ -2582,7 +2582,7 @@ __operation49::__operation49()
 {
 }
 
-__operation49::__operation49(::CORBA::Long _a):
+__operation49::__operation49(CORBA::Long _a):
     a(_a)
 {
 
@@ -2601,7 +2601,7 @@ __operation50::__operation50()
 {
 }
 
-__operation50::__operation50(::CORBA::Long _a):
+__operation50::__operation50(CORBA::Long _a):
     a(_a)
 {
 
@@ -2620,7 +2620,7 @@ __operation51::__operation51()
 {
 }
 
-__operation51::__operation51(::CORBA::Long _a):
+__operation51::__operation51(CORBA::Long _a):
     a(_a)
 {
 
@@ -2639,7 +2639,7 @@ __operation52::__operation52()
 {
 }
 
-__operation52::__operation52(::CORBA::Long _a):
+__operation52::__operation52(CORBA::Long _a):
     a(_a)
 {
 
@@ -2658,7 +2658,7 @@ __operation53::__operation53()
 {
 }
 
-__operation53::__operation53(::CORBA::Long _a):
+__operation53::__operation53(CORBA::Long _a):
     a(_a)
 {
 
@@ -2677,7 +2677,7 @@ __operation54::__operation54()
 {
 }
 
-__operation54::__operation54(::CORBA::Long _a):
+__operation54::__operation54(CORBA::Long _a):
     a(_a)
 {
 
@@ -2696,7 +2696,7 @@ __operation55::__operation55()
 {
 }
 
-__operation55::__operation55(::CORBA::Long _a):
+__operation55::__operation55(CORBA::Long _a):
     a(_a)
 {
 
@@ -2715,7 +2715,7 @@ __operation56::__operation56()
 {
 }
 
-__operation56::__operation56(::CORBA::Long _a):
+__operation56::__operation56(CORBA::Long _a):
     a(_a)
 {
 
@@ -2734,7 +2734,7 @@ __operation57::__operation57()
 {
 }
 
-__operation57::__operation57(::CORBA::Long _a):
+__operation57::__operation57(CORBA::Long _a):
     a(_a)
 {
 
@@ -2753,7 +2753,7 @@ __operation58::__operation58()
 {
 }
 
-__operation58::__operation58(::CORBA::Long _a):
+__operation58::__operation58(CORBA::Long _a):
     a(_a)
 {
 
@@ -2772,7 +2772,7 @@ __operation59::__operation59()
 {
 }
 
-__operation59::__operation59(::CORBA::Long _a):
+__operation59::__operation59(CORBA::Long _a):
     a(_a)
 {
 
@@ -2791,7 +2791,7 @@ __operation60::__operation60()
 {
 }
 
-__operation60::__operation60(::CORBA::Long _a):
+__operation60::__operation60(CORBA::Long _a):
     a(_a)
 {
 
@@ -2810,7 +2810,7 @@ __operation61::__operation61()
 {
 }
 
-__operation61::__operation61(::CORBA::Long _a):
+__operation61::__operation61(CORBA::Long _a):
     a(_a)
 {
 
@@ -2829,7 +2829,7 @@ __operation62::__operation62()
 {
 }
 
-__operation62::__operation62(::CORBA::Long _a):
+__operation62::__operation62(CORBA::Long _a):
     a(_a)
 {
 
@@ -2848,7 +2848,7 @@ __operation63::__operation63()
 {
 }
 
-__operation63::__operation63(::CORBA::Long _a):
+__operation63::__operation63(CORBA::Long _a):
     a(_a)
 {
 
@@ -2867,7 +2867,7 @@ __operation64::__operation64()
 {
 }
 
-__operation64::__operation64(::CORBA::Long _a):
+__operation64::__operation64(CORBA::Long _a):
     a(_a)
 {
 
@@ -2886,7 +2886,7 @@ __operation65::__operation65()
 {
 }
 
-__operation65::__operation65(::CORBA::Long _a):
+__operation65::__operation65(CORBA::Long _a):
     a(_a)
 {
 
@@ -2905,7 +2905,7 @@ __operation66::__operation66()
 {
 }
 
-__operation66::__operation66(::CORBA::Long _a):
+__operation66::__operation66(CORBA::Long _a):
     a(_a)
 {
 
@@ -2924,7 +2924,7 @@ __operation67::__operation67()
 {
 }
 
-__operation67::__operation67(::CORBA::Long _a):
+__operation67::__operation67(CORBA::Long _a):
     a(_a)
 {
 
@@ -2943,7 +2943,7 @@ __operation68::__operation68()
 {
 }
 
-__operation68::__operation68(::CORBA::Long _a):
+__operation68::__operation68(CORBA::Long _a):
     a(_a)
 {
 
@@ -2962,7 +2962,7 @@ __operation69::__operation69()
 {
 }
 
-__operation69::__operation69(::CORBA::Long _a):
+__operation69::__operation69(CORBA::Long _a):
     a(_a)
 {
 
@@ -2981,7 +2981,7 @@ __operation70::__operation70()
 {
 }
 
-__operation70::__operation70(::CORBA::Long _a):
+__operation70::__operation70(CORBA::Long _a):
     a(_a)
 {
 
@@ -3000,7 +3000,7 @@ __operation71::__operation71()
 {
 }
 
-__operation71::__operation71(::CORBA::Long _a):
+__operation71::__operation71(CORBA::Long _a):
     a(_a)
 {
 
@@ -3019,7 +3019,7 @@ __operation72::__operation72()
 {
 }
 
-__operation72::__operation72(::CORBA::Long _a):
+__operation72::__operation72(CORBA::Long _a):
     a(_a)
 {
 
@@ -3038,7 +3038,7 @@ __operation73::__operation73()
 {
 }
 
-__operation73::__operation73(::CORBA::Long _a):
+__operation73::__operation73(CORBA::Long _a):
     a(_a)
 {
 
@@ -3057,7 +3057,7 @@ __operation74::__operation74()
 {
 }
 
-__operation74::__operation74(::CORBA::Long _a):
+__operation74::__operation74(CORBA::Long _a):
     a(_a)
 {
 
@@ -3076,7 +3076,7 @@ __operation75::__operation75()
 {
 }
 
-__operation75::__operation75(::CORBA::Long _a):
+__operation75::__operation75(CORBA::Long _a):
     a(_a)
 {
 
@@ -3095,7 +3095,7 @@ __operation76::__operation76()
 {
 }
 
-__operation76::__operation76(::CORBA::Long _a):
+__operation76::__operation76(CORBA::Long _a):
     a(_a)
 {
 
@@ -3114,7 +3114,7 @@ __operation77::__operation77()
 {
 }
 
-__operation77::__operation77(::CORBA::Long _a):
+__operation77::__operation77(CORBA::Long _a):
     a(_a)
 {
 
@@ -3133,7 +3133,7 @@ __operation78::__operation78()
 {
 }
 
-__operation78::__operation78(::CORBA::Long _a):
+__operation78::__operation78(CORBA::Long _a):
     a(_a)
 {
 
@@ -3152,7 +3152,7 @@ __operation79::__operation79()
 {
 }
 
-__operation79::__operation79(::CORBA::Long _a):
+__operation79::__operation79(CORBA::Long _a):
     a(_a)
 {
 
@@ -3171,7 +3171,7 @@ __operation80::__operation80()
 {
 }
 
-__operation80::__operation80(::CORBA::Long _a):
+__operation80::__operation80(CORBA::Long _a):
     a(_a)
 {
 
@@ -3190,7 +3190,7 @@ __operation81::__operation81()
 {
 }
 
-__operation81::__operation81(::CORBA::Long _a):
+__operation81::__operation81(CORBA::Long _a):
     a(_a)
 {
 
@@ -3209,7 +3209,7 @@ __operation82::__operation82()
 {
 }
 
-__operation82::__operation82(::CORBA::Long _a):
+__operation82::__operation82(CORBA::Long _a):
     a(_a)
 {
 
@@ -3228,7 +3228,7 @@ __operation83::__operation83()
 {
 }
 
-__operation83::__operation83(::CORBA::Long _a):
+__operation83::__operation83(CORBA::Long _a):
     a(_a)
 {
 
@@ -3247,7 +3247,7 @@ __operation84::__operation84()
 {
 }
 
-__operation84::__operation84(::CORBA::Long _a):
+__operation84::__operation84(CORBA::Long _a):
     a(_a)
 {
 
@@ -3266,7 +3266,7 @@ __operation85::__operation85()
 {
 }
 
-__operation85::__operation85(::CORBA::Long _a):
+__operation85::__operation85(CORBA::Long _a):
     a(_a)
 {
 
@@ -3285,7 +3285,7 @@ __operation86::__operation86()
 {
 }
 
-__operation86::__operation86(::CORBA::Long _a):
+__operation86::__operation86(CORBA::Long _a):
     a(_a)
 {
 
@@ -3304,7 +3304,7 @@ __operation87::__operation87()
 {
 }
 
-__operation87::__operation87(::CORBA::Long _a):
+__operation87::__operation87(CORBA::Long _a):
     a(_a)
 {
 
@@ -3323,7 +3323,7 @@ __operation88::__operation88()
 {
 }
 
-__operation88::__operation88(::CORBA::Long _a):
+__operation88::__operation88(CORBA::Long _a):
     a(_a)
 {
 
@@ -3342,7 +3342,7 @@ __operation89::__operation89()
 {
 }
 
-__operation89::__operation89(::CORBA::Long _a):
+__operation89::__operation89(CORBA::Long _a):
     a(_a)
 {
 
@@ -3361,7 +3361,7 @@ __operation90::__operation90()
 {
 }
 
-__operation90::__operation90(::CORBA::Long _a):
+__operation90::__operation90(CORBA::Long _a):
     a(_a)
 {
 
@@ -3380,7 +3380,7 @@ __operation91::__operation91()
 {
 }
 
-__operation91::__operation91(::CORBA::Long _a):
+__operation91::__operation91(CORBA::Long _a):
     a(_a)
 {
 
@@ -3399,7 +3399,7 @@ __operation92::__operation92()
 {
 }
 
-__operation92::__operation92(::CORBA::Long _a):
+__operation92::__operation92(CORBA::Long _a):
     a(_a)
 {
 
@@ -3418,7 +3418,7 @@ __operation93::__operation93()
 {
 }
 
-__operation93::__operation93(::CORBA::Long _a):
+__operation93::__operation93(CORBA::Long _a):
     a(_a)
 {
 
@@ -3437,7 +3437,7 @@ __operation94::__operation94()
 {
 }
 
-__operation94::__operation94(::CORBA::Long _a):
+__operation94::__operation94(CORBA::Long _a):
     a(_a)
 {
 
@@ -3456,7 +3456,7 @@ __operation95::__operation95()
 {
 }
 
-__operation95::__operation95(::CORBA::Long _a):
+__operation95::__operation95(CORBA::Long _a):
     a(_a)
 {
 
@@ -3475,7 +3475,7 @@ __operation96::__operation96()
 {
 }
 
-__operation96::__operation96(::CORBA::Long _a):
+__operation96::__operation96(CORBA::Long _a):
     a(_a)
 {
 
@@ -3494,7 +3494,7 @@ __operation97::__operation97()
 {
 }
 
-__operation97::__operation97(::CORBA::Long _a):
+__operation97::__operation97(CORBA::Long _a):
     a(_a)
 {
 
@@ -3513,7 +3513,7 @@ __operation98::__operation98()
 {
 }
 
-__operation98::__operation98(::CORBA::Long _a):
+__operation98::__operation98(CORBA::Long _a):
     a(_a)
 {
 
@@ -3532,7 +3532,7 @@ __operation99::__operation99()
 {
 }
 
-__operation99::__operation99(::CORBA::Long _a):
+__operation99::__operation99(CORBA::Long _a):
     a(_a)
 {
 
@@ -3551,7 +3551,7 @@ __operation100::__operation100()
 {
 }
 
-__operation100::__operation100(::CORBA::Long _a):
+__operation100::__operation100(CORBA::Long _a):
     a(_a)
 {
 
@@ -3570,7 +3570,7 @@ __operation101::__operation101()
 {
 }
 
-__operation101::__operation101(::CORBA::Long _a):
+__operation101::__operation101(CORBA::Long _a):
     a(_a)
 {
 
@@ -3589,7 +3589,7 @@ __operation102::__operation102()
 {
 }
 
-__operation102::__operation102(::CORBA::Long _a):
+__operation102::__operation102(CORBA::Long _a):
     a(_a)
 {
 
@@ -3608,7 +3608,7 @@ __operation103::__operation103()
 {
 }
 
-__operation103::__operation103(::CORBA::Long _a):
+__operation103::__operation103(CORBA::Long _a):
     a(_a)
 {
 
@@ -3627,7 +3627,7 @@ __operation104::__operation104()
 {
 }
 
-__operation104::__operation104(::CORBA::Long _a):
+__operation104::__operation104(CORBA::Long _a):
     a(_a)
 {
 
@@ -3646,7 +3646,7 @@ __operation105::__operation105()
 {
 }
 
-__operation105::__operation105(::CORBA::Long _a):
+__operation105::__operation105(CORBA::Long _a):
     a(_a)
 {
 
@@ -3665,7 +3665,7 @@ __operation106::__operation106()
 {
 }
 
-__operation106::__operation106(::CORBA::Long _a):
+__operation106::__operation106(CORBA::Long _a):
     a(_a)
 {
 
@@ -3684,7 +3684,7 @@ __operation107::__operation107()
 {
 }
 
-__operation107::__operation107(::CORBA::Long _a):
+__operation107::__operation107(CORBA::Long _a):
     a(_a)
 {
 
@@ -3703,7 +3703,7 @@ __operation108::__operation108()
 {
 }
 
-__operation108::__operation108(::CORBA::Long _a):
+__operation108::__operation108(CORBA::Long _a):
     a(_a)
 {
 
@@ -3722,7 +3722,7 @@ __operation109::__operation109()
 {
 }
 
-__operation109::__operation109(::CORBA::Long _a):
+__operation109::__operation109(CORBA::Long _a):
     a(_a)
 {
 
@@ -3741,7 +3741,7 @@ __operation110::__operation110()
 {
 }
 
-__operation110::__operation110(::CORBA::Long _a):
+__operation110::__operation110(CORBA::Long _a):
     a(_a)
 {
 
@@ -3760,7 +3760,7 @@ __operation111::__operation111()
 {
 }
 
-__operation111::__operation111(::CORBA::Long _a):
+__operation111::__operation111(CORBA::Long _a):
     a(_a)
 {
 
@@ -3779,7 +3779,7 @@ __operation112::__operation112()
 {
 }
 
-__operation112::__operation112(::CORBA::Long _a):
+__operation112::__operation112(CORBA::Long _a):
     a(_a)
 {
 
@@ -3798,7 +3798,7 @@ __operation113::__operation113()
 {
 }
 
-__operation113::__operation113(::CORBA::Long _a):
+__operation113::__operation113(CORBA::Long _a):
     a(_a)
 {
 
@@ -3817,7 +3817,7 @@ __operation114::__operation114()
 {
 }
 
-__operation114::__operation114(::CORBA::Long _a):
+__operation114::__operation114(CORBA::Long _a):
     a(_a)
 {
 
@@ -3836,7 +3836,7 @@ __operation115::__operation115()
 {
 }
 
-__operation115::__operation115(::CORBA::Long _a):
+__operation115::__operation115(CORBA::Long _a):
     a(_a)
 {
 
@@ -3855,7 +3855,7 @@ __operation116::__operation116()
 {
 }
 
-__operation116::__operation116(::CORBA::Long _a):
+__operation116::__operation116(CORBA::Long _a):
     a(_a)
 {
 
@@ -3874,7 +3874,7 @@ __operation117::__operation117()
 {
 }
 
-__operation117::__operation117(::CORBA::Long _a):
+__operation117::__operation117(CORBA::Long _a):
     a(_a)
 {
 
@@ -3893,7 +3893,7 @@ __operation118::__operation118()
 {
 }
 
-__operation118::__operation118(::CORBA::Long _a):
+__operation118::__operation118(CORBA::Long _a):
     a(_a)
 {
 
@@ -3912,7 +3912,7 @@ __operation119::__operation119()
 {
 }
 
-__operation119::__operation119(::CORBA::Long _a):
+__operation119::__operation119(CORBA::Long _a):
     a(_a)
 {
 
@@ -3931,7 +3931,7 @@ __operation120::__operation120()
 {
 }
 
-__operation120::__operation120(::CORBA::Long _a):
+__operation120::__operation120(CORBA::Long _a):
     a(_a)
 {
 
@@ -3950,7 +3950,7 @@ __operation121::__operation121()
 {
 }
 
-__operation121::__operation121(::CORBA::Long _a):
+__operation121::__operation121(CORBA::Long _a):
     a(_a)
 {
 
@@ -3969,7 +3969,7 @@ __operation122::__operation122()
 {
 }
 
-__operation122::__operation122(::CORBA::Long _a):
+__operation122::__operation122(CORBA::Long _a):
     a(_a)
 {
 
@@ -3988,7 +3988,7 @@ __operation123::__operation123()
 {
 }
 
-__operation123::__operation123(::CORBA::Long _a):
+__operation123::__operation123(CORBA::Long _a):
     a(_a)
 {
 
@@ -4007,7 +4007,7 @@ __operation124::__operation124()
 {
 }
 
-__operation124::__operation124(::CORBA::Long _a):
+__operation124::__operation124(CORBA::Long _a):
     a(_a)
 {
 
@@ -4026,7 +4026,7 @@ __operation125::__operation125()
 {
 }
 
-__operation125::__operation125(::CORBA::Long _a):
+__operation125::__operation125(CORBA::Long _a):
     a(_a)
 {
 
@@ -4045,7 +4045,7 @@ __operation126::__operation126()
 {
 }
 
-__operation126::__operation126(::CORBA::Long _a):
+__operation126::__operation126(CORBA::Long _a):
     a(_a)
 {
 
@@ -4064,7 +4064,7 @@ __operation127::__operation127()
 {
 }
 
-__operation127::__operation127(::CORBA::Long _a):
+__operation127::__operation127(CORBA::Long _a):
     a(_a)
 {
 
@@ -4083,7 +4083,7 @@ __operation128::__operation128()
 {
 }
 
-__operation128::__operation128(::CORBA::Long _a):
+__operation128::__operation128(CORBA::Long _a):
     a(_a)
 {
 
@@ -4102,7 +4102,7 @@ __operation129::__operation129()
 {
 }
 
-__operation129::__operation129(::CORBA::Long _a):
+__operation129::__operation129(CORBA::Long _a):
     a(_a)
 {
 
@@ -4121,7 +4121,7 @@ __operation130::__operation130()
 {
 }
 
-__operation130::__operation130(::CORBA::Long _a):
+__operation130::__operation130(CORBA::Long _a):
     a(_a)
 {
 
@@ -4140,7 +4140,7 @@ __operation131::__operation131()
 {
 }
 
-__operation131::__operation131(::CORBA::Long _a):
+__operation131::__operation131(CORBA::Long _a):
     a(_a)
 {
 
@@ -4159,7 +4159,7 @@ __operation132::__operation132()
 {
 }
 
-__operation132::__operation132(::CORBA::Long _a):
+__operation132::__operation132(CORBA::Long _a):
     a(_a)
 {
 
@@ -4178,7 +4178,7 @@ __operation133::__operation133()
 {
 }
 
-__operation133::__operation133(::CORBA::Long _a):
+__operation133::__operation133(CORBA::Long _a):
     a(_a)
 {
 
@@ -4197,7 +4197,7 @@ __operation134::__operation134()
 {
 }
 
-__operation134::__operation134(::CORBA::Long _a):
+__operation134::__operation134(CORBA::Long _a):
     a(_a)
 {
 
@@ -4216,7 +4216,7 @@ __operation135::__operation135()
 {
 }
 
-__operation135::__operation135(::CORBA::Long _a):
+__operation135::__operation135(CORBA::Long _a):
     a(_a)
 {
 
@@ -4235,7 +4235,7 @@ __operation136::__operation136()
 {
 }
 
-__operation136::__operation136(::CORBA::Long _a):
+__operation136::__operation136(CORBA::Long _a):
     a(_a)
 {
 
@@ -4254,7 +4254,7 @@ __operation137::__operation137()
 {
 }
 
-__operation137::__operation137(::CORBA::Long _a):
+__operation137::__operation137(CORBA::Long _a):
     a(_a)
 {
 
@@ -4273,7 +4273,7 @@ __operation138::__operation138()
 {
 }
 
-__operation138::__operation138(::CORBA::Long _a):
+__operation138::__operation138(CORBA::Long _a):
     a(_a)
 {
 
@@ -4292,7 +4292,7 @@ __operation139::__operation139()
 {
 }
 
-__operation139::__operation139(::CORBA::Long _a):
+__operation139::__operation139(CORBA::Long _a):
     a(_a)
 {
 
@@ -4311,7 +4311,7 @@ __operation140::__operation140()
 {
 }
 
-__operation140::__operation140(::CORBA::Long _a):
+__operation140::__operation140(CORBA::Long _a):
     a(_a)
 {
 
@@ -4330,7 +4330,7 @@ __operation141::__operation141()
 {
 }
 
-__operation141::__operation141(::CORBA::Long _a):
+__operation141::__operation141(CORBA::Long _a):
     a(_a)
 {
 
@@ -4349,7 +4349,7 @@ __operation142::__operation142()
 {
 }
 
-__operation142::__operation142(::CORBA::Long _a):
+__operation142::__operation142(CORBA::Long _a):
     a(_a)
 {
 
@@ -4368,7 +4368,7 @@ __operation143::__operation143()
 {
 }
 
-__operation143::__operation143(::CORBA::Long _a):
+__operation143::__operation143(CORBA::Long _a):
     a(_a)
 {
 
@@ -4387,7 +4387,7 @@ __operation144::__operation144()
 {
 }
 
-__operation144::__operation144(::CORBA::Long _a):
+__operation144::__operation144(CORBA::Long _a):
     a(_a)
 {
 
@@ -4406,7 +4406,7 @@ __operation145::__operation145()
 {
 }
 
-__operation145::__operation145(::CORBA::Long _a):
+__operation145::__operation145(CORBA::Long _a):
     a(_a)
 {
 
@@ -4425,7 +4425,7 @@ __operation146::__operation146()
 {
 }
 
-__operation146::__operation146(::CORBA::Long _a):
+__operation146::__operation146(CORBA::Long _a):
     a(_a)
 {
 
@@ -4444,7 +4444,7 @@ __operation147::__operation147()
 {
 }
 
-__operation147::__operation147(::CORBA::Long _a):
+__operation147::__operation147(CORBA::Long _a):
     a(_a)
 {
 
@@ -4463,7 +4463,7 @@ __operation148::__operation148()
 {
 }
 
-__operation148::__operation148(::CORBA::Long _a):
+__operation148::__operation148(CORBA::Long _a):
     a(_a)
 {
 
@@ -4482,7 +4482,7 @@ __operation149::__operation149()
 {
 }
 
-__operation149::__operation149(::CORBA::Long _a):
+__operation149::__operation149(CORBA::Long _a):
     a(_a)
 {
 
@@ -4501,7 +4501,7 @@ __operation150::__operation150()
 {
 }
 
-__operation150::__operation150(::CORBA::Long _a):
+__operation150::__operation150(CORBA::Long _a):
     a(_a)
 {
 
@@ -4520,7 +4520,7 @@ __operation151::__operation151()
 {
 }
 
-__operation151::__operation151(::CORBA::Long _a):
+__operation151::__operation151(CORBA::Long _a):
     a(_a)
 {
 
@@ -4539,7 +4539,7 @@ __operation152::__operation152()
 {
 }
 
-__operation152::__operation152(::CORBA::Long _a):
+__operation152::__operation152(CORBA::Long _a):
     a(_a)
 {
 
@@ -4558,7 +4558,7 @@ __operation153::__operation153()
 {
 }
 
-__operation153::__operation153(::CORBA::Long _a):
+__operation153::__operation153(CORBA::Long _a):
     a(_a)
 {
 
@@ -4577,7 +4577,7 @@ __operation154::__operation154()
 {
 }
 
-__operation154::__operation154(::CORBA::Long _a):
+__operation154::__operation154(CORBA::Long _a):
     a(_a)
 {
 
@@ -4596,7 +4596,7 @@ __operation155::__operation155()
 {
 }
 
-__operation155::__operation155(::CORBA::Long _a):
+__operation155::__operation155(CORBA::Long _a):
     a(_a)
 {
 
@@ -4615,7 +4615,7 @@ __operation156::__operation156()
 {
 }
 
-__operation156::__operation156(::CORBA::Long _a):
+__operation156::__operation156(CORBA::Long _a):
     a(_a)
 {
 
@@ -4634,7 +4634,7 @@ __operation157::__operation157()
 {
 }
 
-__operation157::__operation157(::CORBA::Long _a):
+__operation157::__operation157(CORBA::Long _a):
     a(_a)
 {
 
@@ -4653,7 +4653,7 @@ __operation158::__operation158()
 {
 }
 
-__operation158::__operation158(::CORBA::Long _a):
+__operation158::__operation158(CORBA::Long _a):
     a(_a)
 {
 
@@ -4672,7 +4672,7 @@ __operation159::__operation159()
 {
 }
 
-__operation159::__operation159(::CORBA::Long _a):
+__operation159::__operation159(CORBA::Long _a):
     a(_a)
 {
 
@@ -4691,7 +4691,7 @@ __operation160::__operation160()
 {
 }
 
-__operation160::__operation160(::CORBA::Long _a):
+__operation160::__operation160(CORBA::Long _a):
     a(_a)
 {
 
@@ -4710,7 +4710,7 @@ __operation161::__operation161()
 {
 }
 
-__operation161::__operation161(::CORBA::Long _a):
+__operation161::__operation161(CORBA::Long _a):
     a(_a)
 {
 
@@ -4729,7 +4729,7 @@ __operation162::__operation162()
 {
 }
 
-__operation162::__operation162(::CORBA::Long _a):
+__operation162::__operation162(CORBA::Long _a):
     a(_a)
 {
 
@@ -4748,7 +4748,7 @@ __operation163::__operation163()
 {
 }
 
-__operation163::__operation163(::CORBA::Long _a):
+__operation163::__operation163(CORBA::Long _a):
     a(_a)
 {
 
@@ -4767,7 +4767,7 @@ __operation164::__operation164()
 {
 }
 
-__operation164::__operation164(::CORBA::Long _a):
+__operation164::__operation164(CORBA::Long _a):
     a(_a)
 {
 
@@ -4786,7 +4786,7 @@ __operation165::__operation165()
 {
 }
 
-__operation165::__operation165(::CORBA::Long _a):
+__operation165::__operation165(CORBA::Long _a):
     a(_a)
 {
 
@@ -4805,7 +4805,7 @@ __operation166::__operation166()
 {
 }
 
-__operation166::__operation166(::CORBA::Long _a):
+__operation166::__operation166(CORBA::Long _a):
     a(_a)
 {
 
@@ -4824,7 +4824,7 @@ __operation167::__operation167()
 {
 }
 
-__operation167::__operation167(::CORBA::Long _a):
+__operation167::__operation167(CORBA::Long _a):
     a(_a)
 {
 
@@ -4843,7 +4843,7 @@ __operation168::__operation168()
 {
 }
 
-__operation168::__operation168(::CORBA::Long _a):
+__operation168::__operation168(CORBA::Long _a):
     a(_a)
 {
 
@@ -4862,7 +4862,7 @@ __operation169::__operation169()
 {
 }
 
-__operation169::__operation169(::CORBA::Long _a):
+__operation169::__operation169(CORBA::Long _a):
     a(_a)
 {
 
@@ -4881,7 +4881,7 @@ __operation170::__operation170()
 {
 }
 
-__operation170::__operation170(::CORBA::Long _a):
+__operation170::__operation170(CORBA::Long _a):
     a(_a)
 {
 
@@ -4900,7 +4900,7 @@ __operation171::__operation171()
 {
 }
 
-__operation171::__operation171(::CORBA::Long _a):
+__operation171::__operation171(CORBA::Long _a):
     a(_a)
 {
 
@@ -4919,7 +4919,7 @@ __operation172::__operation172()
 {
 }
 
-__operation172::__operation172(::CORBA::Long _a):
+__operation172::__operation172(CORBA::Long _a):
     a(_a)
 {
 
@@ -4938,7 +4938,7 @@ __operation173::__operation173()
 {
 }
 
-__operation173::__operation173(::CORBA::Long _a):
+__operation173::__operation173(CORBA::Long _a):
     a(_a)
 {
 
@@ -4957,7 +4957,7 @@ __operation174::__operation174()
 {
 }
 
-__operation174::__operation174(::CORBA::Long _a):
+__operation174::__operation174(CORBA::Long _a):
     a(_a)
 {
 
@@ -4976,7 +4976,7 @@ __operation175::__operation175()
 {
 }
 
-__operation175::__operation175(::CORBA::Long _a):
+__operation175::__operation175(CORBA::Long _a):
     a(_a)
 {
 
@@ -4995,7 +4995,7 @@ __operation176::__operation176()
 {
 }
 
-__operation176::__operation176(::CORBA::Long _a):
+__operation176::__operation176(CORBA::Long _a):
     a(_a)
 {
 
@@ -5014,7 +5014,7 @@ __operation177::__operation177()
 {
 }
 
-__operation177::__operation177(::CORBA::Long _a):
+__operation177::__operation177(CORBA::Long _a):
     a(_a)
 {
 
@@ -5033,7 +5033,7 @@ __operation178::__operation178()
 {
 }
 
-__operation178::__operation178(::CORBA::Long _a):
+__operation178::__operation178(CORBA::Long _a):
     a(_a)
 {
 
@@ -5052,7 +5052,7 @@ __operation179::__operation179()
 {
 }
 
-__operation179::__operation179(::CORBA::Long _a):
+__operation179::__operation179(CORBA::Long _a):
     a(_a)
 {
 
@@ -5071,7 +5071,7 @@ __operation180::__operation180()
 {
 }
 
-__operation180::__operation180(::CORBA::Long _a):
+__operation180::__operation180(CORBA::Long _a):
     a(_a)
 {
 
@@ -5090,7 +5090,7 @@ __operation181::__operation181()
 {
 }
 
-__operation181::__operation181(::CORBA::Long _a):
+__operation181::__operation181(CORBA::Long _a):
     a(_a)
 {
 
@@ -5109,7 +5109,7 @@ __operation182::__operation182()
 {
 }
 
-__operation182::__operation182(::CORBA::Long _a):
+__operation182::__operation182(CORBA::Long _a):
     a(_a)
 {
 
@@ -5128,7 +5128,7 @@ __operation183::__operation183()
 {
 }
 
-__operation183::__operation183(::CORBA::Long _a):
+__operation183::__operation183(CORBA::Long _a):
     a(_a)
 {
 
@@ -5147,7 +5147,7 @@ __operation184::__operation184()
 {
 }
 
-__operation184::__operation184(::CORBA::Long _a):
+__operation184::__operation184(CORBA::Long _a):
     a(_a)
 {
 
@@ -5166,7 +5166,7 @@ __operation185::__operation185()
 {
 }
 
-__operation185::__operation185(::CORBA::Long _a):
+__operation185::__operation185(CORBA::Long _a):
     a(_a)
 {
 
@@ -5185,7 +5185,7 @@ __operation186::__operation186()
 {
 }
 
-__operation186::__operation186(::CORBA::Long _a):
+__operation186::__operation186(CORBA::Long _a):
     a(_a)
 {
 
@@ -5204,7 +5204,7 @@ __operation187::__operation187()
 {
 }
 
-__operation187::__operation187(::CORBA::Long _a):
+__operation187::__operation187(CORBA::Long _a):
     a(_a)
 {
 
@@ -5223,7 +5223,7 @@ __operation188::__operation188()
 {
 }
 
-__operation188::__operation188(::CORBA::Long _a):
+__operation188::__operation188(CORBA::Long _a):
     a(_a)
 {
 
@@ -5242,7 +5242,7 @@ __operation189::__operation189()
 {
 }
 
-__operation189::__operation189(::CORBA::Long _a):
+__operation189::__operation189(CORBA::Long _a):
     a(_a)
 {
 
@@ -5261,7 +5261,7 @@ __operation190::__operation190()
 {
 }
 
-__operation190::__operation190(::CORBA::Long _a):
+__operation190::__operation190(CORBA::Long _a):
     a(_a)
 {
 
@@ -5280,7 +5280,7 @@ __operation191::__operation191()
 {
 }
 
-__operation191::__operation191(::CORBA::Long _a):
+__operation191::__operation191(CORBA::Long _a):
     a(_a)
 {
 
@@ -5299,7 +5299,7 @@ __operation192::__operation192()
 {
 }
 
-__operation192::__operation192(::CORBA::Long _a):
+__operation192::__operation192(CORBA::Long _a):
     a(_a)
 {
 
@@ -5318,7 +5318,7 @@ __operation193::__operation193()
 {
 }
 
-__operation193::__operation193(::CORBA::Long _a):
+__operation193::__operation193(CORBA::Long _a):
     a(_a)
 {
 
@@ -5337,7 +5337,7 @@ __operation194::__operation194()
 {
 }
 
-__operation194::__operation194(::CORBA::Long _a):
+__operation194::__operation194(CORBA::Long _a):
     a(_a)
 {
 
@@ -5356,7 +5356,7 @@ __operation195::__operation195()
 {
 }
 
-__operation195::__operation195(::CORBA::Long _a):
+__operation195::__operation195(CORBA::Long _a):
     a(_a)
 {
 
@@ -5375,7 +5375,7 @@ __operation196::__operation196()
 {
 }
 
-__operation196::__operation196(::CORBA::Long _a):
+__operation196::__operation196(CORBA::Long _a):
     a(_a)
 {
 
@@ -5394,7 +5394,7 @@ __operation197::__operation197()
 {
 }
 
-__operation197::__operation197(::CORBA::Long _a):
+__operation197::__operation197(CORBA::Long _a):
     a(_a)
 {
 
@@ -5413,7 +5413,7 @@ __operation198::__operation198()
 {
 }
 
-__operation198::__operation198(::CORBA::Long _a):
+__operation198::__operation198(CORBA::Long _a):
     a(_a)
 {
 
@@ -5432,7 +5432,7 @@ __operation199::__operation199()
 {
 }
 
-__operation199::__operation199(::CORBA::Long _a):
+__operation199::__operation199(CORBA::Long _a):
     a(_a)
 {
 
@@ -5491,7 +5491,7 @@ __operation1::__operation1()
 {
 }
 
-__operation1::__operation1(::CORBA::Long _a, ::CORBA::Long _b, const SimpleExample::St& _c):
+__operation1::__operation1(CORBA::Long _a, CORBA::Long _b, const SimpleExample::St& _c):
     a(_a), b(_b), c(_c)
 {
 

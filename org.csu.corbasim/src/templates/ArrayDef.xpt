@@ -60,7 +60,7 @@ typedef csu::mycorba::_array_fixed_forany_t<«identifier», «identifier»_slice
 void «fqn»_copy(«fqn»_slice* to, const «fqn»_slice* from)
 {
     // Copy each individual element.
-    for (::CORBA::ULong i = 0; i < «getArrayDimensionsMult()»; ++i)
+    for (CORBA::ULong i = 0; i < «getArrayDimensionsMult()»; ++i)
             («FOREACH bounds.withoutLast() AS dim»*«ENDFOREACH»to)[i] = («FOREACH bounds.withoutLast() AS dim»*«ENDFOREACH»from)[i];
 }
 

@@ -12,8 +12,8 @@
 // StructDef: CosNaming::NameComponent
 BOOST_FUSION_ADAPT_STRUCT(
     CosNaming::NameComponent,
-    ( ::corbasim::orbimpl::String_Manager, id)
-    ( ::corbasim::orbimpl::String_Manager, kind)
+    ( corbasim::orbimpl::String_Manager, id)
+    ( corbasim::orbimpl::String_Manager, kind)
      )
 
 
@@ -673,7 +673,7 @@ struct interface < CosNaming::NamingContext >
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContext::bind,
     ( CosNaming::Name, n)
-    ( ::CORBA::Object_var, obj)
+    ( CORBA::Object_var, obj)
      )
 
 namespace corbasim
@@ -701,7 +701,7 @@ struct call< _corbasim_CosNaming::NamingContext::bind >
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContext::rebind,
     ( CosNaming::Name, n)
-    ( ::CORBA::Object_var, obj)
+    ( CORBA::Object_var, obj)
      )
 
 namespace corbasim
@@ -785,7 +785,7 @@ struct call< _corbasim_CosNaming::NamingContext::rebind_context >
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContext::resolve,
     ( CosNaming::Name, n)
-    ( ::CORBA::Object_var, _return)
+    ( CORBA::Object_var, _return)
      )
 
 namespace corbasim
@@ -920,7 +920,7 @@ struct call< _corbasim_CosNaming::NamingContext::destroy >
 // OperationDef: CosNaming::NamingContext::list
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContext::list,
-    ( ::CORBA::ULong, how_many)
+    ( CORBA::ULong, how_many)
     ( CosNaming::BindingList_var, bl)
     ( CosNaming::BindingIterator_var, bi)
      )
@@ -967,7 +967,7 @@ struct interface < CosNaming::BindingIterator >
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::BindingIterator::next_one,
     ( CosNaming::Binding_var, b)
-    ( ::CORBA::Boolean, _return)
+    ( CORBA::Boolean, _return)
      )
 
 namespace corbasim
@@ -994,9 +994,9 @@ value._return = ref->next_one(value.b);
 // OperationDef: CosNaming::BindingIterator::next_n
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::BindingIterator::next_n,
-    ( ::CORBA::ULong, how_many)
+    ( CORBA::ULong, how_many)
     ( CosNaming::BindingList_var, bl)
-    ( ::CORBA::Boolean, _return)
+    ( CORBA::Boolean, _return)
      )
 
 namespace corbasim
@@ -1073,7 +1073,7 @@ struct interface < CosNaming::NamingContextExt >
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContextExt::to_string,
     ( CosNaming::Name, n)
-    ( ::corbasim::orbimpl::String_Manager, _return)
+    ( corbasim::orbimpl::String_Manager, _return)
      )
 
 namespace corbasim
@@ -1100,7 +1100,7 @@ value._return = ref->to_string(value.n);
 // OperationDef: CosNaming::NamingContextExt::to_name
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContextExt::to_name,
-    ( ::corbasim::orbimpl::String_Manager, sn)
+    ( corbasim::orbimpl::String_Manager, sn)
     ( CosNaming::Name_var, _return)
      )
 
@@ -1130,9 +1130,9 @@ value._return = ref->to_name(value.sn);
 // OperationDef: CosNaming::NamingContextExt::to_url
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContextExt::to_url,
-    ( ::corbasim::orbimpl::String_Manager, addr)
-    ( ::corbasim::orbimpl::String_Manager, sn)
-    ( ::corbasim::orbimpl::String_Manager, _return)
+    ( corbasim::orbimpl::String_Manager, addr)
+    ( corbasim::orbimpl::String_Manager, sn)
+    ( corbasim::orbimpl::String_Manager, _return)
      )
 
 namespace corbasim
@@ -1159,8 +1159,8 @@ value._return = ref->to_url(value.addr, value.sn);
 // OperationDef: CosNaming::NamingContextExt::resolve_str
 BOOST_FUSION_ADAPT_STRUCT(
     _corbasim_CosNaming::NamingContextExt::resolve_str,
-    ( ::corbasim::orbimpl::String_Manager, n)
-    ( ::CORBA::Object_var, _return)
+    ( corbasim::orbimpl::String_Manager, n)
+    ( CORBA::Object_var, _return)
      )
 
 namespace corbasim

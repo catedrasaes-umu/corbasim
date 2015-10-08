@@ -23,7 +23,7 @@ public:
     /*PROTECTED REGION END*/
 
     
-    void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
+    void operation(CORBA::Long a, const prueba::Iface::FloatSeq& fs)
     {
         /*PROTECTED REGION ID(prueba_Iface_impl::prueba_Iface_operation___pre) ENABLED START*/
         /*PROTECTED REGION END*/

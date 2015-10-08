@@ -83,7 +83,7 @@ typedef csu::mycorba::_interface_out_t< «this» > «this»_out;
 
 «getCode_TypeCodeDeclaration()»
 
-class «identifier» : «IF derivesFrom.isEmpty-»public virtual ::CORBA::Object
+class «identifier» : «IF derivesFrom.isEmpty-»public virtual CORBA::Object
 «ELSE-»
 «FOREACH derivesFrom AS parent SEPARATOR ", "»public virtual «parent.getFQN()»«ENDFOREACH»
 «ENDIF-»
@@ -96,9 +96,9 @@ public:
     typedef «identifier»_out _out_type;
 
     static «identifier»_ptr _duplicate(«identifier»_ptr obj);
-    static «identifier»_ptr _narrow(::CORBA::Object_ptr obj);
+    static «identifier»_ptr _narrow(CORBA::Object_ptr obj);
 
-    static inline «identifier»_ptr _unchecked_narrow(::CORBA::Object_ptr obj)
+    static inline «identifier»_ptr _unchecked_narrow(CORBA::Object_ptr obj)
     {
         return _narrow(obj);
     }
@@ -145,7 +145,7 @@ private:
     «FOREACH members AS mmb-»
 MYCORBA_EXCEPTION_ATTRIBUTE(«identifier», «mmb.identifier», «mmb.getType().get_CPPType()»);
     «ENDFOREACH-»
-typedef csu::mycorba::mapping::exceptions::exception< ::CORBA::UserException, «getTypeCode()»«FOREACH members AS mmb-», _«identifier»_«mmb.identifier-»«ENDFOREACH-» > «identifier»;
+typedef csu::mycorba::mapping::exceptions::exception< CORBA::UserException, «getTypeCode()»«FOREACH members AS mmb-», _«identifier»_«mmb.identifier-»«ENDFOREACH-» > «identifier»;
 // END CODE EXCEPTION «identifier»
 «ENDDEFINE»
 
@@ -209,11 +209,11 @@ typedef «primitive.getFQN_Type()»_ptr «identifier»_ptr;
 typedef «primitive.getFQN_Type()»_var «identifier»_var;
 typedef «primitive.getFQN_Type()»_out «identifier»_out;
         «ELSEIF primitive.kind ==  PrimitiveKind::PK_STRING-»
-typedef ::CORBA::String_out «identifier»_out;
-typedef ::CORBA::String_var «identifier»_var;
+typedef CORBA::String_out «identifier»_out;
+typedef CORBA::String_var «identifier»_var;
         «ELSEIF primitive.kind ==  PrimitiveKind::PK_WSTRING-»
-typedef ::CORBA::WString_out «identifier»_out;
-typedef ::CORBA::WString_var «identifier»_var;
+typedef CORBA::WString_out «identifier»_out;
+typedef CORBA::WString_var «identifier»_var;
         «ELSEIF primitive.kind ==  PrimitiveKind::PK_ANY-»
 typedef «primitive.getFQN_Type()»_var «identifier»_var;
         «ELSEIF primitive.kind ==  PrimitiveKind::PK_NULL || primitive.kind ==  PrimitiveKind::PK_VOID

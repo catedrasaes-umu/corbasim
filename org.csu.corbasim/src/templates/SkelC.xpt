@@ -94,7 +94,7 @@ __attr_parameters_«identifier»_get[] = {
 
 static ::csu::mycorba::_nv_param
 __attr_parameters_«identifier»_set[] = {
-    {"«identifier»", «getType().getTypeCode()», ::CORBA::ARG_IN},
+    {"«identifier»", «getType().getTypeCode()», CORBA::ARG_IN},
     {"", NULL, 0}
 };
     «ENDIF-»

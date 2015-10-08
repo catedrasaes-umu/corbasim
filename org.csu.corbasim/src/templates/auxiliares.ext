@@ -26,23 +26,23 @@ String getFQN_Type(PrimitiveDef this) : switch (kind) {
 /*        case PrimitiveKind::PK_NULL : ""
         case PrimitiveKind::PK_TYPECODE : ""
         case PrimitiveKind::PK_PRINCIPAL : ""*/
-        case PrimitiveKind::PK_OBJREF : "::CORBA::Object"
-        case PrimitiveKind::PK_ANY : "::CORBA::Any"
+        case PrimitiveKind::PK_OBJREF : "CORBA::Object"
+        case PrimitiveKind::PK_ANY : "CORBA::Any"
         case PrimitiveKind::PK_VOID : "void"
-        case PrimitiveKind::PK_SHORT: "::CORBA::Short"
-        case PrimitiveKind::PK_LONG : "::CORBA::Long"
-        case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
-        case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
-        case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
-        case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
-        case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
-        case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
-        case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
-        case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
-        case PrimitiveKind::PK_CHAR : "::CORBA::Char"
-        case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
-        case PrimitiveKind::PK_WSTRING : "::CORBA::WChar* "
-        case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"
+        case PrimitiveKind::PK_SHORT: "CORBA::Short"
+        case PrimitiveKind::PK_LONG : "CORBA::Long"
+        case PrimitiveKind::PK_LONGLONG : "CORBA::LongLong"
+        case PrimitiveKind::PK_USHORT : "CORBA::UShort"
+        case PrimitiveKind::PK_ULONG : "CORBA::ULong"
+        case PrimitiveKind::PK_ULONGLONG : "CORBA::ULongLong"
+        case PrimitiveKind::PK_FLOAT : "CORBA::Float"
+        case PrimitiveKind::PK_DOUBLE : "CORBA::Double"
+        case PrimitiveKind::PK_LONGDOUBLE : "CORBA::LongDouble"
+        case PrimitiveKind::PK_BOOLEAN : "CORBA::Boolean"
+        case PrimitiveKind::PK_CHAR : "CORBA::Char"
+        case PrimitiveKind::PK_OCTET : "CORBA::Octet"
+        case PrimitiveKind::PK_WSTRING : "CORBA::WChar* "
+        case PrimitiveKind::PK_WCHAR : "CORBA::WChar"
         case PrimitiveKind::PK_STRING : "char*"
         default : "/***UNUSED!***/"
     };
@@ -102,32 +102,32 @@ getTypeCode(IDLType this)  : "/***ERROR IDLType getTypeCode: "+metaType.name+"**
 
 getTypeCode(PrimitiveDef this) : switch (kind) {
 /*
- ::CORBA::_tc_NamedValue;
+ CORBA::_tc_NamedValue;
  */
-         case PrimitiveKind::PK_TYPECODE : "::CORBA::_tc_TypeCode;"
-        case PrimitiveKind::PK_PRINCIPAL : "::CORBA::_tc_Principal;"
-        case PrimitiveKind::PK_NULL : "::CORBA::_tc_null;"
-        case PrimitiveKind::PK_ANY : "::CORBA::_tc_any"
-        case PrimitiveKind::PK_VOID : "::CORBA::_tc_void"
-        case PrimitiveKind::PK_SHORT: "::CORBA::_tc_short"
-        case PrimitiveKind::PK_LONG : "::CORBA::_tc_long"
-        case PrimitiveKind::PK_LONGLONG : "::CORBA::_tc_longlong"
-        case PrimitiveKind::PK_USHORT : "::CORBA::_tc_ushort"
-        case PrimitiveKind::PK_ULONG : "::CORBA::_tc_ulong"
-        case PrimitiveKind::PK_ULONGLONG : "::CORBA::_tc_ulonglong"
-        case PrimitiveKind::PK_FLOAT : "::CORBA::_tc_float"
-        case PrimitiveKind::PK_DOUBLE : "::CORBA::_tc_double"
-        case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::_tc_longdouble"
-        case PrimitiveKind::PK_BOOLEAN : "::CORBA::_tc_boolean"
-        case PrimitiveKind::PK_CHAR : "::CORBA::_tc_char"
-        case PrimitiveKind::PK_OCTET : "::CORBA::_tc_octet"
-        case PrimitiveKind::PK_WSTRING : "::CORBA::_tc_wstring"
-        case PrimitiveKind::PK_WCHAR : "::CORBA::_tc_wchar"
-        case PrimitiveKind::PK_STRING : "::CORBA::_tc_string"
-        case PrimitiveKind::PK_OBJREF : "::CORBA::_tc_Object"
+         case PrimitiveKind::PK_TYPECODE : "CORBA::_tc_TypeCode;"
+        case PrimitiveKind::PK_PRINCIPAL : "CORBA::_tc_Principal;"
+        case PrimitiveKind::PK_NULL : "CORBA::_tc_null;"
+        case PrimitiveKind::PK_ANY : "CORBA::_tc_any"
+        case PrimitiveKind::PK_VOID : "CORBA::_tc_void"
+        case PrimitiveKind::PK_SHORT: "CORBA::_tc_short"
+        case PrimitiveKind::PK_LONG : "CORBA::_tc_long"
+        case PrimitiveKind::PK_LONGLONG : "CORBA::_tc_longlong"
+        case PrimitiveKind::PK_USHORT : "CORBA::_tc_ushort"
+        case PrimitiveKind::PK_ULONG : "CORBA::_tc_ulong"
+        case PrimitiveKind::PK_ULONGLONG : "CORBA::_tc_ulonglong"
+        case PrimitiveKind::PK_FLOAT : "CORBA::_tc_float"
+        case PrimitiveKind::PK_DOUBLE : "CORBA::_tc_double"
+        case PrimitiveKind::PK_LONGDOUBLE : "CORBA::_tc_longdouble"
+        case PrimitiveKind::PK_BOOLEAN : "CORBA::_tc_boolean"
+        case PrimitiveKind::PK_CHAR : "CORBA::_tc_char"
+        case PrimitiveKind::PK_OCTET : "CORBA::_tc_octet"
+        case PrimitiveKind::PK_WSTRING : "CORBA::_tc_wstring"
+        case PrimitiveKind::PK_WCHAR : "CORBA::_tc_wchar"
+        case PrimitiveKind::PK_STRING : "CORBA::_tc_string"
+        case PrimitiveKind::PK_OBJREF : "CORBA::_tc_Object"
         default : "/***UNUSED!***/"
     };
-getTypeCode(StringDef this) : "::CORBA::_tc_string";
+getTypeCode(StringDef this) : "CORBA::_tc_string";
 
 getContainedTypeCode(Contained this) :
     if definedIn != null then
@@ -221,19 +221,19 @@ private Integer _getArgType(PrimitiveDef this) : switch (kind) {
         case PrimitiveKind::PK_TYPECODE : -1
         case PrimitiveKind::PK_PRINCIPAL : -1
         case PrimitiveKind::PK_OBJREF : 3
-        /*case PrimitiveKind::PK_SHORT: "::CORBA::Short"
-        case PrimitiveKind::PK_LONG : "::CORBA::Long"
-        case PrimitiveKind::PK_LONGLONG : "::CORBA::LongLong"
-        case PrimitiveKind::PK_USHORT : "::CORBA::UShort"
-        case PrimitiveKind::PK_ULONG : "::CORBA::ULong"
-        case PrimitiveKind::PK_ULONGLONG : "::CORBA::ULongLong"
-        case PrimitiveKind::PK_FLOAT : "::CORBA::Float"
-        case PrimitiveKind::PK_DOUBLE : "::CORBA::Double"
-        case PrimitiveKind::PK_LONGDOUBLE : "::CORBA::LongDouble"
-        case PrimitiveKind::PK_BOOLEAN : "::CORBA::Boolean"
-        case PrimitiveKind::PK_CHAR : "::CORBA::Char"
-        case PrimitiveKind::PK_OCTET : "::CORBA::Octet"
-        case PrimitiveKind::PK_WCHAR : "::CORBA::WChar"*/
+        /*case PrimitiveKind::PK_SHORT: "CORBA::Short"
+        case PrimitiveKind::PK_LONG : "CORBA::Long"
+        case PrimitiveKind::PK_LONGLONG : "CORBA::LongLong"
+        case PrimitiveKind::PK_USHORT : "CORBA::UShort"
+        case PrimitiveKind::PK_ULONG : "CORBA::ULong"
+        case PrimitiveKind::PK_ULONGLONG : "CORBA::ULongLong"
+        case PrimitiveKind::PK_FLOAT : "CORBA::Float"
+        case PrimitiveKind::PK_DOUBLE : "CORBA::Double"
+        case PrimitiveKind::PK_LONGDOUBLE : "CORBA::LongDouble"
+        case PrimitiveKind::PK_BOOLEAN : "CORBA::Boolean"
+        case PrimitiveKind::PK_CHAR : "CORBA::Char"
+        case PrimitiveKind::PK_OCTET : "CORBA::Octet"
+        case PrimitiveKind::PK_WCHAR : "CORBA::WChar"*/
         case PrimitiveKind::PK_STRING : 3
         case PrimitiveKind::PK_WSTRING : 3
         default : 1

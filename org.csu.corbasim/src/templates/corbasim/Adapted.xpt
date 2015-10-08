@@ -71,7 +71,7 @@ template < >
 struct is_corbaseq< «fqn» > : public cs_mpl::true_
 {
     «IF getType().getOriginalType().isString()-»
-    typedef ::CORBA::String_var slice_type;
+    typedef CORBA::String_var slice_type;
     «ELSE-»
     typedef «getType().getMemberCPPType()» slice_type;
     «ENDIF-»

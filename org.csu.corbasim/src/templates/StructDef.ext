@@ -9,14 +9,14 @@ List[Field] getAnonymousFields(StructDef this) :
 
 String getMemberCPPType(IDLType this) : get_CPPType();
 String getMemberCPPType(PrimitiveDef this) : switch (kind) {
-        case PrimitiveKind::PK_OBJREF : "::CORBA::Object_var"
-        case PrimitiveKind::PK_WSTRING : "::corbasim::orbimpl::WString_Manager"
-        case PrimitiveKind::PK_STRING : "::corbasim::orbimpl::String_Manager"
+        case PrimitiveKind::PK_OBJREF : "CORBA::Object_var"
+        case PrimitiveKind::PK_WSTRING : "corbasim::orbimpl::WString_Manager"
+        case PrimitiveKind::PK_STRING : "corbasim::orbimpl::String_Manager"
         default : get_CPPType()
 };
 String getMemberCPPType(InterfaceDef this) : getFQN() + "_var";
-String getMemberCPPType(StringDef this) : "::corbasim::orbimpl::String_Manager";
-String getMemberCPPType(WstringDef this) : "::corbasim::orbimpl::WString_Manager";
+String getMemberCPPType(StringDef this) : "corbasim::orbimpl::String_Manager";
+String getMemberCPPType(WstringDef this) : "corbasim::orbimpl::WString_Manager";
 
 
 private Boolean specialMemberCPPType(IDLType this) : false;

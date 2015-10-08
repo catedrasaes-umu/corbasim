@@ -9,7 +9,7 @@ extension templates::StructDef;
 
 /* TypeCode declaration: general */
 getCode_TypeCodeDeclaration(Boolean definedInInterface, String identifier) :
-    (definedInInterface == true ? "static" : "extern") + " ::CORBA::TypeCode_ptr const _tc_"+identifier+";";
+    (definedInInterface == true ? "static" : "extern") + " CORBA::TypeCode_ptr const _tc_"+identifier+";";
 /* TypeCode declaration: subclasses */
 getCode_TypeCodeDeclaration(StructDef this) :
     getCode_TypeCodeDeclaration(isNestedStruct() || InterfaceDef.isInstance(definedIn), identifier); // definedIn == null -> StructDef definida en un Field de una estructura
@@ -40,9 +40,9 @@ getCode_SequenceDeclaration(SequenceDef this, String identifier, String typecode
 /** Any operators **/
 /* Any operators declaration: Base for each type (structures, sequences, anonymous sequences, interfaces and enumerates) */
 getCode_AnyOperatorsDeclaration(String type_copy, String type_noncopy, String type_extract) :
-    "void operator<<=(::CORBA::Any & a, "+type_copy+" s); // copying version\n"+
-    "void operator<<=(::CORBA::Any & a, "+type_noncopy+" s); // noncopying version\n"+
-    "::CORBA::Boolean operator>>=(const ::CORBA::Any & a, "+type_extract+" s);\n";
+    "void operator<<=(CORBA::Any & a, "+type_copy+" s); // copying version\n"+
+    "void operator<<=(CORBA::Any & a, "+type_noncopy+" s); // noncopying version\n"+
+    "CORBA::Boolean operator>>=(const CORBA::Any & a, "+type_extract+" s);\n";
 
 /* Any operators declaration: Structures and Anonymous sequences) */
 getCode_AnyOperatorsDeclaration(StructDef this, String type) :
@@ -58,25 +58,25 @@ getCode_AnyOperatorsDeclaration(InterfaceDef this) :
 
 getCode_AnyOperatorsDeclaration(EnumDef this) :
     let type = get_CPPType() :
-    "void operator<<=( ::CORBA::Any & a, "+type+" s);\n"+
-    "::CORBA::Boolean operator>>=(const ::CORBA::Any & a, "+type+" & s);\n";
+    "void operator<<=( CORBA::Any & a, "+type+" s);\n"+
+    "CORBA::Boolean operator>>=(const CORBA::Any & a, "+type+" & s);\n";
 
 getCode_AnyOperatorsDeclaration(ArrayDef this, String forany_type) :
-    "void operator<<=( ::CORBA::Any & a, const "+forany_type+" & s);\n"+
-    "::CORBA::Boolean operator>>=(const ::CORBA::Any & a, "+forany_type+" & s);\n";
+    "void operator<<=( CORBA::Any & a, const "+forany_type+" & s);\n"+
+    "CORBA::Boolean operator>>=(const CORBA::Any & a, "+forany_type+" & s);\n";
 
 /* Any operators definition: Base for each type (structures, sequences, anonymous sequences, interfaces and enumerates) */
 getCode_AnyOperatorsDefinition(String type_copy, String type_noncopy, String type_extract,
                             String fqn, String typecode, String func_prefix) :
-    "void CORBA::operator<<=( ::CORBA::Any & a, "+type_copy+" s)\n"+
+    "void CORBA::operator<<=( CORBA::Any & a, "+type_copy+" s)\n"+
     "{\n"+
     "    csu::mycorba::mapping::"+func_prefix+"_to_any_copy< "+fqn+" > (a, s, "+typecode+");\n"+
     "}\n\n"+
-    "void CORBA::operator<<=( ::CORBA::Any & a, "+type_noncopy+" s)\n"+
+    "void CORBA::operator<<=( CORBA::Any & a, "+type_noncopy+" s)\n"+
     "{\n"+
     "    csu::mycorba::mapping::"+func_prefix+"_to_any_noncopy< "+fqn+" > (a, s, "+typecode+");\n"+
     "}\n\n"+
-    "::CORBA::Boolean CORBA::operator>>=(const ::CORBA::Any & a, "+type_extract+" s)\n"+
+    "CORBA::Boolean CORBA::operator>>=(const CORBA::Any & a, "+type_extract+" s)\n"+
     "{\n"+
     "    return csu::mycorba::mapping::"+func_prefix+"_from_any< "+fqn+" > (a, s, "+typecode+");\n"+
     "}";
@@ -102,21 +102,21 @@ getCode_AnyOperatorsDefinition(EnumDef this) :
     let type = get_CPPType() :
     let typecode = getTypeCode() :
     let fqn = getFQN()  :
-    "void CORBA::operator<<=( ::CORBA::Any & a, "+type+" s)\n"+
+    "void CORBA::operator<<=( CORBA::Any & a, "+type+" s)\n"+
     "{\n"+
     "    csu::mycorba::mapping::enum_to_any< "+fqn+" > (a, s, "+typecode+");\n"+
     "}\n\n"+
-    "::CORBA::Boolean CORBA::operator>>=(const ::CORBA::Any & a, "+type+" & s)\n"+
+    "CORBA::Boolean CORBA::operator>>=(const CORBA::Any & a, "+type+" & s)\n"+
     "{\n"+
     "    return csu::mycorba::mapping::enum_from_any< "+fqn+" > (a, s, "+typecode+");\n"+
     "}";
 
 getCode_AnyOperatorsDefinition(ArrayDef this, String fqn, String typecode) :
-    "void CORBA::operator<<=( ::CORBA::Any & a, const "+fqn+"_forany & s)\n"+
+    "void CORBA::operator<<=( CORBA::Any & a, const "+fqn+"_forany & s)\n"+
     "{\n"+
     "    csu::mycorba::mapping::array_to_any< "+fqn+"_forany > (a, s, "+typecode+");\n"+
     "}\n\n"+
-    "::CORBA::Boolean CORBA::operator>>=(const ::CORBA::Any & a, "+fqn+"_forany & s)\n"+
+    "CORBA::Boolean CORBA::operator>>=(const CORBA::Any & a, "+fqn+"_forany & s)\n"+
     "{\n"+
     "    return csu::mycorba::mapping::array_from_any< "+fqn+"_forany > (a, s, "+typecode+");\n"+
     "}\n";

@@ -128,7 +128,7 @@ struct servant< Test::Huge >
         {
         }
 
-        void operation1(::CORBA::Long a)
+        void operation1(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation1 _val(a);
 
@@ -136,7 +136,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation2(::CORBA::Long a)
+        void operation2(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation2 _val(a);
 
@@ -144,7 +144,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation3(::CORBA::Long a)
+        void operation3(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation3 _val(a);
 
@@ -152,7 +152,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation4(::CORBA::Long a)
+        void operation4(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation4 _val(a);
 
@@ -160,7 +160,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation5(::CORBA::Long a)
+        void operation5(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation5 _val(a);
 
@@ -168,7 +168,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation6(::CORBA::Long a)
+        void operation6(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation6 _val(a);
 
@@ -176,7 +176,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation7(::CORBA::Long a)
+        void operation7(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation7 _val(a);
 
@@ -184,7 +184,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation8(::CORBA::Long a)
+        void operation8(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation8 _val(a);
 
@@ -192,7 +192,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation9(::CORBA::Long a)
+        void operation9(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation9 _val(a);
 
@@ -200,7 +200,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation10(::CORBA::Long a)
+        void operation10(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation10 _val(a);
 
@@ -208,7 +208,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation11(::CORBA::Long a)
+        void operation11(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation11 _val(a);
 
@@ -216,7 +216,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation12(::CORBA::Long a)
+        void operation12(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation12 _val(a);
 
@@ -224,7 +224,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation13(::CORBA::Long a)
+        void operation13(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation13 _val(a);
 
@@ -232,7 +232,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation14(::CORBA::Long a)
+        void operation14(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation14 _val(a);
 
@@ -240,7 +240,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation15(::CORBA::Long a)
+        void operation15(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation15 _val(a);
 
@@ -248,7 +248,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation16(::CORBA::Long a)
+        void operation16(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation16 _val(a);
 
@@ -256,7 +256,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation17(::CORBA::Long a)
+        void operation17(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation17 _val(a);
 
@@ -264,7 +264,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation18(::CORBA::Long a)
+        void operation18(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation18 _val(a);
 
@@ -272,7 +272,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation19(::CORBA::Long a)
+        void operation19(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation19 _val(a);
 
@@ -280,7 +280,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation20(::CORBA::Long a)
+        void operation20(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation20 _val(a);
 
@@ -288,7 +288,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation21(::CORBA::Long a)
+        void operation21(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation21 _val(a);
 
@@ -296,7 +296,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation22(::CORBA::Long a)
+        void operation22(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation22 _val(a);
 
@@ -304,7 +304,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation23(::CORBA::Long a)
+        void operation23(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation23 _val(a);
 
@@ -312,7 +312,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation24(::CORBA::Long a)
+        void operation24(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation24 _val(a);
 
@@ -320,7 +320,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation25(::CORBA::Long a)
+        void operation25(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation25 _val(a);
 
@@ -328,7 +328,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation26(::CORBA::Long a)
+        void operation26(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation26 _val(a);
 
@@ -336,7 +336,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation27(::CORBA::Long a)
+        void operation27(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation27 _val(a);
 
@@ -344,7 +344,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation28(::CORBA::Long a)
+        void operation28(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation28 _val(a);
 
@@ -352,7 +352,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation29(::CORBA::Long a)
+        void operation29(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation29 _val(a);
 
@@ -360,7 +360,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation30(::CORBA::Long a)
+        void operation30(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation30 _val(a);
 
@@ -368,7 +368,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation31(::CORBA::Long a)
+        void operation31(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation31 _val(a);
 
@@ -376,7 +376,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation32(::CORBA::Long a)
+        void operation32(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation32 _val(a);
 
@@ -384,7 +384,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation33(::CORBA::Long a)
+        void operation33(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation33 _val(a);
 
@@ -392,7 +392,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation34(::CORBA::Long a)
+        void operation34(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation34 _val(a);
 
@@ -400,7 +400,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation35(::CORBA::Long a)
+        void operation35(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation35 _val(a);
 
@@ -408,7 +408,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation36(::CORBA::Long a)
+        void operation36(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation36 _val(a);
 
@@ -416,7 +416,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation37(::CORBA::Long a)
+        void operation37(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation37 _val(a);
 
@@ -424,7 +424,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation38(::CORBA::Long a)
+        void operation38(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation38 _val(a);
 
@@ -432,7 +432,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation39(::CORBA::Long a)
+        void operation39(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation39 _val(a);
 
@@ -440,7 +440,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation40(::CORBA::Long a)
+        void operation40(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation40 _val(a);
 
@@ -448,7 +448,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation41(::CORBA::Long a)
+        void operation41(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation41 _val(a);
 
@@ -456,7 +456,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation42(::CORBA::Long a)
+        void operation42(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation42 _val(a);
 
@@ -464,7 +464,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation43(::CORBA::Long a)
+        void operation43(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation43 _val(a);
 
@@ -472,7 +472,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation44(::CORBA::Long a)
+        void operation44(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation44 _val(a);
 
@@ -480,7 +480,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation45(::CORBA::Long a)
+        void operation45(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation45 _val(a);
 
@@ -488,7 +488,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation46(::CORBA::Long a)
+        void operation46(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation46 _val(a);
 
@@ -496,7 +496,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation47(::CORBA::Long a)
+        void operation47(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation47 _val(a);
 
@@ -504,7 +504,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation48(::CORBA::Long a)
+        void operation48(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation48 _val(a);
 
@@ -512,7 +512,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation49(::CORBA::Long a)
+        void operation49(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation49 _val(a);
 
@@ -520,7 +520,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation50(::CORBA::Long a)
+        void operation50(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation50 _val(a);
 
@@ -528,7 +528,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation51(::CORBA::Long a)
+        void operation51(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation51 _val(a);
 
@@ -536,7 +536,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation52(::CORBA::Long a)
+        void operation52(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation52 _val(a);
 
@@ -544,7 +544,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation53(::CORBA::Long a)
+        void operation53(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation53 _val(a);
 
@@ -552,7 +552,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation54(::CORBA::Long a)
+        void operation54(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation54 _val(a);
 
@@ -560,7 +560,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation55(::CORBA::Long a)
+        void operation55(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation55 _val(a);
 
@@ -568,7 +568,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation56(::CORBA::Long a)
+        void operation56(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation56 _val(a);
 
@@ -576,7 +576,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation57(::CORBA::Long a)
+        void operation57(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation57 _val(a);
 
@@ -584,7 +584,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation58(::CORBA::Long a)
+        void operation58(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation58 _val(a);
 
@@ -592,7 +592,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation59(::CORBA::Long a)
+        void operation59(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation59 _val(a);
 
@@ -600,7 +600,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation60(::CORBA::Long a)
+        void operation60(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation60 _val(a);
 
@@ -608,7 +608,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation61(::CORBA::Long a)
+        void operation61(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation61 _val(a);
 
@@ -616,7 +616,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation62(::CORBA::Long a)
+        void operation62(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation62 _val(a);
 
@@ -624,7 +624,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation63(::CORBA::Long a)
+        void operation63(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation63 _val(a);
 
@@ -632,7 +632,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation64(::CORBA::Long a)
+        void operation64(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation64 _val(a);
 
@@ -640,7 +640,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation65(::CORBA::Long a)
+        void operation65(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation65 _val(a);
 
@@ -648,7 +648,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation66(::CORBA::Long a)
+        void operation66(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation66 _val(a);
 
@@ -656,7 +656,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation67(::CORBA::Long a)
+        void operation67(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation67 _val(a);
 
@@ -664,7 +664,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation68(::CORBA::Long a)
+        void operation68(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation68 _val(a);
 
@@ -672,7 +672,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation69(::CORBA::Long a)
+        void operation69(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation69 _val(a);
 
@@ -680,7 +680,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation70(::CORBA::Long a)
+        void operation70(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation70 _val(a);
 
@@ -688,7 +688,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation71(::CORBA::Long a)
+        void operation71(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation71 _val(a);
 
@@ -696,7 +696,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation72(::CORBA::Long a)
+        void operation72(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation72 _val(a);
 
@@ -704,7 +704,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation73(::CORBA::Long a)
+        void operation73(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation73 _val(a);
 
@@ -712,7 +712,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation74(::CORBA::Long a)
+        void operation74(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation74 _val(a);
 
@@ -720,7 +720,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation75(::CORBA::Long a)
+        void operation75(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation75 _val(a);
 
@@ -728,7 +728,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation76(::CORBA::Long a)
+        void operation76(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation76 _val(a);
 
@@ -736,7 +736,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation77(::CORBA::Long a)
+        void operation77(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation77 _val(a);
 
@@ -744,7 +744,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation78(::CORBA::Long a)
+        void operation78(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation78 _val(a);
 
@@ -752,7 +752,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation79(::CORBA::Long a)
+        void operation79(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation79 _val(a);
 
@@ -760,7 +760,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation80(::CORBA::Long a)
+        void operation80(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation80 _val(a);
 
@@ -768,7 +768,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation81(::CORBA::Long a)
+        void operation81(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation81 _val(a);
 
@@ -776,7 +776,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation82(::CORBA::Long a)
+        void operation82(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation82 _val(a);
 
@@ -784,7 +784,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation83(::CORBA::Long a)
+        void operation83(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation83 _val(a);
 
@@ -792,7 +792,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation84(::CORBA::Long a)
+        void operation84(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation84 _val(a);
 
@@ -800,7 +800,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation85(::CORBA::Long a)
+        void operation85(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation85 _val(a);
 
@@ -808,7 +808,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation86(::CORBA::Long a)
+        void operation86(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation86 _val(a);
 
@@ -816,7 +816,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation87(::CORBA::Long a)
+        void operation87(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation87 _val(a);
 
@@ -824,7 +824,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation88(::CORBA::Long a)
+        void operation88(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation88 _val(a);
 
@@ -832,7 +832,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation89(::CORBA::Long a)
+        void operation89(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation89 _val(a);
 
@@ -840,7 +840,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation90(::CORBA::Long a)
+        void operation90(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation90 _val(a);
 
@@ -848,7 +848,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation91(::CORBA::Long a)
+        void operation91(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation91 _val(a);
 
@@ -856,7 +856,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation92(::CORBA::Long a)
+        void operation92(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation92 _val(a);
 
@@ -864,7 +864,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation93(::CORBA::Long a)
+        void operation93(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation93 _val(a);
 
@@ -872,7 +872,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation94(::CORBA::Long a)
+        void operation94(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation94 _val(a);
 
@@ -880,7 +880,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation95(::CORBA::Long a)
+        void operation95(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation95 _val(a);
 
@@ -888,7 +888,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation96(::CORBA::Long a)
+        void operation96(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation96 _val(a);
 
@@ -896,7 +896,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation97(::CORBA::Long a)
+        void operation97(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation97 _val(a);
 
@@ -904,7 +904,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation98(::CORBA::Long a)
+        void operation98(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation98 _val(a);
 
@@ -912,7 +912,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation99(::CORBA::Long a)
+        void operation99(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation99 _val(a);
 
@@ -920,7 +920,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation100(::CORBA::Long a)
+        void operation100(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation100 _val(a);
 
@@ -928,7 +928,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation101(::CORBA::Long a)
+        void operation101(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation101 _val(a);
 
@@ -936,7 +936,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation102(::CORBA::Long a)
+        void operation102(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation102 _val(a);
 
@@ -944,7 +944,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation103(::CORBA::Long a)
+        void operation103(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation103 _val(a);
 
@@ -952,7 +952,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation104(::CORBA::Long a)
+        void operation104(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation104 _val(a);
 
@@ -960,7 +960,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation105(::CORBA::Long a)
+        void operation105(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation105 _val(a);
 
@@ -968,7 +968,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation106(::CORBA::Long a)
+        void operation106(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation106 _val(a);
 
@@ -976,7 +976,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation107(::CORBA::Long a)
+        void operation107(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation107 _val(a);
 
@@ -984,7 +984,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation108(::CORBA::Long a)
+        void operation108(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation108 _val(a);
 
@@ -992,7 +992,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation109(::CORBA::Long a)
+        void operation109(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation109 _val(a);
 
@@ -1000,7 +1000,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation110(::CORBA::Long a)
+        void operation110(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation110 _val(a);
 
@@ -1008,7 +1008,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation111(::CORBA::Long a)
+        void operation111(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation111 _val(a);
 
@@ -1016,7 +1016,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation112(::CORBA::Long a)
+        void operation112(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation112 _val(a);
 
@@ -1024,7 +1024,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation113(::CORBA::Long a)
+        void operation113(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation113 _val(a);
 
@@ -1032,7 +1032,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation114(::CORBA::Long a)
+        void operation114(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation114 _val(a);
 
@@ -1040,7 +1040,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation115(::CORBA::Long a)
+        void operation115(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation115 _val(a);
 
@@ -1048,7 +1048,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation116(::CORBA::Long a)
+        void operation116(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation116 _val(a);
 
@@ -1056,7 +1056,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation117(::CORBA::Long a)
+        void operation117(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation117 _val(a);
 
@@ -1064,7 +1064,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation118(::CORBA::Long a)
+        void operation118(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation118 _val(a);
 
@@ -1072,7 +1072,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation119(::CORBA::Long a)
+        void operation119(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation119 _val(a);
 
@@ -1080,7 +1080,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation120(::CORBA::Long a)
+        void operation120(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation120 _val(a);
 
@@ -1088,7 +1088,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation121(::CORBA::Long a)
+        void operation121(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation121 _val(a);
 
@@ -1096,7 +1096,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation122(::CORBA::Long a)
+        void operation122(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation122 _val(a);
 
@@ -1104,7 +1104,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation123(::CORBA::Long a)
+        void operation123(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation123 _val(a);
 
@@ -1112,7 +1112,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation124(::CORBA::Long a)
+        void operation124(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation124 _val(a);
 
@@ -1120,7 +1120,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation125(::CORBA::Long a)
+        void operation125(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation125 _val(a);
 
@@ -1128,7 +1128,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation126(::CORBA::Long a)
+        void operation126(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation126 _val(a);
 
@@ -1136,7 +1136,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation127(::CORBA::Long a)
+        void operation127(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation127 _val(a);
 
@@ -1144,7 +1144,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation128(::CORBA::Long a)
+        void operation128(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation128 _val(a);
 
@@ -1152,7 +1152,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation129(::CORBA::Long a)
+        void operation129(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation129 _val(a);
 
@@ -1160,7 +1160,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation130(::CORBA::Long a)
+        void operation130(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation130 _val(a);
 
@@ -1168,7 +1168,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation131(::CORBA::Long a)
+        void operation131(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation131 _val(a);
 
@@ -1176,7 +1176,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation132(::CORBA::Long a)
+        void operation132(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation132 _val(a);
 
@@ -1184,7 +1184,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation133(::CORBA::Long a)
+        void operation133(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation133 _val(a);
 
@@ -1192,7 +1192,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation134(::CORBA::Long a)
+        void operation134(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation134 _val(a);
 
@@ -1200,7 +1200,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation135(::CORBA::Long a)
+        void operation135(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation135 _val(a);
 
@@ -1208,7 +1208,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation136(::CORBA::Long a)
+        void operation136(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation136 _val(a);
 
@@ -1216,7 +1216,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation137(::CORBA::Long a)
+        void operation137(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation137 _val(a);
 
@@ -1224,7 +1224,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation138(::CORBA::Long a)
+        void operation138(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation138 _val(a);
 
@@ -1232,7 +1232,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation139(::CORBA::Long a)
+        void operation139(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation139 _val(a);
 
@@ -1240,7 +1240,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation140(::CORBA::Long a)
+        void operation140(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation140 _val(a);
 
@@ -1248,7 +1248,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation141(::CORBA::Long a)
+        void operation141(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation141 _val(a);
 
@@ -1256,7 +1256,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation142(::CORBA::Long a)
+        void operation142(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation142 _val(a);
 
@@ -1264,7 +1264,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation143(::CORBA::Long a)
+        void operation143(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation143 _val(a);
 
@@ -1272,7 +1272,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation144(::CORBA::Long a)
+        void operation144(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation144 _val(a);
 
@@ -1280,7 +1280,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation145(::CORBA::Long a)
+        void operation145(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation145 _val(a);
 
@@ -1288,7 +1288,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation146(::CORBA::Long a)
+        void operation146(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation146 _val(a);
 
@@ -1296,7 +1296,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation147(::CORBA::Long a)
+        void operation147(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation147 _val(a);
 
@@ -1304,7 +1304,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation148(::CORBA::Long a)
+        void operation148(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation148 _val(a);
 
@@ -1312,7 +1312,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation149(::CORBA::Long a)
+        void operation149(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation149 _val(a);
 
@@ -1320,7 +1320,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation150(::CORBA::Long a)
+        void operation150(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation150 _val(a);
 
@@ -1328,7 +1328,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation151(::CORBA::Long a)
+        void operation151(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation151 _val(a);
 
@@ -1336,7 +1336,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation152(::CORBA::Long a)
+        void operation152(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation152 _val(a);
 
@@ -1344,7 +1344,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation153(::CORBA::Long a)
+        void operation153(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation153 _val(a);
 
@@ -1352,7 +1352,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation154(::CORBA::Long a)
+        void operation154(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation154 _val(a);
 
@@ -1360,7 +1360,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation155(::CORBA::Long a)
+        void operation155(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation155 _val(a);
 
@@ -1368,7 +1368,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation156(::CORBA::Long a)
+        void operation156(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation156 _val(a);
 
@@ -1376,7 +1376,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation157(::CORBA::Long a)
+        void operation157(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation157 _val(a);
 
@@ -1384,7 +1384,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation158(::CORBA::Long a)
+        void operation158(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation158 _val(a);
 
@@ -1392,7 +1392,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation159(::CORBA::Long a)
+        void operation159(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation159 _val(a);
 
@@ -1400,7 +1400,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation160(::CORBA::Long a)
+        void operation160(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation160 _val(a);
 
@@ -1408,7 +1408,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation161(::CORBA::Long a)
+        void operation161(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation161 _val(a);
 
@@ -1416,7 +1416,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation162(::CORBA::Long a)
+        void operation162(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation162 _val(a);
 
@@ -1424,7 +1424,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation163(::CORBA::Long a)
+        void operation163(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation163 _val(a);
 
@@ -1432,7 +1432,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation164(::CORBA::Long a)
+        void operation164(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation164 _val(a);
 
@@ -1440,7 +1440,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation165(::CORBA::Long a)
+        void operation165(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation165 _val(a);
 
@@ -1448,7 +1448,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation166(::CORBA::Long a)
+        void operation166(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation166 _val(a);
 
@@ -1456,7 +1456,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation167(::CORBA::Long a)
+        void operation167(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation167 _val(a);
 
@@ -1464,7 +1464,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation168(::CORBA::Long a)
+        void operation168(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation168 _val(a);
 
@@ -1472,7 +1472,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation169(::CORBA::Long a)
+        void operation169(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation169 _val(a);
 
@@ -1480,7 +1480,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation170(::CORBA::Long a)
+        void operation170(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation170 _val(a);
 
@@ -1488,7 +1488,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation171(::CORBA::Long a)
+        void operation171(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation171 _val(a);
 
@@ -1496,7 +1496,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation172(::CORBA::Long a)
+        void operation172(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation172 _val(a);
 
@@ -1504,7 +1504,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation173(::CORBA::Long a)
+        void operation173(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation173 _val(a);
 
@@ -1512,7 +1512,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation174(::CORBA::Long a)
+        void operation174(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation174 _val(a);
 
@@ -1520,7 +1520,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation175(::CORBA::Long a)
+        void operation175(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation175 _val(a);
 
@@ -1528,7 +1528,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation176(::CORBA::Long a)
+        void operation176(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation176 _val(a);
 
@@ -1536,7 +1536,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation177(::CORBA::Long a)
+        void operation177(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation177 _val(a);
 
@@ -1544,7 +1544,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation178(::CORBA::Long a)
+        void operation178(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation178 _val(a);
 
@@ -1552,7 +1552,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation179(::CORBA::Long a)
+        void operation179(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation179 _val(a);
 
@@ -1560,7 +1560,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation180(::CORBA::Long a)
+        void operation180(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation180 _val(a);
 
@@ -1568,7 +1568,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation181(::CORBA::Long a)
+        void operation181(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation181 _val(a);
 
@@ -1576,7 +1576,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation182(::CORBA::Long a)
+        void operation182(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation182 _val(a);
 
@@ -1584,7 +1584,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation183(::CORBA::Long a)
+        void operation183(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation183 _val(a);
 
@@ -1592,7 +1592,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation184(::CORBA::Long a)
+        void operation184(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation184 _val(a);
 
@@ -1600,7 +1600,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation185(::CORBA::Long a)
+        void operation185(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation185 _val(a);
 
@@ -1608,7 +1608,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation186(::CORBA::Long a)
+        void operation186(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation186 _val(a);
 
@@ -1616,7 +1616,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation187(::CORBA::Long a)
+        void operation187(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation187 _val(a);
 
@@ -1624,7 +1624,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation188(::CORBA::Long a)
+        void operation188(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation188 _val(a);
 
@@ -1632,7 +1632,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation189(::CORBA::Long a)
+        void operation189(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation189 _val(a);
 
@@ -1640,7 +1640,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation190(::CORBA::Long a)
+        void operation190(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation190 _val(a);
 
@@ -1648,7 +1648,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation191(::CORBA::Long a)
+        void operation191(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation191 _val(a);
 
@@ -1656,7 +1656,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation192(::CORBA::Long a)
+        void operation192(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation192 _val(a);
 
@@ -1664,7 +1664,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation193(::CORBA::Long a)
+        void operation193(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation193 _val(a);
 
@@ -1672,7 +1672,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation194(::CORBA::Long a)
+        void operation194(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation194 _val(a);
 
@@ -1680,7 +1680,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation195(::CORBA::Long a)
+        void operation195(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation195 _val(a);
 
@@ -1688,7 +1688,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation196(::CORBA::Long a)
+        void operation196(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation196 _val(a);
 
@@ -1696,7 +1696,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation197(::CORBA::Long a)
+        void operation197(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation197 _val(a);
 
@@ -1704,7 +1704,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation198(::CORBA::Long a)
+        void operation198(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation198 _val(a);
 
@@ -1712,7 +1712,7 @@ struct servant< Test::Huge >
 
         }
 
-        void operation199(::CORBA::Long a)
+        void operation199(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation199 _val(a);
 
@@ -1738,7 +1738,7 @@ struct servant< Test::Huge >
             __ref = Test::Huge::_narrow(obj);
         }
 
-        virtual void operation1(::CORBA::Long a)
+        virtual void operation1(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation1 _val(a);
 
@@ -1749,7 +1749,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation2(::CORBA::Long a)
+        virtual void operation2(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation2 _val(a);
 
@@ -1760,7 +1760,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation3(::CORBA::Long a)
+        virtual void operation3(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation3 _val(a);
 
@@ -1771,7 +1771,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation4(::CORBA::Long a)
+        virtual void operation4(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation4 _val(a);
 
@@ -1782,7 +1782,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation5(::CORBA::Long a)
+        virtual void operation5(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation5 _val(a);
 
@@ -1793,7 +1793,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation6(::CORBA::Long a)
+        virtual void operation6(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation6 _val(a);
 
@@ -1804,7 +1804,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation7(::CORBA::Long a)
+        virtual void operation7(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation7 _val(a);
 
@@ -1815,7 +1815,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation8(::CORBA::Long a)
+        virtual void operation8(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation8 _val(a);
 
@@ -1826,7 +1826,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation9(::CORBA::Long a)
+        virtual void operation9(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation9 _val(a);
 
@@ -1837,7 +1837,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation10(::CORBA::Long a)
+        virtual void operation10(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation10 _val(a);
 
@@ -1848,7 +1848,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation11(::CORBA::Long a)
+        virtual void operation11(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation11 _val(a);
 
@@ -1859,7 +1859,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation12(::CORBA::Long a)
+        virtual void operation12(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation12 _val(a);
 
@@ -1870,7 +1870,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation13(::CORBA::Long a)
+        virtual void operation13(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation13 _val(a);
 
@@ -1881,7 +1881,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation14(::CORBA::Long a)
+        virtual void operation14(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation14 _val(a);
 
@@ -1892,7 +1892,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation15(::CORBA::Long a)
+        virtual void operation15(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation15 _val(a);
 
@@ -1903,7 +1903,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation16(::CORBA::Long a)
+        virtual void operation16(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation16 _val(a);
 
@@ -1914,7 +1914,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation17(::CORBA::Long a)
+        virtual void operation17(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation17 _val(a);
 
@@ -1925,7 +1925,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation18(::CORBA::Long a)
+        virtual void operation18(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation18 _val(a);
 
@@ -1936,7 +1936,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation19(::CORBA::Long a)
+        virtual void operation19(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation19 _val(a);
 
@@ -1947,7 +1947,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation20(::CORBA::Long a)
+        virtual void operation20(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation20 _val(a);
 
@@ -1958,7 +1958,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation21(::CORBA::Long a)
+        virtual void operation21(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation21 _val(a);
 
@@ -1969,7 +1969,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation22(::CORBA::Long a)
+        virtual void operation22(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation22 _val(a);
 
@@ -1980,7 +1980,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation23(::CORBA::Long a)
+        virtual void operation23(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation23 _val(a);
 
@@ -1991,7 +1991,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation24(::CORBA::Long a)
+        virtual void operation24(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation24 _val(a);
 
@@ -2002,7 +2002,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation25(::CORBA::Long a)
+        virtual void operation25(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation25 _val(a);
 
@@ -2013,7 +2013,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation26(::CORBA::Long a)
+        virtual void operation26(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation26 _val(a);
 
@@ -2024,7 +2024,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation27(::CORBA::Long a)
+        virtual void operation27(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation27 _val(a);
 
@@ -2035,7 +2035,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation28(::CORBA::Long a)
+        virtual void operation28(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation28 _val(a);
 
@@ -2046,7 +2046,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation29(::CORBA::Long a)
+        virtual void operation29(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation29 _val(a);
 
@@ -2057,7 +2057,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation30(::CORBA::Long a)
+        virtual void operation30(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation30 _val(a);
 
@@ -2068,7 +2068,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation31(::CORBA::Long a)
+        virtual void operation31(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation31 _val(a);
 
@@ -2079,7 +2079,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation32(::CORBA::Long a)
+        virtual void operation32(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation32 _val(a);
 
@@ -2090,7 +2090,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation33(::CORBA::Long a)
+        virtual void operation33(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation33 _val(a);
 
@@ -2101,7 +2101,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation34(::CORBA::Long a)
+        virtual void operation34(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation34 _val(a);
 
@@ -2112,7 +2112,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation35(::CORBA::Long a)
+        virtual void operation35(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation35 _val(a);
 
@@ -2123,7 +2123,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation36(::CORBA::Long a)
+        virtual void operation36(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation36 _val(a);
 
@@ -2134,7 +2134,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation37(::CORBA::Long a)
+        virtual void operation37(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation37 _val(a);
 
@@ -2145,7 +2145,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation38(::CORBA::Long a)
+        virtual void operation38(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation38 _val(a);
 
@@ -2156,7 +2156,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation39(::CORBA::Long a)
+        virtual void operation39(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation39 _val(a);
 
@@ -2167,7 +2167,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation40(::CORBA::Long a)
+        virtual void operation40(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation40 _val(a);
 
@@ -2178,7 +2178,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation41(::CORBA::Long a)
+        virtual void operation41(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation41 _val(a);
 
@@ -2189,7 +2189,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation42(::CORBA::Long a)
+        virtual void operation42(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation42 _val(a);
 
@@ -2200,7 +2200,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation43(::CORBA::Long a)
+        virtual void operation43(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation43 _val(a);
 
@@ -2211,7 +2211,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation44(::CORBA::Long a)
+        virtual void operation44(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation44 _val(a);
 
@@ -2222,7 +2222,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation45(::CORBA::Long a)
+        virtual void operation45(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation45 _val(a);
 
@@ -2233,7 +2233,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation46(::CORBA::Long a)
+        virtual void operation46(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation46 _val(a);
 
@@ -2244,7 +2244,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation47(::CORBA::Long a)
+        virtual void operation47(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation47 _val(a);
 
@@ -2255,7 +2255,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation48(::CORBA::Long a)
+        virtual void operation48(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation48 _val(a);
 
@@ -2266,7 +2266,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation49(::CORBA::Long a)
+        virtual void operation49(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation49 _val(a);
 
@@ -2277,7 +2277,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation50(::CORBA::Long a)
+        virtual void operation50(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation50 _val(a);
 
@@ -2288,7 +2288,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation51(::CORBA::Long a)
+        virtual void operation51(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation51 _val(a);
 
@@ -2299,7 +2299,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation52(::CORBA::Long a)
+        virtual void operation52(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation52 _val(a);
 
@@ -2310,7 +2310,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation53(::CORBA::Long a)
+        virtual void operation53(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation53 _val(a);
 
@@ -2321,7 +2321,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation54(::CORBA::Long a)
+        virtual void operation54(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation54 _val(a);
 
@@ -2332,7 +2332,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation55(::CORBA::Long a)
+        virtual void operation55(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation55 _val(a);
 
@@ -2343,7 +2343,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation56(::CORBA::Long a)
+        virtual void operation56(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation56 _val(a);
 
@@ -2354,7 +2354,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation57(::CORBA::Long a)
+        virtual void operation57(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation57 _val(a);
 
@@ -2365,7 +2365,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation58(::CORBA::Long a)
+        virtual void operation58(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation58 _val(a);
 
@@ -2376,7 +2376,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation59(::CORBA::Long a)
+        virtual void operation59(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation59 _val(a);
 
@@ -2387,7 +2387,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation60(::CORBA::Long a)
+        virtual void operation60(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation60 _val(a);
 
@@ -2398,7 +2398,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation61(::CORBA::Long a)
+        virtual void operation61(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation61 _val(a);
 
@@ -2409,7 +2409,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation62(::CORBA::Long a)
+        virtual void operation62(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation62 _val(a);
 
@@ -2420,7 +2420,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation63(::CORBA::Long a)
+        virtual void operation63(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation63 _val(a);
 
@@ -2431,7 +2431,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation64(::CORBA::Long a)
+        virtual void operation64(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation64 _val(a);
 
@@ -2442,7 +2442,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation65(::CORBA::Long a)
+        virtual void operation65(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation65 _val(a);
 
@@ -2453,7 +2453,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation66(::CORBA::Long a)
+        virtual void operation66(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation66 _val(a);
 
@@ -2464,7 +2464,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation67(::CORBA::Long a)
+        virtual void operation67(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation67 _val(a);
 
@@ -2475,7 +2475,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation68(::CORBA::Long a)
+        virtual void operation68(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation68 _val(a);
 
@@ -2486,7 +2486,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation69(::CORBA::Long a)
+        virtual void operation69(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation69 _val(a);
 
@@ -2497,7 +2497,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation70(::CORBA::Long a)
+        virtual void operation70(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation70 _val(a);
 
@@ -2508,7 +2508,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation71(::CORBA::Long a)
+        virtual void operation71(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation71 _val(a);
 
@@ -2519,7 +2519,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation72(::CORBA::Long a)
+        virtual void operation72(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation72 _val(a);
 
@@ -2530,7 +2530,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation73(::CORBA::Long a)
+        virtual void operation73(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation73 _val(a);
 
@@ -2541,7 +2541,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation74(::CORBA::Long a)
+        virtual void operation74(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation74 _val(a);
 
@@ -2552,7 +2552,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation75(::CORBA::Long a)
+        virtual void operation75(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation75 _val(a);
 
@@ -2563,7 +2563,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation76(::CORBA::Long a)
+        virtual void operation76(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation76 _val(a);
 
@@ -2574,7 +2574,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation77(::CORBA::Long a)
+        virtual void operation77(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation77 _val(a);
 
@@ -2585,7 +2585,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation78(::CORBA::Long a)
+        virtual void operation78(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation78 _val(a);
 
@@ -2596,7 +2596,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation79(::CORBA::Long a)
+        virtual void operation79(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation79 _val(a);
 
@@ -2607,7 +2607,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation80(::CORBA::Long a)
+        virtual void operation80(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation80 _val(a);
 
@@ -2618,7 +2618,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation81(::CORBA::Long a)
+        virtual void operation81(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation81 _val(a);
 
@@ -2629,7 +2629,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation82(::CORBA::Long a)
+        virtual void operation82(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation82 _val(a);
 
@@ -2640,7 +2640,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation83(::CORBA::Long a)
+        virtual void operation83(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation83 _val(a);
 
@@ -2651,7 +2651,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation84(::CORBA::Long a)
+        virtual void operation84(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation84 _val(a);
 
@@ -2662,7 +2662,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation85(::CORBA::Long a)
+        virtual void operation85(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation85 _val(a);
 
@@ -2673,7 +2673,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation86(::CORBA::Long a)
+        virtual void operation86(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation86 _val(a);
 
@@ -2684,7 +2684,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation87(::CORBA::Long a)
+        virtual void operation87(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation87 _val(a);
 
@@ -2695,7 +2695,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation88(::CORBA::Long a)
+        virtual void operation88(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation88 _val(a);
 
@@ -2706,7 +2706,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation89(::CORBA::Long a)
+        virtual void operation89(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation89 _val(a);
 
@@ -2717,7 +2717,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation90(::CORBA::Long a)
+        virtual void operation90(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation90 _val(a);
 
@@ -2728,7 +2728,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation91(::CORBA::Long a)
+        virtual void operation91(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation91 _val(a);
 
@@ -2739,7 +2739,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation92(::CORBA::Long a)
+        virtual void operation92(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation92 _val(a);
 
@@ -2750,7 +2750,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation93(::CORBA::Long a)
+        virtual void operation93(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation93 _val(a);
 
@@ -2761,7 +2761,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation94(::CORBA::Long a)
+        virtual void operation94(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation94 _val(a);
 
@@ -2772,7 +2772,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation95(::CORBA::Long a)
+        virtual void operation95(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation95 _val(a);
 
@@ -2783,7 +2783,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation96(::CORBA::Long a)
+        virtual void operation96(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation96 _val(a);
 
@@ -2794,7 +2794,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation97(::CORBA::Long a)
+        virtual void operation97(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation97 _val(a);
 
@@ -2805,7 +2805,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation98(::CORBA::Long a)
+        virtual void operation98(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation98 _val(a);
 
@@ -2816,7 +2816,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation99(::CORBA::Long a)
+        virtual void operation99(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation99 _val(a);
 
@@ -2827,7 +2827,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation100(::CORBA::Long a)
+        virtual void operation100(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation100 _val(a);
 
@@ -2838,7 +2838,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation101(::CORBA::Long a)
+        virtual void operation101(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation101 _val(a);
 
@@ -2849,7 +2849,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation102(::CORBA::Long a)
+        virtual void operation102(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation102 _val(a);
 
@@ -2860,7 +2860,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation103(::CORBA::Long a)
+        virtual void operation103(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation103 _val(a);
 
@@ -2871,7 +2871,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation104(::CORBA::Long a)
+        virtual void operation104(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation104 _val(a);
 
@@ -2882,7 +2882,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation105(::CORBA::Long a)
+        virtual void operation105(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation105 _val(a);
 
@@ -2893,7 +2893,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation106(::CORBA::Long a)
+        virtual void operation106(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation106 _val(a);
 
@@ -2904,7 +2904,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation107(::CORBA::Long a)
+        virtual void operation107(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation107 _val(a);
 
@@ -2915,7 +2915,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation108(::CORBA::Long a)
+        virtual void operation108(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation108 _val(a);
 
@@ -2926,7 +2926,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation109(::CORBA::Long a)
+        virtual void operation109(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation109 _val(a);
 
@@ -2937,7 +2937,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation110(::CORBA::Long a)
+        virtual void operation110(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation110 _val(a);
 
@@ -2948,7 +2948,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation111(::CORBA::Long a)
+        virtual void operation111(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation111 _val(a);
 
@@ -2959,7 +2959,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation112(::CORBA::Long a)
+        virtual void operation112(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation112 _val(a);
 
@@ -2970,7 +2970,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation113(::CORBA::Long a)
+        virtual void operation113(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation113 _val(a);
 
@@ -2981,7 +2981,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation114(::CORBA::Long a)
+        virtual void operation114(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation114 _val(a);
 
@@ -2992,7 +2992,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation115(::CORBA::Long a)
+        virtual void operation115(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation115 _val(a);
 
@@ -3003,7 +3003,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation116(::CORBA::Long a)
+        virtual void operation116(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation116 _val(a);
 
@@ -3014,7 +3014,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation117(::CORBA::Long a)
+        virtual void operation117(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation117 _val(a);
 
@@ -3025,7 +3025,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation118(::CORBA::Long a)
+        virtual void operation118(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation118 _val(a);
 
@@ -3036,7 +3036,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation119(::CORBA::Long a)
+        virtual void operation119(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation119 _val(a);
 
@@ -3047,7 +3047,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation120(::CORBA::Long a)
+        virtual void operation120(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation120 _val(a);
 
@@ -3058,7 +3058,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation121(::CORBA::Long a)
+        virtual void operation121(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation121 _val(a);
 
@@ -3069,7 +3069,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation122(::CORBA::Long a)
+        virtual void operation122(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation122 _val(a);
 
@@ -3080,7 +3080,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation123(::CORBA::Long a)
+        virtual void operation123(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation123 _val(a);
 
@@ -3091,7 +3091,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation124(::CORBA::Long a)
+        virtual void operation124(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation124 _val(a);
 
@@ -3102,7 +3102,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation125(::CORBA::Long a)
+        virtual void operation125(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation125 _val(a);
 
@@ -3113,7 +3113,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation126(::CORBA::Long a)
+        virtual void operation126(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation126 _val(a);
 
@@ -3124,7 +3124,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation127(::CORBA::Long a)
+        virtual void operation127(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation127 _val(a);
 
@@ -3135,7 +3135,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation128(::CORBA::Long a)
+        virtual void operation128(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation128 _val(a);
 
@@ -3146,7 +3146,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation129(::CORBA::Long a)
+        virtual void operation129(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation129 _val(a);
 
@@ -3157,7 +3157,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation130(::CORBA::Long a)
+        virtual void operation130(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation130 _val(a);
 
@@ -3168,7 +3168,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation131(::CORBA::Long a)
+        virtual void operation131(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation131 _val(a);
 
@@ -3179,7 +3179,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation132(::CORBA::Long a)
+        virtual void operation132(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation132 _val(a);
 
@@ -3190,7 +3190,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation133(::CORBA::Long a)
+        virtual void operation133(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation133 _val(a);
 
@@ -3201,7 +3201,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation134(::CORBA::Long a)
+        virtual void operation134(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation134 _val(a);
 
@@ -3212,7 +3212,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation135(::CORBA::Long a)
+        virtual void operation135(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation135 _val(a);
 
@@ -3223,7 +3223,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation136(::CORBA::Long a)
+        virtual void operation136(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation136 _val(a);
 
@@ -3234,7 +3234,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation137(::CORBA::Long a)
+        virtual void operation137(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation137 _val(a);
 
@@ -3245,7 +3245,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation138(::CORBA::Long a)
+        virtual void operation138(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation138 _val(a);
 
@@ -3256,7 +3256,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation139(::CORBA::Long a)
+        virtual void operation139(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation139 _val(a);
 
@@ -3267,7 +3267,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation140(::CORBA::Long a)
+        virtual void operation140(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation140 _val(a);
 
@@ -3278,7 +3278,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation141(::CORBA::Long a)
+        virtual void operation141(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation141 _val(a);
 
@@ -3289,7 +3289,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation142(::CORBA::Long a)
+        virtual void operation142(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation142 _val(a);
 
@@ -3300,7 +3300,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation143(::CORBA::Long a)
+        virtual void operation143(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation143 _val(a);
 
@@ -3311,7 +3311,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation144(::CORBA::Long a)
+        virtual void operation144(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation144 _val(a);
 
@@ -3322,7 +3322,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation145(::CORBA::Long a)
+        virtual void operation145(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation145 _val(a);
 
@@ -3333,7 +3333,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation146(::CORBA::Long a)
+        virtual void operation146(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation146 _val(a);
 
@@ -3344,7 +3344,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation147(::CORBA::Long a)
+        virtual void operation147(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation147 _val(a);
 
@@ -3355,7 +3355,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation148(::CORBA::Long a)
+        virtual void operation148(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation148 _val(a);
 
@@ -3366,7 +3366,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation149(::CORBA::Long a)
+        virtual void operation149(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation149 _val(a);
 
@@ -3377,7 +3377,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation150(::CORBA::Long a)
+        virtual void operation150(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation150 _val(a);
 
@@ -3388,7 +3388,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation151(::CORBA::Long a)
+        virtual void operation151(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation151 _val(a);
 
@@ -3399,7 +3399,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation152(::CORBA::Long a)
+        virtual void operation152(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation152 _val(a);
 
@@ -3410,7 +3410,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation153(::CORBA::Long a)
+        virtual void operation153(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation153 _val(a);
 
@@ -3421,7 +3421,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation154(::CORBA::Long a)
+        virtual void operation154(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation154 _val(a);
 
@@ -3432,7 +3432,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation155(::CORBA::Long a)
+        virtual void operation155(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation155 _val(a);
 
@@ -3443,7 +3443,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation156(::CORBA::Long a)
+        virtual void operation156(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation156 _val(a);
 
@@ -3454,7 +3454,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation157(::CORBA::Long a)
+        virtual void operation157(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation157 _val(a);
 
@@ -3465,7 +3465,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation158(::CORBA::Long a)
+        virtual void operation158(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation158 _val(a);
 
@@ -3476,7 +3476,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation159(::CORBA::Long a)
+        virtual void operation159(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation159 _val(a);
 
@@ -3487,7 +3487,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation160(::CORBA::Long a)
+        virtual void operation160(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation160 _val(a);
 
@@ -3498,7 +3498,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation161(::CORBA::Long a)
+        virtual void operation161(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation161 _val(a);
 
@@ -3509,7 +3509,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation162(::CORBA::Long a)
+        virtual void operation162(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation162 _val(a);
 
@@ -3520,7 +3520,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation163(::CORBA::Long a)
+        virtual void operation163(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation163 _val(a);
 
@@ -3531,7 +3531,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation164(::CORBA::Long a)
+        virtual void operation164(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation164 _val(a);
 
@@ -3542,7 +3542,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation165(::CORBA::Long a)
+        virtual void operation165(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation165 _val(a);
 
@@ -3553,7 +3553,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation166(::CORBA::Long a)
+        virtual void operation166(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation166 _val(a);
 
@@ -3564,7 +3564,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation167(::CORBA::Long a)
+        virtual void operation167(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation167 _val(a);
 
@@ -3575,7 +3575,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation168(::CORBA::Long a)
+        virtual void operation168(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation168 _val(a);
 
@@ -3586,7 +3586,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation169(::CORBA::Long a)
+        virtual void operation169(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation169 _val(a);
 
@@ -3597,7 +3597,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation170(::CORBA::Long a)
+        virtual void operation170(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation170 _val(a);
 
@@ -3608,7 +3608,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation171(::CORBA::Long a)
+        virtual void operation171(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation171 _val(a);
 
@@ -3619,7 +3619,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation172(::CORBA::Long a)
+        virtual void operation172(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation172 _val(a);
 
@@ -3630,7 +3630,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation173(::CORBA::Long a)
+        virtual void operation173(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation173 _val(a);
 
@@ -3641,7 +3641,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation174(::CORBA::Long a)
+        virtual void operation174(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation174 _val(a);
 
@@ -3652,7 +3652,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation175(::CORBA::Long a)
+        virtual void operation175(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation175 _val(a);
 
@@ -3663,7 +3663,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation176(::CORBA::Long a)
+        virtual void operation176(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation176 _val(a);
 
@@ -3674,7 +3674,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation177(::CORBA::Long a)
+        virtual void operation177(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation177 _val(a);
 
@@ -3685,7 +3685,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation178(::CORBA::Long a)
+        virtual void operation178(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation178 _val(a);
 
@@ -3696,7 +3696,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation179(::CORBA::Long a)
+        virtual void operation179(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation179 _val(a);
 
@@ -3707,7 +3707,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation180(::CORBA::Long a)
+        virtual void operation180(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation180 _val(a);
 
@@ -3718,7 +3718,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation181(::CORBA::Long a)
+        virtual void operation181(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation181 _val(a);
 
@@ -3729,7 +3729,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation182(::CORBA::Long a)
+        virtual void operation182(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation182 _val(a);
 
@@ -3740,7 +3740,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation183(::CORBA::Long a)
+        virtual void operation183(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation183 _val(a);
 
@@ -3751,7 +3751,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation184(::CORBA::Long a)
+        virtual void operation184(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation184 _val(a);
 
@@ -3762,7 +3762,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation185(::CORBA::Long a)
+        virtual void operation185(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation185 _val(a);
 
@@ -3773,7 +3773,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation186(::CORBA::Long a)
+        virtual void operation186(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation186 _val(a);
 
@@ -3784,7 +3784,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation187(::CORBA::Long a)
+        virtual void operation187(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation187 _val(a);
 
@@ -3795,7 +3795,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation188(::CORBA::Long a)
+        virtual void operation188(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation188 _val(a);
 
@@ -3806,7 +3806,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation189(::CORBA::Long a)
+        virtual void operation189(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation189 _val(a);
 
@@ -3817,7 +3817,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation190(::CORBA::Long a)
+        virtual void operation190(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation190 _val(a);
 
@@ -3828,7 +3828,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation191(::CORBA::Long a)
+        virtual void operation191(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation191 _val(a);
 
@@ -3839,7 +3839,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation192(::CORBA::Long a)
+        virtual void operation192(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation192 _val(a);
 
@@ -3850,7 +3850,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation193(::CORBA::Long a)
+        virtual void operation193(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation193 _val(a);
 
@@ -3861,7 +3861,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation194(::CORBA::Long a)
+        virtual void operation194(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation194 _val(a);
 
@@ -3872,7 +3872,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation195(::CORBA::Long a)
+        virtual void operation195(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation195 _val(a);
 
@@ -3883,7 +3883,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation196(::CORBA::Long a)
+        virtual void operation196(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation196 _val(a);
 
@@ -3894,7 +3894,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation197(::CORBA::Long a)
+        virtual void operation197(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation197 _val(a);
 
@@ -3905,7 +3905,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation198(::CORBA::Long a)
+        virtual void operation198(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation198 _val(a);
 
@@ -3916,7 +3916,7 @@ struct servant< Test::Huge >
 
         }
 
-        virtual void operation199(::CORBA::Long a)
+        virtual void operation199(CORBA::Long a)
         {
             _corbasim_Test::Huge::operation199 _val(a);
 
@@ -4041,7 +4041,7 @@ struct servant< SimpleExample::Test >
         {
         }
 
-        void operation1(::CORBA::Long a, ::CORBA::Long b, const SimpleExample::St& c)
+        void operation1(CORBA::Long a, CORBA::Long b, const SimpleExample::St& c)
         {
             _corbasim_SimpleExample::Test::operation1 _val(a, b, c);
 
@@ -4075,7 +4075,7 @@ struct servant< SimpleExample::Test >
             __ref = SimpleExample::Test::_narrow(obj);
         }
 
-        virtual void operation1(::CORBA::Long a, ::CORBA::Long b, const SimpleExample::St& c)
+        virtual void operation1(CORBA::Long a, CORBA::Long b, const SimpleExample::St& c)
         {
             _corbasim_SimpleExample::Test::operation1 _val(a, b, c);
 

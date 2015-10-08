@@ -22,7 +22,7 @@ struct servant< prueba::Iface >
         {
         }
 
-        void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
+        void operation(CORBA::Long a, const prueba::Iface::FloatSeq& fs)
         {
             _corbasim_prueba::Iface::operation _val(a, fs);
 
@@ -48,7 +48,7 @@ struct servant< prueba::Iface >
             __ref = prueba::Iface::_narrow(obj);
         }
 
-        virtual void operation(::CORBA::Long a, const prueba::Iface::FloatSeq& fs)
+        virtual void operation(CORBA::Long a, const prueba::Iface::FloatSeq& fs)
         {
             _corbasim_prueba::Iface::operation _val(a, fs);
 

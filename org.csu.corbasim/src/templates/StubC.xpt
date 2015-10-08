@@ -49,7 +49,7 @@ static ::csu::mycorba::AliasTypeCodeImpl< «getFQN()» > __tc_«getFQN("_")»(
                                                            "«identifier»",
                                                            «getType().getTypeCode()»);
 
-::CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
+CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 «ENDIF»
 // END ALIAS ENUM «getFQN()»
 «ENDDEFINE»
@@ -60,7 +60,7 @@ static ::csu::mycorba::AliasTypeCodeImpl< «getFQN()» > __tc_«getFQN("_")»(
 «LET (SequenceDef)this.containedType AS seq-»
 // SEQUENCE: «identifier»
 static ::csu::mycorba::SequenceTypeCodeImpl< «getFQN()»«IF seq.bound != null-», false, «seq.bound.exp2str(true)»«ENDIF-» > __tc_«getFQN("_")»(«seq.getType().getTypeCode()»);
-::CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
+CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 
 // Any operators
 «getCode_AnyOperatorsDefinition(getFQN(),getTypeCode())»
@@ -74,7 +74,7 @@ static ::csu::mycorba::SequenceTypeCodeImpl< «getFQN()»«IF seq.bound != null-
 «LET ((ArrayDef) getType()) AS array-»
 static ::csu::mycorba::ArrayTypeCodeImpl< false, «array.getArrayType().get_CPPType()», «array.getArrayType().getTypeCode()», «array.getArrayDimensionsComma()» > __tc_«getFQN("_")»;
 
-::CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
+CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 
     «EXPAND templates::ArrayDef::stubC(identifier, getFQN()) FOR array-»
 
@@ -102,7 +102,7 @@ static ::csu::mycorba::EnumTypeCodeImpl< «getFQN()» > __tc_«getFQN("_")»("ID
                                                                        "«identifier»",
                                                                        __fields_«getFQN("_")»);
 
-::CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
+CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 
 // Any operators
 «getCode_AnyOperatorsDefinition()»
@@ -120,7 +120,7 @@ static ::csu::mycorba::ObjrefTypeCodeImpl< «getFQN()» > __tc_«getFQN("_")»(
                                                            "IDL:«getFQN("/")»:1.0",
                                                            "«identifier»");
 
-::CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
+CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 
 «getFQN()»::«identifier»()
 {
@@ -168,7 +168,7 @@ __fields_«getFQN("_")»[] = {
 };
 
 «ENDIF-»
-csu::mycorba::ExceptionTypeCodeImpl< «getFQN()», ::CORBA::UserException > __tc_«getFQN("_")»("IDL:«getFQN("/")»:1.0", "«identifier»", «IF !members.isEmpty»__fields_«getFQN("_")»«ELSE»NULL«ENDIF»);
+csu::mycorba::ExceptionTypeCodeImpl< «getFQN()», CORBA::UserException > __tc_«getFQN("_")»("IDL:«getFQN("/")»:1.0", "«identifier»", «IF !members.isEmpty»__fields_«getFQN("_")»«ELSE»NULL«ENDIF»);
 CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 // END BODY EXCEPTION «getFQN()»
 «ENDDEFINE»
@@ -273,7 +273,7 @@ static ::csu::mycorba::StructTypeCodeImpl< «getFQN()» > __tc_«getFQN("_")»(
                                                            "«identifier»",
                                                            __fields_«getFQN("_")»);
 
-::CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
+CORBA::TypeCode_ptr const «getTypeCode()» = &__tc_«getFQN("_")»;
 
 // Any operators
 
@@ -289,7 +289,7 @@ static ::csu::mycorba::StructTypeCodeImpl< «getFQN()» > __tc_«getFQN("_")»(
 «DEFINE anonymous(StructDef struct, Field field) FOR SequenceDef»
 // BEGIN ANONYMOUS SEQUENCE «field.identifier»
 static ::csu::mycorba::SequenceTypeCodeImpl< «struct.getFQN(field)»«getTypeCodeImplParameters()» > «field.getMemberTypeCodeImpl(struct)»(«getType().getTypeCode()»);
-::CORBA::TypeCode_ptr const «field.getMemberTypeCode(struct)» = &«field.getMemberTypeCodeImpl(struct)»;
+CORBA::TypeCode_ptr const «field.getMemberTypeCode(struct)» = &«field.getMemberTypeCodeImpl(struct)»;
 
 // Any operators
 «struct.getCode_AnyOperatorsDefinition(struct.getFQN(field), struct.getTypeCode(field))»
@@ -301,7 +301,7 @@ static ::csu::mycorba::SequenceTypeCodeImpl< «struct.getFQN(field)»«getTypeCo
 «DEFINE anonymous(StructDef struct, Field field) FOR ArrayDef»
 // BEGIN ANONYMOUS ARRAY «field.identifier»
 static ::csu::mycorba::ArrayTypeCodeImpl< false, «getArrayType().get_CPPType()», «getArrayType().getTypeCode()», «getArrayDimensionsComma()» > «field.getMemberTypeCodeImpl(struct)»;
-::CORBA::TypeCode_ptr const «field.getMemberTypeCode(struct)» = &«field.getMemberTypeCodeImpl(struct)»;
+CORBA::TypeCode_ptr const «field.getMemberTypeCode(struct)» = &«field.getMemberTypeCodeImpl(struct)»;
 
     «EXPAND templates::ArrayDef::stubC(field.getMemberTypeId(), struct.getFQN(field)) FOR this-»
 «REM»
