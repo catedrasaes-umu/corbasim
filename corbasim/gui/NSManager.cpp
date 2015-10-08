@@ -23,7 +23,7 @@
 using namespace corbasim::gui;
 
 NSManager::NSManager(const CORBA::ORB_var& orb, QObject * parent) :
-    QObject(parent), m_orb(orb)
+    QObject(parent), m_orb(orb), m_timer(this)
 {
     QObject::connect(&m_timer, SIGNAL(timeout()), this, SLOT(refreshNS()));
     QObject::connect(this, SIGNAL(started()), this, SLOT(doStart()));
