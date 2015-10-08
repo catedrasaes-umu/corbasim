@@ -24,12 +24,11 @@ add_custom_command(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${CORBASIM_PREFIX}«filename»_idl SHARED ${«filename»_GENERATED} «getAdaptedFileCPP()»)
-    «IF !includes.isEmpty-»
 target_link_libraries(${CORBASIM_PREFIX}«filename»_idl
-        «FOREACH includes AS e-»
+    ${CORBASIM_ORB_LIBS}
+    «FOREACH includes AS e-»
     ${CORBASIM_PREFIX}«e.getFileName()»_idl
-        «ENDFOREACH-»)
-    «ENDIF-»
+    «ENDFOREACH-»)
 install(TARGETS ${CORBASIM_PREFIX}«filename»_idl DESTINATION lib)
 
 add_library(${CORBASIM_PREFIX}«filename»_idl_s STATIC ${«filename»_GENERATED} «getAdaptedFileCPP()»)
@@ -53,6 +52,7 @@ install(TARGETS ${CORBASIM_PREFIX}«filename»_idl_s DESTINATION lib)
 add_library(corbasim_reflective_«fqn» SHARED «fqn»_reflective.cpp)
 target_link_libraries(corbasim_reflective_«fqn»
     ${CORBASIM_PREFIX}«getTranslationUnit().getFileName()»_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_«fqn» DESTINATION lib)

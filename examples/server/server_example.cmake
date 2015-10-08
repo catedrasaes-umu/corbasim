@@ -14,6 +14,9 @@ add_custom_command(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${CORBASIM_PREFIX}server_example_idl SHARED ${server_example_GENERATED} server_example_adapted.cpp)
+target_link_libraries(${CORBASIM_PREFIX}server_example_idl
+    ${CORBASIM_ORB_LIBS}
+)
 install(TARGETS ${CORBASIM_PREFIX}server_example_idl DESTINATION lib)
 
 add_library(${CORBASIM_PREFIX}server_example_idl_s STATIC ${server_example_GENERATED} server_example_adapted.cpp)
@@ -25,6 +28,7 @@ install(TARGETS ${CORBASIM_PREFIX}server_example_idl_s DESTINATION lib)
 add_library(corbasim_reflective_prueba_Iface SHARED prueba_Iface_reflective.cpp)
 target_link_libraries(corbasim_reflective_prueba_Iface
     ${CORBASIM_PREFIX}server_example_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_prueba_Iface DESTINATION lib)

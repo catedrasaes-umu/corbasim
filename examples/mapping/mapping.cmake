@@ -14,6 +14,9 @@ add_custom_command(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(${CORBASIM_PREFIX}mapping_idl SHARED ${mapping_GENERATED} mapping_adapted.cpp)
+target_link_libraries(${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
+)
 install(TARGETS ${CORBASIM_PREFIX}mapping_idl DESTINATION lib)
 
 add_library(${CORBASIM_PREFIX}mapping_idl_s STATIC ${mapping_GENERATED} mapping_adapted.cpp)
@@ -25,6 +28,7 @@ install(TARGETS ${CORBASIM_PREFIX}mapping_idl_s DESTINATION lib)
 add_library(corbasim_reflective_HelloApp_Hello SHARED HelloApp_Hello_reflective.cpp)
 target_link_libraries(corbasim_reflective_HelloApp_Hello
     ${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_HelloApp_Hello DESTINATION lib)
@@ -39,6 +43,7 @@ install(TARGETS corbasim_static_reflective_HelloApp_Hello DESTINATION lib)
 add_library(corbasim_reflective_Test_Huge SHARED Test_Huge_reflective.cpp)
 target_link_libraries(corbasim_reflective_Test_Huge
     ${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_Test_Huge DESTINATION lib)
@@ -53,6 +58,7 @@ install(TARGETS corbasim_static_reflective_Test_Huge DESTINATION lib)
 add_library(corbasim_reflective_AAAAAAAAA_IIIIIIIIII SHARED AAAAAAAAA_IIIIIIIIII_reflective.cpp)
 target_link_libraries(corbasim_reflective_AAAAAAAAA_IIIIIIIIII
     ${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_AAAAAAAAA_IIIIIIIIII DESTINATION lib)
@@ -67,6 +73,7 @@ install(TARGETS corbasim_static_reflective_AAAAAAAAA_IIIIIIIIII DESTINATION lib)
 add_library(corbasim_reflective_SimpleExample_Test SHARED SimpleExample_Test_reflective.cpp)
 target_link_libraries(corbasim_reflective_SimpleExample_Test
     ${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_SimpleExample_Test DESTINATION lib)
@@ -81,6 +88,7 @@ install(TARGETS corbasim_static_reflective_SimpleExample_Test DESTINATION lib)
 add_library(corbasim_reflective_StringTest_InterfaceString SHARED StringTest_InterfaceString_reflective.cpp)
 target_link_libraries(corbasim_reflective_StringTest_InterfaceString
     ${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_StringTest_InterfaceString DESTINATION lib)
@@ -95,6 +103,7 @@ install(TARGETS corbasim_static_reflective_StringTest_InterfaceString DESTINATIO
 add_library(corbasim_reflective_MyModule_MyInterface SHARED MyModule_MyInterface_reflective.cpp)
 target_link_libraries(corbasim_reflective_MyModule_MyInterface
     ${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_MyModule_MyInterface DESTINATION lib)
@@ -109,6 +118,7 @@ install(TARGETS corbasim_static_reflective_MyModule_MyInterface DESTINATION lib)
 add_library(corbasim_reflective_Test_Prueba SHARED Test_Prueba_reflective.cpp)
 target_link_libraries(corbasim_reflective_Test_Prueba
     ${CORBASIM_PREFIX}mapping_idl
+    ${CORBASIM_ORB_LIBS}
     # CORBASIM Library
     corbasim)
 install(TARGETS corbasim_reflective_Test_Prueba DESTINATION lib)
