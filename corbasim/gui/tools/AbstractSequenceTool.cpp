@@ -823,7 +823,7 @@ void AbstractSequenceTool::load(const QVariant& settings)
             OperationDescriptor_ptr op = NULL;
 
             if (object &&
-                    (op = object->interface()->get_reflective_by_name(operation.c_str())))
+                    (op = object->interface()->get_reflective_by_name(operation)))
             {
                 appendAbstractItem(object, op)->load(*lit);
             }

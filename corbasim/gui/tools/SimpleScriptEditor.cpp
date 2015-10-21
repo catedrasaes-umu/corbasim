@@ -504,7 +504,7 @@ struct script_helper : public corbasim::json::helper::helper_base
 
     corbasim::json::helper::helper_base* new_child(const std::string& name)
     {
-        op_ptr op (m_factory->get_reflective_by_name(name.c_str()));
+        op_ptr op (m_factory->get_reflective_by_name(name));
 
         if (!op) throw "Error";
 

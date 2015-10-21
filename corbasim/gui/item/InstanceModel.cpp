@@ -473,7 +473,7 @@ OperationDescriptor_ptr InstanceModel::getOperation(
     if (obj)
     {
         const std::string str (operation.toStdString());
-        return obj->interface()->get_reflective_by_name(str.c_str());
+        return obj->interface()->get_reflective_by_name(str);
     }
 
     return NULL;
