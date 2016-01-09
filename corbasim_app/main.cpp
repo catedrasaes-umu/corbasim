@@ -37,7 +37,7 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
 
     int res = 0;
-    boost::thread * orbThread = NULL;
+    boost::thread orbThread;
 
     // Application scope because it is a RAII
     {
@@ -134,8 +134,7 @@ int main(int argc, char **argv)
         threadApplication.start();
 
         // ORB worker
-        orbThread = new boost::thread(boost::bind(&CORBA::ORB::run,
-                    orb.in()));
+        orbThread = boost::thread(boost::bind(&CORBA::ORB::run, orb.in()));
 
         res = app.exec();
 
@@ -145,9 +144,7 @@ int main(int argc, char **argv)
     }
 
     orb->shutdown(1);
-    orbThread->join();
-    delete orbThread;
+    orbThread.join();
 
     return res;
 }
-
