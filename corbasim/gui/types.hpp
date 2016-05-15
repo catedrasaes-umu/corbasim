@@ -23,9 +23,11 @@
 #include <QtCore>
 #include <boost/shared_ptr.hpp>
 #include <corbasim/impl.hpp>
+#ifndef Q_MOC_RUN
 #include <corbasim/core/event_fwd.hpp>
 #include <corbasim/core/reflective_fwd.hpp>
 #include <corbasim/core/caller_fwd.hpp>
+#endif
 #include <corbasim/qt/types.hpp>
 #include <corbasim/gui/export.hpp>
 

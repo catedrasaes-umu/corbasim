@@ -31,9 +31,6 @@
 #include <QMenuBar>
 #include <QMainWindow>
 
-#include <corbasim/core/caller_fwd.hpp>
-#include <corbasim/core/reflective_fwd.hpp>
-
 #include <corbasim/gui/ObjrefWidget.hpp>
 #include <corbasim/gui/item/LogModel.hpp>
 

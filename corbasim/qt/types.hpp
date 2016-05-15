@@ -22,7 +22,9 @@
 
 #include <QMetaType>
 #include <corbasim/impl.hpp>
+#ifndef Q_MOC_RUN
 #include <corbasim/core/event_fwd.hpp>
+#endif
 
 Q_DECLARE_METATYPE(CORBA::Object_var);
 Q_DECLARE_METATYPE(corbasim::core::event_ptr)

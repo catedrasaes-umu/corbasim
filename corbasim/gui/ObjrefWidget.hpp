@@ -22,7 +22,9 @@
 
 #include <QWidget>
 #include <corbasim/gui/export.hpp>
+#ifndef Q_MOC_RUN
 #include <corbasim/core/caller_fwd.hpp>
+#endif
 #include <corbasim/gui/Model.hpp>
 
 class QComboBox;

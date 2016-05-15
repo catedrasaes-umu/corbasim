@@ -62,7 +62,7 @@ set(corbasim_qt_LIBS
 
 qt4_add_resources(corbasim_qt_RCC qt/corbasim_qt.qrc)
 
-# NOTE: QT bug: https://bugreports.qt.nokia.com/browse/QTBUG-22829
+# NOTE: QT bug: https://bugreports.qt.io/browse/QTBUG-22829
 qt4_wrap_cpp(corbasim_qt_MOC_SRCS ${corbasim_qt_MOC_HDRS} 
     OPTIONS -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED)
 
